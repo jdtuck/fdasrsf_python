@@ -1,0 +1,534 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>time_warping &mdash; fdasrsf 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="fdasrsf 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">fdasrsf 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for time_warping</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Group-wise function alignment using SRSF framework and Dynamic Programming</span>
+
+<span class="sd">moduleauthor:: Derek Tucker &lt;dtucker@stat.fsu.edu&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">utility_functions</span> <span class="kn">as</span> <span class="nn">uf</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">simps</span><span class="p">,</span> <span class="n">cumtrapz</span><span class="p">,</span> <span class="n">trapz</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">import</span> <span class="nn">plot_style</span> <span class="kn">as</span> <span class="nn">plot</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+
+<div class="viewcode-block" id="srsf_align"><a class="viewcode-back" href="../time_warping.html#time_warping.srsf_align">[docs]</a><span class="k">def</span> <span class="nf">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;mean&quot;</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sparam</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function aligns a collection of functions using the elastic square-root slope (srsf) framework.</span>
+
+<span class="sd">    :param f: numpy ndarray of shape (M,N) of M functions with N samples</span>
+<span class="sd">    :param time: vector of size N describing the sample points</span>
+<span class="sd">    :param method: (string) warp calculate Karcher Mean or Median (options = &quot;mean&quot; or &quot;median&quot;) (default=&quot;mean&quot;)</span>
+<span class="sd">    :param showplot: Shows plots of results using matplotlib (default = T)</span>
+<span class="sd">    :param smoothdata: Smooth the data using a box filter (default = F)</span>
+<span class="sd">    :param sparam: Number of times to run box filter (default = 25)</span>
+<span class="sd">    :param lam: controls the elasticity (default = 0)</span>
+<span class="sd">    :type lam: double</span>
+<span class="sd">    :type sparam: double</span>
+<span class="sd">    :type smoothdata: bool</span>
+<span class="sd">    :type f: np.ndarray</span>
+<span class="sd">    :type time: np.ndarray</span>
+
+<span class="sd">    :rtype: tuple of numpy array</span>
+<span class="sd">    :return fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</span>
+<span class="sd">    :return qn: aligned srvfs - similar structure to fn</span>
+<span class="sd">    :return q0: original srvf - similar structure to fn</span>
+<span class="sd">    :return fmean: function mean or median - vector of length N</span>
+<span class="sd">    :return mqn: srvf mean or median - vector of length N</span>
+<span class="sd">    :return gam: warping functions - similar structure to fn</span>
+<span class="sd">    :return orig_var: Original Variance of Functions</span>
+<span class="sd">    :return amp_var: Amplitude Variance</span>
+<span class="sd">    :return phase_var: Phase Variance</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import tables</span>
+<span class="sd">    &gt;&gt;&gt; fun=tables.open_file(&quot;../Data/simu_data.h5&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; f = fun.root.f[:]</span>
+<span class="sd">    &gt;&gt;&gt; f = f.transpose()</span>
+<span class="sd">    &gt;&gt;&gt; time = fun.root.time[:]</span>
+<span class="sd">    &gt;&gt;&gt; out = srsf_align(f,time)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="n">f</span>
+
+    <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;mean&quot;</span><span class="p">,</span> <span class="s">&quot;median&quot;</span><span class="p">]</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">method</span><span class="p">]</span>  <span class="c"># 0 mean, 2-median</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">method</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">smoothdata</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">smooth_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">sparam</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">showplot</span><span class="p">:</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Original Data&quot;</span><span class="p">)</span>
+
+    <span class="c"># Compute SRSF function from data</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">gradient_spline</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="p">(</span><span class="s">&quot;Initializing...&quot;</span><span class="p">)</span>
+    <span class="n">mnq</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">mnq</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">d1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">dqq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">min_ind</span> <span class="o">=</span> <span class="n">dqq</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+    <span class="n">mq</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">min_ind</span><span class="p">]</span>
+    <span class="n">mf</span> <span class="o">=</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">min_ind</span><span class="p">]</span>
+
+    <span class="n">gam</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
+
+    <span class="n">gamI</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMeanInverse</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
+    <span class="n">mf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">mf</span><span class="p">)</span>
+    <span class="n">mq</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srvf</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+    <span class="c"># Compute Karcher Mean</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Compute Karcher Mean of </span><span class="si">%d</span><span class="s"> function in SRSF space...&quot;</span> <span class="o">%</span> <span class="n">N</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Compute Karcher Median of </span><span class="si">%d</span><span class="s"> function in SRSF space...&quot;</span> <span class="o">%</span> <span class="n">N</span>
+
+    <span class="n">MaxItr</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">qun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">mq</span>
+    <span class="n">mq</span> <span class="o">=</span> <span class="n">tmp</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">tmp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">tmp</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">tmp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">tmp</span>
+
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">MaxItr</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;updating step: r=</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="p">(</span><span class="n">MaxItr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;maximal number of iterations is reached&quot;</span>
+
+        <span class="c"># Matching Step</span>
+        <span class="n">gam</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lam</span><span class="p">)</span>
+        <span class="n">gam_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">f</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="n">q</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srvf</span><span class="p">(</span><span class="n">f</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">)</span>
+            <span class="n">gam_dev</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">mqt</span> <span class="o">=</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">]</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">mqt</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">d1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ds_tmp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">simps</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">simps</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gam_dev</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">ds</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_tmp</span>
+
+            <span class="c"># Minimization Step</span>
+            <span class="c"># compute the mean of the matched function</span>
+            <span class="n">qtemp</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">qtemp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">qun</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">])</span> <span class="o">/</span> <span class="n">norm</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ds_tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">simps</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">simps</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gam_dev</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">ds</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_tmp</span>
+
+            <span class="c"># Minimization Step</span>
+            <span class="c"># compute the mean of the matched function</span>
+            <span class="n">dist_iinv</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">qtemp</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">ds</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">qtemp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist_iinv</span>
+
+            <span class="n">qun</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">])</span> <span class="o">/</span> <span class="n">norm</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">qun</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1e-2</span> <span class="ow">or</span> <span class="n">r</span> <span class="o">&gt;=</span> <span class="n">MaxItr</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="c"># Last Step with centering of gam</span>
+    <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">gam</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lam</span><span class="p">)</span>
+    <span class="n">gam_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">gam_dev</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">gamI</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMeanInverse</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
+    <span class="n">gamI_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gamI</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">q</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span><span class="p">])</span>
+        <span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+
+    <span class="c"># Aligned data &amp; stats</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">f</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">qn</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">q0</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">mean_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">std_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mean_fn</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">std_fn</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mqn</span> <span class="o">=</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">mqn</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mqn</span><span class="p">),</span> <span class="n">time</span><span class="p">)</span>
+    <span class="n">fmean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">f0</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span> <span class="o">+</span> <span class="n">tmp</span>
+
+    <span class="n">fgam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">fgam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">fmean</span><span class="p">)</span>
+
+    <span class="n">var_fgam</span> <span class="o">=</span> <span class="n">fgam</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">orig_var</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">std_f0</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+    <span class="n">amp_var</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">std_fn</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+    <span class="n">phase_var</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">var_fgam</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">showplot</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">gam</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Warping Functions&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Warped Data&quot;</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_f0</span><span class="p">,</span> <span class="n">mean_f0</span> <span class="o">+</span> <span class="n">std_f0</span><span class="p">,</span> <span class="n">mean_f0</span> <span class="o">-</span> <span class="n">std_f0</span><span class="p">])</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Original Data: Mean $\pm$ STD&quot;</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_fn</span><span class="p">,</span> <span class="n">mean_fn</span> <span class="o">+</span> <span class="n">std_fn</span><span class="p">,</span> <span class="n">mean_fn</span> <span class="o">-</span> <span class="n">std_fn</span><span class="p">])</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Warped Data: Mean $\pm$ STD&quot;</span><span class="p">)</span>
+
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">fmean</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;$f_{mean}$&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">align_results</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;align&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;fn&#39;</span><span class="p">,</span> <span class="s">&#39;qn&#39;</span><span class="p">,</span> <span class="s">&#39;q0&#39;</span><span class="p">,</span> <span class="s">&#39;fmean&#39;</span><span class="p">,</span> <span class="s">&#39;mqn&#39;</span><span class="p">,</span> <span class="s">&#39;gam&#39;</span><span class="p">,</span> <span class="s">&#39;orig_var&#39;</span><span class="p">,</span> <span class="s">&#39;amp_var&#39;</span><span class="p">,</span>
+                                                     <span class="s">&#39;phase_var&#39;</span><span class="p">])</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">align_results</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">fmean</span><span class="p">,</span> <span class="n">mqn</span><span class="p">,</span> <span class="n">gam</span><span class="p">,</span> <span class="n">orig_var</span><span class="p">,</span> <span class="n">amp_var</span><span class="p">,</span> <span class="n">phase_var</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+</div>
+<div class="viewcode-block" id="align_fPCA"><a class="viewcode-back" href="../time_warping.html#time_warping.align_fPCA">[docs]</a><span class="k">def</span> <span class="nf">align_fPCA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">num_comp</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smooth_data</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sparam</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    aligns a collection of functions while extracting pincipal components. The functions are aligned to the principal</span>
+<span class="sd">    components</span>
+
+<span class="sd">    :param f: numpy ndarray of shape (M,N) of M functions with N samples</span>
+<span class="sd">    :param time: vector of size N describing the sample points</span>
+<span class="sd">    :param num_comp: number of fPCA components</span>
+<span class="sd">    :param showplot: Shows plots of results using matplotlib (default = T)</span>
+<span class="sd">    :param smooth_data: Smooth the data using a box filter (default = F)</span>
+<span class="sd">    :param sparam: Number of times to run box filter (default = 25)</span>
+<span class="sd">    :type sparam: double</span>
+<span class="sd">    :type smooth_data: bool</span>
+<span class="sd">    :type f: np.ndarray</span>
+<span class="sd">    :type time: np.ndarray</span>
+
+<span class="sd">    :rtype: tuple of numpy array</span>
+<span class="sd">    :return fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</span>
+<span class="sd">    :return qn: aligned srvfs - similar structure to fn</span>
+<span class="sd">    :return q0: original srvf - similar structure to fn</span>
+<span class="sd">    :return mqn: srvf mean or median - vector of length N</span>
+<span class="sd">    :return gam: warping functions - similar structure to fn</span>
+<span class="sd">    :return q_pca: srsf principal directions</span>
+<span class="sd">    :return f_pca: functional principal directions</span>
+<span class="sd">    :return latent: latent values</span>
+<span class="sd">    :return coef: coefficients</span>
+<span class="sd">    :return U: eigenvectors</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lam</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">MaxItr</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">coef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)</span>
+    <span class="n">Nstd</span> <span class="o">=</span> <span class="n">coef</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="n">f</span>
+
+    <span class="k">if</span> <span class="n">smooth_data</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">smooth_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">sparam</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">showplot</span><span class="p">:</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Original Data&quot;</span><span class="p">)</span>
+
+    <span class="c"># Compute SRSF function from data</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">gradient_spline</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="p">(</span><span class="s">&quot;Initializing...&quot;</span><span class="p">)</span>
+    <span class="n">mnq</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">mnq</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">d1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">dqq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">min_ind</span> <span class="o">=</span> <span class="n">dqq</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+
+    <span class="k">print</span> <span class="s">&quot;Aligning </span><span class="si">%d</span><span class="s"> functions in SRVF space to </span><span class="si">%d</span><span class="s"> fPCA components...&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">)</span>
+    <span class="n">itr</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">mq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">mq</span><span class="p">[:,</span> <span class="n">itr</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">min_ind</span><span class="p">]</span>
+    <span class="n">fi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">fi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="n">qi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">qi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span>
+    <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">MaxItr</span><span class="p">))</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">itr</span> <span class="o">&lt;=</span> <span class="n">MaxItr</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;updating step: r=</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">itr</span> <span class="o">==</span> <span class="n">MaxItr</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;maximal number of iterations is reached&quot;</span>
+
+        <span class="c"># PCA Step</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">itr</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">qhat_cent</span> <span class="o">=</span> <span class="n">qi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">itr</span><span class="p">]</span> <span class="o">-</span> <span class="n">d1</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">qi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">itr</span><span class="p">])</span>
+        <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+
+        <span class="n">alpha_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_comp</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+                <span class="n">alpha_i</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">simps</span><span class="p">(</span><span class="n">qhat_cent</span><span class="p">[:,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">time</span><span class="p">)</span>
+
+        <span class="n">U1</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">num_comp</span><span class="p">]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">U1</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">alpha_i</span><span class="p">)</span>
+        <span class="n">qhat</span> <span class="o">=</span> <span class="n">d1</span> <span class="o">+</span> <span class="n">tmp</span>
+
+        <span class="c"># Matchin Step</span>
+        <span class="n">gam</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">itr</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">qhat</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">qi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">itr</span><span class="p">],</span> <span class="n">lam</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">fi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">itr</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">fi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">itr</span><span class="p">])</span>
+            <span class="n">qi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srvf</span><span class="p">(</span><span class="n">fi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">)</span>
+
+        <span class="n">qtemp</span> <span class="o">=</span> <span class="n">qi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">mq</span><span class="p">[:,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">qtemp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">cost_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">cost_temp</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">qtemp</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">-</span> <span class="n">qhat</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+
+        <span class="n">cost</span><span class="p">[</span><span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost_temp</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">itr</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-05</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="n">itr</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">cost</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c"># Aligned data &amp; stats</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">fi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">qn</span> <span class="o">=</span> <span class="n">qi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">q0</span> <span class="o">=</span> <span class="n">qi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">mean_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">std_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mqn</span> <span class="o">=</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">itr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">gamf</span> <span class="o">=</span> <span class="n">gam</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">itr</span><span class="p">):</span>
+        <span class="n">gam_k</span> <span class="o">=</span> <span class="n">gam</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">gamf</span><span class="p">[:,</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gam_k</span><span class="p">[:,</span> <span class="n">l</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">gamf</span><span class="p">[:,</span> <span class="n">l</span><span class="p">])</span>
+
+    <span class="c"># Center Mean</span>
+    <span class="n">gamI</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMeanInverse</span><span class="p">(</span><span class="n">gamf</span><span class="p">)</span>
+    <span class="n">gamI_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gamI</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">mqn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">mqn</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">qn</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">qn</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
+        <span class="n">fn</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">fn</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+        <span class="n">gamf</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">gamf</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+
+    <span class="n">mean_fn</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">std_fn</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Get Final PCA</span>
+    <span class="n">mididx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">m_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:]))</span>
+    <span class="n">mqn2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mqn</span><span class="p">,</span> <span class="n">m_new</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="n">qn2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn</span><span class="p">,</span> <span class="n">m_new</span><span class="p">))</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">qn2</span><span class="p">)</span>
+
+    <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+    <span class="n">stdS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="c"># compute the PCA in the q domain</span>
+    <span class="n">q_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+            <span class="n">q_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mqn2</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">*</span> <span class="n">stdS</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
+
+    <span class="c"># compute the correspondence in the f domain</span>
+    <span class="n">f_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+            <span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]),</span>
+                                            <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">N2</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N2</span><span class="p">):</span>
+            <span class="n">c</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">l</span><span class="p">],</span> <span class="n">m_new</span><span class="p">[</span><span class="n">l</span><span class="p">])</span> <span class="o">-</span> <span class="n">mqn2</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">showplot</span><span class="p">:</span>
+        <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s">&#39;SB&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">35</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">),</span>
+            <span class="s">&#39;bG&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">),</span>
+            <span class="s">&#39;Ye&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">95</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">25</span><span class="p">),</span>
+            <span class="s">&#39;Bu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">45</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
+            <span class="s">&#39;Ve&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">cl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CBcdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c"># Align Plots</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">gamf</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Warping Functions&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Warped Data&quot;</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_f0</span><span class="p">,</span> <span class="n">mean_f0</span> <span class="o">+</span> <span class="n">std_f0</span><span class="p">,</span> <span class="n">mean_f0</span> <span class="o">-</span> <span class="n">std_f0</span><span class="p">])</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Original Data: Mean $\pm$ STD&quot;</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_fn</span><span class="p">,</span> <span class="n">mean_fn</span> <span class="o">+</span> <span class="n">std_fn</span><span class="p">,</span> <span class="n">mean_fn</span> <span class="o">-</span> <span class="n">std_fn</span><span class="p">])</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Warped Data: Mean $\pm$ STD&quot;</span><span class="p">)</span>
+
+        <span class="c"># PCA Plots</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_comp</span><span class="p">):</span>
+            <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+            <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;q domain: PD </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">plot</span><span class="o">.</span><span class="n">rstyle</span><span class="p">(</span><span class="n">axt</span><span class="p">)</span>
+            <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+            <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;f domain: PD </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">plot</span><span class="o">.</span><span class="n">rstyle</span><span class="p">(</span><span class="n">axt</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">cumm_coef</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">cumm_coef</span><span class="p">,</span> <span class="s">&quot;Coefficient Cumulative Percentage&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&quot;Percentage&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&quot;Index&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">align_fPCAresults</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;align_fPCA&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;fn&#39;</span><span class="p">,</span> <span class="s">&#39;qn&#39;</span><span class="p">,</span> <span class="s">&#39;q0&#39;</span><span class="p">,</span> <span class="s">&#39;mqn&#39;</span><span class="p">,</span> <span class="s">&#39;gam&#39;</span><span class="p">,</span> <span class="s">&#39;q_pca&#39;</span><span class="p">,</span> <span class="s">&#39;f_pca&#39;</span><span class="p">,</span>
+                                                              <span class="s">&#39;latent&#39;</span><span class="p">,</span> <span class="s">&#39;coef&#39;</span><span class="p">,</span> <span class="s">&#39;U&#39;</span><span class="p">])</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">align_fPCAresults</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">mqn</span><span class="p">,</span> <span class="n">gam</span><span class="p">,</span> <span class="n">q_pca</span><span class="p">,</span> <span class="n">f_pca</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">U</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">fdasrsf 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, J. Derek Tucker.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
