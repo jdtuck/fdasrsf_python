@@ -11,13 +11,12 @@ if sys.version_info[:2] < (2, 6):
     sys.exit(-1)
 
 
-class clean(Command):
-    """Cleans *.pyc and debian trashs, so you should get the same copy as
-    is in the VCS.
+class build_docs(Command):
+    """Builds the documentation
     """
 
-    description = "remove build files"
-    user_options = [("all", "a", "the same")]
+    description = "builds the documentation"
+    user_options = []
 
     def initialize_options(self):
         self.all = None
@@ -27,13 +26,12 @@ class clean(Command):
 
     def run(self):
         import os
-
-        os.system("py.cleanup")
-        os.system("rm -f python-build-stamp-2.4")
-        os.system("rm -f MANIFEST")
-        os.system("rm -rf build")
-        os.system("rm -rf dist")
-        os.system("rm -rf doc/_build")
+        os.system("sphinx-build -b html doc/source doc/build/html")
+        os.system("sphinx-build -b latex doc/source doc/build/latex")
+        os.system("sphinx-build -b man doc/source doc/build/man")
+        os.chdir("doc/build/latex")
+        os.system("latexmk -pdf fdasrsf.tex")
+        os.chdir("../../../")
 
 
 ext_modules = [Extension(
@@ -47,7 +45,7 @@ ext_modules = [Extension(
 )]
 
 setup(
-    cmdclass={'build_ext': build_ext},
+    cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
     ext_modules=ext_modules,
 
     name='fdasrsf',

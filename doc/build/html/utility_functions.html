@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Utility Functions &mdash; fdasrsf 1.0.0 documentation</title>
+    <title>Utility Functions &mdash; fdasrsf 1.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '1.0.0',
+        URL_ROOT:    './',
+        VERSION:     '1.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.0.0 documentation" href="index.html" />
+    <link rel="top" title="fdasrsf 1.0.1 documentation" href="index.html" />
     <link rel="prev" title="Functional Principal Component Analysis" href="fPCA.html" /> 
   </head>
   <body>
@@ -37,12 +35,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="fPCA.html" title="Functional Principal Component Analysis"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.0.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">fdasrsf 1.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,275 +46,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-utility_functions">
-<span id="utility-functions"></span><h1>Utility Functions<a class="headerlink" href="#module-utility_functions" title="Permalink to this headline">¶</a></h1>
-<p>Utility functions for SRSF Manipulations</p>
-<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:dtucker&#37;&#52;&#48;stat&#46;fsu&#46;edu">dtucker<span>&#64;</span>stat<span>&#46;</span>fsu<span>&#46;</span>edu</a>&gt;</p>
-<dl class="function">
-<dt id="utility_functions.SqrtMean">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">SqrtMean</tt><big>(</big><em>gam</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#SqrtMean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMean" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculates the srsf of warping functions with corresponding shooting vectors</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gam</strong> &#8211; numpy ndarray of shape (M,N) of M warping functions with N samples</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">2 numpy ndarray and vector</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return mu:</th><td class="field-body">Karcher mean psi function</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return gam_mu:</th><td class="field-body">vector of dim N which is the Karcher mean warping function</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return psi:</th><td class="field-body">numpy ndarray of shape (M,N) of M SRSF of the warping functions</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return vec:</th><td class="field-body">numpy ndarray of shape (M,N) of M shooting vectors</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.SqrtMeanInverse">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">SqrtMeanInverse</tt><big>(</big><em>gam</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#SqrtMeanInverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMeanInverse" title="Permalink to this definition">¶</a></dt>
-<dd><p>finds the inverse of the mean of the set of the diffeomorphisms gamma</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gam</strong> &#8211; numpy ndarray of shape (M,N) of M warping functions with N samples</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">vector</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return gamI:</th><td class="field-body">inverse of gam</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.cumtrapzmid">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">cumtrapzmid</tt><big>(</big><em>x</em>, <em>y</em>, <em>c</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#cumtrapzmid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.cumtrapzmid" title="Permalink to this definition">¶</a></dt>
-<dd><p>cummulative trapzodial numerical integration taken from midpoint</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> &#8211; vector of size N descibing the time samples</li>
-<li><strong>y</strong> &#8211; vector of size N describing the function</li>
-<li><strong>c</strong> &#8211; midpoint</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">vector</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return fa:</th><td class="field-body"><p class="first last">cummulative integration</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.elastic_distance">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">elastic_distance</tt><big>(</big><em>f1</em>, <em>f2</em>, <em>time</em>, <em>lam=0.0</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#8221;
-calculates the distnaces between function, where f1 is aligned to f2. In other words
-caluclates the elastic distances</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>f1</strong> &#8211; vector of size N</li>
-<li><strong>f2</strong> &#8211; vector of size N</li>
-<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
-<li><strong>lam</strong> &#8211; controls the elasticity (default = 0.0)</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">scalar</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return Dy:</th><td class="field-body"><p class="first">amplitude distance</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return Dx:</th><td class="field-body"><p class="first last">phase distance</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.f_to_srvf">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">f_to_srvf</tt><big>(</big><em>f</em>, <em>time</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#f_to_srvf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.f_to_srvf" title="Permalink to this definition">¶</a></dt>
-<dd><p>converts f to a square-root slope function (SRSF)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>f</strong> &#8211; vector of size N samples</li>
-<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">vector</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return q:</th><td class="field-body"><p class="first last">srsf of f</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.gradient_spline">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">gradient_spline</tt><big>(</big><em>time</em>, <em>f</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#gradient_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.gradient_spline" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes the gradient of f using b-spline smoothing</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
-<li><strong>f</strong> &#8211; numpy ndarray of shape (M,N) of M functions with N samples</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple of numpy ndarray</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return f0:</th><td class="field-body"><p class="first">smoothed functions functions</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return g:</th><td class="field-body"><p class="first">first derivative of each function</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return g2:</th><td class="field-body"><p class="first last">second derivative of each function</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.invertGamma">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">invertGamma</tt><big>(</big><em>gam</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#invertGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.invertGamma" title="Permalink to this definition">¶</a></dt>
-<dd><p>finds the inverse of the diffeomorphism gamma</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gam</strong> &#8211; vector describing the warping function</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">vector</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return gamI:</th><td class="field-body">inverse of gam</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.optimum_reparam">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">optimum_reparam</tt><big>(</big><em>q1</em>, <em>time</em>, <em>q2</em>, <em>lam=0.0</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculates the warping to align srsf q2 to q1</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>q1</strong> &#8211; vector of size N or array of NxM samples of first SRSF</li>
-<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
-<li><strong>q2</strong> &#8211; vector of size N or array of NxM samples samples of second SRSF</li>
-<li><strong>lam</strong> &#8211; controls the amount of elasticity (default = 0.0)</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">vector</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return gam:</th><td class="field-body"><p class="first last">describing the warping function used to align q2 with q1</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.outlier_detection">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">outlier_detection</tt><big>(</big><em>q</em>, <em>time</em>, <em>mq</em>, <em>k=1.5</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#outlier_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.outlier_detection" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculates outlier&#8217;s using geodesci distnaces of the SRSFs from the median</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>q</strong> &#8211; numpy ndarray of N x M of M SRS functions with N samples</li>
-<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
-<li><strong>mq</strong> &#8211; median calculated using <a class="reference internal" href="time_warping.html#time_warping.srsf_align" title="time_warping.srsf_align"><tt class="xref py py-func docutils literal"><span class="pre">time_warping.srsf_align()</span></tt></a></li>
-<li><strong>k</strong> &#8211; cutoff threshold (default = 1.5)</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">q_outlier: outlier functions</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.rgam">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">rgam</tt><big>(</big><em>N</em>, <em>sigma</em>, <em>num</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#rgam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.rgam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates random warping functions</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>N</strong> &#8211; length of warping function</li>
-<li><strong>sigma</strong> &#8211; variance of warping functions</li>
-<li><strong>num</strong> &#8211; number of warping functions</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">gam: numpy ndarray of warping functions</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utility_functions.smooth_data">
-<tt class="descclassname">utility_functions.</tt><tt class="descname">smooth_data</tt><big>(</big><em>f</em>, <em>sparam</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#smooth_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.smooth_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function smooths a collection of functions using a box filter</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>f</strong> &#8211; numpy ndarray of shape (M,N) of M functions with N samples</li>
-<li><strong>sparam</strong> &#8211; Number of times to run box filter (default = 25)</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">numpy ndarray</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return f:</th><td class="field-body"><p class="first last">smoothed functions functions</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+  <div class="section" id="utility-functions">
+<h1>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -360,17 +88,14 @@ caluclates the elastic distances</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="fPCA.html" title="Functional Principal Component Analysis"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.0.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">fdasrsf 1.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>
