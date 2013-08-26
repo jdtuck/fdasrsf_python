@@ -86,7 +86,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
 
     gamI = uf.SqrtMeanInverse(gam)
     mf = np.interp((time[-1] - time[0]) * gamI + time[0], time, mf)
-    mq = uf.f_to_srvf(mf, time)
+    mq = uf.f_to_srsf(mf, time)
 
     # Compute Karcher Mean
     if method == 0:
@@ -118,7 +118,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
         gam_dev = np.zeros((M, N))
         for k in xrange(0, N):
             f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, f[:, k, 0])
-            q[:, k, r + 1] = uf.f_to_srvf(f[:, k, r + 1], time)
+            q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
             gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
 
         mqt = mq[:, r]
@@ -215,7 +215,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25):
     """
-    aligns a collection of functions while extracting pincipal components. The functions are aligned to the principal
+    aligns a collection of functions while extracting principal components. The functions are aligned to the principal
     components
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
@@ -302,11 +302,11 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25)
         tmp = U1.dot(alpha_i)
         qhat = d1 + tmp
 
-        # Matchin Step
+        # Matching Step
         gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], lam)
         for k in xrange(0, N):
             fi[:, k, itr + 1] = np.interp((time[-1] - time[0]) * gam[:, k, itr] + time[0], time, fi[:, k, itr])
-            qi[:, k, itr + 1] = uf.f_to_srvf(fi[:, k, itr + 1], time)
+            qi[:, k, itr + 1] = uf.f_to_srsf(fi[:, k, itr + 1], time)
 
         qtemp = qi[:, :, itr + 1]
         mq[:, itr + 1] = qtemp.mean(axis=1)

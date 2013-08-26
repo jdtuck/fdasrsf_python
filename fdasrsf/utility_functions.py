@@ -5,12 +5,12 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 
-from scipy.interpolate import InterpolatedUnivariateSpline
+from scipy.interpolate import UnivariateSpline
 from scipy.integrate import simps, cumtrapz
 from scipy.linalg import norm
 from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace, arccos, sin, cos, arange, ascontiguousarray, round
-from numpy import ones, real, trapz, pi, cumsum
+from numpy import ones, real, trapz, pi, cumsum, fabs
 import numpy.random as rn
 import optimum_reparamN as orN
 
@@ -49,18 +49,21 @@ def gradient_spline(time, f):
 
     """
     M = f.shape[0]
+
     if f.ndim > 1:
         N = f.shape[1]
         f0 = zeros((M, N))
         g = zeros((M, N))
         g2 = zeros((M, N))
         for k in xrange(0, N):
-            tmp_spline = InterpolatedUnivariateSpline(time, f[:, k])
+            spar = time.shape[0] * (.025 * fabs(f[:, k]).max())**2
+            tmp_spline = UnivariateSpline(time, f[:, k], s=spar)
             f0[:, k] = tmp_spline(time)
             g[:, k] = tmp_spline(time, 1)
             g2[:, k] = tmp_spline(time, 2)
     else:
-        tmp_spline = InterpolatedUnivariateSpline(time, f)
+        spar = time.shape[0] * (.025 * fabs(f).max())**2
+        tmp_spline = UnivariateSpline(time, f, s=spar)
         f0 = tmp_spline(time)
         g = tmp_spline(time, 1)
         g2 = tmp_spline(time, 2)
@@ -68,7 +71,7 @@ def gradient_spline(time, f):
     return f0, g, g2
 
 
-def f_to_srvf(f, time):
+def f_to_srsf(f, time):
     """
     converts f to a square-root slope function (SRSF)
 
@@ -112,8 +115,8 @@ def optimum_reparam(q1, time, q2, lam=0.0):
 
 def elastic_distance(f1, f2, time, lam=0.0):
     """"
-    calculates the distnaces between function, where f1 is aligned to f2. In other words
-    caluclates the elastic distances
+    calculates the distances between function, where f1 is aligned to f2. In other words
+    calculates the elastic distances
 
     :param f1: vector of size N
     :param f2: vector of size N
@@ -125,12 +128,12 @@ def elastic_distance(f1, f2, time, lam=0.0):
     :return Dx: phase distance
 
     """
-    q1 = f_to_srvf(f1, time)
-    q2 = f_to_srvf(f2, time)
+    q1 = f_to_srsf(f1, time)
+    q2 = f_to_srsf(f2, time)
 
     gam = optimum_reparam(q1, time, q2, lam)
     fw = interp((time[-1] - time[0]) * gam + time[0], time, f2)
-    qw = f_to_srvf(fw, time)
+    qw = f_to_srsf(fw, time)
 
     Dy = sqrt(trapz((qw - q1) ** 2, time))
     M = time.shape[0]
@@ -284,14 +287,14 @@ def SqrtMean(gam):
 
 def cumtrapzmid(x, y, c):
     """
-    cummulative trapzodial numerical integration taken from midpoint
+    cumulative trapezoidal numerical integration taken from midpoint
 
-    :param x: vector of size N descibing the time samples
+    :param x: vector of size N describing the time samples
     :param y: vector of size N describing the function
     :param c: midpoint
 
     :rtype: vector
-    :return fa: cummulative integration
+    :return fa: cumulative integration
 
     """
     a = x.shape[0]
@@ -353,7 +356,7 @@ def rgam(N, sigma, num):
 
 def outlier_detection(q, time, mq, k=1.5):
     """
-    calculates outlier's using geodesci distnaces of the SRSFs from the median
+    calculates outlier's using geodesic distances of the SRSFs from the median
 
     :param q: numpy ndarray of N x M of M SRS functions with N samples
     :param time: vector of size N describing the sample points

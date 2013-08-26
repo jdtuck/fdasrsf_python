@@ -21,6 +21,6 @@ del sys
 
 from .time_warping import srsf_align, align_fPCA
 from .plot_style import f_plot, rstyle
-from .utility_functions import smooth_data, optimum_reparam, f_to_srvf, gradient_spline, elastic_distance, invertGamma
+from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection
 from .fPCA import vertfPCA, horizfPCA

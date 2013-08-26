@@ -48,10 +48,8 @@ def f_plot(time, f, title="Data"):
     plots function data using matplotlib
 
     :param time: vector of size N describing the sample points
-    :param f: numpy ndarray of shape (M,N) of M srsfs with N samples
+    :param f: numpy ndarray of shape (M,N) of M SRSFs with N samples
     :param title: string of title
-    :param xlabel: string of xlabel
-    :param ylabel: string of ylabel
 
     :return fig: figure definition
     :return ax: axes definition
