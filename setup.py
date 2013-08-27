@@ -65,6 +65,7 @@ setup(
         "matplotlib",
         "numpy",
         "scipy",
+        "joblib",
     ],
     classifiers=[
         'License :: OSI Approved :: BSD License',

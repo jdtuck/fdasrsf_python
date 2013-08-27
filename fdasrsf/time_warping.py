@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import utility_functions as uf
 from scipy.integrate import simps, cumtrapz, trapz
 from numpy.linalg import norm
+from joblib import Parallel, delayed
 import plot_style as plot
 import collections
 
@@ -53,11 +54,18 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
     M = f.shape[0]
     N = f.shape[1]
 
+    if M > 500:
+        parallel = True
+    elif N > 100:
+        parallel = True
+    else:
+        parallel = False
+
     eps = np.finfo(np.double).eps
     f0 = f
 
     methods = ["mean", "median"]
-    method = [i for i, x in enumerate(methods) if x == method]  # 0 mean, 2-median
+    method = [i for i, x in enumerate(methods) if x == method]  # 0 mean, 1-median
 
     if method != 0 or method != 1:
         method = 0
@@ -82,7 +90,12 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
     mq = q[:, min_ind]
     mf = f[:, min_ind]
 
-    gam = uf.optimum_reparam(mq, time, q, lam)
+    if parallel:
+        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, time, q[:, n], lam) for n in range(N))
+        gam = np.array(out)
+        gam = gam.transpose()
+    else:
+        gam = uf.optimum_reparam(mq, time, q, lam)
 
     gamI = uf.SqrtMeanInverse(gam)
     mf = np.interp((time[-1] - time[0]) * gamI + time[0], time, mf)
@@ -114,7 +127,13 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
             print "maximal number of iterations is reached"
 
         # Matching Step
-        gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
+        if parallel:
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time, q[:, n, 0], lam) for n in range(N))
+            gam = np.array(out)
+            gam = gam.transpose()
+        else:
+            gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
+
         gam_dev = np.zeros((M, N))
         for k in xrange(0, N):
             f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, f[:, k, 0])
@@ -153,7 +172,13 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
 
     # Last Step with centering of gam
     r += 1
-    gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
+    if parallel:
+        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time, q[:, n, 0], lam) for n in range(N))
+        gam = np.array(out)
+        gam = gam.transpose()
+    else:
+        gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
+
     gam_dev = np.zeros((M, N))
     for k in xrange(0, N):
         gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
@@ -248,6 +273,12 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25)
     Nstd = coef.shape[0]
     M = f.shape[0]
     N = f.shape[1]
+    if M > 500:
+        parallel = True
+    elif N > 100:
+        parallel = True
+    else:
+        parallel = False
 
     eps = np.finfo(np.double).eps
     f0 = f
@@ -303,7 +334,13 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25)
         qhat = d1 + tmp
 
         # Matching Step
-        gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], lam)
+        if parallel:
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr], lam) for n in range(N))
+            gam_t = np.array(out)
+            gam[:, :, itr] = gam_t.transpose()
+        else:
+            gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], lam)
+
         for k in xrange(0, N):
             fi[:, k, itr + 1] = np.interp((time[-1] - time[0]) * gam[:, k, itr] + time[0], time, fi[:, k, itr])
             qi[:, k, itr + 1] = uf.f_to_srsf(fi[:, k, itr + 1], time)
