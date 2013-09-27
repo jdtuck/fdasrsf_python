@@ -10,7 +10,8 @@ from scipy.integrate import simps, cumtrapz
 from scipy.linalg import norm
 from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace, arccos, sin, cos, arange, ascontiguousarray, round
-from numpy import ones, real, trapz, pi, cumsum, fabs
+from numpy import ones, real, trapz, pi, cumsum, fabs, cov
+from numpy.linalg import svd
 import numpy.random as rn
 import optimum_reparamN as orN
 
@@ -35,12 +36,13 @@ def smooth_data(f, sparam):
     return f
 
 
-def gradient_spline(time, f):
+def gradient_spline(time, f, smooth=False):
     """
     This function takes the gradient of f using b-spline smoothing
 
     :param time: vector of size N describing the sample points
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param smooth: smooth data (default = F)
 
     :rtype: tuple of numpy ndarray
     :return f0: smoothed functions functions
@@ -56,13 +58,19 @@ def gradient_spline(time, f):
         g = zeros((M, N))
         g2 = zeros((M, N))
         for k in xrange(0, N):
-            spar = time.shape[0] * (.025 * fabs(f[:, k]).max())**2
+            if smooth:
+                spar = time.shape[0] * (.025 * fabs(f[:, k]).max())**2
+            else:
+                spar = 0
             tmp_spline = UnivariateSpline(time, f[:, k], s=spar)
             f0[:, k] = tmp_spline(time)
             g[:, k] = tmp_spline(time, 1)
             g2[:, k] = tmp_spline(time, 2)
     else:
-        spar = time.shape[0] * (.025 * fabs(f).max())**2
+        if smooth:
+            spar = time.shape[0] * (.025 * fabs(f).max())**2
+        else:
+            spar = 0
         tmp_spline = UnivariateSpline(time, f, s=spar)
         f0 = tmp_spline(time)
         g = tmp_spline(time, 1)
@@ -381,3 +389,27 @@ def outlier_detection(q, time, mq, k=1.5):
     q_outlier = q[:, ind]
 
     return q_outlier
+
+
+def randomGamma(gam, num):
+    """
+    generates random wapring functions
+
+    :param q: numpy ndarray of N x M of M of warping functions
+    :param num: number of random functions
+
+    :return: rgam: random warping functions
+
+    """
+    mu, gam_mu, psi, vec = SqrtMean(gam)
+    K = cov(vec)
+
+    U, s, V = svd(K)
+    n = 5
+    TT = vec.shape[0]+1
+    vm = vec.mean(axis=1)
+
+    rgam = zeros((nu, TT))
+    for k in xrange(0,num):
+        a =
+    return rgam

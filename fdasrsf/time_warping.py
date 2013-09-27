@@ -14,7 +14,7 @@ import plot_style as plot
 import collections
 
 
-def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=25, lam=0.0):
+def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0):
     """
     This function aligns a collection of functions using the elastic square-root slope (srsf) framework.
 
@@ -70,14 +70,11 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, sparam=2
     if method != 0 or method != 1:
         method = 0
 
-    if smoothdata:
-        f = uf.smooth_data(f, sparam)
-
     if showplot:
         plot.f_plot(time, f, title="Original Data")
 
     # Compute SRSF function from data
-    f, g, g2 = uf.gradient_spline(time, f)
+    f, g, g2 = uf.gradient_spline(time, f, smoothdata)
     q = g / np.sqrt(abs(g) + eps)
 
     print ("Initializing...")
