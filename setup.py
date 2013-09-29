@@ -26,6 +26,7 @@ class build_docs(Command):
 
     def run(self):
         import os
+
         os.system("sphinx-build -b html doc/source doc/build/html")
         os.system("sphinx-build -b latex doc/source doc/build/latex")
         os.system("sphinx-build -b man doc/source doc/build/man")
@@ -34,7 +35,7 @@ class build_docs(Command):
         os.chdir("../../../")
 
 
-ext_modules = [Extension(
+ext_modules_dp = Extension(
     name="optimum_reparamN",
     sources=["src/optimum_reparamN.pyx", "src/DynamicProgrammingQ2.c", "src/dp_grid.c"],
     include_dirs=[numpy.get_include()], # .../site-packages/numpy/core/include
@@ -42,14 +43,24 @@ ext_modules = [Extension(
     # libraries=
     # extra_compile_args = "...".split(),
     # extra_link_args = "...".split()
-)]
+)
+
+ext_modules_pls = Extension(
+    name="fpls_warp",
+    sources=["src/fpls_warp.pyx", "src/fpls_warp_grad.c", "src/misc_funcs.c"],
+    include_dirs=[numpy.get_include()], # .../site-packages/numpy/core/include
+    language="c",
+    # libraries=
+    # extra_compile_args = "...".split(),
+    # extra_link_args = "...".split()
+)
 
 setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
-    ext_modules=ext_modules,
+    ext_modules=[ext_modules_dp, ext_modules_pls],
 
     name='fdasrsf',
-    version='1.0.1',
+    version='1.1.0',
     packages=['fdasrsf'],
     url='http://stat.fsu.edu/~dtucker/research.html',
     license='LICENSE.txt',

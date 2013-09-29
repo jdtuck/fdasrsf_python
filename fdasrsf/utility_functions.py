@@ -7,13 +7,13 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import simps, cumtrapz
-from scipy.linalg import norm
+from scipy.linalg import norm, svd, cholesky, inv
 from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace, arccos, sin, cos, arange, ascontiguousarray, round
-from numpy import ones, real, trapz, pi, cumsum, fabs, cov
-from numpy.linalg import svd
+from numpy import ones, real, trapz, pi, cumsum, fabs, cov, diagflat, inner, gradient, interp
 import numpy.random as rn
 import optimum_reparamN as orN
+import sys
 
 
 def smooth_data(f, sparam):
@@ -59,7 +59,7 @@ def gradient_spline(time, f, smooth=False):
         g2 = zeros((M, N))
         for k in xrange(0, N):
             if smooth:
-                spar = time.shape[0] * (.025 * fabs(f[:, k]).max())**2
+                spar = time.shape[0] * (.025 * fabs(f[:, k]).max()) ** 2
             else:
                 spar = 0
             tmp_spline = UnivariateSpline(time, f[:, k], s=spar)
@@ -68,7 +68,7 @@ def gradient_spline(time, f, smooth=False):
             g2[:, k] = tmp_spline(time, 2)
     else:
         if smooth:
-            spar = time.shape[0] * (.025 * fabs(f).max())**2
+            spar = time.shape[0] * (.025 * fabs(f).max()) ** 2
         else:
             spar = 0
         tmp_spline = UnivariateSpline(time, f, s=spar)
@@ -338,11 +338,11 @@ def rgam(N, sigma, num):
     mu = sqrt(ones(N - 1) * TT / double(N - 1))
     omega = (2 * pi) / double(TT)
     for k in xrange(0, num):
-        alpha_i = rn.normal(scale=sigma)
+        alpha_i = rn.normal(scale=1 / sigma)
         v = alpha_i * ones(TT)
         cnt = 1
         for l in range(2, 11):
-            alpha_i = rn.normal(scale=sigma)
+            alpha_i = rn.normal(scale=1 / sigma)
             #odd
             if l % 2 != 0:
                 v = v + alpha_i * sqrt(2) * cos(cnt * omega * time)
@@ -393,9 +393,9 @@ def outlier_detection(q, time, mq, k=1.5):
 
 def randomGamma(gam, num):
     """
-    generates random wapring functions
+    generates random warping functions
 
-    :param q: numpy ndarray of N x M of M of warping functions
+    :param gam: numpy ndarray of N x M of M of warping functions
     :param num: number of random functions
 
     :return: rgam: random warping functions
@@ -406,10 +406,165 @@ def randomGamma(gam, num):
 
     U, s, V = svd(K)
     n = 5
-    TT = vec.shape[0]+1
+    TT = vec.shape[0] + 1
     vm = vec.mean(axis=1)
 
-    rgam = zeros((nu, TT))
-    for k in xrange(0,num):
-        a =
+    rgam = zeros((TT, num))
+    for k in xrange(0, num):
+        a = rn.standard_normal(n)
+        v = zeros(vm.size)
+        for i in xrange(0, n):
+            v = v + a[i] * sqrt(s[i]) * U[:, i]
+
+        vn = norm(v) / sqrt(TT)
+        psi = cos(vn) * mu + sin(vn) * v / vn
+        tmp = zeros(TT)
+        tmp[1:TT] = cumsum(psi * psi) / TT
+        rgam[:, k] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
+
     return rgam
+
+
+def update_progress(progress):
+    """
+    This function creates a progress bar
+
+    :param progress: fraction of progress
+
+
+    """
+    barLength = 20  # Modify this to change the length of the progress bar
+    status = ""
+    if isinstance(progress, int):
+        progress = float(progress)
+    if not isinstance(progress, float):
+        progress = 0
+        status = "error: progress var must be float\r\n"
+    if progress < 0:
+        progress = 0
+        status = "Halt...\r\n"
+    if progress >= 1:
+        progress = 1
+        status = "Done...\r\n"
+    block = int(round(barLength * progress))
+    text = "\rPercent: [{0}] {1}% {2}".format("#" * block + "-" * (barLength - block), progress * 100, status)
+    sys.stdout.write(text)
+    sys.stdout.flush()
+
+
+def diffop(n, binsize=1):
+    """
+    Creates a second order differential operator
+
+    :param n: dimension
+    :param binsize: dx (default = 1)
+
+    :rtype: numpy ndarray
+    :return m: matrix describing differential operator
+
+    """
+    m = diagflat(ones(n - 1), k=1) + diagflat(ones(n - 1), k=-1) + diagflat(2 * ones(n))
+    m = inner(m.transpose(), m)
+    m[0, 0] = 6
+    m[-1, -1] = 6
+    m /= (binsize ** 4)
+
+    return m
+
+
+def geigen(Amat, Bmat, Cmat):
+    """
+    generalized eigenvalue problem of the form
+
+    max tr L'AM / sqrt(tr L'BL tr M'CM) w.r.t. L and M
+
+    :param Amat numpy ndarray of shape (M,N)
+    :param Bmat numpy ndarray of shape (M,N)
+    :param Bmat numpy ndarray of shape (M,N)
+
+    :rtype: numpy ndarray
+    :return values: eigenvalues
+    :return Lmat: left eigenvectors
+    :return Mmat: right eigenvectors
+
+    """
+    if Bmat.shape[0] != Bmat.shape[1]:
+        print "BMAT is not square.\n"
+        sys.exit(1)
+
+    if Cmat.shape[0] != Cmat.shape[1]:
+        print "CMAT is not square.\n"
+        sys.exit(1)
+
+    p = Bmat.shape[0]
+    q = Cmat.shape[0]
+
+    s = min(p, q)
+    tmp = fabs(Bmat - Bmat.transpose())
+    tmp1 = fabs(Bmat)
+    if tmp.max() / tmp1.max() > 1e-10:
+        print "BMAT not symmetric..\n"
+        sys.exit(1)
+
+    tmp = fabs(Cmat - Cmat.transpose())
+    tmp1 = fabs(Cmat)
+    if tmp.max() / tmp1.max() > 1e-10:
+        print "CMAT not symmetric..\n"
+        sys.exit(1)
+
+    Bmat = (Bmat + Bmat.transpose()) / 2
+    Cmat = (Cmat + Cmat.transpose()) / 2
+    Bfac = cholesky(Bmat)
+    Cfac = cholesky(Cmat)
+    Bfacinv = inv(Bfac)
+    Bfacinvt = Bfacinv.transpose()
+    Cfacinv = inv(Cfac)
+    Dmat = Bfacinvt.dot(Amat).dot(Cfacinv)
+    if p >= q:
+        u, d, v = svd(Dmat)
+        values = d
+        Lmat = Bfacinv.dot(u)
+        Mmat = Cfacinv.dot(v.transpose())
+    else:
+        u, d, v = svd(Dmat.transpose())
+        values = d
+        Lmat = Bfacinv.dot(u)
+        Mmat = Cfacinv.dot(v.transpose())
+
+    return values, Lmat, Mmat
+
+
+def innerprod_q(time, q1, q2):
+    """
+    calculates the innerproduct between two srsfs
+
+    :param time vector descrbing time samples
+    :param q1 vector of srsf 1
+    :param q2 vector of srsf 2
+
+    :rtype: scalar
+    :return val: inner product value
+
+    """
+    val = simps(q1 * q2, time)
+    return val
+
+
+def warp_q_gamma(time, q, gam):
+    """
+    warps a srsf q by gam
+
+    :param time vector describing time samples
+    :param q vector describing srsf
+    :param gam vector describing warping function
+
+    :rtype: numpy ndarray
+    :return q_temp: warped srsf
+
+    """
+    M = gam.size
+    gam_dev = gradient(gam, 1 / double(M - 1))
+    tmp = interp((time[-1] - time[0]) * gam + time[0], time, q)
+    q_temp = tmp * sqrt(gam_dev)
+
+    return q_temp

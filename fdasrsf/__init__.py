@@ -7,7 +7,7 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "fPCA"]
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 
 import sys
 if sys.version_info[0] == 2 and sys.version_info[1] < 6:
@@ -19,9 +19,10 @@ else:  # Python 3
 del sys
 
 
-from .time_warping import srsf_align, align_fPCA
+from .time_warping import srsf_align, align_fPCA, align_fPLS
 from .plot_style import f_plot, rstyle
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma
-from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection
+from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
 from .fPCA import vertfPCA, horizfPCA
 from .gauss_model import gauss_model
+from .fPLS import pls_svd

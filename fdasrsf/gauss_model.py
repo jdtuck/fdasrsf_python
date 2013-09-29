@@ -6,6 +6,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 """
 import numpy as np
 import utility_functions as uf
+import collections
 
 
 def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
@@ -34,6 +35,8 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
     # Parameters
     no = 3
     eps = np.finfo(np.double).eps
+    binsize = np.diff(time)
+    binsize = binsize.mean()
     M = time.size
 
     # compute mean and covariance in q-domain
@@ -54,5 +57,46 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
         fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]), np.sign(q_s[M, k]) * (q_s[M, k] ** 2))
 
     # random warping generation
+    rgam = uf.randomGamma(gam, n)
+    gams = np.zeros((M, n))
+    for k in xrange(0, n):
+        gams[:, k] = uf.invertGamma(rgam[:, k])
 
-    return(samples)
+    # sort functions and warping
+    if sort_samples:
+        mx = fs.max(axis=0)
+        seq1 = mx.argsort()
+
+        # compute the psi-function
+        fy = np.gradient(rgam, binsize)
+        psi = fy / np.sqrt(abs(fy) + eps)
+        ip = np.zeros(n)
+        len = np.zeros(n)
+        for i in xrange(0, n):
+            tmp = np.ones(M)
+            ip[i] = tmp.dot(psi[:, i] / M)
+            len[i] = np.acos(tmp.dot(psi[:, i] / M))
+
+        seq2 = len.argsort()
+
+        # combine x-variability and y-variability
+        ft = np.zeros((M, n))
+        for k in xrange(0, n):
+            ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) / np.double(M - 1), fs[:, seq1[k]])
+            tmp = np.isnan(ft[:, k])
+            while tmp.any():
+                rgam2 = uf.randomGamma(gam, 1)
+                ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) / np.double(M - 1), uf.invertGamma(rgam2))
+    else:
+        # combine x-variability and y-variability
+        ft = np.zeros((M, n))
+        for k in xrange(0, n):
+            ft[:, k] = np.interp(gams[:, k], np.arange(0, M) / np.double(M - 1), fs[:, k])
+            tmp = np.isnan(ft[:, k])
+            while tmp.any():
+                rgam2 = uf.randomGamma(gam, 1)
+                ft[:, k] = np.interp(gams[:, k], np.arange(0, M) / np.double(M - 1), uf.invertGamma(rgam2))
+
+    samples = collections.namedtuple('samples', ['fs', 'gams', 'ft'])
+    out = samples(fs, rgam, ft)
+    return out

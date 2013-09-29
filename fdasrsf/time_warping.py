@@ -10,7 +10,9 @@ import utility_functions as uf
 from scipy.integrate import simps, cumtrapz, trapz
 from numpy.linalg import norm
 from joblib import Parallel, delayed
+from fPLS import pls_svd
 import plot_style as plot
+import fpls_warp as fpls
 import collections
 
 
@@ -235,7 +237,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
     return out
 
 
-def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25):
+def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     """
     aligns a collection of functions while extracting principal components. The functions are aligned to the principal
     components
@@ -280,14 +282,11 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25)
     eps = np.finfo(np.double).eps
     f0 = f
 
-    if smooth_data:
-        f = uf.smooth_data(f, sparam)
-
     if showplot:
         plot.f_plot(time, f, title="Original Data")
 
     # Compute SRSF function from data
-    f, g, g2 = uf.gradient_spline(time, f)
+    f, g, g2 = uf.gradient_spline(time, f, smoothdata)
     q = g / np.sqrt(abs(g) + eps)
 
     print ("Initializing...")
@@ -332,7 +331,8 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25)
 
         # Matching Step
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr], lam) for n in range(N))
+            out = Parallel(n_jobs=-1)(
+                delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr], lam) for n in range(N))
             gam_t = np.array(out)
             gam[:, :, itr] = gam_t.transpose()
         else:
@@ -469,4 +469,154 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smooth_data=False, sparam=25)
     align_fPCAresults = collections.namedtuple('align_fPCA', ['fn', 'qn', 'q0', 'mqn', 'gam', 'q_pca', 'f_pca',
                                                               'latent', 'coef', 'U'])
     out = align_fPCAresults(fn, qn, q0, mqn, gam, q_pca, f_pca, s, c, U)
+    return out
+
+
+def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, max_itr=100):
+    """
+    This function aligns a collection of functions while performing principal least squares
+
+    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param g: numpy ndarray of shape (M,N) of M functions with N samples
+    :param time: vector of size N describing the sample points
+    :param comps: number of fPLS components
+    :param showplot: Shows plots of results using matplotlib (default = T)
+    :param smooth_data: Smooth the data using a box filter (default = F)
+    :type smooth_data: bool
+    :type f: np.ndarray
+    :type g: np.ndarray
+    :type time: np.ndarray
+
+    :rtype: tuple of numpy array
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+    :return gn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+    :return qfn: aligned srvfs - similar structure to fn
+    :return qgn: aligned srvfs - similar structure to fn
+    :return qf0: original srvf - similar structure to fn
+    :return qg0: original srvf - similar structure to fn
+    :return gam: warping functions - similar structure to fn
+    :return wqf: srsf principal weight functions
+    :return wqg: srsf principal weight functions
+    :return wf: srsf principal weight functions
+    :return wg: srsf principal weight functions
+    :return cost: cost function value
+    """
+    print ("Initializing...")
+    binsize = np.diff(time)
+    binsize = binsize.mean()
+    eps = np.finfo(np.double).eps
+    M = f.shape[0]
+    N = f.shape[1]
+    f0 = f
+    g0 = g
+
+    if showplot:
+        plot.f_plot(time, f, title="f Original Data")
+        plot.f_plot(time, g, title="g Original Data")
+
+    # Compute q-function of f and g
+    f, g1, g2 = uf.gradient_spline(time, f, smoothdata)
+    qf = g1 / np.sqrt(abs(g1) + eps)
+    g, g1, g2 = uf.gradient_spline(time, g, smoothdata)
+    qg = g1 / np.sqrt(abs(g1) + eps)
+
+    print "Calculating fPLS weight functions for %d Warped Functions..." % N
+    itr = 0
+    fi = np.zeros((M, N, max_itr + 1))
+    fi[:, :, itr] = f
+    gi = np.zeros((M, N, max_itr + 1))
+    gi[:, :, itr] = g
+    qfi = np.zeros((M, N, max_itr + 1))
+    qfi[:, :, itr] = qf
+    qgi = np.zeros((M, N, max_itr + 1))
+    qgi[:, :, itr] = qg
+    wqf1, wqg1, alpha, values = pls_svd(time, qfi[:, :, itr], qgi[:, :, itr], 2, 0)
+    wqf = np.zeros((M, max_itr + 1))
+    wqf[:, itr] = wqf1[:, 0]
+    wqg = np.zeros((M, max_itr + 1))
+    wqg[:, itr] = wqg1[:, 0]
+    gam = np.zeros((M, N, max_itr + 1))
+    tmp = np.tile(np.linspace(0, 1, M), (N, 1))
+    gam[:, :, itr] = tmp.transpose()
+    wqf_diff = np.zeros(max_itr + 1)
+    cost = np.zeros(max_itr + 1)
+    cost_diff = 1
+
+    while itr <= max_itr:
+
+        # warping
+        gamtmp = np.ascontiguousarray(gam[:, :, 0])
+        qftmp = np.ascontiguousarray(qfi[:, :, 0])
+        qgtmp = np.ascontiguousarray(qgi[:, :, 0])
+        wqftmp = np.ascontiguousarray(wqf[:, itr])
+        wqgtmp = np.ascontiguousarray(wqg[:, itr])
+        gam[:, :, itr + 1] = fpls.fpls_warp(time, gamtmp, qftmp, qgtmp, wqftmp, wqgtmp,
+                                            display=0, delta=0.1, tol=1e-6, max_iter=4000)
+
+        for k in xrange(0, N):
+            gam_k = gam[:, k, itr + 1]
+            fi[:, k, itr + 1] = np.interp((time[-1] - time[0]) * gam_k + time[0], time, fi[:, k, 0])
+            gi[:, k, itr + 1] = np.interp((time[-1] - time[0]) * gam_k + time[0], time, gi[:, k, 0])
+            qfi[:, k, itr + 1] = uf.warp_q_gamma(time, qfi[:, k, 0], gam_k)
+            qgi[:, k, itr + 1] = uf.warp_q_gamma(time, qgi[:, k, 0], gam_k)
+
+        # PLS
+        wqfi, wqgi, alpha, values = pls_svd(time, qfi[:, :, itr + 1], qgi[:, :, itr + 1], 2, 0)
+        wqf[:, itr + 1] = wqfi[:, 0]
+        wqg[:, itr + 1] = wqgi[:, 0]
+
+        wqf_diff[itr] = np.sqrt(sum(wqf[:, itr + 1] - wqf[:, itr]) ** 2)
+
+        rfi = np.zeros(N)
+        rgi = np.zeros(N)
+
+        for l in xrange(0, N):
+            rfi[l] = uf.innerprod_q(time, qfi[:, l, itr + 1], wqf[:, itr + 1])
+            rgi[l] = uf.innerprod_q(time, qgi[:, l, itr + 1], wqg[:, itr + 1])
+
+        cost[itr] = np.cov(rfi, rgi)[1, 0]
+
+        if itr > 1:
+            cost_diff = cost[itr] - cost[itr - 1]
+
+        print "Iteration: %d - Diff Value: %f - %f" % (itr + 1, wqf_diff[itr], cost[itr])
+        if wqf_diff[itr] < 1e-1 or abs(cost_diff) < 1e-3:
+            break
+
+        itr += 1
+
+    cost = cost[0:(itr + 1)]
+
+    # Aligned data & stats
+    fn = fi[:, :, itr + 1]
+    gn = gi[:, :, itr + 1]
+    qfn = qfi[:, :, itr + 1]
+    qf0 = qfi[:, :, 0]
+    qgn = qgi[:, :, itr + 1]
+    qg0 = qgi[:, :, 0]
+    wqfn, wqgn, alpha, values = pls_svd(time, qfn, qgn, comps, 0)
+
+    wf = np.zeros((M, comps))
+    wg = np.zeros((M, comps))
+    for ii in xrange(0, comps):
+        wf[:, ii] = cumtrapz(wqfn[:, ii] * np.abs(wqfn[:, ii]), time, initial=0)
+        wg[:, ii] = cumtrapz(wqgn[:, ii] * np.abs(wqgn[:, ii]), time, initial=0)
+
+    gam_f = gam[:, :, itr + 1]
+
+    if showplot:
+        # Align Plots
+        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), gam_f, title="Warping Functions")
+        ax.set_aspect('equal')
+
+        plot.f_plot(time, fn, title="fn Warped Data")
+        plot.f_plot(time, gn, title="gn Warped Data")
+        plot.f_plot(time, wf, title="wf")
+        plot.f_plot(time, wg, title="wg")
+
+        plt.show()
+
+    align_fPLSresults = collections.namedtuple('align_fPLS', ['wf', 'wg', 'fn', 'gn', 'qfn', 'qgn', 'qf0',
+                                                              'qg0', 'wqf', 'wqg', 'gam', 'values', 'cost'])
+    out = align_fPLSresults(wf, wg, fn, gn, qfn, qgn, qf0, qg0, wqfn, wqgn, gam_f, values, cost)
     return out

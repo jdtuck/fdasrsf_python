@@ -1,4 +1,6 @@
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file fdasrsf.idx...done (0 entries accepted, 0 rejected).
-Nothing written in fdasrsf.ind.
+Scanning input file fdasrsf.idx....done (27 entries accepted, 0 rejected).
+Sorting entries....done (137 comparisons).
+Generating output file fdasrsf.ind....done (82 lines written, 0 warnings).
+Output written in fdasrsf.ind.
 Transcript written in fdasrsf.ilg.

@@ -1,0 +1,82 @@
+\begin{theindex}
+
+  \item align\_fPCA() (in module time\_warping), \hyperpage{3}
+  \item align\_fPLS() (in module time\_warping), \hyperpage{3}
+
+  \indexspace
+
+  \item cumtrapzmid() (in module utility\_functions), \hyperpage{11}
+
+  \indexspace
+
+  \item diffop() (in module utility\_functions), \hyperpage{11}
+
+  \indexspace
+
+  \item elastic\_distance() (in module utility\_functions), 
+		\hyperpage{12}
+
+  \indexspace
+
+  \item f\_to\_srsf() (in module utility\_functions), \hyperpage{12}
+  \item fPCA (module), \hyperpage{7}
+  \item fPLS (module), \hyperpage{9}
+
+  \indexspace
+
+  \item geigen() (in module utility\_functions), \hyperpage{12}
+  \item gradient\_spline() (in module utility\_functions), 
+		\hyperpage{12}
+
+  \indexspace
+
+  \item horizfPCA() (in module fPCA), \hyperpage{7}
+
+  \indexspace
+
+  \item innerprod\_q() (in module utility\_functions), \hyperpage{13}
+  \item invertGamma() (in module utility\_functions), \hyperpage{13}
+
+  \indexspace
+
+  \item optimum\_reparam() (in module utility\_functions), 
+		\hyperpage{13}
+  \item outlier\_detection() (in module utility\_functions), 
+		\hyperpage{13}
+
+  \indexspace
+
+  \item pls\_svd() (in module fPLS), \hyperpage{9}
+
+  \indexspace
+
+  \item randomGamma() (in module utility\_functions), \hyperpage{13}
+  \item rgam() (in module utility\_functions), \hyperpage{13}
+
+  \indexspace
+
+  \item smooth\_data() (in module utility\_functions), \hyperpage{14}
+  \item SqrtMean() (in module utility\_functions), \hyperpage{11}
+  \item SqrtMeanInverse() (in module utility\_functions), 
+		\hyperpage{11}
+  \item srsf\_align() (in module time\_warping), \hyperpage{4}
+
+  \indexspace
+
+  \item time\_warping (module), \hyperpage{3}
+
+  \indexspace
+
+  \item update\_progress() (in module utility\_functions), 
+		\hyperpage{14}
+  \item utility\_functions (module), \hyperpage{11}
+
+  \indexspace
+
+  \item vertfPCA() (in module fPCA), \hyperpage{7}
+
+  \indexspace
+
+  \item warp\_q\_gamma() (in module utility\_functions), \hyperpage{14}
+
+\end{theindex}

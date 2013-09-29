@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,15 +8,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Functional Principal Component Analysis &mdash; fdasrsf 1.0.1 documentation</title>
+    <title>Functional Principal Component Analysis &mdash; fdasrsf 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0.1',
+        URL_ROOT:    '',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,8 +26,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.0.1 documentation" href="index.html" />
-    <link rel="next" title="Utility Functions" href="utility_functions.html" />
+    <link rel="top" title="fdasrsf 1.1.0 documentation" href="index.html" />
+    <link rel="next" title="Functional Principal Least Squares" href="fPLS.html" />
     <link rel="prev" title="Functional Alignment" href="time_warping.html" /> 
   </head>
   <body>
@@ -36,12 +38,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="utility_functions.html" title="Utility Functions"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fPLS.html" title="Functional Principal Least Squares"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="time_warping.html" title="Functional Alignment"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,8 +55,87 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="functional-principal-component-analysis">
-<h1>Functional Principal Component Analysis<a class="headerlink" href="#functional-principal-component-analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-fPCA">
+<span id="functional-principal-component-analysis"></span><h1>Functional Principal Component Analysis<a class="headerlink" href="#module-fPCA" title="Permalink to this headline">¶</a></h1>
+<p>Vertical and Horizontal Functional Principal Component Analysis using SRSF</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:dtucker&#37;&#52;&#48;stat&#46;fsu&#46;edu">dtucker<span>&#64;</span>stat<span>&#46;</span>fsu<span>&#46;</span>edu</a>&gt;</p>
+<dl class="function">
+<dt id="fPCA.horizfPCA">
+<tt class="descclassname">fPCA.</tt><tt class="descname">horizfPCA</tt><big>(</big><em>gam</em>, <em>time</em>, <em>no</em>, <em>showplot=True</em><big>)</big><a class="reference internal" href="_modules/fPCA.html#horizfPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPCA.horizfPCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates horizontal functional principal component analysis on aligned data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gam</strong> &#8211; numpy ndarray of shape (M,N) of M warping functions</li>
+<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
+<li><strong>no</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of components to extract (default = 1)</li>
+<li><strong>showplot</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Shows plots of results using matplotlib (default = T)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple of numpy ndarray</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return q_pca:</th><td class="field-body"><p class="first">srsf principal directions</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return f_pca:</th><td class="field-body"><p class="first">functional principal directions</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return latent:</th><td class="field-body"><p class="first">latent values</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return coef:</th><td class="field-body"><p class="first">coefficients</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return U:</th><td class="field-body"><p class="first last">eigenvectors</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fPCA.vertfPCA">
+<tt class="descclassname">fPCA.</tt><tt class="descname">vertfPCA</tt><big>(</big><em>fn</em>, <em>time</em>, <em>qn</em>, <em>no=1</em>, <em>showplot=True</em><big>)</big><a class="reference internal" href="_modules/fPCA.html#vertfPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPCA.vertfPCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates vertical functional principal component analysis on aligned data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fn</strong> &#8211; numpy ndarray of shape (M,N) of M aligned functions with N samples</li>
+<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
+<li><strong>qn</strong> &#8211; numpy ndarray of shape (M,N) of M aligned SRSF with N samples</li>
+<li><strong>no</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of components to extract (default = 1)</li>
+<li><strong>showplot</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Shows plots of results using matplotlib (default = T)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple of numpy ndarray</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return q_pca:</th><td class="field-body"><p class="first">srsf principal directions</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return f_pca:</th><td class="field-body"><p class="first">functional principal directions</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return latent:</th><td class="field-body"><p class="first">latent values</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return coef:</th><td class="field-body"><p class="first">coefficients</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return U:</th><td class="field-body"><p class="first last">eigenvectors</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -64,8 +148,8 @@
   <p class="topless"><a href="time_warping.html"
                         title="previous chapter">Functional Alignment</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="utility_functions.html"
-                        title="next chapter">Utility Functions</a></p>
+  <p class="topless"><a href="fPLS.html"
+                        title="next chapter">Functional Principal Least Squares</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/fPCA.txt"
@@ -95,17 +179,20 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="utility_functions.html" title="Utility Functions"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fPLS.html" title="Functional Principal Least Squares"
              >next</a> |</li>
         <li class="right" >
           <a href="time_warping.html" title="Functional Alignment"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

@@ -12,7 +12,7 @@ def coptimum_reparamN(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double
 
     :param mq: vector of size N samples of first SRSF
     :param time: vector of size N describing the sample points
-    :param q: numpy ndarray of shape (M,N) of M srsfs with N samples
+    :param q: numpy ndarray of shape (M,N) of N srsfs with M samples
     :param lam1: controls the amount of elasticity (default = 0.0)
 
     :rtype numpy ndarray
@@ -21,7 +21,7 @@ def coptimum_reparamN(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double
     """
     cdef int M, N, n1
     cdef double lam
-    mq = mq/norm(mq)
+    mq = mq / norm(mq)
     M, N = q.shape[0], q.shape[1]
     n1 = 1
     lam = lam1
@@ -35,7 +35,7 @@ def coptimum_reparamN(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double
     Go = np.zeros((M, N))
     To = np.zeros((M, N))
     for k in xrange(0, N):
-        qi = q[:, k]/norm(q[:,k])
+        qi = q[:, k] / norm(q[:, k])
         qi = np.ascontiguousarray(qi)
 
         cDPQ.DynamicProgrammingQ2(&mq[0], &time[0], &qi[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
@@ -80,8 +80,8 @@ def coptimum_reparamN2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doubl
     Go = np.zeros((M, N))
     To = np.zeros((M, N))
     for k in xrange(0, N):
-        q1i = q1[:, k]/norm(q1[:, k])
-        q2i = q2[:, k]/norm(q2[:, k])
+        q1i = q1[:, k] / norm(q1[:, k])
+        q2i = q2[:, k] / norm(q2[:, k])
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
@@ -115,8 +115,8 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     M = q1.shape[0]
     n1 = 1
     lam = lam1
-    q1 = q1/norm(q1)
-    q2 = q2/norm(q2)
+    q1 = q1 / norm(q1)
+    q2 = q2 / norm(q2)
     cdef np.ndarray[double, ndim=1, mode="c"] G = np.zeros(M)
     cdef np.ndarray[double, ndim=1, mode="c"] T = np.zeros(M)
     cdef np.ndarray[double, ndim=1, mode="c"] size = np.zeros(1)
