@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,7 +13,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -320,6 +318,33 @@ calculates the elastic distances</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="utility_functions.optimum_reparam_pair">
+<tt class="descclassname">utility_functions.</tt><tt class="descname">optimum_reparam_pair</tt><big>(</big><em>q</em>, <em>time</em>, <em>q1</em>, <em>q2</em>, <em>lam=0.0</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam_pair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam_pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the warping to align srsf pair q1 and q2 to q</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>q</strong> &#8211; vector of size N or array of NxM samples of first SRSF</li>
+<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
+<li><strong>q1</strong> &#8211; vector of size N or array of NxM samples samples of second SRSF</li>
+<li><strong>q2</strong> &#8211; vector of size N or array of NxM samples samples of second SRSF</li>
+<li><strong>lam</strong> &#8211; controls the amount of elasticity (default = 0.0)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">vector</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return gam:</th><td class="field-body"><p class="first last">describing the warping function used to align q2 with q1</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="utility_functions.outlier_detection">
 <tt class="descclassname">utility_functions.</tt><tt class="descname">outlier_detection</tt><big>(</big><em>q</em>, <em>time</em>, <em>mq</em>, <em>k=1.5</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#outlier_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.outlier_detection" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates outlier&#8217;s using geodesic distances of the SRSFs from the median</p>
@@ -492,7 +517,7 @@ calculates the elastic distances</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

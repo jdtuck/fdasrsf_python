@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -62,7 +60,7 @@
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span><span class="p">,</span> <span class="n">cholesky</span><span class="p">,</span> <span class="n">inv</span>
 <span class="kn">from</span> <span class="nn">scipy.stats.mstats</span> <span class="kn">import</span> <span class="n">mquantiles</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">finfo</span><span class="p">,</span> <span class="n">double</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">,</span> <span class="nb">round</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ones</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">diagflat</span><span class="p">,</span> <span class="n">inner</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">interp</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ones</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">diagflat</span><span class="p">,</span> <span class="n">inner</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="kn">as</span> <span class="nn">rn</span>
 <span class="kn">import</span> <span class="nn">optimum_reparamN</span> <span class="kn">as</span> <span class="nn">orN</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -169,6 +167,30 @@
 
     <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparamN2</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gam</span>
+
+</div>
+<div class="viewcode-block" id="optimum_reparam_pair"><a class="viewcode-back" href="../utility_functions.html#utility_functions.optimum_reparam_pair">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam_pair</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    calculates the warping to align srsf pair q1 and q2 to q</span>
+
+<span class="sd">    :param q: vector of size N or array of NxM samples of first SRSF</span>
+<span class="sd">    :param time: vector of size N describing the sample points</span>
+<span class="sd">    :param q1: vector of size N or array of NxM samples samples of second SRSF</span>
+<span class="sd">    :param q2: vector of size N or array of NxM samples samples of second SRSF</span>
+<span class="sd">    :param lam: controls the amount of elasticity (default = 0.0)</span>
+
+<span class="sd">    :rtype: vector</span>
+<span class="sd">    :return gam: describing the warping function used to align q2 with q1</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">q_c</span> <span class="o">=</span> <span class="n">column_stack</span><span class="p">((</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">))</span>
+        <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparam_pair</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q_c</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparamN2_pair</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">gam</span>
 
@@ -659,7 +681,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

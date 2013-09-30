@@ -34,12 +34,14 @@
 
   \indexspace
 
-  \item innerprod\_q() (in module utility\_functions), \hyperpage{13}
+  \item innerprod\_q() (in module utility\_functions), \hyperpage{12}
   \item invertGamma() (in module utility\_functions), \hyperpage{13}
 
   \indexspace
 
   \item optimum\_reparam() (in module utility\_functions), 
+		\hyperpage{13}
+  \item optimum\_reparam\_pair() (in module utility\_functions), 
 		\hyperpage{13}
   \item outlier\_detection() (in module utility\_functions), 
 		\hyperpage{13}
@@ -51,7 +53,7 @@
   \indexspace
 
   \item randomGamma() (in module utility\_functions), \hyperpage{13}
-  \item rgam() (in module utility\_functions), \hyperpage{13}
+  \item rgam() (in module utility\_functions), \hyperpage{14}
 
   \indexspace
 
@@ -60,6 +62,7 @@
   \item SqrtMeanInverse() (in module utility\_functions), 
 		\hyperpage{11}
   \item srsf\_align() (in module time\_warping), \hyperpage{4}
+  \item srsf\_align\_pair() (in module time\_warping), \hyperpage{5}
 
   \indexspace
 

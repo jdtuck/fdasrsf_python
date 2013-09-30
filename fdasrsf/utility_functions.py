@@ -10,7 +10,7 @@ from scipy.integrate import simps, cumtrapz
 from scipy.linalg import norm, svd, cholesky, inv
 from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace, arccos, sin, cos, arange, ascontiguousarray, round
-from numpy import ones, real, trapz, pi, cumsum, fabs, cov, diagflat, inner, gradient, interp
+from numpy import ones, real, trapz, pi, cumsum, fabs, cov, diagflat, inner, gradient, column_stack, row_stack
 import numpy.random as rn
 import optimum_reparamN as orN
 import sys
@@ -117,6 +117,30 @@ def optimum_reparam(q1, time, q2, lam=0.0):
 
     if q1.ndim == 2 and q2.ndim == 2:
         gam = orN.coptimum_reparamN2(ascontiguousarray(q1), time, ascontiguousarray(q2), lam)
+
+    return gam
+
+
+def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
+    """
+    calculates the warping to align srsf pair q1 and q2 to q
+
+    :param q: vector of size N or array of NxM samples of first SRSF
+    :param time: vector of size N describing the sample points
+    :param q1: vector of size N or array of NxM samples samples of second SRSF
+    :param q2: vector of size N or array of NxM samples samples of second SRSF
+    :param lam: controls the amount of elasticity (default = 0.0)
+
+    :rtype: vector
+    :return gam: describing the warping function used to align q2 with q1
+
+    """
+    if q1.ndim == 1 and q2.ndim == 1:
+        q_c = column_stack((q1, q2))
+        gam = orN.coptimum_reparam_pair(ascontiguousarray(q), time, ascontiguousarray(q_c), lam)
+
+    if q1.ndim == 2 and q2.ndim == 2:
+        gam = orN.coptimum_reparamN2_pair(ascontiguousarray(q), time, ascontiguousarray(q1), ascontiguousarray(q2), lam)
 
     return gam
 
@@ -338,11 +362,11 @@ def rgam(N, sigma, num):
     mu = sqrt(ones(N - 1) * TT / double(N - 1))
     omega = (2 * pi) / double(TT)
     for k in xrange(0, num):
-        alpha_i = rn.normal(scale=1 / sigma)
+        alpha_i = rn.normal(scale=sqrt(sigma))
         v = alpha_i * ones(TT)
         cnt = 1
         for l in range(2, 11):
-            alpha_i = rn.normal(scale=1 / sigma)
+            alpha_i = rn.normal(scale=sqrt(sigma))
             #odd
             if l % 2 != 0:
                 v = v + alpha_i * sqrt(2) * cos(cnt * omega * time)

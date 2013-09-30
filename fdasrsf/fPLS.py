@@ -44,4 +44,14 @@ def pls_svd(time, qf, qg, no, alpha=0.0):
     wqf = wf
     wqg = wg
 
-    return wqf, wqg, alpha, values
+    N = qf.shape[1]
+    rfi = np.zeros(N)
+    rgi = np.zeros(N)
+
+    for l in xrange(0, N):
+        rfi[l] = innerprod_q(time, qf[:, l], wqf[:, 0])
+        rgi[l] = innerprod_q(time, qg[:, l], wqg[:, 0])
+
+    cost = np.cov(rfi, rgi)[1, 0]
+
+    return wqf, wqg, alpha, values, cost

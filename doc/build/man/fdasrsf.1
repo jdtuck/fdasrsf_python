@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "September 28, 2013" "1.1" "fdasrsf"
+.TH "FDASRSF" "1" "September 30, 2013" "1.1" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -203,8 +203,6 @@ This function aligns a collection of functions using the elastic square\-root sl
 .IP \(bu 2
 \fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
-\fBsparam\fP (\fIdouble\fP) \-\- Number of times to run box filter (default = 25)
-.IP \(bu 2
 \fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
 .UNINDENT
 .TP
@@ -246,6 +244,67 @@ Examples
 >>> f = f.transpose()
 >>> time = fun.root.time[:]
 >>> out = srsf_align(f,time)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B time_warping.srsf_align_pair(f, g, time, method=\(aqmean\(aq, showplot=True, smoothdata=False, lam=0.0)
+This function aligns a collection of functions using the elastic square\-root slope (srsf) framework.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of M functions with N samples
+.IP \(bu 2
+\fBg\fP \-\- numpy ndarray of shape (M,N) of M functions with N samples
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size N describing the sample points
+.IP \(bu 2
+\fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
+.IP \(bu 2
+\fBshowplot\fP \-\- Shows plots of results using matplotlib (default = T)
+.IP \(bu 2
+\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+.IP \(bu 2
+\fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return fn
+aligned functions \- numpy ndarray of shape (M,N) of M functions with N samples
+.TP
+.B Return gn
+aligned functions \- numpy ndarray of shape (M,N) of M functions with N samples
+.TP
+.B Return qfn
+aligned srvfs \- similar structure to fn
+.TP
+.B Return qgn
+aligned srvfs \- similar structure to fn
+.TP
+.B Return qf0
+original srvf \- similar structure to fn
+.TP
+.B Return qg0
+original srvf \- similar structure to fn
+.TP
+.B Return fmean
+f function mean or median \- vector of length N
+.TP
+.B Return gmean
+g function mean or median \- vector of length N
+.TP
+.B Return mqfn
+srvf mean or median \- vector of length N
+.TP
+.B Return mqgn
+srvf mean or median \- vector of length N
+.TP
+.B Return gam
+warping functions \- similar structure to fn
+.UNINDENT
 .UNINDENT
 .SH FUNCTIONAL PRINCIPAL COMPONENT ANALYSIS
 .sp
@@ -609,6 +668,33 @@ calculates the warping to align srsf q2 to q1
 \fBq1\fP \-\- vector of size N or array of NxM samples of first SRSF
 .IP \(bu 2
 \fBtime\fP \-\- vector of size N describing the sample points
+.IP \(bu 2
+\fBq2\fP \-\- vector of size N or array of NxM samples samples of second SRSF
+.IP \(bu 2
+\fBlam\fP \-\- controls the amount of elasticity (default = 0.0)
+.UNINDENT
+.TP
+.B Return type
+vector
+.TP
+.B Return gam
+describing the warping function used to align q2 with q1
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B utility_functions.optimum_reparam_pair(q, time, q1, q2, lam=0.0)
+calculates the warping to align srsf pair q1 and q2 to q
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBq\fP \-\- vector of size N or array of NxM samples of first SRSF
+.IP \(bu 2
+\fBtime\fP \-\- vector of size N describing the sample points
+.IP \(bu 2
+\fBq1\fP \-\- vector of size N or array of NxM samples samples of second SRSF
 .IP \(bu 2
 \fBq2\fP \-\- vector of size N or array of NxM samples samples of second SRSF
 .IP \(bu 2

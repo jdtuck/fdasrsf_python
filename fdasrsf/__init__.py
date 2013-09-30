@@ -10,6 +10,7 @@ __all__ = ["time_warping", "utility_functions", "fPCA"]
 __version__ = "1.1.0"
 
 import sys
+
 if sys.version_info[0] == 2 and sys.version_info[1] < 6:
     raise ImportError("Python Version 2.6 or above is required for fdasrsf.")
 else:  # Python 3
@@ -18,11 +19,10 @@ else:  # Python 3
 
 del sys
 
-
-from .time_warping import srsf_align, align_fPCA, align_fPLS
+from .time_warping import srsf_align, srsf_align_pair, align_fPCA, align_fPLS
 from .plot_style import f_plot, rstyle
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma
-from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
+from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q, optimum_reparam_pair
 from .fPCA import vertfPCA, horizfPCA
 from .gauss_model import gauss_model
 from .fPLS import pls_svd
