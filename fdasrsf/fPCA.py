@@ -152,10 +152,10 @@ def horizfPCA(gam, time, no, showplot=True):
 
             tmp = np.zeros(TT)
             tmp[1:TT] = np.cumsum(psi_pca[k-1, :, j] * psi_pca[k-1, :, j])
-            gam_pca[k-1, :, j] = tmp / np.double(TT)
+            gam_pca[k-1, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
 
-    hfpca_results = collections.namedtuple('hfpca', ['gam_pca', 'psi_pca', 'latent', 'U'])
-    hfpca = hfpca_results(gam_pca, psi_pca, s, U)
+    hfpca_results = collections.namedtuple('hfpca', ['gam_pca', 'psi_pca', 'latent', 'U', 'gam_mu'])
+    hfpca = hfpca_results(gam_pca, psi_pca, s, U, gam_mu)
 
     if showplot:
         CBcdict = {
