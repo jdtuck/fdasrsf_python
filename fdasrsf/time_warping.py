@@ -728,7 +728,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     return out
 
 
-def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, max_itr=100):
+def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01, max_itr=100):
     """
     This function aligns a collection of functions while performing principal least squares
 
@@ -738,6 +738,8 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, max_itr=100
     :param comps: number of fPLS components
     :param showplot: Shows plots of results using matplotlib (default = T)
     :param smooth_data: Smooth the data using a box filter (default = F)
+    :param delta: gradient step size
+    :param max_itr: maximum number of iterations
     :type smooth_data: bool
     :type f: np.ndarray
     :type g: np.ndarray
@@ -807,7 +809,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, max_itr=100
         wqftmp = np.ascontiguousarray(wqf[:, itr])
         wqgtmp = np.ascontiguousarray(wqg[:, itr])
         gam[:, :, itr + 1] = fpls.fpls_warp(time, gamtmp, qftmp, qgtmp, wqftmp, wqgtmp,
-                                            display=0, delta=0.1, tol=1e-6, max_iter=4000)
+                                            display=0, delta=delta, tol=1e-6, max_iter=4000)
 
         for k in xrange(0, N):
             gam_k = gam[:, k, itr + 1]
