@@ -30,8 +30,8 @@ def smooth_data(f, sparam):
     M = f.shape[0]
     N = f.shape[1]
 
-    for k in xrange(1, sparam):
-        for r in xrange(0, N):
+    for k in range(1, sparam):
+        for r in range(0, N):
             f[1:(M - 2), r] = (f[0:(M - 3), r] + 2 * f[1:(M - 2), r] + f[2:(M - 1), r]) / 4
     return f
 
@@ -57,7 +57,7 @@ def gradient_spline(time, f, smooth=False):
         f0 = zeros((M, N))
         g = zeros((M, N))
         g2 = zeros((M, N))
-        for k in xrange(0, N):
+        for k in range(0, N):
             if smooth:
                 spar = time.shape[0] * (.025 * fabs(f[:, k]).max()) ** 2
             else:
@@ -209,7 +209,7 @@ def SqrtMeanInverse(gam):
     T1 = gam.shape[0]
     dt = 1 / float(T1 - 1)
     psi = zeros((T1 - 1, n))
-    for k in xrange(0, n):
+    for k in range(0, n):
         psi[:, k] = sqrt(diff(gam[:, k]) / dt + eps)
 
     # Find Direction
@@ -224,8 +224,8 @@ def SqrtMeanInverse(gam):
     tt = 1
     lvm = zeros(maxiter)
     vec = zeros((T1 - 1, n))
-    for itr in xrange(0, maxiter):
-        for k in xrange(0, n):
+    for itr in range(0, maxiter):
+        for k in range(0, n):
             dot = simps(mu * psi[:, k], linspace(0, 1, T1 - 1))
             if dot > 1:
                 dot = 1
@@ -271,7 +271,7 @@ def SqrtMean(gam):
     n = gam.shape[1]
     TT = double(gam.shape[0])
     psi = zeros((TT - 1, n))
-    for k in xrange(0, n):
+    for k in range(0, n):
         psi[:, k] = sqrt(diff(gam[:, k]) * TT)
 
     # Find Direction
@@ -286,8 +286,8 @@ def SqrtMean(gam):
     tt = 1
     lvm = zeros(maxiter)
     vec = zeros((TT - 1, n))
-    for itr in xrange(0, maxiter):
-        for k in xrange(0, n):
+    for itr in range(0, maxiter):
+        for k in range(0, n):
             dot = simps(mu * psi[:, k], linspace(0, 1, TT - 1))
             if dot > 1:
                 dot = 1
@@ -361,7 +361,7 @@ def rgam(N, sigma, num):
     time = linspace(0, 1, TT)
     mu = sqrt(ones(N - 1) * TT / double(N - 1))
     omega = (2 * pi) / double(TT)
-    for k in xrange(0, num):
+    for k in range(0, num):
         alpha_i = rn.normal(scale=sqrt(sigma))
         v = alpha_i * ones(TT)
         cnt = 1
@@ -400,7 +400,7 @@ def outlier_detection(q, time, mq, k=1.5):
     """
     N = q.shape[1]
     ds = zeros(N)
-    for kk in xrange(0, N):
+    for kk in range(0, N):
         ds[kk] = sqrt(simps((mq - q[:, kk]) ** 2, time))
 
     quartile_range = mquantiles(ds)
@@ -434,10 +434,10 @@ def randomGamma(gam, num):
     vm = vec.mean(axis=1)
 
     rgam = zeros((TT, num))
-    for k in xrange(0, num):
+    for k in range(0, num):
         a = rn.standard_normal(n)
         v = zeros(vm.size)
-        for i in xrange(0, n):
+        for i in range(0, n):
             v = v + a[i] * sqrt(s[i]) * U[:, i]
 
         vn = norm(v) / sqrt(TT)
@@ -513,11 +513,11 @@ def geigen(Amat, Bmat, Cmat):
 
     """
     if Bmat.shape[0] != Bmat.shape[1]:
-        print "BMAT is not square.\n"
+        print("BMAT is not square.\n")
         sys.exit(1)
 
     if Cmat.shape[0] != Cmat.shape[1]:
-        print "CMAT is not square.\n"
+        print("CMAT is not square.\n")
         sys.exit(1)
 
     p = Bmat.shape[0]
@@ -527,13 +527,13 @@ def geigen(Amat, Bmat, Cmat):
     tmp = fabs(Bmat - Bmat.transpose())
     tmp1 = fabs(Bmat)
     if tmp.max() / tmp1.max() > 1e-10:
-        print "BMAT not symmetric..\n"
+        print("BMAT not symmetric..\n")
         sys.exit(1)
 
     tmp = fabs(Cmat - Cmat.transpose())
     tmp1 = fabs(Cmat)
     if tmp.max() / tmp1.max() > 1e-10:
-        print "CMAT not symmetric..\n"
+        print("CMAT not symmetric..\n")
         sys.exit(1)
 
     Bmat = (Bmat + Bmat.transpose()) / 2

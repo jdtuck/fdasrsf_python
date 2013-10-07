@@ -7,7 +7,7 @@ from Cython.Distutils import build_ext
 
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (2, 6):
-    print("fdasrsf requires Python 2.6 or newer. Python %d.%d detected" % sys.version_info[:2])
+    print(("fdasrsf requires Python 2.6 or newer. Python %d.%d detected" % sys.version_info[:2]))
     sys.exit(-1)
 
 

@@ -5,7 +5,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 import numpy as np
-import utility_functions as uf
+from . import utility_functions as uf
 import collections
 
 
@@ -53,13 +53,13 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
 
     # compute the correspondence to the original function domain
     fs = np.zeros((M, n))
-    for k in xrange(0, n):
+    for k in range(0, n):
         fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]), np.sign(q_s[M, k]) * (q_s[M, k] ** 2))
 
     # random warping generation
     rgam = uf.randomGamma(gam, n)
     gams = np.zeros((M, n))
-    for k in xrange(0, n):
+    for k in range(0, n):
         gams[:, k] = uf.invertGamma(rgam[:, k])
 
     # sort functions and warping
@@ -72,7 +72,7 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
         psi = fy / np.sqrt(abs(fy) + eps)
         ip = np.zeros(n)
         len = np.zeros(n)
-        for i in xrange(0, n):
+        for i in range(0, n):
             tmp = np.ones(M)
             ip[i] = tmp.dot(psi[:, i] / M)
             len[i] = np.acos(tmp.dot(psi[:, i] / M))
@@ -81,7 +81,7 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
 
         # combine x-variability and y-variability
         ft = np.zeros((M, n))
-        for k in xrange(0, n):
+        for k in range(0, n):
             ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) / np.double(M - 1), fs[:, seq1[k]])
             tmp = np.isnan(ft[:, k])
             while tmp.any():
@@ -90,7 +90,7 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
     else:
         # combine x-variability and y-variability
         ft = np.zeros((M, n))
-        for k in xrange(0, n):
+        for k in range(0, n):
             ft[:, k] = np.interp(gams[:, k], np.arange(0, M) / np.double(M - 1), fs[:, k])
             tmp = np.isnan(ft[:, k])
             while tmp.any():

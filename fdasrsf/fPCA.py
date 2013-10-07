@@ -5,10 +5,10 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 import numpy as np
-import utility_functions as uf
+from . import utility_functions as uf
 from scipy.linalg import norm
 import matplotlib.pyplot as plt
-import plot_style as plot
+from . import plot_style as plot
 import collections
 
 
@@ -49,21 +49,21 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
 
     # compute the PCA in the q domain
     q_pca = np.ndarray(shape=(N + 1, Nstd, no), dtype=float)
-    for k in xrange(0, no):
-        for l in xrange(0, Nstd):
+    for k in range(0, no):
+        for l in range(0, Nstd):
             q_pca[:, l, k] = mqn + coef[l] * stdS[k] * U[:, k]
 
     # compute the correspondence in the f domain
     f_pca = np.ndarray(shape=(N, Nstd, no), dtype=float)
-    for k in xrange(0, no):
-        for l in xrange(0, Nstd):
+    for k in range(0, no):
+        for l in range(0, Nstd):
             f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca[0:N, l, k] * np.abs(q_pca[0:N, l, k]),
                                             np.sign(q_pca[N, l, k]) * (q_pca[N, l, k] ** 2))
 
     N2 = qn.shape[1]
     c = np.zeros((N2, no))
-    for k in xrange(0, no):
-        for l in xrange(0, N2):
+    for k in range(0, no):
+        for l in range(0, N2):
             c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
 
     vfpca_results = collections.namedtuple('vfpca', ['q_pca', 'f_pca', 'latent', 'coef', 'U'])
@@ -82,16 +82,16 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
         }
         cl = sorted(CBcdict.keys())
         fig, ax = plt.subplots(2, no)
-        for k in xrange(0, no):
+        for k in range(0, no):
             axt = ax[0, k]
-            for l in xrange(0, Nstd):
+            for l in range(0, Nstd):
                 axt.plot(time, q_pca[0:N, l, k], color=CBcdict[cl[l]])
                 axt.hold(True)
 
             axt.set_title('q domain: PD %d' % (k + 1))
             plot.rstyle(axt)
             axt = ax[1, k]
-            for l in xrange(0, Nstd):
+            for l in range(0, Nstd):
                 axt.plot(time, f_pca[:, l, k], color=CBcdict[cl[l]])
                 axt.hold(True)
 
@@ -141,7 +141,7 @@ def horizfPCA(gam, time, no, showplot=True):
 
     gam_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0] + 1, no), dtype=float)
     psi_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0], no), dtype=float)
-    for j in xrange(0, no):
+    for j in range(0, no):
         for k in tau:
             v = (k - 3) * np.sqrt(s[j]) * U[:, j]
             vn = norm(v) / np.sqrt(TT)
@@ -169,7 +169,7 @@ def horizfPCA(gam, time, no, showplot=True):
             'rP': (.8, .6, .7),
         }
         fig, ax = plt.subplots(1, no)
-        for k in xrange(0, no):
+        for k in range(0, no):
             axt = ax[k]
             axt.set_color_cycle(CBcdict[c] for c in sorted(CBcdict.keys()))
             tmp = gam_pca[:, :, k]

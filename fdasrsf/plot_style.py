@@ -104,7 +104,7 @@ def f_plot(time, f, title="Data", bw = False):
     }
 
     fig, ax = plt.subplots()
-    ax.set_color_cycle(CBcdict[c] for c in CBcdict.keys())
+    ax.set_color_cycle(CBcdict[c] for c in list(CBcdict.keys()))
     ax.plot(time, f)
     plt.title(title)
     if bw:

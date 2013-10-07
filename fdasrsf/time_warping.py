@@ -6,12 +6,12 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import utility_functions as uf
+from . import utility_functions as uf
 from scipy.integrate import simps, cumtrapz, trapz
 from numpy.linalg import norm
 from joblib import Parallel, delayed
-from fPLS import pls_svd
-import plot_style as plot
+from .fPLS import pls_svd
+from . import plot_style as plot
 import fpls_warp as fpls
 import collections
 
@@ -100,9 +100,9 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
 
     # Compute Karcher Mean
     if method == 0:
-        print "Compute Karcher Mean of %d function in SRSF space..." % N
+        print("Compute Karcher Mean of %d function in SRSF space..." % N)
     if method == 1:
-        print "Compute Karcher Median of %d function in SRSF space..." % N
+        print("Compute Karcher Median of %d function in SRSF space..." % N)
 
     MaxItr = 20
     ds = np.repeat(0.0, MaxItr + 2)
@@ -118,10 +118,10 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
     tmp[:, :, 0] = q
     q = tmp
 
-    for r in xrange(0, MaxItr):
-        print "updating step: r=%d" % (r + 1)
+    for r in range(0, MaxItr):
+        print("updating step: r=%d" % (r + 1))
         if r == (MaxItr - 1):
-            print "maximal number of iterations is reached"
+            print("maximal number of iterations is reached")
 
         # Matching Step
         if parallel:
@@ -132,7 +132,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
             gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
 
         gam_dev = np.zeros((M, N))
-        for k in xrange(0, N):
+        for k in range(0, N):
             f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, f[:, k, 0])
             q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
             gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
@@ -177,14 +177,14 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
         gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
 
     gam_dev = np.zeros((M, N))
-    for k in xrange(0, N):
+    for k in range(0, N):
         gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
 
     gamI = uf.SqrtMeanInverse(gam)
     gamI_dev = np.gradient(gamI, 1 / float(M - 1))
     mq[:, r + 1] = np.interp((time[-1] - time[0]) * gamI + time[0], time, mq[:, r]) * np.sqrt(gamI_dev)
 
-    for k in xrange(0, N):
+    for k in range(0, N):
         q[:, k, r + 1] = np.interp((time[-1] - time[0]) * gamI + time[0], time, q[:, k, r]) * np.sqrt(gamI_dev)
         f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gamI + time[0], time, f[:, k, r])
         gam[:, k] = np.interp((time[-1] - time[0]) * gamI + time[0], time, gam[:, k])
@@ -204,7 +204,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
     fmean = np.mean(f0[1, :]) + tmp
 
     fgam = np.zeros((M, N))
-    for k in xrange(0, N):
+    for k in range(0, N):
         fgam[:, k] = np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, fmean)
 
     var_fgam = fgam.var(axis=1)
@@ -314,15 +314,15 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True, smoothdata=False, 
 
     gamI = uf.SqrtMeanInverse(gam)
 
-    for k in xrange(0, 2):
+    for k in range(0, 2):
         mf[:, k] = np.interp((time[-1] - time[0]) * gamI + time[0], time, mf[:, k])
         mq[:, k] = uf.f_to_srsf(mf[:, k], time)
 
     # Compute Karcher Mean
     if method == 0:
-        print "Compute Karcher Mean of %d function in SRSF space..." % N
+        print("Compute Karcher Mean of %d function in SRSF space..." % N)
     if method == 1:
-        print "Compute Karcher Median of %d function in SRSF space..." % N
+        print("Compute Karcher Median of %d function in SRSF space..." % N)
 
     MaxItr = 20
     ds = np.repeat(0.0, MaxItr + 2)
@@ -345,10 +345,10 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True, smoothdata=False, 
     tmp[:, :, 0] = qg
     qg = tmp
 
-    for r in xrange(0, MaxItr):
-        print "updating step: r=%d" % (r + 1)
+    for r in range(0, MaxItr):
+        print("updating step: r=%d" % (r + 1))
         if r == (MaxItr - 1):
-            print "maximal number of iterations is reached"
+            print("maximal number of iterations is reached")
 
         # Matching Step
         if parallel:
@@ -360,7 +360,7 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True, smoothdata=False, 
             gam = uf.optimum_reparam_pair(mq[:, :, r], time, qf[:, :, 0], qg[:, :, 0], lam)
 
         gam_dev = np.zeros((M, N))
-        for k in xrange(0, N):
+        for k in range(0, N):
             f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, f[:, k, 0])
             g[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, g[:, k, 0])
             qf[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
@@ -421,15 +421,15 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True, smoothdata=False, 
         gam = uf.optimum_reparam_pair(mq[:, :, r], time, qf[:, :, 0], qg[:, :, 0], lam)
 
     gam_dev = np.zeros((M, N))
-    for k in xrange(0, N):
+    for k in range(0, N):
         gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
 
     gamI = uf.SqrtMeanInverse(gam)
     gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    for k in xrange(0, 2):
+    for k in range(0, 2):
         mq[:, k, r + 1] = np.interp((time[-1] - time[0]) * gamI + time[0], time, mq[:, k, r]) * np.sqrt(gamI_dev)
 
-    for k in xrange(0, N):
+    for k in range(0, N):
         qf[:, k, r + 1] = np.interp((time[-1] - time[0]) * gamI + time[0], time, qf[:, k, r]) * np.sqrt(gamI_dev)
         f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gamI + time[0], time, f[:, k, r])
         qg[:, k, r + 1] = np.interp((time[-1] - time[0]) * gamI + time[0], time, qg[:, k, r]) * np.sqrt(gamI_dev)
@@ -553,7 +553,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     dqq = np.sqrt(d.sum(axis=0))
     min_ind = dqq.argmin()
 
-    print "Aligning %d functions in SRVF space to %d fPCA components..." % (N, num_comp)
+    print("Aligning %d functions in SRVF space to %d fPCA components..." % (N, num_comp))
     itr = 0
     mq = np.zeros((M, MaxItr + 1))
     mq[:, itr] = q[:, min_ind]
@@ -565,9 +565,9 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     cost = np.zeros(MaxItr + 1)
 
     while itr <= MaxItr:
-        print "updating step: r=%d" % (itr + 1)
+        print("updating step: r=%d" % (itr + 1))
         if itr == MaxItr:
-            print "maximal number of iterations is reached"
+            print("maximal number of iterations is reached")
 
         # PCA Step
         a = mq[:, itr].repeat(N)
@@ -577,8 +577,8 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
         U, s, V = np.linalg.svd(K)
 
         alpha_i = np.zeros((num_comp, N))
-        for ii in xrange(0, num_comp):
-            for jj in xrange(0, N):
+        for ii in range(0, num_comp):
+            for jj in range(0, N):
                 alpha_i[ii, jj] = simps(qhat_cent[:, jj] * U[:, ii], time)
 
         U1 = U[:, 0:num_comp]
@@ -594,7 +594,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
         else:
             gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], lam)
 
-        for k in xrange(0, N):
+        for k in range(0, N):
             fi[:, k, itr + 1] = np.interp((time[-1] - time[0]) * gam[:, k, itr] + time[0], time, fi[:, k, itr])
             qi[:, k, itr + 1] = uf.f_to_srsf(fi[:, k, itr + 1], time)
 
@@ -603,7 +603,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
 
         cost_temp = np.zeros(N)
 
-        for ii in xrange(0, N):
+        for ii in range(0, N):
             cost_temp[ii] = norm(qtemp[:, ii] - qhat[:, ii]) ** 2
 
         cost[itr + 1] = cost_temp.mean()
@@ -623,16 +623,16 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     std_f0 = f0.std(axis=1)
     mqn = mq[:, itr + 1]
     gamf = gam[:, :, 0]
-    for k in xrange(1, itr):
+    for k in range(1, itr):
         gam_k = gam[:, :, k]
-        for l in xrange(0, N):
+        for l in range(0, N):
             gamf[:, l] = np.interp((time[-1] - time[0]) * gam_k[:, l] + time[0], time, gamf[:, l])
 
     # Center Mean
     gamI = uf.SqrtMeanInverse(gamf)
     gamI_dev = np.gradient(gamI, 1 / float(M - 1))
     mqn = np.interp((time[-1] - time[0]) * gamI + time[0], time, mqn) * np.sqrt(gamI_dev)
-    for k in xrange(0, N):
+    for k in range(0, N):
         qn[:, k] = np.interp((time[-1] - time[0]) * gamI + time[0], time, qn[:, k]) * np.sqrt(gamI_dev)
         fn[:, k] = np.interp((time[-1] - time[0]) * gamI + time[0], time, fn[:, k])
         gamf[:, k] = np.interp((time[-1] - time[0]) * gamI + time[0], time, gamf[:, k])
@@ -652,21 +652,21 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
 
     # compute the PCA in the q domain
     q_pca = np.ndarray(shape=(M + 1, Nstd, num_comp), dtype=float)
-    for k in xrange(0, num_comp):
-        for l in xrange(0, Nstd):
+    for k in range(0, num_comp):
+        for l in range(0, Nstd):
             q_pca[:, l, k] = mqn2 + coef[l] * stdS[k] * U[:, k]
 
     # compute the correspondence in the f domain
     f_pca = np.ndarray(shape=(M, Nstd, num_comp), dtype=float)
-    for k in xrange(0, num_comp):
-        for l in xrange(0, Nstd):
+    for k in range(0, num_comp):
+        for l in range(0, Nstd):
             f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca[0:M, l, k] * np.abs(q_pca[0:M, l, k]),
                                             np.sign(q_pca[M, l, k]) * (q_pca[M, l, k] ** 2))
 
     N2 = qn.shape[1]
     c = np.zeros((N2, num_comp))
-    for k in xrange(0, num_comp):
-        for l in xrange(0, N2):
+    for k in range(0, num_comp):
+        for l in range(0, N2):
             c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn2) * U[:, k])
 
     if showplot:
@@ -698,16 +698,16 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
 
         # PCA Plots
         fig, ax = plt.subplots(2, num_comp)
-        for k in xrange(0, num_comp):
+        for k in range(0, num_comp):
             axt = ax[0, k]
-            for l in xrange(0, Nstd):
+            for l in range(0, Nstd):
                 axt.plot(time, q_pca[0:M, l, k], color=CBcdict[cl[l]])
                 axt.hold(True)
 
             axt.set_title('q domain: PD %d' % (k + 1))
             plot.rstyle(axt)
             axt = ax[1, k]
-            for l in xrange(0, Nstd):
+            for l in range(0, Nstd):
                 axt.plot(time, f_pca[:, l, k], color=CBcdict[cl[l]])
                 axt.hold(True)
 
@@ -778,7 +778,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01,
     g, g1, g2 = uf.gradient_spline(time, g, smoothdata)
     qg = g1 / np.sqrt(abs(g1) + eps)
 
-    print "Calculating fPLS weight functions for %d Warped Functions..." % N
+    print("Calculating fPLS weight functions for %d Warped Functions..." % N)
     itr = 0
     fi = np.zeros((M, N, max_itr + 1))
     fi[:, :, itr] = f
@@ -811,7 +811,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01,
         gam[:, :, itr + 1] = fpls.fpls_warp(time, gamtmp, qftmp, qgtmp, wqftmp, wqgtmp,
                                             display=0, delta=delta, tol=1e-6, max_iter=4000)
 
-        for k in xrange(0, N):
+        for k in range(0, N):
             gam_k = gam[:, k, itr + 1]
             fi[:, k, itr + 1] = np.interp((time[-1] - time[0]) * gam_k + time[0], time, fi[:, k, 0])
             gi[:, k, itr + 1] = np.interp((time[-1] - time[0]) * gam_k + time[0], time, gi[:, k, 0])
@@ -828,7 +828,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01,
         rfi = np.zeros(N)
         rgi = np.zeros(N)
 
-        for l in xrange(0, N):
+        for l in range(0, N):
             rfi[l] = uf.innerprod_q(time, qfi[:, l, itr + 1], wqf[:, itr + 1])
             rgi[l] = uf.innerprod_q(time, qgi[:, l, itr + 1], wqg[:, itr + 1])
 
@@ -837,7 +837,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01,
         if itr > 1:
             cost_diff = cost[itr] - cost[itr - 1]
 
-        print "Iteration: %d - Diff Value: %f - %f" % (itr + 1, wqf_diff[itr], cost[itr])
+        print("Iteration: %d - Diff Value: %f - %f" % (itr + 1, wqf_diff[itr], cost[itr]))
         if wqf_diff[itr] < 1e-1 or abs(cost_diff) < 1e-3:
             break
 
@@ -856,7 +856,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01,
 
     wf = np.zeros((M, comps))
     wg = np.zeros((M, comps))
-    for ii in xrange(0, comps):
+    for ii in range(0, comps):
         wf[:, ii] = cumtrapz(wqfn[:, ii] * np.abs(wqfn[:, ii]), time, initial=0)
         wg[:, ii] = cumtrapz(wqgn[:, ii] * np.abs(wqgn[:, ii]), time, initial=0)
 

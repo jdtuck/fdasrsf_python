@@ -6,7 +6,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 """
 import numpy as np
 from numpy.linalg import norm
-from utility_functions import diffop, geigen, update_progress, innerprod_q
+from .utility_functions import diffop, geigen, update_progress, innerprod_q
 
 
 def pls_svd(time, qf, qg, no, alpha=0.0):
@@ -37,7 +37,7 @@ def pls_svd(time, qf, qg, no, alpha=0.0):
     wf = Lmat[:, 0:no]
     wg = Mmat[:, 0:no]
 
-    for ii in xrange(0, no):
+    for ii in range(0, no):
         wf[:, ii] = wf[:, ii] / np.sqrt(innerprod_q(time, wf[:, ii], wf[:, ii]))
         wg[:, ii] = wg[:, ii] / np.sqrt(innerprod_q(time, wg[:, ii], wg[:, ii]))
 
@@ -48,7 +48,7 @@ def pls_svd(time, qf, qg, no, alpha=0.0):
     rfi = np.zeros(N)
     rgi = np.zeros(N)
 
-    for l in xrange(0, N):
+    for l in range(0, N):
         rfi[l] = innerprod_q(time, qf[:, l], wqf[:, 0])
         rgi[l] = innerprod_q(time, qg[:, l], wqg[:, 0])
 
