@@ -10,7 +10,8 @@ from scipy.integrate import simps, cumtrapz
 from scipy.linalg import norm, svd, cholesky, inv
 from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace, arccos, sin, cos, arange, ascontiguousarray, round
-from numpy import ones, real, trapz, pi, cumsum, fabs, cov, diagflat, inner, gradient, column_stack, row_stack
+from numpy import ones, real, trapz, pi, cumsum, fabs, cov, diagflat, inner, gradient, column_stack, row_stack, append
+from numpy import insert, vectorize
 import numpy.random as rn
 import optimum_reparamN as orN
 import sys
@@ -592,3 +593,22 @@ def warp_q_gamma(time, q, gam):
     q_temp = tmp * sqrt(gam_dev)
 
     return q_temp
+
+
+def f_K_fold(Nobs, K=5):
+    rs = rn.uniform(size=Nobs)
+    ids = rs.ravel().argsort()
+    k = Nobs * arange(1, K) / K
+    tmp = append(k.repeat(2), Nobs)
+    tmp = insert(tmp, 0, 0)
+    k = tmp.reshape((K, 2))
+    k[:, 0] = k[:, 0] + 1
+    k = k - 1
+    train = zeros((Nobs * (K - 1) / K, K))
+    test = zeros((Nobs * 1 / K, K))
+    for ii in range(0, K):
+        tf = vectorize(lambda x: x in arange(k[ii, 0], k[ii, 1] + 1))(arange(0, Nobs))
+        train[:, ii] = ids[~tf]
+        test[:, ii] = ids[tf]
+
+    return train, test
