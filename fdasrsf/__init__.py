@@ -23,7 +23,7 @@ from .time_warping import srsf_align, srsf_align_pair, align_fPCA, align_fPLS
 from .plot_style import f_plot, rstyle
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q, optimum_reparam_pair
-from .utility_functions import f_K_fold
+from .utility_functions import f_K_fold, zero_crossing, warp_q_gamma
 from .fPCA import vertfPCA, horizfPCA
 from .gauss_model import gauss_model
 from .fPLS import pls_svd

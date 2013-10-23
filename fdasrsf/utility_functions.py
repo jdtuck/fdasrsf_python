@@ -590,12 +590,24 @@ def warp_q_gamma(time, q, gam):
     M = gam.size
     gam_dev = gradient(gam, 1 / double(M - 1))
     tmp = interp((time[-1] - time[0]) * gam + time[0], time, q)
+
     q_temp = tmp * sqrt(gam_dev)
 
     return q_temp
 
 
 def f_K_fold(Nobs, K=5):
+    """
+    generates sample indices for K-fold cross validation
+
+    :param Nobs number of observations
+    :param K number of folds
+
+    :rtype: numpy ndarray
+    :return train: train indexes (Nobs*(K-1)/K X K)
+    :return test: test indexes (Nobs*(1/K) X K)
+
+    """
     rs = rn.uniform(size=Nobs)
     ids = rs.ravel().argsort()
     k = Nobs * arange(1, K) / K
@@ -612,3 +624,41 @@ def f_K_fold(Nobs, K=5):
         test[:, ii] = ids[tf]
 
     return train, test
+
+
+def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
+    # simple iterative method based on intermediate theorem
+    a = zeros(100)
+    a[0] = 1
+    f = zeros(100)
+    f[0] = y_max - Y
+    f[1] = y_min - Y
+    mrp = f[0]
+    mrn = f[1]
+    mrp_ind = 0  # most recent positive index
+    mrn_ind = 1  # most recent negative index
+
+    for ii in range(2, 100):
+        x1 = a[mrp_ind]
+        x2 = a[mrn_ind]
+        y1 = mrp
+        y2 = mrn
+        a[ii] = (x1 * y2 - x2 * y1) / (y2 - y1)
+
+        gam_m = a[ii] * gmax + (1 - a[ii]) * gmin
+        qtmp = warp_q_gamma(time, q, gam_m)
+        f[ii] = trapz(qtmp * bt, time) - Y
+
+        if fabs(f[ii]) < 1e-5:
+            break
+        elif f[ii] > 0:
+            mrp = f[ii]
+            mrp_ind = ii
+        else:
+            mrn = f[ii]
+            mrn_ind = ii
+
+    gamma = a[ii] * gmax + (1 - a[ii]) * gmin
+
+    return gamma
+
