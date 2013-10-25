@@ -77,6 +77,7 @@ setup(
         "numpy",
         "scipy",
         "joblib",
+        "patsy",
     ],
     classifiers=[
         'License :: OSI Approved :: BSD License',
