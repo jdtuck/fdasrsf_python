@@ -14,7 +14,7 @@ from patsy import bs
 import collections
 
 
-def elastic_regression(f, y, time, B=None):
+def elastic_regression(f, y, time, B=None, lam=0):
     """
     This function identifies a regression model with phase-variablity using elastic methods
 
@@ -22,6 +22,7 @@ def elastic_regression(f, y, time, B=None):
     :param y: numpy array of N responses
     :param time: vector of size N describing the sample points
     :param B: optional matrix describing Basis elements
+    :param lam: regularization parameter (default 0)
     :type f: np.ndarray
     :type time: np.ndarray
 
@@ -40,12 +41,19 @@ def elastic_regression(f, y, time, B=None):
     max_itr = 20
     M = f.shape[0]
     N = f.shape[1]
+    binsize = np.diff(time)
+    binsize = binsize.mean()
 
     # Create B-Spline Basis if no provided
     if B is None:
         B = bs(time, knots=np.linspace(time[0], time[-1], 20), lower_bound=0, upper_bound=time[-1], degree=4,
                include_intercept=True)
     Nb = B.shape[1]
+
+    # second derivative for reularization2
+    Bdiff = np.zeros((M, Nb))
+    for ii in range(0, Nb):
+        Bdiff[:, ii] = np.gradient(np.gradient(B[:, ii], binsize), binsize)
 
     q = uf.f_to_srsf(f, time)
 
@@ -69,7 +77,13 @@ def elastic_regression(f, y, time, B=None):
             for jj in range(0, Nb):
                 Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj], time)
 
-        inv_xx = inv(dot(Phi.T, Phi))
+        R = np.zeros((Nb, Nb))
+        for ii in range(0, Nb):
+            for jj in range(0, Nb):
+                R[ii, jj] = trapz(Bdiff[:, ii] * Bdiff[:, jj], time)
+
+        xx = dot(Phi.T, Phi)
+        inv_xx = inv(xx + lam * R)
         xy = dot(Phi.T, y)
         b = dot(inv_xx, xy)
 
