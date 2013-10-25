@@ -5,10 +5,10 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 import numpy as np
-from . import utility_functions as uf
+import fdasrsf.utility_functions as uf
 from scipy.linalg import norm
 import matplotlib.pyplot as plt
-from . import plot_style as plot
+import fdasrsf.plot_style as plot
 import collections
 
 

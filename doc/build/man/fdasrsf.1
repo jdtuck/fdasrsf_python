@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "September 30, 2013" "1.1" "fdasrsf"
+.TH "FDASRSF" "1" "October 25, 2013" "1.1" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -124,7 +124,7 @@ eigenvectors
 .UNINDENT
 .INDENT 0.0
 .TP
-.B time_warping.align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, max_itr=100)
+.B time_warping.align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01, max_itr=100)
 This function aligns a collection of functions while performing principal least squares
 .INDENT 7.0
 .TP
@@ -142,6 +142,10 @@ This function aligns a collection of functions while performing principal least 
 \fBshowplot\fP \-\- Shows plots of results using matplotlib (default = T)
 .IP \(bu 2
 \fBsmooth_data\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+.IP \(bu 2
+\fBdelta\fP \-\- gradient step size
+.IP \(bu 2
+\fBmax_itr\fP \-\- maximum number of iterations
 .UNINDENT
 .TP
 .B Return type
@@ -387,6 +391,46 @@ coefficients
 eigenvectors
 .UNINDENT
 .UNINDENT
+.SH GAUSSIAN GENERATIVE MODELS
+.sp
+Gaussian Model of functional data
+.sp
+moduleauthor:: Derek Tucker <\fI\%dtucker@stat.fsu.edu\fP>
+.INDENT 0.0
+.TP
+.B gauss_model.gauss_model(fn, time, qn, gam, n=1, sort_samples=False)
+This function models the functional data using a Gaussian model extracted from the principal components of the srvfs
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBfn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of M aligned functions with N samples
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size N describing the sample points
+.IP \(bu 2
+\fBqn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of M aligned srvfs with N samples
+.IP \(bu 2
+\fBgam\fP (\fInp.ndarray\fP) \-\- warping functions
+.IP \(bu 2
+\fBn\fP (\fIinteger\fP) \-\- number of random samples
+.IP \(bu 2
+\fBsort_samples\fP (\fI\%bool\fP) \-\- sort samples (default = T)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return fs
+random aligned samples
+.TP
+.B Return gams
+random warping functions
+.TP
+.B Return ft
+random samples
+.UNINDENT
+.UNINDENT
 .SH FUNCTIONAL PRINCIPAL LEAST SQUARES
 .sp
 Partial Least Squares using SVD
@@ -426,6 +470,109 @@ smoothing value
 .TP
 .B Return values
 singular values
+.UNINDENT
+.UNINDENT
+.SH ELASTIC REGRESSION
+.sp
+Warping Invariant Regression using SRSF
+.sp
+moduleauthor:: Derek Tucker <\fI\%dtucker@stat.fsu.edu\fP>
+.INDENT 0.0
+.TP
+.B regression.elastic_prediction(f, time, model, y=None)
+This function identifies a regression model with phase\-variablity using elastic methods
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP \-\- numpy ndarray of shape (M,N) of M functions with N samples
+.IP \(bu 2
+\fBtime\fP \-\- vector of size N describing the sample points
+.IP \(bu 2
+\fBmodel\fP \-\- indentified model from elastic_regression
+.IP \(bu 2
+\fBy\fP \-\- truth, optional used to calculate SSE
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return alpha
+alpha parameter of model
+.TP
+.B Return beta
+beta(t) of model
+.TP
+.B Return fn
+aligned functions \- numpy ndarray of shape (M,N) of M functions with N samples
+.TP
+.B Return qn
+aligned srvfs \- similar structure to fn
+.TP
+.B Return gamma
+calculated warping functions
+.TP
+.B Return q
+original training SRSFs
+.TP
+.B Return B
+basis matrix
+.TP
+.B Return b
+basis coefficients
+.TP
+.B Return SSE
+sum of squared error
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B regression.elastic_regression(f, y, time, B=None)
+This function identifies a regression model with phase\-variablity using elastic methods
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of M functions with N samples
+.IP \(bu 2
+\fBy\fP \-\- numpy array of N responses
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size N describing the sample points
+.IP \(bu 2
+\fBB\fP \-\- optional matrix describing Basis elements
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return alpha
+alpha parameter of model
+.TP
+.B Return beta
+beta(t) of model
+.TP
+.B Return fn
+aligned functions \- numpy ndarray of shape (M,N) of M functions with N samples
+.TP
+.B Return qn
+aligned srvfs \- similar structure to fn
+.TP
+.B Return gamma
+calculated warping functions
+.TP
+.B Return q
+original training SRSFs
+.TP
+.B Return B
+basis matrix
+.TP
+.B Return b
+basis coefficients
+.TP
+.B Return SSE
+sum of squared error
 .UNINDENT
 .UNINDENT
 .SH UTILITY FUNCTIONS
@@ -546,6 +693,25 @@ amplitude distance
 .TP
 .B Return Dx
 phase distance
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B utility_functions.f_K_fold(Nobs, K=5)
+generates sample indices for K\-fold cross validation
+.sp
+:param Nobs number of observations
+:param K number of folds
+.INDENT 7.0
+.TP
+.B Return type
+numpy ndarray
+.TP
+.B Return train
+train indexes (Nobs*(K\-1)/K X K)
+.TP
+.B Return test
+test indexes (Nobs*(1/K) X K)
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -814,6 +980,39 @@ numpy ndarray
 .TP
 .B Return q_temp
 warped srsf
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B utility_functions.zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin)
+finds zero\-crossing of optimal gamma, gam = s*gmax + (1\-s)*gmin from elastic regression model
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBY\fP \-\- response
+.IP \(bu 2
+\fBq\fP \-\- predicitve function
+.IP \(bu 2
+\fBbt\fP \-\- basis function
+.IP \(bu 2
+\fBtime\fP \-\- time samples
+.IP \(bu 2
+\fBy_max\fP \-\- maximum repsonse for warping function gmax
+.IP \(bu 2
+\fBy_min\fP \-\- minimum response for warping function gmin
+.IP \(bu 2
+\fBgmax\fP \-\- max warping function
+.IP \(bu 2
+\fBgmin\fP \-\- min warping fucntion
+.UNINDENT
+.TP
+.B Return type
+numpy array
+.TP
+.B Return gamma
+optimal warping function
 .UNINDENT
 .UNINDENT
 .sp

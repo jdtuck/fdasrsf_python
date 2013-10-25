@@ -5,28 +5,33 @@
 
   \indexspace
 
-  \item cumtrapzmid() (in module utility\_functions), \hyperpage{11}
+  \item cumtrapzmid() (in module utility\_functions), \hyperpage{15}
 
   \indexspace
 
-  \item diffop() (in module utility\_functions), \hyperpage{11}
+  \item diffop() (in module utility\_functions), \hyperpage{15}
 
   \indexspace
 
   \item elastic\_distance() (in module utility\_functions), 
-		\hyperpage{12}
+		\hyperpage{16}
+  \item elastic\_prediction() (in module regression), \hyperpage{13}
+  \item elastic\_regression() (in module regression), \hyperpage{13}
 
   \indexspace
 
-  \item f\_to\_srsf() (in module utility\_functions), \hyperpage{12}
+  \item f\_K\_fold() (in module utility\_functions), \hyperpage{16}
+  \item f\_to\_srsf() (in module utility\_functions), \hyperpage{16}
   \item fPCA (module), \hyperpage{7}
-  \item fPLS (module), \hyperpage{9}
+  \item fPLS (module), \hyperpage{11}
 
   \indexspace
 
-  \item geigen() (in module utility\_functions), \hyperpage{12}
+  \item gauss\_model (module), \hyperpage{9}
+  \item gauss\_model() (in module gauss\_model), \hyperpage{9}
+  \item geigen() (in module utility\_functions), \hyperpage{16}
   \item gradient\_spline() (in module utility\_functions), 
-		\hyperpage{12}
+		\hyperpage{16}
 
   \indexspace
 
@@ -34,33 +39,34 @@
 
   \indexspace
 
-  \item innerprod\_q() (in module utility\_functions), \hyperpage{12}
-  \item invertGamma() (in module utility\_functions), \hyperpage{13}
+  \item innerprod\_q() (in module utility\_functions), \hyperpage{17}
+  \item invertGamma() (in module utility\_functions), \hyperpage{17}
 
   \indexspace
 
   \item optimum\_reparam() (in module utility\_functions), 
-		\hyperpage{13}
+		\hyperpage{17}
   \item optimum\_reparam\_pair() (in module utility\_functions), 
-		\hyperpage{13}
+		\hyperpage{17}
   \item outlier\_detection() (in module utility\_functions), 
-		\hyperpage{13}
+		\hyperpage{17}
 
   \indexspace
 
-  \item pls\_svd() (in module fPLS), \hyperpage{9}
+  \item pls\_svd() (in module fPLS), \hyperpage{11}
 
   \indexspace
 
-  \item randomGamma() (in module utility\_functions), \hyperpage{13}
-  \item rgam() (in module utility\_functions), \hyperpage{14}
+  \item randomGamma() (in module utility\_functions), \hyperpage{18}
+  \item regression (module), \hyperpage{13}
+  \item rgam() (in module utility\_functions), \hyperpage{18}
 
   \indexspace
 
-  \item smooth\_data() (in module utility\_functions), \hyperpage{14}
-  \item SqrtMean() (in module utility\_functions), \hyperpage{11}
+  \item smooth\_data() (in module utility\_functions), \hyperpage{18}
+  \item SqrtMean() (in module utility\_functions), \hyperpage{15}
   \item SqrtMeanInverse() (in module utility\_functions), 
-		\hyperpage{11}
+		\hyperpage{15}
   \item srsf\_align() (in module time\_warping), \hyperpage{4}
   \item srsf\_align\_pair() (in module time\_warping), \hyperpage{5}
 
@@ -71,8 +77,8 @@
   \indexspace
 
   \item update\_progress() (in module utility\_functions), 
-		\hyperpage{14}
-  \item utility\_functions (module), \hyperpage{11}
+		\hyperpage{18}
+  \item utility\_functions (module), \hyperpage{15}
 
   \indexspace
 
@@ -80,6 +86,10 @@
 
   \indexspace
 
-  \item warp\_q\_gamma() (in module utility\_functions), \hyperpage{14}
+  \item warp\_q\_gamma() (in module utility\_functions), \hyperpage{18}
+
+  \indexspace
+
+  \item zero\_crossing() (in module utility\_functions), \hyperpage{18}
 
 \end{theindex}

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -13,7 +15,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -25,7 +27,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="fdasrsf 1.1.0 documentation" href="index.html" />
-    <link rel="prev" title="Functional Principal Least Squares" href="fPLS.html" /> 
+    <link rel="prev" title="Elastic Regression" href="regression.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,7 +40,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="fPLS.html" title="Functional Principal Least Squares"
+          <a href="regression.html" title="Elastic Regression"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
       </ul>
@@ -170,6 +172,26 @@ calculates the elastic distances</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return Dx:</th><td class="field-body"><p class="first last">phase distance</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utility_functions.f_K_fold">
+<tt class="descclassname">utility_functions.</tt><tt class="descname">f_K_fold</tt><big>(</big><em>Nobs</em>, <em>K=5</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#f_K_fold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.f_K_fold" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates sample indices for K-fold cross validation</p>
+<p>:param Nobs number of observations
+:param K number of folds</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy ndarray</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return train:</th><td class="field-body">train indexes (Nobs*(K-1)/K X K)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return test:</th><td class="field-body">test indexes (Nobs*(1/K) X K)</td>
 </tr>
 </tbody>
 </table>
@@ -467,6 +489,36 @@ calculates the elastic distances</p>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="utility_functions.zero_crossing">
+<tt class="descclassname">utility_functions.</tt><tt class="descname">zero_crossing</tt><big>(</big><em>Y</em>, <em>q</em>, <em>bt</em>, <em>time</em>, <em>y_max</em>, <em>y_min</em>, <em>gmax</em>, <em>gmin</em><big>)</big><a class="reference internal" href="_modules/utility_functions.html#zero_crossing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.zero_crossing" title="Permalink to this definition">¶</a></dt>
+<dd><p>finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin from elastic regression model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Y</strong> &#8211; response</li>
+<li><strong>q</strong> &#8211; predicitve function</li>
+<li><strong>bt</strong> &#8211; basis function</li>
+<li><strong>time</strong> &#8211; time samples</li>
+<li><strong>y_max</strong> &#8211; maximum repsonse for warping function gmax</li>
+<li><strong>y_min</strong> &#8211; minimum response for warping function gmin</li>
+<li><strong>gmax</strong> &#8211; max warping function</li>
+<li><strong>gmin</strong> &#8211; min warping fucntion</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">numpy array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return gamma:</th><td class="field-body"><p class="first last">optimal warping function</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -476,8 +528,8 @@ calculates the elastic distances</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="fPLS.html"
-                        title="previous chapter">Functional Principal Least Squares</a></p>
+  <p class="topless"><a href="regression.html"
+                        title="previous chapter">Elastic Regression</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/utility_functions.txt"
@@ -510,14 +562,14 @@ calculates the elastic distances</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="fPLS.html" title="Functional Principal Least Squares"
+          <a href="regression.html" title="Elastic Regression"
              >previous</a> |</li>
         <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

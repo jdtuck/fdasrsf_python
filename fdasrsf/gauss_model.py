@@ -5,7 +5,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 import numpy as np
-from . import utility_functions as uf
+import fdasrsf.utility_functions as uf
 import collections
 
 

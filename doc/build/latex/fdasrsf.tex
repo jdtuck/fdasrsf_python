@@ -3,7 +3,6 @@
 \documentclass[letterpaper,10pt,english]{sphinxmanual}
 \usepackage[utf8]{inputenc}
 \DeclareUnicodeCharacter{00A0}{\nobreakspace}
-\usepackage{cmap}
 \usepackage[T1]{fontenc}
 \usepackage{babel}
 \usepackage{times}
@@ -14,7 +13,7 @@
 
 
 \title{fdasrsf Documentation}
-\date{September 30, 2013}
+\date{October 25, 2013}
 \release{1.1.0}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{}
@@ -32,66 +31,66 @@
     \PYG@it{\PYG@bf{\PYG@ff{#1}}}}}}}
 \def\PYG#1#2{\PYG@reset\PYG@toks#1+\relax+\PYG@do{#2}}
 
-\expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
-\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
-\expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
-\expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
-\expandafter\def\csname PYG@tok@vg\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@m\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@mh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@cs\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\colorbox[rgb]{1.00,0.94,0.94}{\strut ##1}}}
-\expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
-\expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
-\expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
-\expandafter\def\csname PYG@tok@ni\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.84,0.33,0.22}{##1}}}
-\expandafter\def\csname PYG@tok@nl\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.13,0.44}{##1}}}
-\expandafter\def\csname PYG@tok@nn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
-\expandafter\def\csname PYG@tok@no\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.38,0.68,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@na\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@nv\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@nt\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.45}{##1}}}
 \expandafter\def\csname PYG@tok@nb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@nc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
+\expandafter\def\csname PYG@tok@s2\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@nf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.49}{##1}}}
+\expandafter\def\csname PYG@tok@nn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
 \expandafter\def\csname PYG@tok@nd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.33,0.33,0.33}{##1}}}
 \expandafter\def\csname PYG@tok@ne\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@nf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.49}{##1}}}
-\expandafter\def\csname PYG@tok@si\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.44,0.63,0.82}{##1}}}
-\expandafter\def\csname PYG@tok@s2\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@vi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@nt\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.45}{##1}}}
-\expandafter\def\csname PYG@tok@nv\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
 \expandafter\def\csname PYG@tok@s1\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@gp\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
-\expandafter\def\csname PYG@tok@sh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@ow\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@sx\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
-\expandafter\def\csname PYG@tok@bp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@c1\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
-\expandafter\def\csname PYG@tok@kc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@c\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
-\expandafter\def\csname PYG@tok@mf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@err\endcsname{\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
-\expandafter\def\csname PYG@tok@kd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@ss\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.32,0.47,0.09}{##1}}}
-\expandafter\def\csname PYG@tok@sr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.14,0.33,0.53}{##1}}}
-\expandafter\def\csname PYG@tok@mo\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@mi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@kn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@o\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\expandafter\def\csname PYG@tok@kr\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@nc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
+\expandafter\def\csname PYG@tok@na\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@vg\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@no\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.38,0.68,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@nl\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.13,0.44}{##1}}}
+\expandafter\def\csname PYG@tok@ni\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.84,0.33,0.22}{##1}}}
 \expandafter\def\csname PYG@tok@s\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@kp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@w\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
-\expandafter\def\csname PYG@tok@kt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.56,0.13,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
+\expandafter\def\csname PYG@tok@c1\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
 \expandafter\def\csname PYG@tok@sc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@sb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@k\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@bp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@mf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@kp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
 \expandafter\def\csname PYG@tok@se\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
 \expandafter\def\csname PYG@tok@sd\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@ow\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@sb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@w\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PYG@tok@kt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.56,0.13,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@si\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.44,0.63,0.82}{##1}}}
+\expandafter\def\csname PYG@tok@sh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@kr\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@o\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PYG@tok@mi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@mh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@mo\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@ss\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.32,0.47,0.09}{##1}}}
+\expandafter\def\csname PYG@tok@sr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.14,0.33,0.53}{##1}}}
+\expandafter\def\csname PYG@tok@err\endcsname{\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PYG@tok@kd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@c\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@sx\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@kc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@cs\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\colorbox[rgb]{1.00,0.94,0.94}{\strut ##1}}}
+\expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
+\expandafter\def\csname PYG@tok@m\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PYG@tok@k\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@kn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@vi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@gp\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
+\expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
 
 \def\PYGZbs{\char`\\}
 \def\PYGZus{\char`\_}
@@ -126,7 +125,7 @@ group-wise alignment as well as modeling using functional component analysis.
 
 
 \chapter{Functional Alignment}
-\label{time_warping:module-time_warping}\label{time_warping:functional-alignment}\label{time_warping::doc}\label{time_warping:welcome-to-fdasrsf-s-documentation}\index{time\_warping (module)}
+\label{time_warping::doc}\label{time_warping:welcome-to-fdasrsf-s-documentation}\label{time_warping:module-time_warping}\label{time_warping:functional-alignment}\index{time\_warping (module)}
 Group-wise function alignment using SRSF framework and Dynamic Programming
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -198,7 +197,7 @@ eigenvectors
 \index{align\_fPLS() (in module time\_warping)}
 
 \begin{fulllineitems}
-\phantomsection\label{time_warping:time_warping.align_fPLS}\pysiglinewithargsret{\code{time\_warping.}\bfcode{align\_fPLS}}{\emph{f}, \emph{g}, \emph{time}, \emph{comps=3}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{max\_itr=100}}{}
+\phantomsection\label{time_warping:time_warping.align_fPLS}\pysiglinewithargsret{\code{time\_warping.}\bfcode{align\_fPLS}}{\emph{f}, \emph{g}, \emph{time}, \emph{comps=3}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{delta=0.01}, \emph{max\_itr=100}}{}
 This function aligns a collection of functions while performing principal least squares
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -219,6 +218,12 @@ This function aligns a collection of functions while performing principal least 
 
 \item {} 
 \textbf{smooth\_data} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- Smooth the data using a box filter (default = F)
+
+\item {} 
+\textbf{delta} -- gradient step size
+
+\item {} 
+\textbf{max\_itr} -- maximum number of iterations
 
 \end{itemize}
 
@@ -407,7 +412,7 @@ warping functions - similar structure to fn
 
 
 \chapter{Functional Principal Component Analysis}
-\label{fPCA:module-fPCA}\label{fPCA::doc}\label{fPCA:functional-principal-component-analysis}\index{fPCA (module)}
+\label{fPCA::doc}\label{fPCA:module-fPCA}\label{fPCA:functional-principal-component-analysis}\index{fPCA (module)}
 Vertical and Horizontal Functional Principal Component Analysis using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -502,8 +507,58 @@ eigenvectors
 
 
 
+\chapter{Gaussian Generative Models}
+\label{gauss_model::doc}\label{gauss_model:module-gauss_model}\label{gauss_model:gaussian-generative-models}\index{gauss\_model (module)}
+Gaussian Model of functional data
+
+moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
+\index{gauss\_model() (in module gauss\_model)}
+
+\begin{fulllineitems}
+\phantomsection\label{gauss_model:gauss_model.gauss_model}\pysiglinewithargsret{\code{gauss\_model.}\bfcode{gauss\_model}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{gam}, \emph{n=1}, \emph{sort\_samples=False}}{}
+This function models the functional data using a Gaussian model extracted from the principal components of the srvfs
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{fn} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M aligned functions with N samples
+
+\item {} 
+\textbf{time} (\emph{np.ndarray}) -- vector of size N describing the sample points
+
+\item {} 
+\textbf{qn} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M aligned srvfs with N samples
+
+\item {} 
+\textbf{gam} (\emph{np.ndarray}) -- warping functions
+
+\item {} 
+\textbf{n} (\emph{integer}) -- number of random samples
+
+\item {} 
+\textbf{sort\_samples} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- sort samples (default = T)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fs}] \leavevmode
+random aligned samples
+
+\item[{Return gams}] \leavevmode
+random warping functions
+
+\item[{Return ft}] \leavevmode
+random samples
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
 \chapter{Functional Principal Least Squares}
-\label{fPLS:functional-principal-least-squares}\label{fPLS::doc}\label{fPLS:module-fPLS}\index{fPLS (module)}
+\label{fPLS:module-fPLS}\label{fPLS::doc}\label{fPLS:functional-principal-least-squares}\index{fPLS (module)}
 Partial Least Squares using SVD
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -552,8 +607,125 @@ singular values
 
 
 
+\chapter{Elastic Regression}
+\label{regression::doc}\label{regression:module-regression}\label{regression:elastic-regression}\index{regression (module)}
+Warping Invariant Regression using SRSF
+
+moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
+\index{elastic\_prediction() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.elastic_prediction}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_prediction}}{\emph{f}, \emph{time}, \emph{model}, \emph{y=None}}{}
+This function identifies a regression model with phase-variablity using elastic methods
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{f} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{time} -- vector of size N describing the sample points
+
+\item {} 
+\textbf{model} -- indentified model from elastic\_regression
+
+\item {} 
+\textbf{y} -- truth, optional used to calculate SSE
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+
+\item[{Return qn}] \leavevmode
+aligned srvfs - similar structure to fn
+
+\item[{Return gamma}] \leavevmode
+calculated warping functions
+
+\item[{Return q}] \leavevmode
+original training SRSFs
+
+\item[{Return B}] \leavevmode
+basis matrix
+
+\item[{Return b}] \leavevmode
+basis coefficients
+
+\item[{Return SSE}] \leavevmode
+sum of squared error
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{elastic\_regression() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.elastic_regression}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_regression}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}}{}
+This function identifies a regression model with phase-variablity using elastic methods
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{f} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy array of N responses
+
+\item {} 
+\textbf{time} (\emph{np.ndarray}) -- vector of size N describing the sample points
+
+\item {} 
+\textbf{B} -- optional matrix describing Basis elements
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+
+\item[{Return qn}] \leavevmode
+aligned srvfs - similar structure to fn
+
+\item[{Return gamma}] \leavevmode
+calculated warping functions
+
+\item[{Return q}] \leavevmode
+original training SRSFs
+
+\item[{Return B}] \leavevmode
+basis matrix
+
+\item[{Return b}] \leavevmode
+basis coefficients
+
+\item[{Return SSE}] \leavevmode
+sum of squared error
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
 \chapter{Utility Functions}
-\label{utility_functions:module-utility_functions}\label{utility_functions::doc}\label{utility_functions:utility-functions}\index{utility\_functions (module)}
+\label{utility_functions::doc}\label{utility_functions:utility-functions}\label{utility_functions:module-utility_functions}\index{utility\_functions (module)}
 Utility functions for SRSF Manipulations
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -688,6 +860,28 @@ amplitude distance
 
 \item[{Return Dx}] \leavevmode
 phase distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{f\_K\_fold() (in module utility\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{utility_functions:utility_functions.f_K_fold}\pysiglinewithargsret{\code{utility\_functions.}\bfcode{f\_K\_fold}}{\emph{Nobs}, \emph{K=5}}{}
+generates sample indices for K-fold cross validation
+
+:param Nobs number of observations
+:param K number of folds
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return train}] \leavevmode
+train indexes (Nobs*(K-1)/K X K)
+
+\item[{Return test}] \leavevmode
+test indexes (Nobs*(1/K) X K)
 
 \end{description}\end{quote}
 
@@ -1017,6 +1211,49 @@ warped srsf
 
 \end{fulllineitems}
 
+\index{zero\_crossing() (in module utility\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{utility_functions:utility_functions.zero_crossing}\pysiglinewithargsret{\code{utility\_functions.}\bfcode{zero\_crossing}}{\emph{Y}, \emph{q}, \emph{bt}, \emph{time}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
+finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin from elastic regression model
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{Y} -- response
+
+\item {} 
+\textbf{q} -- predicitve function
+
+\item {} 
+\textbf{bt} -- basis function
+
+\item {} 
+\textbf{time} -- time samples
+
+\item {} 
+\textbf{y\_max} -- maximum repsonse for warping function gmax
+
+\item {} 
+\textbf{y\_min} -- minimum response for warping function gmin
+
+\item {} 
+\textbf{gmax} -- max warping function
+
+\item {} 
+\textbf{gmin} -- min warping fucntion
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return gamma}] \leavevmode
+optimal warping function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 
 References:
 \begin{quote}
@@ -1049,6 +1286,12 @@ Computational Statistics and Data Analysis (2012), 10.1016/j.csda.2012.12.001.
 \bigletter{f}
 \item {\texttt{fPCA}}, \pageref{fPCA:module-fPCA}
 \item {\texttt{fPLS}}, \pageref{fPLS:module-fPLS}
+\indexspace
+\bigletter{g}
+\item {\texttt{gauss\_model}}, \pageref{gauss_model:module-gauss_model}
+\indexspace
+\bigletter{r}
+\item {\texttt{regression}}, \pageref{regression:module-regression}
 \indexspace
 \bigletter{t}
 \item {\texttt{time\_warping}}, \pageref{time_warping:module-time_warping}

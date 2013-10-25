@@ -456,7 +456,6 @@ def update_progress(progress):
 
     :param progress: fraction of progress
 
-
     """
     barLength = 20  # Modify this to change the length of the progress bar
     status = ""
@@ -627,6 +626,22 @@ def f_K_fold(Nobs, K=5):
 
 
 def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
+    """
+    finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin from elastic regression model
+
+    :param Y: response
+    :param q: predicitve function
+    :param bt: basis function
+    :param time: time samples
+    :param y_max: maximum repsonse for warping function gmax
+    :param y_min: minimum response for warping function gmin
+    :param gmax: max warping function
+    :param gmin: min warping fucntion
+
+    :rtype: numpy array
+    :return gamma: optimal warping function
+
+    """
     # simple iterative method based on intermediate theorem
     a = zeros(100)
     a[0] = 1

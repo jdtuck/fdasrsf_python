@@ -15,7 +15,9 @@ group-wise alignment as well as modeling using functional component analysis.
 
    time_warping
    fPCA
+   gauss_model
    fPLS
+   regression
    utility_functions
 
 References:

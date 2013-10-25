@@ -5,8 +5,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 import numpy as np
-from numpy.linalg import norm
-from .utility_functions import diffop, geigen, update_progress, innerprod_q
+from fdasrsf.utility_functions import diffop, geigen, innerprod_q
 
 
 def pls_svd(time, qf, qg, no, alpha=0.0):

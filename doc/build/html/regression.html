@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Elastic Regression &mdash; fdasrsf 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="fdasrsf 1.1.0 documentation" href="index.html" />
+    <link rel="next" title="Utility Functions" href="utility_functions.html" />
+    <link rel="prev" title="Functional Principal Least Squares" href="fPLS.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utility_functions.html" title="Utility Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fPLS.html" title="Functional Principal Least Squares"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-regression">
+<span id="elastic-regression"></span><h1>Elastic Regression<a class="headerlink" href="#module-regression" title="Permalink to this headline">¶</a></h1>
+<p>Warping Invariant Regression using SRSF</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:dtucker&#37;&#52;&#48;stat&#46;fsu&#46;edu">dtucker<span>&#64;</span>stat<span>&#46;</span>fsu<span>&#46;</span>edu</a>&gt;</p>
+<dl class="function">
+<dt id="regression.elastic_prediction">
+<tt class="descclassname">regression.</tt><tt class="descname">elastic_prediction</tt><big>(</big><em>f</em>, <em>time</em>, <em>model</em>, <em>y=None</em><big>)</big><a class="reference internal" href="_modules/regression.html#elastic_prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a regression model with phase-variablity using elastic methods</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> &#8211; numpy ndarray of shape (M,N) of M functions with N samples</li>
+<li><strong>time</strong> &#8211; vector of size N describing the sample points</li>
+<li><strong>model</strong> &#8211; indentified model from elastic_regression</li>
+<li><strong>y</strong> &#8211; truth, optional used to calculate SSE</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple of numpy array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return alpha:</th><td class="field-body"><p class="first">alpha parameter of model</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return beta:</th><td class="field-body"><p class="first">beta(t) of model</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return fn:</th><td class="field-body"><p class="first">aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return qn:</th><td class="field-body"><p class="first">aligned srvfs - similar structure to fn</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return gamma:</th><td class="field-body"><p class="first">calculated warping functions</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return q:</th><td class="field-body"><p class="first">original training SRSFs</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return B:</th><td class="field-body"><p class="first">basis matrix</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return b:</th><td class="field-body"><p class="first">basis coefficients</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return SSE:</th><td class="field-body"><p class="first last">sum of squared error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.elastic_regression">
+<tt class="descclassname">regression.</tt><tt class="descname">elastic_regression</tt><big>(</big><em>f</em>, <em>y</em>, <em>time</em>, <em>B=None</em><big>)</big><a class="reference internal" href="_modules/regression.html#elastic_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a regression model with phase-variablity using elastic methods</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> (<em>np.ndarray</em>) &#8211; numpy ndarray of shape (M,N) of M functions with N samples</li>
+<li><strong>y</strong> &#8211; numpy array of N responses</li>
+<li><strong>time</strong> (<em>np.ndarray</em>) &#8211; vector of size N describing the sample points</li>
+<li><strong>B</strong> &#8211; optional matrix describing Basis elements</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple of numpy array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return alpha:</th><td class="field-body"><p class="first">alpha parameter of model</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return beta:</th><td class="field-body"><p class="first">beta(t) of model</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return fn:</th><td class="field-body"><p class="first">aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return qn:</th><td class="field-body"><p class="first">aligned srvfs - similar structure to fn</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return gamma:</th><td class="field-body"><p class="first">calculated warping functions</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return q:</th><td class="field-body"><p class="first">original training SRSFs</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return B:</th><td class="field-body"><p class="first">basis matrix</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return b:</th><td class="field-body"><p class="first">basis coefficients</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return SSE:</th><td class="field-body"><p class="first last">sum of squared error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fPLS.html"
+                        title="previous chapter">Functional Principal Least Squares</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="utility_functions.html"
+                        title="next chapter">Utility Functions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/regression.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utility_functions.html" title="Utility Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fPLS.html" title="Functional Principal Least Squares"
+             >previous</a> |</li>
+        <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, J. Derek Tucker.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

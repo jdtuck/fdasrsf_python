@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -55,8 +57,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
-<span class="kn">from</span> <span class="nn">utility_functions</span> <span class="kn">import</span> <span class="n">diffop</span><span class="p">,</span> <span class="n">geigen</span><span class="p">,</span> <span class="n">update_progress</span><span class="p">,</span> <span class="n">innerprod_q</span>
+<span class="kn">from</span> <span class="nn">fdasrsf.utility_functions</span> <span class="kn">import</span> <span class="n">diffop</span><span class="p">,</span> <span class="n">geigen</span><span class="p">,</span> <span class="n">innerprod_q</span>
 
 
 <div class="viewcode-block" id="pls_svd"><a class="viewcode-back" href="../fPLS.html#fPLS.pls_svd">[docs]</a><span class="k">def</span> <span class="nf">pls_svd</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qf</span><span class="p">,</span> <span class="n">qg</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
@@ -87,14 +88,24 @@
     <span class="n">wf</span> <span class="o">=</span> <span class="n">Lmat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
     <span class="n">wg</span> <span class="o">=</span> <span class="n">Mmat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
 
-    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
         <span class="n">wf</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">wf</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">wf</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">wf</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]))</span>
         <span class="n">wg</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">wg</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">wg</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">wg</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]))</span>
 
     <span class="n">wqf</span> <span class="o">=</span> <span class="n">wf</span>
     <span class="n">wqg</span> <span class="o">=</span> <span class="n">wg</span>
 
-    <span class="k">return</span> <span class="n">wqf</span><span class="p">,</span> <span class="n">wqg</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">values</span></div>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">qf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">rfi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">rgi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">rfi</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">innerprod_q</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qf</span><span class="p">[:,</span> <span class="n">l</span><span class="p">],</span> <span class="n">wqf</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">rgi</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">innerprod_q</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qg</span><span class="p">[:,</span> <span class="n">l</span><span class="p">],</span> <span class="n">wqg</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">rfi</span><span class="p">,</span> <span class="n">rgi</span><span class="p">)[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">wqf</span><span class="p">,</span> <span class="n">wqg</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">cost</span></div>
 </pre></div>
 
           </div>
@@ -134,7 +145,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

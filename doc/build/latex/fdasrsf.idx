@@ -6,24 +6,31 @@
 \indexentry{fPCA (module)|hyperpage}{7}
 \indexentry{horizfPCA() (in module fPCA)|hyperpage}{7}
 \indexentry{vertfPCA() (in module fPCA)|hyperpage}{7}
-\indexentry{fPLS (module)|hyperpage}{9}
-\indexentry{pls\_svd() (in module fPLS)|hyperpage}{9}
-\indexentry{utility\_functions (module)|hyperpage}{11}
-\indexentry{SqrtMean() (in module utility\_functions)|hyperpage}{11}
-\indexentry{SqrtMeanInverse() (in module utility\_functions)|hyperpage}{11}
-\indexentry{cumtrapzmid() (in module utility\_functions)|hyperpage}{11}
-\indexentry{diffop() (in module utility\_functions)|hyperpage}{11}
-\indexentry{elastic\_distance() (in module utility\_functions)|hyperpage}{12}
-\indexentry{f\_to\_srsf() (in module utility\_functions)|hyperpage}{12}
-\indexentry{geigen() (in module utility\_functions)|hyperpage}{12}
-\indexentry{gradient\_spline() (in module utility\_functions)|hyperpage}{12}
-\indexentry{innerprod\_q() (in module utility\_functions)|hyperpage}{12}
-\indexentry{invertGamma() (in module utility\_functions)|hyperpage}{13}
-\indexentry{optimum\_reparam() (in module utility\_functions)|hyperpage}{13}
-\indexentry{optimum\_reparam\_pair() (in module utility\_functions)|hyperpage}{13}
-\indexentry{outlier\_detection() (in module utility\_functions)|hyperpage}{13}
-\indexentry{randomGamma() (in module utility\_functions)|hyperpage}{13}
-\indexentry{rgam() (in module utility\_functions)|hyperpage}{14}
-\indexentry{smooth\_data() (in module utility\_functions)|hyperpage}{14}
-\indexentry{update\_progress() (in module utility\_functions)|hyperpage}{14}
-\indexentry{warp\_q\_gamma() (in module utility\_functions)|hyperpage}{14}
+\indexentry{gauss\_model (module)|hyperpage}{9}
+\indexentry{gauss\_model() (in module gauss\_model)|hyperpage}{9}
+\indexentry{fPLS (module)|hyperpage}{11}
+\indexentry{pls\_svd() (in module fPLS)|hyperpage}{11}
+\indexentry{regression (module)|hyperpage}{13}
+\indexentry{elastic\_prediction() (in module regression)|hyperpage}{13}
+\indexentry{elastic\_regression() (in module regression)|hyperpage}{13}
+\indexentry{utility\_functions (module)|hyperpage}{15}
+\indexentry{SqrtMean() (in module utility\_functions)|hyperpage}{15}
+\indexentry{SqrtMeanInverse() (in module utility\_functions)|hyperpage}{15}
+\indexentry{cumtrapzmid() (in module utility\_functions)|hyperpage}{15}
+\indexentry{diffop() (in module utility\_functions)|hyperpage}{15}
+\indexentry{elastic\_distance() (in module utility\_functions)|hyperpage}{16}
+\indexentry{f\_K\_fold() (in module utility\_functions)|hyperpage}{16}
+\indexentry{f\_to\_srsf() (in module utility\_functions)|hyperpage}{16}
+\indexentry{geigen() (in module utility\_functions)|hyperpage}{16}
+\indexentry{gradient\_spline() (in module utility\_functions)|hyperpage}{16}
+\indexentry{innerprod\_q() (in module utility\_functions)|hyperpage}{17}
+\indexentry{invertGamma() (in module utility\_functions)|hyperpage}{17}
+\indexentry{optimum\_reparam() (in module utility\_functions)|hyperpage}{17}
+\indexentry{optimum\_reparam\_pair() (in module utility\_functions)|hyperpage}{17}
+\indexentry{outlier\_detection() (in module utility\_functions)|hyperpage}{17}
+\indexentry{randomGamma() (in module utility\_functions)|hyperpage}{18}
+\indexentry{rgam() (in module utility\_functions)|hyperpage}{18}
+\indexentry{smooth\_data() (in module utility\_functions)|hyperpage}{18}
+\indexentry{update\_progress() (in module utility\_functions)|hyperpage}{18}
+\indexentry{warp\_q\_gamma() (in module utility\_functions)|hyperpage}{18}
+\indexentry{zero\_crossing() (in module utility\_functions)|hyperpage}{18}

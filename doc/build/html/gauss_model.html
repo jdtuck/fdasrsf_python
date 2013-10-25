@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Functional Principal Least Squares &mdash; fdasrsf 1.1.0 documentation</title>
+    <title>Gaussian Generative Models &mdash; fdasrsf 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="fdasrsf 1.1.0 documentation" href="index.html" />
-    <link rel="next" title="Elastic Regression" href="regression.html" />
-    <link rel="prev" title="Gaussian Generative Models" href="gauss_model.html" /> 
+    <link rel="next" title="Functional Principal Least Squares" href="fPLS.html" />
+    <link rel="prev" title="Functional Principal Component Analysis" href="fPCA.html" /> 
   </head>
   <body>
     <div class="related">
@@ -41,10 +41,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="regression.html" title="Elastic Regression"
+          <a href="fPLS.html" title="Functional Principal Least Squares"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="gauss_model.html" title="Gaussian Generative Models"
+          <a href="fPCA.html" title="Functional Principal Component Analysis"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
       </ul>
@@ -55,46 +55,48 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-fPLS">
-<span id="functional-principal-least-squares"></span><h1>Functional Principal Least Squares<a class="headerlink" href="#module-fPLS" title="Permalink to this headline">¶</a></h1>
-<p>Partial Least Squares using SVD</p>
+  <div class="section" id="module-gauss_model">
+<span id="gaussian-generative-models"></span><h1>Gaussian Generative Models<a class="headerlink" href="#module-gauss_model" title="Permalink to this headline">¶</a></h1>
+<p>Gaussian Model of functional data</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:dtucker&#37;&#52;&#48;stat&#46;fsu&#46;edu">dtucker<span>&#64;</span>stat<span>&#46;</span>fsu<span>&#46;</span>edu</a>&gt;</p>
 <dl class="function">
-<dt id="fPLS.pls_svd">
-<tt class="descclassname">fPLS.</tt><tt class="descname">pls_svd</tt><big>(</big><em>time</em>, <em>qf</em>, <em>qg</em>, <em>no</em>, <em>alpha=0.0</em><big>)</big><a class="reference internal" href="_modules/fPLS.html#pls_svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPLS.pls_svd" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function computes the partial least squares using SVD</p>
+<dt id="gauss_model.gauss_model">
+<tt class="descclassname">gauss_model.</tt><tt class="descname">gauss_model</tt><big>(</big><em>fn</em>, <em>time</em>, <em>qn</em>, <em>gam</em>, <em>n=1</em>, <em>sort_samples=False</em><big>)</big><a class="reference internal" href="_modules/gauss_model.html#gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gauss_model.gauss_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function models the functional data using a Gaussian model extracted from the principal components of the srvfs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>time</strong> &#8211; vector describing time samples</li>
-<li><strong>qf</strong> &#8211; numpy ndarray of shape (M,N) of M functions with N samples</li>
-<li><strong>qg</strong> &#8211; numpy ndarray of shape (M,N) of M functions with N samples</li>
-<li><strong>no</strong> &#8211; number of components</li>
-<li><strong>alpha</strong> &#8211; amount of smoothing (Default = 0.0 i.e., none)</li>
+<li><strong>fn</strong> (<em>np.ndarray</em>) &#8211; numpy ndarray of shape (M,N) of M aligned functions with N samples</li>
+<li><strong>time</strong> (<em>np.ndarray</em>) &#8211; vector of size N describing the sample points</li>
+<li><strong>qn</strong> (<em>np.ndarray</em>) &#8211; numpy ndarray of shape (M,N) of M aligned srvfs with N samples</li>
+<li><strong>gam</strong> (<em>np.ndarray</em>) &#8211; warping functions</li>
+<li><strong>n</strong> (<em>integer</em>) &#8211; number of random samples</li>
+<li><strong>sort_samples</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; sort samples (default = T)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">numpy ndarray</p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple of numpy array</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return wqf:</th><td class="field-body"><p class="first">f weight function</p>
+<tr class="field-odd field"><th class="field-name">Return fs:</th><td class="field-body"><p class="first">random aligned samples</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return wqg:</th><td class="field-body"><p class="first">g weight function</p>
+<tr class="field-even field"><th class="field-name">Return gams:</th><td class="field-body"><p class="first">random warping functions</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return alpha:</th><td class="field-body"><p class="first">smoothing value</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return values:</th><td class="field-body"><p class="first last">singular values</p>
+<tr class="field-odd field"><th class="field-name">Return ft:</th><td class="field-body"><p class="first last">random samples</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
 </div>
 
 
@@ -104,14 +106,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="gauss_model.html"
-                        title="previous chapter">Gaussian Generative Models</a></p>
+  <p class="topless"><a href="fPCA.html"
+                        title="previous chapter">Functional Principal Component Analysis</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="regression.html"
-                        title="next chapter">Elastic Regression</a></p>
+  <p class="topless"><a href="fPLS.html"
+                        title="next chapter">Functional Principal Least Squares</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/fPLS.txt"
+    <li><a href="_sources/gauss_model.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -141,10 +143,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="regression.html" title="Elastic Regression"
+          <a href="fPLS.html" title="Functional Principal Least Squares"
              >next</a> |</li>
         <li class="right" >
-          <a href="gauss_model.html" title="Gaussian Generative Models"
+          <a href="fPCA.html" title="Functional Principal Component Analysis"
              >previous</a> |</li>
         <li><a href="index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li> 
       </ul>

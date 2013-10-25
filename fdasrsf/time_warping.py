@@ -6,12 +6,12 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from . import utility_functions as uf
+import fdasrsf.utility_functions as uf
 from scipy.integrate import simps, cumtrapz, trapz
 from numpy.linalg import norm
 from joblib import Parallel, delayed
-from .fPLS import pls_svd
-from . import plot_style as plot
+from fdasrsf.fPLS import pls_svd
+import fdasrsf.plot_style as plot
 import fpls_warp as fpls
 import collections
 
