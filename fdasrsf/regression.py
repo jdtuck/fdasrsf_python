@@ -50,7 +50,7 @@ def elastic_regression(f, y, time, B=None, lam=0):
                include_intercept=True)
     Nb = B.shape[1]
 
-    # second derivative for reularization2
+    # second derivative for regularization
     Bdiff = np.zeros((M, Nb))
     for ii in range(0, Nb):
         Bdiff[:, ii] = np.gradient(np.gradient(B[:, ii], binsize), binsize)
@@ -72,15 +72,15 @@ def elastic_regression(f, y, time, B=None, lam=0):
             qn[:, ii] = uf.warp_q_gamma(time, q[:, ii], gamma[:, ii])
 
         # OLS using basis since we have it in this example
-        Phi = np.ones((N, Nb))
+        Phi = np.ones((N, Nb+1))
         for ii in range(0, N):
-            for jj in range(0, Nb):
-                Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj], time)
+            for jj in range(1, Nb+1):
+                Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], time)
 
-        R = np.zeros((Nb, Nb))
-        for ii in range(0, Nb):
-            for jj in range(0, Nb):
-                R[ii, jj] = trapz(Bdiff[:, ii] * Bdiff[:, jj], time)
+        R = np.zeros((Nb+1, Nb+1))
+        for ii in range(1, Nb+1):
+            for jj in range(1, Nb+1):
+                R[ii, jj] = trapz(Bdiff[:, ii-1] * Bdiff[:, jj-1], time)
 
         xx = dot(Phi.T, Phi)
         inv_xx = inv(xx + lam * R)
@@ -88,7 +88,8 @@ def elastic_regression(f, y, time, B=None, lam=0):
         b = dot(inv_xx, xy)
 
         alpha = b[0]
-        beta = B.dot(b[1:-1])
+        beta = B.dot(b[1:Nb+1])
+        beta = beta.reshape(M)
 
         # compute the SSE
         int_X = np.zeros(N)
