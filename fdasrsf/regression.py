@@ -128,6 +128,16 @@ def elastic_regression(f, y, time, B=None, lam=0):
 
         itr += 1
 
+    # Last Step with centering of gam
+    gamI = uf.SqrtMeanInverse(gamma_new)
+    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+    beta = np.interp((time[-1] - time[0]) * gamI + time[0], time, beta) * np.sqrt(gamI_dev)
+
+    for ii in range(0, N):
+        qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0], time, qn[:, ii]) * np.sqrt(gamI_dev)
+        fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0], time, fn[:, ii])
+        gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0], time, gamma_new[:, ii])
+
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn', 'qn', 'gamma', 'q', 'B', 'b', 'SSE'])
     out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], SSE[0:(itr - 1)])
     return out
