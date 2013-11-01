@@ -90,7 +90,7 @@ def rstyle_bw(ax):
     ax.yaxis.set_ticks_position('left')
 
 
-def f_plot(time, f, title="Data", bw=False):
+def f_plot(time, f, title="Data", bw=False, pres=False):
     """
     plots function data using matplotlib
 
@@ -120,6 +120,6 @@ def f_plot(time, f, title="Data", bw=False):
     if bw:
         rstyle_bw(ax)
     else:
-        rstyle(ax)
+        rstyle(ax, pres)
 
     return fig, ax
