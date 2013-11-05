@@ -139,7 +139,7 @@ def elastic_regression(f, y, time, B=None, lam=0):
         gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0], time, gamma_new[:, ii])
 
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn', 'qn', 'gamma', 'q', 'B', 'b', 'SSE'])
-    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], SSE[0:(itr - 1)])
+    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], SSE[0:itr])
     return out
 
 
