@@ -48,6 +48,7 @@ def elastic_regression(f, y, time, B=None, lam=0):
     if B is None:
         B = bs(time, knots=np.linspace(time[0], time[-1], 20), lower_bound=0, upper_bound=time[-1], degree=4,
                include_intercept=True)
+    B = B[:, 1:(B.shape[1]-1)]
     Nb = B.shape[1]
 
     # second derivative for regularization
