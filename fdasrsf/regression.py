@@ -11,10 +11,11 @@ from scipy import dot
 from scipy.integrate import trapz
 from scipy.linalg import inv, norm
 from patsy import bs
+from joblib import Parallel, delayed
 import collections
 
 
-def elastic_regression(f, y, time, B=None, lam=0):
+def elastic_regression(f, y, time, B=None, lam=0, df=20):
     """
     This function identifies a regression model with phase-variablity using elastic methods
 
@@ -41,14 +42,20 @@ def elastic_regression(f, y, time, B=None, lam=0):
     max_itr = 20
     M = f.shape[0]
     N = f.shape[1]
+
+    if M > 500:
+        parallel = True
+    elif N > 100:
+        parallel = True
+    else:
+        parallel = False
+
     binsize = np.diff(time)
     binsize = binsize.mean()
 
     # Create B-Spline Basis if no provided
     if B is None:
-        B = bs(time, knots=np.linspace(time[0], time[-1], 20), lower_bound=0, upper_bound=time[-1], degree=4,
-               include_intercept=True)
-    B = B[:, 1:(B.shape[1]-1)]
+        B = bs(time, df=df, degree=4, include_intercept=True)
     Nb = B.shape[1]
 
     # second derivative for regularization
@@ -100,27 +107,14 @@ def elastic_regression(f, y, time, B=None, lam=0):
         SSE[itr - 1] = sum((y.reshape(N) - alpha - int_X) ** 2)
 
         # find gamma
-        qM = np.zeros((M, N))
-        qm = np.zeros((M, N))
         gamma_new = np.zeros((M, N))
-        y_M = np.zeros(N)
-        y_m = np.zeros(N)
-        for ii in range(0, N):
-            gam_M = uf.optimum_reparam(beta, time, q[:, ii])
-            qM[:, ii] = uf.warp_q_gamma(time, q[:, ii], gam_M)
-            y_M[ii] = trapz(qM[:, ii] * beta, time)
-
-            gam_m = uf.optimum_reparam(-1 * beta, time, q[:, ii])
-            qm[:, ii] = uf.warp_q_gamma(time, q[:, ii], gam_m)
-            y_m[ii] = trapz(qm[:, ii] * beta, time)
-
-            if y[ii] > alpha + y_M[ii]:
-                gamma_new[:, ii] = gam_M
-            elif y[ii] < alpha + y_m[ii]:
-                gamma_new[:, ii] = gam_m
-            else:
-                gamma_new[:, ii] = uf.zero_crossing(y[ii] - alpha, q[:, ii], beta, time, y_M[ii], y_m[ii], gam_M,
-                                                    gam_m)
+        if parallel:
+            out = Parallel(n_jobs=-1)(delayed(regression_warp)(beta, time, q[:, n], y[n], alpha) for n in range(N))
+            gamma_new = np.array(out)
+            gamma_new = gamma_new.transpose()
+        else:
+            for ii in range(0, N):
+                gamma_new[:, ii] = regression_warp(beta, time, q[:, ii], y[ii], alpha)
 
         if norm(gamma - gamma_new) < 1e-5:
             break
@@ -183,3 +177,23 @@ def elastic_prediction(f, time, model, y=None):
     prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])
     out = prediction(y_pred, SSE)
     return out
+
+
+def regression_warp(beta, time, q, y, alpha):
+    gam_M = uf.optimum_reparam(beta, time, q)
+    qM = uf.warp_q_gamma(time, q, gam_M)
+    y_M = trapz(qM * beta, time)
+
+    gam_m = uf.optimum_reparam(-1 * beta, time, q)
+    qm = uf.warp_q_gamma(time, q, gam_m)
+    y_m = trapz(qm * beta, time)
+
+    if y > alpha + y_M:
+        gamma_new = gam_M
+    elif y < alpha + y_m:
+        gamma_new = gam_m
+    else:
+        gamma_new = uf.zero_crossing(y - alpha, q, beta, time, y_M, y_m, gam_M,
+                                                    gam_m)
+
+    return gamma_new
