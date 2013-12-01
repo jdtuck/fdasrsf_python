@@ -15,9 +15,10 @@ from joblib import Parallel, delayed
 import collections
 
 
-def elastic_regression(f, y, time, B=None, lam=0, df=20):
+def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20):
     """
-    This function identifies a regression model with phase-variablity using elastic methods
+    This function identifies a regression model with phase-variablity
+    using elastic methods
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
     :param y: numpy array of N responses
@@ -30,7 +31,8 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20):
     :rtype: tuple of numpy array
     :return alpha: alpha parameter of model
     :return beta: beta(t) of model
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
     :return qn: aligned srvfs - similar structure to fn
     :return gamma: calculated warping functions
     :return q: original training SRSFs
@@ -39,7 +41,6 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20):
     :return SSE: sum of squared error
 
     """
-    max_itr = 20
     M = f.shape[0]
     N = f.shape[1]
 
@@ -76,7 +77,8 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20):
         fn = np.zeros((M, N))
         qn = np.zeros((M, N))
         for ii in range(0, N):
-            fn[:, ii] = np.interp((time[-1] - time[0]) * gamma[:, ii] + time[0], time, f[:, ii])
+            fn[:, ii] = np.interp((time[-1] - time[0]) * gamma[:, ii] +
+                                  time[0], time, f[:, ii])
             qn[:, ii] = uf.warp_q_gamma(time, q[:, ii], gamma[:, ii])
 
         # OLS using basis since we have it in this example
@@ -109,12 +111,14 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20):
         # find gamma
         gamma_new = np.zeros((M, N))
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(regression_warp)(beta, time, q[:, n], y[n], alpha) for n in range(N))
+            out = Parallel(n_jobs=-1)(delayed(regression_warp)(beta,
+                                      time, q[:, n], y[n], alpha) for n in range(N))
             gamma_new = np.array(out)
             gamma_new = gamma_new.transpose()
         else:
             for ii in range(0, N):
-                gamma_new[:, ii] = regression_warp(beta, time, q[:, ii], y[ii], alpha)
+                gamma_new[:, ii] = regression_warp(beta, time, q[:, ii],
+                                                   y[ii], alpha)
 
         if norm(gamma - gamma_new) < 1e-5:
             break
@@ -126,21 +130,27 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20):
     # Last Step with centering of gam
     gamI = uf.SqrtMeanInverse(gamma_new)
     gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    beta = np.interp((time[-1] - time[0]) * gamI + time[0], time, beta) * np.sqrt(gamI_dev)
+    beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
+                     beta) * np.sqrt(gamI_dev)
 
     for ii in range(0, N):
-        qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0], time, qn[:, ii]) * np.sqrt(gamI_dev)
-        fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0], time, fn[:, ii])
-        gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0], time, gamma_new[:, ii])
+        qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+                              time, qn[:, ii]) * np.sqrt(gamI_dev)
+        fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+                              time, fn[:, ii])
+        gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+                                 time, gamma_new[:, ii])
 
-    model = collections.namedtuple('model', ['alpha', 'beta', 'fn', 'qn', 'gamma', 'q', 'B', 'b', 'SSE'])
+    model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
+                                   'qn', 'gamma', 'q', 'B', 'b', 'SSE'])
     out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], SSE[0:itr])
     return out
 
 
 def elastic_prediction(f, time, model, y=None):
     """
-    This function identifies a regression model with phase-variablity using elastic methods
+    This function identifies a regression model with phase-variablity
+    using elastic methods
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
     :param time: vector of size N describing the sample points
@@ -150,7 +160,8 @@ def elastic_prediction(f, time, model, y=None):
     :rtype: tuple of numpy array
     :return alpha: alpha parameter of model
     :return beta: beta(t) of model
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
     :return qn: aligned srvfs - similar structure to fn
     :return gamma: calculated warping functions
     :return q: original training SRSFs
@@ -193,7 +204,7 @@ def regression_warp(beta, time, q, y, alpha):
     elif y < alpha + y_m:
         gamma_new = gam_m
     else:
-        gamma_new = uf.zero_crossing(y - alpha, q, beta, time, y_M, y_m, gam_M,
-                                                    gam_m)
+        gamma_new = uf.zero_crossing(y - alpha, q, beta, time, y_M, y_m,
+                                     gam_M, gam_m)
 
     return gamma_new

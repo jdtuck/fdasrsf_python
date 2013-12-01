@@ -7,7 +7,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 import numpy as np
 import matplotlib.pyplot as plt
 import fdasrsf.utility_functions as uf
-from scipy.integrate import simps, cumtrapz, trapz
+from scipy.integrate import trapz, cumtrapz, trapz
 from numpy.linalg import norm
 from joblib import Parallel, delayed
 from fdasrsf.fPLS import pls_svd
@@ -18,11 +18,13 @@ import collections
 
 def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0):
     """
-    This function aligns a collection of functions using the elastic square-root slope (srsf) framework.
+    This function aligns a collection of functions using the elastic
+    square-root slope (srsf) framework.
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
     :param time: vector of size N describing the sample points
-    :param method: (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
+    :param method: (string) warp calculate Karcher Mean or Median
+    (options = "mean" or "median") (default="mean")
     :param showplot: Shows plots of results using matplotlib (default = T)
     :param smoothdata: Smooth the data using a box filter (default = F)
     :param lam: controls the elasticity (default = 0)
@@ -32,7 +34,8 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
     :type time: np.ndarray
 
     :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
     :return qn: aligned srvfs - similar structure to fn
     :return q0: original srvf - similar structure to fn
     :return fmean: function mean or median - vector of length N
@@ -65,8 +68,8 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
     f0 = f
 
     methods = ["mean", "median"]
-    method = [i for i, x in enumerate(methods) if x == method]  # 0 mean, 1-median
-
+    # 0 mean, 1-median
+    method = [i for i, x in enumerate(methods) if x == method]
     if method != 0 or method != 1:
         method = 0
 
@@ -77,7 +80,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
     f, g, g2 = uf.gradient_spline(time, f, smoothdata)
     q = g / np.sqrt(abs(g) + eps)
 
-    print ("Initializing...")
+    print("Initializing...")
     mnq = q.mean(axis=1)
     a = mnq.repeat(N)
     d1 = a.reshape(M, N)
@@ -88,7 +91,8 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
     mf = f[:, min_ind]
 
     if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, time, q[:, n], lam) for n in range(N))
+        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, time,
+                                  q[:, n], lam) for n in range(N))
         gam = np.array(out)
         gam = gam.transpose()
     else:
@@ -125,7 +129,8 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
 
         # Matching Step
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time, q[:, n, 0], lam) for n in range(N))
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
+                                      time, q[:, n, 0], lam) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
@@ -133,7 +138,8 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
-            f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, f[:, k, 0])
+            f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k]
+                                       + time[0], time, f[:, k, 0])
             q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
             gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
 
@@ -142,7 +148,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
         d1 = a.reshape(M, N)
         d = (q[:, :, r + 1] - d1) ** 2
         if method == 0:
-            ds_tmp = sum(simps(d, time, axis=0)) + lam * sum(simps((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
+            ds_tmp = sum(trapz(d, time, axis=0)) + lam * sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
             ds[r + 1] = ds_tmp
 
             # Minimization Step
@@ -153,7 +159,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0)
             qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
         if method == 1:
-            ds_tmp = np.sqrt(sum(simps(d, time, axis=0))) + lam * sum(simps((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
+            ds_tmp = np.sqrt(sum(trapz(d, time, axis=0))) + lam * sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
             ds[r + 1] = ds_tmp
 
             # Minimization Step
@@ -376,8 +382,8 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True, smoothdata=False, 
         d1 = a.reshape(M, N)
         dg = (qg[:, :, r + 1] - d1) ** 2
         if method == 0:
-            ds_tmp = sum(simps(df, time, axis=0)) + lam * sum(simps((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp1 = sum(simps(dg, time, axis=0)) + lam * sum(simps((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
+            ds_tmp = sum(trapz(df, time, axis=0)) + lam * sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
+            ds_tmp1 = sum(trapz(dg, time, axis=0)) + lam * sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
             ds[r + 1] = (ds_tmp + ds_tmp1) / 2
 
             # Minimization Step
@@ -391,9 +397,9 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True, smoothdata=False, 
             qgun[r] = norm(mq[:, 1, r + 1] - mq[:, 1, r]) / norm(mq[:, 1, r])
 
         if method == 1:
-            ds_tmp = np.sqrt(sum(simps(df, time, axis=0))) + lam * sum(simps((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp1 = np.sqrt(sum(simps(dg, time, axis=0))) + lam * sum(
-                simps((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
+            ds_tmp = np.sqrt(sum(trapz(df, time, axis=0))) + lam * sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
+            ds_tmp1 = np.sqrt(sum(trapz(dg, time, axis=0))) + lam * sum(
+                trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
             ds[r + 1] = (ds_tmp + ds_tmp1) / 2
 
             # Minimization Step
@@ -579,7 +585,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
         alpha_i = np.zeros((num_comp, N))
         for ii in range(0, num_comp):
             for jj in range(0, N):
-                alpha_i[ii, jj] = simps(qhat_cent[:, jj] * U[:, ii], time)
+                alpha_i[ii, jj] = trapz(qhat_cent[:, jj] * U[:, ii], time)
 
         U1 = U[:, 0:num_comp]
         tmp = U1.dot(alpha_i)

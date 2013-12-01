@@ -6,11 +6,11 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 """
 
 from scipy.interpolate import UnivariateSpline
-from scipy.integrate import simps, cumtrapz
+from scipy.integrate import trapz, cumtrapz, trapz
 from scipy.linalg import norm, svd, cholesky, inv
 from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace, arccos, sin, cos, arange, ascontiguousarray, round
-from numpy import ones, real, trapz, pi, cumsum, fabs, cov, diagflat, inner, gradient, column_stack, row_stack, append
+from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner, gradient, column_stack, row_stack, append
 from numpy import insert, vectorize
 import numpy.random as rn
 import optimum_reparamN as orN
@@ -33,7 +33,8 @@ def smooth_data(f, sparam):
 
     for k in range(1, sparam):
         for r in range(0, N):
-            f[1:(M - 2), r] = (f[0:(M - 3), r] + 2 * f[1:(M - 2), r] + f[2:(M - 1), r]) / 4
+            f[1:(M - 2), r] = (f[0:(M - 3), r] + 2 * f[1:(M - 2), r] +
+                               f[2:(M - 1), r]) / 4
     return f
 
 
@@ -111,13 +112,16 @@ def optimum_reparam(q1, time, q2, lam=0.0):
 
     """
     if q1.ndim == 1 and q2.ndim == 1:
-        gam = orN.coptimum_reparam(ascontiguousarray(q1), time, ascontiguousarray(q2), lam)
+        gam = orN.coptimum_reparam(ascontiguousarray(q1), time,
+                                   ascontiguousarray(q2), lam)
 
     if q1.ndim == 1 and q2.ndim == 2:
-        gam = orN.coptimum_reparamN(ascontiguousarray(q1), time, ascontiguousarray(q2), lam)
+        gam = orN.coptimum_reparamN(ascontiguousarray(q1), time,
+                                    ascontiguousarray(q2), lam)
 
     if q1.ndim == 2 and q2.ndim == 2:
-        gam = orN.coptimum_reparamN2(ascontiguousarray(q1), time, ascontiguousarray(q2), lam)
+        gam = orN.coptimum_reparamN2(ascontiguousarray(q1), time,
+                                     ascontiguousarray(q2), lam)
 
     return gam
 
@@ -138,17 +142,21 @@ def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
     """
     if q1.ndim == 1 and q2.ndim == 1:
         q_c = column_stack((q1, q2))
-        gam = orN.coptimum_reparam_pair(ascontiguousarray(q), time, ascontiguousarray(q_c), lam)
+        gam = orN.coptimum_reparam_pair(ascontiguousarray(q), time,
+                                        ascontiguousarray(q_c), lam)
 
     if q1.ndim == 2 and q2.ndim == 2:
-        gam = orN.coptimum_reparamN2_pair(ascontiguousarray(q), time, ascontiguousarray(q1), ascontiguousarray(q2), lam)
+        gam = orN.coptimum_reparamN2_pair(ascontiguousarray(q), time,
+                                          ascontiguousarray(q1),
+                                          ascontiguousarray(q2), lam)
 
     return gam
 
 
 def elastic_distance(f1, f2, time, lam=0.0):
     """"
-    calculates the distances between function, where f1 is aligned to f2. In other words
+    calculates the distances between function, where f1 is aligned to
+    f2. In other words
     calculates the elastic distances
 
     :param f1: vector of size N
@@ -199,7 +207,8 @@ def SqrtMeanInverse(gam):
     """
     finds the inverse of the mean of the set of the diffeomorphisms gamma
 
-    :param gam: numpy ndarray of shape (M,N) of M warping functions with N samples
+    :param gam: numpy ndarray of shape (M,N) of M warping functions
+    with N samples
 
     :rtype: vector
     :return gamI: inverse of gam
@@ -227,7 +236,7 @@ def SqrtMeanInverse(gam):
     vec = zeros((T1 - 1, n))
     for itr in range(0, maxiter):
         for k in range(0, n):
-            dot = simps(mu * psi[:, k], linspace(0, 1, T1 - 1))
+            dot = trapz(mu * psi[:, k], linspace(0, 1, T1 - 1))
             if dot > 1:
                 dot = 1
             elif dot < (-1):
@@ -260,7 +269,8 @@ def SqrtMean(gam):
     """
     calculates the srsf of warping functions with corresponding shooting vectors
 
-    :param gam: numpy ndarray of shape (M,N) of M warping functions with N samples
+    :param gam: numpy ndarray of shape (M,N) of M warping functions
+    with N samples
 
     :rtype: 2 numpy ndarray and vector
     :return mu: Karcher mean psi function
@@ -289,7 +299,7 @@ def SqrtMean(gam):
     vec = zeros((TT - 1, n))
     for itr in range(0, maxiter):
         for k in range(0, n):
-            dot = simps(mu * psi[:, k], linspace(0, 1, TT - 1))
+            dot = trapz(mu * psi[:, k], linspace(0, 1, TT - 1))
             if dot > 1:
                 dot = 1
             elif dot < (-1):
@@ -402,7 +412,7 @@ def outlier_detection(q, time, mq, k=1.5):
     N = q.shape[1]
     ds = zeros(N)
     for kk in range(0, N):
-        ds[kk] = sqrt(simps((mq - q[:, kk]) ** 2, time))
+        ds[kk] = sqrt(trapz((mq - q[:, kk]) ** 2, time))
 
     quartile_range = mquantiles(ds)
     IQR = quartile_range[2] - quartile_range[0]
@@ -471,7 +481,9 @@ def update_progress(progress):
         progress = 1
         status = "Done...\r\n"
     block = int(round(barLength * progress))
-    text = "\rPercent: [{0}] {1}% {2}".format("#" * block + "-" * (barLength - block), progress * 100, status)
+    text = "\rPercent: [{0}] {1}% {2}".format("#" * block + "-" *
+                                              (barLength - block),
+                                              progress * 100, status)
     sys.stdout.write(text)
     sys.stdout.flush()
 
@@ -570,7 +582,7 @@ def innerprod_q(time, q1, q2):
     :return val: inner product value
 
     """
-    val = simps(q1 * q2, time)
+    val = trapz(q1 * q2, time)
     return val
 
 
@@ -618,7 +630,8 @@ def f_K_fold(Nobs, K=5):
     train = zeros((Nobs * (K - 1) / K, K))
     test = zeros((Nobs * 1 / K, K))
     for ii in range(0, K):
-        tf = vectorize(lambda x: x in arange(k[ii, 0], k[ii, 1] + 1))(arange(0, Nobs))
+        tf = vectorize(lambda x: x in arange(k[ii, 0],
+                       k[ii, 1] + 1))(arange(0, Nobs))
         train[:, ii] = ids[~tf]
         test[:, ii] = ids[tf]
 
@@ -627,7 +640,8 @@ def f_K_fold(Nobs, K=5):
 
 def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
     """
-    finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin from elastic regression model
+    finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+    from elastic regression model
 
     :param Y: response
     :param q: predicitve function
@@ -676,4 +690,3 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
     gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
     return gamma
-
