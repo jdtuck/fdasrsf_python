@@ -15,7 +15,7 @@ from joblib import Parallel, delayed
 import collections
 
 
-def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20):
+def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=-1):
     """
     This function identifies a regression model with phase-variablity
     using elastic methods
@@ -25,6 +25,9 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20):
     :param time: vector of size N describing the sample points
     :param B: optional matrix describing Basis elements
     :param lam: regularization parameter (default 0)
+    :param df: number of degrees of freedom B-spline (default 20)
+    :param max_itr: maximum number of iterations (default 20)
+    :param cores: number of cores for parallel processing (default all)
     :type f: np.ndarray
     :type time: np.ndarray
 
@@ -54,7 +57,7 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20):
     binsize = np.diff(time)
     binsize = binsize.mean()
 
-    # Create B-Spline Basis if no provided
+    # Create B-Spline Basis if none provided
     if B is None:
         B = bs(time, df=df, degree=4, include_intercept=True)
     Nb = B.shape[1]
@@ -111,7 +114,7 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20):
         # find gamma
         gamma_new = np.zeros((M, N))
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(regression_warp)(beta,
+            out = Parallel(n_jobs=cores)(delayed(regression_warp)(beta,
                                       time, q[:, n], y[n], alpha) for n in range(N))
             gamma_new = np.array(out)
             gamma_new = gamma_new.transpose()
