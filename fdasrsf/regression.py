@@ -84,7 +84,7 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=-1):
                                   time[0], time, f[:, ii])
             qn[:, ii] = uf.warp_q_gamma(time, q[:, ii], gamma[:, ii])
 
-        # OLS using basis since we have it in this example
+        # OLS using basis
         Phi = np.ones((N, Nb+1))
         for ii in range(0, N):
             for jj in range(1, Nb+1):
@@ -110,6 +110,139 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=-1):
             int_X[ii] = trapz(qn[:, ii] * beta, time)
 
         SSE[itr - 1] = sum((y.reshape(N) - alpha - int_X) ** 2)
+
+        # find gamma
+        gamma_new = np.zeros((M, N))
+        if parallel:
+            out = Parallel(n_jobs=cores)(delayed(regression_warp)(beta,
+                                         time, q[:, n], y[n], alpha) for n in range(N))
+            gamma_new = np.array(out)
+            gamma_new = gamma_new.transpose()
+        else:
+            for ii in range(0, N):
+                gamma_new[:, ii] = regression_warp(beta, time, q[:, ii],
+                                                   y[ii], alpha)
+
+        if norm(gamma - gamma_new) < 1e-5:
+            break
+        else:
+            gamma = gamma_new
+
+        itr += 1
+
+    # Last Step with centering of gam
+    gamI = uf.SqrtMeanInverse(gamma_new)
+    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+    beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
+                     beta) * np.sqrt(gamI_dev)
+
+    for ii in range(0, N):
+        qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+                              time, qn[:, ii]) * np.sqrt(gamI_dev)
+        fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+                              time, fn[:, ii])
+        gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+                                 time, gamma_new[:, ii])
+
+    model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
+                                   'qn', 'gamma', 'q', 'B', 'b',
+                                   'SSE', 'type'])
+    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], SSE[0:itr],
+                'linear')
+    return out
+
+
+def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
+    """
+    This function identifies a logistic regression model with
+    phase-variablity using elastic methods
+
+    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy array of N responses
+    :param time: vector of size N describing the sample points
+    :param B: optional matrix describing Basis elements
+    :param df: number of degrees of freedom B-spline (default 20)
+    :param max_itr: maximum number of iterations (default 20)
+    :param cores: number of cores for parallel processing (default all)
+    :type f: np.ndarray
+    :type time: np.ndarray
+
+    :rtype: tuple of numpy array
+    :return alpha: alpha parameter of model
+    :return beta: beta(t) of model
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
+    :return qn: aligned srvfs - similar structure to fn
+    :return gamma: calculated warping functions
+    :return q: original training SRSFs
+    :return B: basis matrix
+    :return b: basis coefficients
+    :return SSE: sum of squared error
+
+    """
+    M = f.shape[0]
+    N = f.shape[1]
+
+    if M > 500:
+        parallel = True
+    elif N > 100:
+        parallel = True
+    else:
+        parallel = False
+
+    binsize = np.diff(time)
+    binsize = binsize.mean()
+
+    # Create B-Spline Basis if none provided
+    if B is None:
+        B = bs(time, df=df, degree=4, include_intercept=True)
+    Nb = B.shape[1]
+
+    q = uf.f_to_srsf(f, time)
+
+    gamma = np.tile(np.linspace(0, 1, M), (N, 1))
+    gamma = gamma.transpose()
+
+    itr = 1
+    LL = np.zeros(max_itr)
+    while itr <= max_itr:
+        print("Iteration: %d" % itr)
+        # align data
+        fn = np.zeros((M, N))
+        qn = np.zeros((M, N))
+        for ii in range(0, N):
+            fn[:, ii] = np.interp((time[-1] - time[0]) * gamma[:, ii] +
+                                  time[0], time, f[:, ii])
+            qn[:, ii] = uf.warp_q_gamma(time, q[:, ii], gamma[:, ii])
+
+        Phi = np.ones((N, Nb+1))
+        for ii in range(0, N):
+            for jj in range(1, Nb+1):
+                Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], time)
+
+        # IRLS
+        b = np.zeros(Nb+1)
+        itr2 = 1
+        while itr2 <= 100:
+            p = 1/(1+np.exp(-1*dot(Phi, b)))
+            tmp = p*(1-p)
+            Xtilde = tmp*Phi.T
+            inv_xx = inv((Phi.T).dot(Xtilde.T))
+            b_new = b + inv_xx.dot(Phi.T).dot(y-p)
+            if norm(b - b_new) < 1e-4:
+                break
+            else:
+                b = b_new
+
+            itr2 += 1
+
+        b = b_new
+        alpha = b[0]
+        beta = B.dot(b[1:Nb+1])
+        beta = beta.reshape(M)
+
+        # compute the log-likelihood
+        LL[itr - 1] = sum(y * dot(Phi, b) - np.log(1 + np.exp(dot(Phi, b))))
 
         # find gamma
         gamma_new = np.zeros((M, N))
@@ -145,8 +278,10 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=-1):
                                  time, gamma_new[:, ii])
 
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
-                                   'qn', 'gamma', 'q', 'B', 'b', 'SSE'])
-    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], SSE[0:itr])
+                                   'qn', 'gamma', 'q', 'B', 'b',
+                                   'LogLike', 'type'])
+    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], LL[0:itr],
+                'logistic')
     return out
 
 
@@ -180,16 +315,39 @@ def elastic_prediction(f, time, model, y=None):
     for ii in range(0, n):
         diff = model.q - q[:, ii][:, np.newaxis]
         dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
-        q_tmp = uf.warp_q_gamma(time, q[:, ii], model.gamma[:, dist.argmin()])
-        y_pred[ii] = model.alpha + trapz(q_tmp * model.beta, time)
+        q_tmp = uf.warp_q_gamma(time, q[:, ii],
+                                model.gamma[:, dist.argmin()])
+        if model.type == 'linear':
+            y_pred[ii] = model.alpha + trapz(q_tmp * model.beta, time)
+        elif model.type == 'logistic':
+            tmp = model.alpha + trapz(q_tmp * model.beta, time)
+            y_pred[ii] = 1/(1+np.exp(-1*(tmp)))
 
     if y is None:
-        SSE = None
+        if model.type == 'linear':
+            SSE = None
+        elif model.type == 'logistic':
+            PC = None
     else:
-        SSE = sum((y - y_pred) ** 2)
+        if model.type == 'linear':
+            SSE = sum((y - y_pred) ** 2)
+        elif model.type == 'logistic':
+            y_labels = np.zeros(n)
+            y_labels[y_pred >= 0.5] = 1
+            TT = sum(y[y_labels == 1] == 1)
+            FT = sum(y[y_labels == 0] == 1)
+            PC = TT/(TT+FT)
 
-    prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])
-    out = prediction(y_pred, SSE)
+    if model.type == 'linear':
+        prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])
+        out = prediction(y_pred, SSE)
+    elif model.type == 'logistic':
+        prediction = collections.namedtuple('prediction', ['y_prob',
+                                            'y_labels', 'PC'])
+        y_labels = np.zeros(n)
+        y_labels[y_pred >= 0.5] = 1
+        out = prediction(y_pred, y_labels, PC)
+
     return out
 
 
@@ -211,3 +369,12 @@ def regression_warp(beta, time, q, y, alpha):
                                      gam_M, gam_m)
 
     return gamma_new
+
+def logit(t):
+    # logistic function
+    idx = t > 0
+    out = np.empty(t.size, dtype=np.float)
+    out[idx] = 1. / (1 + np.exp(-t[idx]))
+    exp_t = np.exp(t[~idx])
+    out[~idx] = exp_t / (1. + exp_t)
+    return out
