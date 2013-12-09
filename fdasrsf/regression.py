@@ -8,6 +8,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 import numpy as np
 import fdasrsf.utility_functions as uf
 from scipy import dot
+from scipy.optimize import fmin_l_bfgs_b
 from scipy.integrate import trapz
 from scipy.linalg import inv, norm
 from patsy import bs
@@ -220,23 +221,13 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
             for jj in range(1, Nb+1):
                 Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], time)
 
-        # IRLS
-        b = np.zeros(Nb+1)
-        itr2 = 1
-        while itr2 <= 100:
-            p = 1/(1+np.exp(-1*dot(Phi, b)))
-            tmp = p*(1-p)
-            Xtilde = tmp*Phi.T
-            inv_xx = inv((Phi.T).dot(Xtilde.T))
-            b_new = b + inv_xx.dot(Phi.T).dot(y-p)
-            if norm(b - b_new) < 1e-4:
-                break
-            else:
-                b = b_new
+        # l_bfgs
+        b0 = np.zeros(Nb+1)
+        out = fmin_l_bfgs_b(loss, b0, fprime=gradient,
+                                     args=(Phi, y), pgtol=1e-10,
+                                     maxiter=200, maxfun=250, factr=1e-30)
+        b = out[0]
 
-            itr2 += 1
-
-        b = b_new
         alpha = b[0]
         beta = B.dot(b[1:Nb+1])
         beta = beta.reshape(M)
@@ -370,11 +361,45 @@ def regression_warp(beta, time, q, y, alpha):
 
     return gamma_new
 
-def logit(t):
-    # logistic function
+
+# helper functions for logistic regression
+def phi(t):
+    # logistic function, returns 1 / (1 + exp(-t))
     idx = t > 0
     out = np.empty(t.size, dtype=np.float)
     out[idx] = 1. / (1 + np.exp(-t[idx]))
     exp_t = np.exp(t[~idx])
     out[~idx] = exp_t / (1. + exp_t)
+    return out
+
+
+def loss(b, X, y):
+    # logistic loss function, returns Sum{-log(phi(t))}
+    z = X.dot(b)
+    yz = y * z
+    idx = yz > 0
+    out = np.zeros_like(yz)
+    out[idx] = np.log(1 + np.exp(-yz[idx]))
+    out[~idx] = (-yz[~idx] + np.log(1 + np.exp(yz[~idx])))
+    out = out.sum()
+    return out
+
+
+def gradient(b, X, y):
+    # gradient of the logistic loss
+    z = X.dot(b)
+    z = phi(y * z)
+    z0 = (z - 1) * y
+    grad = X.T.dot(z0)
+    return grad
+
+
+def hessian(s, b, X, y):
+    # hessian of the logistic loss
+    z = X.dot(b)
+    z = phi(y * z)
+    d = z * (1 - z)
+    wa = d * X.dot(s)
+    Hs = X.T.dot(wa)
+    out = Hs
     return out

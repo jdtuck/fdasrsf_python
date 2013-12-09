@@ -19,14 +19,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "fdasrsf/gauss_model.py",
-			"settings":
-			{
-				"buffer_size": 3406,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -104,6 +96,9 @@
 	},
 	"file_history":
 	[
+		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/regression.py",
+		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf.sublime-project",
+		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/gauss_model.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/regression.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/time_warping.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/setup.py",
@@ -172,38 +167,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "fdasrsf/gauss_model.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3406,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1247,
-								1247
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 433.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],

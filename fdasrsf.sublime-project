@@ -3,11 +3,11 @@
 	[
 		{
 			"follow_symlinks": true,
-			"path": "/Users/jdtucker/Documents/Research/fdasrsf"
+			"path": "~/Documents/Research/fdasrsf"
 		}
 	],
-    "settings":
-    {
-        "python_interpreter": "/usr/local/bin/python3"
-    }
+	"settings":
+	{
+		"python_interpreter": "/usr/local/bin/python3"
+	}
 }
