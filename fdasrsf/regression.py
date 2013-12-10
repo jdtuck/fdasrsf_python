@@ -159,7 +159,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
     phase-variablity using elastic methods
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy array of N responses
+    :param y: numpy array of labels (1/-1)
     :param time: vector of size N describing the sample points
     :param B: optional matrix describing Basis elements
     :param df: number of degrees of freedom B-spline (default 20)
@@ -221,7 +221,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
             for jj in range(1, Nb+1):
                 Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], time)
 
-        # l_bfgs
+        # Find alpha and beta using l_bfgs
         b0 = np.zeros(Nb+1)
         out = fmin_l_bfgs_b(logit_loss, b0, fprime=logit_gradient,
                             args=(Phi, y), pgtol=1e-10, maxiter=200,
@@ -233,12 +233,12 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
         beta = beta.reshape(M)
 
         # compute the log-likelihood
-        LL[itr - 1] = sum(y * dot(Phi, b) - np.log(1 + np.exp(dot(Phi, b))))
+        LL[itr - 1] = -1*logit_loss(b, Phi, y)
 
         # find gamma
         gamma_new = np.zeros((M, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(regression_warp)(beta,
+            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(beta,
                                       time, q[:, n], y[n], alpha) for n in range(N))
             gamma_new = np.array(out)
             gamma_new = gamma_new.transpose()
@@ -255,18 +255,19 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
         itr += 1
 
     # Last Step with centering of gam
-    gamI = uf.SqrtMeanInverse(gamma_new)
-    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
-                     beta) * np.sqrt(gamI_dev)
+    gamma = gamma_new
+    # gamI = uf.SqrtMeanInverse(gamma)
+    # gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+    # beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
+    #                  beta) * np.sqrt(gamI_dev)
 
-    for ii in range(0, N):
-        qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-                              time, qn[:, ii]) * np.sqrt(gamI_dev)
-        fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-                              time, fn[:, ii])
-        gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-                                 time, gamma_new[:, ii])
+    # for ii in range(0, N):
+    #     qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+    #                           time, qn[:, ii]) * np.sqrt(gamI_dev)
+    #     fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+    #                           time, fn[:, ii])
+    #     gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+    #                              time, gamma[:, ii])
 
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
                                    'qn', 'gamma', 'q', 'B', 'b',
@@ -342,6 +343,7 @@ def elastic_prediction(f, time, model, y=None):
     return out
 
 
+# helper functions for linear regression
 def regression_warp(beta, time, q, y, alpha):
     gam_M = uf.optimum_reparam(beta, time, q)
     qM = uf.warp_q_gamma(time, q, gam_M)
@@ -363,6 +365,14 @@ def regression_warp(beta, time, q, y, alpha):
 
 
 # helper functions for logistic regression
+def logistic_warp(beta, time, q, y, alpha):
+    if y == 1:
+        gamma = uf.optimum_reparam(beta, time, q)
+    elif y == -1:
+        gamma = uf.optimum_reparam(-1*beta, time, q)
+    return gamma
+
+
 def phi(t):
     # logistic function, returns 1 / (1 + exp(-t))
     idx = t > 0

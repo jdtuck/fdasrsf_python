@@ -16,7 +16,8 @@ import fpls_warp as fpls
 import collections
 
 
-def srsf_align(f, time, method="mean", showplot=True, smoothdata=False, lam=0.0):
+def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
+               lam=0.0):
     """
     This function aligns a collection of functions using the elastic
     square-root slope (srsf) framework.

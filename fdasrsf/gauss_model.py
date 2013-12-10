@@ -35,7 +35,6 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
     """
 
     # Parameters
-    no = 3
     eps = np.finfo(np.double).eps
     binsize = np.diff(time)
     binsize = binsize.mean()
@@ -43,7 +42,6 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
 
     # compute mean and covariance in q-domain
     mq_new = qn.mean(axis=1)
-    N = mq_new.shape[0]
     mididx = np.round(time.shape[0] / 2)
     m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
     mqn = np.append(mq_new, m_new.mean())
@@ -56,7 +54,8 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
     # compute the correspondence to the original function domain
     fs = np.zeros((M, n))
     for k in range(0, n):
-        fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]), np.sign(q_s[M, k]) * (q_s[M, k] ** 2))
+        fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]),
+                                  np.sign(q_s[M, k]) * (q_s[M, k] ** 2))
 
     # random warping generation
     rgam = uf.randomGamma(gam, n)
@@ -84,20 +83,24 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
         # combine x-variability and y-variability
         ft = np.zeros((M, n))
         for k in range(0, n):
-            ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) / np.double(M - 1), fs[:, seq1[k]])
+            ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) /
+                                 np.double(M - 1), fs[:, seq1[k]])
             tmp = np.isnan(ft[:, k])
             while tmp.any():
                 rgam2 = uf.randomGamma(gam, 1)
-                ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) / np.double(M - 1), uf.invertGamma(rgam2))
+                ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) /
+                                     np.double(M - 1), uf.invertGamma(rgam2))
     else:
         # combine x-variability and y-variability
         ft = np.zeros((M, n))
         for k in range(0, n):
-            ft[:, k] = np.interp(gams[:, k], np.arange(0, M) / np.double(M - 1), fs[:, k])
+            ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
+                                 np.double(M - 1), fs[:, k])
             tmp = np.isnan(ft[:, k])
             while tmp.any():
                 rgam2 = uf.randomGamma(gam, 1)
-                ft[:, k] = np.interp(gams[:, k], np.arange(0, M) / np.double(M - 1), uf.invertGamma(rgam2))
+                ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
+                                     np.double(M - 1), uf.invertGamma(rgam2))
 
     samples = collections.namedtuple('samples', ['fs', 'gams', 'ft'])
     out = samples(fs, rgam, ft)
