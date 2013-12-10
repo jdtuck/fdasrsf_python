@@ -223,9 +223,9 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
 
         # l_bfgs
         b0 = np.zeros(Nb+1)
-        out = fmin_l_bfgs_b(loss, b0, fprime=gradient,
-                                     args=(Phi, y), pgtol=1e-10,
-                                     maxiter=200, maxfun=250, factr=1e-30)
+        out = fmin_l_bfgs_b(logit_loss, b0, fprime=logit_gradient,
+                            args=(Phi, y), pgtol=1e-10, maxiter=200,
+                            maxfun=250, factr=1e-30)
         b = out[0]
 
         alpha = b[0]
@@ -373,7 +373,7 @@ def phi(t):
     return out
 
 
-def loss(b, X, y):
+def logit_loss(b, X, y):
     # logistic loss function, returns Sum{-log(phi(t))}
     z = X.dot(b)
     yz = y * z
@@ -385,7 +385,7 @@ def loss(b, X, y):
     return out
 
 
-def gradient(b, X, y):
+def logit_gradient(b, X, y):
     # gradient of the logistic loss
     z = X.dot(b)
     z = phi(y * z)
@@ -394,7 +394,7 @@ def gradient(b, X, y):
     return grad
 
 
-def hessian(s, b, X, y):
+def logit_hessian(s, b, X, y):
     # hessian of the logistic loss
     z = X.dot(b)
     z = phi(y * z)
