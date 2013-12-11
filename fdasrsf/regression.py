@@ -227,25 +227,23 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
                             args=(Phi, y), pgtol=1e-10, maxiter=200,
                             maxfun=250, factr=1e-30)
         b = out[0]
-
         alpha = b[0]
         beta = B.dot(b[1:Nb+1])
         beta = beta.reshape(M)
 
-        # compute the log-likelihood
-        LL[itr - 1] = -1*logit_loss(b, Phi, y)
+        # compute the logistic loss
+        LL[itr - 1] = logit_loss(b, Phi, y)
 
         # find gamma
         gamma_new = np.zeros((M, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(beta,
-                                      time, q[:, n], y[n], alpha) for n in range(N))
+            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(beta, time,
+                                         q[:, n], y[n]) for n in range(N))
             gamma_new = np.array(out)
             gamma_new = gamma_new.transpose()
         else:
             for ii in range(0, N):
-                gamma_new[:, ii] = regression_warp(beta, time, q[:, ii],
-                                                   y[ii], alpha)
+                gamma_new[:, ii] = logistic_warp(beta, time, q[:, ii], y[ii])
 
         if norm(gamma - gamma_new) < 1e-5:
             break
@@ -271,7 +269,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
 
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
                                    'qn', 'gamma', 'q', 'B', 'b',
-                                   'LogLike', 'type'])
+                                   'Loss', 'type'])
     out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], LL[0:itr],
                 'logistic')
     return out
@@ -312,22 +310,25 @@ def elastic_prediction(f, time, model, y=None):
         if model.type == 'linear':
             y_pred[ii] = model.alpha + trapz(q_tmp * model.beta, time)
         elif model.type == 'logistic':
-            tmp = model.alpha + trapz(q_tmp * model.beta, time)
-            y_pred[ii] = 1/(1+np.exp(-1*(tmp)))
+            y_pred[ii] = model.alpha + trapz(q_tmp * model.beta, time)
 
     if y is None:
         if model.type == 'linear':
             SSE = None
         elif model.type == 'logistic':
+            y_pred = phi(y_pred)
+            y_labels = np.ones(n)
+            y_labels[y_pred < 0.5] = -1
             PC = None
     else:
         if model.type == 'linear':
             SSE = sum((y - y_pred) ** 2)
         elif model.type == 'logistic':
-            y_labels = np.zeros(n)
-            y_labels[y_pred >= 0.5] = 1
+            y_pred = phi(y_pred)
+            y_labels = np.ones(n)
+            y_labels[y_pred < 0.5] = -1
             TT = sum(y[y_labels == 1] == 1)
-            FT = sum(y[y_labels == 0] == 1)
+            FT = sum(y[y_labels == -1] == 1)
             PC = TT/(TT+FT)
 
     if model.type == 'linear':
@@ -336,8 +337,6 @@ def elastic_prediction(f, time, model, y=None):
     elif model.type == 'logistic':
         prediction = collections.namedtuple('prediction', ['y_prob',
                                             'y_labels', 'PC'])
-        y_labels = np.zeros(n)
-        y_labels[y_pred >= 0.5] = 1
         out = prediction(y_pred, y_labels, PC)
 
     return out
@@ -365,7 +364,7 @@ def regression_warp(beta, time, q, y, alpha):
 
 
 # helper functions for logistic regression
-def logistic_warp(beta, time, q, y, alpha):
+def logistic_warp(beta, time, q, y):
     if y == 1:
         gamma = uf.optimum_reparam(beta, time, q)
     elif y == -1:
