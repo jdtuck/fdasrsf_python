@@ -23,9 +23,13 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 375.0,
+		"height": 313.0,
 		"selected_items":
 		[
+			[
+				"Package Control: ",
+				"Package Control: Upgrade Package"
+			],
 			[
 				"ins",
 				"Package Control: Install Package"
@@ -96,13 +100,12 @@
 	},
 	"file_history":
 	[
-		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/regression.py",
-		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf.sublime-project",
-		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/gauss_model.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/regression.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/time_warping.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/setup.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/utility_functions.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/time_warping.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/__init__.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/gauss_model.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/setup.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/fPCA.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/fPLS.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf.sublime-project",
@@ -244,7 +247,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 198.0,
+	"side_bar_width": 192.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

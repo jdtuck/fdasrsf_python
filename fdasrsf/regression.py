@@ -327,9 +327,11 @@ def elastic_prediction(f, time, model, y=None):
             y_pred = phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
-            TT = sum(y[y_labels == 1] == 1)
-            FT = sum(y[y_labels == -1] == 1)
-            PC = TT/(TT+FT)
+            TP = sum(y[y_labels == 1] == 1)
+            FP = sum(y[y_labels == -1] == 1)
+            TN = sum(y[y_labels == -1] == -1)
+            FN = sum(y[y_labels == 1] == -1)
+            PC = (TP+TN)/(TP+FP+FN+TN)
 
     if model.type == 'linear':
         prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])
