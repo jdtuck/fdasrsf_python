@@ -307,9 +307,9 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
     N = f.shape[1]
     # Code labels
     m = y.max()
-    Y = np.zeros((m, N), dtype=int)
+    Y = np.zeros((N, m), dtype=int)
     for ii in range(0, N):
-        Y[y[ii]-1, ii] = 1
+        Y[ii, y[ii]-1] = 1
 
     if M > 500:
         parallel = True
@@ -349,18 +349,19 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
                 Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], time)
 
         # Find alpha and beta using l_bfgs
-        b0 = np.zeros(
-                      Nb+1)
-        out = fmin_l_bfgs_b(mlogit_loss, b0, fprime=logit_gradient,
+        b0 = np.zeros(m * (Nb+1))
+        out = fmin_l_bfgs_b(mlogit_loss, b0, fprime=mlogit_gradient,
                             args=(Phi, Y), pgtol=1e-10, maxiter=200,
                             maxfun=250, factr=1e-30)
         b = out[0]
-        alpha = b[0]
-        beta = B.dot(b[1:Nb+1])
-        beta = beta.reshape(M)
+        B0 = b.reshape(Nb+1, m)
+        alpha = B0[0, :]
+        beta = np.zeros((M, m))
+        for i in range(0, m):
+            beta[:, i] = B.dot(B0[1:Nb+1, i])
 
         # compute the logistic loss
-        LL[itr - 1] = logit_loss(b, Phi, y)
+        LL[itr - 1] = mlogit_loss(b, Phi, Y)
 
         # find gamma
         gamma_new = np.zeros((M, N))
@@ -397,9 +398,9 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
 
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
                                    'qn', 'gamma', 'q', 'B', 'b',
-                                   'Loss', 'type'])
+                                   'Loss', 'n_classes', 'type'])
     out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], LL[0:itr],
-                'mlogistic')
+                m, 'mlogistic')
     return out
 
 
@@ -429,7 +430,12 @@ def elastic_prediction(f, time, model, y=None):
     q = uf.f_to_srsf(f, time)
     n = q.shape[1]
 
-    y_pred = np.zeros(n)
+    if model.type == 'linear' or model.type == 'logistic':
+        y_pred = np.zeros(n)
+    elif model.type == 'mlogistic':
+        m = model.n_classes
+        y_pred = np.zeros((n, m))
+
     for ii in range(0, n):
         diff = model.q - q[:, ii][:, np.newaxis]
         dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
@@ -439,6 +445,9 @@ def elastic_prediction(f, time, model, y=None):
             y_pred[ii] = model.alpha + trapz(q_tmp * model.beta, time)
         elif model.type == 'logistic':
             y_pred[ii] = model.alpha + trapz(q_tmp * model.beta, time)
+        elif model.type == 'mlogistic':
+            for jj in range(0, m):
+                y_pred[ii, jj] = model.alpha[jj] + trapz(q_tmp * model.beta[:, jj], time)
 
     if y is None:
         if model.type == 'linear':
@@ -447,6 +456,11 @@ def elastic_prediction(f, time, model, y=None):
             y_pred = phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
+            PC = None
+        elif model.type == 'mlogistic':
+            y_pred = phi(y_pred.ravel())
+            y_pred = 1-y_pred.reshape(n, m)
+            y_labels = y_pred.argmax(axis=1)+1
             PC = None
     else:
         if model.type == 'linear':
@@ -460,11 +474,29 @@ def elastic_prediction(f, time, model, y=None):
             TN = sum(y[y_labels == -1] == -1)
             FN = sum(y[y_labels == 1] == -1)
             PC = (TP+TN)/(TP+FP+FN+TN)
+        elif model.type == 'mlogistic':
+            PC = np.zeros(m)
+            cls_set = np.arange(1, m+1)
+            for ii in range(0, m):
+                cls_sub = np.delete(cls_set, ii)
+                TP = sum(y[y_labels == (ii+1)] == (ii+1))
+                FP = sum(y[np.in1d(y_labels, cls_sub)] == (ii+1))
+                TN = sum(y[np.in1d(y_labels, cls_sub)] ==
+                         y_labels[np.in1d(y_labels, cls_sub)])
+                FN = sum(y[y_labels == (ii+1)] ==
+                         y_labels[np.in1d(y_labels, cls_sub)])
+                PC[ii] = (TP+TN)/(TP+FP+FN+TN)
+
+            PC = PC.mean()
 
     if model.type == 'linear':
         prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])
         out = prediction(y_pred, SSE)
     elif model.type == 'logistic':
+        prediction = collections.namedtuple('prediction', ['y_prob',
+                                            'y_labels', 'PC'])
+        out = prediction(y_pred, y_labels, PC)
+    elif model.type == 'mlogistic':
         prediction = collections.namedtuple('prediction', ['y_prob',
                                             'y_labels', 'PC'])
         out = prediction(y_pred, y_labels, PC)
@@ -545,40 +577,40 @@ def logit_hessian(s, b, X, y):
 
 
 # helper functions for multinomial logistic regression
-def mlogit_loss(B, X, Y):
+def mlogit_loss(b, X, Y):
     # multinomial logistic loss (negative log-likelihood)
-    m = Y.shape[0]
-    N = Y.shape[1]
-    out = np.zeros(N)
-    for i in range(0, N):
-        tmp = np.zeros(m)
-        tmp1 = np.zeros(m)
-        for j in range(0, m):
-            tmp[j] = Y[j, i] * B[j, :].dot(X[i, :].T)
-            tmp1[j] = np.exp(B[j, :].dot(X[i, :].T))
+    N, m = Y.shape  # n_samples, n_classes
+    M = X.shape[1]  # n_features
+    B = b.reshape(M, m)
+    Yhat = np.dot(X, B)
+    Yhat -= Yhat.min(axis=1)[:, np.newaxis]
+    Yhat = np.exp(-Yhat)
+    # l1-normalize
+    Yhat /= Yhat.sum(axis=1)[:, np.newaxis]
 
-        out[i] = tmp.sum() - np.log(tmp1.sum())
+    Yhat = Yhat * Y
+    nll = np.sum(np.log(Yhat.sum(axis=1)))
+    nll /= -float(N)
 
-    out = -1*out.sum()
-    return out
+    return nll
 
 
-def mlogit_gradient(B, X, Y):
+def mlogit_gradient(b, X, Y):
     # gradient of the multinomial logistic loss
-    m = Y.shape[0]
-    N = Y.shape[1]
-    M = X.shape[1]
-    grad = np.zeros((m, M))
-    for k in range(0, m):
-        tmp = np.zeros((M, N))
-        for i in range(0, N):
-            tmp1 = Y[k, i] * X[i, :].T
-            tmp2 = np.zeros(m)
-            for j in range(0, m):
-                tmp2[j] = np.exp(B[j, :].dot(X[i, :].T))
+    N, m = Y.shape  # n_samples, n_classes
+    M = X.shape[1]  # n_features
+    B = b.reshape(M, m)
+    Yhat = np.dot(X, B)
+    Yhat -= Yhat.min(axis=1)[:, np.newaxis]
+    Yhat = np.exp(-Yhat)
+    # l1-normalize
+    Yhat /= Yhat.sum(axis=1)[:, np.newaxis]
 
-            tmp[:, i] = tmp1 - 1/tmp2.sum() * np.exp(B[k, :].dot(X[i, :].T)) * X[i, :]
-
-        grad[k, :] = -1*tmp.sum(axis=1)
+    _Yhat = Yhat * Y
+    _Yhat /= _Yhat.sum(axis=1)[:, np.newaxis]
+    Yhat -= _Yhat
+    grad = np.dot(X.T, Yhat)
+    grad /= -float(N)
+    grad = grad.ravel()
 
     return grad
