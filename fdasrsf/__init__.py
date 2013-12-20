@@ -27,4 +27,4 @@ from .utility_functions import optimum_reparam_pair, f_K_fold, zero_crossing, wa
 from .fPCA import vertfPCA, horizfPCA
 from .gauss_model import gauss_model
 from .fPLS import pls_svd
-from .regression import elastic_prediction, elastic_logistic, elastic_regression
+from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic

@@ -178,7 +178,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
     :return q: original training SRSFs
     :return B: basis matrix
     :return b: basis coefficients
-    :return SSE: sum of squared error
+    :return Loss: logistic loss
 
     """
     M = f.shape[0]
@@ -272,6 +272,134 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
                                    'Loss', 'type'])
     out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], LL[0:itr],
                 'logistic')
+    return out
+
+
+def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
+    """
+    This function identifies a multinomial logistic regression model with
+    phase-variablity using elastic methods
+
+    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy array of labels {1,2,...,m} for m classes
+    :param time: vector of size N describing the sample points
+    :param B: optional matrix describing Basis elements
+    :param df: number of degrees of freedom B-spline (default 20)
+    :param max_itr: maximum number of iterations (default 20)
+    :param cores: number of cores for parallel processing (default all)
+    :type f: np.ndarray
+    :type time: np.ndarray
+
+    :rtype: tuple of numpy array
+    :return alpha: alpha parameter of model
+    :return beta: beta(t) of model
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
+    :return qn: aligned srvfs - similar structure to fn
+    :return gamma: calculated warping functions
+    :return q: original training SRSFs
+    :return B: basis matrix
+    :return b: basis coefficients
+    :return Loss: logistic loss
+
+    """
+    M = f.shape[0]
+    N = f.shape[1]
+    # Code labels
+    m = y.max()
+    Y = np.zeros((m, N), dtype=int)
+    for ii in range(0, N):
+        Y[y[ii]-1, ii] = 1
+
+    if M > 500:
+        parallel = True
+    elif N > 100:
+        parallel = True
+    else:
+        parallel = False
+
+    binsize = np.diff(time)
+    binsize = binsize.mean()
+
+    # Create B-Spline Basis if none provided
+    if B is None:
+        B = bs(time, df=df, degree=4, include_intercept=True)
+    Nb = B.shape[1]
+
+    q = uf.f_to_srsf(f, time)
+
+    gamma = np.tile(np.linspace(0, 1, M), (N, 1))
+    gamma = gamma.transpose()
+
+    itr = 1
+    LL = np.zeros(max_itr)
+    while itr <= max_itr:
+        print("Iteration: %d" % itr)
+        # align data
+        fn = np.zeros((M, N))
+        qn = np.zeros((M, N))
+        for ii in range(0, N):
+            fn[:, ii] = np.interp((time[-1] - time[0]) * gamma[:, ii] +
+                                  time[0], time, f[:, ii])
+            qn[:, ii] = uf.warp_q_gamma(time, q[:, ii], gamma[:, ii])
+
+        Phi = np.ones((N, Nb+1))
+        for ii in range(0, N):
+            for jj in range(1, Nb+1):
+                Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], time)
+
+        # Find alpha and beta using l_bfgs
+        b0 = np.zeros(
+                      Nb+1)
+        out = fmin_l_bfgs_b(mlogit_loss, b0, fprime=logit_gradient,
+                            args=(Phi, Y), pgtol=1e-10, maxiter=200,
+                            maxfun=250, factr=1e-30)
+        b = out[0]
+        alpha = b[0]
+        beta = B.dot(b[1:Nb+1])
+        beta = beta.reshape(M)
+
+        # compute the logistic loss
+        LL[itr - 1] = logit_loss(b, Phi, y)
+
+        # find gamma
+        gamma_new = np.zeros((M, N))
+        if parallel:
+            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(beta, time,
+                                         q[:, n], y[n]) for n in range(N))
+            gamma_new = np.array(out)
+            gamma_new = gamma_new.transpose()
+        else:
+            for ii in range(0, N):
+                gamma_new[:, ii] = logistic_warp(beta, time, q[:, ii], y[ii])
+
+        if norm(gamma - gamma_new) < 1e-5:
+            break
+        else:
+            gamma = gamma_new
+
+        itr += 1
+
+    # Last Step with centering of gam
+    gamma = gamma_new
+    # gamI = uf.SqrtMeanInverse(gamma)
+    # gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+    # beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
+    #                  beta) * np.sqrt(gamI_dev)
+
+    # for ii in range(0, N):
+    #     qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+    #                           time, qn[:, ii]) * np.sqrt(gamI_dev)
+    #     fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+    #                           time, fn[:, ii])
+    #     gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
+    #                              time, gamma[:, ii])
+
+    model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
+                                   'qn', 'gamma', 'q', 'B', 'b',
+                                   'Loss', 'type'])
+    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], LL[0:itr],
+                'mlogistic')
     return out
 
 
@@ -414,3 +542,43 @@ def logit_hessian(s, b, X, y):
     Hs = X.T.dot(wa)
     out = Hs
     return out
+
+
+# helper functions for multinomial logistic regression
+def mlogit_loss(B, X, Y):
+    # multinomial logistic loss (negative log-likelihood)
+    m = Y.shape[0]
+    N = Y.shape[1]
+    out = np.zeros(N)
+    for i in range(0, N):
+        tmp = np.zeros(m)
+        tmp1 = np.zeros(m)
+        for j in range(0, m):
+            tmp[j] = Y[j, i] * B[j, :].dot(X[i, :].T)
+            tmp1[j] = np.exp(B[j, :].dot(X[i, :].T))
+
+        out[i] = tmp.sum() - np.log(tmp1.sum())
+
+    out = -1*out.sum()
+    return out
+
+
+def mlogit_gradient(B, X, Y):
+    # gradient of the multinomial logistic loss
+    m = Y.shape[0]
+    N = Y.shape[1]
+    M = X.shape[1]
+    grad = np.zeros((m, M))
+    for k in range(0, m):
+        tmp = np.zeros((M, N))
+        for i in range(0, N):
+            tmp1 = Y[k, i] * X[i, :].T
+            tmp2 = np.zeros(m)
+            for j in range(0, m):
+                tmp2[j] = np.exp(B[j, :].dot(X[i, :].T))
+
+            tmp[:, i] = tmp1 - 1/tmp2.sum() * np.exp(B[k, :].dot(X[i, :].T)) * X[i, :]
+
+        grad[k, :] = -1*tmp.sum(axis=1)
+
+    return grad
