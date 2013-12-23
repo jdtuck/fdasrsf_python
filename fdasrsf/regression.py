@@ -578,12 +578,16 @@ def logit_hessian(s, b, X, y):
 
 
 # helper functions for multinomial logistic regression
-def mlogit_warp(alpha, beta, time, q, y, max_itr=1000, tol=1e-4, delta=0.1,
+def mlogit_warp(alpha, beta, time, q, y, max_itr=4000, tol=1e-4, delta=0.008,
                 display=0):
     TT = time.size
     binsize = np.diff(time)
     binsize = binsize.mean()
     m = beta.shape[1]
+    alpha = alpha/norm(alpha)
+    q = q/norm(q)
+    for i in range(0, m):
+        beta[:, i] = beta[:, i]/norm(beta[:, i])
     eps = np.finfo(np.double).eps
     gam = np.linspace(0, 1, TT)
     psi = np.sqrt(np.abs(np.gradient(gam, binsize)) + eps)
@@ -591,7 +595,7 @@ def mlogit_warp(alpha, beta, time, q, y, max_itr=1000, tol=1e-4, delta=0.1,
     psi_old = psi
 
     itr = 0
-    max_val = np.zeros(max_itr)
+    max_val = np.zeros(max_itr+1)
     while itr <= max_itr:
         A = np.zeros(m)
         Adiff = np.zeros((TT, m))

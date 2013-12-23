@@ -55,9 +55,19 @@ ext_modules_pls = Extension(
     # extra_link_args = "...".split()
 )
 
+ext_modules_mlogit = Extension(
+    name="mlogit_warp",
+    sources=["src/mlogit_warp.pyx", "src/mlogit_warp_grad.c", "src/misc_funcs.c"],
+    include_dirs=[numpy.get_include()], # .../site-packages/numpy/core/include
+    language="c",
+    # libraries=
+    # extra_compile_args = "...".split(),
+    # extra_link_args = "...".split()
+)
+
 setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
-    ext_modules=[ext_modules_dp, ext_modules_pls],
+    ext_modules=[ext_modules_dp, ext_modules_pls, ext_modules_mlogit],
 
     name='fdasrsf',
     version='1.1.0',
