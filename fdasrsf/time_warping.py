@@ -560,7 +560,8 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     dqq = np.sqrt(d.sum(axis=0))
     min_ind = dqq.argmin()
 
-    print("Aligning %d functions in SRVF space to %d fPCA components..." % (N, num_comp))
+    print("Aligning %d functions in SRVF space to %d fPCA components..."
+          % (N, num_comp))
     itr = 0
     mq = np.zeros((M, MaxItr + 1))
     mq[:, itr] = q[:, min_ind]
@@ -737,7 +738,8 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
 
 def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01, max_itr=100):
     """
-    This function aligns a collection of functions while performing principal least squares
+    This function aligns a collection of functions while performing
+    principal least squares
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
     :param g: numpy ndarray of shape (M,N) of M functions with N samples
@@ -753,8 +755,10 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01,
     :type time: np.ndarray
 
     :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
-    :return gn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
+    :return gn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
     :return qfn: aligned srvfs - similar structure to fn
     :return qgn: aligned srvfs - similar structure to fn
     :return qf0: original srvf - similar structure to fn

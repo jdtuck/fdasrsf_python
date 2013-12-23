@@ -9,7 +9,7 @@ import numpy as np
 import fdasrsf.utility_functions as uf
 from scipy import dot
 from scipy.optimize import fmin_l_bfgs_b
-from scipy.integrate import trapz
+from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import inv, norm
 from patsy import bs
 from joblib import Parallel, delayed
@@ -366,13 +366,14 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
         # find gamma
         gamma_new = np.zeros((M, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(beta, time,
-                                         q[:, n], y[n]) for n in range(N))
+            out = Parallel(n_jobs=cores)(delayed(mlogit_warp)(alpha, beta,
+                                         time, q[:, n], Y[n, :]) for n in range(N))
             gamma_new = np.array(out)
             gamma_new = gamma_new.transpose()
         else:
             for ii in range(0, N):
-                gamma_new[:, ii] = logistic_warp(beta, time, q[:, ii], y[ii])
+                gamma_new[:, ii] = mlogit_warp(alpha, beta, time,
+                                               q[:, ii], Y[ii, :])
 
         if norm(gamma - gamma_new) < 1e-5:
             break
@@ -577,6 +578,64 @@ def logit_hessian(s, b, X, y):
 
 
 # helper functions for multinomial logistic regression
+def mlogit_warp(alpha, beta, time, q, y, max_itr=1000, tol=1e-4, delta=0.1,
+                display=0):
+    TT = time.size
+    binsize = np.diff(time)
+    binsize = binsize.mean()
+    m = beta.shape[1]
+    eps = np.finfo(np.double).eps
+    gam = np.linspace(0, 1, TT)
+    psi = np.sqrt(np.abs(np.gradient(gam, binsize)) + eps)
+    gam_old = gam
+    psi_old = psi
+
+    itr = 0
+    max_val = np.zeros(max_itr)
+    while itr <= max_itr:
+        A = np.zeros(m)
+        Adiff = np.zeros((TT, m))
+        qtmp = np.interp((time[-1] - time[0]) * gam_old + time[0], time, q)
+        qtmp_diff = np.interp((time[-1] - time[0]) * gam_old + time[0],
+                              time, np.gradient(q, binsize))
+        for i in range(0, m):
+            A[i] = uf.innerprod_q(time, qtmp * psi_old, beta[:, i])
+            tmp1 = trapz(qtmp_diff * psi_old * beta[:, i], time)
+            tmp2 = cumtrapz(qtmp_diff * psi_old * beta[:, i], time, initial=0)
+            tmp = tmp1 - tmp2
+            Adiff[:, i] = 2 * psi_old * tmp + qtmp * beta[:, i]
+
+        tmp1 = np.sum(np.exp(alpha + A))
+        tmp2 = np.sum(np.exp(alpha + A) * Adiff, axis=1)
+        h = np.sum(y * Adiff, axis=1) - (tmp2 / tmp1)
+
+        tmp = uf.innerprod_q(time, h, psi_old)
+        vec = h - tmp*psi_old
+        vecnorm = norm(vec) * binsize
+        costmp = np.cos(delta * vecnorm) * psi_old
+        sintmp = np.sin(delta * vecnorm) * (vec / vecnorm)
+        psi_new = costmp + sintmp
+        gam_tmp = cumtrapz(psi_new * psi_new, time, initial=0)
+        gam_new = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
+
+        max_val[itr] = np.sum(y * (alpha + A)) - np.log(tmp1)
+
+        if display == 1:
+            print("Iteration %d : Cost %f" % (itr+1, max_val[itr]))
+
+        psi_old = psi_new
+        gam_old = gam_new
+
+        if itr >= 2:
+            max_val_change = max_val[itr] - max_val[itr-1]
+            if np.abs(max_val_change) < tol:
+                break
+
+        itr += 1
+
+    return gam_old
+
+
 def mlogit_loss(b, X, Y):
     # multinomial logistic loss (negative log-likelihood)
     N, m = Y.shape  # n_samples, n_classes
