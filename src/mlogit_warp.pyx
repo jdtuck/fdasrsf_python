@@ -5,10 +5,13 @@ from scipy.linalg import norm
 cimport numpy as np
 from cpython cimport array
 
-def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha, np.ndarray[double, ndim=2, mode="c"] beta,
-              np.ndarray[double, ndim=1, mode="c"] time, np.ndarray[double, ndim=1, mode="c"] q,
-              np.ndarray[int, ndim=1, mode="c"] y,
-              max_iter = 4000, tol = 1e-4, delta = 0.008, display = 0):
+
+def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha,
+                np.ndarray[double, ndim=2, mode="c"] beta,
+                np.ndarray[double, ndim=1, mode="c"] time,
+                np.ndarray[double, ndim=1, mode="c"] q,
+                np.ndarray[int, ndim=1, mode="c"] y,
+                max_iter=4000, tol=1e-10, delta=0.008, display=0):
     """
     cython interface perform warping calculation for multinomial cost function
 
@@ -39,9 +42,9 @@ def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha, np.ndarray[double, n
     for i in range(0, m):
         beta[:, i] = beta[:, i]/norm(beta[:, i])
 
-    cdef np.ndarray[double, ndim=1, mode="c"] gam1 = np.linspace(0, 1, m1)
-    cdef np.ndarray[double, ndim=1, mode="c"] beta1 = np.zeros(m1 * m)
-    cdef np.ndarray[double, ndim=1, mode="c"] gamout = np.zeros(m1)
+    cdef np.ndarray[double, ndim = 1, mode = "c"] gam1 = np.linspace(0, 1, m1)
+    cdef np.ndarray[double, ndim = 1, mode = "c"] beta1 = np.zeros(m1 * m)
+    cdef np.ndarray[double, ndim = 1, mode = "c"] gamout = np.zeros(m1)
     for ii in xrange(0, m):
         beta1[ii * m1:ii * m1 + m1] = beta[:, ii]
 

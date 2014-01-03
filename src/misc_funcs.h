@@ -3,6 +3,7 @@ void trapz(int *m, int *n, double *x, double *y, double *out);
 
 /* L2 Vector Norm */
 void pvecnorm2(int *n, double *x, double *dt, double *out);
+void pvecnorm(int *n, double *x, double *dt, double *out);
 
 /* Gradient using forward and centered differences */
 void gradient(int *m, int *n, double *f, double *binsize, double *g);

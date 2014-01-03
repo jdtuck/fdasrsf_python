@@ -37,6 +37,15 @@ void pvecnorm2(int *n, double *x, double *dt, double *out) {
     *out = sqrt(*out * *dt);
 }
 
+void pvecnorm(int *n, double *x, double *dt, double *out) {
+    int k;
+    *out = 0.0;
+    
+    for (k=0; k<*n; k++) {
+        *out += x[k]*x[k];
+    }
+    *out = sqrt(*out) * *dt;
+}
 
 void cov(int n, double *x, double *y, double *out){
     int k;

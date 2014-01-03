@@ -67,7 +67,7 @@ void mlogit_warp_grad(int *m1, int *m2, double *alpha, double *beta, double *ti,
 			for (k=0; k<TT; k++)
 				tmp[k] = q_tmp_ptr[k]*psi_ptr[k]*beta_ptr[k];
 			tmp_ptr = tmp;
-			simpson(m1, &n1, ti, tmp_ptr, tmp1_ptr);
+			trapz(m1, &n1, ti, tmp_ptr, tmp1_ptr);
 			A[j] = tmp1;
 			for (k=0; k<TT; k++)
 				tmp[k] = q_tmp_diff_ptr[k]*psi_ptr[k]*beta_ptr[k];
@@ -102,8 +102,8 @@ void mlogit_warp_grad(int *m1, int *m2, double *alpha, double *beta, double *ti,
 		tmp3_ptr = tmp3;
 		for (k=0; k<TT; k++){
 			tmp[k] = tmp3_ptr[k];
-			for (j=1; j<m; j++);
-			tmp[k] += tmp3_ptr[k+j*TT];
+			for (j=1; j<m; j++)
+				tmp[k] = tmp[k] + tmp3_ptr[k+j*TT];
 		}
 
 		for (k=0; k<TT; k++)
@@ -124,8 +124,8 @@ void mlogit_warp_grad(int *m1, int *m2, double *alpha, double *beta, double *ti,
 		tmp3_ptr = tmp3;
 		for (k=0; k<TT; k++){
 			h[k] = tmp3_ptr[k];
-			for (j=1; j<m; j++);
-			h[k] += tmp3_ptr[k+j*TT];
+			for (j=1; j<m; j++)
+				h[k] += tmp3_ptr[k+j*TT];
 		}
 
 		tmp_ptr = tmp;
@@ -139,7 +139,7 @@ void mlogit_warp_grad(int *m1, int *m2, double *alpha, double *beta, double *ti,
 			vec[j] = h[j] - tmpi*psi_ptr[j];
 
 		psi2_ptr = psi2; gam2_ptr = gam2;
-		pvecnorm2(&TT, vec, &binsize, &tmpi);
+		pvecnorm(&TT, vec, &binsize, &tmpi);
 		res_cos = cos(delta*tmpi);
 		res_sin = sin(delta*tmpi);
 		for (j=0; j<TT; j++)
@@ -177,10 +177,10 @@ void mlogit_warp_grad(int *m1, int *m2, double *alpha, double *beta, double *ti,
 
 		itr++;
 
-	} while (max_itr>itr);
+	} while (max_itr>=itr);
 
-	for (k=0; k<TT; k++){
-		gamout[k] = gam_ptr[k];
+	for (k=1; k<TT; k++){
+		gamout[k] = gam2_ptr[k];
 	}
 
 	free(tmp2);
