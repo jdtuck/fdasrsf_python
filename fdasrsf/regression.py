@@ -580,7 +580,7 @@ def logit_hessian(s, b, X, y):
 
 
 # helper functions for multinomial logistic regression
-def mlogit_warp_grad(alpha, beta, time, q, y, max_itr=5000, tol=1e-10,
+def mlogit_warp_grad(alpha, beta, time, q, y, max_itr=8000, tol=1e-10,
                      delta=0.008, display=0):
 
     gam_old = mw.mlogit_warp(np.ascontiguousarray(alpha),

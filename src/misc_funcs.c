@@ -16,7 +16,7 @@ typedef struct {
 void trapz(int *m, int *n, double *x, double *y, double *out) {
     int k, j;
     double *yptr;
-    
+
     yptr = y;
     for (k=0; k<*n; k++) {
         out[k] = 0.0;
@@ -30,22 +30,24 @@ void trapz(int *m, int *n, double *x, double *y, double *out) {
 void pvecnorm2(int *n, double *x, double *dt, double *out) {
     int k;
     *out = 0.0;
-    
+
     for (k=0; k<*n; k++) {
         *out += x[k]*x[k];
     }
     *out = sqrt(*out * *dt);
 }
 
+
 void pvecnorm(int *n, double *x, double *dt, double *out) {
     int k;
     *out = 0.0;
-    
+
     for (k=0; k<*n; k++) {
         *out += x[k]*x[k];
     }
     *out = sqrt(*out) * *dt;
 }
+
 
 void cov(int n, double *x, double *y, double *out){
     int k;
@@ -58,7 +60,7 @@ void cov(int n, double *x, double *y, double *out){
     for (k=0; k<n; k++){
         xmean += x[k];
         ymean += y[k];
-    } 
+    }
     xmean = xmean/n;
     ymean = ymean/n;
 
@@ -73,18 +75,18 @@ void cov(int n, double *x, double *y, double *out){
 void gradient(int *m, int *n, double *f, double *binsize, double *g) {
     int k, j;
     double *g_ptr, *f_ptr;
-    
+
     /* Take forward differences on left and right edges */
     g_ptr = g; f_ptr = f;
     for (k=0; k<*n; k++) {
         g_ptr[0] = (f_ptr[1] - f_ptr[0])/ *binsize;
         g_ptr[*m-1] = (f_ptr[*m-1] - f_ptr[*m-2])/ *binsize;
-        
+
         /* move to next column */
         g_ptr += *m;
         f_ptr += *m;
     }
-    
+
     /* Take centered differences on interior points */
     g_ptr = g; f_ptr = f;
     for (k=0; k<*n; k++) {
@@ -118,40 +120,40 @@ void simpson(int *m1, int *n1, double *x, double *y, double *out) {
     else {
         for (k=0; k<n; k++)
         out[k] = 0.0;
-    
+
         for (j=0; j<m-2; j=j+2) {
             dx1 = x[j+1] - x[j];
             dx2 = x[j+2] - x[j+1];
-            
+
             alpha = (dx1+dx2)/dx1/6.0;
             a0 = alpha*(2.0*dx1-dx2);
             a1 = alpha*(dx1+dx2)*(dx1+dx2)/dx2;
             a2 = alpha*dx1/dx2*(2.0*dx2-dx1);
-            
+
             yptr = y;
             for (k=0; k<n; k++) {
                 out[k] += a0*yptr[j] + a1*yptr[j+1] +a2*yptr[j+2];
                 yptr += m;
             }
         }
-    
+
         if (m%2==0) {
             yptr = y;
             for (k=0; k<n; k++) {
-                alpha = x[m-3]*x[m-2]*(x[m-3]-x[m-2]) - 
-                    x[m-3]*x[m-1]*(x[m-3]-x[m-1]) + 
+                alpha = x[m-3]*x[m-2]*(x[m-3]-x[m-2]) -
+                    x[m-3]*x[m-1]*(x[m-3]-x[m-1]) +
                     x[m-2]*x[m-1]*(x[m-2]-x[m-1]);
-                a0 = yptr[m-3]*(x[m-2]-x[m-1]) - yptr[m-2]*(x[m-3]-x[m-1]) + 
+                a0 = yptr[m-3]*(x[m-2]-x[m-1]) - yptr[m-2]*(x[m-3]-x[m-1]) +
                     yptr[m-1]*(x[m-3]-x[m-2]);
-                a1 = yptr[m-3]*(x[m-1]*x[m-1]-x[m-2]*x[m-2]) - 
-                    yptr[m-2]*(x[m-1]*x[m-1]-x[m-3]*x[m-3]) + 
+                a1 = yptr[m-3]*(x[m-1]*x[m-1]-x[m-2]*x[m-2]) -
+                    yptr[m-2]*(x[m-1]*x[m-1]-x[m-3]*x[m-3]) +
                     yptr[m-1]*(x[m-2]*x[m-2]-x[m-3]*x[m-3]);
-                a2 = x[m-3]*x[m-2]*yptr[m-1]*(x[m-3]-x[m-2]) - 
-                    x[m-3]*yptr[m-2]*x[m-1]*(x[m-3]-x[m-1]) + 
+                a2 = x[m-3]*x[m-2]*yptr[m-1]*(x[m-3]-x[m-2]) -
+                    x[m-3]*yptr[m-2]*x[m-1]*(x[m-3]-x[m-1]) +
                     yptr[m-3]*x[m-2]*x[m-1]*(x[m-2]-x[m-1]);
                 a0 /= alpha; a1 /= alpha; a2 /= alpha;
-                
-                out[k] += a0*(x[m-1]*x[m-1]*x[m-1]-x[m-2]*x[m-2]*x[m-2])/3 + 
+
+                out[k] += a0*(x[m-1]*x[m-1]*x[m-1]-x[m-2]*x[m-2]*x[m-2])/3 +
                     a1*(x[m-1]*x[m-1]-x[m-2]*x[m-2])/2 + a2*(x[m-1]-x[m-2]);
                 yptr += m;
             }
@@ -165,13 +167,13 @@ void innerprod_q(int *m1, double *t, double *q1, double *q2, double *out) {
     double *q;
     int m = *m1;
     int n1 = 1;
-    
+
     q = (double *) malloc(m*sizeof(double));
     for (k=0; k<m; k++)
         q[k] = q1[k]*q2[k];
-    
-    simpson(m1, &n1, t, q, out);
-    
+
+    trapz(m1, &n1, t, q, out);
+
     free(q);
 }
 
@@ -357,7 +359,7 @@ void approx(double *x, double *y, int nxy, double *xout, double *yout,
     M.yhigh = yright;
     for(i = 0; i < nout; i++)
 			yout[i] = approx1(xout[i], x, y, nxy, &M);
-		
+
 		return;
 }
 
@@ -365,16 +367,16 @@ void invertGamma(int n, double *gam, double *out) {
 	double *x = malloc(sizeof(double)*(n));
 	double *y = malloc(sizeof(double)*(n));
 	int k;
-	
+
 	for (k=0; k<n; k++)
 		x[k] = (double)k/((double)(n-1));
-	
+
 	approx(gam, x, n, x, out, n, 1, 0, 1, 0);
 	out[n] = 1;
-	
+
 	for (k=0; k<n; k++)
 		out[k] = out[k]/out[n];
-	
+
 	free(x); free(y);
 	return;
 }
@@ -437,7 +439,7 @@ void SqrtMeanInverse(int *T1, int *n1, double *ti, double *gami, double *out){
         if (k==0) {
             min_ind = 0;
             min = dqq[k];
-        } 
+        }
         else{
             if (dqq[k]<min){
                 min = dqq[k];
@@ -459,7 +461,7 @@ void SqrtMeanInverse(int *T1, int *n1, double *ti, double *gami, double *out){
             for(l=0; l<T; l++)
                 y[l] = psi[k*T+l]*mu[l];
             y_ptr = y;
-            simpson(T1, &n2, ti, y_ptr, &tmpi);
+            trapz(T1, &n2, ti, y_ptr, &tmpi);
 
             if (tmpi > 1){
                 tmpi = 1;
@@ -487,7 +489,7 @@ void SqrtMeanInverse(int *T1, int *n1, double *ti, double *gami, double *out){
             }
             vm[k] = tmp/n;
         }
-        
+
         for (k=0; k<T; k++)
             tmpv[k] = vm[k]*vm[k];
 
