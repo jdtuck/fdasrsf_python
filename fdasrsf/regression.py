@@ -277,7 +277,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
 
 
 def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
-                      delta=.01):
+                      delta=.01, parallel=True):
     """
     This function identifies a multinomial logistic regression model with
     phase-variablity using elastic methods
@@ -312,13 +312,6 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
     Y = np.zeros((N, m), dtype=int)
     for ii in range(0, N):
         Y[ii, y[ii]-1] = 1
-
-    if M > 500:
-        parallel = True
-    elif N > 80:
-        parallel = True
-    else:
-        parallel = False
 
     binsize = np.diff(time)
     binsize = binsize.mean()
@@ -462,7 +455,7 @@ def elastic_prediction(f, time, model, y=None):
             PC = None
         elif model.type == 'mlogistic':
             y_pred = phi(y_pred.ravel())
-            y_pred = 1-y_pred.reshape(n, m)
+            y_pred = y_pred.reshape(n, m)
             y_labels = y_pred.argmax(axis=1)+1
             PC = None
     else:
@@ -478,6 +471,9 @@ def elastic_prediction(f, time, model, y=None):
             FN = sum(y[y_labels == 1] == -1)
             PC = (TP+TN)/(TP+FP+FN+TN)
         elif model.type == 'mlogistic':
+            y_pred = phi(y_pred.ravel())
+            y_pred = y_pred.reshape(n, m)
+            y_labels = y_pred.argmax(axis=1)+1
             PC = np.zeros(m)
             cls_set = np.arange(1, m+1)
             for ii in range(0, m):
@@ -486,8 +482,7 @@ def elastic_prediction(f, time, model, y=None):
                 FP = sum(y[np.in1d(y_labels, cls_sub)] == (ii+1))
                 TN = sum(y[np.in1d(y_labels, cls_sub)] ==
                          y_labels[np.in1d(y_labels, cls_sub)])
-                FN = sum(y[y_labels == (ii+1)] ==
-                         y_labels[np.in1d(y_labels, cls_sub)])
+                FN = sum(np.in1d(y[y_labels == (ii+1)], cls_sub))
                 PC[ii] = (TP+TN)/(TP+FP+FN+TN)
 
             PC = PC.mean()
