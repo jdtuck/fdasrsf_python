@@ -485,7 +485,7 @@ def elastic_prediction(f, time, model, y=None):
                 FN = sum(np.in1d(y[y_labels == (ii+1)], cls_sub))
                 PC[ii] = (TP+TN)/(TP+FP+FN+TN)
 
-            PC = PC.mean()
+            PC = sum(y == y_labels)/y_labels.size
 
     if model.type == 'linear':
         prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])
