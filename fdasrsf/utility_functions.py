@@ -690,3 +690,9 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
     gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
     return gamma
+
+
+def resamplecurve(x, n):
+    T = x.shape[0]
+    xn = interp(arange(0, n)/(n-1), arange(0, T)/(T-1), x)
+    return(xn)
