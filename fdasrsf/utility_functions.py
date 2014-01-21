@@ -81,7 +81,7 @@ def gradient_spline(time, f, smooth=False):
     return f0, g, g2
 
 
-def f_to_srsf(f, time):
+def f_to_srsf(f, time, smooth=False):
     """
     converts f to a square-root slope function (SRSF)
 
@@ -93,7 +93,7 @@ def f_to_srsf(f, time):
 
     """
     eps = finfo(double).eps
-    f0, g, g2 = gradient_spline(time, f)
+    f0, g, g2 = gradient_spline(time, f, smooth)
     q = g / sqrt(abs(g) + eps)
     return q
 

@@ -17,7 +17,8 @@ import mlogit_warp as mw
 import collections
 
 
-def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=-1):
+def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20,
+                       cores=-1, smooth=False):
     """
     This function identifies a regression model with phase-variablity
     using elastic methods
@@ -69,7 +70,7 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=-1):
     for ii in range(0, Nb):
         Bdiff[:, ii] = np.gradient(np.gradient(B[:, ii], binsize), binsize)
 
-    q = uf.f_to_srsf(f, time)
+    q = uf.f_to_srsf(f, time, smooth)
 
     gamma = np.tile(np.linspace(0, 1, M), (N, 1))
     gamma = gamma.transpose()
@@ -154,7 +155,8 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=-1):
     return out
 
 
-def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
+def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
+                     smooth=False):
     """
     This function identifies a logistic regression model with
     phase-variablity using elastic methods
@@ -200,7 +202,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
         B = bs(time, df=df, degree=4, include_intercept=True)
     Nb = B.shape[1]
 
-    q = uf.f_to_srsf(f, time)
+    q = uf.f_to_srsf(f, time, smooth)
 
     gamma = np.tile(np.linspace(0, 1, M), (N, 1))
     gamma = gamma.transpose()
@@ -277,7 +279,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1):
 
 
 def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
-                      delta=.01, parallel=True):
+                      delta=.01, parallel=True, smooth=False):
     """
     This function identifies a multinomial logistic regression model with
     phase-variablity using elastic methods
@@ -321,7 +323,7 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
         B = bs(time, df=df, degree=4, include_intercept=True)
     Nb = B.shape[1]
 
-    q = uf.f_to_srsf(f, time)
+    q = uf.f_to_srsf(f, time, smooth)
 
     gamma = np.tile(np.linspace(0, 1, M), (N, 1))
     gamma = gamma.transpose()
@@ -400,7 +402,7 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
     return out
 
 
-def elastic_prediction(f, time, model, y=None):
+def elastic_prediction(f, time, model, y=None, smooth=False):
     """
     This function identifies a regression model with phase-variablity
     using elastic methods
@@ -423,7 +425,7 @@ def elastic_prediction(f, time, model, y=None):
     :return SSE: sum of squared error
 
     """
-    q = uf.f_to_srsf(f, time)
+    q = uf.f_to_srsf(f, time, smooth)
     n = q.shape[1]
 
     if model.type == 'linear' or model.type == 'logistic':
