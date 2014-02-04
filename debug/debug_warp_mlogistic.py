@@ -4,7 +4,7 @@ from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import norm
 import h5py
 
-fun = h5py.File('/Users/jderektucker/Documents/Research/fdasrsf/debug_data.h5')
+fun = h5py.File('/Users/jdtucker/Documents/Research/fdasrsf/debug/debug_data.h5')
 q = fun['q'][:]
 y = fun['y'][:]
 time = fun['time'][:]

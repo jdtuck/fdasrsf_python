@@ -6,11 +6,13 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 """
 
 from scipy.interpolate import UnivariateSpline
-from scipy.integrate import trapz, cumtrapz, trapz
+from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import norm, svd, cholesky, inv
 from scipy.stats.mstats import mquantiles
-from numpy import zeros, interp, finfo, double, sqrt, diff, linspace, arccos, sin, cos, arange, ascontiguousarray, round
-from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner, gradient, column_stack, row_stack, append
+from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
+from numpy import arccos, sin, cos, arange, ascontiguousarray, round
+from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
+from numpy import gradient, column_stack, append
 from numpy import insert, vectorize
 import numpy.random as rn
 import optimum_reparamN as orN
@@ -692,7 +694,7 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
     return gamma
 
 
-def resamplecurve(x, n):
+def resamplefunction(x, n):
     T = x.shape[0]
     xn = interp(arange(0, n)/(n-1), arange(0, T)/(T-1), x)
     return(xn)
