@@ -70,7 +70,7 @@ setup(
     ext_modules=[ext_modules_dp, ext_modules_pls, ext_modules_mlogit],
 
     name='fdasrsf',
-    version='1.1.0',
+    version='1.2.0',
     packages=['fdasrsf'],
     url='http://stat.fsu.edu/~dtucker/research.html',
     license='LICENSE.txt',

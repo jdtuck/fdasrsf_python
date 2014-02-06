@@ -5,7 +5,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 
-from scipy.interpolate import UnivariateSpline
+from scipy.interpolate import UnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import norm, svd, cholesky, inv
 from scipy.stats.mstats import mquantiles
@@ -198,10 +198,10 @@ def invertGamma(gam):
 
     """
     N = gam.size
-    x = arange(0, N) / float(N - 1)
-    gamI = interp(x, gam, x)
-    gamI[-1] = 1.0
-    gamI = gamI / gamI[-1]
+    x = arange(1, N+1)/N
+    s = interp1d(gam, x)
+    gamI = s(x)
+    gamI = (gamI - gamI[0]) / (gamI[-1] - gamI[0])
     return gamI
 
 
@@ -210,10 +210,11 @@ def SqrtMeanInverse(gam):
     finds the inverse of the mean of the set of the diffeomorphisms gamma
 
     :param gam: numpy ndarray of shape (M,N) of M warping functions
-    with N samples
+                with N samples
 
     :rtype: vector
     :return gamI: inverse of gam
+
 
     """
     eps = finfo(double).eps
@@ -272,7 +273,7 @@ def SqrtMean(gam):
     calculates the srsf of warping functions with corresponding shooting vectors
 
     :param gam: numpy ndarray of shape (M,N) of M warping functions
-    with N samples
+                with N samples
 
     :rtype: 2 numpy ndarray and vector
     :return mu: Karcher mean psi function
@@ -281,6 +282,7 @@ def SqrtMean(gam):
     :return vec: numpy ndarray of shape (M,N) of M shooting vectors
 
     """
+
     n = gam.shape[1]
     TT = double(gam.shape[0])
     psi = zeros((TT - 1, n))
@@ -695,6 +697,16 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
 
 
 def resamplefunction(x, n):
+    """
+    resample function using n points
+
+    :param x: functions
+    :param n: number of points
+
+    :rtype: numpy array
+    :return xn: resampled function
+
+    """
     T = x.shape[0]
     xn = interp(arange(0, n)/(n-1), arange(0, T)/(T-1), x)
     return(xn)

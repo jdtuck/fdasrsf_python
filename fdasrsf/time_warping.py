@@ -71,7 +71,8 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
     methods = ["mean", "median"]
     # 0 mean, 1-median
     method = [i for i, x in enumerate(methods) if x == method]
-    if method != 0 or method != 1:
+    method = method[0]
+    if method != 0 and method != 1:
         method = 0
 
     if showplot:
@@ -769,6 +770,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01,
     :return wf: srsf principal weight functions
     :return wg: srsf principal weight functions
     :return cost: cost function value
+
     """
     print ("Initializing...")
     binsize = np.diff(time)

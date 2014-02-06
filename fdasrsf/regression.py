@@ -506,6 +506,20 @@ def elastic_prediction(f, time, model, y=None, smooth=False):
 
 # helper functions for linear regression
 def regression_warp(beta, time, q, y, alpha):
+    """
+    calculates optimal warping for function linear regression
+
+    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
+    :param time: vector of size N describing the sample points
+    :param q: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+    :param alpha: numpy scalar
+
+    :rtype: numpy array
+    :return gamma_new: warping function
+
+    """
     gam_M = uf.optimum_reparam(beta, time, q)
     qM = uf.warp_q_gamma(time, q, gam_M)
     y_M = trapz(qM * beta, time)
@@ -527,6 +541,19 @@ def regression_warp(beta, time, q, y, alpha):
 
 # helper functions for logistic regression
 def logistic_warp(beta, time, q, y):
+    """
+    calculates optimal warping for function logistic regression
+
+    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
+    :param time: vector of size N describing the sample points
+    :param q: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return gamma: warping function
+
+    """
     if y == 1:
         gamma = uf.optimum_reparam(beta, time, q)
     elif y == -1:
@@ -535,6 +562,15 @@ def logistic_warp(beta, time, q, y):
 
 
 def phi(t):
+    """
+    calculates logistic function, returns 1 / (1 + exp(-t))
+
+    :param t: scalar
+
+    :rtype: numpy array
+    :return out: return value
+
+    """
     # logistic function, returns 1 / (1 + exp(-t))
     idx = t > 0
     out = np.empty(t.size, dtype=np.float)
@@ -545,7 +581,18 @@ def phi(t):
 
 
 def logit_loss(b, X, y):
-    # logistic loss function, returns Sum{-log(phi(t))}
+    """
+    logistic loss function, returns Sum{-log(phi(t))}
+
+    :param b: numpy ndarray of shape (M,N) of M functions with N samples
+    :param X: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return out: loss value
+
+    """
     z = X.dot(b)
     yz = y * z
     idx = yz > 0
@@ -557,7 +604,18 @@ def logit_loss(b, X, y):
 
 
 def logit_gradient(b, X, y):
-    # gradient of the logistic loss
+    """
+    calculates gradient of the logistic loss
+
+    :param b: numpy ndarray of shape (M,N) of M functions with N samples
+    :param X: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return grad: gradient of logisitc loss
+
+    """
     z = X.dot(b)
     z = phi(y * z)
     z0 = (z - 1) * y
@@ -566,7 +624,19 @@ def logit_gradient(b, X, y):
 
 
 def logit_hessian(s, b, X, y):
-    # hessian of the logistic loss
+    """
+    calculates hessian of the logistic loss
+
+    :param s: numpy ndarray of shape (M,N) of M functions with N samples
+    :param b: numpy ndarray of shape (M,N) of M functions with N samples
+    :param X: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return out: hessian of logistic loss
+
+    """
     z = X.dot(b)
     z = phi(y * z)
     d = z * (1 - z)
@@ -579,6 +649,24 @@ def logit_hessian(s, b, X, y):
 # helper functions for multinomial logistic regression
 def mlogit_warp_grad(alpha, beta, time, q, y, max_itr=8000, tol=1e-10,
                      delta=0.008, display=0):
+    """
+    calculates optimal warping for functional multinomial logistic regression
+
+    :param alpha: scalar
+    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
+    :param time: vector of size N describing the sample points
+    :param q: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+    :param max_itr: maximum number of iterations (Default=8000)
+    :param tol: stopping tolerance (Default=1e-10)
+    :param delta: gradient step size (Default=0.008)
+    :param display: display iterations (Default=0)
+
+    :rtype: tuple of numpy array
+    :return gam_old: warping function
+
+    """
 
     gam_old = mw.mlogit_warp(np.ascontiguousarray(alpha),
                              np.ascontiguousarray(beta),
@@ -586,12 +674,22 @@ def mlogit_warp_grad(alpha, beta, time, q, y, max_itr=8000, tol=1e-10,
                              np.ascontiguousarray(y, dtype=np.int32), max_itr,
                              tol, delta, display)
 
-
     return gam_old
 
 
 def mlogit_loss(b, X, Y):
-    # multinomial logistic loss (negative log-likelihood)
+    """
+    calculates multinomial logistic loss (negative log-likelihood)
+
+    :param b: numpy ndarray of shape (M,N) of M functions with N samples
+    :param X: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return nll: negative log-likelihood
+
+    """
     N, m = Y.shape  # n_samples, n_classes
     M = X.shape[1]  # n_features
     B = b.reshape(M, m)
@@ -609,7 +707,18 @@ def mlogit_loss(b, X, Y):
 
 
 def mlogit_gradient(b, X, Y):
-    # gradient of the multinomial logistic loss
+    """
+    calculates gradient of the multinomial logistic loss
+
+    :param b: numpy ndarray of shape (M,N) of M functions with N samples
+    :param X: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return grad: gradient
+
+    """
     N, m = Y.shape  # n_samples, n_classes
     M = X.shape[1]  # n_features
     B = b.reshape(M, m)

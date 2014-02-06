@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gauss_model &mdash; fdasrsf 1.1.0 documentation</title>
+    <title>gauss_model &mdash; fdasrsf 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.0',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.1.0 documentation" href="../index.html" />
+    <link rel="top" title="fdasrsf 1.2.0 documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -39,7 +37,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li>
+        <li><a href="../index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -63,9 +61,11 @@
 
 <div class="viewcode-block" id="gauss_model"><a class="viewcode-back" href="../gauss_model.html#gauss_model.gauss_model">[docs]</a><span class="k">def</span> <span class="nf">gauss_model</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">gam</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort_samples</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function models the functional data using a Gaussian model extracted from the principal components of the srvfs</span>
+<span class="sd">    This function models the functional data using a Gaussian model</span>
+<span class="sd">    extracted from the principal components of the srvfs</span>
 
-<span class="sd">    :param fn: numpy ndarray of shape (M,N) of M aligned functions with N samples</span>
+<span class="sd">    :param fn: numpy ndarray of shape (M,N) of M aligned functions with</span>
+<span class="sd">    N samples</span>
 <span class="sd">    :param time: vector of size N describing the sample points</span>
 <span class="sd">    :param qn: numpy ndarray of shape (M,N) of M aligned srvfs with N samples</span>
 <span class="sd">    :param gam: warping functions</span>
@@ -85,7 +85,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c"># Parameters</span>
-    <span class="n">no</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
     <span class="n">binsize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
     <span class="n">binsize</span> <span class="o">=</span> <span class="n">binsize</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -93,7 +92,6 @@
 
     <span class="c"># compute mean and covariance in q-domain</span>
     <span class="n">mq_new</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">N</span> <span class="o">=</span> <span class="n">mq_new</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">mididx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">m_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:]))</span>
     <span class="n">mqn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mq_new</span><span class="p">,</span> <span class="n">m_new</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
@@ -106,7 +104,8 @@
     <span class="c"># compute the correspondence to the original function domain</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="n">fs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q_s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q_s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">q_s</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_s</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">fs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q_s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q_s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">]),</span>
+                                  <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">q_s</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_s</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 
     <span class="c"># random warping generation</span>
     <span class="n">rgam</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">randomGamma</span><span class="p">(</span><span class="n">gam</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
@@ -134,20 +133,24 @@
         <span class="c"># combine x-variability and y-variability</span>
         <span class="n">ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-            <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">seq2</span><span class="p">[</span><span class="n">k</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fs</span><span class="p">[:,</span> <span class="n">seq1</span><span class="p">[</span><span class="n">k</span><span class="p">]])</span>
+            <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">seq2</span><span class="p">[</span><span class="n">k</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span>
+                                 <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fs</span><span class="p">[:,</span> <span class="n">seq1</span><span class="p">[</span><span class="n">k</span><span class="p">]])</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
             <span class="k">while</span> <span class="n">tmp</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                 <span class="n">rgam2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">randomGamma</span><span class="p">(</span><span class="n">gam</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">seq2</span><span class="p">[</span><span class="n">k</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">rgam2</span><span class="p">))</span>
+                <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">seq2</span><span class="p">[</span><span class="n">k</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span>
+                                     <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">rgam2</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c"># combine x-variability and y-variability</span>
         <span class="n">ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-            <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+            <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span>
+                                 <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
             <span class="k">while</span> <span class="n">tmp</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                 <span class="n">rgam2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">randomGamma</span><span class="p">(</span><span class="n">gam</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">rgam2</span><span class="p">))</span>
+                <span class="n">ft</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">gams</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span>
+                                     <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">rgam2</span><span class="p">))</span>
 
     <span class="n">samples</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;samples&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;fs&#39;</span><span class="p">,</span> <span class="s">&#39;gams&#39;</span><span class="p">,</span> <span class="s">&#39;ft&#39;</span><span class="p">])</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">samples</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rgam</span><span class="p">,</span> <span class="n">ft</span><span class="p">)</span>
@@ -185,13 +188,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">fdasrsf 1.1.0 documentation</a> &raquo;</li>
+        <li><a href="../index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

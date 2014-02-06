@@ -3,6 +3,7 @@
 \documentclass[letterpaper,10pt,english]{sphinxmanual}
 \usepackage[utf8]{inputenc}
 \DeclareUnicodeCharacter{00A0}{\nobreakspace}
+\usepackage{cmap}
 \usepackage[T1]{fontenc}
 \usepackage{babel}
 \usepackage{times}
@@ -13,8 +14,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{October 25, 2013}
-\release{1.1.0}
+\date{February 06, 2014}
+\release{1.2.0}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{}
 \renewcommand{\releasename}{Release}
@@ -33,64 +34,64 @@
 
 \expandafter\def\csname PYG@tok@nv\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
 \expandafter\def\csname PYG@tok@nt\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.45}{##1}}}
-\expandafter\def\csname PYG@tok@nb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@s2\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@nf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.49}{##1}}}
-\expandafter\def\csname PYG@tok@nn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
-\expandafter\def\csname PYG@tok@nd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.33,0.33,0.33}{##1}}}
-\expandafter\def\csname PYG@tok@ne\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@s1\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@nc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
-\expandafter\def\csname PYG@tok@na\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@vg\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
 \expandafter\def\csname PYG@tok@no\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.38,0.68,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@nn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
 \expandafter\def\csname PYG@tok@nl\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.13,0.44}{##1}}}
-\expandafter\def\csname PYG@tok@ni\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.84,0.33,0.22}{##1}}}
-\expandafter\def\csname PYG@tok@s\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
-\expandafter\def\csname PYG@tok@c1\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
-\expandafter\def\csname PYG@tok@sc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@bp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@mf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@kp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@se\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@sd\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@ow\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@sb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@w\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
-\expandafter\def\csname PYG@tok@kt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.56,0.13,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@si\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.44,0.63,0.82}{##1}}}
-\expandafter\def\csname PYG@tok@sh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@kr\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@o\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\expandafter\def\csname PYG@tok@mi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
 \expandafter\def\csname PYG@tok@mh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@mo\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@ss\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.32,0.47,0.09}{##1}}}
-\expandafter\def\csname PYG@tok@sr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.14,0.33,0.53}{##1}}}
-\expandafter\def\csname PYG@tok@err\endcsname{\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
-\expandafter\def\csname PYG@tok@kd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@c\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@ni\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.84,0.33,0.22}{##1}}}
+\expandafter\def\csname PYG@tok@c1\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@nf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.49}{##1}}}
+\expandafter\def\csname PYG@tok@ne\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@nd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.33,0.33,0.33}{##1}}}
+\expandafter\def\csname PYG@tok@nc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
+\expandafter\def\csname PYG@tok@nb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@na\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@sh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@bp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
 \expandafter\def\csname PYG@tok@sx\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
-\expandafter\def\csname PYG@tok@kc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@si\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.44,0.63,0.82}{##1}}}
+\expandafter\def\csname PYG@tok@s1\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@s2\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@vg\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@vi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
+\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
+\expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@ow\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
 \expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PYG@tok@gp\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
 \expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
 \expandafter\def\csname PYG@tok@cs\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\colorbox[rgb]{1.00,0.94,0.94}{\strut ##1}}}
+\expandafter\def\csname PYG@tok@mf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@c\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@kc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@kd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@err\endcsname{\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
 \expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
-\expandafter\def\csname PYG@tok@m\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
 \expandafter\def\csname PYG@tok@k\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@sr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.14,0.33,0.53}{##1}}}
+\expandafter\def\csname PYG@tok@ss\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.32,0.47,0.09}{##1}}}
+\expandafter\def\csname PYG@tok@o\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
 \expandafter\def\csname PYG@tok@kn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@vi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
-\expandafter\def\csname PYG@tok@gp\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
-\expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
-\expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
-\expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@mi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@kp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@s\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@kr\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@kt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.56,0.13,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@w\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PYG@tok@mo\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@sb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@sc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@sd\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@se\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@m\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
 
 \def\PYGZbs{\char`\\}
 \def\PYGZus{\char`\_}
@@ -120,12 +121,14 @@
 \phantomsection\label{index::doc}
 
 
-A python package for functional data analysis using the square root slope framework which performs pair-wise and
-group-wise alignment as well as modeling using functional component analysis.
+A python package for functional data analysis using the square root
+slope framework and curves using the square root velocity framework
+which performs pair-wise and group-wise alignment as well as modeling
+using functional component analysis and regression.
 
 
 \chapter{Functional Alignment}
-\label{time_warping::doc}\label{time_warping:welcome-to-fdasrsf-s-documentation}\label{time_warping:module-time_warping}\label{time_warping:functional-alignment}\index{time\_warping (module)}
+\label{time_warping:functional-alignment}\label{time_warping:module-time_warping}\label{time_warping:welcome-to-fdasrsf-s-documentation}\label{time_warping::doc}\index{time\_warping (module)}
 Group-wise function alignment using SRSF framework and Dynamic Programming
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -198,7 +201,8 @@ eigenvectors
 
 \begin{fulllineitems}
 \phantomsection\label{time_warping:time_warping.align_fPLS}\pysiglinewithargsret{\code{time\_warping.}\bfcode{align\_fPLS}}{\emph{f}, \emph{g}, \emph{time}, \emph{comps=3}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{delta=0.01}, \emph{max\_itr=100}}{}
-This function aligns a collection of functions while performing principal least squares
+This function aligns a collection of functions while performing
+principal least squares
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -231,42 +235,23 @@ This function aligns a collection of functions while performing principal least 
 tuple of numpy array
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
-
-\item[{Return gn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
-
-\item[{Return qfn}] \leavevmode
-aligned srvfs - similar structure to fn
-
-\item[{Return qgn}] \leavevmode
-aligned srvfs - similar structure to fn
-
-\item[{Return qf0}] \leavevmode
-original srvf - similar structure to fn
-
-\item[{Return qg0}] \leavevmode
-original srvf - similar structure to fn
-
-\item[{Return gam}] \leavevmode
-warping functions - similar structure to fn
-
-\item[{Return wqf}] \leavevmode
-srsf principal weight functions
-
-\item[{Return wqg}] \leavevmode
-srsf principal weight functions
-
-\item[{Return wf}] \leavevmode
-srsf principal weight functions
-
-\item[{Return wg}] \leavevmode
-srsf principal weight functions
-
-\item[{Return cost}] \leavevmode
-cost function value
+aligned functions - numpy ndarray of shape (M,N) of M
 
 \end{description}\end{quote}
+
+functions with N samples
+:return gn: aligned functions - numpy ndarray of shape (M,N) of M
+functions with N samples
+:return qfn: aligned srvfs - similar structure to fn
+:return qgn: aligned srvfs - similar structure to fn
+:return qf0: original srvf - similar structure to fn
+:return qg0: original srvf - similar structure to fn
+:return gam: warping functions - similar structure to fn
+:return wqf: srsf principal weight functions
+:return wqg: srsf principal weight functions
+:return wf: srsf principal weight functions
+:return wg: srsf principal weight functions
+:return cost: cost function value
 
 \end{fulllineitems}
 
@@ -274,60 +259,49 @@ cost function value
 
 \begin{fulllineitems}
 \phantomsection\label{time_warping:time_warping.srsf_align}\pysiglinewithargsret{\code{time\_warping.}\bfcode{srsf\_align}}{\emph{f}, \emph{time}, \emph{method='mean'}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{lam=0.0}}{}
-This function aligns a collection of functions using the elastic square-root slope (srsf) framework.
+This function aligns a collection of functions using the elastic
+square-root slope (srsf) framework.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\textbf{f} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M functions with N samples
+\textbf{f} -- numpy ndarray of shape (M,N) of M functions with N samples
 
 \item {} 
-\textbf{time} (\emph{np.ndarray}) -- vector of size N describing the sample points
+\textbf{time} -- vector of size N describing the sample points
 
 \item {} 
-\textbf{method} -- (string) warp calculate Karcher Mean or Median (options = ``mean'' or ``median'') (default=''mean'')
-
-\item {} 
-\textbf{showplot} -- Shows plots of results using matplotlib (default = T)
-
-\item {} 
-\textbf{smoothdata} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- Smooth the data using a box filter (default = F)
-
-\item {} 
-\textbf{lam} (\emph{double}) -- controls the elasticity (default = 0)
+\textbf{method} -- (string) warp calculate Karcher Mean or Median
 
 \end{itemize}
 
+\end{description}\end{quote}
+
+(options = ``mean'' or ``median'') (default=''mean'')
+:param showplot: Shows plots of results using matplotlib (default = T)
+:param smoothdata: Smooth the data using a box filter (default = F)
+:param lam: controls the elasticity (default = 0)
+:type lam: double
+:type smoothdata: bool
+:type f: np.ndarray
+:type time: np.ndarray
+\begin{quote}\begin{description}
 \item[{Return type}] \leavevmode
 tuple of numpy array
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
-
-\item[{Return qn}] \leavevmode
-aligned srvfs - similar structure to fn
-
-\item[{Return q0}] \leavevmode
-original srvf - similar structure to fn
-
-\item[{Return fmean}] \leavevmode
-function mean or median - vector of length N
-
-\item[{Return mqn}] \leavevmode
-srvf mean or median - vector of length N
-
-\item[{Return gam}] \leavevmode
-warping functions - similar structure to fn
-
-\item[{Return orig\_var}] \leavevmode
-Original Variance of Functions
-
-\item[{Return amp\_var}] \leavevmode
-Amplitude Variance
-
-\item[{Return phase\_var}] \leavevmode
-Phase Variance
+aligned functions - numpy ndarray of shape (M,N) of M
 
 \end{description}\end{quote}
+
+functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return q0: original srvf - similar structure to fn
+:return fmean: function mean or median - vector of length N
+:return mqn: srvf mean or median - vector of length N
+:return gam: warping functions - similar structure to fn
+:return orig\_var: Original Variance of Functions
+:return amp\_var: Amplitude Variance
+:return phase\_var: Phase Variance
 
 Examples
 \textgreater{}\textgreater{}\textgreater{} import tables
@@ -412,7 +386,7 @@ warping functions - similar structure to fn
 
 
 \chapter{Functional Principal Component Analysis}
-\label{fPCA::doc}\label{fPCA:module-fPCA}\label{fPCA:functional-principal-component-analysis}\index{fPCA (module)}
+\label{fPCA:module-fPCA}\label{fPCA:functional-principal-component-analysis}\label{fPCA::doc}\index{fPCA (module)}
 Vertical and Horizontal Functional Principal Component Analysis using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -508,7 +482,7 @@ eigenvectors
 
 
 \chapter{Gaussian Generative Models}
-\label{gauss_model::doc}\label{gauss_model:module-gauss_model}\label{gauss_model:gaussian-generative-models}\index{gauss\_model (module)}
+\label{gauss_model:gaussian-generative-models}\label{gauss_model:module-gauss_model}\label{gauss_model::doc}\index{gauss\_model (module)}
 Gaussian Model of functional data
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -516,29 +490,27 @@ moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucke
 
 \begin{fulllineitems}
 \phantomsection\label{gauss_model:gauss_model.gauss_model}\pysiglinewithargsret{\code{gauss\_model.}\bfcode{gauss\_model}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{gam}, \emph{n=1}, \emph{sort\_samples=False}}{}
-This function models the functional data using a Gaussian model extracted from the principal components of the srvfs
+This function models the functional data using a Gaussian model
+extracted from the principal components of the srvfs
 \begin{quote}\begin{description}
-\item[{Parameters}] \leavevmode\begin{itemize}
-\item {} 
-\textbf{fn} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M aligned functions with N samples
+\item[{Parameters}] \leavevmode
+\textbf{fn} -- numpy ndarray of shape (M,N) of M aligned functions with
 
-\item {} 
-\textbf{time} (\emph{np.ndarray}) -- vector of size N describing the sample points
+\end{description}\end{quote}
 
-\item {} 
-\textbf{qn} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M aligned srvfs with N samples
-
-\item {} 
-\textbf{gam} (\emph{np.ndarray}) -- warping functions
-
-\item {} 
-\textbf{n} (\emph{integer}) -- number of random samples
-
-\item {} 
-\textbf{sort\_samples} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- sort samples (default = T)
-
-\end{itemize}
-
+N samples
+:param time: vector of size N describing the sample points
+:param qn: numpy ndarray of shape (M,N) of M aligned srvfs with N samples
+:param gam: warping functions
+:param n: number of random samples
+:param sort\_samples: sort samples (default = T)
+:type n: integer
+:type sort\_samples: bool
+:type fn: np.ndarray
+:type qn: np.ndarray
+:type gam: np.ndarray
+:type time: np.ndarray
+\begin{quote}\begin{description}
 \item[{Return type}] \leavevmode
 tuple of numpy array
 
@@ -558,7 +530,7 @@ random samples
 
 
 \chapter{Functional Principal Least Squares}
-\label{fPLS:module-fPLS}\label{fPLS::doc}\label{fPLS:functional-principal-least-squares}\index{fPLS (module)}
+\label{fPLS:module-fPLS}\label{fPLS:functional-principal-least-squares}\label{fPLS::doc}\index{fPLS (module)}
 Partial Least Squares using SVD
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -608,15 +580,126 @@ singular values
 
 
 \chapter{Elastic Regression}
-\label{regression::doc}\label{regression:module-regression}\label{regression:elastic-regression}\index{regression (module)}
+\label{regression:elastic-regression}\label{regression:module-regression}\label{regression::doc}\index{regression (module)}
 Warping Invariant Regression using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
+\index{elastic\_logistic() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.elastic_logistic}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_logistic}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{smooth=False}}{}
+This function identifies a logistic regression model with
+phase-variablity using elastic methods
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{f} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy array of labels (1/-1)
+
+\item {} 
+\textbf{time} (\emph{np.ndarray}) -- vector of size N describing the sample points
+
+\item {} 
+\textbf{B} -- optional matrix describing Basis elements
+
+\item {} 
+\textbf{df} -- number of degrees of freedom B-spline (default 20)
+
+\item {} 
+\textbf{max\_itr} -- maximum number of iterations (default 20)
+
+\item {} 
+\textbf{cores} -- number of cores for parallel processing (default all)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of M
+
+\end{description}\end{quote}
+
+functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return Loss: logistic loss
+
+\end{fulllineitems}
+
+\index{elastic\_mlogistic() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.elastic_mlogistic}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_mlogistic}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{delta=0.01}, \emph{parallel=True}, \emph{smooth=False}}{}
+This function identifies a multinomial logistic regression model with
+phase-variablity using elastic methods
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{f} (\emph{np.ndarray}) -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy array of labels \{1,2,...,m\} for m classes
+
+\item {} 
+\textbf{time} (\emph{np.ndarray}) -- vector of size N describing the sample points
+
+\item {} 
+\textbf{B} -- optional matrix describing Basis elements
+
+\item {} 
+\textbf{df} -- number of degrees of freedom B-spline (default 20)
+
+\item {} 
+\textbf{max\_itr} -- maximum number of iterations (default 20)
+
+\item {} 
+\textbf{cores} -- number of cores for parallel processing (default all)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of M
+
+\end{description}\end{quote}
+
+functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return Loss: logistic loss
+
+\end{fulllineitems}
+
 \index{elastic\_prediction() (in module regression)}
 
 \begin{fulllineitems}
-\phantomsection\label{regression:regression.elastic_prediction}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_prediction}}{\emph{f}, \emph{time}, \emph{model}, \emph{y=None}}{}
-This function identifies a regression model with phase-variablity using elastic methods
+\phantomsection\label{regression:regression.elastic_prediction}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_prediction}}{\emph{f}, \emph{time}, \emph{model}, \emph{y=None}, \emph{smooth=False}}{}
+This function identifies a regression model with phase-variablity
+using elastic methods
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -643,35 +726,26 @@ alpha parameter of model
 beta(t) of model
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
-
-\item[{Return qn}] \leavevmode
-aligned srvfs - similar structure to fn
-
-\item[{Return gamma}] \leavevmode
-calculated warping functions
-
-\item[{Return q}] \leavevmode
-original training SRSFs
-
-\item[{Return B}] \leavevmode
-basis matrix
-
-\item[{Return b}] \leavevmode
-basis coefficients
-
-\item[{Return SSE}] \leavevmode
-sum of squared error
+aligned functions - numpy ndarray of shape (M,N) of M
 
 \end{description}\end{quote}
+
+functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return SSE: sum of squared error
 
 \end{fulllineitems}
 
 \index{elastic\_regression() (in module regression)}
 
 \begin{fulllineitems}
-\phantomsection\label{regression:regression.elastic_regression}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_regression}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}}{}
-This function identifies a regression model with phase-variablity using elastic methods
+\phantomsection\label{regression:regression.elastic_regression}\pysiglinewithargsret{\code{regression.}\bfcode{elastic\_regression}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{lam=0}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{smooth=False}}{}
+This function identifies a regression model with phase-variablity
+using elastic methods
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -686,6 +760,18 @@ This function identifies a regression model with phase-variablity using elastic 
 \item {} 
 \textbf{B} -- optional matrix describing Basis elements
 
+\item {} 
+\textbf{lam} -- regularization parameter (default 0)
+
+\item {} 
+\textbf{df} -- number of degrees of freedom B-spline (default 20)
+
+\item {} 
+\textbf{max\_itr} -- maximum number of iterations (default 20)
+
+\item {} 
+\textbf{cores} -- number of cores for parallel processing (default all)
+
 \end{itemize}
 
 \item[{Return type}] \leavevmode
@@ -698,25 +784,815 @@ alpha parameter of model
 beta(t) of model
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
+aligned functions - numpy ndarray of shape (M,N) of M
 
-\item[{Return qn}] \leavevmode
-aligned srvfs - similar structure to fn
+\end{description}\end{quote}
+
+functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return SSE: sum of squared error
+
+\end{fulllineitems}
+
+\index{logistic\_warp() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.logistic_warp}\pysiglinewithargsret{\code{regression.}\bfcode{logistic\_warp}}{\emph{beta}, \emph{time}, \emph{q}, \emph{y}}{}
+calculates optimal warping for function logistic regression
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{time} -- vector of size N describing the sample points
+
+\item {} 
+\textbf{q} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
 
 \item[{Return gamma}] \leavevmode
-calculated warping functions
+warping function
 
-\item[{Return q}] \leavevmode
-original training SRSFs
+\end{description}\end{quote}
 
-\item[{Return B}] \leavevmode
-basis matrix
+\end{fulllineitems}
 
-\item[{Return b}] \leavevmode
-basis coefficients
+\index{logit\_gradient() (in module regression)}
 
-\item[{Return SSE}] \leavevmode
-sum of squared error
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.logit_gradient}\pysiglinewithargsret{\code{regression.}\bfcode{logit\_gradient}}{\emph{b}, \emph{X}, \emph{y}}{}
+calculates gradient of the logistic loss
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{b} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{X} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return grad}] \leavevmode
+gradient of logisitc loss
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{logit\_hessian() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.logit_hessian}\pysiglinewithargsret{\code{regression.}\bfcode{logit\_hessian}}{\emph{s}, \emph{b}, \emph{X}, \emph{y}}{}
+calculates hessian of the logistic loss
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{s} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{b} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{X} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return out}] \leavevmode
+hessian of logistic loss
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{logit\_loss() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.logit_loss}\pysiglinewithargsret{\code{regression.}\bfcode{logit\_loss}}{\emph{b}, \emph{X}, \emph{y}}{}
+logistic loss function, returns Sum\{-log(phi(t))\}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{b} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{X} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return out}] \leavevmode
+loss value
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{mlogit\_gradient() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.mlogit_gradient}\pysiglinewithargsret{\code{regression.}\bfcode{mlogit\_gradient}}{\emph{b}, \emph{X}, \emph{Y}}{}
+calculates gradient of the multinomial logistic loss
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{b} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{X} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return grad}] \leavevmode
+gradient
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{mlogit\_loss() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.mlogit_loss}\pysiglinewithargsret{\code{regression.}\bfcode{mlogit\_loss}}{\emph{b}, \emph{X}, \emph{Y}}{}
+calculates multinomial logistic loss (negative log-likelihood)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{b} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{X} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return nll}] \leavevmode
+negative log-likelihood
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{mlogit\_warp\_grad() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.mlogit_warp_grad}\pysiglinewithargsret{\code{regression.}\bfcode{mlogit\_warp\_grad}}{\emph{alpha}, \emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{max\_itr=8000}, \emph{tol=1e-10}, \emph{delta=0.008}, \emph{display=0}}{}
+calculates optimal warping for functional multinomial logistic regression
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{alpha} -- scalar
+
+\item {} 
+\textbf{beta} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{time} -- vector of size N describing the sample points
+
+\item {} 
+\textbf{q} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+:param max\_itr: maximum number of iterations (Default=8000)
+:param tol: stopping tolerance (Default=1e-10)
+:param delta: gradient step size (Default=0.008)
+:param display: display iterations (Default=0)
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return gam\_old}] \leavevmode
+warping function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{phi() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.phi}\pysiglinewithargsret{\code{regression.}\bfcode{phi}}{\emph{t}}{}
+calculates logistic function, returns 1 / (1 + exp(-t))
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{t} -- scalar
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return out}] \leavevmode
+return value
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{regression\_warp() (in module regression)}
+
+\begin{fulllineitems}
+\phantomsection\label{regression:regression.regression_warp}\pysiglinewithargsret{\code{regression.}\bfcode{regression\_warp}}{\emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{alpha}}{}
+calculates optimal warping for function linear regression
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{time} -- vector of size N describing the sample points
+
+\item {} 
+\textbf{q} -- numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\textbf{y} -- numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+:param alpha: numpy scalar
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return gamma\_new}] \leavevmode
+warping function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\chapter{SRVF Geodesic Computation}
+\label{geodesic:module-geodesic}\label{geodesic:srvf-geodesic-computation}\label{geodesic::doc}\index{geodesic (module)}
+geodesic calculation for SRVF (curves) open and closed)
+
+moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
+\index{back\_parallel\_transport() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.back_parallel_transport}\pysiglinewithargsret{\code{geodesic.}\bfcode{back\_parallel\_transport}}{\emph{u1}, \emph{alpha}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+backwards parallel translates q1 and q2 along manifold
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{u1} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{alpha} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{basis} -- list numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return utilde}] \leavevmode
+translated vector
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calc\_alphadot() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.calc_alphadot}\pysiglinewithargsret{\code{geodesic.}\bfcode{calc\_alphadot}}{\emph{alpha}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+calculates derivative along the path alpha
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{alpha} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{basis} -- list of numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return alphadot}] \leavevmode
+derivative of alpha
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculate\_energy() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.calculate_energy}\pysiglinewithargsret{\code{geodesic.}\bfcode{calculate\_energy}}{\emph{alphadot}, \emph{T=100}, \emph{k=5}}{}
+calculates energy along path
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{alphadot} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return E}] \leavevmode
+energy
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculate\_gradE() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.calculate_gradE}\pysiglinewithargsret{\code{geodesic.}\bfcode{calculate\_gradE}}{\emph{u}, \emph{utilde}, \emph{T=100}, \emph{k=5}}{}
+calculates gradient of energy along path
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{u} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{utilde} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return gradE}] \leavevmode
+gradient of energy
+
+\item[{Return normgradE}] \leavevmode
+norm of gradient of energy
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{cov\_integral() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.cov_integral}\pysiglinewithargsret{\code{geodesic.}\bfcode{cov\_integral}}{\emph{alpha}, \emph{alphadot}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+Calculates covariance along path alpha
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{alpha} -- numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\textbf{alphadot} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{basis} -- list numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return u}] \leavevmode
+covariance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_basis\_normal\_path() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.find_basis_normal_path}\pysiglinewithargsret{\code{geodesic.}\bfcode{find\_basis\_normal\_path}}{\emph{alpha}, \emph{k=5}}{}
+computes orthonormalized basis vectors to the normal space at each of the
+k points (q-functions) of the path alpha
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{alpha} -- numpy ndarray of shape (2,M) of M samples (path)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return basis}] \leavevmode
+basis vectors along the path
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{geod\_dist\_path\_strt() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.geod_dist_path_strt}\pysiglinewithargsret{\code{geodesic.}\bfcode{geod\_dist\_path\_strt}}{\emph{beta}, \emph{k=5}}{}
+calculate geodisc distance for path straightening
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return dist}] \leavevmode
+geodesic distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{geod\_sphere() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.geod_sphere}\pysiglinewithargsret{\code{geodesic.}\bfcode{geod\_sphere}}{\emph{beta1}, \emph{beta2}, \emph{k=5}}{}
+This function caluclates the geodecis between open curves beta1 and
+beta2 with k steps along path
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta1} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{beta2} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return dist}] \leavevmode
+geodesic distance
+
+\item[{Return path}] \leavevmode
+geodesic path
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{gram\_schmidt() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.gram_schmidt}\pysiglinewithargsret{\code{geodesic.}\bfcode{gram\_schmidt}}{\emph{basis}}{}
+Performs Gram Schmidt Orthogonlization of a basis\_o
+\begin{quote}
+\begin{quote}\begin{description}
+\item[{param basis}] \leavevmode
+list of numpy ndarray of shape (2,M) of M samples
+
+\item[{rtype}] \leavevmode
+list of numpy ndarray
+
+\item[{return basis\_o}] \leavevmode
+orthogonlized basis
+
+\end{description}\end{quote}
+\end{quote}
+
+\end{fulllineitems}
+
+\index{init\_path\_geod() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.init_path_geod}\pysiglinewithargsret{\code{geodesic.}\bfcode{init\_path\_geod}}{\emph{beta1}, \emph{beta2}, \emph{T=100}, \emph{k=5}}{}
+Initializes a path in cal\{C\}. beta1, beta2 are already
+standardized curves. Creates a path from beta1 to beta2 in
+shape space, then projects to the closed shape manifold.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta1} -- numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\textbf{beta2} -- numpy ndarray of shape (2,M) of M samples (end curve)
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return alpha}] \leavevmode
+a path between two q-functions
+
+\item[{Return beta}] \leavevmode
+a path between two curves
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{init\_path\_rand() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.init_path_rand}\pysiglinewithargsret{\code{geodesic.}\bfcode{init\_path\_rand}}{\emph{beta1}, \emph{beta\_mid}, \emph{beta2}, \emph{T=100}, \emph{k=5}}{}
+Initializes a path in cal\{C\}. beta1, beta\_mid beta2 are already
+standardized curves. Creates a path from beta1 to beta\_mid to beta2 in
+shape space, then projects to the closed shape manifold.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta1} -- numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\textbf{betamid} -- numpy ndarray of shape (2,M) of M samples (mid curve)
+
+\item {} 
+\textbf{beta2} -- numpy ndarray of shape (2,M) of M samples (end curve)
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return alpha}] \leavevmode
+a path between two q-functions
+
+\item[{Return beta}] \leavevmode
+a path between two curves
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{parallel\_translate() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.parallel_translate}\pysiglinewithargsret{\code{geodesic.}\bfcode{parallel\_translate}}{\emph{w}, \emph{q1}, \emph{q2}, \emph{basis}}{}
+parallel translates q1 and q2 along manifold
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{w} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{q1} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{q2} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{basis} -- list of numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return wbar}] \leavevmode
+translated vector
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{path\_straightening() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.path_straightening}\pysiglinewithargsret{\code{geodesic.}\bfcode{path\_straightening}}{\emph{beta1}, \emph{beta2}, \emph{betamid}, \emph{init='rand'}, \emph{T=100}, \emph{k=5}}{}
+Perform path straigtening to find geodesic between two shapes in either
+the space of closed curves or the space of affine standardized curves.
+This algorithm follows the steps outlined in section 4.6 of the
+manuscript.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta1} -- numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\textbf{beta2} -- numpy ndarray of shape (2,M) of M samples (end curve)
+
+\item {} 
+\textbf{betamid} -- numpy ndarray of shape (2,M) of M samples (mid curve
+Default = NULL, only needed for init ``rand'')
+
+\item {} 
+\textbf{init} -- initilizae path geodesic or random (Default = ``rand'')
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return dist}] \leavevmode
+geodesic distance
+
+\item[{Return path}] \leavevmode
+geodesic path
+
+\item[{Return pathsqnc}] \leavevmode
+geodesic path sequence
+
+\item[{Return E}] \leavevmode
+energy
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{project\_tangent() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.project_tangent}\pysiglinewithargsret{\code{geodesic.}\bfcode{project\_tangent}}{\emph{w}, \emph{q}, \emph{basis}}{}
+projects srvf to tangent space w using basis
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{w} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{q} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{basis} -- list of numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return wproj}] \leavevmode
+projected q
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{update\_path() (in module geodesic)}
+
+\begin{fulllineitems}
+\phantomsection\label{geodesic:geodesic.update_path}\pysiglinewithargsret{\code{geodesic.}\bfcode{update\_path}}{\emph{alpha}, \emph{beta}, \emph{gradE}, \emph{delta}, \emph{T=100}, \emph{k=5}}{}
+Update the path along the direction -gradE
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{alpha} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{beta} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{gradE} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{delta} -- gradient paramenter
+
+\item {} 
+\textbf{T} -- Number of samples of curve (Default = 100)
+
+\item {} 
+\textbf{k} -- number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return alpha}] \leavevmode
+updated path of srvfs
+
+\item[{Return beta}] \leavevmode
+updated path of curves
 
 \end{description}\end{quote}
 
@@ -725,7 +1601,7 @@ sum of squared error
 
 
 \chapter{Utility Functions}
-\label{utility_functions::doc}\label{utility_functions:utility-functions}\label{utility_functions:module-utility_functions}\index{utility\_functions (module)}
+\label{utility_functions:utility-functions}\label{utility_functions:module-utility_functions}\label{utility_functions::doc}\index{utility\_functions (module)}
 Utility functions for SRSF Manipulations
 
 moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
@@ -736,7 +1612,8 @@ moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucke
 calculates the srsf of warping functions with corresponding shooting vectors
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
-\textbf{gam} -- numpy ndarray of shape (M,N) of M warping functions with N samples
+\textbf{gam} -- numpy ndarray of shape (M,N) of M warping functions
+with N samples
 
 \item[{Return type}] \leavevmode
 2 numpy ndarray and vector
@@ -764,7 +1641,8 @@ numpy ndarray of shape (M,N) of M shooting vectors
 finds the inverse of the mean of the set of the diffeomorphisms gamma
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
-\textbf{gam} -- numpy ndarray of shape (M,N) of M warping functions with N samples
+\textbf{gam} -- numpy ndarray of shape (M,N) of M warping functions
+with N samples
 
 \item[{Return type}] \leavevmode
 vector
@@ -834,7 +1712,8 @@ matrix describing differential operator
 \begin{fulllineitems}
 \phantomsection\label{utility_functions:utility_functions.elastic_distance}\pysiglinewithargsret{\code{utility\_functions.}\bfcode{elastic\_distance}}{\emph{f1}, \emph{f2}, \emph{time}, \emph{lam=0.0}}{}
 ''
-calculates the distances between function, where f1 is aligned to f2. In other words
+calculates the distances between function, where f1 is aligned to
+f2. In other words
 calculates the elastic distances
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -890,7 +1769,7 @@ test indexes (Nobs*(1/K) X K)
 \index{f\_to\_srsf() (in module utility\_functions)}
 
 \begin{fulllineitems}
-\phantomsection\label{utility_functions:utility_functions.f_to_srsf}\pysiglinewithargsret{\code{utility\_functions.}\bfcode{f\_to\_srsf}}{\emph{f}, \emph{time}}{}
+\phantomsection\label{utility_functions:utility_functions.f_to_srsf}\pysiglinewithargsret{\code{utility\_functions.}\bfcode{f\_to\_srsf}}{\emph{f}, \emph{time}, \emph{smooth=False}}{}
 converts f to a square-root slope function (SRSF)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1128,6 +2007,31 @@ rgam: random warping functions
 
 \end{fulllineitems}
 
+\index{resamplefunction() (in module utility\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{utility_functions:utility_functions.resamplefunction}\pysiglinewithargsret{\code{utility\_functions.}\bfcode{resamplefunction}}{\emph{x}, \emph{n}}{}
+resample function using n points
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{x} -- functions
+
+\item {} 
+\textbf{n} -- number of points
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return xn}] \leavevmode
+resampled function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 \index{rgam() (in module utility\_functions)}
 
 \begin{fulllineitems}
@@ -1215,7 +2119,8 @@ warped srsf
 
 \begin{fulllineitems}
 \phantomsection\label{utility_functions:utility_functions.zero_crossing}\pysiglinewithargsret{\code{utility\_functions.}\bfcode{zero\_crossing}}{\emph{Y}, \emph{q}, \emph{bt}, \emph{time}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
-finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin from elastic regression model
+finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+from elastic regression model
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -1255,14 +2160,450 @@ optimal warping function
 \end{fulllineitems}
 
 
+
+\chapter{Curve Functions}
+\label{curve_functions:curve-functions}\label{curve_functions:module-curve_functions}\label{curve_functions::doc}\index{curve\_functions (module)}
+functions for SRVF curve manipulations
+
+moduleauthor:: Derek Tucker \textless{}\href{mailto:dtucker@stat.fsu.edu}{dtucker@stat.fsu.edu}\textgreater{}
+\index{calc\_j() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.calc_j}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{calc\_j}}{\emph{basis}}{}
+Calculates Jacobian matrix from normal basis
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{basis} -- list of numpy ndarray of shape (2,M) of M samples basis
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return j}] \leavevmode
+Jacobian
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculate\_variance() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.calculate_variance}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{calculate\_variance}}{\emph{beta}}{}
+This function calculates variance of curve beta
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{beta} -- numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return variance}] \leavevmode
+variance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculatecentroid() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.calculatecentroid}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{calculatecentroid}}{\emph{beta}}{}
+This function calculates centroid of a parameterized curve
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{beta} -- numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return centroid}] \leavevmode
+center coordinates
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{curve\_to\_q() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.curve_to_q}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{curve\_to\_q}}{\emph{beta}}{}
+This function converts curve beta to srvf q
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{beta} -- numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return q}] \leavevmode
+srvf of curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_basis\_normal() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.find_basis_normal}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{find\_basis\_normal}}{\emph{q}}{}
+Finds the basis normal to the srvf
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{q1} -- numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+list of numpy ndarray
+
+\item[{Return basis}] \leavevmode
+list containing basis vectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_best\_rotation() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.find_best_rotation}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{find\_best\_rotation}}{\emph{q1}, \emph{q2}}{}
+This function calculates the best rotation between two srvfs using
+procustes rigid alignment
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{q1} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{q2} -- numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return q2new}] \leavevmode
+optimal rotated q2 to q1
+
+\item[{Return R}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_rotation\_and\_seed\_coord() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.find_rotation_and_seed_coord}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{find\_rotation\_and\_seed\_coord}}{\emph{beta1}, \emph{beta2}}{}
+This function returns a candidate list of optimally oriented and
+registered (seed) shapes w.r.t. beta1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta2} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{q2} -- numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return beta2new}] \leavevmode
+optimal rotated beta2 to beta1
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\item[{Return tau}] \leavevmode
+seed
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{group\_action\_by\_gamma() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.group_action_by_gamma}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{group\_action\_by\_gamma}}{\emph{q}, \emph{gamma}}{}
+This function reparamerized srvf q by gamma
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{f} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{gamma} -- numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return qn}] \leavevmode
+reparatermized srvf
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{group\_action\_by\_gamma\_coord() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.group_action_by_gamma_coord}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{group\_action\_by\_gamma\_coord}}{\emph{f}, \emph{gamma}}{}
+This function reparamerized curve f by gamma
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{f} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{gamma} -- numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return fn}] \leavevmode
+reparatermized curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{innerprod\_q() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.innerprod_q}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{innerprod\_q}}{\emph{q1}, \emph{q2}}{}
+This function calculates the innerproduct in srvf space
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{q1} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{q2} -- numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return val}] \leavevmode
+inner product
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{optimum\_reparam\_curve() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.optimum_reparam_curve}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{optimum\_reparam\_curve}}{\emph{q1}, \emph{q2}, \emph{lam=0.0}}{}
+calculates the warping to align srsf q2 to q1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{q1} -- matrix of size nxN or array of NxM samples of first SRVF
+
+\item {} 
+\textbf{time} -- vector of size N describing the sample points
+
+\item {} 
+\textbf{q2} -- matrix of size nxN or array of NxM samples samples of second SRVF
+
+\item {} 
+\textbf{lam} -- controls the amount of elasticity (default = 0.0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return gam}] \leavevmode
+describing the warping function used to align q2 with q1
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{pre\_proc\_curve() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.pre_proc_curve}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{pre\_proc\_curve}}{\emph{beta}, \emph{T=100}}{}
+This function prepcoessed a curve beta to set of closed curves
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{beta} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{T} -- number of samples (default = 100)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return betanew}] \leavevmode
+projected beta
+
+\item[{Return qnew}] \leavevmode
+projected srvf
+
+\item[{Return A}] \leavevmode
+alignment matrix (not used currently)
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{project\_curve() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.project_curve}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{project\_curve}}{\emph{q}}{}
+This function projects srvf q to set of close curves
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{q} -- numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return qproj}] \leavevmode
+project srvf
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{psi() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.psi}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{psi}}{\emph{x}, \emph{a}, \emph{q}}{}
+This function formats variance output
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{x} -- numpy ndarray of shape (2,M) of M samples curve
+
+\item {} 
+\textbf{a} -- numpy ndarray of shape (2,1) mean
+
+\item {} 
+\textbf{q} -- numpy ndarray of shape (2,M) of M samples srvf
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return psi1}] \leavevmode
+variance
+
+\item[{Return psi2}] \leavevmode
+cross variance
+
+\item[{Return psi3}] \leavevmode
+curve end
+
+\item[{Return psi4}] \leavevmode
+curve end
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{q\_to\_curve() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.q_to_curve}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{q\_to\_curve}}{\emph{q}}{}
+This function converts srvf to beta
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{q} -- numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return beta}] \leavevmode
+parameterized curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{resamplecurve() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.resamplecurve}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{resamplecurve}}{\emph{x}, \emph{N=100}}{}
+This function resamples a curve to have N samples
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{x} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{N} -- Number of samples for new curve (default = 100)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return xn}] \leavevmode
+resampled curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{shift\_f() (in module curve\_functions)}
+
+\begin{fulllineitems}
+\phantomsection\label{curve_functions:curve_functions.shift_f}\pysiglinewithargsret{\code{curve\_functions.}\bfcode{shift\_f}}{\emph{f}, \emph{tau}}{}
+shifts a curve f by tau
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{f} -- numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\textbf{tau} -- scalar
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return fn}] \leavevmode
+shifted curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 References:
 \begin{quote}
 
-Srivastava, A., Wu, W., Kurtek, S., Klassen, E., Marron, J. S., May 2011. Registration of functional data using
-fisher-rao metric, arXiv:1103.3817v2 {[}math.ST{]}.
+Srivastava, A., Wu, W., Kurtek, S., Klassen, E. and Marron, J. S. (2011).
+Registration of Functional Data Using Fisher-Rao Metric.
+arXiv:1103.3817v2 {[}math.ST{]}.
 
-Tucker, J. D., Wu, W., Srivastava, A., Generative Models for Function Data using Phase and Amplitude Separation,
-Computational Statistics and Data Analysis (2012), 10.1016/j.csda.2012.12.001.
+Tucker, J. D., Wu, W. and Srivastava, A. (2013). Generative models for
+functional data using phase and amplitude separation. Computational
+Statistics and Data Analysis 61, 50-66.
+
+Joshi, S.H., Srivastava, A., Klassen, E. and Jermyn, I. (2007).
+A Novel Representation for Computing Geodesics Between n-Dimensional
+Elastic Curves. IEEE Conference on computer Vision and Pattern Recognition
+(CVPR), Minneapolis, MN.
+
+Srivastava, A., Klassen, E., Joshi, S., Jermyn, I., (2011). Shape analysis
+of elastic curves in euclidean spaces. Pattern Analysis and Machine
+Intelligence, IEEE Transactions on 33 (7), 1415 –1428.
 \end{quote}
 
 
@@ -1283,12 +2624,16 @@ Computational Statistics and Data Analysis (2012), 10.1016/j.csda.2012.12.001.
 \renewcommand{\indexname}{Python Module Index}
 \begin{theindex}
 \def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+\bigletter{c}
+\item {\texttt{curve\_functions}}, \pageref{curve_functions:module-curve_functions}
+\indexspace
 \bigletter{f}
 \item {\texttt{fPCA}}, \pageref{fPCA:module-fPCA}
 \item {\texttt{fPLS}}, \pageref{fPLS:module-fPLS}
 \indexspace
 \bigletter{g}
 \item {\texttt{gauss\_model}}, \pageref{gauss_model:module-gauss_model}
+\item {\texttt{geodesic}}, \pageref{geodesic:module-geodesic}
 \indexspace
 \bigletter{r}
 \item {\texttt{regression}}, \pageref{regression:module-regression}

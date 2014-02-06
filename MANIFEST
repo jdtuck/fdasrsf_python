@@ -6,10 +6,13 @@ setup.py
 bin/ex_srsf_align.py
 doc/build/man/fdasrsf.1
 fdasrsf/__init__.py
+fdasrsf/curve_functions.py
 fdasrsf/fPCA.py
 fdasrsf/fPLS.py
 fdasrsf/gauss_model.py
+fdasrsf/geodesic.py
 fdasrsf/plot_style.py
+fdasrsf/regression.py
 fdasrsf/time_warping.py
 fdasrsf/utility_functions.py
 src/.DS_Store
@@ -17,6 +20,7 @@ src/DynamicProgrammingQ2.c
 src/DynamicProgrammingQ2.h
 src/cDPQ.pxd
 src/cfPLS.pxd
+src/cmlogit.pxd
 src/dp_grid.c
 src/dp_grid.h
 src/dp_nbhd.h
@@ -26,5 +30,9 @@ src/fpls_warp_grad.c
 src/fpls_warp_grad.h
 src/misc_funcs.c
 src/misc_funcs.h
+src/mlogit_warp.c
+src/mlogit_warp.pyx
+src/mlogit_warp_grad.c
+src/mlogit_warp_grad.h
 src/optimum_reparamN.c
 src/optimum_reparamN.pyx
