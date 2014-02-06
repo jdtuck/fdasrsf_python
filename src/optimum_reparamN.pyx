@@ -225,3 +225,46 @@ def coptimum_reparam_pair(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[do
     gam = (gam0 - gam0[0]) / (gam0[-1] - gam0[0])
 
     return gam
+
+def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
+                     np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0):
+    """
+    cython interface for calculates the warping to align srvf q2 to q1
+
+    :param q1: matrix of size nxN samples of first SRVF
+    :param time: vector of size N describing the sample points
+    :param q2: matrix of size nxN samples of second SRVF
+    :param lam1: controls the amount of elasticity (default = 0.0)
+
+    :rtype vector
+    :return gam: describing the warping function used to align q2 with q1
+    """
+    cdef int M, n1
+    cdef double lam
+    n1 = q1.shape[0]
+    M = q1.shape[1]
+    lam = lam1
+    cdef np.ndarray[double, ndim=1, mode="c"] G = np.zeros(M)
+    cdef np.ndarray[double, ndim=1, mode="c"] T = np.zeros(M)
+    cdef np.ndarray[double, ndim=1, mode="c"] q1i = np.zeros(M * n1)
+    cdef np.ndarray[double, ndim=1, mode="c"] q2i = np.zeros(M * n1)
+    cdef np.ndarray[double, ndim=1, mode="c"] size = np.zeros(1)
+
+    q1i = q1.reshape(M*n1, order='F')
+    q2i = q2.reshape(M*n1, order='F')
+
+    q1i = np.ascontiguousarray(q1i)
+    q2i = np.ascontiguousarray(q2i)
+
+    sizes = np.zeros(1, dtype=np.int32)
+    Go = np.zeros((M, 1))
+    To = np.zeros((M, 1))
+    cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
+                              &T[0], &size[0], lam)
+    sizes = np.int32(size)
+    Go[:, 0] = G
+    To[:, 0] = T
+    gam0 = np.interp(time, To[0:sizes[0], 0], Go[0:sizes[0], 0])
+    gam = (gam0 - gam0[0]) / (gam0[-1] - gam0[0])
+
+    return gam

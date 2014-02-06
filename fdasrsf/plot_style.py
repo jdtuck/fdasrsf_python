@@ -1,5 +1,7 @@
 import matplotlib
 import pylab
+import fdasrsf.curve_functions as cf
+from numpy import tile, array, arange
 import matplotlib.pyplot as plt
 
 
@@ -121,5 +123,88 @@ def f_plot(time, f, title="Data", bw=False, pres=False):
         rstyle_bw(ax)
     else:
         rstyle(ax, pres)
+
+    return fig, ax
+
+
+def plot_reg_open_curve(beta1, beta2n):
+    """
+    plots registration between two open curves using matplotlib
+
+    :param beta: numpy ndarray of shape (2,M) of M samples
+    :param beta: numpy ndarray of shape (2,M) of M samples
+
+    :return fig: figure definition
+    :return ax: axes definition
+
+    """
+    T = beta1.shape[1]
+    centroid1 = cf.calculatecentroid(beta1)
+    beta1 = beta1 - tile(centroid1, [T, 1]).T
+    centroid2 = cf.calculatecentroid(beta2n)
+    beta2n = beta2n - tile(centroid2, [T, 1]).T
+    beta2n[0, :] = beta2n[0, :] + 1.3
+    beta2n[1, :] = beta2n[1, :] - 0.1
+
+    fig, ax = plt.subplots()
+    ax.plot(beta1[0, :], beta1[1, :], 'r', linewidth=2)
+    fig.hold()
+    ax.plot(beta2n[0, :], beta2n[1, :], 'b-o', linewidth=2)
+
+    for j in range(0, int(T/5)):
+        i = j*5
+        ax.plot(array([beta1[0, i], beta2n[0, i]]),
+                array([beta1[1, i], beta2n[1, i]]), 'k', linewidth=1)
+
+    ax.set_aspect('equal')
+    ax.axis('off')
+    fig.hold()
+
+    return fig, ax
+
+
+def plot_geod_open_curve(PsiX):
+    """
+    plots geodesic between two open curves using matplotlib
+
+    :param PsiX: numpy ndarray of shape (2,M,k) of M samples
+
+    :return fig: figure definition
+    :return ax: axes definition
+
+    """
+    k = PsiX.shape[2]
+    fig, ax = plt.subplots()
+    fig.hold()
+    for tau in range(0, k):
+        ax.plot(.35*tau+PsiX[0, :, tau], PsiX[1, :, tau], 'k', linewidth=2)
+
+    ax.set_aspect('equal')
+    ax.axis('off')
+    fig.hold()
+
+    return fig, ax
+
+
+def plot_geod_close_curve(pathsqnc):
+    """
+    plots geodesic between two closed curves using matplotlib
+
+    :param pathsqnc: numpy ndarray of shape (2,M,k,i) of M samples
+
+    :return fig: figure definition
+    :return ax: axes definition
+
+    """
+    i = pathsqnc.shape[3]
+    k = pathsqnc.shape[2]
+    plotidx = arange(0, i+2)
+    fig, ax = plt.subplots(plotidx.size, k, sharex=True, sharey=True)
+    for j in plotidx:
+        for tau in range(0, k):
+            beta_tmp = pathsqnc[:, :, tau, j]
+            ax[j, tau].plot(beta_tmp[0, :], beta_tmp[1, :], 'r', linewidth=2)
+            ax[j, tau].set_aspect('equal')
+            ax[j, tau].axis('off')
 
     return fig, ax

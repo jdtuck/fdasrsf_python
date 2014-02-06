@@ -5,9 +5,9 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "fPCA"]
+__all__ = ["time_warping", "utility_functions", "curve_functions"]
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 import sys
 
@@ -28,4 +28,7 @@ from .fPCA import vertfPCA, horizfPCA
 from .gauss_model import gauss_model
 from .fPLS import pls_svd
 from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic
-from .curve_functions import resamplecurve
+from .curve_functions import resamplecurve, calculatecentroid, innerprod_q, curve_to_q, optimum_reparam_curve, find_best_rotation
+from .curve_functions import find_rotation_and_seed_coord, group_action_by_gamma_coord, group_action_by_gamma, q_to_curve
+from .curve_functions import calculate_variance, project_curve, pre_proc_curve
+from .geodesic import geod_sphere, path_straightening
