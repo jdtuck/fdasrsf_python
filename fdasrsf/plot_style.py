@@ -198,13 +198,22 @@ def plot_geod_close_curve(pathsqnc):
     """
     i = pathsqnc.shape[3]
     k = pathsqnc.shape[2]
-    plotidx = arange(0, i+2)
-    fig, ax = plt.subplots(plotidx.size, k, sharex=True, sharey=True)
-    for j in plotidx:
+    if i > 1:
+        plotidx = arange(0, i)
+        fig, ax = plt.subplots(plotidx.size, k, sharex=True, sharey=True)
+        for j in plotidx:
+            for tau in range(0, k):
+                beta_tmp = pathsqnc[:, :, tau, j]
+                ax[j, tau].plot(beta_tmp[0, :], beta_tmp[1, :], 'r',
+                                linewidth=2)
+                ax[j, tau].set_aspect('equal')
+                ax[j, tau].axis('off')
+    else:
+        fig, ax = plt.subplots(1, k, sharex=True, sharey=True)
         for tau in range(0, k):
             beta_tmp = pathsqnc[:, :, tau, j]
-            ax[j, tau].plot(beta_tmp[0, :], beta_tmp[1, :], 'r', linewidth=2)
-            ax[j, tau].set_aspect('equal')
-            ax[j, tau].axis('off')
+            ax[tau].plot(beta_tmp[0, :], beta_tmp[1, :], 'r', linewidth=2)
+            ax[tau].set_aspect('equal')
+            ax[tau].axis('off')
 
     return fig, ax

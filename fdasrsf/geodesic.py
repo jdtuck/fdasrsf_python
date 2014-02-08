@@ -134,13 +134,13 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
     i = 0
     g = 1
     delta = 0.5
-    E = zeros(maxit)
-    gradEnorm = zeros(maxit)
+    E = zeros(maxit+1)
+    gradEnorm = zeros(maxit+1)
     pathsqnc = zeros((n, T, k, maxit+1))
 
     pathsqnc[:, :, :, 0] = beta
 
-    while i <= maxit:
+    while i < maxit:
         # algorithm 8:
         # compute dalpha/dt along alpha using finite difference appox
         # First calculate basis for normal sapce at each point in alpha
@@ -176,8 +176,14 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
 
         i += 1
 
-    E = E[0:(i+1)]
-    gradEnorm = gradEnorm[0:(i+1)]
+    if i > 0:
+        E = E[0:i]
+        gradEnorm = gradEnorm[0:i]
+        pathsqnc = pathsqnc[:, :, :, 0:(i+2)]
+    else:
+        E = E[0]
+        gradEnorm = gradEnorm[0]
+        pathsqnc = pathsqnc[:, :, :, 0:(i+2)]
 
     path = beta
     dist = geod_dist_path_strt(beta, k)

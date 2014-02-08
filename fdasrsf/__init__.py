@@ -20,7 +20,7 @@ else:  # Python 3
 del sys
 
 from .time_warping import srsf_align, srsf_align_pair, align_fPCA, align_fPLS
-from .plot_style import f_plot, rstyle
+from .plot_style import f_plot, rstyle, plot_reg_open_curve, plot_geod_open_curve, plot_geod_close_curve
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
 from .utility_functions import optimum_reparam_pair, f_K_fold, zero_crossing, warp_q_gamma, resamplefunction

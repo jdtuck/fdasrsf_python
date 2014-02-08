@@ -149,12 +149,12 @@ def geod_dist_path_strt(beta, k=5):
     return(dist)
 
 
-fun = h5py.File('/Users/jderektucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
+fun = h5py.File('/Users/jdtucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
 C = fun['beta'][:]
 C = C.T
 shape1 = 0
-shapemid = 2
-shape2 = 4
+shapemid = 28
+shape2 = 65
 
 beta1 = C[:, :, shape1]
 beta2 = C[:, :, shape2]
