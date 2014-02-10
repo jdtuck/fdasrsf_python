@@ -9,7 +9,7 @@ import numpy as np
 import fdasrsf.utility_functions as uf
 from scipy import dot
 from scipy.optimize import fmin_l_bfgs_b
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapz
 from scipy.linalg import inv, norm
 from patsy import bs
 from joblib import Parallel, delayed

@@ -9,8 +9,10 @@ from scipy.interpolate import InterpolatedUnivariateSpline
 from scipy.integrate import trapz, cumtrapz
 from numpy import zeros, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
+from numpy import arccos
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparamN as orN
+import fdasrsf.utility_functions as uf
 
 
 def resamplecurve(x, N=100):
@@ -486,3 +488,149 @@ def pre_proc_curve(beta, T=100):
     A = eye(2)
 
     return(betanew, qnew, A)
+
+
+def inverse_exp_coord(beta1, beta2):
+    """
+    Calculate the inverse exponential to obtain a shooting vector from
+    beta1 to beta2 in shape space of open curves
+
+    :param beta1: numpy ndarray of shape (2,M) of M samples
+    :param beta2: numpy ndarray of shape (2,M) of M samples
+
+    :rtype: numpy ndarray
+    :return v: shooting vectors
+    :return dist: distance
+
+    """
+    T = beta1.shape[1]
+    centroid1 = calculatecentroid(beta1)
+    beta1 = beta1 - tile(centroid1, [T, 1]).T
+    centroid2 = calculatecentroid(beta2)
+    beta2 = beta2 - tile(centroid2, [T, 1]).T
+
+    q1 = curve_to_q(beta1)
+
+    # Iteratively optimize over SO(n) x Gamma
+    for i in range(0, 1):
+        # Optimize over SO(n)
+        beta2, O_hat, tau = find_rotation_and_seed_coord(beta1, beta2)
+        q2 = curve_to_q(beta2)
+
+        # Optimize over Gamma
+        gam = optimum_reparam_curve(q2, q1, 0.0)
+        gamI = uf.invertGamma(gam)
+        # Applying optimal re-parameterization to the second curve
+        beta2 = group_action_by_gamma_coord(beta2, gamI)
+
+    # Optimize over SO(n)
+    beta2, O_hat, tau = find_rotation_and_seed_coord(beta1, beta2)
+    q2n = curve_to_q(beta2)
+
+    # Compute geodesic distance
+    q1dotq2 = innerprod_q(q1, q2n)
+    dist = arccos(q1dotq2)
+
+    # Compute shooting vector
+    if q1dotq2 > 1:
+        q1dotq2 = 1
+
+    u = q2n - q1dotq2*q1
+    normu = sqrt(innerprod_q(u, u))
+
+    if normu > 1e-4:
+        v = u*arccos(q1dotq2)/normu
+    else:
+        v = zeros((2, T))
+
+    return(v, dist)
+
+
+def gram_schmidt(basis):
+    """
+   Performs Gram Schmidt Orthogonlization of a basis_o
+
+    :param basis: list of numpy ndarray of shape (2,M) of M samples
+
+    :rtype: list of numpy ndarray
+    :return basis_o: orthogonlized basis
+
+    """
+    b1 = basis[0]
+    b2 = basis[1]
+
+    basis1 = b1 / sqrt(innerprod_q(b1, b1))
+    b2 = b2 - innerprod_q(basis1, b2)*basis1
+    basis2 = b2 / sqrt(innerprod_q(b2, b2))
+
+    basis_o = [basis1, basis2]
+
+    return(basis_o)
+
+
+def project_tangent(w, q, basis):
+    """
+    projects srvf to tangent space w using basis
+
+    :param w: numpy ndarray of shape (2,M) of M samples
+    :param q: numpy ndarray of shape (2,M) of M samples
+    :param basis: list of numpy ndarray of shape (2,M) of M samples
+
+    :rtype: numpy ndarray
+    :return wproj: projected q
+
+    """
+    w = w - innerprod_q(w, q) * q
+    bo = gram_schmidt(basis)
+
+    wproj = w - innerprod_q(w, bo[0])*bo[0] - innerprod_q(w, bo[1])*bo[1]
+
+    return(wproj)
+
+
+def scale_curve(beta):
+    """
+    scales curve to length 1
+
+    :param beta: numpy ndarray of shape (2,M) of M samples
+
+    :rtype: numpy ndarray
+    :return beta_scaled: scaled curve
+    :return scale: scale factor used
+
+    """
+    n, T = beta.shape
+    normbetadot = zeros(T)
+    betadot = gradient(beta, 1./T)
+    betadot = betadot[1]
+    for i in range(0, T):
+        normbetadot[i] = norm(betadot[:, i])
+
+    scale = trapz(normbetadot, linspace(0, 1, T))
+    beta_scaled = beta/scale
+
+    return(beta_scaled, scale)
+
+
+def parallel_translate(w, q1, q2, basis):
+    """
+    parallel translates q1 and q2 along manifold
+
+    :param w: numpy ndarray of shape (2,M) of M samples
+    :param q1: numpy ndarray of shape (2,M) of M samples
+    :param q2: numpy ndarray of shape (2,M) of M samples
+    :param basis: list of numpy ndarray of shape (2,M) of M samples
+
+    :rtype: numpy ndarray
+    :return wbar: translated vector
+
+    """
+    wtilde = w - 2*innerprod_q(w, q2) / innerprod_q(q1+q2, q1+q2)*(q1+q2)
+    l = sqrt(innerprod_q(wtilde, wtilde))
+
+    wbar = project_tangent(wtilde, q2, basis)
+    normwbar = sqrt(innerprod_q(wbar, wbar))
+    if normwbar > 10**(-4):
+        wbar = wbar*l/normwbar
+
+    return(wbar)

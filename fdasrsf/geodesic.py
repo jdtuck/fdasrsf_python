@@ -302,28 +302,6 @@ def init_path_geod(beta1, beta2, T=100, k=5):
     return(alpha, beta, O)
 
 
-def gram_schmidt(basis):
-    """
-   Performs Gram Schmidt Orthogonlization of a basis_o
-
-    :param basis: list of numpy ndarray of shape (2,M) of M samples
-
-    :rtype: list of numpy ndarray
-    :return basis_o: orthogonlized basis
-
-    """
-    b1 = basis[0]
-    b2 = basis[1]
-
-    basis1 = b1 / sqrt(cf.innerprod_q(b1, b1))
-    b2 = b2 - cf.innerprod_q(basis1, b2)*basis1
-    basis2 = b2 / sqrt(cf.innerprod_q(b2, b2))
-
-    basis_o = [basis1, basis2]
-
-    return(basis_o)
-
-
 def find_basis_normal_path(alpha, k=5):
     """
     computes orthonormalized basis vectors to the normal space at each of the
@@ -340,30 +318,10 @@ def find_basis_normal_path(alpha, k=5):
     for tau in range(0, k):
         q = alpha[:, :, tau]
         b = cf.find_basis_normal(q)
-        basis_tmp = gram_schmidt(b)
+        basis_tmp = cf.gram_schmidt(b)
         basis[tau] = basis_tmp
 
     return(basis)
-
-
-def project_tangent(w, q, basis):
-    """
-    projects srvf to tangent space w using basis
-
-    :param w: numpy ndarray of shape (2,M) of M samples
-    :param q: numpy ndarray of shape (2,M) of M samples
-    :param basis: list of numpy ndarray of shape (2,M) of M samples
-
-    :rtype: numpy ndarray
-    :return wproj: projected q
-
-    """
-    w = w - cf.innerprod_q(w, q) * q
-    bo = gram_schmidt(basis)
-
-    wproj = w - cf.innerprod_q(w, bo[0])*bo[0] - cf.innerprod_q(w, bo[1])*bo[1]
-
-    return(wproj)
 
 
 def calc_alphadot(alpha, basis, T=100, k=5):
@@ -389,7 +347,8 @@ def calc_alphadot(alpha, basis, T=100, k=5):
         else:
             v = ((k-1)/2.0)*(alpha[:, :, tau+1] - alpha[:, :, (tau-1)])
 
-        alphadot[:, :, tau] = project_tangent(v, alpha[:, :, tau], basis[tau])
+        alphadot[:, :, tau] = cf.project_tangent(v, alpha[:, :, tau],
+                                                 basis[tau])
 
     return(alphadot)
 
@@ -421,30 +380,6 @@ def calculate_energy(alphadot, T=100, k=5):
     return(E)
 
 
-def parallel_translate(w, q1, q2, basis):
-    """
-    parallel translates q1 and q2 along manifold
-
-    :param w: numpy ndarray of shape (2,M) of M samples
-    :param q1: numpy ndarray of shape (2,M) of M samples
-    :param q2: numpy ndarray of shape (2,M) of M samples
-    :param basis: list of numpy ndarray of shape (2,M) of M samples
-
-    :rtype: numpy ndarray
-    :return wbar: translated vector
-
-    """
-    wtilde = w - 2*cf.innerprod_q(w, q2) / cf.innerprod_q(q1+q2, q1+q2)*(q1+q2)
-    l = sqrt(cf.innerprod_q(wtilde, wtilde))
-
-    wbar = project_tangent(wtilde, q2, basis)
-    normwbar = sqrt(cf.innerprod_q(wbar, wbar))
-    if normwbar > 10**(-4):
-        wbar = wbar*l/normwbar
-
-    return(wbar)
-
-
 def cov_integral(alpha, alphadot, basis, T=100, k=5):
     """
     Calculates covariance along path alpha
@@ -466,7 +401,7 @@ def cov_integral(alpha, alphadot, basis, T=100, k=5):
         q1 = alpha[:, :, tau-1]
         q2 = alpha[:, :, tau]
         b = basis[tau]
-        wbar = parallel_translate(w, q1, q2, b)
+        wbar = cf.parallel_translate(w, q1, q2, b)
         u[:, :, tau] = (1/(k-1))*alphadot[:, :, tau]+wbar
 
     return(u)
@@ -494,7 +429,7 @@ def back_parallel_transport(u1, alpha, basis, T=100, k=5):
         q1 = alpha[:, :, tau+1]
         q2 = alpha[:, :, tau]
         b = basis[tau]
-        utilde[:, :, tau] = parallel_translate(w, q1, q2, b)
+        utilde[:, :, tau] = cf.parallel_translate(w, q1, q2, b)
 
     return(utilde)
 
