@@ -29,9 +29,10 @@ def curve_karcher_mean(q, beta, mode='O'):
     n, T, N = q.shape
     modes = ['O', 'C']
     mode = [i for i, x in enumerate(modes) if x == mode]
-    mode = mode[0]
-    if mode != 0 and mode != 1:
+    if len(mode) == 0:
         mode = 0
+    else:
+        mode = mode[0]
 
     # Initialize mu as one of the shapes
     mu = q[:, :, 0]
@@ -110,21 +111,23 @@ def curve_karcher_cov(betamean, beta, mode='O'):
     n, T, N = beta.shape
     modes = ['O', 'C']
     mode = [i for i, x in enumerate(modes) if x == mode]
-    mode = mode[0]
-    if mode != 0 and mode != 1:
+    if len(mode) == 0:
         mode = 0
+    else:
+        mode = mode[0]
 
     # Compute Karcher covariance of uniformly sampled mean
     betamean = cf.resamplecurve(betamean, T)
-    mu_q = cf.curve_to_q(betamean)
-    mu = cf.project_curve(mu_q)
-    basis = cf.find_basis_normal(mu)
+    mu = cf.curve_to_q(betamean)
+    if mode == 1:
+        mu = cf.project_curve(mu)
+        basis = cf.find_basis_normal(mu)
 
     v = zeros((n, T, N))
     for i in range(0, N):
         beta1 = beta[:, :, i]
 
-        w = cf.inverse_exp_coord(betamean, beta1)
+        w, dist = cf.inverse_exp_coord(betamean, beta1)
         # Project to the tangent sapce of manifold to obtain v_i
         if mode == 0:
             v[:, :, i] = w
@@ -135,7 +138,7 @@ def curve_karcher_cov(betamean, beta, mode='O'):
 
     for i in range(0, N):
         w = v[:, :, i]
-        wtmp = w.reshape((20, 1), order='C')
+        wtmp = w.reshape((T*n, 1), order='C')
         K = K + wtmp.dot(wtmp.T)
 
     K = K/(N-1)
@@ -162,9 +165,10 @@ def curve_principal_directions(betamean, mu, K, mode='O', no=3, N=5):
     n, T = betamean.shape
     modes = ['O', 'C']
     mode = [i for i, x in enumerate(modes) if x == mode]
-    mode = mode[0]
-    if mode != 0 and mode != 1:
+    if len(mode) == 0:
         mode = 0
+    else:
+        mode = mode[0]
 
     U, s, V = svd(K)
 
@@ -194,11 +198,12 @@ def curve_principal_directions(betamean, mu, K, mode='O', no=3, N=5):
             qarray1[i] = q2
             p = cf.q_to_curve(q2)
             centroid1 = -1*cf.calculatecentroid(p)
-            pd1[i] = cf.scale_curve(p + tile(centroid1, [T, 1]).T)
+            beta_scaled, scale = cf.scale_curve(p + tile(centroid1, [T, 1]).T)
+            pd1[i] = beta_scaled
 
             # Parallel translate tangent vector
             basis2 = cf.find_basis_normal(q2)
-            v = cf.parallel_translate(v, q1, q2, basis2)
+            v = cf.parallel_translate(v, q1, q2, basis2, mode)
 
             q1 = q2
 
@@ -218,11 +223,12 @@ def curve_principal_directions(betamean, mu, K, mode='O', no=3, N=5):
             qarray2[i] = q2
             p = cf.q_to_curve(q2)
             centroid1 = -1*cf.calculatecentroid(p)
-            pd2[i] = cf.scale_curve(p + tile(centroid1, [T, 1]).T)
+            beta_scaled, scale = cf.scale_curve(p + tile(centroid1, [T, 1]).T)
+            pd2[i] = beta_scaled
 
             # Parallel translate tangent vector
             basis2 = cf.find_basis_normal(q2)
-            v = cf.parallel_translate(v, q1, q2, basis2)
+            v = cf.parallel_translate(v, q1, q2, basis2, mode)
 
             q1 = q2
 
@@ -232,10 +238,12 @@ def curve_principal_directions(betamean, mu, K, mode='O', no=3, N=5):
 
         qarray[m, N] = mu
         centroid1 = -1*cf.calculatecentroid(betamean)
-        pd[m, N] = cf.scale_curve(betamean + tile(centroid1, [T, 1]).T)
+        beta_scaled, scale = cf.scale_curve(betamean +
+                                            tile(centroid1, [T, 1]).T)
+        pd[m, N] = beta_scaled
 
         for i in range(N+1, 2*N+1):
-            qarray1[m, i] = qarray1[i-(N+1)]
+            qarray[m, i] = qarray1[i-(N+1)]
             pd[m, i] = pd1[i-(N+1)]
 
     return(pd)
@@ -259,9 +267,10 @@ def sample_shapes(mu, K, mode='O', no=3, numSamp=10):
     n, T = mu.shape
     modes = ['O', 'C']
     mode = [i for i, x in enumerate(modes) if x == mode]
-    mode = mode[0]
-    if mode != 0 and mode != 1:
+    if len(mode) == 0:
         mode = 0
+    else:
+        mode = mode[0]
 
     U, s, V = svd(K)
 
@@ -291,7 +300,7 @@ def sample_shapes(mu, K, mode='O', no=3, numSamp=10):
 
             # Parallel translate tangent vector
             basis2 = cf.find_basis_normal(q2)
-            v = cf.parallel_translate(v, q1, q2, basis2)
+            v = cf.parallel_translate(v, q1, q2, basis2, mode)
 
             q1 = q2
 

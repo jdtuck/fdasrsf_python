@@ -110,9 +110,10 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
     """
     inits = ["rand", "geod"]
     init = [i for i, x in enumerate(inits) if x == init]
-    init = init[0]
-    if init != 0 and init != 1:
+    if len(init) == 0:
         init = 0
+    else:
+        init = init[0]
 
     betanew1, qnew1, A1 = cf.pre_proc_curve(beta1, T)
     betanew2, qnew2, A2 = cf.pre_proc_curve(beta2, T)

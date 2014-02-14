@@ -32,4 +32,4 @@ from .curve_functions import resamplecurve, calculatecentroid, innerprod_q, curv
 from .curve_functions import find_rotation_and_seed_coord, group_action_by_gamma_coord, group_action_by_gamma, q_to_curve
 from .curve_functions import calculate_variance, project_curve, pre_proc_curve, inverse_exp_coord, project_tangent, gram_schmidt, scale_curve, parallel_translate
 from .geodesic import geod_sphere, path_straightening
-from .curve_stats import curve_karcher_mean, curve_karcher_cov
+from .curve_stats import curve_karcher_mean, curve_karcher_cov, curve_principal_directions, sample_shapes

@@ -71,9 +71,10 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
     methods = ["mean", "median"]
     # 0 mean, 1-median
     method = [i for i, x in enumerate(methods) if x == method]
-    method = method[0]
-    if method != 0 and method != 1:
+    if len(method) == 0:
         method = 0
+    else:
+        method = method[0]
 
     if showplot:
         plot.f_plot(time, f, title="f Original Data")

@@ -612,7 +612,7 @@ def scale_curve(beta):
     return(beta_scaled, scale)
 
 
-def parallel_translate(w, q1, q2, basis):
+def parallel_translate(w, q1, q2, basis, mode=0):
     """
     parallel translates q1 and q2 along manifold
 
@@ -620,17 +620,28 @@ def parallel_translate(w, q1, q2, basis):
     :param q1: numpy ndarray of shape (2,M) of M samples
     :param q2: numpy ndarray of shape (2,M) of M samples
     :param basis: list of numpy ndarray of shape (2,M) of M samples
+    :param mode: open 0 or closed curves 1 (default 0)
 
     :rtype: numpy ndarray
     :return wbar: translated vector
 
     """
+    modes = [0, 1]
+    mode = [i for i, x in enumerate(modes) if x == mode]
+    if len(mode) == 0:
+        mode = 0
+    else:
+        mode = mode[0]
+
     wtilde = w - 2*innerprod_q(w, q2) / innerprod_q(q1+q2, q1+q2)*(q1+q2)
     l = sqrt(innerprod_q(wtilde, wtilde))
 
-    wbar = project_tangent(wtilde, q2, basis)
-    normwbar = sqrt(innerprod_q(wbar, wbar))
-    if normwbar > 10**(-4):
-        wbar = wbar*l/normwbar
+    if mode == 1:
+        wbar = project_tangent(wtilde, q2, basis)
+        normwbar = sqrt(innerprod_q(wbar, wbar))
+        if normwbar > 10**(-4):
+            wbar = wbar*l/normwbar
+    else:
+        wbar = wtilde
 
     return(wbar)
