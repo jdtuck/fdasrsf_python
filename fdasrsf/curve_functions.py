@@ -140,7 +140,7 @@ def optimum_reparam_curve(q1, q2, lam=0.0):
 
 def innerprod_q(q1, q2):
     """
-    This function calculates the innerproduct in srvf space
+    This function calculates the inner product in srvf space
 
     :param q1: numpy ndarray of shape (2,M) of M samples
     :param q2: numpy ndarray of shape (2,M) of M samples
