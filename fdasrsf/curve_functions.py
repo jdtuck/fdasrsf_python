@@ -9,7 +9,7 @@ from scipy.interpolate import InterpolatedUnivariateSpline
 from scipy.integrate import trapz, cumtrapz
 from numpy import zeros, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
-from numpy import arccos
+from numpy import arccos, fabs
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparamN as orN
 import fdasrsf.utility_functions as uf
@@ -645,3 +645,77 @@ def parallel_translate(w, q1, q2, basis, mode=0):
         wbar = wtilde
 
     return(wbar)
+
+
+def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin, omax, omin):
+    """
+    finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+    from elastic curve regression model
+
+    :param Y: response
+    :param beta: predicitve function
+    :param bt: basis function
+    :param time: time samples
+    :param y_max: maximum repsonse for warping function gmax
+    :param y_min: minimum response for warping function gmin
+    :param gmax: max warping function
+    :param gmin: min warping fucntion
+    :param omax: max angle
+    :param omin: min angle
+
+    :rtype: numpy array
+    :return gamma: optimal warping function
+    :return O_hat: rotation matrix
+
+    """
+    # simple iterative method based on intermediate theorem
+    max_itr = 100
+    a = zeros(max_itr)
+    a[0] = 1
+    f = zeros(max_itr)
+    f[0] = y_max - Y
+    f[1] = y_min - Y
+    mrp = f[0]
+    mrn = f[1]
+    mrp_ind = 0  # most recent positive index
+    mrn_ind = 1  # most recent negative index
+
+    for ii in range(2, max_itr):
+        x1 = a[mrp_ind]
+        x2 = a[mrn_ind]
+        y1 = mrp
+        y2 = mrn
+        a[ii] = (x1 * y2 - x2 * y1) / (y2 - y1)
+
+        gam_m = a[ii] * gmax + (1 - a[ii]) * gmin
+        beta2n = shift_f(beta2, ctr)
+        beta2new, R = find_best_rotation(beta1, beta2n)
+        for jj in range(2, max_itr):
+            x11 = a1[mrp_ind1]
+            x21 = a1[mrn_ind1]
+            y11 = mrp1
+            y21 = mrn1
+            a1[jj] = (x11 * y21 - x21 * y11) / (y21 - y11)
+
+            gam_m = a[ii] * gmax + (1 - a[ii]) * gmin
+            qnew = O_m.dot(q)
+            qnew = group_action_by_gamma(qnew, gam_m)
+            f1[jj] = innerprod_q(qnew, bt)
+
+            if fabs(f1[jj]) < 1e-5:
+                break
+            elif f1[jj] > 0:
+                mrp = f1[jj]
+                mrp_ind = jj
+            else:
+                mrn = f[jj]
+                mrn_ind = ii
+
+
+    return(gamma, O_hat)
+
+
+def rot_mat(theta):
+    O = array([(cos(theta), sin(theta)), (-1*sin(theta), cos(theta))])
+
+    return(O)

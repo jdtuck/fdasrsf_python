@@ -2,7 +2,7 @@ import h5py
 import fdasrsf as fs
 import numpy as np
 import matplotlib.pyplot as plt
-fun = h5py.File('/Users/jderektucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
+fun = h5py.File('/Users/jdtucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
 C = fun['beta'][:]
 C = C.T
 

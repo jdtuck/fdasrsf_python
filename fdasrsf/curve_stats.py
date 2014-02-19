@@ -9,6 +9,7 @@ from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty
 from numpy.linalg import svd
 from numpy.random import randn
 import fdasrsf.curve_functions as cf
+from joblib import Parallel, delayed
 
 
 def curve_karcher_mean(q, beta, mode='O'):
@@ -51,26 +52,17 @@ def curve_karcher_mean(q, beta, mode='O'):
         print("Iteration: %d" % itr)
 
         mu = mu / sqrt(cf.innerprod_q(mu, mu))
-        if mode == 1:
-            basis = cf.find_basis_normal(mu)
 
         sumv = zeros((2, T))
         sumd[itr+1] = 0
+        out = Parallel(n_jobs=-1)(delayed(karcher_calc)(beta[:, :, n],
+                                  q[:, :, n], betamean, mu, mode) for n in range(N))
+        v = zeros((n, T, N))
         for i in range(0, N):
-            q1 = q[:, :, i]
-            beta1 = beta[:, :, i]
+            v[:, :, i] = out[i][0]
+            sumd[itr+1] = sumd[itr+1] + out[i][1]**2
 
-            # Compute shooting vector from mu to q_i
-            w, d = cf.inverse_exp_coord(betamean, beta1)
-
-            # Project to tangent space of manifold to obtain v_i
-            if mode == 0:
-                v[:, :, i] = w
-            else:
-                v[:, :, i] = cf.project_tangent(w, q1, basis)
-
-            sumv = sumv + v[:, :, i]
-            sumd[itr+1] = sumd[itr+1] + d**2
+        sumv = v.sum(axis=2)
 
         # Compute average direction of tangent vectors v_i
         vbar = sumv/N
@@ -307,3 +299,18 @@ def sample_shapes(mu, K, mode='O', no=3, numSamp=10):
         samples[i] = cf.q_to_curve(q2)
 
     return(samples)
+
+
+def karcher_calc(beta, q, betamean, mu, mode=0):
+    if mode == 1:
+        basis = cf.find_basis_normal(mu)
+    # Compute shooting vector from mu to q_i
+    w, d = cf.inverse_exp_coord(betamean, beta)
+
+    # Project to tangent space of manifold to obtain v_i
+    if mode == 0:
+        v = w
+    else:
+        v = cf.project_tangent(w, q, basis)
+
+    return(v, d)

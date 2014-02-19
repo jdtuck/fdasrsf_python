@@ -661,9 +661,10 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
 
     """
     # simple iterative method based on intermediate theorem
-    a = zeros(100)
+    max_itr = 100
+    a = zeros(max_itr)
     a[0] = 1
-    f = zeros(100)
+    f = zeros(max_itr)
     f[0] = y_max - Y
     f[1] = y_min - Y
     mrp = f[0]
@@ -671,7 +672,7 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
     mrp_ind = 0  # most recent positive index
     mrn_ind = 1  # most recent negative index
 
-    for ii in range(2, 100):
+    for ii in range(2, max_itr):
         x1 = a[mrp_ind]
         x2 = a[mrn_ind]
         y1 = mrp
