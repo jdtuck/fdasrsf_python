@@ -131,7 +131,7 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
 def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     """
     This function identifies a logistic regression model with
-    phase-variablity using elastic methods
+    phase-variablity using elastic methods for open curves
 
     :param beta: numpy ndarray of shape (n, M, N) describing N curves
     in R^M
@@ -163,7 +163,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     elif T > 100:
         parallel = True
     else:
-        parallel = False
+        parallel = True
 
     # Create B-Spline Basis if none provided
     if B is None:
@@ -216,7 +216,6 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
             for ii in range(0, N):
                 beta1 = beta[:, :, ii]
                 gammatmp, Otmp, beta1, tautmp = logistic_warp(nu, beta1, y[ii])
-                Tracer()()
                 beta[:, :, ii] = beta1
                 qn[:, :, ii] = cf.curve_to_q(beta1)
                 gamma_new[:, ii] = gammatmp
@@ -247,13 +246,13 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     model = collections.namedtuple('model', ['alpha', 'nu', 'betan', 'q',
                                    'gamma', 'O', 'tau', 'B', 'b', 'Loss',
                                    'type'])
-    out = model(alpha, nu, beta, q, gamma, O_hat, B, b[1:-1],
+    out = model(alpha, nu, beta, q, gamma, O_hat, tau, B, b[1:-1],
                 LL[0:itr], 'logistic')
     return out
 
 
-def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
-                      delta=.01, parallel=True, smooth=False):
+def oc_elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
+                         delta=.01, parallel=True, smooth=False):
     """
     This function identifies a multinomial logistic regression model with
     phase-variablity using elastic methods
@@ -552,24 +551,29 @@ def logistic_warp(nu, beta, y):
     :return gamma: warping function
 
     """
+    betanu = cf.q_to_curve(nu)
     T = beta.shape[1]
     if y == 1:
-        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(nu, beta)
+        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(betanu, beta)
         q = cf.curve_to_q(beta1)
-        gamma = cf.optimum_reparam_curve(nu, q)
-        beta1n = cf.group_action_by_gamma_coord(beta, gamma)
-        beta1n, O_hat, tau = cf.find_rotation_and_seed_coord(nu, beta1n)
+        gamma = cf.optimum_reparam_curve(q, nu)
+        gamI = uf.invertGamma(gamma)
+        beta1n = cf.group_action_by_gamma_coord(beta1, gamI)
+        beta1n, O_hat1, tau = cf.find_rotation_and_seed_coord(betanu, beta1n)
         centroid2 = cf.calculatecentroid(beta1n)
-        beta1 = beta1n - np.tile(centroid2, [T, 1]).T
+        beta1n = beta1n - np.tile(centroid2, [T, 1]).T
+        O = O_hat.dot(O_hat1)
     elif y == -1:
-        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(-1*nu, beta)
+        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(-1*betanu, beta)
         q = cf.curve_to_q(beta1)
-        gamma = cf.optimum_reparam_curve(-1*nu, q)
-        beta1n = cf.group_action_by_gamma_coord(beta, gamma)
-        beta1n, O_hat, tau = cf.find_rotation_and_seed_coord(-1*nu, beta1n)
+        gamma = cf.optimum_reparam_curve(q, -1*nu)
+        gamI = uf.invertGamma(gamma)
+        beta1n = cf.group_action_by_gamma_coord(beta1, gamI)
+        beta1n, O_hat1, tau = cf.find_rotation_and_seed_coord(-1*betanu, beta1n)
         centroid2 = cf.calculatecentroid(beta1n)
-        beta1 = beta1n - np.tile(centroid2, [T, 1]).T
-    return (gamma, O_hat, beta1, tau)
+        beta1n = beta1n - np.tile(centroid2, [T, 1]).T
+        O = O_hat.dot(O_hat1)
+    return (gamI, O, beta1n, tau)
 
 
 def phi(t):
