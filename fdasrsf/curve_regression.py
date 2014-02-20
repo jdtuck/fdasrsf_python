@@ -247,7 +247,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
                                    'gamma', 'O', 'tau', 'B', 'b', 'Loss',
                                    'type'])
     out = model(alpha, nu, beta, q, gamma, O_hat, tau, B, b[1:-1],
-                LL[0:itr], 'logistic')
+                LL[0:itr], 'oclogistic')
     return out
 
 
@@ -375,7 +375,7 @@ def oc_elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
     return out
 
 
-def oc_elastic_prediction(beta, model, T=100, y=None):
+def oc_elastic_prediction(beta, model, y=None):
     """
     This function identifies a regression model with phase-variablity
     using elastic methods
@@ -397,12 +397,15 @@ def oc_elastic_prediction(beta, model, T=100, y=None):
     :return SSE: sum of squared error
 
     """
-    q, beta = preproc_open_curve(beta, T)
-    n = q.shape[2]
+    Tracer()()
+    T = model.q.shape[1]
+    n = model.q.shape[2]
 
-    if model.type == 'linear' or model.type == 'logistic':
+    q, beta = preproc_open_curve(beta, T)
+
+    if model.type == 'oclinear' or model.type == 'oclogistic':
         y_pred = np.zeros(n)
-    elif model.type == 'mlogistic':
+    elif model.type == 'ocmlogistic':
         m = model.n_classes
         y_pred = np.zeros((n, m))
 
@@ -415,31 +418,31 @@ def oc_elastic_prediction(beta, model, T=100, y=None):
                                                model.gamma[:, dist.argmin()])
         q_tmp = cf.curve_to_q(beta1)
 
-        if model.type == 'linear':
+        if model.type == 'oclinear':
             y_pred[ii] = model.alpha + cf.innerprod_q(q_tmp, model.nu)
-        elif model.type == 'logistic':
+        elif model.type == 'oclogistic':
             y_pred[ii] = model.alpha + cf.innerprod_q(q_tmp, model.nu)
-        elif model.type == 'mlogistic':
+        elif model.type == 'ocmlogistic':
             for jj in range(0, m):
                 y_pred[ii, jj] = model.alpha[jj] + cf.innerprod_q(q_tmp, model.nu[:, jj])
 
     if y is None:
-        if model.type == 'linear':
+        if model.type == 'oclinear':
             SSE = None
-        elif model.type == 'logistic':
+        elif model.type == 'oclogistic':
             y_pred = phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
             PC = None
-        elif model.type == 'mlogistic':
+        elif model.type == 'ocmlogistic':
             y_pred = phi(y_pred.ravel())
             y_pred = y_pred.reshape(n, m)
             y_labels = y_pred.argmax(axis=1)+1
             PC = None
     else:
-        if model.type == 'linear':
+        if model.type == 'oclinear':
             SSE = sum((y - y_pred) ** 2)
-        elif model.type == 'logistic':
+        elif model.type == 'oclogistic':
             y_pred = phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
@@ -448,7 +451,7 @@ def oc_elastic_prediction(beta, model, T=100, y=None):
             TN = sum(y[y_labels == -1] == -1)
             FN = sum(y[y_labels == 1] == -1)
             PC = (TP+TN)/(TP+FP+FN+TN)
-        elif model.type == 'mlogistic':
+        elif model.type == 'ocmlogistic':
             y_pred = phi(y_pred.ravel())
             y_pred = y_pred.reshape(n, m)
             y_labels = y_pred.argmax(axis=1)+1
@@ -465,14 +468,14 @@ def oc_elastic_prediction(beta, model, T=100, y=None):
 
             PC = sum(y == y_labels)/y_labels.size
 
-    if model.type == 'linear':
+    if model.type == 'oclinear':
         prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])
         out = prediction(y_pred, SSE)
-    elif model.type == 'logistic':
+    elif model.type == 'oclogistic':
         prediction = collections.namedtuple('prediction', ['y_prob',
                                             'y_labels', 'PC'])
         out = prediction(y_pred, y_labels, PC)
-    elif model.type == 'mlogistic':
+    elif model.type == 'ocmlogistic':
         prediction = collections.namedtuple('prediction', ['y_prob',
                                             'y_labels', 'PC'])
         out = prediction(y_pred, y_labels, PC)
