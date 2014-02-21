@@ -31,16 +31,16 @@ def resamplecurve(x, N=100):
 
     delta = zeros(T)
     for r in range(1, T):
-        delta[r] = norm(x[:, r] - x[:, r-1])
+        delta[r] = norm(x[:, r] - x[:, r - 1])
 
-    cumdel = cumsum(delta)/delta.sum()
+    cumdel = cumsum(delta) / delta.sum()
     newdel = linspace(0, 1, N)
 
     for r in range(0, n):
         s = InterpolatedUnivariateSpline(cumdel, x[r, :], k=3)
         xn[r, :] = s(newdel)
 
-    return(xn)
+    return (xn)
 
 
 def calculatecentroid(beta):
@@ -54,7 +54,7 @@ def calculatecentroid(beta):
 
     """
     n, T = beta.shape
-    betadot = gradient(beta, 1./(T - 1))
+    betadot = gradient(beta, 1. / (T - 1))
     betadot = betadot[1]
     normbetadot = zeros(T)
     integrand = zeros((n, T))
@@ -63,9 +63,9 @@ def calculatecentroid(beta):
         integrand[:, i] = beta[:, i] * normbetadot[i]
 
     scale = trapz(normbetadot, linspace(0, 1, T))
-    centroid = trapz(integrand, linspace(0, 1, T), axis=1)/scale
+    centroid = trapz(integrand, linspace(0, 1, T), axis=1) / scale
 
-    return(centroid)
+    return (centroid)
 
 
 def curve_to_q(beta):
@@ -79,20 +79,20 @@ def curve_to_q(beta):
 
     """
     n, T = beta.shape
-    v = gradient(beta, 1./(T - 1))
+    v = gradient(beta, 1. / (T - 1))
     v = v[1]
 
-    length = sum(sqrt(sum(v*v)))/T
-    v = v/length
+    length = sum(sqrt(sum(v * v))) / T
+    v = v / length
     q = zeros((n, T))
     for i in range(0, T):
         L = sqrt(norm(v[:, i]))
         if L > 0.0001:
-            q[:, i] = v[:, i]/L
+            q[:, i] = v[:, i] / L
         else:
-            q[:, i] = v[:, i]*0.0001
+            q[:, i] = v[:, i] * 0.0001
 
-    return(q)
+    return (q)
 
 
 def q_to_curve(q):
@@ -113,9 +113,9 @@ def q_to_curve(q):
     integrand = zeros((2, T))
     integrand[0, :] = q[0, :] * qnorm
     integrand[1, :] = q[1, :] * qnorm
-    beta = cumtrapz(integrand, axis=1, initial=0)/T
+    beta = cumtrapz(integrand, axis=1, initial=0) / T
 
-    return(beta)
+    return (beta)
 
 
 def optimum_reparam_curve(q1, q2, lam=0.0):
@@ -150,9 +150,9 @@ def innerprod_q(q1, q2):
 
     """
     T = q1.shape[1]
-    val = sum(sum(q1*q2))/T
+    val = sum(sum(q1 * q2)) / T
 
-    return(val)
+    return (val)
 
 
 def find_best_rotation(q1, q2):
@@ -173,7 +173,7 @@ def find_best_rotation(q1, q2):
     A = q1.dot(q2.T)
     U, s, V = svd(A)
 
-    if (abs(det(U)*det(V)-1) < 10*eps):
+    if (abs(det(U) * det(V) - 1) < 10 * eps):
         S = eye(n)
     else:
         S = eye(n)
@@ -182,7 +182,7 @@ def find_best_rotation(q1, q2):
     R = U.dot(S).dot(V.T)
     q2new = R.dot(q2)
 
-    return(q2new, R)
+    return (q2new, R)
 
 
 def calculate_variance(beta):
@@ -196,7 +196,7 @@ def calculate_variance(beta):
 
     """
     n, T = beta.shape
-    betadot = gradient(beta, 1./(T - 1))
+    betadot = gradient(beta, 1. / (T - 1))
     betadot = betadot[1]
     normbetadot = zeros(T)
     centroid = calculatecentroid(beta)
@@ -204,7 +204,7 @@ def calculate_variance(beta):
     t = linspace(0, 1, T)
     for i in range(0, T):
         normbetadot[i] = norm(betadot[:, i])
-        a1 = (beta[:, i]-centroid)
+        a1 = (beta[:, i] - centroid)
         a1 = a1.reshape((n, 1))
         integrand[:, :, i] = a1.dot(a1.T) * normbetadot[i]
 
@@ -212,7 +212,7 @@ def calculate_variance(beta):
     variance = trapz(integrand, t, axis=2)
     variance /= l
 
-    return(variance)
+    return (variance)
 
 
 def psi(x, a, q):
@@ -237,7 +237,7 @@ def psi(x, a, q):
     psi3 = x[0, -1]
     psi4 = x[1, -1]
 
-    return(psi1, psi2, psi3, psi4)
+    return (psi1, psi2, psi3, psi4)
 
 
 def find_basis_normal(q):
@@ -255,10 +255,10 @@ def find_basis_normal(q):
     f1 = zeros((n, T))
     f2 = zeros((n, T))
     for i in range(0, T):
-        f1[:, i] = q[0, i] * q[:, i]/norm(q[:, i]) + array([norm(q[:, i]),
-                                                           0])
-        f2[:, i] = q[1, i] * q[:, i]/norm(q[:, i]) + array([0,
-                                                           norm(q[:, i])])
+        f1[:, i] = q[0, i] * q[:, i] / norm(q[:, i]) + array([norm(q[:, i]),
+                                                              0])
+        f2[:, i] = q[1, i] * q[:, i] / norm(q[:, i]) + array([0,
+                                                              norm(q[:, i])])
 
     h3 = f1
     h4 = f2
@@ -274,7 +274,7 @@ def find_basis_normal(q):
 
     basis = [b3, b4]
 
-    return(basis)
+    return (basis)
 
 
 def calc_j(basis):
@@ -307,7 +307,7 @@ def calc_j(basis):
     j[1, 1] = trapz(integrand22, linspace(0, 1, T))
     j[1, 0] = j[0, 1]
 
-    return(j)
+    return (j)
 
 
 def shift_f(f, tau):
@@ -323,10 +323,10 @@ def shift_f(f, tau):
     """
     n, T = f.shape
     fn = zeros((n, T))
-    fn[:, 0:(T-1)] = roll(f[:, 0:(T-1)], tau, axis=1)
-    fn[:, T-1] = fn[:, 0]
+    fn[:, 0:(T - 1)] = roll(f[:, 0:(T - 1)], tau, axis=1)
+    fn[:, T - 1] = fn[:, 0]
 
-    return(fn)
+    return (fn)
 
 
 def find_rotation_and_seed_coord(beta1, beta2):
@@ -359,7 +359,7 @@ def find_rotation_and_seed_coord(beta1, beta2):
     beta2new = shift_f(beta2, tau)
     beta2new = O_hat.dot(beta2new)
 
-    return(beta2new, O_hat, tau)
+    return (beta2new, O_hat, tau)
 
 
 def group_action_by_gamma_coord(f, gamma):
@@ -380,7 +380,7 @@ def group_action_by_gamma_coord(f, gamma):
         s = InterpolatedUnivariateSpline(linspace(0, 1, T), f[j, :], k=3)
         fn[j, :] = s(gamma)
 
-    return(fn)
+    return (fn)
 
 
 def group_action_by_gamma(q, gamma):
@@ -395,16 +395,16 @@ def group_action_by_gamma(q, gamma):
 
     """
     n, T = q.shape
-    gammadot = gradient(gamma, 1./T)
+    gammadot = gradient(gamma, 1. / T)
     qn = zeros((n, T))
 
     for j in range(0, n):
         s = InterpolatedUnivariateSpline(linspace(0, 1, T), q[j, :], k=3)
-        qn[j, :] = s(gamma)*sqrt(gammadot)
+        qn[j, :] = s(gamma) * sqrt(gammadot)
 
-    qn = qn/sqrt(innerprod_q(qn, qn))
+    qn = qn / sqrt(innerprod_q(qn, qn))
 
-    return(qn)
+    return (qn)
 
 
 def project_curve(q):
@@ -423,12 +423,12 @@ def project_curve(q):
     itr = 1
     delta = 0.5
     x = q_to_curve(q)
-    a = -1*calculatecentroid(x)
+    a = -1 * calculatecentroid(x)
 
     psi1, psi2, psi3, psi4 = psi(x, a, q)
 
     r = vstack((psi3, psi4))
-    rnorm = zeros(maxit+1)
+    rnorm = zeros(maxit + 1)
     rnorm[0] = norm(r)
 
     while itr <= maxit:
@@ -439,15 +439,15 @@ def project_curve(q):
 
         # Newton-Raphson step to update q
         y = solve(j, -r)
-        dq = delta * (y[0]*basis[0] + y[1]*basis[1])
+        dq = delta * (y[0] * basis[0] + y[1] * basis[1])
         normdq = sqrt(innerprod_q(dq, dq))
-        q = cos(normdq)*q + sin(normdq)*dq/normdq
+        q = cos(normdq) * q + sin(normdq) * dq / normdq
         q /= sqrt(innerprod_q(q, q))
 
         # update x and a from the new q
         beta_new = q_to_curve(q)
         x = beta_new
-        a = -1*calculatecentroid(x)
+        a = -1 * calculatecentroid(x)
         beta_new = x + tile(a, [T, 1]).T
 
         # calculate the new value of psi
@@ -463,7 +463,7 @@ def project_curve(q):
     rnorm = rnorm[0:itr]
     qproj = q
 
-    return(qproj)
+    return (qproj)
 
 
 def pre_proc_curve(beta, T=100):
@@ -483,11 +483,11 @@ def pre_proc_curve(beta, T=100):
     q = curve_to_q(beta)
     qnew = project_curve(q)
     x = q_to_curve(qnew)
-    a = -1*calculatecentroid(x)
+    a = -1 * calculatecentroid(x)
     betanew = x + tile(a, [T, 1]).T
     A = eye(2)
 
-    return(betanew, qnew, A)
+    return (betanew, qnew, A)
 
 
 def inverse_exp_coord(beta1, beta2):
@@ -535,15 +535,15 @@ def inverse_exp_coord(beta1, beta2):
     if q1dotq2 > 1:
         q1dotq2 = 1
 
-    u = q2n - q1dotq2*q1
+    u = q2n - q1dotq2 * q1
     normu = sqrt(innerprod_q(u, u))
 
     if normu > 1e-4:
-        v = u*arccos(q1dotq2)/normu
+        v = u * arccos(q1dotq2) / normu
     else:
         v = zeros((2, T))
 
-    return(v, dist)
+    return (v, dist)
 
 
 def gram_schmidt(basis):
@@ -560,12 +560,12 @@ def gram_schmidt(basis):
     b2 = basis[1]
 
     basis1 = b1 / sqrt(innerprod_q(b1, b1))
-    b2 = b2 - innerprod_q(basis1, b2)*basis1
+    b2 = b2 - innerprod_q(basis1, b2) * basis1
     basis2 = b2 / sqrt(innerprod_q(b2, b2))
 
     basis_o = [basis1, basis2]
 
-    return(basis_o)
+    return (basis_o)
 
 
 def project_tangent(w, q, basis):
@@ -583,9 +583,9 @@ def project_tangent(w, q, basis):
     w = w - innerprod_q(w, q) * q
     bo = gram_schmidt(basis)
 
-    wproj = w - innerprod_q(w, bo[0])*bo[0] - innerprod_q(w, bo[1])*bo[1]
+    wproj = w - innerprod_q(w, bo[0]) * bo[0] - innerprod_q(w, bo[1]) * bo[1]
 
-    return(wproj)
+    return (wproj)
 
 
 def scale_curve(beta):
@@ -601,15 +601,15 @@ def scale_curve(beta):
     """
     n, T = beta.shape
     normbetadot = zeros(T)
-    betadot = gradient(beta, 1./T)
+    betadot = gradient(beta, 1. / T)
     betadot = betadot[1]
     for i in range(0, T):
         normbetadot[i] = norm(betadot[:, i])
 
     scale = trapz(normbetadot, linspace(0, 1, T))
-    beta_scaled = beta/scale
+    beta_scaled = beta / scale
 
-    return(beta_scaled, scale)
+    return (beta_scaled, scale)
 
 
 def parallel_translate(w, q1, q2, basis, mode=0):
@@ -633,21 +633,21 @@ def parallel_translate(w, q1, q2, basis, mode=0):
     else:
         mode = mode[0]
 
-    wtilde = w - 2*innerprod_q(w, q2) / innerprod_q(q1+q2, q1+q2)*(q1+q2)
+    wtilde = w - 2 * innerprod_q(w, q2) / innerprod_q(q1 + q2, q1 + q2) * (q1 + q2)
     l = sqrt(innerprod_q(wtilde, wtilde))
 
     if mode == 1:
         wbar = project_tangent(wtilde, q2, basis)
         normwbar = sqrt(innerprod_q(wbar, wbar))
-        if normwbar > 10**(-4):
-            wbar = wbar*l/normwbar
+        if normwbar > 10 ** (-4):
+            wbar = wbar * l / normwbar
     else:
         wbar = wtilde
 
-    return(wbar)
+    return (wbar)
 
 
-def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin, omax, omin):
+def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
     """
     finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
     from elastic curve regression model
@@ -655,13 +655,10 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin, omax, omin):
     :param Y: response
     :param beta: predicitve function
     :param bt: basis function
-    :param time: time samples
     :param y_max: maximum repsonse for warping function gmax
     :param y_min: minimum response for warping function gmin
     :param gmax: max warping function
     :param gmin: min warping fucntion
-    :param omax: max angle
-    :param omin: min angle
 
     :rtype: numpy array
     :return gamma: optimal warping function
@@ -669,6 +666,8 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin, omax, omin):
 
     """
     # simple iterative method based on intermediate theorem
+    T = beta.shape[1]
+    betanu = q_to_curve(bt)
     max_itr = 100
     a = zeros(max_itr)
     a[0] = 1
@@ -687,35 +686,41 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin, omax, omin):
         y2 = mrn
         a[ii] = (x1 * y2 - x2 * y1) / (y2 - y1)
 
-        gam_m = a[ii] * gmax + (1 - a[ii]) * gmin
-        beta2n = shift_f(beta2, ctr)
-        beta2new, R = find_best_rotation(beta1, beta2n)
-        for jj in range(2, max_itr):
-            x11 = a1[mrp_ind1]
-            x21 = a1[mrn_ind1]
-            y11 = mrp1
-            y21 = mrn1
-            a1[jj] = (x11 * y21 - x21 * y11) / (y21 - y11)
+        beta1, O_hat, tau = find_rotation_and_seed_coord(betanu, beta)
 
-            gam_m = a[ii] * gmax + (1 - a[ii]) * gmin
-            qnew = O_m.dot(q)
-            qnew = group_action_by_gamma(qnew, gam_m)
-            f1[jj] = innerprod_q(qnew, bt)
+        gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
-            if fabs(f1[jj]) < 1e-5:
-                break
-            elif f1[jj] > 0:
-                mrp = f1[jj]
-                mrp_ind = jj
-            else:
-                mrn = f[jj]
-                mrn_ind = ii
+        beta1 = group_action_by_gamma_coord(beta1, gamma)
+        beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
+        centroid2 = calculatecentroid(beta1)
+        beta1 = beta1 - tile(centroid2, [T, 1]).T
+        O_hat = O_hat.dot(O_hat1)
+        q1 = curve_to_q(beta1)
+        f[ii] = innerprod_q(q1, bt) - Y
 
+        if fabs(f[ii]) < 1e-5:
+            break
+        elif f[ii] > 0:
+            mrp = f[ii]
+            mrp_ind = ii
+        else:
+            mrn = f[ii]
+            mrn_ind = ii
 
-    return(gamma, O_hat)
+    gamma = a[ii] * gmax + (1 - a[ii]) * gmin
+
+    beta1, O_hat, tau = find_rotation_and_seed_coord(betanu, beta)
+
+    beta1 = group_action_by_gamma_coord(beta1, gamma)
+    beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
+    centroid2 = calculatecentroid(beta1)
+    beta1 = beta1 - tile(centroid2, [T, 1]).T
+    O_hat = O_hat.dot(O_hat1)
+
+    return (gamma, O_hat, beta1, tau)
 
 
 def rot_mat(theta):
-    O = array([(cos(theta), sin(theta)), (-1*sin(theta), cos(theta))])
+    O = array([(cos(theta), sin(theta)), (-1 * sin(theta), cos(theta))])
 
-    return(O)
+    return (O)
