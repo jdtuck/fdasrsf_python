@@ -10,11 +10,11 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 from scipy import dot
 from scipy.optimize import fmin_l_bfgs_b
-from scipy.integrate import trapz
+from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import inv, norm
 from patsy import bs
 from joblib import Parallel, delayed
-import mlogit_warp as mw
+# import ocmlogit_warp as mw
 import collections
 
 
@@ -118,7 +118,7 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
                 qn[:, :, ii] = cf.curve_to_q(beta1)
 
 
-        if abs(SSE[itr - 1] - SSE[itr - 2]) < 1e-15:
+        if np.abs(SSE[itr - 1] - SSE[itr - 2]) < 1e-15:
             break
         else:
             gamma = gamma_new
@@ -238,7 +238,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
                 beta[:, :, ii] = beta1
                 qn[:, :, ii] = cf.curve_to_q(beta1)
 
-        if abs(LL[itr] - LL[itr - 1]) < 1e-18:
+        if np.abs(LL[itr] - LL[itr - 1]) < 1e-18:
             break
         else:
             gamma = gamma_new
@@ -250,7 +250,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
         out = Parallel(n_jobs=cores)(delayed(logistic_warp)(nu,
                                                             beta0[:, :, ii], y[ii]) for ii in range(N))
         for ii in range(0, N):
-            gamma[:, ii] = out[ii][0]
+            gamma_new[:, ii] = out[ii][0]
             O_hat[:, :, ii] = out[ii][1]
             tau[ii] = out[ii][3]
     else:
@@ -269,100 +269,109 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     return out
 
 
-def oc_elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
-                         delta=.01, parallel=True, smooth=False):
+def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
+                         deltaO=.01, deltag=.01):
     """
     This function identifies a multinomial logistic regression model with
-    phase-variablity using elastic methods
+    phase-variablity using elastic methods for open curves
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param beta: numpy ndarray of shape (n, M, N) describing N curves
+    in R^M
     :param y: numpy array of labels {1,2,...,m} for m classes
-    :param time: vector of size N describing the sample points
     :param B: optional matrix describing Basis elements
     :param df: number of degrees of freedom B-spline (default 20)
+    :param T: number of desired samples along curve (default 100)
     :param max_itr: maximum number of iterations (default 20)
     :param cores: number of cores for parallel processing (default all)
-    :type f: np.ndarray
-    :type time: np.ndarray
+    :type beta: np.ndarray
 
     :rtype: tuple of numpy array
     :return alpha: alpha parameter of model
-    :return beta: beta(t) of model
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
-    :return qn: aligned srvfs - similar structure to fn
+    :return nu: nu(t) of model
+    :return betan: aligned curves - numpy ndarray of shape (n,T,N)
+    :return O: calulated rotation matrices
     :return gamma: calculated warping functions
-    :return q: original training SRSFs
     :return B: basis matrix
     :return b: basis coefficients
     :return Loss: logistic loss
 
     """
-    M = f.shape[0]
-    N = f.shape[1]
+    n = beta.shape[0]
+    N = beta.shape[2]
+    time = np.linspace(0, 1, T)
+
+    if n > 500:
+        parallel = True
+    elif T > 100:
+        parallel = True
+    else:
+        parallel = False
+
     # Code labels
     m = y.max()
     Y = np.zeros((N, m), dtype=int)
     for ii in range(0, N):
         Y[ii, y[ii] - 1] = 1
 
-    binsize = np.diff(time)
-    binsize = binsize.mean()
-
     # Create B-Spline Basis if none provided
     if B is None:
         B = bs(time, df=df, degree=4, include_intercept=True)
     Nb = B.shape[1]
 
-    q = uf.f_to_srsf(f, time, smooth)
+    q, beta = preproc_open_curve(beta, T)
+    qn = q.copy()
 
-    gamma = np.tile(np.linspace(0, 1, M), (N, 1))
+    gamma = np.tile(np.linspace(0, 1, T), (N, 1))
     gamma = gamma.transpose()
+    O_hat = np.zeros((n, n, N))
 
     itr = 1
-    LL = np.zeros(max_itr)
+    LL = np.zeros(max_itr+1)
     while itr <= max_itr:
         print("Iteration: %d" % itr)
-        # align data
-        fn = np.zeros((M, N))
-        qn = np.zeros((M, N))
-        for ii in range(0, N):
-            fn[:, ii] = np.interp((time[-1] - time[0]) * gamma[:, ii] +
-                                  time[0], time, f[:, ii])
-            qn[:, ii] = uf.warp_q_gamma(time, q[:, ii], gamma[:, ii])
 
-        Phi = np.ones((N, Nb + 1))
+        Phi = np.ones((N, n * Nb + 1))
         for ii in range(0, N):
-            for jj in range(1, Nb + 1):
-                Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj - 1], time)
+            for jj in range(0, n):
+                for kk in range(1, Nb + 1):
+                    Phi[ii, jj * Nb + kk] = trapz(qn[jj, :, ii] * B[:, kk - 1], time)
 
         # Find alpha and beta using l_bfgs
-        b0 = np.zeros(m * (Nb + 1))
+        b0 = np.zeros(m * (n * Nb + 1))
         out = fmin_l_bfgs_b(mlogit_loss, b0, fprime=mlogit_gradient,
                             args=(Phi, Y), pgtol=1e-10, maxiter=200,
                             maxfun=250, factr=1e-30)
         b = out[0]
-        B0 = b.reshape(Nb + 1, m)
+        B0 = b.reshape(n * Nb + 1, m)
         alpha = B0[0, :]
-        beta = np.zeros((M, m))
+        nu = np.zeros((n, T, m))
         for i in range(0, m):
-            beta[:, i] = B.dot(B0[1:Nb + 1, i])
+            for j in range(0, n):
+                nu[j, :, i] = B.dot(B0[(ii * Nb + 1):((ii + 1) * Nb + 1), i])
 
         # compute the logistic loss
-        LL[itr - 1] = mlogit_loss(b, Phi, Y)
+        LL[itr] = mlogit_loss(b, Phi, Y)
 
         # find gamma
-        gamma_new = np.zeros((M, N))
+        gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, beta,
-                                                                   time, q[:, n], Y[n, :], delta=delta) for n in
-                                         range(N))
-            gamma_new = np.array(out)
-            gamma_new = gamma_new.transpose()
+            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :],
+                                                                   deltaO=deltaO, deltag=deltag) for n in range(N))
+            for ii in range(0, N):
+                gamma_new[:, ii] = out[ii][0]
+                O_hat[:, :, ii] = out[ii][1]
+                beta_tmp = O_hat[:, :, ii].dot(beta[:, :, ii])
+                beta[:, :, ii][:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
+                qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                gamma_new[:, ii] = mlogit_warp_grad(alpha, beta, time,
-                                                    q[:, ii], Y[ii, :], delta=delta)
+                gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
+                                                  deltaO=deltaO, deltag=deltag)
+                gamma_new[:, ii] = gammatmp
+                O_hat[:, :, ii] = Otmp
+                beta_tmp = O_hat[:, :, ii].dot(beta[:, :, ii])
+                beta[:, :, ii][:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
+                qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
 
         if norm(gamma - gamma_new) < 1e-5:
             break
@@ -371,26 +380,24 @@ def oc_elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
 
         itr += 1
 
-    # Last Step with centering of gam
-    gamma = gamma_new
-    # gamI = uf.SqrtMeanInverse(gamma)
-    # gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    # beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
-    #                  beta) * np.sqrt(gamI_dev)
+    if parallel:
+        out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :],
+                                                               deltaO=deltaO, deltag=deltag) for n in range(N))
+        for ii in range(0, N):
+            gamma_new[:, ii] = out[ii][0]
+            O_hat[:, :, ii] = out[ii][1]
+    else:
+        for ii in range(0, N):
+            gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
+                                              deltaO=deltaO, deltag=deltag)
+            gamma_new[:, ii] = gammatmp
+            O_hat[:, :, ii] = Otmp
 
-    # for ii in range(0, N):
-    #     qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                           time, qn[:, ii]) * np.sqrt(gamI_dev)
-    #     fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                           time, fn[:, ii])
-    #     gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                              time, gamma[:, ii])
-
-    model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
-                                             'qn', 'gamma', 'q', 'B', 'b',
+    model = collections.namedtuple('model', ['alpha', 'nu', 'betan', 'q',
+                                             'gamma', 'O', 'B', 'b',
                                              'Loss', 'n_classes', 'type'])
-    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], LL[0:itr],
-                m, 'mlogistic')
+    out = model(alpha, nu, beta, q, gamma_new, O_hat, B, b[1:-1], LL[1:itr],
+                m, 'ocmlogistic')
     return out
 
 
@@ -400,7 +407,7 @@ def oc_elastic_prediction(beta, model, y=None):
     using elastic methods
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param model: indentified model from elastic_regression
+    :param model: identified model from elastic_regression
     :param y: truth, optional used to calculate SSE
 
     :rtype: tuple of numpy array
@@ -442,7 +449,7 @@ def oc_elastic_prediction(beta, model, y=None):
             y_pred[ii] = model.alpha + cf.innerprod_q(q_tmp, model.nu)
         elif model.type == 'ocmlogistic':
             for jj in range(0, m):
-                y_pred[ii, jj] = model.alpha[jj] + cf.innerprod_q(q_tmp, model.nu[:, jj])
+                y_pred[ii, jj] = model.alpha[jj] + cf.innerprod_q(q_tmp, model.nu[:, :, jj])
 
     if y is None:
         if model.type == 'oclinear':
@@ -698,3 +705,178 @@ def logit_hessian(s, b, X, y):
     Hs = X.T.dot(wa)
     out = Hs
     return out
+
+
+# helper functions for multinomial logistic regression
+def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-10,
+                     deltaO=0.008, deltag=0.008, display=0):
+    """
+    calculates optimal warping for functional multinomial logistic regression
+
+    :param alpha: scalar
+    :param nu: numpy ndarray of shape (M,N) of M functions with N samples
+    :param q: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+    :param max_itr: maximum number of iterations (Default=8000)
+    :param tol: stopping tolerance (Default=1e-10)
+    :param deltaO: gradient step size for rotation (Default=0.008)
+    :param deltag: gradient step size for warping (Default=0.008
+    :param display: display iterations (Default=0)
+
+    :rtype: tuple of numpy array
+    :return gam_old: warping function
+
+    """
+    n = q.shape[0]
+    TT = q.shape[1]
+    m = nu.shape[1]
+    time = np.linspace(0, 1, TT)
+    binsize = 1. / (TT - 1)
+
+    alpha = alpha/norm(alpha)
+    for i in range(0, m):
+        nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q(nu[:, :, i], nu[:, :, i]))
+
+    eps = np.finfo(np.double).eps
+    gam = np.linspace(0, 1, TT)
+    psi = np.sqrt(np.abs(np.gradient(gam, binsize)) + eps)
+    O = np.eye(n)
+    O_old = O.copy()
+    gam_old = gam.copy()
+    qtilde = q.copy()
+    # rotation basis (Skew Symmetric)
+    E = np.array([[0, -1.], [1., 0]])
+    # warping basis (Fourier)
+    p = 20
+    f_basis = np.zeros((TT, p))
+    for i in range(0, int(p/2)):
+        f_basis[:, 2*i] = 1/np.sqrt(np.pi) * np.sin(2*np.pi*(i+1)*time)
+        f_basis[:, 2*i + 1] = 1/np.sqrt(np.pi) * np.cos(2*np.pi*(i+1)*time)
+
+    itr = 0
+    max_val = np.zeros(max_itr+1)
+    while itr <= max_itr:
+        # inner product value
+        A = np.zeros(m)
+        for i in range(0, m):
+            A[i] = cf.innerprod_q(qtilde, nu[:, :, i])
+
+        # form gradient for rotation
+        B = np.zeros((n, n, m))
+        for i in range(0, m):
+            B[:, :, i] = cf.innerprod_q(E.dot(qtilde), nu[:, :, i]) * E
+
+        tmp1 = np.sum(np.exp(alpha + A))
+        tmp2 = np.sum(tmp1 * B, axis=2)
+        hO = np.sum(y * B, axis=1) - (tmp2 / tmp1)
+        O_new = O_old.dot(np.exp(deltaO * hO))
+
+        # form gradient for warping
+        qtilde_diff = np.gradient(qtilde, binsize)
+        qtilde_diff = qtilde_diff[1]
+        c = np.zeros((TT, m))
+        for i in range(0, m):
+            tmp3 = np.zeros((TT, p))
+            for j in range(0, p):
+                cbar = cumtrapz(f_basis[:, j] * f_basis[:, j], time, initial=0)
+                ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, j]
+                tmp3[:, j] = cf.innerprod_q(ctmp, nu[:, :, i]) * f_basis[:, j]
+
+            c[:, i] = np.sum(tmp3, axis=1)
+
+        tmp2 = np.sum(tmp1 * c, axis=2)
+        hpsi = np.sum(y * c, axis=1) - (tmp2 / tmp1)
+
+        vecnorm = norm(hpsi)
+        costmp = np.cos(deltag * vecnorm) * np.ones(TT)
+        sintmp = np.sin(deltag * vecnorm) * (hpsi / vecnorm)
+        psi_new = costmp + sintmp
+        gam_tmp = cumtrapz(psi_new * psi_new, time, initial=0)
+        gam_tmp = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
+        gam_new = np.interp(gam_tmp, time, gam_old)
+
+        max_val[itr] = np.sum(y * (alpha + A)) - np.log(tmp1)
+
+        if display == 1:
+            print("Iteration %d : Cost %f" % (itr+1, max_val[itr]))
+
+        gam_old = gam_new.copy()
+        O_old = O_new.copy()
+        qtilde = cf.group_action_by_gamma(O_old.dot(q), gam_old)
+
+        if itr >= 2:
+            max_val_change = max_val[itr] - max_val[itr-1]
+            if np.abs(max_val_change) < tol:
+                break
+
+        itr += 1
+
+    # gam_old = mw.mlogit_warp(np.ascontiguousarray(alpha),
+    #                          np.ascontiguousarray(beta),
+    #                          time, np.ascontiguousarray(q),
+    #                          np.ascontiguousarray(y, dtype=np.int32), max_itr,
+    #                          tol, delta, display)
+
+    return (gam_old, O_old)
+
+
+def mlogit_loss(b, X, Y):
+    """
+    calculates multinomial logistic loss (negative log-likelihood)
+
+    :param b: numpy ndarray of shape (M,N) of M functions with N samples
+    :param X: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return nll: negative log-likelihood
+
+    """
+    N, m = Y.shape  # n_samples, n_classes
+    M = X.shape[1]  # n_features
+    B = b.reshape(M, m)
+    Yhat = np.dot(X, B)
+    Yhat -= Yhat.min(axis=1)[:, np.newaxis]
+    Yhat = np.exp(-Yhat)
+    # l1-normalize
+    Yhat /= Yhat.sum(axis=1)[:, np.newaxis]
+
+    Yhat = Yhat * Y
+    nll = np.sum(np.log(Yhat.sum(axis=1)))
+    nll /= -float(N)
+
+    return nll
+
+
+def mlogit_gradient(b, X, Y):
+    """
+    calculates gradient of the multinomial logistic loss
+
+    :param b: numpy ndarray of shape (M,N) of M functions with N samples
+    :param X: numpy ndarray of shape (M,N) of M functions with N samples
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples
+    responses
+
+    :rtype: numpy array
+    :return grad: gradient
+
+    """
+    N, m = Y.shape  # n_samples, n_classes
+    M = X.shape[1]  # n_features
+    B = b.reshape(M, m)
+    Yhat = np.dot(X, B)
+    Yhat -= Yhat.min(axis=1)[:, np.newaxis]
+    Yhat = np.exp(-Yhat)
+    # l1-normalize
+    Yhat /= Yhat.sum(axis=1)[:, np.newaxis]
+
+    _Yhat = Yhat * Y
+    _Yhat /= _Yhat.sum(axis=1)[:, np.newaxis]
+    Yhat -= _Yhat
+    grad = np.dot(X.T, Yhat)
+    grad /= -float(N)
+    grad = grad.ravel()
+
+    return grad
