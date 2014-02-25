@@ -232,21 +232,24 @@ void innerprod_q(int *m1, double *t, double *q1, double *q2, double *out) {
 
 
 /* SRVF Inner Product */
-void innerprod_q2(int *m1, double *q1, double *q2, double *out) {
+void innerprod_q2(int *m1, double *q1, double *q2, double out) {
     int k;
     double *q;
     int m = *m1;
     int n1 = 2;
+    double out1 = 0.0;
 
+    out1 = 0.0;
     q = (double *) malloc(m*sizeof(double));
     for (k=0; k<n1*m; k++)
         q[k] = q1[k]*q2[k];
 
-    out = 0.0;
     for (k=0; k<n1*m; k++)
-        out += q[k];
+        out1 += q[k];
 
-    out = out/m;
+    out1 = out1/m;
+
+    out = out1;
 
     free(q);
 }
@@ -624,10 +627,10 @@ void group_action_by_gamma(int *n1, int *T1, double *q, double *gam, double *qn)
     double dt = 1/T, max=1, min=0;
     int j, k;
     double val;
-    double gammadot, qn[n*T], time[T], tmp[T];
-    double *gammadot_ptr, *val_ptr, *time_ptr, *tmp_ptr;
+    double gammadot[T], ti[T], tmp[T];
+    double *gammadot_ptr, *time_ptr, *tmp_ptr;
 
-    time_ptr = time;
+    time_ptr = ti;
     linspace(min, max, T, time_ptr);
     gammadot_ptr = gammadot;
     gradient(&T,&n,gam,&dt,gammadot_ptr);
@@ -638,15 +641,11 @@ void group_action_by_gamma(int *n1, int *T1, double *q, double *gam, double *qn)
             tmp[j] = q[n*j+k];
         spline(T, time_ptr, q, T, gam, tmp_ptr);
         for (j=0; j<T; j++)
-            qn[n*j+k] = tmp[j];
+            qn[n*j+k] = tmp[j]* sqrt(gammadot[j]);
 
     }
 
-    for (k=0; k<T*n; k++)
-        qn[k] = qn[k] * sqrt(gammadot)
-
-    val_ptr = val;
-    innerprod_q2(&T, qn, qn, val_ptr);
+    innerprod_q2(&T, qn, qn, val);
 
     for (k=0; k<T*n; k++)
         qn[k] = qn[k] / sqrt(val);

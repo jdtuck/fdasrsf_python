@@ -347,7 +347,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
         nu = np.zeros((n, T, m))
         for i in range(0, m):
             for j in range(0, n):
-                nu[j, :, i] = B.dot(B0[(ii * Nb + 1):((ii + 1) * Nb + 1), i])
+                nu[j, :, i] = B.dot(B0[(j * Nb + 1):((j + 1) * Nb + 1), i])
 
         # compute the logistic loss
         LL[itr] = mlogit_loss(b, Phi, Y)
@@ -730,7 +730,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-10,
     """
     n = q.shape[0]
     TT = q.shape[1]
-    m = nu.shape[1]
+    m = nu.shape[2]
     time = np.linspace(0, 1, TT)
     binsize = 1. / (TT - 1)
 
@@ -769,7 +769,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-10,
 
         tmp1 = np.sum(np.exp(alpha + A))
         tmp2 = np.sum(tmp1 * B, axis=2)
-        hO = np.sum(y * B, axis=1) - (tmp2 / tmp1)
+        hO = np.sum(y * B, axis=2) - (tmp2 / tmp1)
         O_new = O_old.dot(np.exp(deltaO * hO))
 
         # form gradient for warping
