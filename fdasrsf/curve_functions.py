@@ -684,7 +684,7 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
         x2 = a[mrn_ind]
         y1 = mrp
         y2 = mrn
-        a[ii] = (x1 * y2 - x2 * y1) / (y2 - y1)
+        a[ii] = (x1 * y2 - x2 * y1) / float(y2 - y1)
 
         beta1, O_hat, tau = find_rotation_and_seed_coord(betanu, beta)
 

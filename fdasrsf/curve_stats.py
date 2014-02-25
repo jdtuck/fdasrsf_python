@@ -65,7 +65,7 @@ def curve_karcher_mean(q, beta, mode='O'):
         sumv = v.sum(axis=2)
 
         # Compute average direction of tangent vectors v_i
-        vbar = sumv/N
+        vbar = sumv/float(N)
 
         normvbar[itr] = sqrt(cf.innerprod_q(vbar, vbar))
         normv = normvbar[itr]

@@ -475,7 +475,7 @@ def oc_elastic_prediction(beta, model, y=None):
             FP = sum(y[y_labels == -1] == 1)
             TN = sum(y[y_labels == -1] == -1)
             FN = sum(y[y_labels == 1] == -1)
-            PC = (TP + TN) / (TP + FP + FN + TN)
+            PC = (TP + TN) / float(TP + FP + FN + TN)
         elif model.type == 'ocmlogistic':
             y_pred = phi(y_pred.ravel())
             y_pred = y_pred.reshape(n, m)
@@ -489,9 +489,9 @@ def oc_elastic_prediction(beta, model, y=None):
                 TN = sum(y[np.in1d(y_labels, cls_sub)] ==
                          y_labels[np.in1d(y_labels, cls_sub)])
                 FN = sum(np.in1d(y[y_labels == (ii + 1)], cls_sub))
-                PC[ii] = (TP + TN) / (TP + FP + FN + TN)
+                PC[ii] = (TP + TN) / float(TP + FP + FN + TN)
 
-            PC = sum(y == y_labels) / y_labels.size
+            PC = sum(y == y_labels) / float(y_labels.size)
 
     if model.type == 'oclinear':
         prediction = collections.namedtuple('prediction', ['y_pred', 'SSE'])

@@ -198,7 +198,7 @@ def invertGamma(gam):
 
     """
     N = gam.size
-    x = arange(1, N+1) / double(N)
+    x = arange(1, N+1) / float(N)
     s = interp1d(gam, x)
     gamI = s(x)
     gamI = (gamI - gamI[0]) / (gamI[-1] - gamI[0])
@@ -507,7 +507,7 @@ def diffop(n, binsize=1):
     m = inner(m.transpose(), m)
     m[0, 0] = 6
     m[-1, -1] = 6
-    m /= (binsize ** 4)
+    m /= (binsize ** 4.)
 
     return m
 
@@ -552,8 +552,8 @@ def geigen(Amat, Bmat, Cmat):
         print("CMAT not symmetric..\n")
         sys.exit(1)
 
-    Bmat = (Bmat + Bmat.transpose()) / 2
-    Cmat = (Cmat + Cmat.transpose()) / 2
+    Bmat = (Bmat + Bmat.transpose()) / 2.
+    Cmat = (Cmat + Cmat.transpose()) / 2.
     Bfac = cholesky(Bmat)
     Cfac = cholesky(Cmat)
     Bfacinv = inv(Bfac)
@@ -677,7 +677,7 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
         x2 = a[mrn_ind]
         y1 = mrp
         y2 = mrn
-        a[ii] = (x1 * y2 - x2 * y1) / (y2 - y1)
+        a[ii] = (x1 * y2 - x2 * y1) / float(y2 - y1)
 
         gam_m = a[ii] * gmax + (1 - a[ii]) * gmin
         qtmp = warp_q_gamma(time, q, gam_m)

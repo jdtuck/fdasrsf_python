@@ -75,7 +75,7 @@ def geod_sphere(beta1, beta2, k=5):
         PsiQ = zeros((n, T, k))
         PsiX = zeros((n, T, k))
         for tau in range(0, k):
-            s = dist * tau / (k - 1)
+            s = dist * tau / (k - 1.)
             PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
             PsiX[:, :, tau] = cf.q_to_curve(PsiQ[:, :, tau])
 
@@ -245,7 +245,7 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
 
     i = 0
     for tau in range(2, int((k-1)/2)+1):
-        t[i] = (tau-1)/((k-1)/2)
+        t[i] = (tau-1.)/((k-1)/2.)
         qnew = (1/sin(theta1))*(sin((1-t[i])*theta1)*q1+sin(t[i]*theta1)*q_mid)
         alpha[:, :, tau-1] = cf.project_curve(qnew)
         x = cf.q_to_curve(alpha[:, :, tau-1])
@@ -403,7 +403,7 @@ def cov_integral(alpha, alphadot, basis, T=100, k=5):
         q2 = alpha[:, :, tau]
         b = basis[tau]
         wbar = cf.parallel_translate(w, q1, q2, b)
-        u[:, :, tau] = (1/(k-1))*alphadot[:, :, tau]+wbar
+        u[:, :, tau] = (1./(k-1))*alphadot[:, :, tau]+wbar
 
     return(u)
 
@@ -453,7 +453,7 @@ def calculate_gradE(u, utilde, T=100, k=5):
     normgradE = zeros(k)
 
     for tau in range(2, k+1):
-        gradE[:, :, tau-1] = u[:, :, tau-1] - ((tau-1)/(k-1)) * utilde[:, :, tau-1]
+        gradE[:, :, tau-1] = u[:, :, tau-1] - ((tau-1.)/(k-1.)) * utilde[:, :, tau-1]
         normgradE[tau-1] = sqrt(cf.innerprod_q(gradE[:, :, tau-1], gradE[:, :, tau-1]))
 
     return(gradE, normgradE)
