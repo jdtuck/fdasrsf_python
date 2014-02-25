@@ -232,26 +232,25 @@ void innerprod_q(int *m1, double *t, double *q1, double *q2, double *out) {
 
 
 /* SRVF Inner Product */
-void innerprod_q2(int *m1, double *q1, double *q2, double out) {
+double innerprod_q2(int *m1, double *q1, double *q2) {
     int k;
     double *q;
     int m = *m1;
     int n1 = 2;
-    double out1 = 0.0;
+    double out = 0.0;
 
-    out1 = 0.0;
     q = (double *) malloc(m*sizeof(double));
     for (k=0; k<n1*m; k++)
         q[k] = q1[k]*q2[k];
 
     for (k=0; k<n1*m; k++)
-        out1 += q[k];
+        out += q[k];
 
-    out1 = out1/m;
-
-    out = out1;
+    out = out/m;
 
     free(q);
+
+    return(out);
 }
 
 
@@ -645,7 +644,7 @@ void group_action_by_gamma(int *n1, int *T1, double *q, double *gam, double *qn)
 
     }
 
-    innerprod_q2(&T, qn, qn, val);
+    val = innerprod_q2(&T, qn, qn);
 
     for (k=0; k<T*n; k++)
         qn[k] = qn[k] / sqrt(val);

@@ -27,7 +27,7 @@ void simpson(int *m1, int *n1, double *x, double *y, double *out);
 void innerprod_q(int *m1, double *t, double *q1, double *q2, double *out);
 
 /* SRVF Inner Product */
-void innerprod_q2(int *m1, double *q1, double *q2, double out);
+double innerprod_q2(int *m1, double *q1, double *q2);
 
 /* 1-D Sample Covariance */
 void cov(int n, double *x, double *y, double *out);

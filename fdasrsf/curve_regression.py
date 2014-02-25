@@ -11,7 +11,7 @@ import fdasrsf.curve_functions as cf
 from scipy import dot
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.integrate import trapz, cumtrapz
-from scipy.linalg import inv, norm
+from scipy.linalg import inv, norm, expm
 from patsy import bs
 from joblib import Parallel, delayed
 # import ocmlogit_warp as mw
@@ -270,7 +270,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
 
 
 def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
-                         deltaO=.01, deltag=.01):
+                         deltaO=.003, deltag=.003):
     """
     This function identifies a multinomial logistic regression model with
     phase-variablity using elastic methods for open curves
@@ -370,7 +370,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
                 gamma_new[:, ii] = gammatmp
                 O_hat[:, :, ii] = Otmp
                 beta_tmp = O_hat[:, :, ii].dot(beta[:, :, ii])
-                beta[:, :, ii][:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
+                beta[:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
 
         if norm(gamma - gamma_new) < 1e-5:
@@ -437,7 +437,10 @@ def oc_elastic_prediction(beta, model, y=None):
     for ii in range(0, n):
         diff = model.q - q[:, :, ii][:, :, np.newaxis]
         dist = np.linalg.norm(np.abs(diff) ** 2, axis=(0, 1))
-        beta1 = cf.shift_f(beta[:, :, ii], int(model.tau[dist.argmin()]))
+        if model.type == 'oclinear' or model.type == 'oclogistic':
+            beta1 = cf.shift_f(beta[:, :, ii], int(model.tau[dist.argmin()]))
+        else:
+            beta1 = beta[:, :, ii]
         beta1 = model.O[:, :, dist.argmin()].dot(beta1)
         beta1 = cf.group_action_by_gamma_coord(beta1,
                                                model.gamma[:, dist.argmin()])
@@ -708,7 +711,7 @@ def logit_hessian(s, b, X, y):
 
 
 # helper functions for multinomial logistic regression
-def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-10,
+def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
                      deltaO=0.008, deltag=0.008, display=0):
     """
     calculates optimal warping for functional multinomial logistic regression
@@ -736,11 +739,10 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-10,
 
     alpha = alpha/norm(alpha)
     for i in range(0, m):
-        nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q(nu[:, :, i], nu[:, :, i]))
+        nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q(nu[:, :, i],
+                                          nu[:, :, i]))
 
-    eps = np.finfo(np.double).eps
     gam = np.linspace(0, 1, TT)
-    psi = np.sqrt(np.abs(np.gradient(gam, binsize)) + eps)
     O = np.eye(n)
     O_old = O.copy()
     gam_old = gam.copy()
@@ -768,9 +770,9 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-10,
             B[:, :, i] = cf.innerprod_q(E.dot(qtilde), nu[:, :, i]) * E
 
         tmp1 = np.sum(np.exp(alpha + A))
-        tmp2 = np.sum(tmp1 * B, axis=2)
+        tmp2 = np.sum(np.exp(alpha + A) * B, axis=2)
         hO = np.sum(y * B, axis=2) - (tmp2 / tmp1)
-        O_new = O_old.dot(np.exp(deltaO * hO))
+        O_new = O_old.dot(expm(deltaO * hO))
 
         # form gradient for warping
         qtilde_diff = np.gradient(qtilde, binsize)
@@ -785,7 +787,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-10,
 
             c[:, i] = np.sum(tmp3, axis=1)
 
-        tmp2 = np.sum(tmp1 * c, axis=2)
+        tmp2 = np.sum(np.exp(alpha + A) * c, axis=1)
         hpsi = np.sum(y * c, axis=1) - (tmp2 / tmp1)
 
         vecnorm = norm(hpsi)

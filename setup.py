@@ -67,7 +67,7 @@ ext_modules_mlogit = Extension(
 
 ext_modules_ocmlogit = Extension(
     name="ocmlogit_warp",
-    sources=["src/ocmlogit_warp.pyx", "src/ocmlogit_warp_grad.c", "src/misc_funcs.c"],
+    sources=["src/ocmlogit_warp.pyx", "src/ocmlogit_warp_grad.c", "src/misc_funcs.c", "src/matrix_exponential.c", "src/c8lib.c", "src/r8lib.c"],
     include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
     language="c",
     # libraries=
