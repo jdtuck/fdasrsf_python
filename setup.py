@@ -38,7 +38,7 @@ class build_docs(Command):
 ext_modules_dp = Extension(
     name="optimum_reparamN",
     sources=["src/optimum_reparamN.pyx", "src/DynamicProgrammingQ2.c", "src/dp_grid.c"],
-    include_dirs=[numpy.get_include()], # .../site-packages/numpy/core/include
+    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
     language="c",
     # libraries=
     # extra_compile_args = "...".split(),
@@ -48,7 +48,7 @@ ext_modules_dp = Extension(
 ext_modules_pls = Extension(
     name="fpls_warp",
     sources=["src/fpls_warp.pyx", "src/fpls_warp_grad.c", "src/misc_funcs.c"],
-    include_dirs=[numpy.get_include()], # .../site-packages/numpy/core/include
+    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
     language="c",
     # libraries=
     # extra_compile_args = "...".split(),
@@ -58,7 +58,17 @@ ext_modules_pls = Extension(
 ext_modules_mlogit = Extension(
     name="mlogit_warp",
     sources=["src/mlogit_warp.pyx", "src/mlogit_warp_grad.c", "src/misc_funcs.c"],
-    include_dirs=[numpy.get_include()], # .../site-packages/numpy/core/include
+    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
+    language="c",
+    # libraries=
+    # extra_compile_args = "...".split(),
+    # extra_link_args = "...".split()
+)
+
+ext_modules_ocmlogit = Extension(
+    name="ocmlogit_warp",
+    sources=["src/ocmlogit_warp.pyx", "src/ocmlogit_warp_grad.c", "src/misc_funcs.c"],
+    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
     language="c",
     # libraries=
     # extra_compile_args = "...".split(),
@@ -67,7 +77,7 @@ ext_modules_mlogit = Extension(
 
 setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
-    ext_modules=[ext_modules_dp, ext_modules_pls, ext_modules_mlogit],
+    ext_modules=[ext_modules_dp, ext_modules_pls, ext_modules_mlogit, ext_modules_ocmlogit],
 
     name='fdasrsf',
     version='1.2.0',

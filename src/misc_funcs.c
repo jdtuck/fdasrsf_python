@@ -27,6 +27,25 @@ void trapz(int *m, int *n, double *x, double *y, double *out) {
 }
 
 
+/* Trapezoidal numerical integration in third dimension. */
+void trapz3(int nr, int nc, int nd, double *x, double *y, double *z) {
+    /* x is [1 x nd]
+     * y is [nr x nc x nd]
+     * z is [nr x nc] */
+    int k, j, i, ij;
+    int nrc = nr*nc;
+
+    for (i=0; i<nr; i++)
+        for (j=0; j<nc; j++) {
+            ij = i+j*nr;
+            z[ij] = 0;
+            for (k=0; k<nd-1; k++)
+                z[ij] += (x[k+1]-x[k])*(y[ij+(k+1)*nrc]+y[ij+k*nrc]);
+            z[ij] *= 0.5;
+        }
+}
+
+
 void pvecnorm2(int *n, double *x, double *dt, double *out) {
     int k;
     *out = 0.0;
@@ -97,6 +116,40 @@ void gradient(int *m, int *n, double *f, double *binsize, double *g) {
     }
 }
 
+/* Computes gradient in across columns of f. */
+void col_gradient(int nrows, int ncols, double *f, double step, double *df) {
+    int k, j;
+    int colN = nrows*(ncols-1);
+    int colN1 = nrows*(ncols-2);
+
+    for (k=0; k<nrows; k++) { /* loop over rows of f */
+        /* Take forward differences on left and right edges */
+        df[k] = (f[k+nrows] - f[k])/step;
+        df[k+colN] = (f[k+colN] - f[k+colN1])/step;
+
+        /* Take centered differences on interior points */
+        for (j=1; j<ncols-1; j++) {
+            df[k+j*nrows] = (f[k+(j+1)*nrows]-f[k+(j-1)*nrows])/(2*step);
+        }
+    }
+}
+
+
+/* Matrix product operation (c = a*b) */
+void product(int m, int n, int nn, double *a, double *b, double *c) {
+    /* a is [m x n]
+     * b is [n x nn]
+     * c is [m x nn] */
+    int k, j, i;
+
+    for (k=0; k<m; k++)
+        for (j=0; j<nn; j++) {
+            c[k+j*m] = 0; /* zero out c[k,j] */
+            for (i=0; i<n; i++)
+                c[k+j*m] += a[k+i*m]*b[i+j*n];
+            }
+}
+
 
 void cumtrapz(int *n, double *x, double *y, double *z) {
     int k;
@@ -161,7 +214,7 @@ void simpson(int *m1, int *n1, double *x, double *y, double *out) {
     }
 }
 
-
+/* SRSF Inner Product */
 void innerprod_q(int *m1, double *t, double *q1, double *q2, double *out) {
     int k;
     double *q;
@@ -173,6 +226,30 @@ void innerprod_q(int *m1, double *t, double *q1, double *q2, double *out) {
         q[k] = q1[k]*q2[k];
 
     trapz(m1, &n1, t, q, out);
+
+    free(q);
+}
+
+
+/* SRVF Inner Product */
+void innerprod_q2(int *m1, double *q1, double *q2, double out) {
+    int k;
+    double *q;
+    int m = *m1;
+    int n1 = 2;
+    double out1 = 0.0;
+
+    out1 = 0.0;
+    q = (double *) malloc(m*sizeof(double));
+    for (k=0; k<n1*m; k++)
+        q[k] = q1[k]*q2[k];
+
+    for (k=0; k<n1*m; k++)
+        out1 += q[k];
+
+    out1 = out1/m;
+
+    out = out1;
 
     free(q);
 }
@@ -522,5 +599,56 @@ void SqrtMeanInverse(int *T1, int *n1, double *ti, double *gami, double *out){
     invertGamma(T, gam_mu_ptr, out);
 
     free(x);
+    return;
+}
+
+
+/* linear spaced vector */
+void linspace(double min, double max, int n, double *result){
+    int iterator = 0;
+    int i;
+    double temp;
+
+    for (i = 0; i <= n-2; i++){
+        temp = min + i*(max-min)/(floor((double)n) - 1);
+        result[iterator] = temp;
+        iterator += 1;
+     }
+
+    result[iterator] = max;
+
+    return;
+}
+
+
+/* reparameterize srvf q by gamma */
+void group_action_by_gamma(int *n1, int *T1, double *q, double *gam, double *qn){
+    int T = *T1, n = *n1;
+    double dt = 1/T, max=1, min=0;
+    int j, k;
+    double val;
+    double gammadot[T], ti[T], tmp[T];
+    double *gammadot_ptr, *time_ptr, *tmp_ptr;
+
+    time_ptr = ti;
+    linspace(min, max, T, time_ptr);
+    gammadot_ptr = gammadot;
+    gradient(&T,&n,gam,&dt,gammadot_ptr);
+
+    tmp_ptr = tmp;
+    for (k=0; k<n; k++){
+        for (j=0; j<T; j++)
+            tmp[j] = q[n*j+k];
+        spline(T, time_ptr, q, T, gam, tmp_ptr);
+        for (j=0; j<T; j++)
+            qn[n*j+k] = tmp[j]* sqrt(gammadot[j]);
+
+    }
+
+    innerprod_q2(&T, qn, qn, val);
+
+    for (k=0; k<T*n; k++)
+        qn[k] = qn[k] / sqrt(val);
+
     return;
 }
