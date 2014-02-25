@@ -198,7 +198,7 @@ def invertGamma(gam):
 
     """
     N = gam.size
-    x = arange(1, N+1)/N
+    x = arange(1, N+1) / double(N)
     s = interp1d(gam, x)
     gamI = s(x)
     gamI = (gamI - gamI[0]) / (gamI[-1] - gamI[0])
