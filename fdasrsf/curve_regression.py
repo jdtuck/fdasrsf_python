@@ -320,6 +320,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
 
     q, beta = preproc_open_curve(beta, T)
     qn = q.copy()
+    beta0 = beta.copy()
 
     gamma = np.tile(np.linspace(0, 1, T), (N, 1))
     gamma = gamma.transpose()
@@ -355,7 +356,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :],
+            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, qn[:, :, n], Y[n, :],
                                                                    deltaO=deltaO, deltag=deltag) for n in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
@@ -365,7 +366,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
+                gammatmp, Otmp = mlogit_warp_grad(alpha, nu, qn[:, :, ii], Y[ii, :],
                                                   deltaO=deltaO, deltag=deltag)
                 gamma_new[:, ii] = gammatmp
                 O_hat[:, :, ii] = Otmp
@@ -406,7 +407,7 @@ def oc_elastic_prediction(beta, model, y=None):
     This function identifies a regression model with phase-variablity
     using elastic methods
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
     :param model: identified model from elastic_regression
     :param y: truth, optional used to calculate SSE
 
@@ -447,12 +448,12 @@ def oc_elastic_prediction(beta, model, y=None):
         q_tmp = cf.curve_to_q(beta1)
 
         if model.type == 'oclinear':
-            y_pred[ii] = model.alpha + cf.innerprod_q(q_tmp, model.nu)
+            y_pred[ii] = model.alpha + cf.innerprod_q2(q_tmp, model.nu)
         elif model.type == 'oclogistic':
-            y_pred[ii] = model.alpha + cf.innerprod_q(q_tmp, model.nu)
+            y_pred[ii] = model.alpha + cf.innerprod_q2(q_tmp, model.nu)
         elif model.type == 'ocmlogistic':
             for jj in range(0, m):
-                y_pred[ii, jj] = model.alpha[jj] + cf.innerprod_q(q_tmp, model.nu[:, :, jj])
+                y_pred[ii, jj] = model.alpha[jj] + cf.innerprod_q2(q_tmp, model.nu[:, :, jj])
 
     if y is None:
         if model.type == 'oclinear':
@@ -555,7 +556,7 @@ def regression_warp(nu, beta, y, alpha):
     betaM = betaM - np.tile(centroid2, [T, 1]).T
     O_M = O_M.dot(O_hat1)
     qM = cf.curve_to_q(betaM)
-    y_M = cf.innerprod_q(qM, nu)
+    y_M = cf.innerprod_q2(qM, nu)
 
     betam, O_m, taum = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
     q = cf.curve_to_q(betam)
@@ -567,7 +568,7 @@ def regression_warp(nu, beta, y, alpha):
     betam = betam - np.tile(centroid2, [T, 1]).T
     O_m = O_m.dot(O_hat1)
     qm = cf.curve_to_q(betam)
-    y_m = cf.innerprod_q(qm, nu)
+    y_m = cf.innerprod_q2(qm, nu)
 
     if y > alpha + y_M:
         O_hat = O_M
@@ -739,7 +740,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
 
     alpha = alpha/norm(alpha)
     for i in range(0, m):
-        nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q(nu[:, :, i],
+        nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q2(nu[:, :, i],
                                           nu[:, :, i]))
 
     gam = np.linspace(0, 1, TT)
@@ -762,12 +763,12 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
         # inner product value
         A = np.zeros(m)
         for i in range(0, m):
-            A[i] = cf.innerprod_q(qtilde, nu[:, :, i])
+            A[i] = cf.innerprod_q2(qtilde, nu[:, :, i])
 
         # form gradient for rotation
         B = np.zeros((n, n, m))
         for i in range(0, m):
-            B[:, :, i] = cf.innerprod_q(E.dot(qtilde), nu[:, :, i]) * E
+            B[:, :, i] = cf.innerprod_q2(E.dot(qtilde), nu[:, :, i]) * E
 
         tmp1 = np.sum(np.exp(alpha + A))
         tmp2 = np.sum(np.exp(alpha + A) * B, axis=2)
@@ -783,7 +784,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
             for j in range(0, p):
                 cbar = cumtrapz(f_basis[:, j] * f_basis[:, j], time, initial=0)
                 ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, j]
-                tmp3[:, j] = cf.innerprod_q(ctmp, nu[:, :, i]) * f_basis[:, j]
+                tmp3[:, j] = cf.innerprod_q2(ctmp, nu[:, :, i]) * f_basis[:, j]
 
             c[:, i] = np.sum(tmp3, axis=1)
 

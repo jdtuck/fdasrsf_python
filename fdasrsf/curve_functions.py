@@ -138,7 +138,7 @@ def optimum_reparam_curve(q1, q2, lam=0.0):
     return gam
 
 
-def innerprod_q(q1, q2):
+def innerprod_q2(q1, q2):
     """
     This function calculates the inner product in srvf space
 
@@ -351,7 +351,7 @@ def find_rotation_and_seed_coord(beta1, beta2):
         beta2n = shift_f(beta2, ctr)
         beta2new, R = find_best_rotation(beta1, beta2n)
         q2new = curve_to_q(beta2new)
-        Ltwo[ctr] = innerprod_q(q1 - q2new, q1 - q2new)
+        Ltwo[ctr] = innerprod_q2(q1 - q2new, q1 - q2new)
         Rlist[:, :, ctr] = R
 
     tau = Ltwo.argmin()
@@ -402,7 +402,7 @@ def group_action_by_gamma(q, gamma):
         s = InterpolatedUnivariateSpline(linspace(0, 1, T), q[j, :], k=3)
         qn[j, :] = s(gamma) * sqrt(gammadot)
 
-    qn = qn / sqrt(innerprod_q(qn, qn))
+    qn = qn / sqrt(innerprod_q2(qn, qn))
 
     return (qn)
 
@@ -440,9 +440,9 @@ def project_curve(q):
         # Newton-Raphson step to update q
         y = solve(j, -r)
         dq = delta * (y[0] * basis[0] + y[1] * basis[1])
-        normdq = sqrt(innerprod_q(dq, dq))
+        normdq = sqrt(innerprod_q2(dq, dq))
         q = cos(normdq) * q + sin(normdq) * dq / normdq
-        q /= sqrt(innerprod_q(q, q))
+        q /= sqrt(innerprod_q2(q, q))
 
         # update x and a from the new q
         beta_new = q_to_curve(q)
@@ -528,7 +528,7 @@ def inverse_exp_coord(beta1, beta2):
     q2n = curve_to_q(beta2)
 
     # Compute geodesic distance
-    q1dotq2 = innerprod_q(q1, q2n)
+    q1dotq2 = innerprod_q2(q1, q2n)
     dist = arccos(q1dotq2)
 
     # Compute shooting vector
@@ -536,7 +536,7 @@ def inverse_exp_coord(beta1, beta2):
         q1dotq2 = 1
 
     u = q2n - q1dotq2 * q1
-    normu = sqrt(innerprod_q(u, u))
+    normu = sqrt(innerprod_q2(u, u))
 
     if normu > 1e-4:
         v = u * arccos(q1dotq2) / normu
@@ -559,9 +559,9 @@ def gram_schmidt(basis):
     b1 = basis[0]
     b2 = basis[1]
 
-    basis1 = b1 / sqrt(innerprod_q(b1, b1))
-    b2 = b2 - innerprod_q(basis1, b2) * basis1
-    basis2 = b2 / sqrt(innerprod_q(b2, b2))
+    basis1 = b1 / sqrt(innerprod_q2(b1, b1))
+    b2 = b2 - innerprod_q2(basis1, b2) * basis1
+    basis2 = b2 / sqrt(innerprod_q2(b2, b2))
 
     basis_o = [basis1, basis2]
 
@@ -580,10 +580,10 @@ def project_tangent(w, q, basis):
     :return wproj: projected q
 
     """
-    w = w - innerprod_q(w, q) * q
+    w = w - innerprod_q2(w, q) * q
     bo = gram_schmidt(basis)
 
-    wproj = w - innerprod_q(w, bo[0]) * bo[0] - innerprod_q(w, bo[1]) * bo[1]
+    wproj = w - innerprod_q2(w, bo[0]) * bo[0] - innerprod_q2(w, bo[1]) * bo[1]
 
     return (wproj)
 
@@ -633,12 +633,12 @@ def parallel_translate(w, q1, q2, basis, mode=0):
     else:
         mode = mode[0]
 
-    wtilde = w - 2 * innerprod_q(w, q2) / innerprod_q(q1 + q2, q1 + q2) * (q1 + q2)
-    l = sqrt(innerprod_q(wtilde, wtilde))
+    wtilde = w - 2 * innerprod_q2(w, q2) / innerprod_q2(q1 + q2, q1 + q2) * (q1 + q2)
+    l = sqrt(innerprod_q2(wtilde, wtilde))
 
     if mode == 1:
         wbar = project_tangent(wtilde, q2, basis)
-        normwbar = sqrt(innerprod_q(wbar, wbar))
+        normwbar = sqrt(innerprod_q2(wbar, wbar))
         if normwbar > 10 ** (-4):
             wbar = wbar * l / normwbar
     else:
@@ -696,7 +696,7 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
         beta1 = beta1 - tile(centroid2, [T, 1]).T
         O_hat = O_hat.dot(O_hat1)
         q1 = curve_to_q(beta1)
-        f[ii] = innerprod_q(q1, bt) - Y
+        f[ii] = innerprod_q2(q1, bt) - Y
 
         if fabs(f[ii]) < 1e-5:
             break

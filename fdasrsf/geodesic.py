@@ -69,7 +69,7 @@ def geod_sphere(beta1, beta2, k=5):
         O = O1
 
     # Forming geodesic between the registered curves
-    dist = arccos(cf.innerprod_q(q1, q2n))
+    dist = arccos(cf.innerprod_q2(q1, q2n))
 
     if returnpath:
         PsiQ = zeros((n, T, k))
@@ -236,8 +236,8 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
     O = O1.dot(O2)
 
     # Initialize a path as a geodesic through q1 --- q_mid --- q2
-    theta1 = arccos(cf.innerprod_q(q1, q_mid))
-    theta2 = arccos(cf.innerprod_q(q_mid, q2n))
+    theta1 = arccos(cf.innerprod_q2(q1, q_mid))
+    theta2 = arccos(cf.innerprod_q2(q_mid, q2n))
     tmp = arange(2, int((k-1)/2)+1)
     t = zeros(tmp.size)
     alpha[:, :, 0] = q1
@@ -454,7 +454,7 @@ def calculate_gradE(u, utilde, T=100, k=5):
 
     for tau in range(2, k+1):
         gradE[:, :, tau-1] = u[:, :, tau-1] - ((tau-1.)/(k-1.)) * utilde[:, :, tau-1]
-        normgradE[tau-1] = sqrt(cf.innerprod_q(gradE[:, :, tau-1], gradE[:, :, tau-1]))
+        normgradE[tau-1] = sqrt(cf.innerprod_q2(gradE[:, :, tau-1], gradE[:, :, tau-1]))
 
     return(gradE, normgradE)
 
@@ -503,7 +503,7 @@ def geod_dist_path_strt(beta, k=5):
         beta2 = beta[:, :, i]
         q1 = cf.curve_to_q(beta1)
         q2 = cf.curve_to_q(beta2)
-        d = arccos(cf.innerprod_q(q1, q2))
+        d = arccos(cf.innerprod_q2(q1, q2))
         dist += d
 
     return(dist)

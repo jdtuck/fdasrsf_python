@@ -51,7 +51,7 @@ def curve_karcher_mean(q, beta, mode='O'):
     while itr < maxit:
         print("Iteration: %d" % itr)
 
-        mu = mu / sqrt(cf.innerprod_q(mu, mu))
+        mu = mu / sqrt(cf.innerprod_q2(mu, mu))
 
         sumv = zeros((2, T))
         sumd[itr+1] = 0
@@ -67,7 +67,7 @@ def curve_karcher_mean(q, beta, mode='O'):
         # Compute average direction of tangent vectors v_i
         vbar = sumv/float(N)
 
-        normvbar[itr] = sqrt(cf.innerprod_q(vbar, vbar))
+        normvbar[itr] = sqrt(cf.innerprod_q2(vbar, vbar))
         normv = normvbar[itr]
 
         if normv > tolv and fabs(sumd[itr+1]-sumd[itr]) > told:
@@ -178,7 +178,7 @@ def curve_principal_directions(betamean, mu, K, mode='O', no=3, N=5):
 
         # Forward direction from mean
         for i in range(0, N):
-            normv = sqrt(cf.innerprod_q(v, v))
+            normv = sqrt(cf.innerprod_q2(v, v))
 
             if normv < 1e-4:
                 q2 = mu
@@ -203,7 +203,7 @@ def curve_principal_directions(betamean, mu, K, mode='O', no=3, N=5):
         v = -sqrt(s[m])*princDir
         q1 = mu
         for i in range(0, N):
-            normv = sqrt(cf.innerprod_q(v, v))
+            normv = sqrt(cf.innerprod_q2(v, v))
 
             if normv < 1e-4:
                 q2 = mu
@@ -281,7 +281,7 @@ def sample_shapes(mu, K, mode='O', no=3, numSamp=10):
 
         q1 = mu
         for j in range(0, N-1):
-            normv = sqrt(cf.innerprod_q(v, v))
+            normv = sqrt(cf.innerprod_q2(v, v))
 
             if normv < 1e-4:
                 q2 = mu
