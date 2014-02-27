@@ -92,6 +92,8 @@ def curve_to_q(beta):
         else:
             q[:, i] = v[:, i] * 0.0001
 
+    q = q / sqrt(innerprod_q2(q, q))
+
     return (q)
 
 
@@ -334,8 +336,8 @@ def find_rotation_and_seed_coord(beta1, beta2):
     This function returns a candidate list of optimally oriented and
     registered (seed) shapes w.r.t. beta1
 
+    :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
-    :param q2: numpy ndarray of shape (2,M) of M samples
 
     :rtype: numpy ndarray
     :return beta2new: optimal rotated beta2 to beta1
@@ -360,6 +362,37 @@ def find_rotation_and_seed_coord(beta1, beta2):
     beta2new = O_hat.dot(beta2new)
 
     return (beta2new, O_hat, tau)
+
+
+def find_rotation_and_seed_q(q1, q2):
+    """
+    This function returns a candidate list of optimally oriented and
+    registered (seed) shapes w.r.t. beta1
+
+    :param q1: numpy ndarray of shape (2,M) of M samples
+    :param q2: numpy ndarray of shape (2,M) of M samples
+
+    :rtype: numpy ndarray
+    :return beta2new: optimal rotated beta2 to beta1
+    :return O: rotation matrix
+    :return tau: seed
+
+    """
+    n, T = q1.shape
+    Ltwo = zeros(T)
+    Rlist = zeros((n, n, T))
+    for ctr in range(0, T):
+        q2n = shift_f(q2, ctr)
+        q2new, R = find_best_rotation(q1, q2n)
+        Ltwo[ctr] = innerprod_q2(q1 - q2new, q1 - q2new)
+        Rlist[:, :, ctr] = R
+
+    tau = Ltwo.argmin()
+    O_hat = Rlist[:, :, tau]
+    q2new = shift_f(q2, tau)
+    q2new = O_hat.dot(q2new)
+
+    return (q2new, O_hat, tau)
 
 
 def group_action_by_gamma_coord(f, gamma):
@@ -544,6 +577,56 @@ def inverse_exp_coord(beta1, beta2):
         v = zeros((2, T))
 
     return (v, dist)
+
+
+def inverse_exp(q1, q2, beta2):
+    """
+    Calculate the inverse exponential to obtain a shooting vector from
+    beta1 to beta2 in shape space of open curves
+
+    :param q1: numpy ndarray of shape (2,M) of M samples
+    :param q2: numpy ndarray of shape (2,M) of M samples
+    :param beta2: numpy ndarray of shape (2,M) of M samples
+
+    :rtype: numpy ndarray
+    :return v: shooting vectors
+
+    """
+    T = q1.shape[1]
+    centroid1 = calculatecentroid(beta2)
+    beta2 = beta2 - tile(centroid1, [T, 1]).T
+
+    # Optimize over SO(n)
+    q2, O_hat, tau = find_rotation_and_seed_q(q1, q2)
+
+    # Optimize over Gamma
+    gam = optimum_reparam_curve(q2, q1, 0.0)
+    gamI = uf.invertGamma(gam)
+
+    # Applying optimal re-parameterization to the second curve
+    beta2 = group_action_by_gamma_coord(beta2, gamI)
+    q2 = curve_to_q(beta2)
+
+    # Optimize over SO(n)
+    q2, O2, tau = find_rotation_and_seed_q(q1, q2)
+
+    # Compute geodesic distance
+    q1dotq2 = innerprod_q2(q1, q2)
+    dist = arccos(q1dotq2)
+
+    # Compute shooting vector
+    if q1dotq2 > 1:
+        q1dotq2 = 1
+
+    u = q2 - q1dotq2 * q1
+    normu = sqrt(innerprod_q2(u, u))
+
+    if normu > 1e-4:
+        v = u * arccos(q1dotq2) / normu
+    else:
+        v = zeros((2, T))
+
+    return v
 
 
 def gram_schmidt(basis):

@@ -147,7 +147,7 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     return out
 
 
-def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
+def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=20, cores=-1):
     """
     This function identifies a logistic regression model with
     phase-variablity using elastic methods for open curves
@@ -182,7 +182,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     elif T > 100:
         parallel = True
     else:
-        parallel = False
+        parallel = True
 
     # Create B-Spline Basis if none provided
     if B is None:
@@ -200,7 +200,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     itr = 1
     LL = np.zeros(max_itr + 1)
     while itr <= max_itr:
-        print("Iteration: %d" % itr)
+        print("Iteration: %d - Loss %f" % (itr, LL[itr]))
 
         Phi = np.ones((N, n * Nb + 1))
         for ii in range(0, N):
@@ -238,9 +238,10 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
                 beta[:, :, ii] = beta1
                 qn[:, :, ii] = cf.curve_to_q(beta1)
 
-        if np.abs(LL[itr] - LL[itr - 1]) < 1e-18:
+        if norm(gamma - gamma_new) < 1e-5:
             break
         else:
+            print(norm(gamma - gamma_new))
             gamma = gamma_new
 
         itr += 1
@@ -269,7 +270,7 @@ def oc_elastic_logistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     return out
 
 
-def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
+def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
                          deltaO=.003, deltag=.003):
     """
     This function identifies a multinomial logistic regression model with
@@ -303,7 +304,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
     if n > 500:
         parallel = True
     elif T > 100:
-        parallel = True
+        parallel = False
     else:
         parallel = False
 
@@ -362,10 +363,11 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
                 gamma_new[:, ii] = out[ii][0]
                 O_hat[:, :, ii] = out[ii][1]
                 beta_tmp = O_hat[:, :, ii].dot(beta[:, :, ii])
-                beta[:, :, ii][:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
+                beta[:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
+                print(ii)
                 gammatmp, Otmp = mlogit_warp_grad(alpha, nu, qn[:, :, ii], Y[ii, :],
                                                   deltaO=deltaO, deltag=deltag)
                 gamma_new[:, ii] = gammatmp
@@ -389,6 +391,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1,
             O_hat[:, :, ii] = out[ii][1]
     else:
         for ii in range(0, N):
+            print(ii)
             gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
                                               deltaO=deltaO, deltag=deltag)
             gamma_new[:, ii] = gammatmp
@@ -439,7 +442,8 @@ def oc_elastic_prediction(beta, model, y=None):
         diff = model.q - q[:, :, ii][:, :, np.newaxis]
         dist = np.linalg.norm(np.abs(diff) ** 2, axis=(0, 1))
         if model.type == 'oclinear' or model.type == 'oclogistic':
-            beta1 = cf.shift_f(beta[:, :, ii], int(model.tau[dist.argmin()]))
+            # beta1 = cf.shift_f(beta[:, :, ii], int(model.tau[dist.argmin()]))
+            beta1 = beta[:, :, ii]
         else:
             beta1 = beta[:, :, ii]
         beta1 = model.O[:, :, dist.argmin()].dot(beta1)
@@ -739,9 +743,12 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     binsize = 1. / (TT - 1)
 
     alpha = alpha/norm(alpha)
-    for i in range(0, m):
-        nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q2(nu[:, :, i],
-                                          nu[:, :, i]))
+    q = q/norm(q)
+    nu = nu/norm(nu)
+    # for i in range(0, q.shape[2]):
+    #     q[:, :, i] = q[:, :, i]/np.sqrt(cf.innerprod_q2(q[:, :, i], q[:, :, i]))
+    # for i in range(0, m):
+    #     nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q2(nu[:, :, i], nu[:, :, i]))
 
     gam = np.linspace(0, 1, TT)
     O = np.eye(n)

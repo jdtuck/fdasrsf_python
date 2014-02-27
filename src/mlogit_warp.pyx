@@ -38,7 +38,8 @@ def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha,
     m1 = time.size
     m = beta.shape[1]
     alpha = alpha/norm(alpha)
-    q = q/norm(q)
+    for i in range(0, q.shape[1]):
+        q[:, i] = q[:, i]/norm(q[:, i])
     for i in range(0, m):
         beta[:, i] = beta[:, i]/norm(beta[:, i])
 

@@ -7,7 +7,7 @@ import h5py
 import numpy as np
 import curve_functions as cf
 import curve_regression as cr
-fun = h5py.File('/Users/jderektucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
+fun = h5py.File('/Users/jdtucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
 C = fun['beta'][:]
 C = C.T
 
@@ -35,5 +35,5 @@ beta_tst[:, :, 1] = beta[:, :, 39]
 y_test = np.ones(2, dtype=int)
 y_test[0] = -1
 
-model = cr.oc_elastic_logistic(betatr, y, cores=5)
-out = cr.oc_elastic_prediction(beta_tst, model, y=y_test)
+model = cr.oc_elastic_logistic(betatr, y, T=200, max_itr=40)
+out = cr.oc_elastic_prediction(betatr, model, y=y)
