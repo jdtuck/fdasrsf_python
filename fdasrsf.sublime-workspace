@@ -4,96 +4,8 @@
 		"selected_items":
 		[
 			[
-				"inner",
-				"innerprod_q"
-			],
-			[
-				"curve",
-				"curve_to_q"
-			],
-			[
-				"o",
-				"omin	(local, instance)"
-			],
-			[
-				"mrp",
-				"mrp_ind	(local, instance)"
-			],
-			[
-				"Oh",
-				"O_hat1	(local, instance)"
-			],
-			[
-				"beta",
-				"betan	(local, instance)"
-			],
-			[
-				"bet",
-				"betan	(local, instance)"
-			],
-			[
-				"curv",
-				"curve_to_q(beta)	(imported, function)"
-			],
-			[
-				"pd",
-				"pd1	(local, instance)"
-			],
-			[
-				"q",
-				"qarray1	(local, instance)"
-			],
-			[
-				"qa",
-				"qarray1	(local, instance)"
-			],
-			[
-				"qarra",
-				"qarray2	(local, instance)"
-			],
-			[
-				"bass",
-				"basis2	(local, instance)"
-			],
-			[
 				"norm",
 				"normbetadot	(local, instance)"
-			],
-			[
-				"pro",
-				"project_curve(q)	(imported, function)"
-			],
-			[
-				"in",
-				"innerprod_q(q1, q2)	(imported, function)"
-			],
-			[
-				"prin",
-				"princDir	(local, instance)"
-			],
-			[
-				"fin",
-				"find_basis_normal(q)	(imported, function)"
-			],
-			[
-				"proj",
-				"project_curve(q)	(imported, function)"
-			],
-			[
-				"normv",
-				"normvbar	(local, instance)"
-			],
-			[
-				"nor",
-				"normvbar	(local, instance)"
-			],
-			[
-				"q1",
-				"q1dotq2	(local, instance)"
-			],
-			[
-				"find",
-				"find_rotation_and_seed_coord(beta1, beta2)	(global, function)"
 			],
 			[
 				"Int",
@@ -119,7 +31,7 @@
 			"file": "fdasrsf/curve_regression.py",
 			"settings":
 			{
-				"buffer_size": 29825,
+				"buffer_size": 30208,
 				"line_ending": "Unix"
 			}
 		},
@@ -127,15 +39,7 @@
 			"file": "fdasrsf/curve_functions.py",
 			"settings":
 			{
-				"buffer_size": 18066,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "fdasrsf/geodesic.py",
-			"settings":
-			{
-				"buffer_size": 15354,
+				"buffer_size": 20211,
 				"line_ending": "Unix"
 			}
 		},
@@ -143,7 +47,7 @@
 			"file": "debug/test_oc_logit.py",
 			"settings":
 			{
-				"buffer_size": 1239,
+				"buffer_size": 1242,
 				"line_ending": "Unix"
 			}
 		}
@@ -228,31 +132,29 @@
 	},
 	"file_history":
 	[
-		"/Users/jdtucker/Google Drive/Shape Analysis/Shape Analysis Functions/scale_curve.m",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/curve_regression.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/regression.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/debug/test_oc_geod.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/curve_functions.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/curve_stats.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/utility_functions.py",
+		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/__init__.py",
+		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/time_warping.py",
+		"/Users/jderektucker/Documents/Research/fdasrsf/src/optimum_reparamN.pyx",
+		"/Users/jderektucker/Documents/Research/fdasrsf/src/optimum_reparamN.c",
+		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/geodesic.py",
+		"/Users/jderektucker/Documents/Research/fdasrsf/debug/test_ps_geod.py",
+		"/Users/jderektucker/Documents/Research/fdasrsf/src/dp_nbhd.h",
+		"/Users/jderektucker/Documents/Research/fdasrsf/fdasrsf/plot_style.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/__init__.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/debug/test_oc_karcher.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/src/misc_funcs.c",
+		"/Users/jdtucker/Documents/Research/fdasrsf/src/mlogit_warp_grad.c",
+		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/utility_functions.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/curve_functions.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/src/DynamicProgrammingQ2.h",
+		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/regression.py",
+		"/Users/jdtucker/Documents/Research/fdasrsf/src/DynamicProgrammingQ2.c",
+		"/Users/jdtucker/Documents/Research/fdasrsf/src/dp_grid.c",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/time_warping.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/geodesic.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/plot_style.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/fPLS.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/fPCA.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/gauss_model.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/setup.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf/curve_stats",
-		"/Users/jdtucker/Documents/Research/fdasrsf/src/dp_nbhd.h",
-		"/Users/jdtucker/Documents/Research/fdasrsf/debug/test_ps_geod.py",
-		"/Users/jdtucker/Documents/Research/fdasrsf/src/misc_funcs.c",
-		"/Users/jdtucker/Documents/Research/fdasrsf/src/mlogit_warp_grad.c",
-		"/Users/jdtucker/Documents/Research/fdasrsf/src/DynamicProgrammingQ2.h",
-		"/Users/jdtucker/Documents/Research/fdasrsf/src/DynamicProgrammingQ2.c",
-		"/Users/jdtucker/Documents/Research/fdasrsf/src/dp_grid.c",
 		"/usr/local/bin/ipy",
+		"/Users/jdtucker/Documents/Research/fdasrsf/setup.py",
 		"/Users/jdtucker/Documents/Research/fdasrsf/fdasrsf.sublime-project",
 		"/Users/jdtucker/Documents/Research/SRVF_FDA/Python/fantasia_create.py",
 		"/Users/jdtucker/Documents/Research/SRVF_FDA/Python/ecg_regress.py",
@@ -291,15 +193,6 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"mode",
-			"parallel_translate",
-			"dir",
-			"parallel_translate",
-			"betadot",
-			"gradient",
-			"gradie",
-			"gradient",
-			"cumtrapz",
 			"gradient",
 			"srsf",
 			"smoothdata",
@@ -341,26 +234,25 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29825,
+						"buffer_size": 30208,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4959,
+								4959
 							]
 						],
 						"settings":
 						{
-							"history_list_is_closing": true,
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 4500.0,
+						"translation.x": -0.0,
+						"translation.y": 1936.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -372,15 +264,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18066,
+						"buffer_size": 20211,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								504,
+								504
 							]
 						],
 						"settings":
@@ -390,57 +282,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4746.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "fdasrsf/geodesic.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15354,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1504,
-								1530
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 318.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 2,
 					"file": "debug/test_oc_logit.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1239,
+						"buffer_size": 1242,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								406,
+								406
 							]
 						],
 						"settings":
@@ -463,7 +325,7 @@
 	},
 	"input":
 	{
-		"height": 33.0
+		"height": 0.0
 	},
 	"layout":
 	{
@@ -532,24 +394,14 @@
 	},
 	"settings":
 	{
-		"last_automatic_layout":
-		[
-			[
-				0,
-				0,
-				1,
-				1
-			]
-		]
 	},
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 132.0,
+	"side_bar_width": 192.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
-		"max_columns": 2
 	}
 }
