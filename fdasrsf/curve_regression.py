@@ -147,7 +147,7 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     return out
 
 
-def oc_elastic_logistic(beta, y, B=None, df=60, T=200, max_itr=40, cores=-1):
+def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
     """
     This function identifies a logistic regression model with
     phase-variablity using elastic methods for open curves
@@ -523,7 +523,7 @@ def preproc_open_curve(beta, T=100):
     beta2 = np.zeros((n, T, k))
     for i in range(0, k):
         beta1 = cf.resamplecurve(beta[:, :, i], T)
-        beta1, scale1 = cf.scale_curve(beta1)
+        # beta1, scale1 = cf.scale_curve(beta1)
         centroid1 = cf.calculatecentroid(beta1)
         beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
@@ -614,8 +614,8 @@ def logistic_warp(nu, beta, y):
         gamI = uf.invertGamma(gamma)
         beta1n = cf.group_action_by_gamma_coord(beta1, gamI)
         beta1n, O_hat1, tau = cf.find_rotation_and_seed_coord(betanu, beta1n)
-        centroid2 = cf.calculatecentroid(beta1n)
-        beta1n = beta1n - np.tile(centroid2, [T, 1]).T
+        # centroid2 = cf.calculatecentroid(beta1n)
+        # beta1n = beta1n - np.tile(centroid2, [T, 1]).T
         O = O_hat.dot(O_hat1)
     elif y == -1:
         beta1, O_hat, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
@@ -624,8 +624,8 @@ def logistic_warp(nu, beta, y):
         gamI = uf.invertGamma(gamma)
         beta1n = cf.group_action_by_gamma_coord(beta1, gamI)
         beta1n, O_hat1, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta1n)
-        centroid2 = cf.calculatecentroid(beta1n)
-        beta1n = beta1n - np.tile(centroid2, [T, 1]).T
+        # centroid2 = cf.calculatecentroid(beta1n)
+        # beta1n = beta1n - np.tile(centroid2, [T, 1]).T
         O = O_hat.dot(O_hat1)
     return (gamI, O, beta1n, tau)
 

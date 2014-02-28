@@ -7,7 +7,7 @@ import h5py
 import numpy as np
 import curve_functions as cf
 import curve_regression as cr
-fun = h5py.File('/Users/jdtucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
+fun = h5py.File('/Users/jderektucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
 C = fun['beta'][:]
 C = C.T
 
