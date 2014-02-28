@@ -147,7 +147,7 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
     return out
 
 
-def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=20, cores=-1):
+def oc_elastic_logistic(beta, y, B=None, df=60, T=200, max_itr=40, cores=-1):
     """
     This function identifies a logistic regression model with
     phase-variablity using elastic methods for open curves
@@ -200,7 +200,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=20, cores=-1):
     itr = 1
     LL = np.zeros(max_itr + 1)
     while itr <= max_itr:
-        print("Iteration: %d - Loss %f" % (itr, LL[itr]))
+        print("Iteration: %d" % itr)
 
         Phi = np.ones((N, n * Nb + 1))
         for ii in range(0, N):
@@ -238,10 +238,9 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=20, cores=-1):
                 beta[:, :, ii] = beta1
                 qn[:, :, ii] = cf.curve_to_q(beta1)
 
-        if norm(gamma - gamma_new) < 1e-5:
+        if norm(gamma - gamma_new) < 1e-15:
             break
         else:
-            print(norm(gamma - gamma_new))
             gamma = gamma_new
 
         itr += 1
@@ -524,6 +523,7 @@ def preproc_open_curve(beta, T=100):
     beta2 = np.zeros((n, T, k))
     for i in range(0, k):
         beta1 = cf.resamplecurve(beta[:, :, i], T)
+        beta1, scale1 = cf.scale_curve(beta1)
         centroid1 = cf.calculatecentroid(beta1)
         beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
