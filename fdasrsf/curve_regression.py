@@ -304,9 +304,9 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
     if n > 500:
         parallel = True
     elif T > 100:
-        parallel = False
+        parallel = True
     else:
-        parallel = False
+        parallel = True
 
     # Code labels
     m = y.max()
@@ -367,7 +367,6 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                print(ii)
                 gammatmp, Otmp = mlogit_warp_grad(alpha, nu, qn[:, :, ii], Y[ii, :],
                                                   deltaO=deltaO, deltag=deltag)
                 gamma_new[:, ii] = gammatmp
@@ -391,7 +390,6 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
             O_hat[:, :, ii] = out[ii][1]
     else:
         for ii in range(0, N):
-            print(ii)
             gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
                                               deltaO=deltaO, deltag=deltag)
             gamma_new[:, ii] = gammatmp
