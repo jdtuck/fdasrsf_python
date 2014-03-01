@@ -9,6 +9,7 @@ import numpy as np
 import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 from scipy import dot
+from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import inv, norm, expm
@@ -18,7 +19,7 @@ from joblib import Parallel, delayed
 import collections
 
 
-def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
+def oc_elastic_regression(beta, y, B=None, df=40, T=200, max_itr=20, cores=-1):
     """
     This function identifies a regression model for open curves
     using elastic methods
@@ -68,7 +69,7 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
 
     gamma = np.tile(np.linspace(0, 1, T), (N, 1))
     gamma = gamma.transpose()
-    O_hat = np.zeros((n, n, N))
+    O_hat = np.tile(np.eye(n), (N, 1, 1)).T
 
     itr = 1
     SSE = np.zeros(max_itr)
@@ -96,26 +97,29 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
         # compute the SSE
         int_X = np.zeros(N)
         for ii in range(0, N):
-            int_X[ii] = cf.innerprod_q(qn[:, :, ii], nu)
+            int_X[ii] = cf.innerprod_q2(qn[:, :, ii], nu)
 
         SSE[itr - 1] = sum((y.reshape(N) - alpha - int_X) ** 2)
 
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(regression_warp)(nu, beta[:, :, n], y[n], alpha) for n in range(N))
+            out = Parallel(n_jobs=cores)(delayed(regression_warp)(nu, beta0[:, :, n], y[n], alpha) for n in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
-                beta[:, :, ii] = out[ii][2]
+                beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
+                beta[:, :, ii] = beta1n
+                O_hat[:, :, ii] = out[ii][1]
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                beta1 = beta[:, :, ii]
-                gammatmp, Otmp, beta1, tau = regression_warp(nu, beta1,
-                                                             y[ii], alpha)
+                beta1 = beta0[:, :, ii]
+                gammatmp, Otmp, tau = regression_warp(nu, beta1, y[ii], alpha)
                 gamma_new[:, ii] = gammatmp
-                beta[:, :, ii] = beta1
-                qn[:, :, ii] = cf.curve_to_q(beta1)
+                beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
+                beta[:, :, ii] = beta1n
+                O_hat[:, :, ii] = Otmp
+                qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
 
 
         if np.abs(SSE[itr - 1] - SSE[itr - 2]) < 1e-15:
@@ -126,20 +130,6 @@ def oc_elastic_regression(beta, y, B=None, df=20, T=100, max_itr=20, cores=-1):
         itr += 1
 
     tau = np.zeros(N)
-    if parallel:
-        out = Parallel(n_jobs=cores)(delayed(regression_warp)(nu, beta0[:, :, ii], y[ii], alpha) for ii in range(N))
-        for ii in range(0, N):
-            gamma[:, ii] = out[ii][0]
-            O_hat[:, :, ii] = out[ii][1]
-            tau[ii] = out[ii][3]
-    else:
-        for ii in range(0, N):
-            beta1 = beta0[:, :, ii]
-            gammatmp, Otmp, beta1, tautmp = regression_warp(nu, beta1,
-                                                            y[ii], alpha)
-            gamma_new[:, ii] = gammatmp
-            O_hat[:, :, ii] = Otmp
-            tau[ii] = tautmp
 
     model = collections.namedtuple('model', ['alpha', 'nu', 'betan' 'q', 'gamma',
                                              'O', 'tau', 'B', 'b', 'SSE', 'type'])
@@ -195,7 +185,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
 
     gamma = np.tile(np.linspace(0, 1, T), (N, 1))
     gamma = gamma.transpose()
-    O_hat = np.zeros((n, n, N))
+    O_hat = np.tile(np.eye(n), (N, 1, 1)).T
 
     itr = 1
     LL = np.zeros(max_itr + 1)
@@ -225,20 +215,24 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(nu, beta[:, :, ii], y[ii]) for ii in range(N))
+            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(nu, beta0[:, :, ii], y[ii]) for ii in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
-                beta[:, :, ii] = out[ii][2]
+                beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
+                beta[:, :, ii] = beta1n
+                O_hat[:, :, ii] = out[ii][1]
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                beta1 = beta[:, :, ii]
-                gammatmp, Otmp, beta1, tautmp = logistic_warp(nu, beta1, y[ii])
+                beta1 = beta0[:, :, ii]
+                gammatmp, Otmp, tautmp = logistic_warp(nu, beta1, y[ii])
                 gamma_new[:, ii] = gammatmp
-                beta[:, :, ii] = beta1
-                qn[:, :, ii] = cf.curve_to_q(beta1)
+                beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
+                beta[:, :, ii] = beta1n
+                O_hat[:, :, ii] = Otmp
+                qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
 
-        if norm(gamma - gamma_new) < 1e-15:
+        if norm(gamma - gamma_new) < 1e-5:
             break
         else:
             gamma = gamma_new
@@ -246,20 +240,6 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
         itr += 1
 
     tau = np.zeros(N)
-    if parallel:
-        out = Parallel(n_jobs=cores)(delayed(logistic_warp)(nu,
-                                                            beta0[:, :, ii], y[ii]) for ii in range(N))
-        for ii in range(0, N):
-            gamma_new[:, ii] = out[ii][0]
-            O_hat[:, :, ii] = out[ii][1]
-            tau[ii] = out[ii][3]
-    else:
-        for ii in range(0, N):
-            beta1 = beta0[:, :, ii]
-            gammatmp, Otmp, beta1, tautmp = logistic_warp(nu, beta1, y[ii])
-            gamma_new[:, ii] = gammatmp
-            O_hat[:, :, ii] = Otmp
-            tau[ii] = tautmp
 
     model = collections.namedtuple('model', ['alpha', 'nu', 'betan', 'q',
                                              'gamma', 'O', 'tau', 'B', 'b', 'Loss',
@@ -324,7 +304,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
 
     gamma = np.tile(np.linspace(0, 1, T), (N, 1))
     gamma = gamma.transpose()
-    O_hat = np.zeros((n, n, N))
+    O_hat = np.tile(np.eye(n), (N, 1, 1)).T
 
     itr = 1
     LL = np.zeros(max_itr+1)
@@ -356,43 +336,31 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, qn[:, :, n], Y[n, :],
-                                                                   deltaO=deltaO, deltag=deltag) for n in range(N))
+            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :],
+                                                                   deltaO=deltaO, deltag=deltag, n=n) for n in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
+                beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
+                beta[:, :, ii] = beta1n
                 O_hat[:, :, ii] = out[ii][1]
-                beta_tmp = O_hat[:, :, ii].dot(beta[:, :, ii])
-                beta[:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                gammatmp, Otmp = mlogit_warp_grad(alpha, nu, qn[:, :, ii], Y[ii, :],
+                gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
                                                   deltaO=deltaO, deltag=deltag)
                 gamma_new[:, ii] = gammatmp
+                beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
+                beta[:, :, ii] = beta1n
                 O_hat[:, :, ii] = Otmp
-                beta_tmp = O_hat[:, :, ii].dot(beta[:, :, ii])
-                beta[:, :, ii] = cf.group_action_by_gamma_coord(beta_tmp, gamma_new[:, ii])
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
 
         if norm(gamma - gamma_new) < 1e-5:
             break
         else:
+            print(LL[itr])
             gamma = gamma_new
 
         itr += 1
-
-    if parallel:
-        out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :],
-                                                               deltaO=deltaO, deltag=deltag) for n in range(N))
-        for ii in range(0, N):
-            gamma_new[:, ii] = out[ii][0]
-            O_hat[:, :, ii] = out[ii][1]
-    else:
-        for ii in range(0, N):
-            gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
-                                              deltaO=deltaO, deltag=deltag)
-            gamma_new[:, ii] = gammatmp
-            O_hat[:, :, ii] = Otmp
 
     model = collections.namedtuple('model', ['alpha', 'nu', 'betan', 'q',
                                              'gamma', 'O', 'B', 'b',
@@ -460,7 +428,7 @@ def oc_elastic_prediction(beta, model, y=None):
         if model.type == 'oclinear':
             SSE = None
         elif model.type == 'oclogistic':
-            y_pred = phi(y_pred)
+            y_pred = 1 - phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
             PC = None
@@ -473,7 +441,7 @@ def oc_elastic_prediction(beta, model, y=None):
         if model.type == 'oclinear':
             SSE = sum((y - y_pred) ** 2)
         elif model.type == 'oclogistic':
-            y_pred = phi(y_pred)
+            y_pred = 1 - phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
             TP = sum(y[y_labels == 1] == 1)
@@ -522,8 +490,8 @@ def preproc_open_curve(beta, T=100):
     for i in range(0, k):
         beta1 = cf.resamplecurve(beta[:, :, i], T)
         # beta1, scale1 = cf.scale_curve(beta1)
-        centroid1 = cf.calculatecentroid(beta1)
-        beta1 = beta1 - np.tile(centroid1, [T, 1]).T
+        # centroid1 = cf.calculatecentroid(beta1)
+        # beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
         q[:, :, i] = cf.curve_to_q(beta1)
 
@@ -550,25 +518,15 @@ def regression_warp(nu, beta, y, alpha):
 
     betaM, O_M, tauM = cf.find_rotation_and_seed_coord(betanu, beta)
     q = cf.curve_to_q(betaM)
-    gamma = cf.optimum_reparam_curve(q, nu)
-    gam_M = uf.invertGamma(gamma)
+    gam_M = cf.optimum_reparam_curve(nu, q)
     betaM = cf.group_action_by_gamma_coord(betaM, gam_M)
-    betaM, O_hat1, tauM = cf.find_rotation_and_seed_coord(betanu, betaM)
-    centroid2 = cf.calculatecentroid(betaM)
-    betaM = betaM - np.tile(centroid2, [T, 1]).T
-    O_M = O_M.dot(O_hat1)
     qM = cf.curve_to_q(betaM)
     y_M = cf.innerprod_q2(qM, nu)
 
     betam, O_m, taum = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
     q = cf.curve_to_q(betam)
-    gamma = cf.optimum_reparam_curve(q, -1 * nu)
-    gam_m = uf.invertGamma(gamma)
+    gam_m = cf.optimum_reparam_curve(-1 * nu, q)
     betam = cf.group_action_by_gamma_coord(betam, gam_m)
-    betam, O_hat1, taum = cf.find_rotation_and_seed_coord(betanu, betaM)
-    centroid2 = cf.calculatecentroid(betam)
-    betam = betam - np.tile(centroid2, [T, 1]).T
-    O_m = O_m.dot(O_hat1)
     qm = cf.curve_to_q(betam)
     y_m = cf.innerprod_q2(qm, nu)
 
@@ -576,17 +534,15 @@ def regression_warp(nu, beta, y, alpha):
         O_hat = O_M
         gamma_new = gam_M
         tau = tauM
-        beta1n = betaM
     elif y < alpha + y_m:
         O_hat = O_m
         gamma_new = gam_m
         tau = taum
-        beta1n = betam
     else:
-        gamma_new, O_hat, beta1n, tau = cf.curve_zero_crossing(y - alpha, beta, nu, y_M, y_m, gam_M,
+        gamma_new, O_hat, tau = cf.curve_zero_crossing(y - alpha, beta, nu, y_M, y_m, gam_M,
                                                                gam_m)
 
-    return(gamma_new, O_hat, beta1n, tau)
+    return(gamma_new, O_hat, tau)
 
 
 # helper functions for logistic regression
@@ -608,24 +564,12 @@ def logistic_warp(nu, beta, y):
     if y == 1:
         beta1, O_hat, tau = cf.find_rotation_and_seed_coord(betanu, beta)
         q = cf.curve_to_q(beta1)
-        gamma = cf.optimum_reparam_curve(q, nu)
-        gamI = uf.invertGamma(gamma)
-        beta1n = cf.group_action_by_gamma_coord(beta1, gamI)
-        beta1n, O_hat1, tau = cf.find_rotation_and_seed_coord(betanu, beta1n)
-        # centroid2 = cf.calculatecentroid(beta1n)
-        # beta1n = beta1n - np.tile(centroid2, [T, 1]).T
-        O = O_hat.dot(O_hat1)
+        gamma = cf.optimum_reparam_curve(nu, q)
     elif y == -1:
         beta1, O_hat, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
         q = cf.curve_to_q(beta1)
-        gamma = cf.optimum_reparam_curve(q, -1 * nu)
-        gamI = uf.invertGamma(gamma)
-        beta1n = cf.group_action_by_gamma_coord(beta1, gamI)
-        beta1n, O_hat1, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta1n)
-        # centroid2 = cf.calculatecentroid(beta1n)
-        # beta1n = beta1n - np.tile(centroid2, [T, 1]).T
-        O = O_hat.dot(O_hat1)
-    return (gamI, O, beta1n, tau)
+        gamma = cf.optimum_reparam_curve(-1 * nu, q)
+    return (gamma, O_hat, tau)
 
 
 def phi(t):
@@ -715,7 +659,7 @@ def logit_hessian(s, b, X, y):
 
 # helper functions for multinomial logistic regression
 def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
-                     deltaO=0.008, deltag=0.008, display=0):
+                     deltaO=0.008, deltag=0.008, display=0, n=0):
     """
     calculates optimal warping for functional multinomial logistic regression
 
@@ -734,6 +678,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     :return gam_old: warping function
 
     """
+    print("itr: %d" % n)
     n = q.shape[0]
     TT = q.shape[1]
     m = nu.shape[2]
@@ -741,8 +686,9 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     binsize = 1. / (TT - 1)
 
     alpha = alpha/norm(alpha)
-    q = q/norm(q)
-    nu = nu/norm(nu)
+    q, scale = cf.scale_curve(q)  # q/norm(q)
+    for ii in range(0, nu.shape[2]):
+        nu[:, :, ii], scale = cf.scale_curve(nu[:, :, ii])  # nu/norm(nu)
     # for i in range(0, q.shape[2]):
     #     q[:, :, i] = q[:, :, i]/np.sqrt(cf.innerprod_q2(q[:, :, i], q[:, :, i]))
     # for i in range(0, m):
@@ -753,6 +699,12 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     O_old = O.copy()
     gam_old = gam.copy()
     qtilde = q.copy()
+    # w = np.zeros(nu.shape)
+    # betanu = np.zeros(nu.shape)
+    # for ii in range(0, nu.shape[2]):
+        # betanu[:, :, ii] = cf.q_to_curve(nu[:, :, ii])
+        # w[:, :, ii] = cf.inverse_exp(qtilde, nu[:, :, ii], betanu[:, :, ii])
+
     # rotation basis (Skew Symmetric)
     E = np.array([[0, -1.], [1., 0]])
     # warping basis (Fourier)
@@ -812,6 +764,9 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
         gam_old = gam_new.copy()
         O_old = O_new.copy()
         qtilde = cf.group_action_by_gamma(O_old.dot(q), gam_old)
+        # for ii in range(0, nu.shape[2]):
+            # betanu[:, :, ii] = cf.q_to_curve(nu[:, :, ii])
+            # w[:, :, ii] = cf.inverse_exp(qtilde, nu[:, :, ii], betanu[:, :, ii])
 
         if itr >= 2:
             max_val_change = max_val[itr] - max_val[itr-1]

@@ -7,7 +7,7 @@ import h5py
 import numpy as np
 import curve_functions as cf
 import curve_regression as cr
-fun = h5py.File('/Users/jderektucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
+fun = h5py.File('/Users/jdtucker/Documents/Research/SRVF_FDA/Data/Full20shapedata.h5')
 C = fun['beta'][:]
 C = C.T
 
@@ -23,7 +23,7 @@ for ii in range(0, 20):
     beta[:, :, ii+20] = cf.resamplecurve(beta_tmp, b)
 
 y = np.ones(38, dtype=int)
-y[0:19] = -1
+y[19:39] = -1
 beta1 = beta[:, :, 0:19]
 beta2 = beta[:, :, 20:39]
 
@@ -33,7 +33,9 @@ beta_tst = np.zeros((a, b, 2))
 beta_tst[:, :, 0] = beta[:, :, 19]
 beta_tst[:, :, 1] = beta[:, :, 39]
 y_test = np.ones(2, dtype=int)
-y_test[0] = -1
+y_test[1] = -1
 
 model = cr.oc_elastic_logistic(betatr, y, T=200, max_itr=40)
 out = cr.oc_elastic_prediction(betatr, model, y=y)
+out2 = cr.oc_elastic_prediction(beta_tst, model, y=y_test)
+

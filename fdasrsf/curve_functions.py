@@ -582,7 +582,7 @@ def inverse_exp_coord(beta1, beta2):
 def inverse_exp(q1, q2, beta2):
     """
     Calculate the inverse exponential to obtain a shooting vector from
-    beta1 to beta2 in shape space of open curves
+    q1 to q2 in shape space of open curves
 
     :param q1: numpy ndarray of shape (2,M) of M samples
     :param q2: numpy ndarray of shape (2,M) of M samples
@@ -775,9 +775,6 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
 
         beta1 = group_action_by_gamma_coord(beta1, gamma)
         beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
-        centroid2 = calculatecentroid(beta1)
-        beta1 = beta1 - tile(centroid2, [T, 1]).T
-        O_hat = O_hat.dot(O_hat1)
         q1 = curve_to_q(beta1)
         f[ii] = innerprod_q2(q1, bt) - Y
 
@@ -793,14 +790,11 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
     gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
     beta1, O_hat, tau = find_rotation_and_seed_coord(betanu, beta)
-
     beta1 = group_action_by_gamma_coord(beta1, gamma)
     beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
-    centroid2 = calculatecentroid(beta1)
-    beta1 = beta1 - tile(centroid2, [T, 1]).T
     O_hat = O_hat.dot(O_hat1)
 
-    return (gamma, O_hat, beta1, tau)
+    return (gamma, O_hat, tau)
 
 
 def rot_mat(theta):
