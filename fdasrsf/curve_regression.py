@@ -692,21 +692,12 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     q, scale = cf.scale_curve(q)  # q/norm(q)
     for ii in range(0, nu.shape[2]):
         nu[:, :, ii], scale = cf.scale_curve(nu[:, :, ii])  # nu/norm(nu)
-    # for i in range(0, q.shape[2]):
-    #     q[:, :, i] = q[:, :, i]/np.sqrt(cf.innerprod_q2(q[:, :, i], q[:, :, i]))
-    # for i in range(0, m):
-    #     nu[:, :, i] = nu[:, :, i]/np.sqrt(cf.innerprod_q2(nu[:, :, i], nu[:, :, i]))
 
     gam = np.linspace(0, 1, TT)
     O = np.eye(n)
     O_old = O.copy()
     gam_old = gam.copy()
     qtilde = q.copy()
-    # w = np.zeros(nu.shape)
-    # betanu = np.zeros(nu.shape)
-    # for ii in range(0, nu.shape[2]):
-        # betanu[:, :, ii] = cf.q_to_curve(nu[:, :, ii])
-        # w[:, :, ii] = cf.inverse_exp(qtilde, nu[:, :, ii], betanu[:, :, ii])
 
     # rotation basis (Skew Symmetric)
     E = np.array([[0, -1.], [1., 0]])
@@ -767,9 +758,6 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
         gam_old = gam_new.copy()
         O_old = O_new.copy()
         qtilde = cf.group_action_by_gamma(O_old.dot(q), gam_old)
-        # for ii in range(0, nu.shape[2]):
-            # betanu[:, :, ii] = cf.q_to_curve(nu[:, :, ii])
-            # w[:, :, ii] = cf.inverse_exp(qtilde, nu[:, :, ii], betanu[:, :, ii])
 
         if itr >= 2:
             max_val_change = max_val[itr] - max_val[itr-1]
