@@ -347,7 +347,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
         else:
             for ii in range(0, N):
                 gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
-                                                  deltaO=deltaO, deltag=deltag)
+                                                  deltaO=deltaO, deltag=deltag, n=ii)
                 gamma_new[:, ii] = gammatmp
                 beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                 beta[:, :, ii] = beta1n
@@ -405,7 +405,10 @@ def oc_elastic_prediction(beta, model, y=None):
 
     for ii in range(0, n):
         diff = model.q - q[:, :, ii][:, :, np.newaxis]
-        dist = np.linalg.norm(np.abs(diff) ** 2, axis=(0, 1))
+        # dist = np.linalg.norm(np.abs(diff), axis=(0, 1)) ** 2
+        dist = np.zeros(n)
+        for jj in range(0, n):
+            dist[jj] = norm(np.abs(diff[:, jj])) ** 2
         if model.type == 'oclinear' or model.type == 'oclogistic':
             # beta1 = cf.shift_f(beta[:, :, ii], int(model.tau[dist.argmin()]))
             beta1 = beta[:, :, ii]
