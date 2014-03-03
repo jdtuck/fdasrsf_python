@@ -394,6 +394,7 @@ def oc_elastic_prediction(beta, model, y=None):
     """
     T = model.q.shape[1]
     n = beta.shape[2]
+    N = model.q.shape[2]
 
     q, beta = preproc_open_curve(beta, T)
 
@@ -406,9 +407,9 @@ def oc_elastic_prediction(beta, model, y=None):
     for ii in range(0, n):
         diff = model.q - q[:, :, ii][:, :, np.newaxis]
         # dist = np.linalg.norm(np.abs(diff), axis=(0, 1)) ** 2
-        dist = np.zeros(n)
-        for jj in range(0, n):
-            dist[jj] = norm(np.abs(diff[:, :, jj])) ** 2
+        dist = np.zeros(N)
+        for jj in range(0, N):
+            dist[jj] = np.linalg.norm(np.abs(diff[:, :, jj])) ** 2
         if model.type == 'oclinear' or model.type == 'oclogistic':
             # beta1 = cf.shift_f(beta[:, :, ii], int(model.tau[dist.argmin()]))
             beta1 = beta[:, :, ii]
@@ -492,9 +493,6 @@ def preproc_open_curve(beta, T=100):
     beta2 = np.zeros((n, T, k))
     for i in range(0, k):
         beta1 = cf.resamplecurve(beta[:, :, i], T)
-        # beta1, scale1 = cf.scale_curve(beta1)
-        # centroid1 = cf.calculatecentroid(beta1)
-        # beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
         q[:, :, i] = cf.curve_to_q(beta1)
 
