@@ -253,7 +253,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
                          deltaO=.003, deltag=.003):
     """
     This function identifies a multinomial logistic regression model with
-    phase-variablity using elastic methods for open curves
+    phase-variability using elastic methods for open curves
 
     :param beta: numpy ndarray of shape (n, M, N) describing N curves
     in R^M
@@ -269,7 +269,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
     :return alpha: alpha parameter of model
     :return nu: nu(t) of model
     :return betan: aligned curves - numpy ndarray of shape (n,T,N)
-    :return O: calulated rotation matrices
+    :return O: calculated rotation matrices
     :return gamma: calculated warping functions
     :return B: basis matrix
     :return b: basis coefficients
@@ -337,7 +337,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
         gamma_new = np.zeros((T, N))
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :],
-                                                                   deltaO=deltaO, deltag=deltag, n=n) for n in range(N))
+                                                                   deltaO=deltaO, deltag=deltag) for n in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
                 beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
@@ -347,7 +347,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
         else:
             for ii in range(0, N):
                 gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
-                                                  deltaO=deltaO, deltag=deltag, n=ii)
+                                                  deltaO=deltaO, deltag=deltag)
                 gamma_new[:, ii] = gammatmp
                 beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                 beta[:, :, ii] = beta1n
@@ -408,7 +408,7 @@ def oc_elastic_prediction(beta, model, y=None):
         # dist = np.linalg.norm(np.abs(diff), axis=(0, 1)) ** 2
         dist = np.zeros(n)
         for jj in range(0, n):
-            dist[jj] = norm(np.abs(diff[:, jj])) ** 2
+            dist[jj] = norm(np.abs(diff[:, :, jj])) ** 2
         if model.type == 'oclinear' or model.type == 'oclogistic':
             # beta1 = cf.shift_f(beta[:, :, ii], int(model.tau[dist.argmin()]))
             beta1 = beta[:, :, ii]
@@ -662,7 +662,7 @@ def logit_hessian(s, b, X, y):
 
 # helper functions for multinomial logistic regression
 def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
-                     deltaO=0.008, deltag=0.008, display=0, n=0):
+                     deltaO=0.008, deltag=0.008, display=0):
     """
     calculates optimal warping for functional multinomial logistic regression
 
@@ -681,7 +681,6 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     :return gam_old: warping function
 
     """
-    print("itr: %d" % n)
     n = q.shape[0]
     TT = q.shape[1]
     m = nu.shape[2]
