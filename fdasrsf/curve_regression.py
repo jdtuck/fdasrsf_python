@@ -15,7 +15,7 @@ from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import inv, norm, expm
 from patsy import bs
 from joblib import Parallel, delayed
-# import ocmlogit_warp as mw
+import ocmlogit_warp as mw
 import collections
 
 
@@ -357,7 +357,6 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
         if norm(gamma - gamma_new) < 1e-5:
             break
         else:
-            print(LL[itr])
             gamma = gamma_new
 
         itr += 1
@@ -679,16 +678,18 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     :return gam_old: warping function
 
     """
-    n = q.shape[0]
-    TT = q.shape[1]
-    m = nu.shape[2]
-    time = np.linspace(0, 1, TT)
-    binsize = 1. / (TT - 1)
 
     alpha = alpha/norm(alpha)
     q, scale = cf.scale_curve(q)  # q/norm(q)
     for ii in range(0, nu.shape[2]):
         nu[:, :, ii], scale = cf.scale_curve(nu[:, :, ii])  # nu/norm(nu)
+
+    # python code
+    n = q.shape[0]
+    TT = q.shape[1]
+    m = nu.shape[2]
+    time = np.linspace(0, 1, TT)
+    binsize = 1. / (TT - 1)
 
     gam = np.linspace(0, 1, TT)
     O = np.eye(n)
@@ -763,11 +764,11 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
 
         itr += 1
 
-    # gam_old = mw.mlogit_warp(np.ascontiguousarray(alpha),
-    #                          np.ascontiguousarray(beta),
-    #                          time, np.ascontiguousarray(q),
-    #                          np.ascontiguousarray(y, dtype=np.int32), max_itr,
-    #                          tol, delta, display)
+    # gam_old, O_old = mw.ocmlogit_warp(np.ascontiguousarray(alpha),
+    #                                   np.ascontiguousarray(nu),
+    #                                   np.ascontiguousarray(q),
+    #                                   np.ascontiguousarray(y, dtype=np.int32), max_itr,
+    #                                   tol, deltaO, deltag, display)
 
     return (gam_old, O_old)
 

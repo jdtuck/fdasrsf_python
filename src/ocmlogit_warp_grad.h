@@ -1,1 +1,1 @@
-void ocmlogit_warp_grad(int *m1, int *m2, double *alpha, double *beta, double *ti, double *gami, double *q, int *y, int *max_itri, double *toli, double *deltai, int *displayi, double *gamout);
+void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, double *q, int *y, int *max_itri, double *toli, double *deltaOi, double *deltagi, int *displayi, double *gamout, double *Oout);

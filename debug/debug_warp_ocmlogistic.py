@@ -1,37 +1,39 @@
 import numpy as np
 import fdasrsf as fs
 from scipy.integrate import cumtrapz
-from scipy.linalg import norm
+from scipy.linalg import norm, expm
 import h5py
 
-fun = h5py.File('/Users/jdtucker/Documents/Research/fdasrsf/debug/debug_data.h5')
+fun = h5py.File('/Users/jdtucker/Documents/Research/fdasrsf/debug/debug_data_oc.h5')
 q = fun['q'][:]
 y = fun['y'][:]
 alpha = fun['alpha'][:]
 nu = fun['nu'][:]
+
 max_itr = 8000  # 4000
-tol = 1e-10
-deltaO = .01
-deltag = .01
+tol = 1e-6
+deltag = .003
+deltaO = .003
 display = 1
 
+alpha = alpha/norm(alpha)
+q, scale = fs.scale_curve(q)  # q/norm(q)
+for ii in range(0, nu.shape[2]):
+    nu[:, :, ii], scale = fs.scale_curve(nu[:, :, ii])  # nu/norm(nu)
+
+# python code
 n = q.shape[0]
 TT = q.shape[1]
-m = nu.shape[1]
+m = nu.shape[2]
 time = np.linspace(0, 1, TT)
 binsize = 1. / (TT - 1)
 
-alpha = alpha/norm(alpha)
-for i in range(0, m):
-    nu[:, :, i] = nu[:, :, i]/np.sqrt(fs.innerprod_q(nu[:, :, i], nu[:, :, i]))
-
-eps = np.finfo(np.double).eps
 gam = np.linspace(0, 1, TT)
-psi = np.sqrt(np.abs(np.gradient(gam, binsize)) + eps)
 O = np.eye(n)
 O_old = O.copy()
 gam_old = gam.copy()
 qtilde = q.copy()
+
 # rotation basis (Skew Symmetric)
 E = np.array([[0, -1.], [1., 0]])
 # warping basis (Fourier)
@@ -47,17 +49,17 @@ while itr <= max_itr:
     # inner product value
     A = np.zeros(m)
     for i in range(0, m):
-        A[i] = fs.innerprod_q(qtilde, nu[:, :, i])
+        A[i] = fs.innerprod_q2(qtilde, nu[:, :, i])
 
     # form gradient for rotation
     B = np.zeros((n, n, m))
     for i in range(0, m):
-        B[:, :, i] = fs.innerprod_q(E.dot(qtilde), nu[:, :, i]) * E
+        B[:, :, i] = fs.innerprod_q2(E.dot(qtilde), nu[:, :, i]) * E
 
     tmp1 = np.sum(np.exp(alpha + A))
-    tmp2 = np.sum(tmp1 * B, axis=2)
-    hO = np.sum(y * B, axis=1) - (tmp2 / tmp1)
-    O_new = O_old.dot(np.exp(deltaO * hO))
+    tmp2 = np.sum(np.exp(alpha + A) * B, axis=2)
+    hO = np.sum(y * B, axis=2) - (tmp2 / tmp1)
+    O_new = O_old.dot(expm(deltaO * hO))
 
     # form gradient for warping
     qtilde_diff = np.gradient(qtilde, binsize)
@@ -68,11 +70,11 @@ while itr <= max_itr:
         for j in range(0, p):
             cbar = cumtrapz(f_basis[:, j] * f_basis[:, j], time, initial=0)
             ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, j]
-            tmp3[:, j] = fs.innerprod_q(ctmp, nu[:, :, i]) * f_basis[:, j]
+            tmp3[:, j] = fs.innerprod_q2(ctmp, nu[:, :, i]) * f_basis[:, j]
 
         c[:, i] = np.sum(tmp3, axis=1)
 
-    tmp2 = np.sum(tmp1 * c, axis=2)
+    tmp2 = np.sum(np.exp(alpha + A) * c, axis=1)
     hpsi = np.sum(y * c, axis=1) - (tmp2 / tmp1)
 
     vecnorm = norm(hpsi)
