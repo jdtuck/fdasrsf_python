@@ -2,8 +2,8 @@ import numpy
 import sys
 from distutils.core import setup
 from distutils.core import Command
-from distutils.extension import Extension
-from Cython.Distutils import build_ext
+from Cython.extension import Extension
+from Cython.Distutils import build_ext, cythonize
 
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (2, 6):
@@ -52,7 +52,7 @@ extensions = [
 	    language="c",
 	),
 	Extension(name="ocmlogit_warp",
-	    sources=["src/ocmlogit_warp.pyx", "src/ocmlogit_warp_grad.c", "src/misc_funcs.c", "src/matrix_exponential.c", "src/c8lib.c", "src/r8lib.c"],
+	    sources=["src/ocmlogit_warp.pyx", "src/ocmlogit_warp_grad.c", "src/misc_funcs.c"],
 	    include_dirs=[numpy.get_include()],
 	    language="c",
 	),
@@ -61,8 +61,7 @@ extensions = [
 
 setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
-    ext_modules=extensions,
-    # ext_modules = cythonize(extensions),
+    ext_modules=cythonize(extensions, gdb_debug=True),
     name='fdasrsf',
     version='1.2.0',
     packages=['fdasrsf'],

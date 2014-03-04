@@ -24,12 +24,12 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 	double binsize1 = 1.0;
 	double t[TT], O1[4], O2[4], binsize, E[4], A[m], O_tmp[4];
 	double gam1[TT], f_basis[TT*p], max_val[max_itr];
-	double q_tilde[TT*n], B[n*n*m], q_tmp[TT*n];
-	double tmpi, tmp1, tmp2[n*n*m], tmp3[n*n], tmp4[n*n];
-	double hO[n*n], q_tilde_diff[TT*n], c[TT*m], cbar[TT], ftmp[TT];
+	double q_tilde[TT*n], B[m], q_tmp[TT*n];
+	double tmpi, tmp1, tmp2[m], tmp3, tmp4, tmpi1;
+	double hO, q_tilde_diff[TT*n], c[TT*m], cbar[TT], ftmp[TT];
 	double tmp5[TT*p], tmp6[TT*m], tmp7[TT], tmp8[TT];
 	double hpsi[TT], ones[TT], psi[TT], gam2[TT], gam_tmp[TT];
-	double max_val_change, res_cos, res_sin;
+	double max_val_change, res_cos, res_sin, theta;
 
 	// Pointers
 	double *t_ptr, *f_basis_ptr, *A_ptr, *tmpi_ptr, *q_tilde_ptr;
@@ -38,7 +38,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 	double *hO_ptr, *O_tmp_ptr, *q_tilde_diff_ptr, *c_ptr, *cbar_ptr;
 	double *ftmp_ptr, *tmp5_ptr, *tmp6_ptr, *tmp7_ptr, *tmp8_ptr;
 	double *hpsi_ptr, *psi_ptr, *gam1_ptr, *gam2_ptr, *ones_ptr;
-	double *gam_tmp_ptr;
+	double *gam_tmp_ptr, *q_ptr;
 	int *y_ptr;
 
 	t_ptr = t;
@@ -55,12 +55,6 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 	O1[1] = 0;
 	O1[2] = 0;
 	O1[3] = 1;
-
-	// rotation basis (skew symmetric)
-	E[0] = 0;
-	E[1] = 1;
-	E[2] = -1;
-	E[3] = 0;
 
 	// warping basis (fourier)
 	f_basis_ptr = f_basis;
@@ -87,16 +81,19 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		}
 
 		// for gradient for rotation
+		theta = acos(O1[0]);
+		O_tmp[0] = -1*sin(theta);
+		O_tmp[1] = -1*cos(theta);
+		O_tmp[2] = cos(theta);
+		O_tmp[3] = -1*sin(theta);
+
 		B_ptr = B;
-		nu_ptr = nu;
-		E_ptr = E;
+		O_tmp_ptr = O_tmp;
 		q_tilde_ptr = q_tilde;
 		q_tmp_ptr = q_tmp;
+		product(n, n, TT, O_tmp_ptr, q_tilde_ptr, q_tmp_ptr);
 		for (j=0; j<m; j++){
-			product(n, n, TT, E_ptr, q_tilde_ptr, q_tmp_ptr);
-			tmpi = innerprod_q2(T1, q_tmp_ptr, nu_ptr);
-			for (k=0; k<n*n; k++)
-				B[k+m*j] = tmpi*E[k];
+			B[j] = innerprod_q2(T1, q_tmp_ptr, nu_ptr);
 			nu_ptr += n*TT;
 		}
 
@@ -109,56 +106,30 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		tmp2_ptr = tmp2;
 		B_ptr = B;
 		for (j=0; j<m; j++){
-			for (k=0; k<n*n; k++){
-				tmp2_ptr[k] = exp(alpha_ptr[j] + A_ptr[j]) * B_ptr[k];
-			}
-			B_ptr += n*n;
-			tmp2_ptr += n*n;
+			tmp2_ptr[k] = exp(alpha_ptr[j] + A_ptr[j]) * B_ptr[k];
 		}
 
-		tmp3_ptr = tmp3;
 		tmp2_ptr = tmp2;
-		for (k=0; k<n*n; k++){
-			tmp3[k] = tmp2_ptr[k];
-			for (j=1; j<m; j++)
-				tmp3[k] = tmp3[k] + tmp2_ptr[k+j*n*n];
+		tmp3 = 0;
+		for (k=0; k<m; k++){
+			tmp3 += tmp2_ptr[k];
 		}
 
-		for (k=0; k<n*n; k++)
-			tmp3[k] = tmp3[k]/tmp1;
+		tmp3 = tmp3/tmp1;
 
-		tmp4_ptr = tmp4;
+		tmp4 = 0;
 		B_ptr = B;
 		y_ptr = y;
-		for (j=0; j<m; j++){
-			for (k=0; k<n*n; k++){
-				tmp4_ptr[k] = y_ptr[j] * B_ptr[k];
-			}
-			B_ptr += n*n;
-			tmp4_ptr += n*n;
+		for (k=0; k<m; j++){
+			tmp4 += y_ptr[k] * B_ptr[k];
 		}
 
-		hO_ptr = hO;
-		tmp4_ptr = tmp4;
-		for (k=0; k<n*n; k++){
-			hO[k] = tmp4_ptr[k];
-			for (j=1; j<m; j++)
-				hO[k] += tmp4_ptr[k+j*n*n];
-		}
+		hO = tmp4 - tmp3;
 
-		tmp3_ptr = tmp3;
-		for (k=0; k<n*n; k++)
-			hO[k] = hO[k] - tmp3_ptr[k];
-
-		for (k=0; k<n*n; k++)
-			hO[k] = hO[k] * deltaO;
-
-		O1_ptr = O1;
-		O_tmp_ptr = O_tmp;
-		O_tmp_ptr = r8mat_expm1(n*n, hO);
-		O2_ptr = O2;
-		O_tmp_ptr = O_tmp;
-		product(n, n, n, O1_ptr, O_tmp_ptr, O2_ptr);
+		O2[0] = cos(theta+deltaO*hO);
+		O2[1] = -1*sin(theta+deltaO*hO);
+		O2[2] = sin(theta+deltaO*hO);
+		O2[3] = cos(theta+deltaO*hO);
 
 		// form graident for warping
 		q_tilde_diff_ptr = q_tilde_diff;
@@ -174,7 +145,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 			tmp5_ptr = tmp5;
 			for (k=0; k<p; k++){
 				for (l=0; l<TT; l++)
-					ftmp[l] = f_basis[l+k*TT] * f_basis[l+k*TT];
+					ftmp[l] = f_basis[l+k*TT];
 				cumtrapz(T1, t_ptr, ftmp_ptr, cbar_ptr);
 				for (jj=0; jj<n; jj++){
 					for (kk=0; kk<TT; kk++){
@@ -263,13 +234,13 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 
 		approx(t, gam1_ptr, TT, gam_tmp_ptr, gam2_ptr, TT, 1, 0, 1, 0);
 
-		tmpi = 0;
+		tmpi1 = 0;
 		alpha_ptr = alpha;
 		A_ptr = A;
 		for (j=0; j<m; j++)
-			tmpi += y[j] * (alpha_ptr[j] + A_ptr[j]);
+			tmpi1 += y[j] * (alpha_ptr[j] + A_ptr[j]);
 
-		max_val[itr] = tmpi - log(tmp1);
+		max_val[itr] = tmpi1 - log(tmp1);
 
 		if (display == 1)
 			printf("Iteration %d : Cost %f\n", itr, max_val[itr]);
@@ -277,12 +248,16 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		gam1_ptr = gam2;
 		O1_ptr = O2;
 
+		q_tilde_ptr = q_tilde;
+		q_tmp_ptr = q_tmp;
+		q_ptr = q;
+		product(n, n, TT, O1_ptr, q_ptr, q_tmp_ptr);
+		group_action_by_gamma(n1, T1, q_tmp_ptr, gam1_ptr, q_tilde_ptr);
+
 		if (itr >= 2){
 			max_val_change = max_val[itr] - max_val[itr-1];
-			if (fabs(max_val_change) < tol)
+			if (hO < tol && tmpi < tol)
 				break;
-			// if (max_val_change < 0)
-			// 	break;
 		}
 
 		itr++;
