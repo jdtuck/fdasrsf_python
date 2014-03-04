@@ -798,6 +798,6 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
 
 
 def rot_mat(theta):
-    O = array([(cos(theta), sin(theta)), (-1 * sin(theta), cos(theta))])
+    O = array([(cos(theta), -1*sin(theta)), (sin(theta), cos(theta))])
 
     return (O)

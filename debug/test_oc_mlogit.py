@@ -29,5 +29,6 @@ y = np.ones(60, dtype=int)
 y[20:40] = 2
 y[40:60] = 3
 
-model = cr.oc_elastic_mlogistic(beta, y, df=60, T=200, max_itr=40)
+model = cr.oc_elastic_mlogistic(beta, y, df=60, T=200, max_itr=40,
+                                deltaO=.08, deltag=.05)
 out = cr.oc_elastic_prediction(beta, model, y=y)

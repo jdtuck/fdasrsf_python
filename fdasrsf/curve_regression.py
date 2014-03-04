@@ -283,7 +283,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
     if n > 500:
         parallel = True
     elif T > 100:
-        parallel = True
+        parallel = False
     else:
         parallel = True
 
@@ -658,7 +658,7 @@ def logit_hessian(s, b, X, y):
 
 
 # helper functions for multinomial logistic regression
-def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
+def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-4,
                      deltaO=0.008, deltag=0.008, display=0):
     """
     calculates optimal warping for functional multinomial logistic regression
@@ -671,7 +671,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     :param max_itr: maximum number of iterations (Default=8000)
     :param tol: stopping tolerance (Default=1e-10)
     :param deltaO: gradient step size for rotation (Default=0.008)
-    :param deltag: gradient step size for warping (Default=0.008
+    :param deltag: gradient step size for warping (Default=0.008)
     :param display: display iterations (Default=0)
 
     :rtype: tuple of numpy array
@@ -698,7 +698,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
     qtilde = q.copy()
 
     # rotation basis (Skew Symmetric)
-    E = np.array([[0, -1.], [1., 0]])
+    # E = np.array([[0, -1.], [1., 0]])
     # warping basis (Fourier)
     p = 20
     f_basis = np.zeros((TT, p))
@@ -715,14 +715,25 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
             A[i] = cf.innerprod_q2(qtilde, nu[:, :, i])
 
         # form gradient for rotation
-        B = np.zeros((n, n, m))
-        for i in range(0, m):
-            B[:, :, i] = cf.innerprod_q2(E.dot(qtilde), nu[:, :, i]) * E
+        # B = np.zeros((n, n, m))
+        # for i in range(0, m):
+        #     B[:, :, i] = cf.innerprod_q2(E.dot(qtilde), nu[:, :, i]) * E
 
+        # tmp1 = np.sum(np.exp(alpha + A))
+        # tmp2 = np.sum(np.exp(alpha + A) * B, axis=2)
+        # hO = np.sum(y * B, axis=2) - (tmp2 / tmp1)
+        # O_new = O_old.dot(expm(deltaO * hO))
+
+        theta = np.arccos(O_old[0, 0])
+        Ograd = np.array([(-1*np.sin(theta), -1*np.cos(theta)),
+                         (np.cos(theta), -1*np.sin(theta))])
+        B = np.zeros(m)
+        for i in range(0, m):
+            B[i] = cf.innerprod_q2(Ograd.dot(qtilde), nu[:, :, i])
         tmp1 = np.sum(np.exp(alpha + A))
-        tmp2 = np.sum(np.exp(alpha + A) * B, axis=2)
-        hO = np.sum(y * B, axis=2) - (tmp2 / tmp1)
-        O_new = O_old.dot(expm(deltaO * hO))
+        tmp2 = np.sum(np.exp(alpha + A) * B)
+        hO = np.sum(y * B) - (tmp2 / tmp1)
+        O_new = cf.rot_mat(theta+deltaO*hO)
 
         # form gradient for warping
         qtilde_diff = np.gradient(qtilde, binsize)
@@ -731,7 +742,7 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
         for i in range(0, m):
             tmp3 = np.zeros((TT, p))
             for j in range(0, p):
-                cbar = cumtrapz(f_basis[:, j] * f_basis[:, j], time, initial=0)
+                cbar = cumtrapz(f_basis[:, j], time, initial=0)
                 ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, j]
                 tmp3[:, j] = cf.innerprod_q2(ctmp, nu[:, :, i]) * f_basis[:, j]
 
@@ -757,18 +768,16 @@ def mlogit_warp_grad(alpha, nu, q, y, max_itr=8000, tol=1e-6,
         O_old = O_new.copy()
         qtilde = cf.group_action_by_gamma(O_old.dot(q), gam_old)
 
-        if itr >= 2:
-            max_val_change = max_val[itr] - max_val[itr-1]
-            if np.abs(max_val_change) < tol:
-                break
+        if vecnorm < tol and hO < tol:
+            break
 
         itr += 1
 
     # gam_old, O_old = mw.ocmlogit_warp(np.ascontiguousarray(alpha),
     #                                   np.ascontiguousarray(nu),
     #                                   np.ascontiguousarray(q),
-    #                                   np.ascontiguousarray(y, dtype=np.int32), max_itr,
-    #                                   tol, deltaO, deltag, display)
+    #                                   np.ascontiguousarray(y, dtype=np.int32),
+    #                                   max_itr, tol, deltaO, deltag, display)
 
     return (gam_old, O_old)
 
