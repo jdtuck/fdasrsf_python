@@ -38,22 +38,22 @@ extensions = [
 	Extension(name="optimum_reparamN",
 	    sources=["src/optimum_reparamN.pyx", "src/DynamicProgrammingQ2.c",
         "src/dp_grid.c"],
-	    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
+	    include_dirs=[numpy.get_include()],
 	    language="c",
 	),
 	Extension(name="fpls_warp",
 	    sources=["src/fpls_warp.pyx", "src/fpls_warp_grad.c", "src/misc_funcs.c"],
-	    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
+	    include_dirs=[numpy.get_include()],
 	    language="c",
 	),
 	Extension(name="mlogit_warp",
 	    sources=["src/mlogit_warp.pyx", "src/mlogit_warp_grad.c", "src/misc_funcs.c"],
-	    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
+	    include_dirs=[numpy.get_include()],
 	    language="c",
 	),
 	Extension(name="ocmlogit_warp",
 	    sources=["src/ocmlogit_warp.pyx", "src/ocmlogit_warp_grad.c", "src/misc_funcs.c", "src/matrix_exponential.c", "src/c8lib.c", "src/r8lib.c"],
-	    include_dirs=[numpy.get_include()],  # .../site-packages/numpy/core/include
+	    include_dirs=[numpy.get_include()],
 	    language="c",
 	),
 ]
@@ -61,7 +61,8 @@ extensions = [
 
 setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
-    ext_modules = cythonize(extensions,
+    ext_modules=extensions,
+    # ext_modules = cythonize(extensions),
     name='fdasrsf',
     version='1.2.0',
     packages=['fdasrsf'],

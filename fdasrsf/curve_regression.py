@@ -283,7 +283,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
     if n > 500:
         parallel = True
     elif T > 100:
-        parallel = False
+        parallel = True
     else:
         parallel = True
 
