@@ -20,16 +20,16 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 	int k, j, l, kk, jj;
 	int p = 20;
 	int p1 = 10;
-	int itr = 1;
+	int itr = 0;
 	double binsize1 = 1.0;
 	double t[TT], O1[4], O2[4], binsize, E[4], A[m], O_tmp[4];
-	double gam1[TT], f_basis[TT*p], max_val[max_itr];
+	double gam1[TT], f_basis[TT*p], max_val[max_itr+1];
 	double q_tilde[TT*n], B[m], q_tmp[TT*n];
 	double tmpi, tmp1, tmp2[m], tmp3, tmp4, tmpi1;
 	double hO, q_tilde_diff[TT*n], c[TT*m], cbar[TT], ftmp[TT];
-	double tmp5[TT*p], tmp6[TT*m], tmp7[TT], tmp8[TT];
+	double tmp5[TT*p], tmp6[TT*m], tmp7[TT], tmp8[TT*m];
 	double hpsi[TT], ones[TT], psi[TT], gam2[TT], gam_tmp[TT];
-	double max_val_change, res_cos, res_sin, theta;
+	double max_val_change, res_cos, res_sin, theta, thetanew;
 
 	// Pointers
 	double *t_ptr, *f_basis_ptr, *A_ptr, *tmpi_ptr, *q_tilde_ptr;
@@ -43,7 +43,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 
 	t_ptr = t;
 	linspace(0, 1, TT, t_ptr);
-	binsize = 1/(TT-1);
+	binsize = 1.0/(TT-1);
 
 	gam1_ptr = gam1;
 	for (k=0; k<TT; k++){
@@ -77,14 +77,13 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		for (j=0; j<m; j++){
 			A[j] = innerprod_q2(T1, q_tilde_ptr, nu_ptr);
 			nu_ptr += n*TT;
-			q_tilde_ptr += n*TT;
 		}
 
 		// for gradient for rotation
 		theta = acos(O1[0]);
 		O_tmp[0] = -1*sin(theta);
-		O_tmp[1] = -1*cos(theta);
-		O_tmp[2] = cos(theta);
+		O_tmp[1] = cos(theta);
+		O_tmp[2] = -1*cos(theta);
 		O_tmp[3] = -1*sin(theta);
 
 		B_ptr = B;
@@ -92,6 +91,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		q_tilde_ptr = q_tilde;
 		q_tmp_ptr = q_tmp;
 		product(n, n, TT, O_tmp_ptr, q_tilde_ptr, q_tmp_ptr);
+		nu_ptr = nu;
 		for (j=0; j<m; j++){
 			B[j] = innerprod_q2(T1, q_tmp_ptr, nu_ptr);
 			nu_ptr += n*TT;
@@ -106,7 +106,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		tmp2_ptr = tmp2;
 		B_ptr = B;
 		for (j=0; j<m; j++){
-			tmp2_ptr[k] = exp(alpha_ptr[j] + A_ptr[j]) * B_ptr[k];
+			tmp2_ptr[j] = exp(alpha_ptr[j] + A_ptr[j]) * B_ptr[j];
 		}
 
 		tmp2_ptr = tmp2;
@@ -120,16 +120,17 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		tmp4 = 0;
 		B_ptr = B;
 		y_ptr = y;
-		for (k=0; k<m; j++){
+		for (k=0; k<m; k++){
 			tmp4 += y_ptr[k] * B_ptr[k];
 		}
 
 		hO = tmp4 - tmp3;
-
-		O2[0] = cos(theta+deltaO*hO);
-		O2[1] = -1*sin(theta+deltaO*hO);
-		O2[2] = sin(theta+deltaO*hO);
-		O2[3] = cos(theta+deltaO*hO);
+		
+		thetanew = theta+deltaO*hO;
+		O2[0] = cos(thetanew);
+		O2[1] = sin(thetanew);
+		O2[2] = -1*sin(thetanew);
+		O2[3] = cos(thetanew);
 
 		// form graident for warping
 		q_tilde_diff_ptr = q_tilde_diff;
@@ -148,10 +149,8 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 					ftmp[l] = f_basis[l+k*TT];
 				cumtrapz(T1, t_ptr, ftmp_ptr, cbar_ptr);
 				for (jj=0; jj<n; jj++){
-					for (kk=0; kk<TT; kk++){
-						for (l=0; l<TT; l++)
-							q_tmp[n*l+jj] = 2*q_tilde_diff[n*l+jj]*cbar[kk] + q_tilde[n*l+jj]*f_basis[l+k*TT];
-					}
+					for (l=0; l<TT; l++)
+						q_tmp[n*l+jj] = 2*q_tilde_diff[n*l+jj]*cbar[l] + q_tilde[n*l+jj]*f_basis[l+k*TT];
 				}
 
 				tmpi = innerprod_q2(T1, q_tmp_ptr, nu_ptr);
@@ -163,7 +162,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 			for (jj=0; jj<TT; jj++){
 				c[jj+TT*j] = tmp5[jj];
 				for (l=1; l<p; l++)
-					c[jj+TT*j] = c[jj+TT*j] + tmp5[l*TT];
+					c[jj+TT*j] = c[jj+TT*j] + tmp5[jj+l*TT];
 			}
 
 			nu_ptr += n*TT;
@@ -180,16 +179,15 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 			tmp6_ptr += TT;
 		}
 
-		tmp7_ptr = tmp7;
 		tmp6_ptr = tmp6;
+		tmp7_ptr = tmp7;
 		for (k=0; k<TT; k++){
-			tmp7[k] = tmp6_ptr[k];
+			tmp7_ptr[k] = tmp6_ptr[k];
 			for (j=1; j<m; j++)
-				tmp7[k] = tmp7[k] + tmp6_ptr[k+j*n*n];
+				tmp7_ptr[k] = tmp7_ptr[k] + tmp6_ptr[k+j*TT];
+			
+			tmp7_ptr[k] = tmp7_ptr[k]/tmp1;
 		}
-
-		for (k=0; k<n*n; k++)
-			tmp7[k] = tmp7[k]/tmp1;
 
 		tmp8_ptr = tmp8;
 		c_ptr = c;
@@ -204,21 +202,21 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 
 		hpsi_ptr = hpsi;
 		tmp8_ptr = tmp8;
-		for (k=0; k<TT; k++){
-			hpsi[k] = tmp8_ptr[k];
-			for (j=1; j<m; j++)
-				hpsi[k] += tmp8_ptr[k+j*n*n];
-		}
-
 		tmp7_ptr = tmp7;
-		for (k=0; k<TT; k++)
-			hpsi[k] = hpsi[k] - tmp7_ptr[k];
-
+		for (k=0; k<TT; k++){
+			hpsi_ptr[k] = tmp8_ptr[k];
+			for (j=1; j<m; j++)
+				hpsi_ptr[k] += tmp8_ptr[k+j*TT];
+			
+			hpsi_ptr[k] = hpsi_ptr[k] - tmp7_ptr[k];
+		}
+			
 		psi_ptr = psi;
 		ones_ptr = ones;
 		gam2_ptr = gam2;
 		gam_tmp_ptr = gam_tmp;
-		pvecnorm(T1, hpsi, &binsize1, &tmpi);
+		hpsi_ptr = hpsi;
+		pvecnorm(T1, hpsi_ptr, &binsize1, &tmpi);
 		res_cos = cos(deltag*tmpi);
 		res_sin = sin(deltag*tmpi);
 		for (j=0; j<TT; j++)
@@ -243,10 +241,14 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		max_val[itr] = tmpi1 - log(tmp1);
 
 		if (display == 1)
-			printf("Iteration %d : Cost %f\n", itr, max_val[itr]);
+			printf("Iteration %d : Cost %f\n", (itr+1), max_val[itr]);
 
 		gam1_ptr = gam2;
 		O1_ptr = O2;
+		O1[0] = O2[0];
+		O1[1] = O2[1];
+		O1[2] = O2[2];
+		O1[3] = O2[3];
 
 		q_tilde_ptr = q_tilde;
 		q_tmp_ptr = q_tmp;
@@ -264,11 +266,11 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 
 	} while (max_itr>=itr);
 
-	for (k=1; k<TT; k++){
+	for (k=0; k<TT; k++){
 		gamout[k] = gam1_ptr[k];
 	}
 
-	for (k=1; k<n*n; k++){
+	for (k=0; k<n*n; k++){
 		Oout[k] = O1_ptr[k];
 	}
 

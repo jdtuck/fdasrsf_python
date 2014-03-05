@@ -239,7 +239,7 @@ double innerprod_q2(int *m1, double *q1, double *q2) {
     int n1 = 2;
     double out = 0.0;
 
-    q = (double *) malloc(m*sizeof(double));
+    q = (double *) malloc((n1*m)*sizeof(double));
     for (k=0; k<n1*m; k++)
         q[k] = q1[k]*q2[k];
 
@@ -460,7 +460,6 @@ void invertGamma(int n, double *gam, double *out) {
 
 void SqrtMeanInverse(int *T1, int *n1, double *ti, double *gami, double *out){
     int T = *T1, n = *n1;
-    double dt = 1/(T-1);
     double psi[T*n], gam[T*n], mu[T], vec[T*n], v[T], y[T], tmpi, len, vm[T], mnpsi[T], dqq[n];
     double eps = DBL_EPSILON, tmpv[T], min = 0.0, binsize, tmp, gam_mu[T];
     int k, iter, l, n2 = 1, min_ind = 0;
@@ -623,28 +622,30 @@ void linspace(double min, double max, int n, double *result){
 /* reparameterize srvf q by gamma */
 void group_action_by_gamma(int *n1, int *T1, double *q, double *gam, double *qn){
     int T = *T1, n = *n1;
-    double dt = 1/T, max=1, min=0;
+	int n2 = 1;
+    double dt = 1.0/T, max=1, min=0;
     int j, k;
     double val;
-    double gammadot[T], ti[T], tmp[T];
-    double *gammadot_ptr, *time_ptr, *tmp_ptr;
+    double gammadot[T], ti[T], tmp[T], tmp1[T];
+    double *gammadot_ptr, *time_ptr, *tmp_ptr, *tmp1_ptr;
 
     time_ptr = ti;
     linspace(min, max, T, time_ptr);
     gammadot_ptr = gammadot;
-    gradient(&T,&n,gam,&dt,gammadot_ptr);
+    gradient(T1,&n2,gam,&dt,gammadot_ptr);
 
-    tmp_ptr = tmp;
     for (k=0; k<n; k++){
+		tmp_ptr = tmp;
+		tmp1_ptr = tmp1;
         for (j=0; j<T; j++)
             tmp[j] = q[n*j+k];
-        spline(T, time_ptr, q, T, gam, tmp_ptr);
+        spline(T, time_ptr, tmp_ptr, T, gam, tmp1_ptr);
         for (j=0; j<T; j++)
-            qn[n*j+k] = tmp[j]* sqrt(gammadot[j]);
+            qn[n*j+k] = tmp1[j]* sqrt(gammadot[j]);
 
     }
 
-    val = innerprod_q2(&T, qn, qn);
+    val = innerprod_q2(T1, qn, qn);
 
     for (k=0; k<T*n; k++)
         qn[k] = qn[k] / sqrt(val);

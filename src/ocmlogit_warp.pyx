@@ -1,3 +1,4 @@
+import numpy as np
 cimport cocmlogit
 
 cimport numpy as np
@@ -47,13 +48,13 @@ def ocmlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha,
     q1 = q.reshape(m1*TT, order='F')
 
     nu1 = np.ascontiguousarray(nu1)
-    q1 = np.ascontinguousarray(q1)
+    q1 = np.ascontiguousarray(q1)
     gamout = np.ascontiguousarray(gamout)
     O = np.ascontiguousarray(O)
 
     cocmlogit.ocmlogit_warp_grad(&m1, &TT, &m, &alpha[0], &nu1[0], &q1[0], &y[0], &max_itri, &toli, &deltaOi,
                                  &deltagi, &displayi, &gamout[0], &O[0])
 
-    Oout = O.reshape((m1, m1))
+    Oout = O.reshape((m1, m1), order='F')
 
     return gamout, Oout

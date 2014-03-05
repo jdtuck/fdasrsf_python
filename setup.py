@@ -2,8 +2,9 @@ import numpy
 import sys
 from distutils.core import setup
 from distutils.core import Command
-from Cython.extension import Extension
-from Cython.Distutils import build_ext, cythonize
+from distutils.extension import Extension
+from Cython.Distutils import build_ext
+from Cython.Build import cythonize
 
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (2, 6):
@@ -61,7 +62,8 @@ extensions = [
 
 setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
-    ext_modules=cythonize(extensions, gdb_debug=True),
+	ext_modules=extensions,
+    # ext_modules=cythonize(extensions, gdb_debug=True),
     name='fdasrsf',
     version='1.2.0',
     packages=['fdasrsf'],
