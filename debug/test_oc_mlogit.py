@@ -12,7 +12,7 @@ C = fun['beta'][:]
 C = C.T
 
 a, b, c = C.shape
-beta = np.zeros((a, b, 60))
+beta = np.zeros((a, b, 80))
 for ii in range(0, 20):
     beta_tmp = np.zeros((a, b+1))
     beta_tmp[:, 0:b] = C[:, :, ii]
@@ -24,10 +24,14 @@ for ii in range(0, 20):
     beta_tmp[:, 0:b] = C[:, :, ii+40]
     beta_tmp[:, b] = C[:, 0, ii+40]
     beta[:, :, ii+40] = cf.resamplecurve(beta_tmp, b)
+    beta_tmp[:, 0:b] = C[:, :, ii+60]
+    beta_tmp[:, b] = C[:, 0, ii+60]
+    beta[:, :, ii+60] = cf.resamplecurve(beta_tmp, b)
 
-y = np.ones(60, dtype=int)
+y = np.ones(80, dtype=int)
 y[20:40] = 2
 y[40:60] = 3
+y[60:80] = 4
 
 model = cr.oc_elastic_mlogistic(beta, y, df=60, T=200, max_itr=40,
                                 deltaO=.08, deltag=.05)
