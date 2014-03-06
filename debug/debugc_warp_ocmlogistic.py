@@ -4,7 +4,7 @@ import fdasrsf as fs
 import ocmlogit_warp as mw
 import h5py
 
-fun = h5py.File('/home/dtucker/fdasrsf/debug_data_oc.h5')
+fun = h5py.File('/home/dtucker/fdasrsf/debug_data_oc_mlogit.h5')
 q = fun['q'][:]
 y = fun['y'][:]
 alpha = fun['alpha'][:]

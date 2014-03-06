@@ -215,7 +215,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(nu, beta0[:, :, ii], y[ii]) for ii in range(N))
+            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(alpha, nu, q[:, :, ii], y[ii]) for ii in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
                 beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
@@ -224,8 +224,8 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                beta1 = beta0[:, :, ii]
-                gammatmp, Otmp, tautmp = logistic_warp(nu, beta1, y[ii])
+                q1 = q[:, :, ii]
+                gammatmp, Otmp, tautmp = logistic_warp(alpha, nu, q1, y[ii])
                 gamma_new[:, ii] = gammatmp
                 beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                 beta[:, :, ii] = beta1n
@@ -235,7 +235,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
         if norm(gamma - gamma_new) < 1e-5:
             break
         else:
-            gamma = gamma_new
+            gamma = gamma_new.copy()
 
         itr += 1
 
@@ -431,7 +431,7 @@ def oc_elastic_prediction(beta, model, y=None):
         if model.type == 'oclinear':
             SSE = None
         elif model.type == 'oclogistic':
-            y_pred = 1 - phi(y_pred)
+            y_pred = phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
             PC = None
@@ -444,7 +444,7 @@ def oc_elastic_prediction(beta, model, y=None):
         if model.type == 'oclinear':
             SSE = sum((y - y_pred) ** 2)
         elif model.type == 'oclogistic':
-            y_pred = 1 - phi(y_pred)
+            y_pred = phi(y_pred)
             y_labels = np.ones(n)
             y_labels[y_pred < 0.5] = -1
             TP = sum(y[y_labels == 1] == 1)
@@ -491,7 +491,11 @@ def preproc_open_curve(beta, T=100):
     q = np.zeros((n, T, k))
     beta2 = np.zeros((n, T, k))
     for i in range(0, k):
-        beta1 = cf.resamplecurve(beta[:, :, i], T)
+        beta1 = beta[:, :, i]
+        # beta1, scale = cf.scale_curve(beta1)
+        beta1 = cf.resamplecurve(beta1, T)
+        # centroid1 = cf.calculatecentroid(beta1)
+        # beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
         q[:, :, i] = cf.curve_to_q(beta1)
 
@@ -546,12 +550,14 @@ def regression_warp(nu, beta, y, alpha):
 
 
 # helper functions for logistic regression
-def logistic_warp(nu, beta, y):
+def logistic_warp(alpha, nu, q, y, deltaO=.05, deltag=.1, max_itr=8000,
+                  tol=1e-4, display=0):
     """
     calculates optimal warping for function logistic regression
 
+    :param alpha: scalar
     :param nu: numpy ndarray of shape (M,N) of M functions with N samples
-    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
+    :param q: numpy ndarray of shape (M,N) of M functions with N samples
     :param y: numpy ndarray of shape (1,N) of M functions with N samples
     responses
 
@@ -559,17 +565,103 @@ def logistic_warp(nu, beta, y):
     :return gamma: warping function
 
     """
-    betanu = cf.q_to_curve(nu)
-    T = beta.shape[1]
-    if y == 1:
-        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(betanu, beta)
-        q = cf.curve_to_q(beta1)
-        gamma = cf.optimum_reparam_curve(nu, q)
-    elif y == -1:
-        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
-        q = cf.curve_to_q(beta1)
-        gamma = cf.optimum_reparam_curve(-1 * nu, q)
-    return (gamma, O_hat, tau)
+    # betanu = cf.q_to_curve(nu)
+    # betanu, scale_nu = cf.scale_curve(betanu)
+    # nu, scale_nu = cf.scale_curve(nu)
+
+    # T = beta.shape[1]
+    # if y == 1:
+    #     beta1, O_hat, tau = cf.find_rotation_and_seed_coord(betanu, beta)
+    #     q = cf.curve_to_q(beta1)
+    #     gamma = cf.optimum_reparam_curve(nu, q)
+    # elif y == -1:
+    #     beta1, O_hat, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
+    #     q = cf.curve_to_q(beta1)
+    #     gamma = cf.optimum_reparam_curve(-1 * nu, q)
+
+    tau = 0
+    q, scale = cf.scale_curve(q)
+    nu, scale = cf.scale_curve(nu)
+
+    # python code
+    n = q.shape[0]
+    TT = q.shape[1]
+    time = np.linspace(0, 1, TT)
+    binsize = 1. / (TT - 1)
+
+    gam = np.linspace(0, 1, TT)
+    O = np.eye(n)
+    O_old = O.copy()
+    gam_old = gam.copy()
+    qtilde = q.copy()
+    # warping basis (Fourier)
+    p = 20
+    f_basis = np.zeros((TT, p))
+    for i in range(0, int(p/2)):
+        f_basis[:, 2*i] = 1/np.sqrt(np.pi) * np.sin(2*np.pi*(i+1)*time)
+        f_basis[:, 2*i + 1] = 1/np.sqrt(np.pi) * np.cos(2*np.pi*(i+1)*time)
+
+    itr = 0
+    max_val = np.zeros(max_itr+1)
+    while itr <= max_itr:
+        # inner product value
+        A = cf.innerprod_q2(qtilde, nu)
+
+        # form gradient for rotation
+        # B = np.zeros((n, n, m))
+        # for i in range(0, m):
+        #     B[:, :, i] = cf.innerprod_q2(E.dot(qtilde), nu[:, :, i]) * E
+
+        # tmp1 = np.sum(np.exp(alpha + A))
+        # tmp2 = np.sum(np.exp(alpha + A) * B, axis=2)
+        # hO = np.sum(y * B, axis=2) - (tmp2 / tmp1)
+        # O_new = O_old.dot(expm(deltaO * hO))
+
+        theta = np.arccos(O_old[0, 0])
+        Ograd = np.array([(-1*np.sin(theta), -1*np.cos(theta)),
+                         (np.cos(theta), -1*np.sin(theta))])
+        B = cf.innerprod_q2(Ograd.dot(qtilde), nu)
+        tmp1 = np.exp((-1*y)*(alpha+A))
+        tmp2 = (y*tmp1)/(1+tmp1)
+        hO = tmp2*B
+        O_new = cf.rot_mat(theta+deltaO*hO)
+
+        # form gradient for warping
+        qtilde_diff = np.gradient(qtilde, binsize)
+        qtilde_diff = qtilde_diff[1]
+        tmp3 = np.zeros((TT, p))
+        for i in range(0, p):
+            cbar = cumtrapz(f_basis[:, i], time, initial=0)
+            ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, i]
+            tmp3[:, i] = cf.innerprod_q2(ctmp, nu) * f_basis[:, i]
+
+        c = np.sum(tmp3, axis=1)
+
+        hpsi = tmp2*c
+
+        vecnorm = norm(hpsi)
+        costmp = np.cos(deltag * vecnorm) * np.ones(TT)
+        sintmp = np.sin(deltag * vecnorm) * (hpsi / vecnorm)
+        psi_new = costmp + sintmp
+        gam_tmp = cumtrapz(psi_new * psi_new, time, initial=0)
+        gam_tmp = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
+        gam_new = np.interp(gam_tmp, time, gam_old)
+
+        max_val[itr] = np.sum(y * (alpha + A)) - np.log(tmp1)
+
+        if display == 1:
+            print("Iteration %d : Cost %f" % (itr+1, max_val[itr]))
+
+        gam_old = gam_new.copy()
+        O_old = O_new.copy()
+        qtilde = cf.group_action_by_gamma(O_old.dot(q), gam_old)
+
+        if vecnorm < tol and hO < tol:
+            break
+
+        itr += 1
+
+    return (gam_old, O_old, tau)
 
 
 def phi(t):
@@ -591,7 +683,7 @@ def phi(t):
     return out
 
 
-def logit_loss(b, X, y):
+def logit_loss(b, X, y, lam=0.0):
     """
     logistic loss function, returns Sum{-log(phi(t))}
 
@@ -610,11 +702,11 @@ def logit_loss(b, X, y):
     out = np.zeros_like(yz)
     out[idx] = np.log(1 + np.exp(-yz[idx]))
     out[~idx] = (-yz[~idx] + np.log(1 + np.exp(yz[~idx])))
-    out = out.sum()
+    out = out.sum() + .5 * lam * b.dot(b)
     return out
 
 
-def logit_gradient(b, X, y):
+def logit_gradient(b, X, y, lam=0.0):
     """
     calculates gradient of the logistic loss
 
@@ -630,7 +722,7 @@ def logit_gradient(b, X, y):
     z = X.dot(b)
     z = phi(y * z)
     z0 = (z - 1) * y
-    grad = X.T.dot(z0)
+    grad = X.T.dot(z0) + lam * b
     return grad
 
 

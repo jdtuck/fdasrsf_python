@@ -4,27 +4,24 @@ from scipy.integrate import cumtrapz
 from scipy.linalg import norm, expm
 import h5py
 
-fun = h5py.File('/home/dtucker/fdasrsf/debug_data_oc_mlogit.h5')
+fun = h5py.File('/Users/jderektucker/Documents/Research/fdasrsf/debug/debug_data_oc_logit.h5')
 q = fun['q'][:]
-y = fun['y'][:]
-alpha = fun['alpha'][:]
+y = fun['y'].value
+alpha = fun['alpha'].value
 nu = fun['nu'][:]
 
 max_itr = 8000  # 4000
 tol = 1e-4
 deltag = .05
-deltaO = .08
+deltaO = .1
 display = 1
 
-alpha = alpha/norm(alpha)
-q, scale = fs.scale_curve(q)  # q/norm(q)
-for ii in range(0, nu.shape[2]):
-    nu[:, :, ii], scale = fs.scale_curve(nu[:, :, ii])  # nu/norm(nu)
+q, scale = fs.scale_curve(q)
+nu, scale = fs.scale_curve(nu)
 
 # python code
 n = q.shape[0]
 TT = q.shape[1]
-m = nu.shape[2]
 time = np.linspace(0, 1, TT)
 binsize = 1. / (TT - 1)
 
@@ -33,9 +30,6 @@ O = np.eye(n)
 O_old = O.copy()
 gam_old = gam.copy()
 qtilde = q.copy()
-
-# rotation basis (Skew Symmetric)
-# E = np.array([[0, -1.], [1., 0]])
 # warping basis (Fourier)
 p = 20
 f_basis = np.zeros((TT, p))
@@ -47,9 +41,7 @@ itr = 0
 max_val = np.zeros(max_itr+1)
 while itr <= max_itr:
     # inner product value
-    A = np.zeros(m)
-    for i in range(0, m):
-        A[i] = fs.innerprod_q2(qtilde, nu[:, :, i])
+    A = fs.innerprod_q2(qtilde, nu)
 
     # form gradient for rotation
     # B = np.zeros((n, n, m))
@@ -64,29 +56,24 @@ while itr <= max_itr:
     theta = np.arccos(O_old[0, 0])
     Ograd = np.array([(-1*np.sin(theta), -1*np.cos(theta)),
                      (np.cos(theta), -1*np.sin(theta))])
-    B = np.zeros(m)
-    for i in range(0, m):
-        B[i] = fs.innerprod_q2(Ograd.dot(qtilde), nu[:, :, i])
-    tmp1 = np.sum(np.exp(alpha + A))
-    tmp2 = np.sum(np.exp(alpha + A) * B)
-    hO = np.sum(y * B) - (tmp2 / tmp1)
+    B = fs.innerprod_q2(Ograd.dot(qtilde), nu)
+    tmp1 = np.exp((-1*y)*(alpha+A))
+    tmp2 = (y*tmp1)/(1+tmp1)
+    hO = tmp2*B
     O_new = fs.rot_mat(theta+deltaO*hO)
 
     # form gradient for warping
     qtilde_diff = np.gradient(qtilde, binsize)
     qtilde_diff = qtilde_diff[1]
-    c = np.zeros((TT, m))
-    for i in range(0, m):
-        tmp3 = np.zeros((TT, p))
-        for j in range(0, p):
-            cbar = cumtrapz(f_basis[:, j], time, initial=0)
-            ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, j]
-            tmp3[:, j] = fs.innerprod_q2(ctmp, nu[:, :, i]) * f_basis[:, j]
+    tmp3 = np.zeros((TT, p))
+    for i in range(0, p):
+        cbar = cumtrapz(f_basis[:, i], time, initial=0)
+        ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, i]
+        tmp3[:, i] = fs.innerprod_q2(ctmp, nu) * f_basis[:, i]
 
-        c[:, i] = np.sum(tmp3, axis=1)
+    c = np.sum(tmp3, axis=1)
 
-    tmp2 = np.sum(np.exp(alpha + A) * c, axis=1)
-    hpsi = np.sum(y * c, axis=1) - (tmp2 / tmp1)
+    hpsi = tmp2*c
 
     vecnorm = norm(hpsi)
     costmp = np.cos(deltag * vecnorm) * np.ones(TT)
