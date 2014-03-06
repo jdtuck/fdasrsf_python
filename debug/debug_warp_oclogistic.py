@@ -21,13 +21,13 @@ def phi(t):
     return out
 
 
-fun = h5py.File('/Users/jderektucker/Documents/Research/fdasrsf/debug/debug_data_oc_logit.h5')
+fun = h5py.File('/home/dtucker/fdasrsf/debug/debug_data_oc_logit.h5')
 q = fun['q'][:]
 y = fun['y'].value
 alpha = fun['alpha'].value
 nu = fun['nu'][:]
 
-max_itr = 8000  # 4000
+max_itr = 9000  # 4000
 tol = 1e-4
 deltag = .05
 deltaO = .1

@@ -120,13 +120,11 @@ void oclogit_warp_grad(int *n1, int *T1, double *alpha, double *nu, double *q, i
 				tmp5[l+k*TT] = tmpi*f_basis[l+k*TT];
 		}
 
-
 		for (jj=0; jj<TT; jj++){
-			c[jj+TT*j] = tmp5[jj];
+			c[jj] = tmp5[jj];
 			for (l=1; l<p; l++)
-				c[jj+TT*j] = c[jj+TT*j] + tmp5[jj+l*TT];
+				c[jj] = c[jj] + tmp5[jj+l*TT];
 		}
-
 
 		hpsi_ptr = hpsi;
 		c_ptr = c;
