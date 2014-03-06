@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "misc_funcs.h"
-#include "matrix_exponential.h"
 
 void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, double *q, int *y, int *max_itri, double *toli, double *deltaOi, double *deltagi, int *displayi, double *gamout, double *Oout){
 
@@ -125,7 +124,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 		}
 
 		hO = tmp4 - tmp3;
-		
+
 		thetanew = theta+deltaO*hO;
 		O2[0] = cos(thetanew);
 		O2[1] = sin(thetanew);
@@ -185,7 +184,7 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 			tmp7_ptr[k] = tmp6_ptr[k];
 			for (j=1; j<m; j++)
 				tmp7_ptr[k] = tmp7_ptr[k] + tmp6_ptr[k+j*TT];
-			
+
 			tmp7_ptr[k] = tmp7_ptr[k]/tmp1;
 		}
 
@@ -207,10 +206,10 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 			hpsi_ptr[k] = tmp8_ptr[k];
 			for (j=1; j<m; j++)
 				hpsi_ptr[k] += tmp8_ptr[k+j*TT];
-			
+
 			hpsi_ptr[k] = hpsi_ptr[k] - tmp7_ptr[k];
 		}
-			
+
 		psi_ptr = psi;
 		ones_ptr = ones;
 		gam2_ptr = gam2;

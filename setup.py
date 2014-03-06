@@ -57,6 +57,11 @@ extensions = [
 	    include_dirs=[numpy.get_include()],
 	    language="c",
 	),
+    Extension(name="oclogit_warp",
+        sources=["src/oclogit_warp.pyx", "src/oclogit_warp_grad.c", "src/misc_funcs.c"],
+        include_dirs=[numpy.get_include()],
+        language="c",
+    ),
 ]
 
 

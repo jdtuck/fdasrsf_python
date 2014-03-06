@@ -16,6 +16,8 @@ from scipy.linalg import inv, norm, expm
 from patsy import bs
 from joblib import Parallel, delayed
 import ocmlogit_warp as mw
+import oclogit_warp as lw
+
 import collections
 
 
@@ -137,7 +139,8 @@ def oc_elastic_regression(beta, y, B=None, df=40, T=200, max_itr=20, cores=-1):
     return out
 
 
-def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
+def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
+                        deltaO=.1, deltag=.05):
     """
     This function identifies a logistic regression model with
     phase-variablity using elastic methods for open curves
@@ -215,7 +218,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(alpha, nu, q[:, :, ii], y[ii]) for ii in range(N))
+            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(alpha, nu, q[:, :, ii], y[ii], deltaO=deltaO, deltag=deltag) for ii in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
                 beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
@@ -225,7 +228,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1):
         else:
             for ii in range(0, N):
                 q1 = q[:, :, ii]
-                gammatmp, Otmp, tautmp = logistic_warp(alpha, nu, q1, y[ii])
+                gammatmp, Otmp, tautmp = logistic_warp(alpha, nu, q1, y[ii],deltaO=deltaO, deltag=deltag)
                 gamma_new[:, ii] = gammatmp
                 beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                 beta[:, :, ii] = beta1n
@@ -336,8 +339,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :],
-                                                                   deltaO=deltaO, deltag=deltag) for n in range(N))
+            out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, nu, q[:, :, n], Y[n, :], deltaO=deltaO, deltag=deltag) for n in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
                 beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
@@ -346,8 +348,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
-                gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :],
-                                                  deltaO=deltaO, deltag=deltag)
+                gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], Y[ii, :], deltaO=deltaO, deltag=deltag)
                 gamma_new[:, ii] = gammatmp
                 beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                 beta[:, :, ii] = beta1n
@@ -357,7 +358,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
         if norm(gamma - gamma_new) < 1e-5:
             break
         else:
-            gamma = gamma_new
+            gamma = gamma_new.copy()
 
         itr += 1
 
@@ -492,10 +493,7 @@ def preproc_open_curve(beta, T=100):
     beta2 = np.zeros((n, T, k))
     for i in range(0, k):
         beta1 = beta[:, :, i]
-        # beta1, scale = cf.scale_curve(beta1)
         beta1 = cf.resamplecurve(beta1, T)
-        # centroid1 = cf.calculatecentroid(beta1)
-        # beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
         q[:, :, i] = cf.curve_to_q(beta1)
 
@@ -550,7 +548,7 @@ def regression_warp(nu, beta, y, alpha):
 
 
 # helper functions for logistic regression
-def logistic_warp(alpha, nu, q, y, deltaO=.05, deltag=.1, max_itr=8000,
+def logistic_warp(alpha, nu, q, y, deltaO=.1, deltag=.05, max_itr=8000,
                   tol=1e-4, display=0):
     """
     calculates optimal warping for function logistic regression
@@ -647,7 +645,7 @@ def logistic_warp(alpha, nu, q, y, deltaO=.05, deltag=.1, max_itr=8000,
         gam_tmp = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
         gam_new = np.interp(gam_tmp, time, gam_old)
 
-        max_val[itr] = np.sum(y * (alpha + A)) - np.log(tmp1)
+        max_val[itr] = np.log(phi(y * (alpha + A)))
 
         if display == 1:
             print("Iteration %d : Cost %f" % (itr+1, max_val[itr]))
@@ -660,6 +658,12 @@ def logistic_warp(alpha, nu, q, y, deltaO=.05, deltag=.1, max_itr=8000,
             break
 
         itr += 1
+
+    # gam_old, O_old = lw.oclogit_warp(np.ascontiguousarray(alpha),
+    #                                   np.ascontiguousarray(nu),
+    #                                   np.ascontiguousarray(q),
+    #                                   np.ascontiguousarray(y, dtype=np.int32),
+    #                                   max_itr, tol, deltaO, deltag, display)
 
     return (gam_old, O_old, tau)
 
