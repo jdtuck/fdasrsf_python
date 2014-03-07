@@ -137,10 +137,17 @@ void oclogit_warp_grad(int *n1, int *T1, double *alpha, double *nu, double *q, i
 		gam_tmp_ptr = gam_tmp;
 		hpsi_ptr = hpsi;
 		pvecnorm(T1, hpsi_ptr, &binsize1, &tmpi);
+
 		res_cos = cos(deltag*tmpi);
 		res_sin = sin(deltag*tmpi);
-		for (j=0; j<TT; j++)
-			psi_ptr[j] = res_cos*ones_ptr[j] + res_sin*(hpsi_ptr[j]/tmpi);
+		if (tmpi == 0){
+			for (j=0; j<TT; j++)
+				psi_ptr[j] = res_cos*ones_ptr[j];
+		}
+		else{
+			for (j=0; j<TT; j++)
+				psi_ptr[j] = res_cos*ones_ptr[j] + res_sin*(hpsi_ptr[j]/tmpi);
+		}
 
 		for (j=0; j<TT; j++)
 			tmp7[j] = psi_ptr[j]*psi_ptr[j];

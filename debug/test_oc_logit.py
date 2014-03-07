@@ -15,7 +15,7 @@ C = C.T
 a, b, c = C.shape
 beta = np.zeros((a, b, 40))
 cnt = 0
-for ii in range(200, 220):
+for ii in range(0, 20):
     beta_tmp = np.zeros((a, b+1))
     beta_tmp[:, 0:b] = C[:, :, ii]
     beta_tmp[:, b] = C[:, 0, ii]

@@ -17,8 +17,8 @@ from patsy import bs
 from joblib import Parallel, delayed
 import ocmlogit_warp as mw
 import oclogit_warp as lw
-
 import collections
+from IPython.core.debugger import Tracer
 
 
 def oc_elastic_regression(beta, y, B=None, df=40, T=200, max_itr=20, cores=-1):
@@ -207,6 +207,8 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
                             args=(Phi, y), pgtol=1e-10, maxiter=200,
                             maxfun=250, factr=1e-30)
         b = out[0]
+        b = b/norm(b)
+        # alpha_norm = b1[0]
         alpha = b[0]
         nu = np.zeros((n, T))
         for ii in range(0, n):
@@ -224,6 +226,8 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
                 beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
                 beta[:, :, ii] = beta1n
                 O_hat[:, :, ii] = out[ii][1]
+                if np.isinf(beta1n).any() or np.isnan(beta1n).any():
+                    Tracer()()
                 qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
         else:
             for ii in range(0, N):
@@ -493,7 +497,10 @@ def preproc_open_curve(beta, T=100):
     beta2 = np.zeros((n, T, k))
     for i in range(0, k):
         beta1 = beta[:, :, i]
+        # beta1, scale = cf.scale_curve(beta1)
         beta1 = cf.resamplecurve(beta1, T)
+        # centroid1 = cf.calculatecentroid(beta1)
+        # beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
         q[:, :, i] = cf.curve_to_q(beta1)
 
@@ -563,107 +570,17 @@ def logistic_warp(alpha, nu, q, y, deltaO=.1, deltag=.05, max_itr=8000,
     :return gamma: warping function
 
     """
-    # betanu = cf.q_to_curve(nu)
-    # betanu, scale_nu = cf.scale_curve(betanu)
-    # nu, scale_nu = cf.scale_curve(nu)
-
-    # T = beta.shape[1]
-    # if y == 1:
-    #     beta1, O_hat, tau = cf.find_rotation_and_seed_coord(betanu, beta)
-    #     q = cf.curve_to_q(beta1)
-    #     gamma = cf.optimum_reparam_curve(nu, q)
-    # elif y == -1:
-    #     beta1, O_hat, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
-    #     q = cf.curve_to_q(beta1)
-    #     gamma = cf.optimum_reparam_curve(-1 * nu, q)
-
     tau = 0
-    q, scale = cf.scale_curve(q)
-    nu, scale = cf.scale_curve(nu)
+    # q, scale = cf.scale_curve(q)
+    q = q/norm(q)
+    # nu, scale = cf.scale_curve(nu)
+    # alpha = alpha/scale
 
-    # python code
-    n = q.shape[0]
-    TT = q.shape[1]
-    time = np.linspace(0, 1, TT)
-    binsize = 1. / (TT - 1)
-
-    gam = np.linspace(0, 1, TT)
-    O = np.eye(n)
-    O_old = O.copy()
-    gam_old = gam.copy()
-    qtilde = q.copy()
-    # warping basis (Fourier)
-    p = 20
-    f_basis = np.zeros((TT, p))
-    for i in range(0, int(p/2)):
-        f_basis[:, 2*i] = 1/np.sqrt(np.pi) * np.sin(2*np.pi*(i+1)*time)
-        f_basis[:, 2*i + 1] = 1/np.sqrt(np.pi) * np.cos(2*np.pi*(i+1)*time)
-
-    itr = 0
-    max_val = np.zeros(max_itr+1)
-    while itr <= max_itr:
-        # inner product value
-        A = cf.innerprod_q2(qtilde, nu)
-
-        # form gradient for rotation
-        # B = np.zeros((n, n, m))
-        # for i in range(0, m):
-        #     B[:, :, i] = cf.innerprod_q2(E.dot(qtilde), nu[:, :, i]) * E
-
-        # tmp1 = np.sum(np.exp(alpha + A))
-        # tmp2 = np.sum(np.exp(alpha + A) * B, axis=2)
-        # hO = np.sum(y * B, axis=2) - (tmp2 / tmp1)
-        # O_new = O_old.dot(expm(deltaO * hO))
-
-        theta = np.arccos(O_old[0, 0])
-        Ograd = np.array([(-1*np.sin(theta), -1*np.cos(theta)),
-                         (np.cos(theta), -1*np.sin(theta))])
-        B = cf.innerprod_q2(Ograd.dot(qtilde), nu)
-        tmp1 = np.exp((-1*y)*(alpha+A))
-        tmp2 = (y*tmp1)/(1+tmp1)
-        hO = tmp2*B
-        O_new = cf.rot_mat(theta+deltaO*hO)
-
-        # form gradient for warping
-        qtilde_diff = np.gradient(qtilde, binsize)
-        qtilde_diff = qtilde_diff[1]
-        tmp3 = np.zeros((TT, p))
-        for i in range(0, p):
-            cbar = cumtrapz(f_basis[:, i], time, initial=0)
-            ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, i]
-            tmp3[:, i] = cf.innerprod_q2(ctmp, nu) * f_basis[:, i]
-
-        c = np.sum(tmp3, axis=1)
-
-        hpsi = tmp2*c
-
-        vecnorm = norm(hpsi)
-        costmp = np.cos(deltag * vecnorm) * np.ones(TT)
-        sintmp = np.sin(deltag * vecnorm) * (hpsi / vecnorm)
-        psi_new = costmp + sintmp
-        gam_tmp = cumtrapz(psi_new * psi_new, time, initial=0)
-        gam_tmp = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
-        gam_new = np.interp(gam_tmp, time, gam_old)
-
-        max_val[itr] = np.log(phi(y * (alpha + A)))
-
-        if display == 1:
-            print("Iteration %d : Cost %f" % (itr+1, max_val[itr]))
-
-        gam_old = gam_new.copy()
-        O_old = O_new.copy()
-        qtilde = cf.group_action_by_gamma(O_old.dot(q), gam_old)
-
-        if vecnorm < tol and hO < tol:
-            break
-
-        itr += 1
-
-    # gam_old, O_old = lw.oclogit_warp(np.ascontiguousarray(alpha),
-    #                                   np.ascontiguousarray(nu),
-    #                                   np.ascontiguousarray(q),
-    #                                   np.ascontiguousarray(y, dtype=np.int32),
-    #                                   max_itr, tol, deltaO, deltag, display)
+    gam_old, O_old = lw.oclogit_warp(np.ascontiguousarray(alpha),
+                                     np.ascontiguousarray(nu),
+                                     np.ascontiguousarray(q),
+                                     np.ascontiguousarray(y, dtype=np.int32),
+                                     max_itr, tol, deltaO, deltag, display)
 
     return (gam_old, O_old, tau)
 

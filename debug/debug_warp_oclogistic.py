@@ -4,30 +4,13 @@ from scipy.integrate import cumtrapz
 from scipy.linalg import norm, expm
 import h5py
 
-
-def phi(t):
-    """
-    calculates logistic function, returns 1 / (1 + exp(-t))
-
-    :param t: scalar
-
-    :rtype: numpy array
-    :return out: return value
-
-    """
-    # logistic function, returns 1 / (1 + exp(-t))
-    idx = t > 0
-    out = 1. / (1 + np.exp(-t))
-    return out
-
-
-fun = h5py.File('/home/dtucker/fdasrsf/debug/debug_data_oc_logit.h5')
+fun = h5py.File('/Users/jderektucker/Documents/Research/fdasrsf/debug/debug_data_oc_logit.h5')
 q = fun['q'][:]
 y = fun['y'].value
 alpha = fun['alpha'].value
 nu = fun['nu'][:]
 
-max_itr = 9000  # 4000
+max_itr = 8000  # 4000
 tol = 1e-4
 deltag = .05
 deltaO = .1
@@ -100,7 +83,7 @@ while itr <= max_itr:
     gam_tmp = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
     gam_new = np.interp(gam_tmp, time, gam_old)
 
-    max_val[itr] = np.log(phi(y * (alpha + A)))
+    max_val[itr] = np.sum(y * (alpha + A)) - np.log(tmp1)
 
     if display == 1:
         print("Iteration %d : Cost %f" % (itr+1, max_val[itr]))

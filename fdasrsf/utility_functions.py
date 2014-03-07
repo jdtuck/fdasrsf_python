@@ -397,6 +397,7 @@ def rgam(N, sigma, num):
         vn = norm(v) / sqrt(TT)
         psi = cos(vn) * mu + sin(vn) * v / vn
         gam[1:, k] = cumsum(psi * psi) / double(TT)
+        gam[:, k] = (gam[:, k] - gam[0, k]) / (gam[-1, k] - gam[0, k])
 
     return gam
 

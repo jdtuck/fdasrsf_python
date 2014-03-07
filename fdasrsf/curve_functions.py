@@ -5,7 +5,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 
 """
 
-from scipy.interpolate import InterpolatedUnivariateSpline
+from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
 from numpy import zeros, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
@@ -410,7 +410,7 @@ def group_action_by_gamma_coord(f, gamma):
     fn = zeros((n, T))
 
     for j in range(0, n):
-        s = InterpolatedUnivariateSpline(linspace(0, 1, T), f[j, :], k=3)
+        s = interp1d(linspace(0, 1, T), f[j, :])
         fn[j, :] = s(gamma)
 
     return (fn)
