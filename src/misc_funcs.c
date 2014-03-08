@@ -230,7 +230,6 @@ void innerprod_q(int *m1, double *t, double *q1, double *q2, double *out) {
     free(q);
 }
 
-
 /* SRVF Inner Product */
 double innerprod_q2(int *m1, double *q1, double *q2) {
     int k;

@@ -23,7 +23,7 @@ def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha,
     :param max_iter: maximal number of iterations (default = 400)
     :param tol: stopping tolerance (default = 1e-4)
     :param delta: step size (default = 0.008)
-    :param display: show iterations (default = 10
+    :param display: show iterations (default = 0)
 
     :rtype numpy ndarray
     :return gamo: describing the warping function
@@ -46,14 +46,13 @@ def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha,
     cdef np.ndarray[double, ndim = 1, mode = "c"] gam1 = np.linspace(0, 1, m1)
     cdef np.ndarray[double, ndim = 1, mode = "c"] beta1 = np.zeros(m1 * m)
     cdef np.ndarray[double, ndim = 1, mode = "c"] gamout = np.zeros(m1)
-    for ii in xrange(0, m):
-        beta1[ii * m1:ii * m1 + m1] = beta[:, ii]
+
+    beta1 = beta.reshape(m1*m, order='F')
 
     gam1 = np.ascontiguousarray(gam1)
     beta1 = np.ascontiguousarray(beta1)
     gamout = np.ascontiguousarray(gamout)
 
-    cmlogit.mlogit_warp_grad(&m1, &m, &alpha[0], &beta1[0], &time[0], &gam1[0], &q[0], &y[0], &max_itri, &toli, &deltai,
-                         &displayi, &gamout[0])
+    cmlogit.mlogit_warp_grad(&m1, &m, &alpha[0], &beta1[0], &time[0], &gam1[0], &q[0], &y[0], &max_itri, &toli, &deltai, &displayi, &gamout[0])
 
     return gamout
