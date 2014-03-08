@@ -710,5 +710,5 @@ def resamplefunction(x, n):
 
     """
     T = x.shape[0]
-    xn = interp(arange(0, n)/(n-1), arange(0, T)/(T-1), x)
+    xn = interp(arange(0, n)/double(n-1), arange(0, T)/double(T-1), x)
     return(xn)

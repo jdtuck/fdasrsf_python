@@ -38,8 +38,7 @@ def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha,
     m1 = time.size
     m = beta.shape[1]
     alpha = alpha/norm(alpha)
-    for i in range(0, q.shape[1]):
-        q[:, i] = q[:, i]/norm(q[:, i])
+    q = q/norm(q)
     for i in range(0, m):
         beta[:, i] = beta[:, i]/norm(beta[:, i])
 
@@ -47,7 +46,9 @@ def mlogit_warp(np.ndarray[double, ndim=1, mode="c"] alpha,
     cdef np.ndarray[double, ndim = 1, mode = "c"] beta1 = np.zeros(m1 * m)
     cdef np.ndarray[double, ndim = 1, mode = "c"] gamout = np.zeros(m1)
 
-    beta1 = beta.reshape(m1*m, order='F')
+    for ii in xrange(0, m):
+        beta1[ii * m1:ii * m1 + m1] = beta[:, ii]
+
 
     gam1 = np.ascontiguousarray(gam1)
     beta1 = np.ascontiguousarray(beta1)

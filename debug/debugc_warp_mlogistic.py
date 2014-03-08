@@ -3,7 +3,7 @@ import fdasrsf as fs
 import mlogit_warp as mw
 import h5py
 
-fun = h5py.File('/Users/jderektucker/Documents/Research/fdasrsf/debug_data.h5')
+fun = h5py.File('/Users/jdtucker/Documents/Research/fdasrsf/debug/debug_data.h5')
 q = fun['q'][:]
 y = fun['y'][:]
 time = fun['time'][:]
