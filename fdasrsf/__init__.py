@@ -32,5 +32,5 @@ from .curve_functions import resamplecurve, calculatecentroid, innerprod_q2, cur
 from .curve_functions import find_rotation_and_seed_coord, group_action_by_gamma_coord, group_action_by_gamma, q_to_curve, rot_mat
 from .curve_functions import calculate_variance, project_curve, pre_proc_curve, inverse_exp_coord, project_tangent, gram_schmidt, scale_curve, parallel_translate, curve_zero_crossing
 from .geodesic import geod_sphere, path_straightening
-from .curve_stats import curve_karcher_mean, curve_karcher_cov, curve_principal_directions, sample_shapes
+from .curve_stats import curve_karcher_mean, curve_karcher_cov, curve_principal_directions, sample_shapes, oc_srvf_align
 from .curve_regression import oc_elastic_logistic, oc_elastic_prediction, preproc_open_curve, oc_elastic_mlogistic

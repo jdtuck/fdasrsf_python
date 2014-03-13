@@ -15,7 +15,7 @@ C = C.T
 a, b, c = C.shape
 beta = np.zeros((a, b, 40))
 cnt = 0
-for ii in range(0, 20):
+for ii in range(200, 220):
     beta_tmp = np.zeros((a, b+1))
     beta_tmp[:, 0:b] = C[:, :, ii]
     beta_tmp[:, b] = C[:, 0, ii]
@@ -46,6 +46,10 @@ y_test = np.ones(2, dtype=int)
 y_test[1] = -1
 
 model = fs.oc_elastic_logistic(betatr, y, T=200, max_itr=40)
+model2 = fs.oc_elastic_logistic(betatr, y, T=200, max_itr=40, method=2)
 out = fs.oc_elastic_prediction(betatr, model, y=y)
-out2 = fs.oc_elastic_prediction(beta_tst, model, y=y_test)
+out2 = fs.oc_elastic_prediction(betatr, model2, y=y)
+out_t = fs.oc_elastic_prediction(beta_tst, model, y=y_test)
+out2_t = fs.oc_elastic_prediction(beta_tst, model2, y=y_test)
+
 

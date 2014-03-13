@@ -140,7 +140,7 @@ def oc_elastic_regression(beta, y, B=None, df=40, T=200, max_itr=20, cores=-1):
 
 
 def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
-                        deltaO=.1, deltag=.05):
+                        deltaO=.1, deltag=.05, method=1):
     """
     This function identifies a logistic regression model with
     phase-variablity using elastic methods for open curves
@@ -220,7 +220,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
         # find gamma
         gamma_new = np.zeros((T, N))
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(alpha, nu, q[:, :, ii], y[ii], deltaO=deltaO, deltag=deltag) for ii in range(N))
+            out = Parallel(n_jobs=cores)(delayed(logistic_warp)(alpha, nu, q[:, :, ii], y[ii], deltaO=deltaO, deltag=deltag, method=method) for ii in range(N))
             for ii in range(0, N):
                 gamma_new[:, ii] = out[ii][0]
                 beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
@@ -232,7 +232,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
         else:
             for ii in range(0, N):
                 q1 = q[:, :, ii]
-                gammatmp, Otmp, tautmp = logistic_warp(alpha, nu, q1, y[ii],deltaO=deltaO, deltag=deltag)
+                gammatmp, Otmp, tautmp = logistic_warp(alpha, nu, q1, y[ii],deltaO=deltaO, deltag=deltag, method=method)
                 gamma_new[:, ii] = gammatmp
                 beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                 beta[:, :, ii] = beta1n
@@ -497,10 +497,10 @@ def preproc_open_curve(beta, T=100):
     beta2 = np.zeros((n, T, k))
     for i in range(0, k):
         beta1 = beta[:, :, i]
-        # beta1, scale = cf.scale_curve(beta1)
+        beta1, scale = cf.scale_curve(beta1)
         beta1 = cf.resamplecurve(beta1, T)
-        # centroid1 = cf.calculatecentroid(beta1)
-        # beta1 = beta1 - np.tile(centroid1, [T, 1]).T
+        centroid1 = cf.calculatecentroid(beta1)
+        beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
         q[:, :, i] = cf.curve_to_q(beta1)
 
@@ -556,7 +556,7 @@ def regression_warp(nu, beta, y, alpha):
 
 # helper functions for logistic regression
 def logistic_warp(alpha, nu, q, y, deltaO=.1, deltag=.05, max_itr=8000,
-                  tol=1e-4, display=0):
+                  tol=1e-4, display=0, method=1):
     """
     calculates optimal warping for function logistic regression
 
@@ -570,17 +570,31 @@ def logistic_warp(alpha, nu, q, y, deltaO=.1, deltag=.05, max_itr=8000,
     :return gamma: warping function
 
     """
-    tau = 0
-    # q, scale = cf.scale_curve(q)
-    q = q/norm(q)
-    # nu, scale = cf.scale_curve(nu)
-    # alpha = alpha/scale
+    if method == 1:
+        tau = 0
+        # q, scale = cf.scale_curve(q)
+        q = q/norm(q)
+        # nu, scale = cf.scale_curve(nu)
+        # alpha = alpha/scale
 
-    gam_old, O_old = lw.oclogit_warp(np.ascontiguousarray(alpha),
-                                     np.ascontiguousarray(nu),
-                                     np.ascontiguousarray(q),
-                                     np.ascontiguousarray(y, dtype=np.int32),
-                                     max_itr, tol, deltaO, deltag, display)
+        gam_old, O_old = lw.oclogit_warp(np.ascontiguousarray(alpha),
+                                         np.ascontiguousarray(nu),
+                                         np.ascontiguousarray(q),
+                                         np.ascontiguousarray(y, dtype=np.int32),
+                                         max_itr, tol, deltaO, deltag, display)
+    elif method == 2:
+        betanu = cf.q_to_curve(nu)
+        beta = cf.q_to_curve(q)
+        T = beta.shape[1]
+        if y == 1:
+            beta1, O_old, tau = cf.find_rotation_and_seed_coord(betanu, beta)
+            q = cf.curve_to_q(beta1)
+            gam_old = cf.optimum_reparam_curve(nu, q)
+        elif y == -1:
+            beta1, O_old, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
+            q = cf.curve_to_q(beta1)
+            gam_old = cf.optimum_reparam_curve(-1 * nu, q)
+
 
     return (gam_old, O_old, tau)
 

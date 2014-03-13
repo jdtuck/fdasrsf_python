@@ -9,14 +9,14 @@ from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty
 from numpy.linalg import svd
 from numpy.random import randn
 import fdasrsf.curve_functions as cf
+import fdasrsf.utility_functions as uf
 from joblib import Parallel, delayed
+import collections
 
 
-def curve_karcher_mean(q, beta, mode='O'):
+def curve_karcher_mean(beta, mode='O'):
     """
     This claculates the mean of a set of curves
-    :param q: numpy ndarray of shape (n, M, N) describing N curves
-    in srvf space
     :param beta: numpy ndarray of shape (n, M, N) describing N curves
     in R^M
     :param mode: Open ('O') or closed curve ('C') (default 'O')
@@ -25,9 +25,14 @@ def curve_karcher_mean(q, beta, mode='O'):
     :return mu: mean srvf
     :return betamean: mean curve
     :return v: shooting vectors
+    :return q: srvfs
 
     """
-    n, T, N = q.shape
+    n, T, N = beta.shape
+    q = zeros((n, T, N))
+    for ii in range(0, N):
+        q[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
+
     modes = ['O', 'C']
     mode = [i for i, x in enumerate(modes) if x == mode]
     if len(mode) == 0:
@@ -44,9 +49,9 @@ def curve_karcher_mean(q, beta, mode='O'):
     told = 5*1e-3
     maxit = 20
     itr = 0
-    sumd = zeros(maxit)
+    sumd = zeros(maxit+1)
     v = zeros((n, T, N))
-    normvbar = zeros(maxit)
+    normvbar = zeros(maxit+1)
 
     while itr < maxit:
         print("Iteration: %d" % itr)
@@ -85,7 +90,58 @@ def curve_karcher_mean(q, beta, mode='O'):
 
         itr += 1
 
-    return(mu, betamean, v)
+    return(mu, betamean, v, q)
+
+
+def oc_srvf_align(beta, mode='O'):
+    """
+    This claculates the mean of a set of curves and aligns them
+    :param beta: numpy ndarray of shape (n, M, N) describing N curves
+    in R^M
+    :param mode: Open ('O') or closed curve ('C') (default 'O')
+
+    :rtype: tuple of numpy array
+    :return betan: aligned curves
+    :return qn: aligned srvf
+    :return betamean: mean curve
+    :return mu: mean srvf
+    """
+    n, T, N = beta.shape
+    # find mean
+    mu, betamean, v, q = curve_karcher_mean(beta, mode=mode)
+
+    qn = zeros((n, T, N))
+    betan = zeros((n, T, N))
+    centroid2 = cf.calculatecentroid(betamean)
+    betamean = betamean - tile(centroid2, [T, 1]).T
+    q_mu = cf.curve_to_q(betamean)
+    # align to mean
+    for ii in range(0, N):
+        beta1 = beta[:, :, ii]
+        centroid1 = cf.calculatecentroid(beta1)
+        beta1 = beta1 - tile(centroid1, [T, 1]).T
+
+        # Iteratively optimize over SO(n) x Gamma
+        for i in range(0, 1):
+            # Optimize over SO(n)
+            beta1, O_hat, tau = cf.find_rotation_and_seed_coord(betamean,
+                                                                beta1)
+            q1 = cf.curve_to_q(beta1)
+
+            # Optimize over Gamma
+            gam = cf.optimum_reparam_curve(q1, q_mu, 0.0)
+            gamI = uf.invertGamma(gam)
+            # Applying optimal re-parameterization to the second curve
+            beta1 = cf.group_action_by_gamma_coord(beta1, gamI)
+
+        # Optimize over SO(n)
+        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(betamean, beta1)
+        qn[:, :, ii] = cf.curve_to_q(beta1)
+        betan[:, :, ii] = beta1
+
+    align_results = collections.namedtuple('align', ['betan', 'qn', 'betamean', 'mu'])
+    out = align_results(betan, qn, betamean, q_mu)
+    return out
 
 
 def curve_karcher_cov(betamean, beta, mode='O'):
