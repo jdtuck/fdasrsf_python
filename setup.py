@@ -62,6 +62,11 @@ extensions = [
         include_dirs=[numpy.get_include()],
         language="c",
     ),
+    Extension(name="optimum_reparam_fN",
+        sources=["src/optimum_reparam_fN.pyx", "src/DP.c"],
+        include_dirs=[numpy.get_include()],
+        language="c",
+    ),
 ]
 
 
