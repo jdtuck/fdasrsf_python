@@ -185,10 +185,8 @@ double CostFn2(const double *q1, const double *q2, const double *q2L, int k, int
 		idx = (int)(ip + (fp >= 0.5)) - 1;
 
 		for (d = 0; d < n; ++d) {
-		/*	tmp = q1[n*x + d] - sqrtm*q2L[n*idx + d];  updated by WW */
             tmp = q1[n*x + d] - q2L[n*idx + d];
-		/* 	E += tmp*tmp;  updated by WW */
-            E += tmp*tmp + lam*(1-sqrtm)*(1-sqrtm);
+			E += tmp*tmp;
 		}
 	}
 
