@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import fdasrsf.utility_functions as uf
 from scipy.integrate import trapz, cumtrapz
+from scipy.linalg import svd
 from numpy.linalg import norm
 from joblib import Parallel, delayed
 from fdasrsf.fPLS import pls_svd
@@ -611,10 +612,10 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     fi[:, :, 0] = f
     qi = np.zeros((M, N, MaxItr + 1))
     qi[:, :, 0] = q
-    gam = np.zeros((M, N, MaxItr))
+    gam = np.zeros((M, N, MaxItr + 1))
     cost = np.zeros(MaxItr + 1)
 
-    while itr <= MaxItr:
+    while itr < MaxItr:
         print("updating step: r=%d" % (itr + 1))
         if itr == MaxItr:
             print("maximal number of iterations is reached")
@@ -624,7 +625,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
         d1 = a.reshape(M, N)
         qhat_cent = qi[:, :, itr] - d1
         K = np.cov(qi[:, :, itr])
-        U, s, V = np.linalg.svd(K)
+        U, s, V = svd(K)
 
         alpha_i = np.zeros((num_comp, N))
         for ii in range(0, num_comp):
@@ -660,20 +661,24 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
 
         cost[itr + 1] = cost_temp.mean()
 
-        if abs(cost[itr + 1] - cost[itr]) < 1e-05:
+        if abs(cost[itr + 1] - cost[itr]) < 1e-06:
             break
 
         itr += 1
 
-    cost = cost[1:itr + 1]
+    if itr >= MaxItr:
+        itrf = MaxItr
+    else:
+        itrf = itr+1
+    cost = cost[1:(itrf+1)]
 
     # Aligned data & stats
-    fn = fi[:, :, itr + 1]
-    qn = qi[:, :, itr + 1]
+    fn = fi[:, :, itrf]
+    qn = qi[:, :, itrf]
     q0 = qi[:, :, 0]
     mean_f0 = f0.mean(axis=1)
     std_f0 = f0.std(axis=1)
-    mqn = mq[:, itr + 1]
+    mqn = mq[:, itrf]
     gamf = gam[:, :, 0]
     for k in range(1, itr):
         gam_k = gam[:, :, k]
@@ -701,7 +706,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     qn2 = np.vstack((qn, m_new))
     K = np.cov(qn2)
 
-    U, s, V = np.linalg.svd(K)
+    U, s, V = svd(K)
     stdS = np.sqrt(s)
 
     # compute the PCA in the q domain
@@ -802,7 +807,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
                                                'U', 'orig_var', 'amp_var',
                                                'phase_var', 'cost'])
 
-    out = align_fPCAresults(fn, qn, q0, mqn, gam, q_pca, f_pca, s, c,
+    out = align_fPCAresults(fn, qn, q0, mqn, gamf, q_pca, f_pca, s, c,
                             U, orig_var, amp_var, phase_var, cost)
     return out
 

@@ -6,7 +6,7 @@ moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
 """
 import numpy as np
 import fdasrsf.utility_functions as uf
-from scipy.linalg import norm
+from scipy.linalg import norm, svd
 import matplotlib.pyplot as plt
 import fdasrsf.plot_style as plot
 import collections
@@ -46,7 +46,7 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
     qn2 = np.vstack((qn, m_new))
     K = np.cov(qn2)
 
-    U, s, V = np.linalg.svd(K)
+    U, s, V = svd(K)
     stdS = np.sqrt(s)
 
     # compute the PCA in the q domain
@@ -138,7 +138,7 @@ def horizfPCA(gam, time, no, showplot=True):
     # TFPCA
     K = np.cov(vec)
 
-    U, s, V = np.linalg.svd(K)
+    U, s, V = svd(K)
     vm = vec.mean(axis=1)
 
     gam_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0] + 1, no), dtype=float)
