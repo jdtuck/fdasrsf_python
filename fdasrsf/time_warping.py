@@ -801,6 +801,10 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     amp_var = trapz(std_fn ** 2, time)
     phase_var = trapz(var_fgam, time)
 
+    K = np.cov(fn)
+
+    U, s, V = svd(K)
+
     align_fPCAresults = collections.namedtuple('align_fPCA', ['fn', 'qn',
                                                'q0', 'mqn', 'gam', 'q_pca',
                                                'f_pca', 'latent', 'coef',
