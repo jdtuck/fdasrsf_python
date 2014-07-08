@@ -16,6 +16,7 @@ from joblib import Parallel, delayed
 import mlogit_warp as mw
 import collections
 
+
 def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20,
                        cores=-1, smooth=False):
     """
