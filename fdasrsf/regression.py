@@ -404,8 +404,8 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
 
 def elastic_prediction(f, time, model, y=None, smooth=False):
     """
-    This function identifies a regression model with phase-variablity
-    using elastic methods
+    This function performs prediction from an elastic regression model
+    with phase-variablity
 
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
     :param time: vector of size N describing the sample points
