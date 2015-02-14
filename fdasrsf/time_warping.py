@@ -23,8 +23,8 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
     This function aligns a collection of functions using the elastic
     square-root slope (srsf) framework.
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param time: vector of size N describing the sample points
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
+    :param time: vector of size M describing the sample points
     :param method: (string) warp calculate Karcher Mean or Median
     (options = "mean" or "median") (default="mean")
     :param showplot: Shows plots of results using matplotlib (default = T)
@@ -36,12 +36,12 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
     :type time: np.ndarray
 
     :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
+    functions with M samples
     :return qn: aligned srvfs - similar structure to fn
     :return q0: original srvf - similar structure to fn
-    :return fmean: function mean or median - vector of length N
-    :return mqn: srvf mean or median - vector of length N
+    :return fmean: function mean or median - vector of length M
+    :return mqn: srvf mean or median - vector of length M
     :return gam: warping functions - similar structure to fn
     :return orig_var: Original Variance of Functions
     :return amp_var: Amplitude Variance
@@ -261,9 +261,9 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True,
     This function aligns a collection of functions using the elastic square-
     root slope (srsf) framework.
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param g: numpy ndarray of shape (M,N) of M functions with N samples
-    :param time: vector of size N describing the sample points
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
+    :param g: numpy ndarray of shape (M,N) of N functions with M samples
+    :param time: vector of size M describing the sample points
     :param method: (string) warp calculate Karcher Mean or Median (options =
                    "mean" or "median") (default="mean")
     :param showplot: Shows plots of results using matplotlib (default = T)
@@ -275,10 +275,10 @@ def srsf_align_pair(f, g, time, method="mean", showplot=True,
     :type time: np.ndarray
 
     :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-                functions with N samples
-    :return gn: aligned functions - numpy ndarray of shape (M,N) of M
-                functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
+                functions with M samples
+    :return gn: aligned functions - numpy ndarray of shape (M,N) of N
+                functions with M samples
     :return qfn: aligned srvfs - similar structure to fn
     :return qgn: aligned srvfs - similar structure to fn
     :return qf0: original srvf - similar structure to fn
@@ -544,8 +544,8 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     aligns a collection of functions while extracting principal components.
     The functions are aligned to the principal components
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param time: vector of size N describing the sample points
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
+    :param time: vector of size M describing the sample points
     :param num_comp: number of fPCA components
     :param showplot: Shows plots of results using matplotlib (default = T)
     :param smooth_data: Smooth the data using a box filter (default = F)
@@ -556,11 +556,11 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     :type time: np.ndarray
 
     :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-                functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
+                functions with M samples
     :return qn: aligned srvfs - similar structure to fn
     :return q0: original srvf - similar structure to fn
-    :return mqn: srvf mean or median - vector of length N
+    :return mqn: srvf mean or median - vector of length M
     :return gam: warping functions - similar structure to fn
     :return q_pca: srsf principal directions
     :return f_pca: functional principal directions
@@ -822,9 +822,9 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
     This function aligns a collection of functions while performing
     principal least squares
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param g: numpy ndarray of shape (M,N) of M functions with N samples
-    :param time: vector of size N describing the sample points
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
+    :param g: numpy ndarray of shape (M,N) of N functions with M samples
+    :param time: vector of size M describing the sample points
     :param comps: number of fPLS components
     :param showplot: Shows plots of results using matplotlib (default = T)
     :param smooth_data: Smooth the data using a box filter (default = F)
@@ -836,10 +836,10 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
     :type time: np.ndarray
 
     :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
-    :return gn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
+    functions with M samples
+    :return gn: aligned functions - numpy ndarray of shape (M,N) of N
+    functions with M samples
     :return qfn: aligned srvfs - similar structure to fn
     :return qgn: aligned srvfs - similar structure to fn
     :return qf0: original srvf - similar structure to fn

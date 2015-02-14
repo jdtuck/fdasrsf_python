@@ -17,10 +17,10 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
     This function calculates vertical functional principal component analysis
     on aligned data
 
-    :param fn: numpy ndarray of shape (M,N) of M aligned functions with N
+    :param fn: numpy ndarray of shape (M,N) of N aligned functions with M
                samples
     :param time: vector of size N describing the sample points
-    :param qn: numpy ndarray of shape (M,N) of M aligned SRSF with N samples
+    :param qn: numpy ndarray of shape (M,N) of N aligned SRSF with M samples
     :param no: number of components to extract (default = 1)
     :param showplot: Shows plots of results using matplotlib (default = T)
     :type showplot: bool
@@ -115,8 +115,8 @@ def horizfPCA(gam, time, no, showplot=True):
     """
     This function calculates horizontal functional principal component analysis on aligned data
 
-    :param gam: numpy ndarray of shape (M,N) of M warping functions
-    :param time: vector of size N describing the sample points
+    :param gam: numpy ndarray of shape (M,N) of N warping functions
+    :param time: vector of size M describing the sample points
     :param no: number of components to extract (default = 1)
     :param showplot: Shows plots of results using matplotlib (default = T)
     :type showplot: bool

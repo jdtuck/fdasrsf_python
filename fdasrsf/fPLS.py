@@ -13,8 +13,8 @@ def pls_svd(time, qf, qg, no, alpha=0.0):
     This function computes the partial least squares using SVD
 
     :param time: vector describing time samples
-    :param qf: numpy ndarray of shape (M,N) of M functions with N samples
-    :param qg: numpy ndarray of shape (M,N) of M functions with N samples
+    :param qf: numpy ndarray of shape (M,N) of N functions with M samples
+    :param qg: numpy ndarray of shape (M,N) of N functions with M samples
     :param no: number of components
     :param alpha: amount of smoothing (Default = 0.0 i.e., none)
 

@@ -75,7 +75,7 @@ setup(
 	ext_modules=extensions,
     # ext_modules=cythonize(extensions, gdb_debug=True),
     name='fdasrsf',
-    version='1.2.0',
+    version='1.2.1',
     packages=['fdasrsf'],
     url='http://stat.fsu.edu/~dtucker/research.html',
     license='LICENSE.txt',

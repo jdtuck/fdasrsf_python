@@ -14,10 +14,10 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
     This function models the functional data using a Gaussian model
     extracted from the principal components of the srvfs
 
-    :param fn: numpy ndarray of shape (M,N) of M aligned functions with
-    N samples
-    :param time: vector of size N describing the sample points
-    :param qn: numpy ndarray of shape (M,N) of M aligned srvfs with N samples
+    :param fn: numpy ndarray of shape (M,N) of N aligned functions with
+     M samples
+    :param time: vector of size M describing the sample points
+    :param qn: numpy ndarray of shape (M,N) of N aligned srvfs with M samples
     :param gam: warping functions
     :param n: number of random samples
     :param sort_samples: sort samples (default = T)

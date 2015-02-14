@@ -23,9 +23,9 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20,
     This function identifies a regression model with phase-variablity
     using elastic methods
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
     :param y: numpy array of N responses
-    :param time: vector of size N describing the sample points
+    :param time: vector of size M describing the sample points
     :param B: optional matrix describing Basis elements
     :param lam: regularization parameter (default 0)
     :param df: number of degrees of freedom B-spline (default 20)
@@ -161,9 +161,9 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
     This function identifies a logistic regression model with
     phase-variablity using elastic methods
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
     :param y: numpy array of labels (1/-1)
-    :param time: vector of size N describing the sample points
+    :param time: vector of size M describing the sample points
     :param B: optional matrix describing Basis elements
     :param df: number of degrees of freedom B-spline (default 20)
     :param max_itr: maximum number of iterations (default 20)
@@ -284,9 +284,9 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
     This function identifies a multinomial logistic regression model with
     phase-variablity using elastic methods
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
     :param y: numpy array of labels {1,2,...,m} for m classes
-    :param time: vector of size N describing the sample points
+    :param time: vector of size M describing the sample points
     :param B: optional matrix describing Basis elements
     :param df: number of degrees of freedom B-spline (default 20)
     :param max_itr: maximum number of iterations (default 20)
@@ -297,8 +297,8 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
     :rtype: tuple of numpy array
     :return alpha: alpha parameter of model
     :return beta: beta(t) of model
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
+    functions with M samples
     :return qn: aligned srvfs - similar structure to fn
     :return gamma: calculated warping functions
     :return q: original training SRSFs
@@ -407,16 +407,16 @@ def elastic_prediction(f, time, model, y=None, smooth=False):
     This function performs prediction from an elastic regression model
     with phase-variablity
 
-    :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param time: vector of size N describing the sample points
+    :param f: numpy ndarray of shape (M,N) of N functions with M samples
+    :param time: vector of size M describing the sample points
     :param model: indentified model from elastic_regression
     :param y: truth, optional used to calculate SSE
 
     :rtype: tuple of numpy array
     :return alpha: alpha parameter of model
     :return beta: beta(t) of model
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
+    functions with M samples
     :return qn: aligned srvfs - similar structure to fn
     :return gamma: calculated warping functions
     :return q: original training SRSFs
@@ -544,11 +544,10 @@ def logistic_warp(beta, time, q, y):
     """
     calculates optimal warping for function logistic regression
 
-    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
+    :param beta: numpy ndarray of shape (M,N) of N functions with M samples
     :param time: vector of size N describing the sample points
-    :param q: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param q: numpy ndarray of shape (M,N) of N functions with M samples
+    :param y: numpy ndarray of shape (1,N) responses
 
     :rtype: numpy array
     :return gamma: warping function
@@ -584,10 +583,9 @@ def logit_loss(b, X, y):
     """
     logistic loss function, returns Sum{-log(phi(t))}
 
-    :param b: numpy ndarray of shape (M,N) of M functions with N samples
-    :param X: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param b: numpy ndarray of shape (M,N) of N functions with M samples
+    :param X: numpy ndarray of shape (M,N) of N functions with M samples
+    :param y: numpy ndarray of shape (1,N) of N responses
 
     :rtype: numpy array
     :return out: loss value
@@ -607,10 +605,9 @@ def logit_gradient(b, X, y):
     """
     calculates gradient of the logistic loss
 
-    :param b: numpy ndarray of shape (M,N) of M functions with N samples
-    :param X: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param b: numpy ndarray of shape (M,N) of N functions with M samples
+    :param X: numpy ndarray of shape (M,N) of N functions with M samples
+    :param y: numpy ndarray of shape (1,N) responses
 
     :rtype: numpy array
     :return grad: gradient of logisitc loss
@@ -627,11 +624,10 @@ def logit_hessian(s, b, X, y):
     """
     calculates hessian of the logistic loss
 
-    :param s: numpy ndarray of shape (M,N) of M functions with N samples
-    :param b: numpy ndarray of shape (M,N) of M functions with N samples
-    :param X: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param s: numpy ndarray of shape (M,N) of N functions with M samples
+    :param b: numpy ndarray of shape (M,N) of N functions with M samples
+    :param X: numpy ndarray of shape (M,N) of N functions with M samples
+    :param y: numpy ndarray of shape (1,N) responses
 
     :rtype: numpy array
     :return out: hessian of logistic loss
@@ -653,11 +649,10 @@ def mlogit_warp_grad(alpha, beta, time, q, y, max_itr=8000, tol=1e-10,
     calculates optimal warping for functional multinomial logistic regression
 
     :param alpha: scalar
-    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
-    :param time: vector of size N describing the sample points
-    :param q: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param beta: numpy ndarray of shape (M,N) of N functions with M samples
+    :param time: vector of size M describing the sample points
+    :param q: numpy ndarray of shape (M,N) of N functions with M samples
+    :param y: numpy ndarray of shape (1,N) responses
     :param max_itr: maximum number of iterations (Default=8000)
     :param tol: stopping tolerance (Default=1e-10)
     :param delta: gradient step size (Default=0.008)
@@ -681,10 +676,9 @@ def mlogit_loss(b, X, Y):
     """
     calculates multinomial logistic loss (negative log-likelihood)
 
-    :param b: numpy ndarray of shape (M,N) of M functions with N samples
-    :param X: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param b: numpy ndarray of shape (M,N) of N functions with M samples
+    :param X: numpy ndarray of shape (M,N) of N functions with M samples
+    :param y: numpy ndarray of shape (1,N) responses
 
     :rtype: numpy array
     :return nll: negative log-likelihood
@@ -710,10 +704,9 @@ def mlogit_gradient(b, X, Y):
     """
     calculates gradient of the multinomial logistic loss
 
-    :param b: numpy ndarray of shape (M,N) of M functions with N samples
-    :param X: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param b: numpy ndarray of shape (M,N) of N functions with M samples
+    :param X: numpy ndarray of shape (M,N) of N functions with M samples
+    :param y: numpy ndarray of shape (1,N) responses
 
     :rtype: numpy array
     :return grad: gradient

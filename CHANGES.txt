@@ -1,3 +1,4 @@
+v1.2.1, 2014-12-06 -- fixed comment issues
 v1.2.0, 2014-02-06 -- added registration for open and closed curves
 v1.1.1, 2014-01-05 -- added regression processing
 v1.1.0, 2013-09-30 -- added partial least squares processing
