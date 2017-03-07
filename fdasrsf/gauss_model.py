@@ -55,7 +55,13 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
     fs = np.zeros((M, n))
     for k in range(0, n):
         fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]),
-                                  np.sign(q_s[M, k]) * (q_s[M, k] ** 2))
+                                  np.sign(q_s[M, k]) * (q_s[M, k] ** 2),
+                                  mididx)
+
+    fbar = fn.mean(axis=1)
+    fsbar = fs.mean(axis=1)
+    err = np.transpose(np.tile(fbar-fsbar, (n,1)))
+    fs += err
 
     # random warping generation
     rgam = uf.randomGamma(gam, n)

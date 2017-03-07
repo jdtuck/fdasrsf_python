@@ -332,20 +332,20 @@ def SqrtMean(gam):
     return mu, gam_mu, psi, vec
 
 
-def cumtrapzmid(x, y, c):
+def cumtrapzmid(x, y, c, mid):
     """
     cumulative trapezoidal numerical integration taken from midpoint
 
     :param x: vector of size N describing the time samples
     :param y: vector of size N describing the function
     :param c: midpoint
+    :param mid: midpiont location
 
     :rtype: vector
     :return fa: cumulative integration
 
     """
     a = x.shape[0]
-    mid = int(round(a / 2.))
 
     # case < mid
     fa = zeros(a)

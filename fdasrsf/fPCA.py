@@ -60,7 +60,12 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
     for k in range(0, no):
         for l in range(0, Nstd):
             f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca[0:N, l, k] * np.abs(q_pca[0:N, l, k]),
-                                            np.sign(q_pca[N, l, k]) * (q_pca[N, l, k] ** 2))
+                                            np.sign(q_pca[N, l, k]) * (q_pca[N, l, k] ** 2),
+                                            mididx)
+        fbar = fn.mean(axis=1)
+        fsbar = f_pca[:, :, k].mean(axis=1)
+        err = np.transpose(np.tile(fbar-fsbar, (n,1)))
+        f_pca[:, :, k] += err
 
     N2 = qn.shape[1]
     c = np.zeros((N2, no))
