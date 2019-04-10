@@ -1,3 +1,10 @@
 .DS_Store
 /build
 /fdasrsf/__pycache__
+*.fdb_latexmk
+*.fls
+*.aux
+*.ilg
+*.ind
+*.log
+*.toc
