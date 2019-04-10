@@ -1,7 +1,7 @@
 """
 Vertical and Horizontal Functional Principal Component Analysis using SRSF
 
-moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
+moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 """
 import numpy as np

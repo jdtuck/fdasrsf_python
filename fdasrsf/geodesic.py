@@ -1,7 +1,7 @@
 """
 geodesic calculation for SRVF (curves) open and closed)
 
-moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
+moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 """
 

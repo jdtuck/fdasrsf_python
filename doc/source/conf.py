@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'fdasrsf'
-copyright = u'2013, J. Derek Tucker'
+copyright = u'2019, J. Derek Tucker'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

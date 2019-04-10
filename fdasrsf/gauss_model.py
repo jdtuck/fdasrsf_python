@@ -1,7 +1,7 @@
 """
 Gaussian Model of functional data
 
-moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
+moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 """
 import numpy as np

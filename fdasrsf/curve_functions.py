@@ -1,7 +1,7 @@
 """
 functions for SRVF curve manipulations
 
-moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
+moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 """
 

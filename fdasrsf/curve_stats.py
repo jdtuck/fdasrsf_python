@@ -2,7 +2,7 @@
 statistic calculation for SRVF (curves) open and closed using Karcher
 Mean and Variance
 
-moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
+moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 """
 from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty

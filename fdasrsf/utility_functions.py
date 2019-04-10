@@ -1,7 +1,7 @@
 """
 Utility functions for SRSF Manipulations
 
-moduleauthor:: Derek Tucker <dtucker@stat.fsu.edu>
+moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 """
 
