@@ -40,7 +40,7 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
     # FPCA
     mq_new = qn.mean(axis=1)
     N = mq_new.shape[0]
-    mididx = np.round(time.shape[0] / 2)
+    mididx = int(np.round(time.shape[0] / 2))
     m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
     mqn = np.append(mq_new, m_new.mean())
     qn2 = np.vstack((qn, m_new))
@@ -64,7 +64,7 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
                                             mididx)
         fbar = fn.mean(axis=1)
         fsbar = f_pca[:, :, k].mean(axis=1)
-        err = np.transpose(np.tile(fbar-fsbar, (n,1)))
+        err = np.transpose(np.tile(fbar-fsbar, (Nstd,1)))
         f_pca[:, :, k] += err
 
     N2 = qn.shape[1]
@@ -93,17 +93,13 @@ def vertfPCA(fn, time, qn, no=1, showplot=True):
             axt = ax[0, k]
             for l in range(0, Nstd):
                 axt.plot(time, q_pca[0:N, l, k], color=CBcdict[cl[l]])
-                axt.hold(True)
 
             axt.set_title('q domain: PD %d' % (k + 1))
-            plot.rstyle(axt)
             axt = ax[1, k]
             for l in range(0, Nstd):
                 axt.plot(time, f_pca[:, l, k], color=CBcdict[cl[l]])
-                axt.hold(True)
 
             axt.set_title('f domain: PD %d' % (k + 1))
-            plot.rstyle(axt)
         fig.set_tight_layout(True)
 
         cumm_coef = 100 * np.cumsum(s) / sum(s)
@@ -178,12 +174,10 @@ def horizfPCA(gam, time, no, showplot=True):
         fig, ax = plt.subplots(1, no)
         for k in range(0, no):
             axt = ax[k]
-            axt.set_color_cycle(CBcdict[c] for c in sorted(CBcdict.keys()))
             tmp = gam_pca[:, :, k]
             axt.plot(np.linspace(0, 1, TT), tmp.transpose())
             axt.set_title('PD %d' % (k + 1))
             axt.set_aspect('equal')
-            plot.rstyle(axt)
 
         fig.set_tight_layout(True)
 

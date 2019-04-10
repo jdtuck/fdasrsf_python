@@ -284,7 +284,7 @@ def SqrtMean(gam):
     """
 
     n = gam.shape[1]
-    TT = double(gam.shape[0])
+    TT = gam.shape[0]
     psi = zeros((TT - 1, n))
     for k in range(0, n):
         psi[:, k] = sqrt(diff(gam[:, k]) * TT)
