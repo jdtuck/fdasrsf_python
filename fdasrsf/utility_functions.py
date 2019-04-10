@@ -611,6 +611,23 @@ def warp_q_gamma(time, q, gam):
 
     return q_temp
 
+def warp_f_gamma(time, f, gam):
+    """
+    warps a function f by gam
+
+    :param time vector describing time samples
+    :param q vector describing srsf
+    :param gam vector describing warping function
+
+    :rtype: numpy ndarray
+    :return f_temp: warped srsf
+
+    """
+    M = gam.size
+    tmp = interp((time[-1] - time[0]) * gam + time[0], time, f)
+
+    return f_temp
+
 
 def f_K_fold(Nobs, K=5):
     """
