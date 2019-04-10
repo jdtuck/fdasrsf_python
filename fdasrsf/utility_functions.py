@@ -258,7 +258,7 @@ def SqrtMeanInverse(gam):
         lvm[itr] = geo.L2norm(vbar)
     
 
-    gam_mu = cumtrapz(mu*mu, time)
+    gam_mu = cumtrapz(mu*mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
     gamI = invertGamma(gam_mu)
     return gamI
@@ -319,7 +319,7 @@ def SqrtMean(gam):
         lvm[itr] = geo.L2norm(vbar)
     
 
-    gam_mu = cumtrapz(mu*mu, time)
+    gam_mu = cumtrapz(mu*mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
 
     return mu, gam_mu, psi, vec
