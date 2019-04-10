@@ -12,10 +12,11 @@ from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
 from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
-from numpy import gradient, column_stack, append
+from numpy import gradient, column_stack, append, mean
 from numpy import insert, vectorize
 import numpy.random as rn
 import optimum_reparamN as orN
+import fdasrsf.geometry as geo
 import sys
 
 
@@ -217,52 +218,47 @@ def SqrtMeanInverse(gam):
 
 
     """
-    eps = finfo(double).eps
-    n = gam.shape[1]
-    T1 = gam.shape[0]
-    dt = 1 / float(T1 - 1)
-    psi = zeros((T1 - 1, n))
+    (T,n) = gam.shape
+    time = linspace(0,1,T)
+    binsize = mean(diff(time))
+    psi = zeros((T, n))
     for k in range(0, n):
-        psi[:, k] = sqrt(diff(gam[:, k]) / dt + eps)
+        psi[:, k] = sqrt(gradient(gam[:, k],binsize))
 
     # Find Direction
     mnpsi = psi.mean(axis=1)
     a = mnpsi.repeat(n)
-    d1 = a.reshape(T1 - 1, n)
+    d1 = a.reshape(T, n)
     d = (psi - d1) ** 2
     dqq = sqrt(d.sum(axis=0))
     min_ind = dqq.argmin()
     mu = psi[:, min_ind]
-    maxiter = 20
+    maxiter = 501
     tt = 1
     lvm = zeros(maxiter)
-    vec = zeros((T1 - 1, n))
-    for itr in range(0, maxiter):
-        for k in range(0, n):
-            dot = trapz(mu * psi[:, k], linspace(0, 1, T1 - 1))
-            if dot > 1:
-                dot = 1
-            elif dot < (-1):
-                dot = -1
-            leng = arccos(dot)
-            if leng > 0.0001:
-                vec[:, k] = (leng / sin(leng)) * (psi[:, k] - cos(leng) * mu)
-            else:
-                vec[:, k] = zeros(T1 - 1)
-        vm = vec.mean(axis=1)
-        vm1 = vm * vm
-        lvm[itr] = sqrt(vm1.sum() * dt)
-        if lvm[itr] == 0:
-            mu = mu
-            break
+    vec = zeros((T, n))
+    stp = .3
+    itr = 0
 
-        mu = cos(tt * lvm[itr]) * mu + (sin(tt * lvm[itr]) / lvm[itr]) * vm
-        if lvm[itr] < 1e-6 or itr >= maxiter:
-            break
+    for i in range(0,n):
+        out, theta = geo.inv_exp_map(mu,psi[:,i])
+        vec[:,i] = out
 
-    tmp = mu * mu
-    gam_mu = zeros(T1)
-    gam_mu[1:] = tmp.cumsum() / T1
+    vbar = vec.mean(axis=1)
+    lvm[itr] = geo.L2norm(vbar)
+
+    while (lvm[itr] > 0.00000001) and (itr<maxiter):
+        mu = geo.exp_map(mu, stp*vbar)
+        itr += 1
+        for i in range(0,n):
+            out, theta = geo.inv_exp_map(mu,psi[:,i])
+            vec[:,i] = out
+        
+        vbar = vec.mean(axis=1)
+        lvm[itr] = geo.L2norm(vbar)
+    
+
+    gam_mu = cumtrapz(mu*mu, time)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
     gamI = invertGamma(gam_mu)
     return gamI
@@ -283,50 +279,47 @@ def SqrtMean(gam):
 
     """
 
-    n = gam.shape[1]
-    TT = gam.shape[0]
-    psi = zeros((TT - 1, n))
+    (T,n) = gam.shape
+    time = linspace(0,1,T)
+    binsize = mean(diff(time))
+    psi = zeros((T, n))
     for k in range(0, n):
-        psi[:, k] = sqrt(diff(gam[:, k]) * TT)
+        psi[:, k] = sqrt(gradient(gam[:, k],binsize))
 
     # Find Direction
     mnpsi = psi.mean(axis=1)
     a = mnpsi.repeat(n)
-    d1 = a.reshape(TT - 1, n)
+    d1 = a.reshape(T, n)
     d = (psi - d1) ** 2
     dqq = sqrt(d.sum(axis=0))
     min_ind = dqq.argmin()
     mu = psi[:, min_ind]
-    maxiter = 20
+    maxiter = 501
     tt = 1
     lvm = zeros(maxiter)
-    vec = zeros((TT - 1, n))
-    for itr in range(0, maxiter):
-        for k in range(0, n):
-            dot = trapz(mu * psi[:, k], linspace(0, 1, TT - 1))
-            if dot > 1:
-                dot = 1
-            elif dot < (-1):
-                dot = -1
-            leng = arccos(dot)
-            if leng > 0.0001:
-                vec[:, k] = (leng / sin(leng)) * (psi[:, k] - cos(leng) * mu)
-            else:
-                vec[:, k] = zeros(TT - 1)
-        vm = vec.mean(axis=1)
-        vm1 = vm * vm
-        lvm[itr] = sqrt(vm1.sum() / TT)
-        if lvm[itr] == 0:
-            mu = mu
-            break
+    vec = zeros((T, n))
+    stp = .3
+    itr = 0
 
-        mu = cos(tt * lvm[itr]) * mu + (sin(tt * lvm[itr]) / lvm[itr]) * vm
-        if lvm[itr] < 1e-6 or itr >= maxiter:
-            break
+    for i in range(0,n):
+        out, theta = geo.inv_exp_map(mu,psi[:,i])
+        vec[:,i] = out
 
-    tmp = mu * mu
-    gam_mu = zeros(TT)
-    gam_mu[1:] = tmp.cumsum() / TT
+    vbar = vec.mean(axis=1)
+    lvm[itr] = geo.L2norm(vbar)
+
+    while (lvm[itr] > 0.00000001) and (itr<maxiter):
+        mu = geo.exp_map(mu, stp*vbar)
+        itr += 1
+        for i in range(0,n):
+            out, theta = geo.inv_exp_map(mu,psi[:,i])
+            vec[:,i] = out
+        
+        vbar = vec.mean(axis=1)
+        lvm[itr] = geo.L2norm(vbar)
+    
+
+    gam_mu = cumtrapz(mu*mu, time)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
 
     return mu, gam_mu, psi, vec
