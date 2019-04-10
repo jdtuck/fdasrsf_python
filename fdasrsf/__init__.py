@@ -7,7 +7,7 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "curve_functions"]
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 import sys
 
@@ -23,7 +23,7 @@ from .time_warping import srsf_align, srsf_align_pair, align_fPCA, align_fPLS
 from .plot_style import f_plot, rstyle, plot_reg_open_curve, plot_geod_open_curve, plot_geod_close_curve
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
-from .utility_functions import optimum_reparam_pair, f_K_fold, zero_crossing, warp_q_gamma, resamplefunction
+from .utility_functions import optimum_reparam_pair, f_K_fold, zero_crossing, warp_q_gamma, resamplefunction, warp_f_gamma
 from .fPCA import vertfPCA, horizfPCA
 from .gauss_model import gauss_model
 from .fPLS import pls_svd

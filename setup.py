@@ -75,7 +75,7 @@ setup(
 	ext_modules=extensions,
     # ext_modules=cythonize(extensions, gdb_debug=True),
     name='fdasrsf',
-    version='1.2.1',
+    version='1.3.0',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
