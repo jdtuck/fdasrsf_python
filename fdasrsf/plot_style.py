@@ -105,24 +105,10 @@ def f_plot(time, f, title="Data", bw=False, pres=False):
 
     """
 
-    CBcdict = {
-        0: (0.0000, 0.4470, 0.7410),
-        1: (0.8500, 0.6940, 0.0980),
-        2: (0.9290, 0.6940, 0.1250),
-        3: (0.4940, 0.1840, 0.5560),
-        4: (0.4660, 0.6740, 0.1880),
-        5: (0.3010, 0.7450, 0.9330),
-        6: (0.6350, 0.0780, 0.1840),
-    }
-
     fig, ax = plt.subplots()
-    ax.set_color_cycle(CBcdict[c] for c in list(CBcdict.keys()))
     ax.plot(time, f)
     plt.title(title)
-    if bw:
-        rstyle_bw(ax)
-    else:
-        rstyle(ax, pres)
+    plt.style.use('ggplot')
 
     return fig, ax
 
