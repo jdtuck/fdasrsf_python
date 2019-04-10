@@ -617,7 +617,7 @@ def warp_f_gamma(time, f, gam):
 
     """
     M = gam.size
-    tmp = interp((time[-1] - time[0]) * gam + time[0], time, f)
+    f_temp = interp((time[-1] - time[0]) * gam + time[0], time, f)
 
     return f_temp
 

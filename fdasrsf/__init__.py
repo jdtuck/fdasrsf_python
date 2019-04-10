@@ -24,7 +24,7 @@ from .plot_style import f_plot, rstyle, plot_reg_open_curve, plot_geod_open_curv
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
 from .utility_functions import optimum_reparam_pair, f_K_fold, zero_crossing, warp_q_gamma, resamplefunction, warp_f_gamma
-from .fPCA import vertfPCA, horizfPCA
+from .fPCA import vertfPCA, horizfPCA, jointfPCA
 from .gauss_model import gauss_model
 from .fPLS import pls_svd
 from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic
