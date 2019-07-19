@@ -75,7 +75,7 @@ setup(
 	ext_modules=extensions,
     # ext_modules=cythonize(extensions, gdb_debug=True),
     name='fdasrsf',
-    version='1.4.0',
+    version='1.4.1',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
@@ -100,8 +100,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Mathematics',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
     ]
 )

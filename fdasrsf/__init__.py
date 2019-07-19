@@ -7,12 +7,12 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "curve_functions", "geometry"]
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 import sys
 
-if sys.version_info[0] == 2 and sys.version_info[1] < 6:
-    raise ImportError("Python Version 2.6 or above is required for fdasrsf.")
+if sys.version_info[0] == 3 and sys.version_info[1] < 6:
+    raise ImportError("Python Version 3.6 or above is required for fdasrsf.")
 else:  # Python 3
     pass
     # Here we can also check for specific Python 3 versions, if needed
