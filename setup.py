@@ -7,8 +7,8 @@ from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 
 # Make sure I have the right Python version.
-if sys.version_info[:2] < (2, 6):
-    print(("fdasrsf requires Python 2.6 or newer. Python %d.%d detected" % sys.version_info[:2]))
+if sys.version_info[:2] < (3, 6):
+    print(("fdasrsf requires Python 3.6 or newer. Python %d.%d detected" % sys.version_info[:2]))
     sys.exit(-1)
 
 
@@ -75,7 +75,7 @@ setup(
 	ext_modules=extensions,
     # ext_modules=cythonize(extensions, gdb_debug=True),
     name='fdasrsf',
-    version='1.3.0',
+    version='1.4.0',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
