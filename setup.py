@@ -36,8 +36,8 @@ class build_docs(Command):
         os.chdir("../../../")
 
 extensions = [
-	Extension(name="optimum_reparamN",
-	    sources=["src/optimum_reparamN.pyx", "src/DynamicProgrammingQ2.c",
+	Extension(name="optimum_reparamN2",
+	    sources=["src/optimum_reparamN2.pyx", "src/DynamicProgrammingQ2.c",
         "src/dp_grid.c"],
 	    include_dirs=[numpy.get_include()],
 	    language="c",
@@ -62,8 +62,8 @@ extensions = [
         include_dirs=[numpy.get_include()],
         language="c",
     ),
-    Extension(name="optimum_reparam_fN",
-        sources=["src/optimum_reparam_fN.pyx", "src/DP.c"],
+    Extension(name="optimum_reparam_N",
+        sources=["src/optimum_reparam_N.pyx", "src/DP.c"],
         include_dirs=[numpy.get_include()],
         language="c",
     ),

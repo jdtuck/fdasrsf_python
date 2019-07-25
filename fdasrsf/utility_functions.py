@@ -15,6 +15,7 @@ from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
 from numpy import gradient, column_stack, append, mean
 from numpy import insert, vectorize
 import numpy.random as rn
+import optimum_reparamN2 as orN2
 import optimum_reparamN as orN
 import fdasrsf.geometry as geo
 import sys
@@ -101,30 +102,47 @@ def f_to_srsf(f, time, smooth=False):
     return q
 
 
-def optimum_reparam(q1, time, q2, lam=0.0):
+def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
     """
     calculates the warping to align srsf q2 to q1
 
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
+    :param method: method to apply optimzation (default="DP") options are "DP", "DP2" and "RBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
 
     :rtype: vector
     :return gam: describing the warping function used to align q2 with q1
 
     """
-    if q1.ndim == 1 and q2.ndim == 1:
-        gam = orN.coptimum_reparam(ascontiguousarray(q1), time,
-                                   ascontiguousarray(q2), lam)
 
-    if q1.ndim == 1 and q2.ndim == 2:
-        gam = orN.coptimum_reparamN(ascontiguousarray(q1), time,
+    if method == "DP":
+        if q1.ndim == 1 and q2.ndim == 1:
+            gam = orN.coptimum_reparam(ascontiguousarray(q1), time,
                                     ascontiguousarray(q2), lam)
 
-    if q1.ndim == 2 and q2.ndim == 2:
-        gam = orN.coptimum_reparamN2(ascontiguousarray(q1), time,
-                                     ascontiguousarray(q2), lam)
+        if q1.ndim == 1 and q2.ndim == 2:
+            gam = orN.coptimum_reparamN(ascontiguousarray(q1), time,
+                                        ascontiguousarray(q2), lam)
+
+        if q1.ndim == 2 and q2.ndim == 2:
+            gam = orN.coptimum_reparamN2(ascontiguousarray(q1), time,
+                                        ascontiguousarray(q2), lam)
+
+    if method == "DP2":
+        if q1.ndim == 1 and q2.ndim == 1:
+            gam = orN2.coptimum_reparam(ascontiguousarray(q1), time,
+                                    ascontiguousarray(q2), lam)
+
+        if q1.ndim == 1 and q2.ndim == 2:
+            gam = orN2.coptimum_reparamN(ascontiguousarray(q1), time,
+                                        ascontiguousarray(q2), lam)
+
+        if q1.ndim == 2 and q2.ndim == 2:
+            gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
+                                        ascontiguousarray(q2), lam)
+    
 
     return gam
 
