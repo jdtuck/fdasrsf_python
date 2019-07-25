@@ -9,3 +9,4 @@
 *.log
 *.toc
 *.pyc
+/dist
