@@ -1,0 +1,27 @@
+.PHONY : clean
+
+CXX = x86_64-w64-mingw32-g++
+
+CFLAGS =  -fPIC -std=c++11 -O3 -g  # C flags
+LDFLAGS = -shared # linking flags
+LIBS = -L. -lopenblas
+
+
+LIB=gropt
+SUFFIX=dll
+SOURCES = $(shell echo src/*.cpp)
+HEADERS = $(shell echo incl/*.h)
+OBJECTS = $(SOURCES:.cpp=.o)
+INC = -Iincl/
+TARGET=$(LIB).$(SUFFIX)
+
+all: $(TARGET)
+
+clean:
+	rm -f $(OBJECTS) $(TARGET)
+
+src/%.o: src/%.cpp
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+$(TARGET) : $(OBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
