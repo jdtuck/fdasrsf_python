@@ -164,7 +164,7 @@ def horizfPCA(gam, time, no=2, showplot=True):
     N2 = gam.shape[1]
     c = np.zeros((N2,no))
     for k in range(0,no_pca):
-        for i in range(0:N2):
+        for i in range(0,N2):
             c[i,k] = np.sum(dot(vec[:,i]-vm,U[:,k]))
 
     hfpca_results = collections.namedtuple('hfpca', ['gam_pca', 'psi_pca', 'latent', 'U', 'gam_mu', 'coef', 'vec'])
