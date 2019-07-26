@@ -18,7 +18,8 @@ import collections
 
 
 def srsf_align(f, time, method="mean", omethod="DP", 
-               showplot=True, smoothdata=False, lam=0.0):
+               showplot=True, smoothdata=False, parallel=False,
+               lam=0.0):
     """
     This function aligns a collection of functions using the elastic
     square-root slope (srsf) framework.
@@ -30,6 +31,7 @@ def srsf_align(f, time, method="mean", omethod="DP",
     :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
     :param showplot: Shows plots of results using matplotlib (default = T)
     :param smoothdata: Smooth the data using a box filter (default = F)
+    :param parallel: run in parallel (default = F)
     :param lam: controls the elasticity (default = 0)
     :type lam: double
     :type smoothdata: bool
@@ -64,8 +66,6 @@ def srsf_align(f, time, method="mean", omethod="DP",
         parallel = True
     elif N > 100:
         parallel = True
-    else:
-        parallel = False
 
     eps = np.finfo(np.double).eps
     f0 = f
