@@ -28,7 +28,7 @@ from .fPCA import vertfPCA, horizfPCA, jointfPCA
 from .gauss_model import gauss_model
 from .fPLS import pls_svd
 from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic
-from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression
+from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, elastic_mlpcr_regression
 from .curve_functions import resamplecurve, calculatecentroid, innerprod_q2, curve_to_q, optimum_reparam_curve, find_best_rotation
 from .curve_functions import find_rotation_and_seed_coord, group_action_by_gamma_coord, group_action_by_gamma, q_to_curve, rot_mat
 from .curve_functions import calculate_variance, project_curve, pre_proc_curve, inverse_exp_coord, project_tangent, gram_schmidt, scale_curve, parallel_translate, curve_zero_crossing
