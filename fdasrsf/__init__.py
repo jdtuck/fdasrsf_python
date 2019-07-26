@@ -5,9 +5,9 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "curve_functions", "geometry", "pcr_regssion"]
+__all__ = ["time_warping", "utility_functions", "curve_functions", "geometry", "pcr_regssion", "tolerance"]
 
-__version__ = "1.4.2"
+__version__ = "1.4.3"
 
 import sys
 
