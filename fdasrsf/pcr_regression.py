@@ -9,7 +9,7 @@ import numpy as np
 import fdasrsf as fs
 import fdasrsf.utility_functions as uf
 import fdasrsf.fPCA as fpca
-import fasrsf.regression as rg
+import fdasrsf.regression as rg
 from scipy import dot
 from scipy.linalg import inv, norm
 from scipy.optimize import fmin_l_bfgs_b

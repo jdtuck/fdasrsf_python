@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pcr_regression &#8212; fdasrsf 1.4.2 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.4.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pcr_regression</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Warping PCR Invariant Regression using SRSF</span>
+
+<span class="sd">moduleauthor:: Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">fdasrsf</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
+<span class="kn">import</span> <span class="nn">fdasrsf.fPCA</span> <span class="k">as</span> <span class="nn">fpca</span>
+<span class="kn">import</span> <span class="nn">fdasrsf.regression</span> <span class="k">as</span> <span class="nn">rg</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">inv</span><span class="p">,</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">fmin_l_bfgs_b</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+
+<div class="viewcode-block" id="elastic_pcr_regression"><a class="viewcode-back" href="../pcr_regression.html#pcr_regression.elastic_pcr_regression">[docs]</a><span class="k">def</span> <span class="nf">elastic_pcr_regression</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">pca_method</span><span class="o">=</span><span class="s2">&quot;combined&quot;</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> 
+                           <span class="n">smooth_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sparam</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                           <span class="n">C</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function identifies a regression model with phase-variability</span>
+<span class="sd">    using elastic pca</span>
+
+<span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
+<span class="sd">    :param y: numpy array of N responses</span>
+<span class="sd">    :param time: vector of size M describing the sample points</span>
+<span class="sd">    :param pca_method: string specifing pca method (options = &quot;combined&quot;,</span>
+<span class="sd">                       &quot;vert&quot;, or &quot;horiz&quot;, default = &quot;combined&quot;)</span>
+<span class="sd">    :param no: scalar specify number of principal components (default=5)</span>
+<span class="sd">    :param smooth_data: smooth data using box filter (default = F)</span>
+<span class="sd">    :param sparam: number of times to apply box filter (default = 25)</span>
+<span class="sd">    :param parallel: run in parallel (default = F)</span>
+<span class="sd">    :param C: scale balance parameter for combined method (default = None)</span>
+<span class="sd">    :type f: np.ndarray</span>
+<span class="sd">    :type time: np.ndarray</span>
+
+<span class="sd">    :rtype: tuple of numpy array</span>
+<span class="sd">    :return alpha: alpha parameter of model</span>
+<span class="sd">    :return b: regressor vector</span>
+<span class="sd">    :return y: response vector</span>
+<span class="sd">    :return warp_data: alignment object from srsf_align</span>
+<span class="sd">    :return pca: fpca object from corresponding pca method</span>
+<span class="sd">    :return SSE: sum of squared errors</span>
+<span class="sd">    :return pca.method: string of pca method</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">smooth_data</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">smooth_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">sparam</span><span class="p">)</span>
+    
+    <span class="n">N1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Align Data</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">)</span>
+
+    <span class="c1"># Calculate PCA</span>
+    <span class="k">if</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;combined&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">jointfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">q0</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;vert&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">vertfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;horiz&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">horizfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid fPCA Method&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># OLS using PCA basis</span>
+    <span class="n">lam</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span> <span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">Phi</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:(</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">out_pca</span><span class="o">.</span><span class="n">coef</span>
+    <span class="n">xx</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">Phi</span><span class="p">)</span>
+    <span class="n">inv_xx</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
+    <span class="n">xy</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv_xx</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># compute the SSE</span>
+    <span class="n">int_X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N1</span><span class="p">):</span>
+        <span class="n">int_X</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">out_pca</span><span class="o">.</span><span class="n">coef</span><span class="o">*</span><span class="n">b</span><span class="p">)</span>
+    
+    <span class="n">SSE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span><span class="o">-</span><span class="n">alpha</span><span class="o">-</span><span class="n">int_X</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">efpcr_results</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;efpcr&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;warp_data&#39;</span><span class="p">,</span> <span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="s1">&#39;SSE&#39;</span><span class="p">,</span> <span class="s1">&#39;pca_method&#39;</span><span class="p">])</span>
+    <span class="n">efpcr</span> <span class="o">=</span> <span class="n">efpcr_results</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">out_pca</span><span class="p">,</span> <span class="n">SSE</span><span class="p">,</span> <span class="n">pca_method</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">efpcr</span></div>
+
+
+<div class="viewcode-block" id="elastic_lpcr_regression"><a class="viewcode-back" href="../pcr_regression.html#pcr_regression.elastic_lpcr_regression">[docs]</a><span class="k">def</span> <span class="nf">elastic_lpcr_regression</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">pca_method</span><span class="o">=</span><span class="s2">&quot;combined&quot;</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> 
+                           <span class="n">smooth_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sparam</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function identifies a logistic regression model with phase-variability</span>
+<span class="sd">    using elastic pca</span>
+
+<span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
+<span class="sd">    :param y: numpy array of N responses</span>
+<span class="sd">    :param time: vector of size M describing the sample points</span>
+<span class="sd">    :param pca_method: string specifing pca method (options = &quot;combined&quot;,</span>
+<span class="sd">                       &quot;vert&quot;, or &quot;horiz&quot;, default = &quot;combined&quot;)</span>
+<span class="sd">    :param no: scalar specify number of principal components (default=5)</span>
+<span class="sd">    :param smooth_data: smooth data using box filter (default = F)</span>
+<span class="sd">    :param sparam: number of times to apply box filter (default = 25)</span>
+<span class="sd">    :type f: np.ndarray</span>
+<span class="sd">    :type time: np.ndarray</span>
+
+<span class="sd">    :rtype: tuple of numpy array</span>
+<span class="sd">    :return alpha: alpha parameter of model</span>
+<span class="sd">    :return b: regressor vector</span>
+<span class="sd">    :return y: response vector</span>
+<span class="sd">    :return warp_data: alignment object from srsf_align</span>
+<span class="sd">    :return pca: fpca object from corresponding pca method</span>
+<span class="sd">    :return Loss: logistic loss</span>
+<span class="sd">    :return pca.method: string of pca method</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">smooth_data</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">smooth_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">sparam</span><span class="p">)</span>
+    
+    <span class="n">N1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Align Data</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate PCA</span>
+    <span class="k">if</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;combined&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">jointfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">q0</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;vert&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">vertfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;horiz&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">horizfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid fPCA Method&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># OLS using PCA basis</span>
+    <span class="n">lam</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span> <span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">Phi</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:(</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">out_pca</span><span class="o">.</span><span class="n">coef</span>
+    <span class="c1"># Find alpha and beta using l_bfgs</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span><span class="n">rg</span><span class="o">.</span><span class="n">logit_loss</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">fprime</span><span class="o">=</span><span class="n">rg</span><span class="o">.</span><span class="n">logit_gradient</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Phi</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                        <span class="n">maxfun</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">factr</span><span class="o">=</span><span class="mf">1e-30</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># compute the Loss</span>
+    <span class="n">LL</span> <span class="o">=</span> <span class="n">rg</span><span class="o">.</span><span class="n">logit_loss</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">Phi</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">eflpcr_results</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;eflpcr&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;warp_data&#39;</span><span class="p">,</span> <span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="s1">&#39;LL&#39;</span><span class="p">,</span> <span class="s1">&#39;pca_method&#39;</span><span class="p">])</span>
+    <span class="n">eflpcr</span> <span class="o">=</span> <span class="n">eflpcr_results</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">out_pca</span><span class="p">,</span> <span class="n">LL</span><span class="p">,</span> <span class="n">pca_method</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">eflpcr</span></div>
+        
+
+<div class="viewcode-block" id="elastic_mlpcr_regression"><a class="viewcode-back" href="../pcr_regression.html#pcr_regression.elastic_mlpcr_regression">[docs]</a><span class="k">def</span> <span class="nf">elastic_mlpcr_regression</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">pca_method</span><span class="o">=</span><span class="s2">&quot;combined&quot;</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> 
+                           <span class="n">smooth_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sparam</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function identifies a logistic regression model with phase-variability</span>
+<span class="sd">    using elastic pca</span>
+
+<span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
+<span class="sd">    :param y: numpy array of N responses</span>
+<span class="sd">    :param time: vector of size M describing the sample points</span>
+<span class="sd">    :param pca_method: string specifing pca method (options = &quot;combined&quot;,</span>
+<span class="sd">                       &quot;vert&quot;, or &quot;horiz&quot;, default = &quot;combined&quot;)</span>
+<span class="sd">    :param no: scalar specify number of principal components (default=5)</span>
+<span class="sd">    :param smooth_data: smooth data using box filter (default = F)</span>
+<span class="sd">    :param sparam: number of times to apply box filter (default = 25)</span>
+<span class="sd">    :type f: np.ndarray</span>
+<span class="sd">    :type time: np.ndarray</span>
+
+<span class="sd">    :rtype: tuple of numpy array</span>
+<span class="sd">    :return alpha: alpha parameter of model</span>
+<span class="sd">    :return b: regressor vector</span>
+<span class="sd">    :return y: response vector</span>
+<span class="sd">    :return warp_data: alignment object from srsf_align</span>
+<span class="sd">    :return pca: fpca object from corresponding pca method</span>
+<span class="sd">    :return Loss: logistic loss</span>
+<span class="sd">    :return pca.method: string of pca method</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">smooth_data</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">smooth_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">sparam</span><span class="p">)</span>
+    
+    <span class="n">N1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Code labels</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">Y</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Align Data</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate PCA</span>
+    <span class="k">if</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;combined&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">jointfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">q0</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;vert&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">vertfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pca_method</span><span class="o">==</span><span class="s1">&#39;horiz&#39;</span><span class="p">:</span>
+        <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">horizfPCA</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid fPCA Method&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># OLS using PCA basis</span>
+    <span class="n">lam</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span> <span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">Phi</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:(</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">out_pca</span><span class="o">.</span><span class="n">coef</span>
+    <span class="c1"># Find alpha and beta using l_bfgs</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span><span class="n">rg</span><span class="o">.</span><span class="n">mlogit_loss</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">fprime</span><span class="o">=</span><span class="n">rg</span><span class="o">.</span><span class="n">mlogit_gradient</span><span class="p">,</span>
+                            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Phi</span><span class="p">,</span> <span class="n">Y</span><span class="p">),</span> <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                            <span class="n">maxfun</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">factr</span><span class="o">=</span><span class="mf">1e-30</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">B0</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">B0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="c1"># compute the Loss</span>
+    <span class="n">LL</span> <span class="o">=</span> <span class="n">rg</span><span class="o">.</span><span class="n">mlogit_loss</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">Phi</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B0</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">no</span><span class="o">+</span><span class="mi">1</span><span class="p">,:]</span>
+
+    <span class="n">efmlpcr_results</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;efmlpcr&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;warp_data&#39;</span><span class="p">,</span> <span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="s1">&#39;LL&#39;</span><span class="p">,</span> <span class="s1">&#39;pca_method&#39;</span><span class="p">])</span>
+    <span class="n">efmlpcr</span> <span class="o">=</span> <span class="n">efmlpcr_results</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">out_pca</span><span class="p">,</span> <span class="n">LL</span><span class="p">,</span> <span class="n">pca_method</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">efmlpcr</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.4.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

@@ -72,7 +72,7 @@
 
 \title{fdasrsf Documentation}
 \date{Jul 26, 2019}
-\release{1.3.0}
+\release{1.4.2}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -94,48 +94,2783 @@ using functional component analysis and regression.
 
 
 \chapter{Functional Alignment}
-\label{\detokenize{time_warping:functional-alignment}}\label{\detokenize{time_warping::doc}}
+\label{\detokenize{time_warping:module-time_warping}}\label{\detokenize{time_warping:functional-alignment}}\label{\detokenize{time_warping::doc}}\index{time\_warping (module)@\spxentry{time\_warping}\spxextra{module}}
+Group-wise function alignment using SRSF framework and Dynamic Programming
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{align\_fPCA() (in module time\_warping)@\spxentry{align\_fPCA()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.align_fPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{align\_fPCA}}}{\emph{f}, \emph{time}, \emph{num\_comp=3}, \emph{showplot=True}, \emph{smoothdata=False}}{}
+aligns a collection of functions while extracting principal components.
+The functions are aligned to the principal components
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{num\_comp}} \textendash{} number of fPCA components
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{showplot}} \textendash{} Shows plots of results using matplotlib (default = T)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} Number of times to run box filter (default = 25)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples
+
+\item[{Return qn}] \leavevmode
+aligned srvfs - similar structure to fn
+
+\item[{Return q0}] \leavevmode
+original srvf - similar structure to fn
+
+\item[{Return mqn}] \leavevmode
+srvf mean or median - vector of length M
+
+\item[{Return gam}] \leavevmode
+warping functions - similar structure to fn
+
+\item[{Return q\_pca}] \leavevmode
+srsf principal directions
+
+\item[{Return f\_pca}] \leavevmode
+functional principal directions
+
+\item[{Return latent}] \leavevmode
+latent values
+
+\item[{Return coef}] \leavevmode
+coefficients
+
+\item[{Return U}] \leavevmode
+eigenvectors
+
+\item[{Return orig\_var}] \leavevmode
+Original Variance of Functions
+
+\item[{Return amp\_var}] \leavevmode
+Amplitude Variance
+
+\item[{Return phase\_var}] \leavevmode
+Phase Variance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{align\_fPLS() (in module time\_warping)@\spxentry{align\_fPLS()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.align_fPLS}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{align\_fPLS}}}{\emph{f}, \emph{g}, \emph{time}, \emph{comps=3}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{delta=0.01}, \emph{max\_itr=100}}{}
+This function aligns a collection of functions while performing
+principal least squares
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{g}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{comps}} \textendash{} number of fPLS components
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{showplot}} \textendash{} Shows plots of results using matplotlib (default = T)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{delta}} \textendash{} gradient step size
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+
+\end{description}\end{quote}
+
+functions with M samples
+:return gn: aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples
+:return qfn: aligned srvfs - similar structure to fn
+:return qgn: aligned srvfs - similar structure to fn
+:return qf0: original srvf - similar structure to fn
+:return qg0: original srvf - similar structure to fn
+:return gam: warping functions - similar structure to fn
+:return wqf: srsf principal weight functions
+:return wqg: srsf principal weight functions
+:return wf: srsf principal weight functions
+:return wg: srsf principal weight functions
+:return cost: cost function value
+
+\end{fulllineitems}
+
+\index{srsf\_align() (in module time\_warping)@\spxentry{srsf\_align()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.srsf_align}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{f}, \emph{time}, \emph{method='mean'}, \emph{omethod='DP'}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+This function aligns a collection of functions using the elastic
+square-root slope (srsf) framework.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} (string) warp calculate Karcher Mean or Median
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+(options = “mean” or “median”) (default=”mean”)
+:param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+:param showplot: Shows plots of results using matplotlib (default = T)
+:param smoothdata: Smooth the data using a box filter (default = F)
+:param parallel: run in parallel (default = F)
+:param lam: controls the elasticity (default = 0)
+:type lam: double
+:type smoothdata: bool
+:type f: np.ndarray
+:type time: np.ndarray
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+
+\end{description}\end{quote}
+
+functions with M samples
+:return qn: aligned srvfs - similar structure to fn
+:return q0: original srvf - similar structure to fn
+:return fmean: function mean or median - vector of length M
+:return mqn: srvf mean or median - vector of length M
+:return gam: warping functions - similar structure to fn
+:return orig\_var: Original Variance of Functions
+:return amp\_var: Amplitude Variance
+:return phase\_var: Phase Variance
+
+Examples
+\textgreater{}\textgreater{}\textgreater{} import tables
+\textgreater{}\textgreater{}\textgreater{} fun=tables.open\_file(“../Data/simu\_data.h5”)
+\textgreater{}\textgreater{}\textgreater{} f = fun.root.f{[}:{]}
+\textgreater{}\textgreater{}\textgreater{} f = f.transpose()
+\textgreater{}\textgreater{}\textgreater{} time = fun.root.time{[}:{]}
+\textgreater{}\textgreater{}\textgreater{} out = srsf\_align(f,time)
+
+\end{fulllineitems}
+
+\index{srsf\_align\_pair() (in module time\_warping)@\spxentry{srsf\_align\_pair()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.srsf_align_pair}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{srsf\_align\_pair}}}{\emph{f}, \emph{g}, \emph{time}, \emph{method='mean'}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{lam=0.0}}{}
+This function aligns a collection of functions using the elastic square-
+root slope (srsf) framework.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{g}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} (string) warp calculate Karcher Mean or Median (options =
+“mean” or “median”) (default=”mean”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{showplot}} \textendash{} Shows plots of results using matplotlib (default = T)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} controls the elasticity (default = 0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples
+
+\item[{Return gn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples
+
+\item[{Return qfn}] \leavevmode
+aligned srvfs - similar structure to fn
+
+\item[{Return qgn}] \leavevmode
+aligned srvfs - similar structure to fn
+
+\item[{Return qf0}] \leavevmode
+original srvf - similar structure to fn
+
+\item[{Return qg0}] \leavevmode
+original srvf - similar structure to fn
+
+\item[{Return fmean}] \leavevmode
+f function mean or median - vector of length N
+
+\item[{Return gmean}] \leavevmode
+g function mean or median - vector of length N
+
+\item[{Return mqfn}] \leavevmode
+srvf mean or median - vector of length N
+
+\item[{Return mqgn}] \leavevmode
+srvf mean or median - vector of length N
+
+\item[{Return gam}] \leavevmode
+warping functions - similar structure to fn
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 
 \chapter{Functional Principal Component Analysis}
-\label{\detokenize{fPCA:functional-principal-component-analysis}}\label{\detokenize{fPCA::doc}}
+\label{\detokenize{fPCA:module-fPCA}}\label{\detokenize{fPCA:functional-principal-component-analysis}}\label{\detokenize{fPCA::doc}}\index{fPCA (module)@\spxentry{fPCA}\spxextra{module}}
+Vertical and Horizontal Functional Principal Component Analysis using SRSF
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{horizfPCA() (in module fPCA)@\spxentry{horizfPCA()}\spxextra{in module fPCA}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.horizfPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{horizfPCA}}}{\emph{gam}, \emph{time}, \emph{no=2}, \emph{showplot=True}}{}
+This function calculates horizontal functional principal component analysis on aligned data
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of shape (M,N) of N warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 2)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{showplot}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Shows plots of results using matplotlib (default = T)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy ndarray
+
+\item[{Return q\_pca}] \leavevmode
+srsf principal directions
+
+\item[{Return f\_pca}] \leavevmode
+functional principal directions
+
+\item[{Return latent}] \leavevmode
+latent values
+
+\item[{Return coef}] \leavevmode
+coefficients
+
+\item[{Return U}] \leavevmode
+eigenvectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{jointfPCA() (in module fPCA)@\spxentry{jointfPCA()}\spxextra{in module fPCA}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.jointfPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{jointfPCA}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{q0}, \emph{gam}, \emph{no=2}, \emph{showplot=True}}{}
+This function calculates joint functional principal component analysis
+on aligned data
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{fn}} \textendash{} numpy ndarray of shape (M,N) of N aligned functions with M
+samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qn}} \textendash{} numpy ndarray of shape (M,N) of N aligned SRSF with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 2)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{showplot}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Shows plots of results using matplotlib (default = T)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy ndarray
+
+\item[{Return q\_pca}] \leavevmode
+srsf principal directions
+
+\item[{Return f\_pca}] \leavevmode
+functional principal directions
+
+\item[{Return latent}] \leavevmode
+latent values
+
+\item[{Return coef}] \leavevmode
+coefficients
+
+\item[{Return U}] \leavevmode
+eigenvectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{vertfPCA() (in module fPCA)@\spxentry{vertfPCA()}\spxextra{in module fPCA}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.vertfPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{vertfPCA}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{no=2}, \emph{showplot=True}}{}
+This function calculates vertical functional principal component analysis
+on aligned data
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{fn}} \textendash{} numpy ndarray of shape (M,N) of N aligned functions with M
+samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qn}} \textendash{} numpy ndarray of shape (M,N) of N aligned SRSF with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 2)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{showplot}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Shows plots of results using matplotlib (default = T)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy ndarray
+
+\item[{Return q\_pca}] \leavevmode
+srsf principal directions
+
+\item[{Return f\_pca}] \leavevmode
+functional principal directions
+
+\item[{Return latent}] \leavevmode
+latent values
+
+\item[{Return coef}] \leavevmode
+coefficients
+
+\item[{Return U}] \leavevmode
+eigenvectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 
 \chapter{Gaussian Generative Models}
-\label{\detokenize{gauss_model:gaussian-generative-models}}\label{\detokenize{gauss_model::doc}}
+\label{\detokenize{gauss_model:module-gauss_model}}\label{\detokenize{gauss_model:gaussian-generative-models}}\label{\detokenize{gauss_model::doc}}\index{gauss\_model (module)@\spxentry{gauss\_model}\spxextra{module}}
+Gaussian Model of functional data
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{gauss\_model() (in module gauss\_model)@\spxentry{gauss\_model()}\spxextra{in module gauss\_model}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{gauss_model:gauss_model.gauss_model}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{gauss\_model.}}\sphinxbfcode{\sphinxupquote{gauss\_model}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{gam}, \emph{n=1}, \emph{sort\_samples=False}}{}
+This function models the functional data using a Gaussian model
+extracted from the principal components of the srvfs
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{fn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned functions with
+M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned srvfs with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{n}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of random samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sort\_samples}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} sort samples (default = T)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fs}] \leavevmode
+random aligned samples
+
+\item[{Return gams}] \leavevmode
+random warping functions
+
+\item[{Return ft}] \leavevmode
+random samples
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 
 \chapter{Functional Principal Least Squares}
-\label{\detokenize{fPLS:functional-principal-least-squares}}\label{\detokenize{fPLS::doc}}
+\label{\detokenize{fPLS:module-fPLS}}\label{\detokenize{fPLS:functional-principal-least-squares}}\label{\detokenize{fPLS::doc}}\index{fPLS (module)@\spxentry{fPLS}\spxextra{module}}
+Partial Least Squares using SVD
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{pls\_svd() (in module fPLS)@\spxentry{pls\_svd()}\spxextra{in module fPLS}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPLS:fPLS.pls_svd}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPLS.}}\sphinxbfcode{\sphinxupquote{pls\_svd}}}{\emph{time}, \emph{qf}, \emph{qg}, \emph{no}, \emph{alpha=0.0}}{}
+This function computes the partial least squares using SVD
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector describing time samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qf}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qg}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} number of components
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} amount of smoothing (Default = 0.0 i.e., none)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return wqf}] \leavevmode
+f weight function
+
+\item[{Return wqg}] \leavevmode
+g weight function
+
+\item[{Return alpha}] \leavevmode
+smoothing value
+
+\item[{Return values}] \leavevmode
+singular values
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 
 \chapter{Elastic Regression}
-\label{\detokenize{regression:elastic-regression}}\label{\detokenize{regression::doc}}
+\label{\detokenize{regression:module-regression}}\label{\detokenize{regression:elastic-regression}}\label{\detokenize{regression::doc}}\index{regression (module)@\spxentry{regression}\spxextra{module}}
+Warping Invariant Regression using SRSF
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{elastic\_logistic() (in module regression)@\spxentry{elastic\_logistic()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.elastic_logistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_logistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{smooth=False}}{}
+This function identifies a logistic regression model with
+phase-variablity using elastic methods
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of labels (1/-1)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{B}} \textendash{} optional matrix describing Basis elements
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B-spline (default 20)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (default 20)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{cores}} \textendash{} number of cores for parallel processing (default all)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of M
+
+\end{description}\end{quote}
+
+functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return Loss: logistic loss
+
+\end{fulllineitems}
+
+\index{elastic\_mlogistic() (in module regression)@\spxentry{elastic\_mlogistic()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.elastic_mlogistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlogistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{delta=0.01}, \emph{parallel=True}, \emph{smooth=False}}{}
+This function identifies a multinomial logistic regression model with
+phase-variablity using elastic methods
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of labels \{1,2,…,m\} for m classes
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{B}} \textendash{} optional matrix describing Basis elements
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B-spline (default 20)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (default 20)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{cores}} \textendash{} number of cores for parallel processing (default all)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+
+\end{description}\end{quote}
+
+functions with M samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return Loss: logistic loss
+
+\end{fulllineitems}
+
+\index{elastic\_prediction() (in module regression)@\spxentry{elastic\_prediction()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.elastic_prediction}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_prediction}}}{\emph{f}, \emph{time}, \emph{model}, \emph{y=None}, \emph{smooth=False}}{}
+This function performs prediction from an elastic regression model
+with phase-variablity
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{model}} \textendash{} indentified model from elastic\_regression
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} truth, optional used to calculate SSE
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+
+\end{description}\end{quote}
+
+functions with M samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return SSE: sum of squared error
+
+\end{fulllineitems}
+
+\index{elastic\_regression() (in module regression)@\spxentry{elastic\_regression()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.elastic_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{lam=0}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{smooth=False}}{}
+This function identifies a regression model with phase-variablity
+using elastic methods
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{B}} \textendash{} optional matrix describing Basis elements
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} regularization parameter (default 0)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B-spline (default 20)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (default 20)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{cores}} \textendash{} number of cores for parallel processing (default all)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return beta}] \leavevmode
+beta(t) of model
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of M
+
+\end{description}\end{quote}
+
+functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return SSE: sum of squared error
+
+\end{fulllineitems}
+
+\index{logistic\_warp() (in module regression)@\spxentry{logistic\_warp()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.logistic_warp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logistic\_warp}}}{\emph{beta}, \emph{time}, \emph{q}, \emph{y}}{}
+calculates optimal warping for function logistic regression
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) responses
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return gamma}] \leavevmode
+warping function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{logit\_gradient() (in module regression)@\spxentry{logit\_gradient()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.logit_gradient}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_gradient}}}{\emph{b}, \emph{X}, \emph{y}}{}
+calculates gradient of the logistic loss
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{b}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{X}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) responses
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return grad}] \leavevmode
+gradient of logisitc loss
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{logit\_hessian() (in module regression)@\spxentry{logit\_hessian()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.logit_hessian}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_hessian}}}{\emph{s}, \emph{b}, \emph{X}, \emph{y}}{}
+calculates hessian of the logistic loss
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{s}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{b}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{X}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) responses
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return out}] \leavevmode
+hessian of logistic loss
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{logit\_loss() (in module regression)@\spxentry{logit\_loss()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.logit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_loss}}}{\emph{b}, \emph{X}, \emph{y}}{}
+logistic loss function, returns Sum\{-log(phi(t))\}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{b}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{X}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) of N responses
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return out}] \leavevmode
+loss value
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{mlogit\_gradient() (in module regression)@\spxentry{mlogit\_gradient()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.mlogit_gradient}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_gradient}}}{\emph{b}, \emph{X}, \emph{Y}}{}
+calculates gradient of the multinomial logistic loss
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{b}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{X}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) responses
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return grad}] \leavevmode
+gradient
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{mlogit\_loss() (in module regression)@\spxentry{mlogit\_loss()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.mlogit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_loss}}}{\emph{b}, \emph{X}, \emph{Y}}{}
+calculates multinomial logistic loss (negative log-likelihood)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{b}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{X}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) responses
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return nll}] \leavevmode
+negative log-likelihood
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{mlogit\_warp\_grad() (in module regression)@\spxentry{mlogit\_warp\_grad()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.mlogit_warp_grad}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_warp\_grad}}}{\emph{alpha}, \emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{max\_itr=8000}, \emph{tol=1e-10}, \emph{delta=0.008}, \emph{display=0}}{}
+calculates optimal warping for functional multinomial logistic regression
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} scalar
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) responses
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (Default=8000)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{tol}} \textendash{} stopping tolerance (Default=1e-10)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{delta}} \textendash{} gradient step size (Default=0.008)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{display}} \textendash{} display iterations (Default=0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return gam\_old}] \leavevmode
+warping function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{phi() (in module regression)@\spxentry{phi()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.phi}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{phi}}}{\emph{t}}{}
+calculates logistic function, returns 1 / (1 + exp(-t))
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{t}} \textendash{} scalar
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return out}] \leavevmode
+return value
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{regression\_warp() (in module regression)@\spxentry{regression\_warp()}\spxextra{in module regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{regression:regression.regression_warp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{regression\_warp}}}{\emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{alpha}}{}
+calculates optimal warping for function linear regression
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy ndarray of shape (1,N) of M functions with N samples
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+responses
+:param alpha: numpy scalar
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return gamma\_new}] \leavevmode
+warping function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 
 \chapter{SRVF Geodesic Computation}
-\label{\detokenize{geodesic:srvf-geodesic-computation}}\label{\detokenize{geodesic::doc}}
+\label{\detokenize{geodesic:module-geodesic}}\label{\detokenize{geodesic:srvf-geodesic-computation}}\label{\detokenize{geodesic::doc}}\index{geodesic (module)@\spxentry{geodesic}\spxextra{module}}
+geodesic calculation for SRVF (curves) open and closed)
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{back\_parallel\_transport() (in module geodesic)@\spxentry{back\_parallel\_transport()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.back_parallel_transport}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{back\_parallel\_transport}}}{\emph{u1}, \emph{alpha}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+backwards parallel translates q1 and q2 along manifold
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{u1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{basis}} \textendash{} list numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return utilde}] \leavevmode
+translated vector
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calc\_alphadot() (in module geodesic)@\spxentry{calc\_alphadot()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.calc_alphadot}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calc\_alphadot}}}{\emph{alpha}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+calculates derivative along the path alpha
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{basis}} \textendash{} list of numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return alphadot}] \leavevmode
+derivative of alpha
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculate\_energy() (in module geodesic)@\spxentry{calculate\_energy()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.calculate_energy}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calculate\_energy}}}{\emph{alphadot}, \emph{T=100}, \emph{k=5}}{}
+calculates energy along path
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alphadot}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return E}] \leavevmode
+energy
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculate\_gradE() (in module geodesic)@\spxentry{calculate\_gradE()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.calculate_gradE}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calculate\_gradE}}}{\emph{u}, \emph{utilde}, \emph{T=100}, \emph{k=5}}{}
+calculates gradient of energy along path
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{u}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{utilde}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return gradE}] \leavevmode
+gradient of energy
+
+\item[{Return normgradE}] \leavevmode
+norm of gradient of energy
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{cov\_integral() (in module geodesic)@\spxentry{cov\_integral()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.cov_integral}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{cov\_integral}}}{\emph{alpha}, \emph{alphadot}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+Calculates covariance along path alpha
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alphadot}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{basis}} \textendash{} list numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return u}] \leavevmode
+covariance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_basis\_normal\_path() (in module geodesic)@\spxentry{find\_basis\_normal\_path()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.find_basis_normal_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{find\_basis\_normal\_path}}}{\emph{alpha}, \emph{k=5}}{}
+computes orthonormalized basis vectors to the normal space at each of the
+k points (q-functions) of the path alpha
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} numpy ndarray of shape (2,M) of M samples (path)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return basis}] \leavevmode
+basis vectors along the path
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{geod\_dist\_path\_strt() (in module geodesic)@\spxentry{geod\_dist\_path\_strt()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.geod_dist_path_strt}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{geod\_dist\_path\_strt}}}{\emph{beta}, \emph{k=5}}{}
+calculate geodisc distance for path straightening
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return dist}] \leavevmode
+geodesic distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{geod\_sphere() (in module geodesic)@\spxentry{geod\_sphere()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.geod_sphere}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{geod\_sphere}}}{\emph{beta1}, \emph{beta2}, \emph{k=5}}{}
+This function caluclates the geodecis between open curves beta1 and
+beta2 with k steps along path
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return dist}] \leavevmode
+geodesic distance
+
+\item[{Return path}] \leavevmode
+geodesic path
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{init\_path\_geod() (in module geodesic)@\spxentry{init\_path\_geod()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.init_path_geod}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{init\_path\_geod}}}{\emph{beta1}, \emph{beta2}, \emph{T=100}, \emph{k=5}}{}
+Initializes a path in cal\{C\}. beta1, beta2 are already
+standardized curves. Creates a path from beta1 to beta2 in
+shape space, then projects to the closed shape manifold.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta1}} \textendash{} numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} numpy ndarray of shape (2,M) of M samples (end curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return alpha}] \leavevmode
+a path between two q-functions
+
+\item[{Return beta}] \leavevmode
+a path between two curves
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{init\_path\_rand() (in module geodesic)@\spxentry{init\_path\_rand()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.init_path_rand}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{init\_path\_rand}}}{\emph{beta1}, \emph{beta\_mid}, \emph{beta2}, \emph{T=100}, \emph{k=5}}{}
+Initializes a path in cal\{C\}. beta1, beta\_mid beta2 are already
+standardized curves. Creates a path from beta1 to beta\_mid to beta2 in
+shape space, then projects to the closed shape manifold.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta1}} \textendash{} numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{betamid}} \textendash{} numpy ndarray of shape (2,M) of M samples (mid curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} numpy ndarray of shape (2,M) of M samples (end curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return alpha}] \leavevmode
+a path between two q-functions
+
+\item[{Return beta}] \leavevmode
+a path between two curves
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{path\_straightening() (in module geodesic)@\spxentry{path\_straightening()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.path_straightening}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{path\_straightening}}}{\emph{beta1}, \emph{beta2}, \emph{betamid}, \emph{init='rand'}, \emph{T=100}, \emph{k=5}}{}
+Perform path straigtening to find geodesic between two shapes in either
+the space of closed curves or the space of affine standardized curves.
+This algorithm follows the steps outlined in section 4.6 of the
+manuscript.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta1}} \textendash{} numpy ndarray of shape (2,M) of M samples (first curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} numpy ndarray of shape (2,M) of M samples (end curve)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{betamid}} \textendash{} numpy ndarray of shape (2,M) of M samples (mid curve
+Default = NULL, only needed for init “rand”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{init}} \textendash{} initilizae path geodesic or random (Default = “rand”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return dist}] \leavevmode
+geodesic distance
+
+\item[{Return path}] \leavevmode
+geodesic path
+
+\item[{Return pathsqnc}] \leavevmode
+geodesic path sequence
+
+\item[{Return E}] \leavevmode
+energy
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{update\_path() (in module geodesic)@\spxentry{update\_path()}\spxextra{in module geodesic}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{geodesic:geodesic.update_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{update\_path}}}{\emph{alpha}, \emph{beta}, \emph{gradE}, \emph{delta}, \emph{T=100}, \emph{k=5}}{}
+Update the path along the direction -gradE
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gradE}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{delta}} \textendash{} gradient paramenter
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} Number of samples of curve (Default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} number of samples along path (Default = 5)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy scalar
+
+\item[{Return alpha}] \leavevmode
+updated path of srvfs
+
+\item[{Return beta}] \leavevmode
+updated path of curves
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 
 \chapter{Utility Functions}
-\label{\detokenize{utility_functions:utility-functions}}\label{\detokenize{utility_functions::doc}}
+\label{\detokenize{utility_functions:module-utility_functions}}\label{\detokenize{utility_functions:utility-functions}}\label{\detokenize{utility_functions::doc}}\index{utility\_functions (module)@\spxentry{utility\_functions}\spxextra{module}}
+Utility functions for SRSF Manipulations
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{SqrtMean() (in module utility\_functions)@\spxentry{SqrtMean()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMean}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMean}}}{\emph{gam}}{}
+calculates the srsf of warping functions with corresponding shooting vectors
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of shape (M,N) of M warping functions
+with N samples
+
+\item[{Return type}] \leavevmode
+2 numpy ndarray and vector
+
+\item[{Return mu}] \leavevmode
+Karcher mean psi function
+
+\item[{Return gam\_mu}] \leavevmode
+vector of dim N which is the Karcher mean warping function
+
+\item[{Return psi}] \leavevmode
+numpy ndarray of shape (M,N) of M SRSF of the warping functions
+
+\item[{Return vec}] \leavevmode
+numpy ndarray of shape (M,N) of M shooting vectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{SqrtMeanInverse() (in module utility\_functions)@\spxentry{SqrtMeanInverse()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMeanInverse}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMeanInverse}}}{\emph{gam}}{}
+finds the inverse of the mean of the set of the diffeomorphisms gamma
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of shape (M,N) of M warping functions
+with N samples
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return gamI}] \leavevmode
+inverse of gam
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{cumtrapzmid() (in module utility\_functions)@\spxentry{cumtrapzmid()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.cumtrapzmid}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{cumtrapzmid}}}{\emph{x}, \emph{y}, \emph{c}, \emph{mid}}{}
+cumulative trapezoidal numerical integration taken from midpoint
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{x}} \textendash{} vector of size N describing the time samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} vector of size N describing the function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{c}} \textendash{} midpoint
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mid}} \textendash{} midpiont location
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return fa}] \leavevmode
+cumulative integration
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{diffop() (in module utility\_functions)@\spxentry{diffop()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.diffop}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{diffop}}}{\emph{n}, \emph{binsize=1}}{}
+Creates a second order differential operator
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{n}} \textendash{} dimension
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{binsize}} \textendash{} dx (default = 1)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return m}] \leavevmode
+matrix describing differential operator
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{elastic\_distance() (in module utility\_functions)@\spxentry{elastic\_distance()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.elastic_distance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_distance}}}{\emph{f1}, \emph{f2}, \emph{time}, \emph{lam=0.0}}{}
+”
+calculates the distances between function, where f1 is aligned to
+f2. In other words
+calculates the elastic distances
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f1}} \textendash{} vector of size N
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f2}} \textendash{} vector of size N
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} controls the elasticity (default = 0.0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+scalar
+
+\item[{Return Dy}] \leavevmode
+amplitude distance
+
+\item[{Return Dx}] \leavevmode
+phase distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{f\_K\_fold() (in module utility\_functions)@\spxentry{f\_K\_fold()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.f_K_fold}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_K\_fold}}}{\emph{Nobs}, \emph{K=5}}{}
+generates sample indices for K-fold cross validation
+
+:param Nobs number of observations
+:param K number of folds
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return train}] \leavevmode
+train indexes (Nobs*(K-1)/K X K)
+
+\item[{Return test}] \leavevmode
+test indexes (Nobs*(1/K) X K)
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{f\_to\_srsf() (in module utility\_functions)@\spxentry{f\_to\_srsf()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.f_to_srsf}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_to\_srsf}}}{\emph{f}, \emph{time}, \emph{smooth=False}}{}
+converts f to a square-root slope function (SRSF)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} vector of size N samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return q}] \leavevmode
+srsf of f
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{geigen() (in module utility\_functions)@\spxentry{geigen()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.geigen}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{geigen}}}{\emph{Amat}, \emph{Bmat}, \emph{Cmat}}{}
+generalized eigenvalue problem of the form
+
+max tr L’AM / sqrt(tr L’BL tr M’CM) w.r.t. L and M
+
+:param Amat numpy ndarray of shape (M,N)
+:param Bmat numpy ndarray of shape (M,N)
+:param Bmat numpy ndarray of shape (M,N)
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return values}] \leavevmode
+eigenvalues
+
+\item[{Return Lmat}] \leavevmode
+left eigenvectors
+
+\item[{Return Mmat}] \leavevmode
+right eigenvectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{gradient\_spline() (in module utility\_functions)@\spxentry{gradient\_spline()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.gradient_spline}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{gradient\_spline}}}{\emph{time}, \emph{f}, \emph{smooth=False}}{}
+This function takes the gradient of f using b-spline smoothing
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} \textendash{} smooth data (default = F)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy ndarray
+
+\item[{Return f0}] \leavevmode
+smoothed functions functions
+
+\item[{Return g}] \leavevmode
+first derivative of each function
+
+\item[{Return g2}] \leavevmode
+second derivative of each function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{innerprod\_q() (in module utility\_functions)@\spxentry{innerprod\_q()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.innerprod_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{innerprod\_q}}}{\emph{time}, \emph{q1}, \emph{q2}}{}
+calculates the innerproduct between two srsfs
+
+:param time vector descrbing time samples
+:param q1 vector of srsf 1
+:param q2 vector of srsf 2
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+scalar
+
+\item[{Return val}] \leavevmode
+inner product value
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{invertGamma() (in module utility\_functions)@\spxentry{invertGamma()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.invertGamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{invertGamma}}}{\emph{gam}}{}
+finds the inverse of the diffeomorphism gamma
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} vector describing the warping function
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return gamI}] \leavevmode
+inverse of gam
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{optimum\_reparam() (in module utility\_functions)@\spxentry{optimum\_reparam()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam}}}{\emph{q1}, \emph{time}, \emph{q2}, \emph{method='DP'}, \emph{lam=0.0}}{}
+calculates the warping to align srsf q2 to q1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} vector of size N or array of NxM samples of first SRSF
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} vector of size N or array of NxM samples samples of second SRSF
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} method to apply optimzation (default=”DP”) options are “DP”, “DP2” and “RBFGS”
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} controls the amount of elasticity (default = 0.0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return gam}] \leavevmode
+describing the warping function used to align q2 with q1
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{optimum\_reparam\_pair() (in module utility\_functions)@\spxentry{optimum\_reparam\_pair()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam_pair}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam\_pair}}}{\emph{q}, \emph{time}, \emph{q1}, \emph{q2}, \emph{lam=0.0}}{}
+calculates the warping to align srsf pair q1 and q2 to q
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} vector of size N or array of NxM samples of first SRSF
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} vector of size N or array of NxM samples samples of second SRSF
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} vector of size N or array of NxM samples samples of second SRSF
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} controls the amount of elasticity (default = 0.0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return gam}] \leavevmode
+describing the warping function used to align q2 with q1
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{outlier\_detection() (in module utility\_functions)@\spxentry{outlier\_detection()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.outlier_detection}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{outlier\_detection}}}{\emph{q}, \emph{time}, \emph{mq}, \emph{k=1.5}}{}
+calculates outlier’s using geodesic distances of the SRSFs from the median
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of N x M of M SRS functions with N samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mq}} \textendash{} median calculated using {\hyperref[\detokenize{time_warping:time_warping.srsf_align}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{time\_warping.srsf\_align()}}}}}
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} cutoff threshold (default = 1.5)
+
+\end{itemize}
+
+\item[{Returns}] \leavevmode
+q\_outlier: outlier functions
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{randomGamma() (in module utility\_functions)@\spxentry{randomGamma()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.randomGamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{randomGamma}}}{\emph{gam}, \emph{num}}{}
+generates random warping functions
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of N x M of M of warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{num}} \textendash{} number of random functions
+
+\end{itemize}
+
+\item[{Returns}] \leavevmode
+rgam: random warping functions
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{resamplefunction() (in module utility\_functions)@\spxentry{resamplefunction()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.resamplefunction}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{resamplefunction}}}{\emph{x}, \emph{n}}{}
+resample function using n points
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{x}} \textendash{} functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{n}} \textendash{} number of points
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return xn}] \leavevmode
+resampled function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{rgam() (in module utility\_functions)@\spxentry{rgam()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.rgam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{rgam}}}{\emph{N}, \emph{sigma}, \emph{num}}{}
+Generates random warping functions
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{N}} \textendash{} length of warping function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sigma}} \textendash{} variance of warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{num}} \textendash{} number of warping functions
+
+\end{itemize}
+
+\item[{Returns}] \leavevmode
+gam: numpy ndarray of warping functions
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{smooth\_data() (in module utility\_functions)@\spxentry{smooth\_data()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.smooth_data}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{smooth\_data}}}{\emph{f}, \emph{sparam}}{}
+This function smooths a collection of functions using a box filter
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (M,N) of M functions with N samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} Number of times to run box filter (default = 25)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return f}] \leavevmode
+smoothed functions functions
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{srsf\_to\_f() (in module utility\_functions)@\spxentry{srsf\_to\_f()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.srsf_to_f}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{srsf\_to\_f}}}{\emph{q}, \emph{time}, \emph{f0=0.0}}{}
+converts q (srsf) to a function
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} vector of size N samples of srsf
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing time sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f0}} \textendash{} initial value
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return f}] \leavevmode
+function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{update\_progress() (in module utility\_functions)@\spxentry{update\_progress()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.update_progress}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{update\_progress}}}{\emph{progress}}{}
+This function creates a progress bar
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{progress}} \textendash{} fraction of progress
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{warp\_f\_gamma() (in module utility\_functions)@\spxentry{warp\_f\_gamma()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.warp_f_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{warp\_f\_gamma}}}{\emph{time}, \emph{f}, \emph{gam}}{}
+warps a function f by gam
+
+:param time vector describing time samples
+:param q vector describing srsf
+:param gam vector describing warping function
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return f\_temp}] \leavevmode
+warped srsf
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{warp\_q\_gamma() (in module utility\_functions)@\spxentry{warp\_q\_gamma()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.warp_q_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{warp\_q\_gamma}}}{\emph{time}, \emph{q}, \emph{gam}}{}
+warps a srsf q by gam
+
+:param time vector describing time samples
+:param q vector describing srsf
+:param gam vector describing warping function
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return q\_temp}] \leavevmode
+warped srsf
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{zero\_crossing() (in module utility\_functions)@\spxentry{zero\_crossing()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{zero\_crossing}}}{\emph{Y}, \emph{q}, \emph{bt}, \emph{time}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
+finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+from elastic regression model
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Y}} \textendash{} response
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} predicitve function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{bt}} \textendash{} basis function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} time samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y\_max}} \textendash{} maximum repsonse for warping function gmax
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y\_min}} \textendash{} minimum response for warping function gmin
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gmax}} \textendash{} max warping function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gmin}} \textendash{} min warping fucntion
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return gamma}] \leavevmode
+optimal warping function
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 
 \chapter{Curve Functions}
-\label{\detokenize{curve_functions:curve-functions}}\label{\detokenize{curve_functions::doc}}
+\label{\detokenize{curve_functions:module-curve_functions}}\label{\detokenize{curve_functions:curve-functions}}\label{\detokenize{curve_functions::doc}}\index{curve\_functions (module)@\spxentry{curve\_functions}\spxextra{module}}
+functions for SRVF curve manipulations
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{calc\_j() (in module curve\_functions)@\spxentry{calc\_j()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.calc_j}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calc\_j}}}{\emph{basis}}{}
+Calculates Jacobian matrix from normal basis
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{basis}} \textendash{} list of numpy ndarray of shape (2,M) of M samples basis
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return j}] \leavevmode
+Jacobian
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculate\_variance() (in module curve\_functions)@\spxentry{calculate\_variance()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.calculate_variance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calculate\_variance}}}{\emph{beta}}{}
+This function calculates variance of curve beta
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return variance}] \leavevmode
+variance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{calculatecentroid() (in module curve\_functions)@\spxentry{calculatecentroid()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.calculatecentroid}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calculatecentroid}}}{\emph{beta}}{}
+This function calculates centroid of a parameterized curve
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return centroid}] \leavevmode
+center coordinates
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{curve\_to\_q() (in module curve\_functions)@\spxentry{curve\_to\_q()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_to_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_to\_q}}}{\emph{beta}}{}
+This function converts curve beta to srvf q
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return q}] \leavevmode
+srvf of curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{curve\_zero\_crossing() (in module curve\_functions)@\spxentry{curve\_zero\_crossing()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_zero\_crossing}}}{\emph{Y}, \emph{beta}, \emph{bt}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
+finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+from elastic curve regression model
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Y}} \textendash{} response
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} predicitve function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{bt}} \textendash{} basis function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y\_max}} \textendash{} maximum repsonse for warping function gmax
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y\_min}} \textendash{} minimum response for warping function gmin
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gmax}} \textendash{} max warping function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gmin}} \textendash{} min warping fucntion
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy array
+
+\item[{Return gamma}] \leavevmode
+optimal warping function
+
+\item[{Return O\_hat}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_basis\_normal() (in module curve\_functions)@\spxentry{find\_basis\_normal()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_basis_normal}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_basis\_normal}}}{\emph{q}}{}
+Finds the basis normal to the srvf
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+list of numpy ndarray
+
+\item[{Return basis}] \leavevmode
+list containing basis vectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_best\_rotation() (in module curve\_functions)@\spxentry{find\_best\_rotation()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_best_rotation}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_best\_rotation}}}{\emph{q1}, \emph{q2}}{}
+This function calculates the best rotation between two srvfs using
+procustes rigid alignment
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return q2new}] \leavevmode
+optimal rotated q2 to q1
+
+\item[{Return R}] \leavevmode
+rotation matrix
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_rotation\_and\_seed\_coord() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_coord()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_rotation_and_seed_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_rotation\_and\_seed\_coord}}}{\emph{beta1}, \emph{beta2}}{}
+This function returns a candidate list of optimally oriented and
+registered (seed) shapes w.r.t. beta1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return beta2new}] \leavevmode
+optimal rotated beta2 to beta1
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\item[{Return tau}] \leavevmode
+seed
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{find\_rotation\_and\_seed\_q() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_q()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_rotation_and_seed_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_rotation\_and\_seed\_q}}}{\emph{q1}, \emph{q2}}{}
+This function returns a candidate list of optimally oriented and
+registered (seed) shapes w.r.t. beta1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return beta2new}] \leavevmode
+optimal rotated beta2 to beta1
+
+\item[{Return O}] \leavevmode
+rotation matrix
+
+\item[{Return tau}] \leavevmode
+seed
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{gram\_schmidt() (in module curve\_functions)@\spxentry{gram\_schmidt()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.gram_schmidt}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{gram\_schmidt}}}{\emph{basis}}{}
+Performs Gram Schmidt Orthogonlization of a basis\_o
+\begin{quote}
+\begin{quote}\begin{description}
+\item[{param basis}] \leavevmode
+list of numpy ndarray of shape (2,M) of M samples
+
+\item[{rtype}] \leavevmode
+list of numpy ndarray
+
+\item[{return basis\_o}] \leavevmode
+orthogonlized basis
+
+\end{description}\end{quote}
+\end{quote}
+
+\end{fulllineitems}
+
+\index{group\_action\_by\_gamma() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.group_action_by_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{group\_action\_by\_gamma}}}{\emph{q}, \emph{gamma}}{}
+This function reparamerized srvf q by gamma
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gamma}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return qn}] \leavevmode
+reparatermized srvf
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{group\_action\_by\_gamma\_coord() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma\_coord()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.group_action_by_gamma_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{group\_action\_by\_gamma\_coord}}}{\emph{f}, \emph{gamma}}{}
+This function reparamerized curve f by gamma
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gamma}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return fn}] \leavevmode
+reparatermized curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{innerprod\_q2() (in module curve\_functions)@\spxentry{innerprod\_q2()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.innerprod_q2}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{innerprod\_q2}}}{\emph{q1}, \emph{q2}}{}
+This function calculates the inner product in srvf space
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return val}] \leavevmode
+inner product
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{inverse\_exp() (in module curve\_functions)@\spxentry{inverse\_exp()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.inverse_exp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{inverse\_exp}}}{\emph{q1}, \emph{q2}, \emph{beta2}}{}
+Calculate the inverse exponential to obtain a shooting vector from
+q1 to q2 in shape space of open curves
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return v}] \leavevmode
+shooting vectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{inverse\_exp\_coord() (in module curve\_functions)@\spxentry{inverse\_exp\_coord()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.inverse_exp_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{inverse\_exp\_coord}}}{\emph{beta1}, \emph{beta2}}{}
+Calculate the inverse exponential to obtain a shooting vector from
+beta1 to beta2 in shape space of open curves
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return v}] \leavevmode
+shooting vectors
+
+\item[{Return dist}] \leavevmode
+distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{optimum\_reparam\_curve() (in module curve\_functions)@\spxentry{optimum\_reparam\_curve()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.optimum_reparam_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam\_curve}}}{\emph{q1}, \emph{q2}, \emph{lam=0.0}}{}
+calculates the warping to align srsf q2 to q1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} matrix of size nxN or array of NxM samples of first SRVF
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} matrix of size nxN or array of NxM samples samples of second SRVF
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} controls the amount of elasticity (default = 0.0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+vector
+
+\item[{Return gam}] \leavevmode
+describing the warping function used to align q2 with q1
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{parallel\_translate() (in module curve\_functions)@\spxentry{parallel\_translate()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.parallel_translate}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{parallel\_translate}}}{\emph{w}, \emph{q1}, \emph{q2}, \emph{basis}, \emph{mode=0}}{}
+parallel translates q1 and q2 along manifold
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{w}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{basis}} \textendash{} list of numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mode}} \textendash{} open 0 or closed curves 1 (default 0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return wbar}] \leavevmode
+translated vector
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{pre\_proc\_curve() (in module curve\_functions)@\spxentry{pre\_proc\_curve()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.pre_proc_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{pre\_proc\_curve}}}{\emph{beta}, \emph{T=100}}{}
+This function prepcoessed a curve beta to set of closed curves
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{T}} \textendash{} number of samples (default = 100)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return betanew}] \leavevmode
+projected beta
+
+\item[{Return qnew}] \leavevmode
+projected srvf
+
+\item[{Return A}] \leavevmode
+alignment matrix (not used currently)
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{project\_curve() (in module curve\_functions)@\spxentry{project\_curve()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.project_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{project\_curve}}}{\emph{q}}{}
+This function projects srvf q to set of close curves
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return qproj}] \leavevmode
+project srvf
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{project\_tangent() (in module curve\_functions)@\spxentry{project\_tangent()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.project_tangent}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{project\_tangent}}}{\emph{w}, \emph{q}, \emph{basis}}{}
+projects srvf to tangent space w using basis
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{w}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{basis}} \textendash{} list of numpy ndarray of shape (2,M) of M samples
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return wproj}] \leavevmode
+projected q
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{psi() (in module curve\_functions)@\spxentry{psi()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.psi}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{psi}}}{\emph{x}, \emph{a}, \emph{q}}{}
+This function formats variance output
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{x}} \textendash{} numpy ndarray of shape (2,M) of M samples curve
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{a}} \textendash{} numpy ndarray of shape (2,1) mean
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (2,M) of M samples srvf
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return psi1}] \leavevmode
+variance
+
+\item[{Return psi2}] \leavevmode
+cross variance
+
+\item[{Return psi3}] \leavevmode
+curve end
+
+\item[{Return psi4}] \leavevmode
+curve end
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{q\_to\_curve() (in module curve\_functions)@\spxentry{q\_to\_curve()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.q_to_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{q\_to\_curve}}}{\emph{q}}{}
+This function converts srvf to beta
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return beta}] \leavevmode
+parameterized curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{resamplecurve() (in module curve\_functions)@\spxentry{resamplecurve()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.resamplecurve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{resamplecurve}}}{\emph{x}, \emph{N=100}}{}
+This function resamples a curve to have N samples
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{x}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{N}} \textendash{} Number of samples for new curve (default = 100)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return xn}] \leavevmode
+resampled curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{scale\_curve() (in module curve\_functions)@\spxentry{scale\_curve()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.scale_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{scale\_curve}}}{\emph{beta}}{}
+scales curve to length 1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return beta\_scaled}] \leavevmode
+scaled curve
+
+\item[{Return scale}] \leavevmode
+scale factor used
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{shift\_f() (in module curve\_functions)@\spxentry{shift\_f()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.shift_f}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{shift\_f}}}{\emph{f}, \emph{tau}}{}
+shifts a curve f by tau
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{tau}} \textendash{} scalar
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+numpy ndarray
+
+\item[{Return fn}] \leavevmode
+shifted curve
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
 References:
 \begin{quote}
 
+Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
+\end{quote}
+
+Methods. Ph.D. Thesis, Florida State University.
+
+Robinson, D. T. 2012, Function Data Analysis and Partial Shape Matching in the
+Square Root Velocity Framework. Ph.D. Thesis, Florida State University.
+
+Huang, W. 2014, Optimization Algorithms on Riemannian Manifolds with
+Applications. Ph.D. Thesis, Florida State University.
+
 Srivastava, A., Wu, W., Kurtek, S., Klassen, E. and Marron, J. S. (2011).
-Registration of Functional Data Using Fisher-Rao Metric.
-arXiv:1103.3817v2 {[}math.ST{]}.
+Registration of Functional Data Using Fisher-Rao Metric. arXiv:1103.3817v2
+{[}math.ST{]}.
 
 Tucker, J. D., Wu, W. and Srivastava, A. (2013). Generative models for
-functional data using phase and amplitude separation. Computational
-Statistics and Data Analysis 61, 50-66.
+functional data using phase and amplitude separation. Computational Statistics
+and Data Analysis 61, 50-66.
 
-Joshi, S.H., Srivastava, A., Klassen, E. and Jermyn, I. (2007).
-A Novel Representation for Computing Geodesics Between n-Dimensional
-Elastic Curves. IEEE Conference on computer Vision and Pattern Recognition
-(CVPR), Minneapolis, MN.
+J. D. Tucker, W. Wu, and A. Srivastava, “Phase-Amplitude Separation of
+Proteomics Data Using Extended Fisher-Rao Metric,” Electronic Journal of
+Statistics, Vol 8, no. 2. pp 1724-1733, 2014.
 
-Srivastava, A., Klassen, E., Joshi, S., Jermyn, I., (2011). Shape analysis
-of elastic curves in euclidean spaces. Pattern Analysis and Machine
-Intelligence, IEEE Transactions on 33 (7), 1415 \textendash{}1428.
-\end{quote}
+J. D. Tucker, W. Wu, and A. Srivastava, “Analysis of signals under compositional
+noise With applications to SONAR data,” IEEE Journal of Oceanic Engineering, Vol
+29, no. 2. pp 318-330, Apr 2014.
+
+Srivastava, A., Klassen, E., Joshi, S., Jermyn, I., (2011). Shape analysis of
+elastic curves in euclidean spaces. Pattern Analysis and Machine Intelligence,
+IEEE Transactions on 33 (7), 1415-1428.
+
+S. Kurtek, A. Srivastava, and W. Wu. Signal estimation under random
+time-warpings and nonlinear signal alignment. In Proceedings of Neural
+Information Processing Systems (NIPS), 2011.
+
+Wen Huang, Kyle A. Gallivan, Anuj Srivastava, Pierre-Antoine Absil. “Riemannian
+Optimization for Elastic Shape Analysis”, Short version, The 21st International
+Symposium on Mathematical Theory of Networks and Systems (MTNS 2014).
+
+Cheng, W., Dryden, I. L., and Huang, X. (2016). Bayesian registration of functions
+and curves. Bayesian Analysis, 11(2), 447-475.
+
+W. Xie, S. Kurtek, K. Bharath, and Y. Sun, A geometric approach to visualization
+of variability in functional data, Journal of American Statistical Association 112
+(2017), pp. 979-993.
+
+Lu, Y., R. Herbei, and S. Kurtek, 2017: Bayesian registration of functions with a Gaussian process prior. Journal of
+Computational and Graphical Statistics, 26, no. 4, 894\textendash{}904.
+
+Lee, S. and S. Jung, 2017: Combined analysis of amplitude and phase variations
+in functional data. arXiv:1603.01775 {[}stat.ME{]}, 1-21.
+
+J. D. Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal
+Component Regression,” Statistical Analysis and Data Mining, 10.1002/sam.11399, 2018.
 
 
 \chapter{Indices and tables}
@@ -152,6 +2887,29 @@ Intelligence, IEEE Transactions on 33 (7), 1415 \textendash{}1428.
 \end{itemize}
 
 
+\renewcommand{\indexname}{Python Module Index}
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\bigletter{c}
+\item\relax\sphinxstyleindexentry{curve\_functions}\sphinxstyleindexpageref{curve_functions:\detokenize{module-curve_functions}}
+\indexspace
+\bigletter{f}
+\item\relax\sphinxstyleindexentry{fPCA}\sphinxstyleindexpageref{fPCA:\detokenize{module-fPCA}}
+\item\relax\sphinxstyleindexentry{fPLS}\sphinxstyleindexpageref{fPLS:\detokenize{module-fPLS}}
+\indexspace
+\bigletter{g}
+\item\relax\sphinxstyleindexentry{gauss\_model}\sphinxstyleindexpageref{gauss_model:\detokenize{module-gauss_model}}
+\item\relax\sphinxstyleindexentry{geodesic}\sphinxstyleindexpageref{geodesic:\detokenize{module-geodesic}}
+\indexspace
+\bigletter{r}
+\item\relax\sphinxstyleindexentry{regression}\sphinxstyleindexpageref{regression:\detokenize{module-regression}}
+\indexspace
+\bigletter{t}
+\item\relax\sphinxstyleindexentry{time\_warping}\sphinxstyleindexpageref{time_warping:\detokenize{module-time_warping}}
+\indexspace
+\bigletter{u}
+\item\relax\sphinxstyleindexentry{utility\_functions}\sphinxstyleindexpageref{utility_functions:\detokenize{module-utility_functions}}
+\end{sphinxtheindex}
 
 \renewcommand{\indexname}{Index}
 \printindex

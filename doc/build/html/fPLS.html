@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Functional Principal Least Squares &#8212; fdasrsf 1.3.0 documentation</title>
+    <title>Functional Principal Least Squares &#8212; fdasrsf 1.4.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -26,12 +26,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="regression.html" title="Elastic Regression"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="gauss_model.html" title="Gaussian Generative Models"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.3.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -40,8 +43,42 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="functional-principal-least-squares">
-<h1>Functional Principal Least Squares<a class="headerlink" href="#functional-principal-least-squares" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-fPLS">
+<span id="functional-principal-least-squares"></span><h1>Functional Principal Least Squares<a class="headerlink" href="#module-fPLS" title="Permalink to this headline">¶</a></h1>
+<p>Partial Least Squares using SVD</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="fPLS.pls_svd">
+<code class="sig-prename descclassname">fPLS.</code><code class="sig-name descname">pls_svd</code><span class="sig-paren">(</span><em class="sig-param">time</em>, <em class="sig-param">qf</em>, <em class="sig-param">qg</em>, <em class="sig-param">no</em>, <em class="sig-param">alpha=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPLS.html#pls_svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPLS.pls_svd" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function computes the partial least squares using SVD</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> – vector describing time samples</p></li>
+<li><p><strong>qf</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>qg</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>no</strong> – number of components</p></li>
+<li><p><strong>alpha</strong> – amount of smoothing (Default = 0.0 i.e., none)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return wqf</dt>
+<dd class="field-odd"><p>f weight function</p>
+</dd>
+<dt class="field-even">Return wqg</dt>
+<dd class="field-even"><p>g weight function</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>smoothing value</p>
+</dd>
+<dt class="field-even">Return values</dt>
+<dd class="field-even"><p>singular values</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -84,12 +121,15 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="regression.html" title="Elastic Regression"
              >next</a> |</li>
         <li class="right" >
           <a href="gauss_model.html" title="Gaussian Generative Models"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.3.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

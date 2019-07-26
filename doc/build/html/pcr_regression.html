@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Elastic Regression &#8212; fdasrsf 1.3.0 documentation</title>
+    <title>Elastic Principal Component Regression &#8212; fdasrsf 1.4.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -23,7 +23,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.3.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -32,8 +35,147 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="elastic-regression">
-<h1>Elastic Regression<a class="headerlink" href="#elastic-regression" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pcr_regression">
+<span id="elastic-principal-component-regression"></span><h1>Elastic Principal Component Regression<a class="headerlink" href="#module-pcr_regression" title="Permalink to this headline">¶</a></h1>
+<p>Warping PCR Invariant Regression using SRSF</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="pcr_regression.elastic_lpcr_regression">
+<code class="sig-prename descclassname">pcr_regression.</code><code class="sig-name descname">elastic_lpcr_regression</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">y</em>, <em class="sig-param">time</em>, <em class="sig-param">pca_method='combined'</em>, <em class="sig-param">no=5</em>, <em class="sig-param">smooth_data=False</em>, <em class="sig-param">sparam=25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_lpcr_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcr_regression.elastic_lpcr_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a logistic regression model with phase-variability
+using elastic pca</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of N responses</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>pca_method</strong> – string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)</p></li>
+<li><p><strong>no</strong> – scalar specify number of principal components (default=5)</p></li>
+<li><p><strong>smooth_data</strong> – smooth data using box filter (default = F)</p></li>
+<li><p><strong>sparam</strong> – number of times to apply box filter (default = 25)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>alpha parameter of model</p>
+</dd>
+<dt class="field-even">Return b</dt>
+<dd class="field-even"><p>regressor vector</p>
+</dd>
+<dt class="field-odd">Return y</dt>
+<dd class="field-odd"><p>response vector</p>
+</dd>
+<dt class="field-even">Return warp_data</dt>
+<dd class="field-even"><p>alignment object from srsf_align</p>
+</dd>
+<dt class="field-odd">Return pca</dt>
+<dd class="field-odd"><p>fpca object from corresponding pca method</p>
+</dd>
+<dt class="field-even">Return Loss</dt>
+<dd class="field-even"><p>logistic loss</p>
+</dd>
+<dt class="field-odd">Return pca.method</dt>
+<dd class="field-odd"><p>string of pca method</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pcr_regression.elastic_mlpcr_regression">
+<code class="sig-prename descclassname">pcr_regression.</code><code class="sig-name descname">elastic_mlpcr_regression</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">y</em>, <em class="sig-param">time</em>, <em class="sig-param">pca_method='combined'</em>, <em class="sig-param">no=5</em>, <em class="sig-param">smooth_data=False</em>, <em class="sig-param">sparam=25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_mlpcr_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcr_regression.elastic_mlpcr_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a logistic regression model with phase-variability
+using elastic pca</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of N responses</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>pca_method</strong> – string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)</p></li>
+<li><p><strong>no</strong> – scalar specify number of principal components (default=5)</p></li>
+<li><p><strong>smooth_data</strong> – smooth data using box filter (default = F)</p></li>
+<li><p><strong>sparam</strong> – number of times to apply box filter (default = 25)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>alpha parameter of model</p>
+</dd>
+<dt class="field-even">Return b</dt>
+<dd class="field-even"><p>regressor vector</p>
+</dd>
+<dt class="field-odd">Return y</dt>
+<dd class="field-odd"><p>response vector</p>
+</dd>
+<dt class="field-even">Return warp_data</dt>
+<dd class="field-even"><p>alignment object from srsf_align</p>
+</dd>
+<dt class="field-odd">Return pca</dt>
+<dd class="field-odd"><p>fpca object from corresponding pca method</p>
+</dd>
+<dt class="field-even">Return Loss</dt>
+<dd class="field-even"><p>logistic loss</p>
+</dd>
+<dt class="field-odd">Return pca.method</dt>
+<dd class="field-odd"><p>string of pca method</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pcr_regression.elastic_pcr_regression">
+<code class="sig-prename descclassname">pcr_regression.</code><code class="sig-name descname">elastic_pcr_regression</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">y</em>, <em class="sig-param">time</em>, <em class="sig-param">pca_method='combined'</em>, <em class="sig-param">no=5</em>, <em class="sig-param">smooth_data=False</em>, <em class="sig-param">sparam=25</em>, <em class="sig-param">parallel=False</em>, <em class="sig-param">C=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a regression model with phase-variability
+using elastic pca</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of N responses</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>pca_method</strong> – string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)</p></li>
+<li><p><strong>no</strong> – scalar specify number of principal components (default=5)</p></li>
+<li><p><strong>smooth_data</strong> – smooth data using box filter (default = F)</p></li>
+<li><p><strong>sparam</strong> – number of times to apply box filter (default = 25)</p></li>
+<li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
+<li><p><strong>C</strong> – scale balance parameter for combined method (default = None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>alpha parameter of model</p>
+</dd>
+<dt class="field-even">Return b</dt>
+<dd class="field-even"><p>regressor vector</p>
+</dd>
+<dt class="field-odd">Return y</dt>
+<dd class="field-odd"><p>response vector</p>
+</dd>
+<dt class="field-even">Return warp_data</dt>
+<dd class="field-even"><p>alignment object from srsf_align</p>
+</dd>
+<dt class="field-odd">Return pca</dt>
+<dd class="field-odd"><p>fpca object from corresponding pca method</p>
+</dd>
+<dt class="field-even">Return SSE</dt>
+<dd class="field-even"><p>sum of squared errors</p>
+</dd>
+<dt class="field-odd">Return pca.method</dt>
+<dd class="field-odd"><p>string of pca method</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -71,7 +213,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.3.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
