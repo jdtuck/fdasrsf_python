@@ -1,5 +1,5 @@
 import numpy
-import sys
+import sys, os
 from distutils.core import setup
 from distutils.core import Command
 from distutils.extension import Extension
@@ -35,37 +35,50 @@ class build_docs(Command):
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
 
+gropt_src = [] 
+for file in os.listdir("src/gropt/src/"): 
+    if file.endswith(".cpp"): 
+        gropt_src.append(os.path.join("src/gropt/src/", file))
+gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
+os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
 extensions = [
 	Extension(name="optimum_reparamN2",
 	    sources=["src/optimum_reparamN2.pyx", "src/DynamicProgrammingQ2.c",
         "src/dp_grid.c"],
 	    include_dirs=[numpy.get_include()],
-	    language="c",
+	    language="c"
 	),
 	Extension(name="fpls_warp",
 	    sources=["src/fpls_warp.pyx", "src/fpls_warp_grad.c", "src/misc_funcs.c"],
 	    include_dirs=[numpy.get_include()],
-	    language="c",
+	    language="c"
 	),
 	Extension(name="mlogit_warp",
 	    sources=["src/mlogit_warp.pyx", "src/mlogit_warp_grad.c", "src/misc_funcs.c"],
 	    include_dirs=[numpy.get_include()],
-	    language="c",
+	    language="c"
 	),
 	Extension(name="ocmlogit_warp",
 	    sources=["src/ocmlogit_warp.pyx", "src/ocmlogit_warp_grad.c", "src/misc_funcs.c"],
 	    include_dirs=[numpy.get_include()],
-	    language="c",
+	    language="c"
 	),
     Extension(name="oclogit_warp",
         sources=["src/oclogit_warp.pyx", "src/oclogit_warp_grad.c", "src/misc_funcs.c"],
         include_dirs=[numpy.get_include()],
-        language="c",
+        language="c"
     ),
     Extension(name="optimum_reparam_N",
         sources=["src/optimum_reparam_N.pyx", "src/DP.c"],
         include_dirs=[numpy.get_include()],
-        language="c",
+        language="c"
+    ),
+    Extension(name="optimum_reparam_Ng",
+        sources=gropt_src,
+        include_dirs=[numpy.get_include(), "src/gropt/incl/"],
+        language="c++",
+        extra_compile_args=['-stdlib=libc++'],
+        extra_link_args=['-stdlib=libc++']
     ),
 ]
 
@@ -73,9 +86,8 @@ extensions = [
 setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
 	ext_modules=extensions,
-    # ext_modules=cythonize(extensions, gdb_debug=True),
     name='fdasrsf',
-    version='1.4.1',
+    version='1.4.2',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',

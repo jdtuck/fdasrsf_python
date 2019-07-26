@@ -17,6 +17,7 @@ from numpy import insert, vectorize
 import numpy.random as rn
 import optimum_reparamN2 as orN2
 import optimum_reparamN as orN
+import optimum_reparam_Ng as orNg
 import fdasrsf.geometry as geo
 import sys
 
@@ -102,6 +103,23 @@ def f_to_srsf(f, time, smooth=False):
     return q
 
 
+def srsf_to_f(q, time, f0=0.0):
+    """
+    converts q (srsf) to a function
+
+    :param q: vector of size N samples of srsf
+    :param time: vector of size N describing time sample points
+    :param f0: initial value
+
+    :rtype: vector
+    :return f: function
+
+    """
+    integrand = q*abs(q)
+    f = f0 + cumtrapz(integrand,time,initial=0)
+    return f
+
+
 def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
     """
     calculates the warping to align srsf q2 to q1
@@ -129,8 +147,7 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN.coptimum_reparamN2(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
-
-    if method == "DP2":
+    elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN2.coptimum_reparam(ascontiguousarray(q1), time,
                                     ascontiguousarray(q2), lam)
@@ -142,8 +159,43 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
-    
+    elif method == "RBFGS":
+        onlyDP=False
+        rotated=False
+        isclosed=False
+        skipm=0
+        auto=0
+        w=0.0
+        if q1.ndim == 1 and q2.ndim == 1:
+            f1 = srsf_to_f(q1,time)
+            f2 = srsf_to_f(q2,time)
+            gam = orNg.coptimum_reparam(ascontiguousarray(q1), time,
+                                    ascontiguousarray(q2), onlyDP, rotated,
+                                    isclosed, skipm, auto, w, lam)
 
+        if q1.ndim == 1 and q2.ndim == 2:
+            f1 = srsf_to_f(q1,time)
+            f2 = zeros(q2.shape)
+            M,N = q2.shape
+            for i in range(0, N):
+                f2[:,i] = srsf_to_f(q2[:,i],time)
+            gam = orNg.coptimum_reparamN(ascontiguousarray(q1), time,
+                                        ascontiguousarray(q2), onlyDP, rotated,
+                                    isclosed, skipm, auto, w, lam)
+
+        if q1.ndim == 2 and q2.ndim == 2:
+            f1 = zeros(q1.shape)
+            f2 = zeros(q2.shape)
+            M,N = q2.shape
+            for i in range(0, N):
+                f1[:,i] = srsf_to_f(q1[:,i],time)
+                f2[:,i] = srsf_to_f(q2[:,i],time)
+            gam = orNg.coptimum_reparamN2(ascontiguousarray(q1), time,
+                                        ascontiguousarray(q2), onlyDP, rotated,
+                                    isclosed, skipm, auto, w, lam)
+    else:
+        raise Exception('Invalid Optimization Method')
+    
     return gam
 
 

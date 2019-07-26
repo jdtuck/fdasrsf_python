@@ -17,8 +17,8 @@ import fpls_warp as fpls
 import collections
 
 
-def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
-               lam=0.0):
+def srsf_align(f, time, method="mean", omethod="DP", 
+               showplot=True, smoothdata=False, lam=0.0):
     """
     This function aligns a collection of functions using the elastic
     square-root slope (srsf) framework.
@@ -27,6 +27,7 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
     :param time: vector of size M describing the sample points
     :param method: (string) warp calculate Karcher Mean or Median
     (options = "mean" or "median") (default="mean")
+    :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
     :param showplot: Shows plots of results using matplotlib (default = T)
     :param smoothdata: Smooth the data using a box filter (default = F)
     :param lam: controls the elasticity (default = 0)
@@ -96,11 +97,11 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
 
     if parallel:
         out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, time,
-                                  q[:, n], lam) for n in range(N))
+                                  q[:, n], omethod, lam) for n in range(N))
         gam = np.array(out)
         gam = gam.transpose()
     else:
-        gam = uf.optimum_reparam(mq, time, q, lam)
+        gam = uf.optimum_reparam(mq, time, q, omethod, lam)
 
     gamI = uf.SqrtMeanInverse(gam)
     mf = np.interp((time[-1] - time[0]) * gamI + time[0], time, mf)
@@ -134,11 +135,11 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
         # Matching Step
         if parallel:
             out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
-                                      time, q[:, n, 0], lam) for n in range(N))
+                                      time, q[:, n, 0], omethod, lam) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
-            gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
+            gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], omethod, lam)
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
@@ -184,11 +185,11 @@ def srsf_align(f, time, method="mean", showplot=True, smoothdata=False,
     # Last Step with centering of gam
     r += 1
     if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time, q[:, n, 0], lam) for n in range(N))
+        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time, q[:, n, 0], omethod, lam) for n in range(N))
         gam = np.array(out)
         gam = gam.transpose()
     else:
-        gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], lam)
+        gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], omethod, lam)
 
     gam_dev = np.zeros((M, N))
     for k in range(0, N):
@@ -640,11 +641,11 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
         if parallel:
             out = Parallel(n_jobs=-1)(
                 delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr],
-                                            lam) for n in range(N))
+                                            "DP", lam) for n in range(N))
             gam_t = np.array(out)
             gam[:, :, itr] = gam_t.transpose()
         else:
-            gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], lam)
+            gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], "DP",  lam)
 
         for k in range(0, N):
             time0 = (time[-1] - time[0]) * gam[:, k, itr] + time[0]
