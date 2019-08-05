@@ -1,5 +1,6 @@
 import numpy
 import sys, os
+import platform
 from distutils.core import setup
 from distutils.core import Command
 from distutils.extension import Extension
@@ -41,6 +42,10 @@ for file in os.listdir("src/gropt/src/"):
         gropt_src.append(os.path.join("src/gropt/src/", file))
 gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
 os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
+extra_args_mac = []
+if platform.system() == 'Darwin':
+    extra_args_mac = ['-stdlib=libc++']
+
 extensions = [
 	Extension(name="optimum_reparamN2",
 	    sources=["src/optimum_reparamN2.pyx", "src/DynamicProgrammingQ2.c",
@@ -77,8 +82,8 @@ extensions = [
         sources=gropt_src,
         include_dirs=[numpy.get_include(), "src/gropt/incl/"],
         language="c++",
-        extra_compile_args=['-stdlib=libc++'],
-        extra_link_args=['-stdlib=libc++']
+        extra_compile_args=extra_args_mac,
+        extra_link_args=extra_args_mac
     ),
 ]
 
@@ -98,7 +103,7 @@ setup(
     description='functional data analysis using the square root slope framework',
     long_description=open('README.txt').read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
-    install_requires=[
+    requires=[
         "Cython",
         "matplotlib",
         "numpy",
