@@ -16,7 +16,7 @@ from numpy import gradient, column_stack, append, mean
 from numpy import insert, vectorize
 import numpy.random as rn
 import optimum_reparamN2 as orN2
-import optimum_reparamN as orN
+import optimum_reparam_N as orN
 import optimum_reparam_Ng as orNg
 import fdasrsf.geometry as geo
 import sys
@@ -195,7 +195,7 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
                                     isclosed, skipm, auto, w, lam)
     else:
         raise Exception('Invalid Optimization Method')
-    
+
     return gam
 
 
@@ -323,10 +323,10 @@ def SqrtMeanInverse(gam):
         for i in range(0,n):
             out, theta = geo.inv_exp_map(mu,psi[:,i])
             vec[:,i] = out
-        
+
         vbar = vec.mean(axis=1)
         lvm[itr] = geo.L2norm(vbar)
-    
+
 
     gam_mu = cumtrapz(mu*mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
@@ -384,10 +384,10 @@ def SqrtMean(gam):
         for i in range(0,n):
             out, theta = geo.inv_exp_map(mu,psi[:,i])
             vec[:,i] = out
-        
+
         vbar = vec.mean(axis=1)
         lvm[itr] = geo.L2norm(vbar)
-    
+
 
     gam_mu = cumtrapz(mu*mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
