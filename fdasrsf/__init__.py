@@ -7,7 +7,7 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "curve_functions", "geometry"]
 
-__version__ = "1.4.2"
+__version__ = "1.4.3"
 
 import sys
 

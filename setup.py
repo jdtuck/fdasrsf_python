@@ -35,9 +35,9 @@ class build_docs(Command):
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
 
-gropt_src = [] 
-for file in os.listdir("src/gropt/src/"): 
-    if file.endswith(".cpp"): 
+gropt_src = []
+for file in os.listdir("src/gropt/src/"):
+    if file.endswith(".cpp"):
         gropt_src.append(os.path.join("src/gropt/src/", file))
 gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
 os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
@@ -87,7 +87,7 @@ setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='1.4.2',
+    version='1.4.3',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
@@ -98,7 +98,7 @@ setup(
     description='functional data analysis using the square root slope framework',
     long_description=open('README.txt').read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
-    requires=[
+    install_requires=[
         "Cython",
         "matplotlib",
         "numpy",
