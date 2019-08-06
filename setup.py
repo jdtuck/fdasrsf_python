@@ -42,7 +42,7 @@ for file in os.listdir("src/gropt/src/"):
         gropt_src.append(os.path.join("src/gropt/src/", file))
 gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
 os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
-extra_args_mac = []
+extra_args_mac = ['-std=c++11']
 if platform.system() == 'Darwin':
     extra_args_mac = ['-stdlib=libc++']
 

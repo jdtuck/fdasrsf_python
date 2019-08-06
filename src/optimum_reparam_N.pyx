@@ -96,7 +96,7 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     lam = lam1
     disp = 0
     q1 = q1 / norm(q1)
-    qf2 = q2 / norm(q2)
+    q2 = q2 / norm(q2)
     cdef np.ndarray[double, ndim=1, mode="c"] gami = np.zeros(M)
 
     cDP.DP(&q2[0], &q1[0], &n1, &M, &lam, &disp, &gami[0])
