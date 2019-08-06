@@ -6,6 +6,7 @@ moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 """
 import numpy as np
 import fdasrsf.utility_functions as uf
+import fdasrsf.geometry as geo
 import collections
 
 
@@ -132,7 +133,7 @@ def ampbox(ft, f_median, qt, q_median, time, alpha=.05, k_a=1):
     maxx = ft[:,max_index]
 
     s = np.linspace(0,1,100)
-    Fs2 = np.zeros((length(time),595))
+    Fs2 = np.zeros((time.shape,595))
     Fs2[:,0] = (1-s[0]) * minn + s[0] * Q1
     for j in range(1,100):
         Fs2[:,j] = (1-s[j]) * minn + s[j] * Q1a
@@ -203,15 +204,13 @@ def phbox(gam, time, alpha=.05, k_a=1):
     lam = 0.5
 
     # compute phase median
-    median_x, psi_median, psi = uf.SqrtMedian(gam)
+    median_x, psi_median, psi, vec = uf.SqrtMedian(gam)
 
     # compute phase distances
     dx = np.zeros(N)
-    binsize = mean(diff(t))
-    v = zeros((M,N))
-    for k in range(0, n):
+    v = np.zeros((M,N))
+    for k in range(0, N):
         v[:,k], d = geo.inv_exp_map(psi_median,psi[:,k])
-        vtil[:,k] = v[:,k]/d[k]
         dx[k] = np.sqrt(np.trapz(v[:,k]**2,t))
 
     dx_ordering = dx.argsort()
@@ -232,7 +231,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
             energy[i,j] = (1-lam) * (dx[CR_50[i]]/m+dx[CR_50[j]]/m) - lam * (angle[i,j] + 1)
 
     maxloc = energy.argmax()
-    maxloc_row,maxloc_col = np.unravel_index(maxloc,energy.shape)
+    maxloc_row, maxloc_col = np.unravel_index(maxloc,energy.shape)
 
     Q1_index = CR_50[maxloc_row]
     Q3_index = CR_50[maxloc_col]
@@ -242,7 +241,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
     Q3_psi = np.sqrt(np.gradient(Q3,1/(M-1)))
 
     # identify phase quantiles
-    dx_ordering = sx.argsort()
+    dx_ordering = dx.argsort()
     CR_alpha = dx_ordering[0:np.round(N*(1-alpha)).astype('int')]
     tmp = dx[CR_alpha]
     m = tmp.max()
@@ -258,7 +257,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
             energy[i,j] = (1-lam) * (dx[CR_alpha[i]]/m+dx[CR_alpha[j]]/m) - lam * (angle[i,j] + 1)
 
     maxloc = energy.argmax()
-    maxloc_row,maxloc_col = np.unravel_index(maxloc,energy.shape)
+    maxloc_row, maxloc_col = np.unravel_index(maxloc,energy.shape)
 
     Q1a_index = CR_alpha[maxloc_row]
     Q3a_index = CR_alpha[maxloc_col]
@@ -295,7 +294,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
     for i in range(0,out_50_CR.shape[0]):
         j = out_50_CR[i]
         distance_to_upper[j] = np.sqrt(np.trapz((upper_v-v[:,j])**2,time))
-        distance_to_lower[j] = np.sqrt(np.trapz((lower_q-v[:,j])**2,time))
+        distance_to_lower[j] = np.sqrt(np.trapz((lower_v-v[:,j])**2,time))
     
     max_index = distance_to_upper.argmin()
     min_index = distance_to_lower.argmin()
@@ -305,7 +304,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
     max_psi = psi[:,max_index]
 
     s = np.linspace(0,1,100)
-    Fs2 = np.zeros((length(time),595))
+    Fs2 = np.zeros((time.shape,595))
     Fs2[:,0] = (1-s[0]) * (minn-t) + s[0] * (Q1-t)
     for j in range(1,100):
         Fs2[:,j] = (1-s[j]) * (minn-t) + s[j] * (Q1a-t)
@@ -318,7 +317,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
     d1 = np.sqrt(np.trapz(psi_median*Q1_psi,time))
     d1a = np.sqrt(np.trapz(Q1_psi*Q1a_psi,time))
     dl = np.sqrt(np.trapz(Q1a_psi*min_psi,time))
-    d3 = np.sqrt(np.trapz((psi_median*Q3_q),time))
+    d3 = np.sqrt(np.trapz((psi_median*Q3_psi),time))
     d3a = np.sqrt(np.trapz((Q3_psi*Q3a_psi),time))
     du = np.sqrt(np.trapz((Q3a_psi*max_psi),time))
     part1=np.linspace(-d1-d1a-dl,-d1-d1a,100)
@@ -339,9 +338,9 @@ def phbox(gam, time, alpha=.05, k_a=1):
     plt = collections.namedtuple('plt', ['U', 'V', 'Fs2', 'allparts',
                                                      'd1', 'd1a', 'dl',
                                                      'd3', 'd3a', 'du',
-                                                     'Q1q','Q3q'])
+                                                     'Q1_psi','Q3_psi'])
 
-    plt_o = plt(U,V,Fs2,allparts,d1,d1a,dl,d3,d3a,du,Q1a_q,Q3a_q)                                           
+    plt_o = plt(U,V,Fs2,allparts,d1,d1a,dl,d3,d3a,du,Q1a_psi,Q3a_psi)                                           
     out = phbox(Q1,Q3,Q1a,Q3a,minn,maxx,outlier_index,median_x,psi_median,plt_o)
 
     return (out)
