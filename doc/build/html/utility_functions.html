@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Utility Functions &#8212; fdasrsf 1.4.2 documentation</title>
+    <title>Utility Functions &#8212; fdasrsf 1.4.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="geodesic.html" title="SRVF Geodesic Computation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -88,6 +88,33 @@ with N samples</p>
 </dd>
 <dt class="field-odd">Return gamI</dt>
 <dd class="field-odd"><p>inverse of gam</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utility_functions.SqrtMedian">
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">SqrtMedian</code><span class="sig-paren">(</span><em class="sig-param">gam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMedian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMedian" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the median srsf of warping functions with corresponding shooting vectors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gam</strong> – numpy ndarray of shape (M,N) of M warping functions
+with N samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>2 numpy ndarray and vector</p>
+</dd>
+<dt class="field-odd">Return gam_median</dt>
+<dd class="field-odd"><p>Karcher median warping function</p>
+</dd>
+<dt class="field-even">Return psi_meidan</dt>
+<dd class="field-even"><p>vector of dim N which is the Karcher median srsf function</p>
+</dd>
+<dt class="field-odd">Return psi</dt>
+<dd class="field-odd"><p>numpy ndarray of shape (M,N) of M SRSF of the warping functions</p>
+</dd>
+<dt class="field-even">Return vec</dt>
+<dd class="field-even"><p>numpy ndarray of shape (M,N) of M shooting vectors</p>
 </dd>
 </dl>
 </dd></dl>
@@ -288,7 +315,7 @@ calculates the elastic distances</p>
 
 <dl class="function">
 <dt id="utility_functions.optimum_reparam">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">time</em>, <em class="sig-param">q2</em>, <em class="sig-param">method='DP'</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">time</em>, <em class="sig-param">q2</em>, <em class="sig-param">method='DP'</em>, <em class="sig-param">lam=0.0</em>, <em class="sig-param">f1o=0.0</em>, <em class="sig-param">f2o=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the warping to align srsf q2 to q1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -569,7 +596,7 @@ from elastic regression model</p>
         <li class="right" >
           <a href="geodesic.html" title="SRVF Geodesic Computation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.4.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

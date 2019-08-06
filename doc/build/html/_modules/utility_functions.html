@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>utility_functions &#8212; fdasrsf 1.4.2 documentation</title>
+    <title>utility_functions &#8212; fdasrsf 1.4.5 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.4.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -55,7 +55,7 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 <span class="kn">import</span> <span class="nn">optimum_reparamN2</span> <span class="k">as</span> <span class="nn">orN2</span>
-<span class="kn">import</span> <span class="nn">optimum_reparamN</span> <span class="k">as</span> <span class="nn">orN</span>
+<span class="kn">import</span> <span class="nn">optimum_reparam_N</span> <span class="k">as</span> <span class="nn">orN</span>
 <span class="kn">import</span> <span class="nn">optimum_reparam_Ng</span> <span class="k">as</span> <span class="nn">orNg</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -138,7 +138,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">eps</span> <span class="o">=</span> <span class="n">finfo</span><span class="p">(</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
     <span class="n">f0</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">gradient_spline</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">q</span></div>
 
 
@@ -154,12 +154,12 @@
 <span class="sd">    :return f: function</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">integrand</span> <span class="o">=</span> <span class="n">q</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">integrand</span> <span class="o">=</span> <span class="n">q</span><span class="o">*</span><span class="n">fabs</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">integrand</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">f</span></div>
 
 
-<div class="viewcode-block" id="optimum_reparam"><a class="viewcode-back" href="../utility_functions.html#utility_functions.optimum_reparam">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="optimum_reparam"><a class="viewcode-back" href="../utility_functions.html#utility_functions.optimum_reparam">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">f1o</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">f2o</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates the warping to align srsf q2 to q1</span>
 
@@ -180,11 +180,11 @@
                                     <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparamN</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparam_N</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
                                         <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparamN2</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparam_N2</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
                                         <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP2&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -206,10 +206,12 @@
         <span class="n">auto</span><span class="o">=</span><span class="mi">0</span>
         <span class="n">w</span><span class="o">=</span><span class="mf">0.0</span>
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">f1</span> <span class="o">=</span> <span class="n">srsf_to_f</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">f2</span> <span class="o">=</span> <span class="n">srsf_to_f</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">gam</span> <span class="o">=</span> <span class="n">orNg</span><span class="o">.</span><span class="n">coptimum_reparam</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                    <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">onlyDP</span><span class="p">,</span> <span class="n">rotated</span><span class="p">,</span>
+            <span class="n">q1</span> <span class="o">=</span> <span class="n">q1</span> <span class="o">/</span> <span class="n">norm</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+            <span class="n">q2</span> <span class="o">=</span> <span class="n">q2</span> <span class="o">/</span> <span class="n">norm</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+            <span class="n">f1</span> <span class="o">=</span> <span class="n">srsf_to_f</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">f1o</span><span class="p">)</span>
+            <span class="n">f2</span> <span class="o">=</span> <span class="n">srsf_to_f</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">f2o</span><span class="p">)</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">orNg</span><span class="o">.</span><span class="n">coptimum_reparam</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">f1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
+                                    <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">f2</span><span class="p">),</span> <span class="n">onlyDP</span><span class="p">,</span> <span class="n">rotated</span><span class="p">,</span>
                                     <span class="n">isclosed</span><span class="p">,</span> <span class="n">skipm</span><span class="p">,</span> <span class="n">auto</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -218,8 +220,8 @@
             <span class="n">M</span><span class="p">,</span><span class="n">N</span> <span class="o">=</span> <span class="n">q2</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
                 <span class="n">f2</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">srsf_to_f</span><span class="p">(</span><span class="n">q2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">gam</span> <span class="o">=</span> <span class="n">orNg</span><span class="o">.</span><span class="n">coptimum_reparamN</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">onlyDP</span><span class="p">,</span> <span class="n">rotated</span><span class="p">,</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">orNg</span><span class="o">.</span><span class="n">coptimum_reparam_N</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">f1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
+                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">f2</span><span class="p">),</span> <span class="n">onlyDP</span><span class="p">,</span> <span class="n">rotated</span><span class="p">,</span>
                                     <span class="n">isclosed</span><span class="p">,</span> <span class="n">skipm</span><span class="p">,</span> <span class="n">auto</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -229,12 +231,12 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
                 <span class="n">f1</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">srsf_to_f</span><span class="p">(</span><span class="n">q1</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">time</span><span class="p">)</span>
                 <span class="n">f2</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">srsf_to_f</span><span class="p">(</span><span class="n">q2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">gam</span> <span class="o">=</span> <span class="n">orNg</span><span class="o">.</span><span class="n">coptimum_reparamN2</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">onlyDP</span><span class="p">,</span> <span class="n">rotated</span><span class="p">,</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">orNg</span><span class="o">.</span><span class="n">coptimum_reparam_N2</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">f1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
+                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">f2</span><span class="p">),</span> <span class="n">onlyDP</span><span class="p">,</span> <span class="n">rotated</span><span class="p">,</span>
                                     <span class="n">isclosed</span><span class="p">,</span> <span class="n">skipm</span><span class="p">,</span> <span class="n">auto</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid Optimization Method&#39;</span><span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">gam</span></div>
 
 
@@ -308,7 +310,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">gam</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
     <span class="n">gamI</span> <span class="o">=</span> <span class="n">s</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">gamI</span> <span class="o">=</span> <span class="p">(</span><span class="n">gamI</span> <span class="o">-</span> <span class="n">gamI</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamI</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">gamI</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -362,10 +364,10 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
             <span class="n">out</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">inv_exp_map</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
             <span class="n">vec</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
-        
+
         <span class="n">vbar</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">lvm</span><span class="p">[</span><span class="n">itr</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">L2norm</span><span class="p">(</span><span class="n">vbar</span><span class="p">)</span>
-    
+
 
     <span class="n">gam_mu</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">mu</span><span class="o">*</span><span class="n">mu</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">gam_mu</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam_mu</span> <span class="o">-</span> <span class="n">gam_mu</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gam_mu</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gam_mu</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
@@ -423,15 +425,75 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
             <span class="n">out</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">inv_exp_map</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
             <span class="n">vec</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
-        
+
         <span class="n">vbar</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">lvm</span><span class="p">[</span><span class="n">itr</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">L2norm</span><span class="p">(</span><span class="n">vbar</span><span class="p">)</span>
-    
+
 
     <span class="n">gam_mu</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">mu</span><span class="o">*</span><span class="n">mu</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">gam_mu</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam_mu</span> <span class="o">-</span> <span class="n">gam_mu</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gam_mu</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gam_mu</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">gam_mu</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">vec</span></div>
+
+
+<div class="viewcode-block" id="SqrtMedian"><a class="viewcode-back" href="../utility_functions.html#utility_functions.SqrtMedian">[docs]</a><span class="k">def</span> <span class="nf">SqrtMedian</span><span class="p">(</span><span class="n">gam</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    calculates the median srsf of warping functions with corresponding shooting vectors</span>
+
+<span class="sd">    :param gam: numpy ndarray of shape (M,N) of M warping functions</span>
+<span class="sd">                with N samples</span>
+
+<span class="sd">    :rtype: 2 numpy ndarray and vector</span>
+<span class="sd">    :return gam_median: Karcher median warping function</span>
+<span class="sd">    :return psi_meidan: vector of dim N which is the Karcher median srsf function</span>
+<span class="sd">    :return psi: numpy ndarray of shape (M,N) of M SRSF of the warping functions</span>
+<span class="sd">    :return vec: numpy ndarray of shape (M,N) of M shooting vectors</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="c1"># Initialization</span>
+    <span class="n">psi_median</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">stp</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="n">maxiter</span> <span class="o">=</span> <span class="mi">501</span>
+    <span class="n">vbar_norm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxiter</span><span class="p">)</span>
+
+    <span class="c1"># compute psi function</span>
+    <span class="n">binsize</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+    <span class="n">psi</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">vtil</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">dtil</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">psi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span><span class="n">binsize</span><span class="p">))</span>
+        <span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">inv_exp_map</span><span class="p">(</span><span class="n">psi_median</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">vtil</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">dtil</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="n">vbar</span> <span class="o">=</span> <span class="n">vtil</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dtil</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">vbar_norm</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">L2norm</span><span class="p">(</span><span class="n">vbar</span><span class="p">)</span>
+
+    <span class="c1"># compute phase median by iterative algorithm</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">vbar_norm</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.00000001</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">r</span><span class="o">&lt;</span><span class="n">maxiter</span><span class="p">):</span>
+        <span class="n">psi_median</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">psi_median</span><span class="p">,</span> <span class="n">stp</span><span class="o">*</span><span class="n">vbar</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">inv_exp_map</span><span class="p">(</span><span class="n">psi_median</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">psi_median</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">vtil</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">dtil</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="n">vbar</span> <span class="o">=</span> <span class="n">vtil</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dtil</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">vbar_norm</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">L2norm</span><span class="p">(</span><span class="n">vbar</span><span class="p">)</span>
+    
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="n">gam_median</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psi_median</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">initial</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gam_median</span><span class="p">,</span> <span class="n">psi_median</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">vec</span></div>
 
 
 <div class="viewcode-block" id="cumtrapzmid"><a class="viewcode-back" href="../utility_functions.html#utility_functions.cumtrapzmid">[docs]</a><span class="k">def</span> <span class="nf">cumtrapzmid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">mid</span><span class="p">):</span>
@@ -861,7 +923,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.4.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

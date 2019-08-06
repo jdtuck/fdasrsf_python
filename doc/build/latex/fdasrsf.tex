@@ -71,8 +71,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{Jul 26, 2019}
-\release{1.4.2}
+\date{Aug 06, 2019}
+\release{1.4.5}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -234,7 +234,7 @@ functions with M samples
 \index{srsf\_align() (in module time\_warping)@\spxentry{srsf\_align()}\spxextra{in module time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.srsf_align}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{f}, \emph{time}, \emph{method='mean'}, \emph{omethod='DP'}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.srsf_align}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{f}, \emph{time}, \emph{method='mean'}, \emph{omethod='DP'}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{lam=0.0}}{}
 This function aligns a collection of functions using the elastic
 square-root slope (srsf) framework.
 \begin{quote}\begin{description}
@@ -508,6 +508,107 @@ coefficients
 eigenvectors
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\chapter{Elastic Principal Component Regression}
+\label{\detokenize{boxplots:module-boxplots}}\label{\detokenize{boxplots:elastic-principal-component-regression}}\label{\detokenize{boxplots::doc}}\index{boxplots (module)@\spxentry{boxplots}\spxextra{module}}
+Elastic Functional Boxplots
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{ampbox() (in module boxplots)@\spxentry{ampbox()}\spxextra{in module boxplots}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{boxplots:boxplots.ampbox}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{ampbox}}}{\emph{ft}, \emph{f\_median}, \emph{qt}, \emph{q\_median}, \emph{time}, \emph{alpha=0.05}, \emph{k\_a=1}}{}
+This function constructs the amplitude boxplot using the elastic
+square-root slope (srsf) framework.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{ft}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f\_median}} \textendash{} vector of size M describing the median
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qt}} \textendash{} numpy ndarray of shape (M,N) of N srsf functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q\_median}} \textendash{} vector of size M describing the srsf median
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the time
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} quantile value (e.g.,=.05, i.e., 95\%)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k\_a}} \textendash{} scalar for outlier cutoff (e.g.,=1)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+
+\end{description}\end{quote}
+
+functions with M samples
+:return Q1: First quartile
+:return Q3: Second quartile
+:return Q1a: First quantile based on alpha
+:return Q3a: Second quantile based on alpha
+:return minn: minimum extreme function
+:return maxx: maximum extreme function
+:return outlier\_index: indexes of outlier functions
+:return f\_median: median function
+:return q\_median: median srsf
+:return plt: surface plot mesh
+
+\end{fulllineitems}
+
+\index{phbox() (in module boxplots)@\spxentry{phbox()}\spxextra{in module boxplots}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{boxplots:boxplots.phbox}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{phbox}}}{\emph{gam}, \emph{time}, \emph{alpha=0.05}, \emph{k\_a=1}}{}
+This function constructs phase boxplot for functional data using the elastic
+square-root slope (srsf) framework.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of shape (M,N) of N warping functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} quantile value (e.g.,=.05, i.e., 95\%)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{k\_a}} \textendash{} scalar for outlier cutoff (e.g.,=1)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fn}] \leavevmode
+aligned functions - numpy ndarray of shape (M,N) of N
+
+\end{description}\end{quote}
+
+functions with M samples
+:return Q1: First quartile
+:return Q3: Second quartile
+:return Q1a: First quantile based on alpha
+:return Q3a: Second quantile based on alpha
+:return minn: minimum extreme function
+:return maxx: maximum extreme function
+:return outlier\_index: indexes of outlier functions
+:return median\_x: median warping function
+:return psi\_median: median srsf of warping function
+:return plt: surface plot mesh
 
 \end{fulllineitems}
 
@@ -1111,6 +1212,199 @@ warping function
 
 
 
+\chapter{Elastic Principal Component Regression}
+\label{\detokenize{pcr_regression:module-pcr_regression}}\label{\detokenize{pcr_regression:elastic-principal-component-regression}}\label{\detokenize{pcr_regression::doc}}\index{pcr\_regression (module)@\spxentry{pcr\_regression}\spxextra{module}}
+Warping PCR Invariant Regression using SRSF
+
+moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{elastic\_lpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_lpcr\_regression()}\spxextra{in module pcr\_regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_lpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}}{}
+This function identifies a logistic regression model with phase-variability
+using elastic pca
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} scalar specify number of principal components (default=5)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} \textendash{} smooth data using box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return b}] \leavevmode
+regressor vector
+
+\item[{Return y}] \leavevmode
+response vector
+
+\item[{Return warp\_data}] \leavevmode
+alignment object from srsf\_align
+
+\item[{Return pca}] \leavevmode
+fpca object from corresponding pca method
+
+\item[{Return Loss}] \leavevmode
+logistic loss
+
+\item[{Return pca.method}] \leavevmode
+string of pca method
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{elastic\_mlpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_mlpcr\_regression()}\spxextra{in module pcr\_regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}}{}
+This function identifies a logistic regression model with phase-variability
+using elastic pca
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} scalar specify number of principal components (default=5)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} \textendash{} smooth data using box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return b}] \leavevmode
+regressor vector
+
+\item[{Return y}] \leavevmode
+response vector
+
+\item[{Return warp\_data}] \leavevmode
+alignment object from srsf\_align
+
+\item[{Return pca}] \leavevmode
+fpca object from corresponding pca method
+
+\item[{Return Loss}] \leavevmode
+logistic loss
+
+\item[{Return pca.method}] \leavevmode
+string of pca method
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{elastic\_pcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_pcr\_regression()}\spxextra{in module pcr\_regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_pcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
+This function identifies a regression model with phase-variability
+using elastic pca
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} scalar specify number of principal components (default=5)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} \textendash{} smooth data using box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run in parallel (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{C}} \textendash{} scale balance parameter for combined method (default = None)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return alpha}] \leavevmode
+alpha parameter of model
+
+\item[{Return b}] \leavevmode
+regressor vector
+
+\item[{Return y}] \leavevmode
+response vector
+
+\item[{Return warp\_data}] \leavevmode
+alignment object from srsf\_align
+
+\item[{Return pca}] \leavevmode
+fpca object from corresponding pca method
+
+\item[{Return SSE}] \leavevmode
+sum of squared errors
+
+\item[{Return pca.method}] \leavevmode
+string of pca method
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
 \chapter{SRVF Geodesic Computation}
 \label{\detokenize{geodesic:module-geodesic}}\label{\detokenize{geodesic:srvf-geodesic-computation}}\label{\detokenize{geodesic::doc}}\index{geodesic (module)@\spxentry{geodesic}\spxextra{module}}
 geodesic calculation for SRVF (curves) open and closed)
@@ -1590,6 +1884,35 @@ inverse of gam
 
 \end{fulllineitems}
 
+\index{SqrtMedian() (in module utility\_functions)@\spxentry{SqrtMedian()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMedian}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMedian}}}{\emph{gam}}{}
+calculates the median srsf of warping functions with corresponding shooting vectors
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of shape (M,N) of M warping functions
+with N samples
+
+\item[{Return type}] \leavevmode
+2 numpy ndarray and vector
+
+\item[{Return gam\_median}] \leavevmode
+Karcher median warping function
+
+\item[{Return psi\_meidan}] \leavevmode
+vector of dim N which is the Karcher median srsf function
+
+\item[{Return psi}] \leavevmode
+numpy ndarray of shape (M,N) of M SRSF of the warping functions
+
+\item[{Return vec}] \leavevmode
+numpy ndarray of shape (M,N) of M shooting vectors
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 \index{cumtrapzmid() (in module utility\_functions)@\spxentry{cumtrapzmid()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
@@ -1834,7 +2157,7 @@ inverse of gam
 \index{optimum\_reparam() (in module utility\_functions)@\spxentry{optimum\_reparam()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam}}}{\emph{q1}, \emph{time}, \emph{q2}, \emph{method='DP'}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam}}}{\emph{q1}, \emph{time}, \emph{q2}, \emph{method='DP'}, \emph{lam=0.0}, \emph{f1o=0.0}, \emph{f2o=0.0}}{}
 calculates the warping to align srsf q2 to q1
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2890,6 +3213,9 @@ Component Regression,” Statistical Analysis and Data Mining, 10.1002/sam.11399
 \renewcommand{\indexname}{Python Module Index}
 \begin{sphinxtheindex}
 \let\bigletter\sphinxstyleindexlettergroup
+\bigletter{b}
+\item\relax\sphinxstyleindexentry{boxplots}\sphinxstyleindexpageref{boxplots:\detokenize{module-boxplots}}
+\indexspace
 \bigletter{c}
 \item\relax\sphinxstyleindexentry{curve\_functions}\sphinxstyleindexpageref{curve_functions:\detokenize{module-curve_functions}}
 \indexspace
@@ -2900,6 +3226,9 @@ Component Regression,” Statistical Analysis and Data Mining, 10.1002/sam.11399
 \bigletter{g}
 \item\relax\sphinxstyleindexentry{gauss\_model}\sphinxstyleindexpageref{gauss_model:\detokenize{module-gauss_model}}
 \item\relax\sphinxstyleindexentry{geodesic}\sphinxstyleindexpageref{geodesic:\detokenize{module-geodesic}}
+\indexspace
+\bigletter{p}
+\item\relax\sphinxstyleindexentry{pcr\_regression}\sphinxstyleindexpageref{pcr_regression:\detokenize{module-pcr_regression}}
 \indexspace
 \bigletter{r}
 \item\relax\sphinxstyleindexentry{regression}\sphinxstyleindexpageref{regression:\detokenize{module-regression}}

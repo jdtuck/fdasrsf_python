@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Jul 26, 2019" "1.4" "fdasrsf"
+.TH "FDASRSF" "1" "Aug 06, 2019" "1.4" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -157,7 +157,7 @@ functions with M samples
 .UNINDENT
 .INDENT 0.0
 .TP
-.B time_warping.srsf_align(f, time, method=\(aqmean\(aq, omethod=\(aqDP\(aq, showplot=True, smoothdata=False, parallel=False, lam=0.0)
+.B time_warping.srsf_align(f, time, method=\(aqmean\(aq, omethod=\(aqDP\(aq, showplot=True, smoothdata=False, lam=0.0)
 This function aligns a collection of functions using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -398,6 +398,91 @@ coefficients
 .B Return U
 eigenvectors
 .UNINDENT
+.UNINDENT
+.SH ELASTIC PRINCIPAL COMPONENT REGRESSION
+.sp
+Elastic Functional Boxplots
+.sp
+moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+.INDENT 0.0
+.TP
+.B boxplots.ampbox(ft, f_median, qt, q_median, time, alpha=0.05, k_a=1)
+This function constructs the amplitude boxplot using the elastic
+square\-root slope (srsf) framework.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBft\fP \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBf_median\fP \-\- vector of size M describing the median
+.IP \(bu 2
+\fBqt\fP \-\- numpy ndarray of shape (M,N) of N srsf functions with M samples
+.IP \(bu 2
+\fBq_median\fP \-\- vector of size M describing the srsf median
+.IP \(bu 2
+\fBtime\fP \-\- vector of size M describing the time
+.IP \(bu 2
+\fBalpha\fP \-\- quantile value (e.g.,=.05, i.e., 95%)
+.IP \(bu 2
+\fBk_a\fP \-\- scalar for outlier cutoff (e.g.,=1)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return fn
+aligned functions \- numpy ndarray of shape (M,N) of N
+.UNINDENT
+.sp
+functions with M samples
+:return Q1: First quartile
+:return Q3: Second quartile
+:return Q1a: First quantile based on alpha
+:return Q3a: Second quantile based on alpha
+:return minn: minimum extreme function
+:return maxx: maximum extreme function
+:return outlier_index: indexes of outlier functions
+:return f_median: median function
+:return q_median: median srsf
+:return plt: surface plot mesh
+.UNINDENT
+.INDENT 0.0
+.TP
+.B boxplots.phbox(gam, time, alpha=0.05, k_a=1)
+This function constructs phase boxplot for functional data using the elastic
+square\-root slope (srsf) framework.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBgam\fP \-\- numpy ndarray of shape (M,N) of N warping functions with M samples
+.IP \(bu 2
+\fBalpha\fP \-\- quantile value (e.g.,=.05, i.e., 95%)
+.IP \(bu 2
+\fBk_a\fP \-\- scalar for outlier cutoff (e.g.,=1)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return fn
+aligned functions \- numpy ndarray of shape (M,N) of N
+.UNINDENT
+.sp
+functions with M samples
+:return Q1: First quartile
+:return Q3: Second quartile
+:return Q1a: First quantile based on alpha
+:return Q3a: Second quantile based on alpha
+:return minn: minimum extreme function
+:return maxx: maximum extreme function
+:return outlier_index: indexes of outlier functions
+:return median_x: median warping function
+:return psi_median: median srsf of warping function
+:return plt: surface plot mesh
 .UNINDENT
 .SH GAUSSIAN GENERATIVE MODELS
 .sp
@@ -890,6 +975,168 @@ numpy array
 warping function
 .UNINDENT
 .UNINDENT
+.SH ELASTIC PRINCIPAL COMPONENT REGRESSION
+.sp
+Warping PCR Invariant Regression using SRSF
+.sp
+moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+.INDENT 0.0
+.TP
+.B pcr_regression.elastic_lpcr_regression(f, y, time, pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25)
+This function identifies a logistic regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBy\fP \-\- numpy array of N responses
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBpca_method\fP \-\- string specifing pca method (options = "combined",
+"vert", or "horiz", default = "combined")
+.IP \(bu 2
+\fBno\fP \-\- scalar specify number of principal components (default=5)
+.IP \(bu 2
+\fBsmooth_data\fP \-\- smooth data using box filter (default = F)
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to apply box filter (default = 25)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return alpha
+alpha parameter of model
+.TP
+.B Return b
+regressor vector
+.TP
+.B Return y
+response vector
+.TP
+.B Return warp_data
+alignment object from srsf_align
+.TP
+.B Return pca
+fpca object from corresponding pca method
+.TP
+.B Return Loss
+logistic loss
+.TP
+.B Return pca.method
+string of pca method
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B pcr_regression.elastic_mlpcr_regression(f, y, time, pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25)
+This function identifies a logistic regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBy\fP \-\- numpy array of N responses
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBpca_method\fP \-\- string specifing pca method (options = "combined",
+"vert", or "horiz", default = "combined")
+.IP \(bu 2
+\fBno\fP \-\- scalar specify number of principal components (default=5)
+.IP \(bu 2
+\fBsmooth_data\fP \-\- smooth data using box filter (default = F)
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to apply box filter (default = 25)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return alpha
+alpha parameter of model
+.TP
+.B Return b
+regressor vector
+.TP
+.B Return y
+response vector
+.TP
+.B Return warp_data
+alignment object from srsf_align
+.TP
+.B Return pca
+fpca object from corresponding pca method
+.TP
+.B Return Loss
+logistic loss
+.TP
+.B Return pca.method
+string of pca method
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B pcr_regression.elastic_pcr_regression(f, y, time, pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25, parallel=False, C=None)
+This function identifies a regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBy\fP \-\- numpy array of N responses
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBpca_method\fP \-\- string specifing pca method (options = "combined",
+"vert", or "horiz", default = "combined")
+.IP \(bu 2
+\fBno\fP \-\- scalar specify number of principal components (default=5)
+.IP \(bu 2
+\fBsmooth_data\fP \-\- smooth data using box filter (default = F)
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to apply box filter (default = 25)
+.IP \(bu 2
+\fBparallel\fP \-\- run in parallel (default = F)
+.IP \(bu 2
+\fBC\fP \-\- scale balance parameter for combined method (default = None)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return alpha
+alpha parameter of model
+.TP
+.B Return b
+regressor vector
+.TP
+.B Return y
+response vector
+.TP
+.B Return warp_data
+alignment object from srsf_align
+.TP
+.B Return pca
+fpca object from corresponding pca method
+.TP
+.B Return SSE
+sum of squared errors
+.TP
+.B Return pca.method
+string of pca method
+.UNINDENT
+.UNINDENT
 .SH SRVF GEODESIC COMPUTATION
 .sp
 geodesic calculation for SRVF (curves) open and closed)
@@ -1290,6 +1537,32 @@ inverse of gam
 .UNINDENT
 .INDENT 0.0
 .TP
+.B utility_functions.SqrtMedian(gam)
+calculates the median srsf of warping functions with corresponding shooting vectors
+.INDENT 7.0
+.TP
+.B Parameters
+\fBgam\fP \-\- numpy ndarray of shape (M,N) of M warping functions
+with N samples
+.TP
+.B Return type
+2 numpy ndarray and vector
+.TP
+.B Return gam_median
+Karcher median warping function
+.TP
+.B Return psi_meidan
+vector of dim N which is the Karcher median srsf function
+.TP
+.B Return psi
+numpy ndarray of shape (M,N) of M SRSF of the warping functions
+.TP
+.B Return vec
+numpy ndarray of shape (M,N) of M shooting vectors
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B utility_functions.cumtrapzmid(x, y, c, mid)
 cumulative trapezoidal numerical integration taken from midpoint
 .INDENT 7.0
@@ -1494,7 +1767,7 @@ inverse of gam
 .UNINDENT
 .INDENT 0.0
 .TP
-.B utility_functions.optimum_reparam(q1, time, q2, method=\(aqDP\(aq, lam=0.0)
+.B utility_functions.optimum_reparam(q1, time, q2, method=\(aqDP\(aq, lam=0.0, f1o=0.0, f2o=0.0)
 calculates the warping to align srsf q2 to q1
 .INDENT 7.0
 .TP
