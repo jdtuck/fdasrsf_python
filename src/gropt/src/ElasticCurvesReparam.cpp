@@ -16,9 +16,7 @@ void optimum_reparam(double *C1, double *C2, int n, int d, double w,
     bool swapi;
     double *Q1 = nullptr, *Q2 = nullptr;
 
-    std::string methodname = "";
-    if (!onlyDP)
-        methodname = "LRBFGS";
+    std::string methodname = "LRBFGS";
 
     genrandseed(0);
 

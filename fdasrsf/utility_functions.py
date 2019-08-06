@@ -99,7 +99,7 @@ def f_to_srsf(f, time, smooth=False):
     """
     eps = finfo(double).eps
     f0, g, g2 = gradient_spline(time, f, smooth)
-    q = g / sqrt(abs(g) + eps)
+    q = g / sqrt(fabs(g) + eps)
     return q
 
 
@@ -115,12 +115,12 @@ def srsf_to_f(q, time, f0=0.0):
     :return f: function
 
     """
-    integrand = q*abs(q)
+    integrand = q*fabs(q)
     f = f0 + cumtrapz(integrand,time,initial=0)
     return f
 
 
-def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
+def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0):
     """
     calculates the warping to align srsf q2 to q1
 
@@ -167,10 +167,12 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
         auto=0
         w=0.0
         if q1.ndim == 1 and q2.ndim == 1:
-            f1 = srsf_to_f(q1,time)
-            f2 = srsf_to_f(q2,time)
-            gam = orNg.coptimum_reparam(ascontiguousarray(q1), time,
-                                    ascontiguousarray(q2), onlyDP, rotated,
+            q1 = q1 / norm(q1)
+            q2 = q2 / norm(q2)
+            f1 = srsf_to_f(q1,time,f1o)
+            f2 = srsf_to_f(q2,time,f2o)
+            gam = orNg.coptimum_reparam(ascontiguousarray(f1), time,
+                                    ascontiguousarray(f2), onlyDP, rotated,
                                     isclosed, skipm, auto, w, lam)
 
         if q1.ndim == 1 and q2.ndim == 2:
@@ -179,8 +181,8 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
             M,N = q2.shape
             for i in range(0, N):
                 f2[:,i] = srsf_to_f(q2[:,i],time)
-            gam = orNg.coptimum_reparam_N(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), onlyDP, rotated,
+            gam = orNg.coptimum_reparam_N(ascontiguousarray(f1), time,
+                                        ascontiguousarray(f2), onlyDP, rotated,
                                     isclosed, skipm, auto, w, lam)
 
         if q1.ndim == 2 and q2.ndim == 2:
@@ -190,8 +192,8 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
             for i in range(0, N):
                 f1[:,i] = srsf_to_f(q1[:,i],time)
                 f2[:,i] = srsf_to_f(q2[:,i],time)
-            gam = orNg.coptimum_reparam_N2(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), onlyDP, rotated,
+            gam = orNg.coptimum_reparam_N2(ascontiguousarray(f1), time,
+                                        ascontiguousarray(f2), onlyDP, rotated,
                                     isclosed, skipm, auto, w, lam)
     else:
         raise Exception('Invalid Optimization Method')
@@ -269,7 +271,7 @@ def invertGamma(gam):
 
     """
     N = gam.size
-    x = arange(1, N+1) / float(N)
+    x = linspace(0,1,N)
     s = interp1d(gam, x)
     gamI = s(x)
     gamI = (gamI - gamI[0]) / (gamI[-1] - gamI[0])

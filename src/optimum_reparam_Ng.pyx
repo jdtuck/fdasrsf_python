@@ -95,9 +95,9 @@ def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] f1, np.ndarray[doub
     :return gam: describing the warping functions used to align columns of f with mf
 
     """
-    cdef int M, N, n1, skipmi, autoi, swap
+    cdef int M, N, n1, skipmi, autoi
     cdef double lam, wi
-    cdef bool onlyDP1, rotated1, isclosed1
+    cdef bool onlyDP1, rotated1, isclosed1, swap
     cdef np.ndarray[double, ndim=1, mode="c"] fopts = np.zeros(5)
     cdef np.ndarray[double, ndim=1, mode="c"] comtime = np.zeros(5)
     lam = lam1
@@ -163,9 +163,9 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] f1, np.ndarray[double,
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
-    cdef int M, n1, skipmi, autoi, swap
+    cdef int M, n1, skipmi, autoi
     cdef double lam, wi
-    cdef bool onlyDP1, rotated1, isclosed1
+    cdef bool onlyDP1, rotated1, isclosed1, swap
     cdef np.ndarray[double, ndim=1, mode="c"] fopts = np.zeros(5)
     cdef np.ndarray[double, ndim=1, mode="c"] comtime = np.zeros(5)
     lam = lam1
@@ -174,12 +174,11 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] f1, np.ndarray[double,
     onlyDP1 = onlyDP
     rotated1 = rotated
     isclosed1 = isclosed
+    swap = False
     wi = w
 
     M = f1.shape[0]
     n1 = 1
-    f1 = f1 / norm(f1)
-    f2 = f2 / norm(f2)
 
     cdef np.ndarray[double, ndim=1, mode="c"] opti = np.zeros(M+2)
     gam = np.zeros(M)
@@ -190,7 +189,7 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] f1, np.ndarray[double,
         cDPg.optimum_reparam(&f1[0], &f2[0], M, n1, wi, True, rotated1, isclosed1, skipmi, autoi, &opti[0], swap, &fopts[0], &comtime[0])
     
     if swap:
-        x = np.arange(1, M+1) / float(M)
+        x = np.linspace(0,1,M)
         gam = np.interp(x,opti[0:M],x)
     else:
         gam = opti[0:M]
@@ -222,10 +221,10 @@ def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] f, np.ndarray[
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
-    cdef int M, N, n1, skipmi, autoi, swap
+    cdef int M, N, n1, skipmi, autoi
     n1 = 2
     cdef double lam, wi
-    cdef bool onlyDP1, rotated1, isclosed1
+    cdef bool onlyDP1, rotated1, isclosed1, swap
     cdef np.ndarray[double, ndim=1, mode="c"] fopts = np.zeros(5)
     cdef np.ndarray[double, ndim=1, mode="c"] comtime = np.zeros(5)
     lam = lam1
@@ -292,9 +291,9 @@ def coptimum_reparam_pair_f(np.ndarray[double, ndim=2, mode="c"] f1, np.ndarray[
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
-    cdef int M, N, skipmi, autoi, swap
+    cdef int M, N, skipmi, autoi
     cdef double lam, wi
-    cdef bool onlyDP1, rotated1, isclosed1
+    cdef bool onlyDP1, rotated1, isclosed1, swap
     cdef np.ndarray[double, ndim=1, mode="c"] fopts = np.zeros(5)
     cdef np.ndarray[double, ndim=1, mode="c"] comtime = np.zeros(5)
     M, N = f1.shape[0], f1.shape[1]
@@ -356,9 +355,9 @@ def coptimum_reparam_curve_f(np.ndarray[double, ndim=2, mode="c"] f1, np.ndarray
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
-    cdef int M, n1, skipmi, autoi, swap
+    cdef int M, n1, skipmi, autoi
     cdef double lam, wi
-    cdef bool onlyDP1, rotated1, isclosed1
+    cdef bool onlyDP1, rotated1, isclosed1, swap
     cdef np.ndarray[double, ndim=1, mode="c"] fopts = np.zeros(5)
     cdef np.ndarray[double, ndim=1, mode="c"] comtime = np.zeros(5)
     n1 = f1.shape[0]
