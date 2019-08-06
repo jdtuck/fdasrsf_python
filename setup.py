@@ -1,5 +1,6 @@
 import numpy
 import sys, os
+import platform
 from distutils.core import setup
 from distutils.core import Command
 from distutils.extension import Extension
@@ -35,12 +36,16 @@ class build_docs(Command):
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
 
-gropt_src = [] 
-for file in os.listdir("src/gropt/src/"): 
-    if file.endswith(".cpp"): 
+gropt_src = []
+for file in os.listdir("src/gropt/src/"):
+    if file.endswith(".cpp"):
         gropt_src.append(os.path.join("src/gropt/src/", file))
 gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
 os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
+extra_args_mac = ['-std=c++11']
+if platform.system() == 'Darwin':
+    extra_args_mac = ['-stdlib=libc++']
+
 extensions = [
 	Extension(name="optimum_reparamN2",
 	    sources=["src/optimum_reparamN2.pyx", "src/DynamicProgrammingQ2.c",
@@ -77,8 +82,8 @@ extensions = [
         sources=gropt_src,
         include_dirs=[numpy.get_include(), "src/gropt/incl/"],
         language="c++",
-        extra_compile_args=['-stdlib=libc++'],
-        extra_link_args=['-stdlib=libc++']
+        extra_compile_args=extra_args_mac,
+        extra_link_args=extra_args_mac
     ),
 ]
 
@@ -87,7 +92,7 @@ setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='1.4.3',
+    version='1.4.4',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',

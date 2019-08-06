@@ -17,9 +17,8 @@ import fpls_warp as fpls
 import collections
 
 
-def srsf_align(f, time, method="mean", omethod="DP", 
-               showplot=True, smoothdata=False, parallel=False,
-               lam=0.0):
+def srsf_align(f, time, method="mean", omethod="DP",
+               showplot=True, smoothdata=False, lam=0.0):
     """
     This function aligns a collection of functions using the elastic
     square-root slope (srsf) framework.
@@ -97,11 +96,13 @@ def srsf_align(f, time, method="mean", omethod="DP",
 
     if parallel:
         out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, time,
-                                  q[:, n], omethod, lam) for n in range(N))
+                                  q[:, n], omethod, lam, mf[0], f[0,n]) for n in range(N))
         gam = np.array(out)
         gam = gam.transpose()
     else:
-        gam = uf.optimum_reparam(mq, time, q, omethod, lam)
+        gam = np.zeros((M,N))
+        for k in range(0,N):
+            gam[:,k] = uf.optimum_reparam(mq,time,q[:,k],omethod,lam,mf[0],f[0,k])
 
     gamI = uf.SqrtMeanInverse(gam)
     mf = np.interp((time[-1] - time[0]) * gamI + time[0], time, mf)
@@ -120,6 +121,9 @@ def srsf_align(f, time, method="mean", omethod="DP",
     tmp = np.zeros((M, MaxItr + 2))
     tmp[:, 0] = mq
     mq = tmp
+    tmp = np.zeros((M, MaxItr+2))
+    tmp[:,0] = mf
+    mf = tmp
     tmp = np.zeros((M, N, MaxItr + 2))
     tmp[:, :, 0] = f
     f = tmp
@@ -135,11 +139,14 @@ def srsf_align(f, time, method="mean", omethod="DP",
         # Matching Step
         if parallel:
             out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
-                                      time, q[:, n, 0], omethod, lam) for n in range(N))
+                                      time, q[:, n, 0], omethod, lam, mf[0,r],
+                                      f[0,k,0] ) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
-            gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], omethod, lam)
+            for k in range(0,N):
+                gam[:,k] = uf.optimum_reparam(mq[:, r], time, q[:, k, 0],
+                        omethod, lam, mf[0,r], f[0,k,0])
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
@@ -161,7 +168,9 @@ def srsf_align(f, time, method="mean", omethod="DP",
             # Minimization Step
             # compute the mean of the matched function
             qtemp = q[:, :, r + 1]
+            ftemp = f[:, :, r + 1]
             mq[:, r + 1] = qtemp.mean(axis=1)
+            mf[:, r + 1] = ftemp.mean(axis=1)
 
             qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
@@ -175,7 +184,9 @@ def srsf_align(f, time, method="mean", omethod="DP",
             # compute the mean of the matched function
             dist_iinv = ds[r + 1] ** (-1)
             qtemp = q[:, :, r + 1] / ds[r + 1]
+            ftemp = f[:, :, r + 1] / ds[r + 1]
             mq[:, r + 1] = qtemp.sum(axis=1) * dist_iinv
+            mf[:, r + 1] = ftemp.sum(axis=1) * dist_iinv
 
             qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
@@ -185,11 +196,14 @@ def srsf_align(f, time, method="mean", omethod="DP",
     # Last Step with centering of gam
     r += 1
     if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time, q[:, n, 0], omethod, lam) for n in range(N))
+        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time,
+            q[:, n, 0], omethod, lam, mf[0,r], f[0,n,0]) for n in range(N))
         gam = np.array(out)
         gam = gam.transpose()
     else:
-        gam = uf.optimum_reparam(mq[:, r], time, q[:, :, 0], omethod, lam)
+        for k in range(0,N):
+            gam[:,k] = uf.optimum_reparam(mq[:, r], time, q[:, k, 0], omethod,
+                    lam, mf[0,r], f[0,k,0])
 
     gam_dev = np.zeros((M, N))
     for k in range(0, N):
@@ -249,10 +263,11 @@ def srsf_align(f, time, method="mean", omethod="DP",
 
     align_results = collections.namedtuple('align', ['fn', 'qn', 'q0', 'fmean',
                                                      'mqn', 'gam', 'orig_var',
-                                                     'amp_var', 'phase_var'])
+                                                     'amp_var', 'phase_var',
+                                                     'cost'])
 
     out = align_results(fn, qn, q0, fmean, mqn, gam, orig_var, amp_var,
-                        phase_var)
+                        phase_var, qun)
     return out
 
 
