@@ -171,6 +171,7 @@ def ampbox(ft, f_median, qt, q_median, time, alpha=.05, k_a=1):
                                                      'Q1q','Q3q'])
 
     plt_o = plt(U,V,Fs2,allparts,d1,d1a,dl,d3,d3a,du,Q1a_q,Q3a_q)                                           
+
     out = ampbox(Q1,Q3,Q1a,Q3a,minn,maxx,outlier_index,f_median,q_median,plt_o)
 
     return (out)
