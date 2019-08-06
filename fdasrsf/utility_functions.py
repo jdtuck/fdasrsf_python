@@ -153,11 +153,11 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
                                     ascontiguousarray(q2), lam)
 
         if q1.ndim == 1 and q2.ndim == 2:
-            gam = orN2.coptimum_reparam_N(ascontiguousarray(q1), time,
+            gam = orN2.coptimum_reparamN(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
 
         if q1.ndim == 2 and q2.ndim == 2:
-            gam = orN2.coptimum_reparam_N2(ascontiguousarray(q1), time,
+            gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
     elif method == "RBFGS":
         onlyDP=False
@@ -179,7 +179,7 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
             M,N = q2.shape
             for i in range(0, N):
                 f2[:,i] = srsf_to_f(q2[:,i],time)
-            gam = orNg.coptimum_reparamN(ascontiguousarray(q1), time,
+            gam = orNg.coptimum_reparam_N(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), onlyDP, rotated,
                                     isclosed, skipm, auto, w, lam)
 
@@ -190,7 +190,7 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
             for i in range(0, N):
                 f1[:,i] = srsf_to_f(q1[:,i],time)
                 f2[:,i] = srsf_to_f(q2[:,i],time)
-            gam = orNg.coptimum_reparamN2(ascontiguousarray(q1), time,
+            gam = orNg.coptimum_reparam_N2(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), onlyDP, rotated,
                                     isclosed, skipm, auto, w, lam)
     else:
