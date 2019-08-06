@@ -128,7 +128,7 @@ def ampbox(ft, f_median, qt, q_median, time, alpha=.05, k_a=1):
     min_index = distance_to_lower.argmin()
     min_q = qt[:,min_index]
     max_q = qt[:,max_index]
-    minn  ft[:,min_index]
+    minn = ft[:,min_index]
     maxx = ft[:,max_index]
 
     s = np.linspace(0,1,100)
@@ -154,7 +154,7 @@ def ampbox(ft, f_median, qt, q_median, time, alpha=.05, k_a=1):
     part4=np.linspace(0,d3,100)
     part5=np.linspace(d3,d3+d3a,100)
     part6=np.linspace(d3+d3a,d3+d3a+du,100)
-    allparts = np.array([part1,part2[1:99],part3[1:99],part4[1:99],part5[1:99],part6[1:99])
+    allparts = np.array([part1,part2[1:99],part3[1:99],part4[1:99],part5[1:99],part6[1:99]])
     U, V = np.meshgrid(time, allparts)
     U = np.transpose(U)
     V = np.transpose(V)
@@ -286,7 +286,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
     outlier_index = np.array([])
     for i in range(0,N):
         if dx[dx_ordering[N+1-i]] > whisker_dis:
-            outlier_index = np.append(outlier_index,dx_ordering[N+1-i]])
+            outlier_index = np.append(outlier_index,dx_ordering[N+1-i])
     
     # identify phase extremes
     distance_to_upper = np.full(N, np.inf)
@@ -301,8 +301,6 @@ def phbox(gam, time, alpha=.05, k_a=1):
     min_index = distance_to_lower.argmin()
     minn = gam[:,min_index]
     maxx = gam[:,max_index]
-    minn  ft[:,min_index]
-    maxx = ft[:,max_index]
     min_psi = psi[:,min_index]
     max_psi = psi[:,max_index]
 
@@ -329,7 +327,7 @@ def phbox(gam, time, alpha=.05, k_a=1):
     part4=np.linspace(0,d3,100)
     part5=np.linspace(d3,d3+d3a,100)
     part6=np.linspace(d3+d3a,d3+d3a+du,100)
-    allparts = np.array([part1,part2[1:99],part3[1:99],part4[1:99],part5[1:99],part6[1:99])
+    allparts = np.array([part1,part2[1:99],part3[1:99],part4[1:99],part5[1:99],part6[1:99]])
     U, V = np.meshgrid(time, allparts)
     U = np.transpose(U)
     V = np.transpose(V)
