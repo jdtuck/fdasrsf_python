@@ -141,11 +141,11 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
                                     ascontiguousarray(q2), lam)
 
         if q1.ndim == 1 and q2.ndim == 2:
-            gam = orN.coptimum_reparamN(ascontiguousarray(q1), time,
+            gam = orN.coptimum_reparam_N(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
 
         if q1.ndim == 2 and q2.ndim == 2:
-            gam = orN.coptimum_reparamN2(ascontiguousarray(q1), time,
+            gam = orN.coptimum_reparam_N2(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
@@ -153,11 +153,11 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0):
                                     ascontiguousarray(q2), lam)
 
         if q1.ndim == 1 and q2.ndim == 2:
-            gam = orN2.coptimum_reparamN(ascontiguousarray(q1), time,
+            gam = orN2.coptimum_reparam_N(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
 
         if q1.ndim == 2 and q2.ndim == 2:
-            gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
+            gam = orN2.coptimum_reparam_N2(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
     elif method == "RBFGS":
         onlyDP=False
