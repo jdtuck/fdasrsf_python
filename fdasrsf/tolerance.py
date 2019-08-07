@@ -143,6 +143,17 @@ def mvtol_region(x, alpha, P, B):
 
 
 def rwishart(df,p):
+    """
+    Computes a random wishart matrix
+    -------------------------------------------------------------------------
+    
+    :param df: degree of freedom
+    :param p: number of dimensions
+
+    :rtype: double
+    :return R: matrix
+
+    """
     R = np.zeros((p,p))
     R = R.flatten()
     R[::p+1] = np.sqrt(chi2.rvs(np.arange(df,df-p,-1),size=p))

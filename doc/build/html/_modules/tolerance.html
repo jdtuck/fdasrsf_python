@@ -182,7 +182,18 @@
     <span class="k">return</span> <span class="n">tol</span></div>
 
 
-<span class="k">def</span> <span class="nf">rwishart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="rwishart"><a class="viewcode-back" href="../tolerance.html#tolerance.rwishart">[docs]</a><span class="k">def</span> <span class="nf">rwishart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a random wishart matrix</span>
+<span class="sd">    -------------------------------------------------------------------------</span>
+<span class="sd">    </span>
+<span class="sd">    :param df: degree of freedom</span>
+<span class="sd">    :param p: number of dimensions</span>
+
+<span class="sd">    :rtype: double</span>
+<span class="sd">    :return R: matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
     <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">R</span><span class="p">[::</span><span class="n">p</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">chi2</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">df</span><span class="o">-</span><span class="n">p</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">size</span><span class="o">=</span><span class="n">p</span><span class="p">))</span>
@@ -194,7 +205,7 @@
     <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
     <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">R</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">R</span>
+    <span class="k">return</span> <span class="n">R</span></div>
 </pre></div>
 
           </div>
