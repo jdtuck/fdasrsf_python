@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Aug 06, 2019" "1.4" "fdasrsf"
+.TH "FDASRSF" "1" "Aug 07, 2019" "1.5" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -399,7 +399,7 @@ coefficients
 eigenvectors
 .UNINDENT
 .UNINDENT
-.SH ELASTIC PRINCIPAL COMPONENT REGRESSION
+.SH ELASTIC FUNCTIONAL BOXPLOTS
 .sp
 Elastic Functional Boxplots
 .sp
@@ -511,6 +511,45 @@ M samples
 \fBn\fP (\fIinteger\fP) \-\- number of random samples
 .IP \(bu 2
 \fBsort_samples\fP (\fI\%bool\fP) \-\- sort samples (default = T)
+.UNINDENT
+.TP
+.B Return type
+tuple of numpy array
+.TP
+.B Return fs
+random aligned samples
+.TP
+.B Return gams
+random warping functions
+.TP
+.B Return ft
+random samples
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B gauss_model.joint_gauss_model(fn, time, qn, gam, q0, n=1, no=3)
+This function models the functional data using a joint Gaussian model
+extracted from the principal components of the srsfs
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBfn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N aligned functions with
+M samples
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBqn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N aligned srsfs with M samples
+.IP \(bu 2
+\fBgam\fP (\fInp.ndarray\fP) \-\- warping functions
+.IP \(bu 2
+\fBq0\fP \-\- numpy ndarray of shape (M,N) of N unaligned srsfs with  samples
+.IP \(bu 2
+\fBn\fP (\fIinteger\fP) \-\- number of random samples
+.IP \(bu 2
+\fBn\fP \-\- number of principal components (default = 3)
 .UNINDENT
 .TP
 .B Return type

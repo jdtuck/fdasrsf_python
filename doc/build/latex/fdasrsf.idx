@@ -12,6 +12,7 @@
 \indexentry{phbox() (in module boxplots)@\spxentry{phbox()}\spxextra{in module boxplots}|hyperpage}{9}
 \indexentry{gauss\_model (module)@\spxentry{gauss\_model}\spxextra{module}|hyperpage}{11}
 \indexentry{gauss\_model() (in module gauss\_model)@\spxentry{gauss\_model()}\spxextra{in module gauss\_model}|hyperpage}{11}
+\indexentry{joint\_gauss\_model() (in module gauss\_model)@\spxentry{joint\_gauss\_model()}\spxextra{in module gauss\_model}|hyperpage}{11}
 \indexentry{fPLS (module)@\spxentry{fPLS}\spxextra{module}|hyperpage}{13}
 \indexentry{pls\_svd() (in module fPLS)@\spxentry{pls\_svd()}\spxextra{in module fPLS}|hyperpage}{13}
 \indexentry{regression (module)@\spxentry{regression}\spxextra{module}|hyperpage}{15}

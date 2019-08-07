@@ -71,8 +71,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{Aug 06, 2019}
-\release{1.4.5}
+\date{Aug 07, 2019}
+\release{1.5.0}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -513,8 +513,8 @@ eigenvectors
 
 
 
-\chapter{Elastic Principal Component Regression}
-\label{\detokenize{boxplots:module-boxplots}}\label{\detokenize{boxplots:elastic-principal-component-regression}}\label{\detokenize{boxplots::doc}}\index{boxplots (module)@\spxentry{boxplots}\spxextra{module}}
+\chapter{Elastic Functional Boxplots}
+\label{\detokenize{boxplots:module-boxplots}}\label{\detokenize{boxplots:elastic-functional-boxplots}}\label{\detokenize{boxplots::doc}}\index{boxplots (module)@\spxentry{boxplots}\spxextra{module}}
 Elastic Functional Boxplots
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
@@ -645,6 +645,54 @@ M samples
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{sort\_samples}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} sort samples (default = T)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+tuple of numpy array
+
+\item[{Return fs}] \leavevmode
+random aligned samples
+
+\item[{Return gams}] \leavevmode
+random warping functions
+
+\item[{Return ft}] \leavevmode
+random samples
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{joint\_gauss\_model() (in module gauss\_model)@\spxentry{joint\_gauss\_model()}\spxextra{in module gauss\_model}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{gauss_model:gauss_model.joint_gauss_model}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{gauss\_model.}}\sphinxbfcode{\sphinxupquote{joint\_gauss\_model}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{gam}, \emph{q0}, \emph{n=1}, \emph{no=3}}{}
+This function models the functional data using a joint Gaussian model
+extracted from the principal components of the srsfs
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{fn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned functions with
+M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned srsfs with M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q0}} \textendash{} numpy ndarray of shape (M,N) of N unaligned srsfs with  samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{n}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of random samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{n}} \textendash{} number of principal components (default = 3)
 
 \end{itemize}
 

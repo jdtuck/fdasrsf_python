@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elastic Functional Tolerance Bounds &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-tolerance">
+<span id="elastic-functional-tolerance-bounds"></span><h1>Elastic Functional Tolerance Bounds<a class="headerlink" href="#module-tolerance" title="Permalink to this headline">¶</a></h1>
+<p>Functional Tolerance Bounds using SRSF</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="tolerance.bootTB">
+<code class="sig-prename descclassname">tolerance.</code><code class="sig-name descname">bootTB</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">a=0.5</em>, <em class="sig-param">p=0.99</em>, <em class="sig-param">B=500</em>, <em class="sig-param">no=5</em>, <em class="sig-param">parallel=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#bootTB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tolerance.bootTB" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function computes tolerance bounds for functional data containing
+phase and amplitude variation using bootstrap sampling</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>a</strong> – confidence level of tolerance bound (default = 0.05)</p></li>
+<li><p><strong>p</strong> – coverage level of tolerance bound (default = 0.99)</p></li>
+<li><p><strong>B</strong> – number of bootstrap samples (default = 500)</p></li>
+<li><p><strong>no</strong> – number of principal components (default = 5)</p></li>
+<li><p><strong>parallel</strong> – enable parallel processing (default = T)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of boxplot objects</p>
+</dd>
+<dt class="field-odd">Return amp</dt>
+<dd class="field-odd"><p>amplitude tolerance bounds</p>
+</dd>
+<dt class="field-even">Return ph</dt>
+<dd class="field-even"><p>phase tolerance bounds</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="tolerance.mvtol_region">
+<code class="sig-prename descclassname">tolerance.</code><code class="sig-name descname">mvtol_region</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">alpha</em>, <em class="sig-param">P</em>, <em class="sig-param">B</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#mvtol_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tolerance.mvtol_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
+Distributions, Communications in Statistics - Simulation and Computation, 35, 461–478.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – (M,N) matrix defining N variables of M samples</p></li>
+<li><p><strong>alpha</strong> – confidence level</p></li>
+<li><p><strong>P</strong> – coverage level</p></li>
+<li><p><strong>B</strong> – number of bootstrap samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+<dt class="field-odd">Return tol</dt>
+<dd class="field-odd"><p>tolerance factor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="tolerance.pcaTB">
+<code class="sig-prename descclassname">tolerance.</code><code class="sig-name descname">pcaTB</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">a=0.5</em>, <em class="sig-param">p=0.99</em>, <em class="sig-param">no=5</em>, <em class="sig-param">parallel=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#pcaTB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tolerance.pcaTB" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function computes tolerance bounds for functional data containing
+phase and amplitude variation using fPCA</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>a</strong> – confidence level of tolerance bound (default = 0.05)</p></li>
+<li><p><strong>p</strong> – coverage level of tolerance bound (default = 0.99)</p></li>
+<li><p><strong>no</strong> – number of principal components (default = 5)</p></li>
+<li><p><strong>parallel</strong> – enable parallel processing (default = T)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of boxplot objects</p>
+</dd>
+<dt class="field-odd">Return warp</dt>
+<dd class="field-odd"><p>alignment data from time_warping</p>
+</dd>
+<dt class="field-even">Return pca</dt>
+<dd class="field-even"><p>functional pca from jointFPCA</p>
+</dd>
+<dt class="field-odd">Return tol</dt>
+<dd class="field-odd"><p>tolerance factor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="tolerance.randn">
+<code class="sig-prename descclassname">tolerance.</code><code class="sig-name descname">randn</code><span class="sig-paren">(</span><em class="sig-param">d0</em>, <em class="sig-param">d1</em>, <em class="sig-param">...</em>, <em class="sig-param">dn</em><span class="sig-paren">)</span><a class="headerlink" href="#tolerance.randn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a sample (or samples) from the “standard normal” distribution.</p>
+<p>If positive, int_like or int-convertible arguments are provided,
+<cite>randn</cite> generates an array of shape <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></code>, filled
+with random floats sampled from a univariate “normal” (Gaussian)
+distribution of mean 0 and variance 1 (if any of the <span class="math notranslate nohighlight">\(d_i\)</span> are
+floats, they are first converted to integers by truncation). A single
+float randomly sampled from the distribution is returned if no
+argument is provided.</p>
+<p>This is a convenience function.  If you want an interface that takes a
+tuple as the first argument, use <cite>numpy.random.standard_normal</cite> instead.</p>
+<dl class="simple">
+<dt>d0, d1, …, dn<span class="classifier">int, optional</span></dt><dd><p>The dimensions of the returned array, should be all positive.
+If no argument is given a single Python float is returned.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Z<span class="classifier">ndarray or float</span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></code>-shaped array of floating-point samples from
+the standard normal distribution, or a single such float if
+no parameters were supplied.</p>
+</dd>
+</dl>
+<p>standard_normal : Similar, but takes a tuple as its argument.</p>
+<p>For random samples from <span class="math notranslate nohighlight">\(N(\mu, \sigma^2)\)</span>, use:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sigma</span> <span class="pre">*</span> <span class="pre">np.random.randn(...)</span> <span class="pre">+</span> <span class="pre">mu</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span>
+<span class="go">2.1923875335537315 #random</span>
+</pre></div>
+</div>
+<p>Two-by-four array of samples from N(3, 6.25):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">2.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+<span class="go">array([[-4.49401501,  4.00950034, -1.81814867,  7.29718677],  #random</span>
+<span class="go">       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]]) #random</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tolerance.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>
