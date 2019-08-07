@@ -1,4 +1,4 @@
-Elastic Principal Component Regression
+Elastic Functional Boxplots
 ======================================
 
 .. automodule:: boxplots
