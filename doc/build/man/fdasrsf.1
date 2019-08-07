@@ -1176,6 +1176,162 @@ sum of squared errors
 string of pca method
 .UNINDENT
 .UNINDENT
+.SH ELASTIC FUNCTIONAL TOLERANCE BOUNDS
+.sp
+Functional Tolerance Bounds using SRSF
+.sp
+moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+.INDENT 0.0
+.TP
+.B tolerance.bootTB(f, time, a=0.5, p=0.99, B=500, no=5, parallel=True)
+This function computes tolerance bounds for functional data containing
+phase and amplitude variation using bootstrap sampling
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBa\fP \-\- confidence level of tolerance bound (default = 0.05)
+.IP \(bu 2
+\fBp\fP \-\- coverage level of tolerance bound (default = 0.99)
+.IP \(bu 2
+\fBB\fP \-\- number of bootstrap samples (default = 500)
+.IP \(bu 2
+\fBno\fP \-\- number of principal components (default = 5)
+.IP \(bu 2
+\fBparallel\fP \-\- enable parallel processing (default = T)
+.UNINDENT
+.TP
+.B Return type
+tuple of boxplot objects
+.TP
+.B Return amp
+amplitude tolerance bounds
+.TP
+.B Return ph
+phase tolerance bounds
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B tolerance.mvtol_region(x, alpha, P, B)
+Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
+Distributions, Communications in Statistics \- Simulation and Computation, 35, 461–478.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBx\fP \-\- (M,N) matrix defining N variables of M samples
+.IP \(bu 2
+\fBalpha\fP \-\- confidence level
+.IP \(bu 2
+\fBP\fP \-\- coverage level
+.IP \(bu 2
+\fBB\fP \-\- number of bootstrap samples
+.UNINDENT
+.TP
+.B Return type
+double
+.TP
+.B Return tol
+tolerance factor
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B tolerance.pcaTB(f, time, a=0.5, p=0.99, no=5, parallel=True)
+This function computes tolerance bounds for functional data containing
+phase and amplitude variation using fPCA
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBa\fP \-\- confidence level of tolerance bound (default = 0.05)
+.IP \(bu 2
+\fBp\fP \-\- coverage level of tolerance bound (default = 0.99)
+.IP \(bu 2
+\fBno\fP \-\- number of principal components (default = 5)
+.IP \(bu 2
+\fBparallel\fP \-\- enable parallel processing (default = T)
+.UNINDENT
+.TP
+.B Return type
+tuple of boxplot objects
+.TP
+.B Return warp
+alignment data from time_warping
+.TP
+.B Return pca
+functional pca from jointFPCA
+.TP
+.B Return tol
+tolerance factor
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B tolerance.randn(d0, d1, \&..., dn)
+Return a sample (or samples) from the "standard normal" distribution.
+.sp
+If positive, int_like or int\-convertible arguments are provided,
+\fIrandn\fP generates an array of shape \fB(d0, d1, ..., dn)\fP, filled
+with random floats sampled from a univariate "normal" (Gaussian)
+distribution of mean 0 and variance 1 (if any of the d_i are
+floats, they are first converted to integers by truncation). A single
+float randomly sampled from the distribution is returned if no
+argument is provided.
+.sp
+This is a convenience function.  If you want an interface that takes a
+tuple as the first argument, use \fInumpy.random.standard_normal\fP instead.
+.INDENT 7.0
+.TP
+.B d0, d1, ..., dn
+int, optional
+The dimensions of the returned array, should be all positive.
+If no argument is given a single Python float is returned.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Z
+ndarray or float
+A \fB(d0, d1, ..., dn)\fP\-shaped array of floating\-point samples from
+the standard normal distribution, or a single such float if
+no parameters were supplied.
+.UNINDENT
+.sp
+standard_normal : Similar, but takes a tuple as its argument.
+.sp
+For random samples from N(\emu, \esigma^2), use:
+.sp
+\fBsigma * np.random.randn(...) + mu\fP
+.sp
+.nf
+.ft C
+>>> np.random.randn()
+2.1923875335537315 #random
+.ft P
+.fi
+.sp
+Two\-by\-four array of samples from N(3, 6.25):
+.sp
+.nf
+.ft C
+>>> 2.5 * np.random.randn(2, 4) + 3
+array([[\-4.49401501,  4.00950034, \-1.81814867,  7.29718677],  #random
+       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]]) #random
+.ft P
+.fi
+.UNINDENT
 .SH SRVF GEODESIC COMPUTATION
 .sp
 geodesic calculation for SRVF (curves) open and closed)

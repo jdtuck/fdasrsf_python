@@ -22,6 +22,7 @@ using functional component analysis and regression.
    fPLS
    regression
    pcr_regression
+   tolerance
    geodesic
    utility_functions
    curve_functions
