@@ -106,7 +106,7 @@ def pcaTB(f, time, a=0.5, p=.99, no=5, parallel=True):
     return warp, pca, tol
 
 
-def mvtol_region(x, alpha, p, B):
+def mvtol_region(x, alpha, P, B):
     """
     Computes tolerance factor for multivariate normal
     -------------------------------------------------------------------------
@@ -125,7 +125,21 @@ def mvtol_region(x, alpha, p, B):
     n,p = x.shape
 
     q_squared = chi2.rvs(1, size=(p,B))/n
-    L = 
+    L = np.zeros((p,B))
+    for k in range(B):
+        L[:,k] = eig(rwishart(n-1,p))[0]
+    
+    c1 = (1+q_squared)/L
+    c1 = c1.sum()
+    c2 = (1+2*q_squared)/(L**2)
+    c2 = c2.sum()
+    c3 = (1+3*q_squared)/(L**3)
+    c3 = c3.sum()
+    a = (c2**3)/(c3**2)
+    T = (n-1)*(np.sqrt(c2/a) * (chi2.ppf(P,a)-a) + c1)
+    tol = np.quantile(T,1-alpha)
+
+    return tol
 
 
 def rwishart(df,p):
