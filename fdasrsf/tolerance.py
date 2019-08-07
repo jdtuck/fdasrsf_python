@@ -8,6 +8,9 @@ moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import fdasrsf as fs
 import fdasrsf.utility_functions as uf
+from fdasrsf.gauss_model import joint_gauss_model
+from fdasrsf.boxplots import ampbox, phbox
+
 
 def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
     """
@@ -24,7 +27,7 @@ def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
     :type f: np.ndarray
     :type time: np.ndarray
 
-    :rtype: tuple of numpy array
+    :rtype: tuple of boxplot objects
     :return amp: amplitude tolerance bounds
     :return ph: phase tolerance bounds
 
@@ -37,6 +40,32 @@ def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
 
     # Calculate CI
     # a% tolerance bound with p%
+    fn = out_med.fn
+    qn = out_med.qn
+    gam = out_med.gam
+    q0 = out_med.q0
     print("Bootstrap Sampling")
-    k = 1
+    bootlwr_amp = np.zeros((M,B))
+    bootupr_amp = np.zeros((M,B))
+    bootlwr_ph =  np.zeros((M,B))
+    bootupr_ph =  np.zeros((M,B))
+    for k in range(B):
+        samples = joint_gauss_model(fn, time, qn, gam, q0, n=100, no=no)
+        obja = ampbox(samples.ft, out_med.fmean , samples.qs, out_med.mqn, time, alpha=1-p, k_a=.3)
+        objp = phbox(samples.gams, time, alpha=1-p, k_a=.3)
+        bootlwr_amp[:,k] = obja.Q1a
+        bootupr_amp[:,k] = obja.Q3a
+        bootlwr_ph[:,k] = objp.Q1a
+        bootupr_ph[:,k] = objp.Q3a
+    
+    # tolerance bounds
+    boot_amp = np.hstack((bootlwr_amp, bootupr_amp)
+    boot_amp_q = uf.f_to_srsf(boot_amp,time)
+    boot_ph = np.hstack((bootlwr_ph,bootupr_ph))
+    amp = ampbox(boot_amp, out_med.fmean , boot_amp_q, out_med.mqn, time, alpha=a, k_a=.3)
+    ph = phbox(boot_ph, time, alpha=a, k_a=.3)
+
+    return amp, ph
+    
+
     

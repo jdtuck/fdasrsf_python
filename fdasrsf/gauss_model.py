@@ -6,6 +6,7 @@ moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 """
 import numpy as np
 import fdasrsf.utility_functions as uf
+from scipy.integrate import cumtrapz
 import fdasrsf.fPCA as fpca
 import fdasrsf.geometry as geo
 import collections
@@ -84,7 +85,7 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
         for i in range(0, n):
             tmp = np.ones(M)
             ip[i] = tmp.dot(psi[:, i] / M)
-            len[i] = np.acos(tmp.dot(psi[:, i] / M))
+            len[i] = np.arccos(tmp.dot(psi[:, i] / M))
 
         seq2 = len.argsort()
 
@@ -168,7 +169,7 @@ def joint_gauss_model(fn, time, qn, gam, q0, n=1, no=3):
     gamhat = np.zeros((M,n))
     for ii in range(n):
         psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
-        gam_tmp = np.cumtrapz(psihat[:,ii]**2,np.linspace(0,1,M))
+        gam_tmp = cumtrapz(psihat[:,ii]**2,np.linspace(0,1,M))
         gamhat[:,ii] = (gam_tmp - gam_tmp.min())/(gam_tmp.max()-gam_tmp.min())
     
     ft = np.zeros((M,n))
