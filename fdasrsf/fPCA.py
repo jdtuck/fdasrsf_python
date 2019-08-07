@@ -332,7 +332,7 @@ def jointfPCAd(qn, vec, C, m, mu_psi):
     return qhat, gamhat, a, U, s, mu_g, g, K
 
 def find_C(C, qn, vec, q0, m, mu_psi):
-    qhat, gamhat, a, U, s, mu_g = jointfPCAd(qn, vec, C, m, mu_psi)
+    qhat, gamhat, a, U, s, mu_g, g, K = jointfPCAd(qn, vec, C, m, mu_psi)
     (M,N) = qn.shape
     time = np.linspace(0,1,M-1)
 

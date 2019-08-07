@@ -25,7 +25,7 @@ from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
 from .utility_functions import optimum_reparam_pair, f_K_fold, zero_crossing, warp_q_gamma, resamplefunction, warp_f_gamma
 from .fPCA import vertfPCA, horizfPCA, jointfPCA
-from .gauss_model import gauss_model
+from .gauss_model import gauss_model, joint_gauss_model
 from .fPLS import pls_svd
 from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic
 from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, elastic_mlpcr_regression

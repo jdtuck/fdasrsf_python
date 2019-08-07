@@ -162,20 +162,20 @@ def joint_gauss_model(fn, time, qn, gam, q0, n=1, no=3):
     vals = np.random.multivariate_normal(np.zeros(s.shape), np.diag(s), n)
     
     tmp = np.matmul(U, np.transpose(vals))
-    qhat = np.tile(mqn,(1,n)) + tmp[0:M+1,:]
+    qhat = np.tile(mqn,(1,n)).T + tmp[0:M+1,:]
     tmp = np.matmul(U, np.transpose(vals)/C)
     vechat = tmp[(M+1):,:]
     psihat = np.zeros((M,n))
     gamhat = np.zeros((M,n))
     for ii in range(n):
         psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
-        gam_tmp = cumtrapz(psihat[:,ii]**2,np.linspace(0,1,M))
+        gam_tmp = cumtrapz(psihat[:,ii]**2,np.linspace(0,1,M),initial=0.0)
         gamhat[:,ii] = (gam_tmp - gam_tmp.min())/(gam_tmp.max()-gam_tmp.min())
     
     ft = np.zeros((M,n))
     fhat = np.zeros((M,n))
     for ii in range(n):
-        fhat[:,ii] = uf.cumtrapzmid(time, qhat[0:M]*np.fabs(qhat[0:M]), np.sign(qhat[M])*(qhat[M]*qhat[M]), mididx)
+        fhat[:,ii] = uf.cumtrapzmid(time, qhat[0:M,ii]*np.fabs(qhat[0:M,ii]), np.sign(qhat[M,ii])*(qhat[M,ii]*qhat[M,ii]), mididx)
         ft[:,ii] = uf.warp_f_gamma(np.linspace(0,1,M),fhat[:,ii],gamhat[:,ii])
 
 
