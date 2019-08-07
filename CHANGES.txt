@@ -1,3 +1,6 @@
+v1.5.0, 2019-08-07 -- added tolerance bound
+v1.4.3, 2019-07-30 -- added RBFGS optimzation
+v1.4.0, 2019-05-10 -- added joint PCA
 v1.3.0, 2019-04-10 -- updates from R package and python3
 v1.2.1, 2014-12-06 -- fixed comment issues
 v1.2.0, 2014-02-06 -- added registration for open and closed curves

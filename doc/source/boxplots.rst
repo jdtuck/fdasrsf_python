@@ -1,5 +1,5 @@
 Elastic Functional Boxplots
-======================================
+===========================
 
 .. automodule:: boxplots
    :members:
