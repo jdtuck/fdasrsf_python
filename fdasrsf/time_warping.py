@@ -18,7 +18,7 @@ import collections
 
 
 def srsf_align(f, time, method="mean", omethod="DP",
-               showplot=True, smoothdata=False, lam=0.0):
+               showplot=True, smoothdata=False, parallel=False, lam=0.0):
     """
     This function aligns a collection of functions using the elastic
     square-root slope (srsf) framework.
