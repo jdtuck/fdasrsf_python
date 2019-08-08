@@ -12,6 +12,7 @@ import fdasrsf.fPCA as fpca
 import fdasrsf.regression as rg
 from scipy import dot
 from scipy.linalg import inv, norm
+from scipy.integrate import trapz, cumtrapz
 from scipy.optimize import fmin_l_bfgs_b
 import collections
 
@@ -84,8 +85,8 @@ def elastic_pcr_regression(f, y, time, pca_method="combined", no=5,
     
     SSE = np.sum((y-alpha-int_X)**2)
 
-    efpcr_results = collections.namedtuple('efpcr', ['alpha', 'b', 'y', 'warp_data', 'pca', 'SSE', 'pca_method'])
-    efpcr = efpcr_results(alpha, b, y, out, out_pca, SSE, pca_method)
+    efpcr_results = collections.namedtuple('efpcr', ['alpha', 'b', 'y', 'warp_data', 'pca', 'SSE', 'pca_method','type'])
+    efpcr = efpcr_results(alpha, b, y, out, out_pca, SSE, pca_method,'linear')
 
     return efpcr
 
@@ -155,8 +156,8 @@ def elastic_lpcr_regression(f, y, time, pca_method="combined", no=5,
 
     b = b[1:no+1]
 
-    eflpcr_results = collections.namedtuple('eflpcr', ['alpha', 'b', 'y', 'warp_data', 'pca', 'LL', 'pca_method'])
-    eflpcr = eflpcr_results(alpha, b, y, out, out_pca, LL, pca_method)
+    eflpcr_results = collections.namedtuple('eflpcr', ['alpha', 'b', 'y', 'warp_data', 'pca', 'LL', 'pca_method','type'])
+    eflpcr = eflpcr_results(alpha, b, y, out, out_pca, LL, pca_method,'logistic')
 
     return eflpcr
         
@@ -233,7 +234,7 @@ def elastic_mlpcr_regression(f, y, time, pca_method="combined", no=5,
 
     b = B0[1:no+1,:]
 
-    efmlpcr_results = collections.namedtuple('efmlpcr', ['alpha', 'b', 'y', 'Y', 'warp_data', 'pca', 'LL', 'pca_method'])
-    efmlpcr = efmlpcr_results(alpha, b, y, Y, out, out_pca, LL, pca_method)
+    efmlpcr_results = collections.namedtuple('efmlpcr', ['alpha', 'b', 'y', 'Y', 'warp_data', 'pca', 'LL', 'pca_method','type'])
+    efmlpcr = efmlpcr_results(alpha, b, y, Y, out, out_pca, LL, pca_method,'mlogistic')
 
     return efmlpcr

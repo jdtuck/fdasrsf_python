@@ -420,7 +420,7 @@ def SqrtMedian(gam):
     r = 1
     stp = 0.3
     maxiter = 501
-    vbar_norm = zeros(maxiter)
+    vbar_norm = zeros(maxiter+1)
 
     # compute psi function
     binsize = mean(diff(time))
