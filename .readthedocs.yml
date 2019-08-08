@@ -19,12 +19,12 @@ formats: all
 # Optionally set the version of Python and requirements required to build your docs
 python:
   version: 3.7
-   install:
-      - requirements: doc/requirements.txt
-      - method: python
-        path: .
-        extra_requirements:
-            - docs
-      - method: setuptools
-        path: another/package
-   system_packages: true
+  install:
+    - requirements: doc/requirements.txt
+    - method: python
+      path: .
+      extra_requirements:
+        - docs
+    - method: setuptools
+      path: another/package
+  system_packages: true
