@@ -1,1 +1,4 @@
 numpy
+scipy
+matplotlib
+fdasrsf
