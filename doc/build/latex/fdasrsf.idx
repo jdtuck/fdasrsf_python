@@ -37,7 +37,6 @@
 \indexentry{bootTB() (in module tolerance)@\spxentry{bootTB()}\spxextra{in module tolerance}|hyperpage}{23}
 \indexentry{mvtol\_region() (in module tolerance)@\spxentry{mvtol\_region()}\spxextra{in module tolerance}|hyperpage}{23}
 \indexentry{pcaTB() (in module tolerance)@\spxentry{pcaTB()}\spxextra{in module tolerance}|hyperpage}{23}
-\indexentry{randn() (in module tolerance)@\spxentry{randn()}\spxextra{in module tolerance}|hyperpage}{24}
 \indexentry{rwishart() (in module tolerance)@\spxentry{rwishart()}\spxextra{in module tolerance}|hyperpage}{24}
 \indexentry{geodesic (module)@\spxentry{geodesic}\spxextra{module}|hyperpage}{25}
 \indexentry{back\_parallel\_transport() (in module geodesic)@\spxentry{back\_parallel\_transport()}\spxextra{in module geodesic}|hyperpage}{25}

@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -50,7 +49,6 @@
 <span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.fPCA</span> <span class="k">as</span> <span class="nn">fpca</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">chi2</span>
-<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="k">import</span> <span class="n">randn</span>
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">eig</span>
 <span class="kn">from</span> <span class="nn">fdasrsf.gauss_model</span> <span class="k">import</span> <span class="n">joint_gauss_model</span>
 <span class="kn">from</span> <span class="nn">fdasrsf.boxplots</span> <span class="k">import</span> <span class="n">ampbox</span><span class="p">,</span> <span class="n">phbox</span>
@@ -149,7 +147,7 @@
 <div class="viewcode-block" id="mvtol_region"><a class="viewcode-back" href="../tolerance.html#tolerance.mvtol_region">[docs]</a><span class="k">def</span> <span class="nf">mvtol_region</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes tolerance factor for multivariate normal</span>
-<span class="sd">    -------------------------------------------------------------------------</span>
+
 <span class="sd">    Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal</span>
 <span class="sd">    Distributions, Communications in Statistics - Simulation and Computation, 35, 461–478.</span>
 <span class="sd">    </span>
@@ -185,7 +183,6 @@
 <div class="viewcode-block" id="rwishart"><a class="viewcode-back" href="../tolerance.html#tolerance.rwishart">[docs]</a><span class="k">def</span> <span class="nf">rwishart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a random wishart matrix</span>
-<span class="sd">    -------------------------------------------------------------------------</span>
 <span class="sd">    </span>
 <span class="sd">    :param df: degree of freedom</span>
 <span class="sd">    :param p: number of dimensions</span>
@@ -200,7 +197,7 @@
     <span class="k">if</span> <span class="n">p</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
         <span class="n">pseq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
-        <span class="n">R</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="n">pseq</span><span class="p">,</span><span class="n">pseq</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span> <span class="o">=</span> <span class="n">randn</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">R</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="n">pseq</span><span class="p">,</span><span class="n">pseq</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
 
     <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
     <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">R</span><span class="p">)</span>

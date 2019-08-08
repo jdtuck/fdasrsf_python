@@ -1506,6 +1506,8 @@ phase tolerance bounds
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{tolerance:tolerance.mvtol_region}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{mvtol\_region}}}{\emph{x}, \emph{alpha}, \emph{P}, \emph{B}}{}
+Computes tolerance factor for multivariate normal
+
 Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
 Distributions, Communications in Statistics - Simulation and Computation, 35, 461\textendash{}478.
 \begin{quote}\begin{description}
@@ -1578,61 +1580,12 @@ tolerance factor
 
 \end{fulllineitems}
 
-\index{randn() (in module tolerance)@\spxentry{randn()}\spxextra{in module tolerance}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{tolerance:tolerance.randn}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{randn}}}{\emph{d0}, \emph{d1}, \emph{...}, \emph{dn}}{}
-Return a sample (or samples) from the “standard normal” distribution.
-
-If positive, int\_like or int-convertible arguments are provided,
-\sphinxtitleref{randn} generates an array of shape \sphinxcode{\sphinxupquote{(d0, d1, ..., dn)}}, filled
-with random floats sampled from a univariate “normal” (Gaussian)
-distribution of mean 0 and variance 1 (if any of the \(d_i\) are
-floats, they are first converted to integers by truncation). A single
-float randomly sampled from the distribution is returned if no
-argument is provided.
-
-This is a convenience function.  If you want an interface that takes a
-tuple as the first argument, use \sphinxtitleref{numpy.random.standard\_normal} instead.
-\begin{description}
-\item[{d0, d1, …, dn}] \leavevmode{[}int, optional{]}
-The dimensions of the returned array, should be all positive.
-If no argument is given a single Python float is returned.
-
-\end{description}
-\begin{description}
-\item[{Z}] \leavevmode{[}ndarray or float{]}
-A \sphinxcode{\sphinxupquote{(d0, d1, ..., dn)}}-shaped array of floating-point samples from
-the standard normal distribution, or a single such float if
-no parameters were supplied.
-
-\end{description}
-
-standard\_normal : Similar, but takes a tuple as its argument.
-
-For random samples from \(N(\mu, \sigma^2)\), use:
-
-\sphinxcode{\sphinxupquote{sigma * np.random.randn(...) + mu}}
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{p}{)}
-\PYG{g+go}{2.1923875335537315 \PYGZsh{}random}
-\end{sphinxVerbatim}
-
-Two-by-four array of samples from N(3, 6.25):
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{l+m+mf}{2.5} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{3}
-\PYG{g+go}{array([[\PYGZhy{}4.49401501,  4.00950034, \PYGZhy{}1.81814867,  7.29718677],  \PYGZsh{}random}
-\PYG{g+go}{       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]]) \PYGZsh{}random}
-\end{sphinxVerbatim}
-
-\end{fulllineitems}
-
 \index{rwishart() (in module tolerance)@\spxentry{rwishart()}\spxextra{in module tolerance}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{tolerance:tolerance.rwishart}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{rwishart}}}{\emph{df}, \emph{p}}{}~\begin{quote}\begin{description}
+\phantomsection\label{\detokenize{tolerance:tolerance.rwishart}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{rwishart}}}{\emph{df}, \emph{p}}{}
+Computes a random wishart matrix
+\begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} degree of freedom
@@ -3390,8 +3343,6 @@ References:
 \begin{quote}
 
 Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
-\end{quote}
-
 Methods. Ph.D. Thesis, Florida State University.
 
 Robinson, D. T. 2012, Function Data Analysis and Partial Shape Matching in the
@@ -3443,6 +3394,7 @@ in functional data. arXiv:1603.01775 {[}stat.ME{]}, 1-21.
 
 J. D. Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal
 Component Regression,” Statistical Analysis and Data Mining, 10.1002/sam.11399, 2018.
+\end{quote}
 
 
 \chapter{Indices and tables}

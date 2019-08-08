@@ -10,7 +10,6 @@ import fdasrsf as fs
 import fdasrsf.utility_functions as uf
 import fdasrsf.fPCA as fpca
 from scipy.stats import chi2
-from numpy.random import randn
 from numpy.linalg import eig
 from fdasrsf.gauss_model import joint_gauss_model
 from fdasrsf.boxplots import ampbox, phbox
@@ -109,7 +108,7 @@ def pcaTB(f, time, a=0.5, p=.99, no=5, parallel=True):
 def mvtol_region(x, alpha, P, B):
     """
     Computes tolerance factor for multivariate normal
-    -------------------------------------------------------------------------
+
     Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
     Distributions, Communications in Statistics - Simulation and Computation, 35, 461–478.
     
@@ -145,7 +144,6 @@ def mvtol_region(x, alpha, P, B):
 def rwishart(df,p):
     """
     Computes a random wishart matrix
-    -------------------------------------------------------------------------
     
     :param df: degree of freedom
     :param p: number of dimensions
@@ -160,7 +158,7 @@ def rwishart(df,p):
     if p>1:
         pseq = np.arange(0,p)
         tmp = [np.arange(0,x+1) for x in np.arange(0,p-1)]
-        R[np.repeat(p*pseq,pseq)+np.concatenate(tmp).ravel()] = randn(int(p*(p-1)/2))
+        R[np.repeat(p*pseq,pseq)+np.concatenate(tmp).ravel()] = np.random.randn(int(p*(p-1)/2))
 
     R = R.reshape((p,p))
     R = np.matmul(R.T,R)
