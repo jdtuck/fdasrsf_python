@@ -162,7 +162,7 @@ def joint_gauss_model(fn, time, qn, gam, q0, n=1, no=3):
     vals = np.random.multivariate_normal(np.zeros(s.shape), np.diag(s), n)
     
     tmp = np.matmul(U, np.transpose(vals))
-    qhat = np.tile(mqn,(1,n)).T + tmp[0:M+1,:]
+    qhat = np.tile(mqn.T,(n,1)).T + tmp[0:M+1,:]
     tmp = np.matmul(U, np.transpose(vals)/C)
     vechat = tmp[(M+1):,:]
     psihat = np.zeros((M,n))

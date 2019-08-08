@@ -196,8 +196,8 @@ def elastic_mlpcr_regression(f, y, time, pca_method="combined", no=5,
 
     # Code labels
     m = y.max()
-    Y = np.zeros((N, m), dtype=int)
-    for ii in range(0, N):
+    Y = np.zeros((N1, m), dtype=int)
+    for ii in range(0, N1):
         Y[ii, y[ii]-1] = 1
 
     # Align Data
@@ -225,7 +225,7 @@ def elastic_mlpcr_regression(f, y, time, pca_method="combined", no=5,
                             maxfun=250, factr=1e-30)
 
     b = out[0]
-    B0 = b.reshape(Nb+1, m)
+    B0 = b.reshape(no+1, m)
     alpha = B0[0, :]
 
     # compute the Loss
