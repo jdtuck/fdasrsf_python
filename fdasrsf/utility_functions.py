@@ -416,7 +416,7 @@ def SqrtMedian(gam):
     time = linspace(0,1,T)
 
     # Initialization
-    psi_median = ones(M)
+    psi_median = ones(T)
     r = 1
     stp = 0.3
     maxiter = 501
@@ -444,7 +444,7 @@ def SqrtMedian(gam):
         r += 1
         for k in range(0,n):
             v[:,k], tmp = geo.inv_exp_map(psi_median,psi[:,k])
-            d[k] = arccos(geo.exp_map(psi_median,psi[:,k]))
+            d[k] = arccos(geo.inner_product(psi_median,psi[:,k]))
             vtil[:,k] = v[:,k]/d[k]
             dtil[k] = 1/d[k]
 
