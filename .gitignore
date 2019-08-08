@@ -10,3 +10,4 @@
 *.toc
 *.pyc
 /dist
+.vscode/settings.json
