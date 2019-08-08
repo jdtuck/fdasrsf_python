@@ -23,6 +23,4 @@ python:
     - requirements: doc/requirements.txt
     - method: setuptools
       path: .
-      extra_requirements:
-        - docs
   system_packages: true
