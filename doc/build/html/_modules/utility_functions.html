@@ -456,11 +456,11 @@
     <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
 
     <span class="c1"># Initialization</span>
-    <span class="n">psi_median</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">psi_median</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
     <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">stp</span> <span class="o">=</span> <span class="mf">0.3</span>
     <span class="n">maxiter</span> <span class="o">=</span> <span class="mi">501</span>
-    <span class="n">vbar_norm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxiter</span><span class="p">)</span>
+    <span class="n">vbar_norm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxiter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># compute psi function</span>
     <span class="n">binsize</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
@@ -484,7 +484,7 @@
         <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
             <span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">inv_exp_map</span><span class="p">(</span><span class="n">psi_median</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">k</span><span class="p">])</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">psi_median</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">inner_product</span><span class="p">(</span><span class="n">psi_median</span><span class="p">,</span><span class="n">psi</span><span class="p">[:,</span><span class="n">k</span><span class="p">]))</span>
             <span class="n">vtil</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">dtil</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
