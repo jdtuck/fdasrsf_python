@@ -1,60 +1,406 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Elastic Regression &mdash; fdasrsf 1.2.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Elastic Regression &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.2.0 documentation" href="index.html" />
-    <link rel="next" title="SRVF Geodesic Computation" href="geodesic.html" />
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Elastic Principal Component Regression" href="pcr_regression.html" />
     <link rel="prev" title="Functional Principal Least Squares" href="fPLS.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="geodesic.html" title="SRVF Geodesic Computation"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pcr_regression.html" title="Elastic Principal Component Regression"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="elastic-regression">
-<h1>Elastic Regression<a class="headerlink" href="#elastic-regression" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul class="simple">
+  <div class="section" id="module-regression">
+<span id="elastic-regression"></span><h1>Elastic Regression<a class="headerlink" href="#module-regression" title="Permalink to this headline">¶</a></h1>
+<p>Warping Invariant Regression using SRSF</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="regression.elastic_logistic">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_logistic</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">y</em>, <em class="sig-param">time</em>, <em class="sig-param">B=None</em>, <em class="sig-param">df=20</em>, <em class="sig-param">max_itr=20</em>, <em class="sig-param">cores=-1</em>, <em class="sig-param">smooth=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_logistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a logistic regression model with
+phase-variablity using elastic methods</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of labels (1/-1)</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
 </ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>alpha parameter of model</p>
+</dd>
+<dt class="field-even">Return beta</dt>
+<dd class="field-even"><p>beta(t) of model</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of M</p>
+</dd>
+</dl>
+<p>functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return Loss: logistic loss</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.elastic_mlogistic">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_mlogistic</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">y</em>, <em class="sig-param">time</em>, <em class="sig-param">B=None</em>, <em class="sig-param">df=20</em>, <em class="sig-param">max_itr=20</em>, <em class="sig-param">cores=-1</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">parallel=True</em>, <em class="sig-param">smooth=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_mlogistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a multinomial logistic regression model with
+phase-variablity using elastic methods</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of labels {1,2,…,m} for m classes</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>alpha parameter of model</p>
+</dd>
+<dt class="field-even">Return beta</dt>
+<dd class="field-even"><p>beta(t) of model</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+</dd>
+</dl>
+<p>functions with M samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return Loss: logistic loss</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.elastic_prediction">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_prediction</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">model</em>, <em class="sig-param">y=None</em>, <em class="sig-param">smooth=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs prediction from an elastic regression model
+with phase-variablity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
+<li><p><strong>model</strong> – indentified model from elastic_regression</p></li>
+<li><p><strong>y</strong> – truth, optional used to calculate SSE</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>alpha parameter of model</p>
+</dd>
+<dt class="field-even">Return beta</dt>
+<dd class="field-even"><p>beta(t) of model</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+</dd>
+</dl>
+<p>functions with M samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return SSE: sum of squared error</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.elastic_regression">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_regression</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">y</em>, <em class="sig-param">time</em>, <em class="sig-param">B=None</em>, <em class="sig-param">lam=0</em>, <em class="sig-param">df=20</em>, <em class="sig-param">max_itr=20</em>, <em class="sig-param">cores=-1</em>, <em class="sig-param">smooth=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a regression model with phase-variablity
+using elastic methods</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of N responses</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>alpha parameter of model</p>
+</dd>
+<dt class="field-even">Return beta</dt>
+<dd class="field-even"><p>beta(t) of model</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of M</p>
+</dd>
+</dl>
+<p>functions with N samples
+:return qn: aligned srvfs - similar structure to fn
+:return gamma: calculated warping functions
+:return q: original training SRSFs
+:return B: basis matrix
+:return b: basis coefficients
+:return SSE: sum of squared error</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.logistic_warp">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logistic_warp</code><span class="sig-paren">(</span><em class="sig-param">beta</em>, <em class="sig-param">time</em>, <em class="sig-param">q</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logistic_warp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logistic_warp" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates optimal warping for function logistic regression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
+<li><p><strong>q</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) responses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return gamma</dt>
+<dd class="field-odd"><p>warping function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.logit_gradient">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logit_gradient</code><span class="sig-paren">(</span><em class="sig-param">b</em>, <em class="sig-param">X</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logit_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates gradient of the logistic loss</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>b</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>X</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) responses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return grad</dt>
+<dd class="field-odd"><p>gradient of logisitc loss</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.logit_hessian">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logit_hessian</code><span class="sig-paren">(</span><em class="sig-param">s</em>, <em class="sig-param">b</em>, <em class="sig-param">X</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_hessian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logit_hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates hessian of the logistic loss</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>b</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>X</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) responses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return out</dt>
+<dd class="field-odd"><p>hessian of logistic loss</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.logit_loss">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logit_loss</code><span class="sig-paren">(</span><em class="sig-param">b</em>, <em class="sig-param">X</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logit_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>logistic loss function, returns Sum{-log(phi(t))}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>b</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>X</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) of N responses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return out</dt>
+<dd class="field-odd"><p>loss value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.mlogit_gradient">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">mlogit_gradient</code><span class="sig-paren">(</span><em class="sig-param">b</em>, <em class="sig-param">X</em>, <em class="sig-param">Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.mlogit_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates gradient of the multinomial logistic loss</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>b</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>X</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) responses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return grad</dt>
+<dd class="field-odd"><p>gradient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.mlogit_loss">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">mlogit_loss</code><span class="sig-paren">(</span><em class="sig-param">b</em>, <em class="sig-param">X</em>, <em class="sig-param">Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.mlogit_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates multinomial logistic loss (negative log-likelihood)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>b</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>X</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) responses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return nll</dt>
+<dd class="field-odd"><p>negative log-likelihood</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.mlogit_warp_grad">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">mlogit_warp_grad</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">beta</em>, <em class="sig-param">time</em>, <em class="sig-param">q</em>, <em class="sig-param">y</em>, <em class="sig-param">max_itr=8000</em>, <em class="sig-param">tol=1e-10</em>, <em class="sig-param">delta=0.008</em>, <em class="sig-param">display=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_warp_grad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.mlogit_warp_grad" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates optimal warping for functional multinomial logistic regression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> – scalar</p></li>
+<li><p><strong>beta</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
+<li><p><strong>q</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) responses</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (Default=8000)</p></li>
+<li><p><strong>tol</strong> – stopping tolerance (Default=1e-10)</p></li>
+<li><p><strong>delta</strong> – gradient step size (Default=0.008)</p></li>
+<li><p><strong>display</strong> – display iterations (Default=0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return gam_old</dt>
+<dd class="field-odd"><p>warping function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.phi">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">phi</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates logistic function, returns 1 / (1 + exp(-t))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> – scalar</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return out</dt>
+<dd class="field-odd"><p>return value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="regression.regression_warp">
+<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">regression_warp</code><span class="sig-paren">(</span><em class="sig-param">beta</em>, <em class="sig-param">time</em>, <em class="sig-param">q</em>, <em class="sig-param">y</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#regression_warp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.regression_warp" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates optimal warping for function linear regression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta</strong> – numpy ndarray of shape (M,N) of M functions with N samples</p></li>
+<li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
+<li><p><strong>q</strong> – numpy ndarray of shape (M,N) of M functions with N samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) of M functions with N samples</p></li>
+</ul>
+</dd>
+</dl>
+<p>responses
+:param alpha: numpy scalar</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+<dt class="field-even">Return gamma_new</dt>
+<dd class="field-even"><p>warping function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
 </div>
 </div>
 
@@ -62,54 +408,56 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="fPLS.html"
                         title="previous chapter">Functional Principal Least Squares</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="geodesic.html"
-                        title="next chapter">SRVF Geodesic Computation</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/regression.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <p class="topless"><a href="pcr_regression.html"
+                        title="next chapter">Elastic Principal Component Regression</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/regression.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="geodesic.html" title="SRVF Geodesic Computation"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pcr_regression.html" title="Elastic Principal Component Regression"
              >next</a> |</li>
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

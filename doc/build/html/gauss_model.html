@@ -1,60 +1,119 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Gaussian Generative Models &mdash; fdasrsf 1.2.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Gaussian Generative Models &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.2.0 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Functional Principal Least Squares" href="fPLS.html" />
-    <link rel="prev" title="Functional Principal Component Analysis" href="fPCA.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="prev" title="Elastic Functional Boxplots" href="boxplots.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="fPCA.html" title="Functional Principal Component Analysis"
+          <a href="boxplots.html" title="Elastic Functional Boxplots"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="gaussian-generative-models">
-<h1>Gaussian Generative Models<a class="headerlink" href="#gaussian-generative-models" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul class="simple">
+  <div class="section" id="module-gauss_model">
+<span id="gaussian-generative-models"></span><h1>Gaussian Generative Models<a class="headerlink" href="#module-gauss_model" title="Permalink to this headline">¶</a></h1>
+<p>Gaussian Model of functional data</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="gauss_model.gauss_model">
+<code class="sig-prename descclassname">gauss_model.</code><code class="sig-name descname">gauss_model</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">time</em>, <em class="sig-param">qn</em>, <em class="sig-param">gam</em>, <em class="sig-param">n=1</em>, <em class="sig-param">sort_samples=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gauss_model.html#gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gauss_model.gauss_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function models the functional data using a Gaussian model
+extracted from the principal components of the srvfs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned functions with
+M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>qn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned srvfs with M samples</p></li>
+<li><p><strong>gam</strong> (<em>np.ndarray</em>) – warping functions</p></li>
+<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
+<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – sort samples (default = T)</p></li>
 </ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fs</dt>
+<dd class="field-odd"><p>random aligned samples</p>
+</dd>
+<dt class="field-even">Return gams</dt>
+<dd class="field-even"><p>random warping functions</p>
+</dd>
+<dt class="field-odd">Return ft</dt>
+<dd class="field-odd"><p>random samples</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gauss_model.joint_gauss_model">
+<code class="sig-prename descclassname">gauss_model.</code><code class="sig-name descname">joint_gauss_model</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">time</em>, <em class="sig-param">qn</em>, <em class="sig-param">gam</em>, <em class="sig-param">q0</em>, <em class="sig-param">n=1</em>, <em class="sig-param">no=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gauss_model.html#joint_gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gauss_model.joint_gauss_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function models the functional data using a joint Gaussian model
+extracted from the principal components of the srsfs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned functions with
+M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>qn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned srsfs with M samples</p></li>
+<li><p><strong>gam</strong> (<em>np.ndarray</em>) – warping functions</p></li>
+<li><p><strong>q0</strong> – numpy ndarray of shape (M,N) of N unaligned srsfs with  samples</p></li>
+<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
+<li><p><strong>n</strong> – number of principal components (default = 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fs</dt>
+<dd class="field-odd"><p>random aligned samples</p>
+</dd>
+<dt class="field-even">Return gams</dt>
+<dd class="field-even"><p>random warping functions</p>
+</dd>
+<dt class="field-odd">Return ft</dt>
+<dd class="field-odd"><p>random samples</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
 </div>
 </div>
 
@@ -62,54 +121,56 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="fPCA.html"
-                        title="previous chapter">Functional Principal Component Analysis</a></p>
+  <p class="topless"><a href="boxplots.html"
+                        title="previous chapter">Elastic Functional Boxplots</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fPLS.html"
                         title="next chapter">Functional Principal Least Squares</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/gauss_model.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/gauss_model.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              >next</a> |</li>
         <li class="right" >
-          <a href="fPCA.html" title="Functional Principal Component Analysis"
+          <a href="boxplots.html" title="Elastic Functional Boxplots"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

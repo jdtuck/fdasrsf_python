@@ -47,6 +47,7 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20,
     :return SSE: sum of squared error
 
     """
+    
     M = f.shape[0]
     N = f.shape[1]
 

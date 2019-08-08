@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>tolerance &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tolerance</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functional Tolerance Bounds using SRSF</span>
+
+<span class="sd">moduleauthor:: Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">fdasrsf</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
+<span class="kn">import</span> <span class="nn">fdasrsf.fPCA</span> <span class="k">as</span> <span class="nn">fpca</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">chi2</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">eig</span>
+<span class="kn">from</span> <span class="nn">fdasrsf.gauss_model</span> <span class="k">import</span> <span class="n">joint_gauss_model</span>
+<span class="kn">from</span> <span class="nn">fdasrsf.boxplots</span> <span class="k">import</span> <span class="n">ampbox</span><span class="p">,</span> <span class="n">phbox</span>
+
+
+<div class="viewcode-block" id="bootTB"><a class="viewcode-back" href="../tolerance.html#tolerance.bootTB">[docs]</a><span class="k">def</span> <span class="nf">bootTB</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">p</span><span class="o">=.</span><span class="mi">99</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function computes tolerance bounds for functional data containing</span>
+<span class="sd">    phase and amplitude variation using bootstrap sampling</span>
+
+<span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
+<span class="sd">    :param time: vector of size M describing the sample points</span>
+<span class="sd">    :param a: confidence level of tolerance bound (default = 0.05)</span>
+<span class="sd">    :param p: coverage level of tolerance bound (default = 0.99)</span>
+<span class="sd">    :param B: number of bootstrap samples (default = 500)</span>
+<span class="sd">    :param no: number of principal components (default = 5)</span>
+<span class="sd">    :param parallel: enable parallel processing (default = T)</span>
+<span class="sd">    :type f: np.ndarray</span>
+<span class="sd">    :type time: np.ndarray</span>
+
+<span class="sd">    :rtype: tuple of boxplot objects</span>
+<span class="sd">    :return amp: amplitude tolerance bounds</span>
+<span class="sd">    :return ph: phase tolerance bounds</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># Align Data</span>
+    <span class="n">out_med</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">)</span>
+
+    <span class="c1"># Calculate CI</span>
+    <span class="c1"># a% tolerance bound with p%</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">out_med</span><span class="o">.</span><span class="n">fn</span>
+    <span class="n">qn</span> <span class="o">=</span> <span class="n">out_med</span><span class="o">.</span><span class="n">qn</span>
+    <span class="n">gam</span> <span class="o">=</span> <span class="n">out_med</span><span class="o">.</span><span class="n">gam</span>
+    <span class="n">q0</span> <span class="o">=</span> <span class="n">out_med</span><span class="o">.</span><span class="n">q0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Bootstrap Sampling&quot;</span><span class="p">)</span>
+    <span class="n">bootlwr_amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+    <span class="n">bootupr_amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+    <span class="n">bootlwr_ph</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+    <span class="n">bootupr_ph</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">joint_gauss_model</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">gam</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="n">no</span><span class="p">)</span>
+        <span class="n">obja</span> <span class="o">=</span> <span class="n">ampbox</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">ft</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">fmean</span> <span class="p">,</span> <span class="n">samples</span><span class="o">.</span><span class="n">qs</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">mqn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">objp</span> <span class="o">=</span> <span class="n">phbox</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">gams</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">bootlwr_amp</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">obja</span><span class="o">.</span><span class="n">Q1a</span>
+        <span class="n">bootupr_amp</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">obja</span><span class="o">.</span><span class="n">Q3a</span>
+        <span class="n">bootlwr_ph</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">objp</span><span class="o">.</span><span class="n">Q1a</span>
+        <span class="n">bootupr_ph</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">objp</span><span class="o">.</span><span class="n">Q3a</span>
+    
+    <span class="c1"># tolerance bounds</span>
+    <span class="n">boot_amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">bootlwr_amp</span><span class="p">,</span> <span class="n">bootupr_amp</span><span class="p">))</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">gradient_spline</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">boot_amp</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">boot_amp_q</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">boot_ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">bootlwr_ph</span><span class="p">,</span><span class="n">bootupr_ph</span><span class="p">))</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">ampbox</span><span class="p">(</span><span class="n">boot_amp</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">fmean</span> <span class="p">,</span> <span class="n">boot_amp_q</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">mqn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ph</span> <span class="o">=</span> <span class="n">phbox</span><span class="p">(</span><span class="n">boot_ph</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">amp</span><span class="p">,</span> <span class="n">ph</span></div>
+
+
+<div class="viewcode-block" id="pcaTB"><a class="viewcode-back" href="../tolerance.html#tolerance.pcaTB">[docs]</a><span class="k">def</span> <span class="nf">pcaTB</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">p</span><span class="o">=.</span><span class="mi">99</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function computes tolerance bounds for functional data containing</span>
+<span class="sd">    phase and amplitude variation using fPCA</span>
+
+<span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
+<span class="sd">    :param time: vector of size M describing the sample points</span>
+<span class="sd">    :param a: confidence level of tolerance bound (default = 0.05)</span>
+<span class="sd">    :param p: coverage level of tolerance bound (default = 0.99)</span>
+<span class="sd">    :param no: number of principal components (default = 5)</span>
+<span class="sd">    :param parallel: enable parallel processing (default = T)</span>
+<span class="sd">    :type f: np.ndarray</span>
+<span class="sd">    :type time: np.ndarray</span>
+
+<span class="sd">    :rtype: tuple of boxplot objects</span>
+<span class="sd">    :return warp: alignment data from time_warping</span>
+<span class="sd">    :return pca: functional pca from jointFPCA</span>
+<span class="sd">    :return tol: tolerance factor</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Align Data</span>
+    <span class="n">warp</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">)</span>
+
+    <span class="c1"># Calculate pca</span>
+    <span class="n">pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">jointfPCA</span><span class="p">(</span><span class="n">warp</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">warp</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">warp</span><span class="o">.</span><span class="n">q0</span><span class="p">,</span> <span class="n">warp</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Calculate TB</span>
+    <span class="n">tol</span> <span class="o">=</span> <span class="n">mvtol_region</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">coef</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">warp</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">tol</span></div>
+
+
+<div class="viewcode-block" id="mvtol_region"><a class="viewcode-back" href="../tolerance.html#tolerance.mvtol_region">[docs]</a><span class="k">def</span> <span class="nf">mvtol_region</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes tolerance factor for multivariate normal</span>
+
+<span class="sd">    Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal</span>
+<span class="sd">    Distributions, Communications in Statistics - Simulation and Computation, 35, 461–478.</span>
+<span class="sd">    </span>
+<span class="sd">    :param x: (M,N) matrix defining N variables of M samples</span>
+<span class="sd">    :param alpha: confidence level</span>
+<span class="sd">    :param P: coverage level</span>
+<span class="sd">    :param B: number of bootstrap samples</span>
+
+<span class="sd">    :rtype: double</span>
+<span class="sd">    :return tol: tolerance factor</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span><span class="p">,</span><span class="n">p</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">q_squared</span> <span class="o">=</span> <span class="n">chi2</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">B</span><span class="p">))</span><span class="o">/</span><span class="n">n</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">p</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+        <span class="n">L</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">rwishart</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">p</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="n">c1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q_squared</span><span class="p">)</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">q_squared</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">c3</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">q_squared</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">c3</span> <span class="o">=</span> <span class="n">c3</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">c2</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">c3</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">c2</span><span class="o">/</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi2</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">c1</span><span class="p">)</span>
+    <span class="n">tol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tol</span></div>
+
+
+<div class="viewcode-block" id="rwishart"><a class="viewcode-back" href="../tolerance.html#tolerance.rwishart">[docs]</a><span class="k">def</span> <span class="nf">rwishart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a random wishart matrix</span>
+<span class="sd">    </span>
+<span class="sd">    :param df: degree of freedom</span>
+<span class="sd">    :param p: number of dimensions</span>
+
+<span class="sd">    :rtype: double</span>
+<span class="sd">    :return R: matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">R</span><span class="p">[::</span><span class="n">p</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">chi2</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">df</span><span class="o">-</span><span class="n">p</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">size</span><span class="o">=</span><span class="n">p</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">p</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">pseq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">R</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="n">pseq</span><span class="p">,</span><span class="n">pseq</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">R</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">R</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 1.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

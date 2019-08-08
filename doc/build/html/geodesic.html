@@ -1,111 +1,417 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>SRVF Geodesic Computation &mdash; fdasrsf 1.2.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>SRVF Geodesic Computation &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.2.0 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Utility Functions" href="utility_functions.html" />
-    <link rel="prev" title="Elastic Regression" href="regression.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="prev" title="Elastic Functional Tolerance Bounds" href="tolerance.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="regression.html" title="Elastic Regression"
+          <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="srvf-geodesic-computation">
-<h1>SRVF Geodesic Computation<a class="headerlink" href="#srvf-geodesic-computation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-geodesic">
+<span id="srvf-geodesic-computation"></span><h1>SRVF Geodesic Computation<a class="headerlink" href="#module-geodesic" title="Permalink to this headline">¶</a></h1>
+<p>geodesic calculation for SRVF (curves) open and closed)</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="geodesic.back_parallel_transport">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">back_parallel_transport</code><span class="sig-paren">(</span><em class="sig-param">u1</em>, <em class="sig-param">alpha</em>, <em class="sig-param">basis</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#back_parallel_transport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.back_parallel_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>backwards parallel translates q1 and q2 along manifold</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>basis</strong> – list numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return utilde</dt>
+<dd class="field-odd"><p>translated vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.calc_alphadot">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calc_alphadot</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">basis</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calc_alphadot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calc_alphadot" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates derivative along the path alpha</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>basis</strong> – list of numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return alphadot</dt>
+<dd class="field-odd"><p>derivative of alpha</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.calculate_energy">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calculate_energy</code><span class="sig-paren">(</span><em class="sig-param">alphadot</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calculate_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates energy along path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alphadot</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy scalar</p>
+</dd>
+<dt class="field-odd">Return E</dt>
+<dd class="field-odd"><p>energy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.calculate_gradE">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calculate_gradE</code><span class="sig-paren">(</span><em class="sig-param">u</em>, <em class="sig-param">utilde</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_gradE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calculate_gradE" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates gradient of energy along path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>utilde</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy scalar</p>
+</dd>
+<dt class="field-odd">Return gradE</dt>
+<dd class="field-odd"><p>gradient of energy</p>
+</dd>
+<dt class="field-even">Return normgradE</dt>
+<dd class="field-even"><p>norm of gradient of energy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.cov_integral">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">cov_integral</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">alphadot</em>, <em class="sig-param">basis</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#cov_integral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.cov_integral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates covariance along path alpha</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
+<li><p><strong>alphadot</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>basis</strong> – list numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return u</dt>
+<dd class="field-odd"><p>covariance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.find_basis_normal_path">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">find_basis_normal_path</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#find_basis_normal_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.find_basis_normal_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>computes orthonormalized basis vectors to the normal space at each of the
+k points (q-functions) of the path alpha</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples (path)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return basis</dt>
+<dd class="field-odd"><p>basis vectors along the path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.geod_dist_path_strt">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">geod_dist_path_strt</code><span class="sig-paren">(</span><em class="sig-param">beta</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_dist_path_strt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.geod_dist_path_strt" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate geodisc distance for path straightening</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy scalar</p>
+</dd>
+<dt class="field-odd">Return dist</dt>
+<dd class="field-odd"><p>geodesic distance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.geod_sphere">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">geod_sphere</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.geod_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function caluclates the geodecis between open curves beta1 and
+beta2 with k steps along path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return dist</dt>
+<dd class="field-odd"><p>geodesic distance</p>
+</dd>
+<dt class="field-even">Return path</dt>
+<dd class="field-even"><p>geodesic path</p>
+</dd>
+<dt class="field-odd">Return O</dt>
+<dd class="field-odd"><p>rotation matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.init_path_geod">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">init_path_geod</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_geod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.init_path_geod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a path in cal{C}. beta1, beta2 are already
+standardized curves. Creates a path from beta1 to beta2 in
+shape space, then projects to the closed shape manifold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
+<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples (end curve)</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>a path between two q-functions</p>
+</dd>
+<dt class="field-even">Return beta</dt>
+<dd class="field-even"><p>a path between two curves</p>
+</dd>
+<dt class="field-odd">Return O</dt>
+<dd class="field-odd"><p>rotation matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.init_path_rand">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">init_path_rand</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta_mid</em>, <em class="sig-param">beta2</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_rand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.init_path_rand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a path in cal{C}. beta1, beta_mid beta2 are already
+standardized curves. Creates a path from beta1 to beta_mid to beta2 in
+shape space, then projects to the closed shape manifold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
+<li><p><strong>betamid</strong> – numpy ndarray of shape (2,M) of M samples (mid curve)</p></li>
+<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples (end curve)</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>a path between two q-functions</p>
+</dd>
+<dt class="field-even">Return beta</dt>
+<dd class="field-even"><p>a path between two curves</p>
+</dd>
+<dt class="field-odd">Return O</dt>
+<dd class="field-odd"><p>rotation matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.path_straightening">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">path_straightening</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em>, <em class="sig-param">betamid</em>, <em class="sig-param">init='rand'</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#path_straightening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.path_straightening" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform path straigtening to find geodesic between two shapes in either
+the space of closed curves or the space of affine standardized curves.
+This algorithm follows the steps outlined in section 4.6 of the
+manuscript.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
+<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples (end curve)</p></li>
+<li><p><strong>betamid</strong> – numpy ndarray of shape (2,M) of M samples (mid curve
+Default = NULL, only needed for init “rand”)</p></li>
+<li><p><strong>init</strong> – initilizae path geodesic or random (Default = “rand”)</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return dist</dt>
+<dd class="field-odd"><p>geodesic distance</p>
+</dd>
+<dt class="field-even">Return path</dt>
+<dd class="field-even"><p>geodesic path</p>
+</dd>
+<dt class="field-odd">Return pathsqnc</dt>
+<dd class="field-odd"><p>geodesic path sequence</p>
+</dd>
+<dt class="field-even">Return E</dt>
+<dd class="field-even"><p>energy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="geodesic.update_path">
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">update_path</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">beta</em>, <em class="sig-param">gradE</em>, <em class="sig-param">delta</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#update_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.update_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the path along the direction -gradE</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>gradE</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>delta</strong> – gradient paramenter</p></li>
+<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
+<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy scalar</p>
+</dd>
+<dt class="field-odd">Return alpha</dt>
+<dd class="field-odd"><p>updated path of srvfs</p>
+</dd>
+<dt class="field-even">Return beta</dt>
+<dd class="field-even"><p>updated path of curves</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="regression.html"
-                        title="previous chapter">Elastic Regression</a></p>
+  <p class="topless"><a href="tolerance.html"
+                        title="previous chapter">Elastic Functional Tolerance Bounds</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="utility_functions.html"
                         title="next chapter">Utility Functions</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/geodesic.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/geodesic.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              >next</a> |</li>
         <li class="right" >
-          <a href="regression.html" title="Elastic Regression"
+          <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

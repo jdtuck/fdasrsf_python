@@ -1,101 +1,632 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Curve Functions &mdash; fdasrsf 1.2.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Curve Functions &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.2.0 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Utility Functions" href="utility_functions.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="curve-functions">
-<h1>Curve Functions<a class="headerlink" href="#curve-functions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-curve_functions">
+<span id="curve-functions"></span><h1>Curve Functions<a class="headerlink" href="#module-curve_functions" title="Permalink to this headline">¶</a></h1>
+<p>functions for SRVF curve manipulations</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="curve_functions.calc_j">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calc_j</code><span class="sig-paren">(</span><em class="sig-param">basis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calc_j"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calc_j" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates Jacobian matrix from normal basis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>basis</strong> – list of numpy ndarray of shape (2,M) of M samples basis</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return j</dt>
+<dd class="field-odd"><p>Jacobian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.calculate_variance">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calculate_variance</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calculate_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calculate_variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates variance of curve beta</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return variance</dt>
+<dd class="field-odd"><p>variance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.calculatecentroid">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calculatecentroid</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calculatecentroid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calculatecentroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates centroid of a parameterized curve</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return centroid</dt>
+<dd class="field-odd"><p>center coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.curve_to_q">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_to_q</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_to_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_to_q" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function converts curve beta to srvf q</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return q</dt>
+<dd class="field-odd"><p>srvf of curve</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.curve_zero_crossing">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_zero_crossing</code><span class="sig-paren">(</span><em class="sig-param">Y</em>, <em class="sig-param">beta</em>, <em class="sig-param">bt</em>, <em class="sig-param">y_max</em>, <em class="sig-param">y_min</em>, <em class="sig-param">gmax</em>, <em class="sig-param">gmin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_zero_crossing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_zero_crossing" title="Permalink to this definition">¶</a></dt>
+<dd><p>finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+from elastic curve regression model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Y</strong> – response</p></li>
+<li><p><strong>beta</strong> – predicitve function</p></li>
+<li><p><strong>bt</strong> – basis function</p></li>
+<li><p><strong>y_max</strong> – maximum repsonse for warping function gmax</p></li>
+<li><p><strong>y_min</strong> – minimum response for warping function gmin</p></li>
+<li><p><strong>gmax</strong> – max warping function</p></li>
+<li><p><strong>gmin</strong> – min warping fucntion</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Return gamma</dt>
+<dd class="field-odd"><p>optimal warping function</p>
+</dd>
+<dt class="field-even">Return O_hat</dt>
+<dd class="field-even"><p>rotation matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.find_basis_normal">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_basis_normal</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_basis_normal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_basis_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the basis normal to the srvf</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return basis</dt>
+<dd class="field-odd"><p>list containing basis vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.find_best_rotation">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_best_rotation</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_best_rotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_best_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the best rotation between two srvfs using
+procustes rigid alignment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>q2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return q2new</dt>
+<dd class="field-odd"><p>optimal rotated q2 to q1</p>
+</dd>
+<dt class="field-even">Return R</dt>
+<dd class="field-even"><p>rotation matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.find_rotation_and_seed_coord">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_rotation_and_seed_coord</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_coord" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a candidate list of optimally oriented and
+registered (seed) shapes w.r.t. beta1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return beta2new</dt>
+<dd class="field-odd"><p>optimal rotated beta2 to beta1</p>
+</dd>
+<dt class="field-even">Return O</dt>
+<dd class="field-even"><p>rotation matrix</p>
+</dd>
+<dt class="field-odd">Return tau</dt>
+<dd class="field-odd"><p>seed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.find_rotation_and_seed_q">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_rotation_and_seed_q</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_q" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a candidate list of optimally oriented and
+registered (seed) shapes w.r.t. beta1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>q2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return beta2new</dt>
+<dd class="field-odd"><p>optimal rotated beta2 to beta1</p>
+</dd>
+<dt class="field-even">Return O</dt>
+<dd class="field-even"><p>rotation matrix</p>
+</dd>
+<dt class="field-odd">Return tau</dt>
+<dd class="field-odd"><p>seed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.gram_schmidt">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">gram_schmidt</code><span class="sig-paren">(</span><em class="sig-param">basis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#gram_schmidt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.gram_schmidt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs Gram Schmidt Orthogonlization of a basis_o</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param basis</dt>
+<dd class="field-odd"><p>list of numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>list of numpy ndarray</p>
+</dd>
+<dt class="field-odd">return basis_o</dt>
+<dd class="field-odd"><p>orthogonlized basis</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.group_action_by_gamma">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">group_action_by_gamma</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">gamma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#group_action_by_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.group_action_by_gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function reparamerized srvf q by gamma</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>gamma</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return qn</dt>
+<dd class="field-odd"><p>reparatermized srvf</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.group_action_by_gamma_coord">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">group_action_by_gamma_coord</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">gamma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#group_action_by_gamma_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.group_action_by_gamma_coord" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function reparamerized curve f by gamma</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>gamma</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>reparatermized curve</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.innerprod_q2">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">innerprod_q2</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#innerprod_q2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.innerprod_q2" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the inner product in srvf space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>q2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return val</dt>
+<dd class="field-odd"><p>inner product</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.inverse_exp">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">inverse_exp</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em>, <em class="sig-param">beta2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#inverse_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.inverse_exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the inverse exponential to obtain a shooting vector from
+q1 to q2 in shape space of open curves</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>q2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return v</dt>
+<dd class="field-odd"><p>shooting vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.inverse_exp_coord">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">inverse_exp_coord</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#inverse_exp_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.inverse_exp_coord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the inverse exponential to obtain a shooting vector from
+beta1 to beta2 in shape space of open curves</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return v</dt>
+<dd class="field-odd"><p>shooting vectors</p>
+</dd>
+<dt class="field-even">Return dist</dt>
+<dd class="field-even"><p>distance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.optimum_reparam_curve">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">optimum_reparam_curve</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#optimum_reparam_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.optimum_reparam_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the warping to align srsf q2 to q1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q1</strong> – matrix of size nxN or array of NxM samples of first SRVF</p></li>
+<li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
+<li><p><strong>q2</strong> – matrix of size nxN or array of NxM samples samples of second SRVF</p></li>
+<li><p><strong>lam</strong> – controls the amount of elasticity (default = 0.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>vector</p>
+</dd>
+<dt class="field-odd">Return gam</dt>
+<dd class="field-odd"><p>describing the warping function used to align q2 with q1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.parallel_translate">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">parallel_translate</code><span class="sig-paren">(</span><em class="sig-param">w</em>, <em class="sig-param">q1</em>, <em class="sig-param">q2</em>, <em class="sig-param">basis</em>, <em class="sig-param">mode=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#parallel_translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.parallel_translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>parallel translates q1 and q2 along manifold</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>w</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>q2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>basis</strong> – list of numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>mode</strong> – open 0 or closed curves 1 (default 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return wbar</dt>
+<dd class="field-odd"><p>translated vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.pre_proc_curve">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">pre_proc_curve</code><span class="sig-paren">(</span><em class="sig-param">beta</em>, <em class="sig-param">T=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#pre_proc_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.pre_proc_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function prepcoessed a curve beta to set of closed curves</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>T</strong> – number of samples (default = 100)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return betanew</dt>
+<dd class="field-odd"><p>projected beta</p>
+</dd>
+<dt class="field-even">Return qnew</dt>
+<dd class="field-even"><p>projected srvf</p>
+</dd>
+<dt class="field-odd">Return A</dt>
+<dd class="field-odd"><p>alignment matrix (not used currently)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.project_curve">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">project_curve</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#project_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.project_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function projects srvf q to set of close curves</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> – numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return qproj</dt>
+<dd class="field-odd"><p>project srvf</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.project_tangent">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">project_tangent</code><span class="sig-paren">(</span><em class="sig-param">w</em>, <em class="sig-param">q</em>, <em class="sig-param">basis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#project_tangent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.project_tangent" title="Permalink to this definition">¶</a></dt>
+<dd><p>projects srvf to tangent space w using basis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>w</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>q</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>basis</strong> – list of numpy ndarray of shape (2,M) of M samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return wproj</dt>
+<dd class="field-odd"><p>projected q</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.psi">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">psi</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">a</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#psi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.psi" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function formats variance output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – numpy ndarray of shape (2,M) of M samples curve</p></li>
+<li><p><strong>a</strong> – numpy ndarray of shape (2,1) mean</p></li>
+<li><p><strong>q</strong> – numpy ndarray of shape (2,M) of M samples srvf</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return psi1</dt>
+<dd class="field-odd"><p>variance</p>
+</dd>
+<dt class="field-even">Return psi2</dt>
+<dd class="field-even"><p>cross variance</p>
+</dd>
+<dt class="field-odd">Return psi3</dt>
+<dd class="field-odd"><p>curve end</p>
+</dd>
+<dt class="field-even">Return psi4</dt>
+<dd class="field-even"><p>curve end</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.q_to_curve">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">q_to_curve</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#q_to_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.q_to_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function converts srvf to beta</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> – numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return beta</dt>
+<dd class="field-odd"><p>parameterized curve</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.resamplecurve">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">resamplecurve</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">N=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#resamplecurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.resamplecurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function resamples a curve to have N samples</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>N</strong> – Number of samples for new curve (default = 100)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return xn</dt>
+<dd class="field-odd"><p>resampled curve</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.scale_curve">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">scale_curve</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#scale_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.scale_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>scales curve to length 1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return beta_scaled</dt>
+<dd class="field-odd"><p>scaled curve</p>
+</dd>
+<dt class="field-even">Return scale</dt>
+<dd class="field-even"><p>scale factor used</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="curve_functions.shift_f">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">shift_f</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">tau</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#shift_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.shift_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>shifts a curve f by tau</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>tau</strong> – scalar</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>shifted curve</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="utility_functions.html"
                         title="previous chapter">Utility Functions</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/curve_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/curve_functions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

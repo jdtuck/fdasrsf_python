@@ -1,60 +1,265 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Functional Alignment &mdash; fdasrsf 1.2.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Functional Alignment &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.2.0 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Functional Principal Component Analysis" href="fPCA.html" />
     <link rel="prev" title="Welcome to fdasrsf’s documentation!" href="index.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="fPCA.html" title="Functional Principal Component Analysis"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="functional-alignment">
-<h1>Functional Alignment<a class="headerlink" href="#functional-alignment" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul class="simple">
+  <div class="section" id="module-time_warping">
+<span id="functional-alignment"></span><h1>Functional Alignment<a class="headerlink" href="#module-time_warping" title="Permalink to this headline">¶</a></h1>
+<p>Group-wise function alignment using SRSF framework and Dynamic Programming</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="time_warping.align_fPCA">
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">align_fPCA</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">num_comp=3</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.align_fPCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>aligns a collection of functions while extracting principal components.
+The functions are aligned to the principal components</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>num_comp</strong> – number of fPCA components</p></li>
+<li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>sparam</strong> (<em>double</em>) – Number of times to run box filter (default = 25)</p></li>
 </ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples</p>
+</dd>
+<dt class="field-even">Return qn</dt>
+<dd class="field-even"><p>aligned srvfs - similar structure to fn</p>
+</dd>
+<dt class="field-odd">Return q0</dt>
+<dd class="field-odd"><p>original srvf - similar structure to fn</p>
+</dd>
+<dt class="field-even">Return mqn</dt>
+<dd class="field-even"><p>srvf mean or median - vector of length M</p>
+</dd>
+<dt class="field-odd">Return gam</dt>
+<dd class="field-odd"><p>warping functions - similar structure to fn</p>
+</dd>
+<dt class="field-even">Return q_pca</dt>
+<dd class="field-even"><p>srsf principal directions</p>
+</dd>
+<dt class="field-odd">Return f_pca</dt>
+<dd class="field-odd"><p>functional principal directions</p>
+</dd>
+<dt class="field-even">Return latent</dt>
+<dd class="field-even"><p>latent values</p>
+</dd>
+<dt class="field-odd">Return coef</dt>
+<dd class="field-odd"><p>coefficients</p>
+</dd>
+<dt class="field-even">Return U</dt>
+<dd class="field-even"><p>eigenvectors</p>
+</dd>
+<dt class="field-odd">Return orig_var</dt>
+<dd class="field-odd"><p>Original Variance of Functions</p>
+</dd>
+<dt class="field-even">Return amp_var</dt>
+<dd class="field-even"><p>Amplitude Variance</p>
+</dd>
+<dt class="field-odd">Return phase_var</dt>
+<dd class="field-odd"><p>Phase Variance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="time_warping.align_fPLS">
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">align_fPLS</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">g</em>, <em class="sig-param">time</em>, <em class="sig-param">comps=3</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">max_itr=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.align_fPLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function aligns a collection of functions while performing
+principal least squares</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>g</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>comps</strong> – number of fPLS components</p></li>
+<li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>delta</strong> – gradient step size</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+</dd>
+</dl>
+<p>functions with M samples
+:return gn: aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples
+:return qfn: aligned srvfs - similar structure to fn
+:return qgn: aligned srvfs - similar structure to fn
+:return qf0: original srvf - similar structure to fn
+:return qg0: original srvf - similar structure to fn
+:return gam: warping functions - similar structure to fn
+:return wqf: srsf principal weight functions
+:return wqg: srsf principal weight functions
+:return wf: srsf principal weight functions
+:return wg: srsf principal weight functions
+:return cost: cost function value</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="time_warping.srsf_align">
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">srsf_align</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">method='mean'</em>, <em class="sig-param">omethod='DP'</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">parallel=False</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#srsf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.srsf_align" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function aligns a collection of functions using the elastic
+square-root slope (srsf) framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
+<li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median</p></li>
+</ul>
+</dd>
+</dl>
+<p>(options = “mean” or “median”) (default=”mean”)
+:param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+:param showplot: Shows plots of results using matplotlib (default = T)
+:param smoothdata: Smooth the data using a box filter (default = F)
+:param parallel: run in parallel (default = F)
+:param lam: controls the elasticity (default = 0)
+:type lam: double
+:type smoothdata: bool
+:type f: np.ndarray
+:type time: np.ndarray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-even">Return fn</dt>
+<dd class="field-even"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+</dd>
+</dl>
+<p>functions with M samples
+:return qn: aligned srvfs - similar structure to fn
+:return q0: original srvf - similar structure to fn
+:return fmean: function mean or median - vector of length M
+:return mqn: srvf mean or median - vector of length M
+:return gam: warping functions - similar structure to fn
+:return orig_var: Original Variance of Functions
+:return amp_var: Amplitude Variance
+:return phase_var: Phase Variance</p>
+<p>Examples
+&gt;&gt;&gt; import tables
+&gt;&gt;&gt; fun=tables.open_file(“../Data/simu_data.h5”)
+&gt;&gt;&gt; f = fun.root.f[:]
+&gt;&gt;&gt; f = f.transpose()
+&gt;&gt;&gt; time = fun.root.time[:]
+&gt;&gt;&gt; out = srsf_align(f,time)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="time_warping.srsf_align_pair">
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">srsf_align_pair</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">g</em>, <em class="sig-param">time</em>, <em class="sig-param">method='mean'</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#srsf_align_pair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.srsf_align_pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function aligns a collection of functions using the elastic square-
+root slope (srsf) framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>g</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median (options =
+“mean” or “median”) (default=”mean”)</p></li>
+<li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples</p>
+</dd>
+<dt class="field-even">Return gn</dt>
+<dd class="field-even"><p>aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples</p>
+</dd>
+<dt class="field-odd">Return qfn</dt>
+<dd class="field-odd"><p>aligned srvfs - similar structure to fn</p>
+</dd>
+<dt class="field-even">Return qgn</dt>
+<dd class="field-even"><p>aligned srvfs - similar structure to fn</p>
+</dd>
+<dt class="field-odd">Return qf0</dt>
+<dd class="field-odd"><p>original srvf - similar structure to fn</p>
+</dd>
+<dt class="field-even">Return qg0</dt>
+<dd class="field-even"><p>original srvf - similar structure to fn</p>
+</dd>
+<dt class="field-odd">Return fmean</dt>
+<dd class="field-odd"><p>f function mean or median - vector of length N</p>
+</dd>
+<dt class="field-even">Return gmean</dt>
+<dd class="field-even"><p>g function mean or median - vector of length N</p>
+</dd>
+<dt class="field-odd">Return mqfn</dt>
+<dd class="field-odd"><p>srvf mean or median - vector of length N</p>
+</dd>
+<dt class="field-even">Return mqgn</dt>
+<dd class="field-even"><p>srvf mean or median - vector of length N</p>
+</dd>
+<dt class="field-odd">Return gam</dt>
+<dd class="field-odd"><p>warping functions - similar structure to fn</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
 </div>
 </div>
 
@@ -62,54 +267,56 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to fdasrsf&#8217;s documentation!</a></p>
+                        title="previous chapter">Welcome to fdasrsf’s documentation!</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fPCA.html"
                         title="next chapter">Functional Principal Component Analysis</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/time_warping.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/time_warping.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="fPCA.html" title="Functional Principal Component Analysis"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

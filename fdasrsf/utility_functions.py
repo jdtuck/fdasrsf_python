@@ -397,6 +397,66 @@ def SqrtMean(gam):
     return mu, gam_mu, psi, vec
 
 
+def SqrtMedian(gam):
+    """
+    calculates the median srsf of warping functions with corresponding shooting vectors
+
+    :param gam: numpy ndarray of shape (M,N) of M warping functions
+                with N samples
+
+    :rtype: 2 numpy ndarray and vector
+    :return gam_median: Karcher median warping function
+    :return psi_meidan: vector of dim N which is the Karcher median srsf function
+    :return psi: numpy ndarray of shape (M,N) of M SRSF of the warping functions
+    :return vec: numpy ndarray of shape (M,N) of M shooting vectors
+
+    """
+
+    (T,n) = gam.shape
+    time = linspace(0,1,T)
+
+    # Initialization
+    psi_median = ones(T)
+    r = 1
+    stp = 0.3
+    maxiter = 501
+    vbar_norm = zeros(maxiter+1)
+
+    # compute psi function
+    binsize = mean(diff(time))
+    psi = zeros((T, n))
+    v = zeros((T,n))
+    vtil = zeros((T,n))
+    d = zeros(n)
+    dtil = zeros(n)
+    for k in range(0, n):
+        psi[:, k] = sqrt(gradient(gam[:, k],binsize))
+        v[:,k], d[k] = geo.inv_exp_map(psi_median,psi[:,k])
+        vtil[:,k] = v[:,k]/d[k]
+        dtil[k] = 1/d[k]
+
+    vbar = vtil.sum(axis=1)*dtil.sum()**(-1)
+    vbar_norm[r] = geo.L2norm(vbar)
+
+    # compute phase median by iterative algorithm
+    while (vbar_norm[r] > 0.00000001) and (r<maxiter):
+        psi_median = geo.exp_map(psi_median, stp*vbar)
+        r += 1
+        for k in range(0,n):
+            v[:,k], tmp = geo.inv_exp_map(psi_median,psi[:,k])
+            d[k] = arccos(geo.inner_product(psi_median,psi[:,k]))
+            vtil[:,k] = v[:,k]/d[k]
+            dtil[k] = 1/d[k]
+
+        vbar = vtil.sum(axis=1)*dtil.sum()**(-1)
+        vbar_norm[r] = geo.L2norm(vbar)
+    
+    vec = v
+    gam_median = cumtrapz(psi_median**2,time,initial=0.0)
+
+    return gam_median, psi_median, psi, vec
+
+
 def cumtrapzmid(x, y, c, mid):
     """
     cumulative trapezoidal numerical integration taken from midpoint

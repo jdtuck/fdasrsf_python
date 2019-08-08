@@ -18,6 +18,7 @@ fdasrsf/plot_style.py
 fdasrsf/regression.py
 fdasrsf/time_warping.py
 fdasrsf/utility_functions.py
+src/.DS_Store
 src/DP.c
 src/DP.h
 src/DynamicProgrammingQ2.c

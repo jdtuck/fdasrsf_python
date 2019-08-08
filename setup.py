@@ -92,7 +92,7 @@ setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='1.4.5',
+    version='1.5.0',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
@@ -101,7 +101,7 @@ setup(
     scripts=['bin/ex_srsf_align.py'],
     keywords=['functional data analysis'],
     description='functional data analysis using the square root slope framework',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
     requires=[
         "Cython",

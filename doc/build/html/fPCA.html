@@ -1,111 +1,217 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Functional Principal Component Analysis &mdash; fdasrsf 1.2.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Functional Principal Component Analysis &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="fdasrsf 1.2.0 documentation" href="index.html" />
-    <link rel="next" title="Gaussian Generative Models" href="gauss_model.html" />
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Elastic Functional Boxplots" href="boxplots.html" />
     <link rel="prev" title="Functional Alignment" href="time_warping.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="gauss_model.html" title="Gaussian Generative Models"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="boxplots.html" title="Elastic Functional Boxplots"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="time_warping.html" title="Functional Alignment"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="functional-principal-component-analysis">
-<h1>Functional Principal Component Analysis<a class="headerlink" href="#functional-principal-component-analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-fPCA">
+<span id="functional-principal-component-analysis"></span><h1>Functional Principal Component Analysis<a class="headerlink" href="#module-fPCA" title="Permalink to this headline">¶</a></h1>
+<p>Vertical and Horizontal Functional Principal Component Analysis using SRSF</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="fPCA.horizfPCA">
+<code class="sig-prename descclassname">fPCA.</code><code class="sig-name descname">horizfPCA</code><span class="sig-paren">(</span><em class="sig-param">gam</em>, <em class="sig-param">time</em>, <em class="sig-param">no=2</em>, <em class="sig-param">showplot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#horizfPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPCA.horizfPCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates horizontal functional principal component analysis on aligned data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gam</strong> – numpy ndarray of shape (M,N) of N warping functions</p></li>
+<li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
+<li><p><strong>no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of components to extract (default = 2)</p></li>
+<li><p><strong>showplot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Shows plots of results using matplotlib (default = T)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return q_pca</dt>
+<dd class="field-odd"><p>srsf principal directions</p>
+</dd>
+<dt class="field-even">Return f_pca</dt>
+<dd class="field-even"><p>functional principal directions</p>
+</dd>
+<dt class="field-odd">Return latent</dt>
+<dd class="field-odd"><p>latent values</p>
+</dd>
+<dt class="field-even">Return coef</dt>
+<dd class="field-even"><p>coefficients</p>
+</dd>
+<dt class="field-odd">Return U</dt>
+<dd class="field-odd"><p>eigenvectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="fPCA.jointfPCA">
+<code class="sig-prename descclassname">fPCA.</code><code class="sig-name descname">jointfPCA</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">time</em>, <em class="sig-param">qn</em>, <em class="sig-param">q0</em>, <em class="sig-param">gam</em>, <em class="sig-param">no=2</em>, <em class="sig-param">showplot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#jointfPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPCA.jointfPCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates joint functional principal component analysis
+on aligned data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> – numpy ndarray of shape (M,N) of N aligned functions with M
+samples</p></li>
+<li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
+<li><p><strong>qn</strong> – numpy ndarray of shape (M,N) of N aligned SRSF with M samples</p></li>
+<li><p><strong>no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of components to extract (default = 2)</p></li>
+<li><p><strong>showplot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Shows plots of results using matplotlib (default = T)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return q_pca</dt>
+<dd class="field-odd"><p>srsf principal directions</p>
+</dd>
+<dt class="field-even">Return f_pca</dt>
+<dd class="field-even"><p>functional principal directions</p>
+</dd>
+<dt class="field-odd">Return latent</dt>
+<dd class="field-odd"><p>latent values</p>
+</dd>
+<dt class="field-even">Return coef</dt>
+<dd class="field-even"><p>coefficients</p>
+</dd>
+<dt class="field-odd">Return U</dt>
+<dd class="field-odd"><p>eigenvectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="fPCA.vertfPCA">
+<code class="sig-prename descclassname">fPCA.</code><code class="sig-name descname">vertfPCA</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">time</em>, <em class="sig-param">qn</em>, <em class="sig-param">no=2</em>, <em class="sig-param">showplot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#vertfPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPCA.vertfPCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates vertical functional principal component analysis
+on aligned data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> – numpy ndarray of shape (M,N) of N aligned functions with M
+samples</p></li>
+<li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
+<li><p><strong>qn</strong> – numpy ndarray of shape (M,N) of N aligned SRSF with M samples</p></li>
+<li><p><strong>no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of components to extract (default = 2)</p></li>
+<li><p><strong>showplot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Shows plots of results using matplotlib (default = T)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return q_pca</dt>
+<dd class="field-odd"><p>srsf principal directions</p>
+</dd>
+<dt class="field-even">Return f_pca</dt>
+<dd class="field-even"><p>functional principal directions</p>
+</dd>
+<dt class="field-odd">Return latent</dt>
+<dd class="field-odd"><p>latent values</p>
+</dd>
+<dt class="field-even">Return coef</dt>
+<dd class="field-even"><p>coefficients</p>
+</dd>
+<dt class="field-odd">Return U</dt>
+<dd class="field-odd"><p>eigenvectors</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="time_warping.html"
                         title="previous chapter">Functional Alignment</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="gauss_model.html"
-                        title="next chapter">Gaussian Generative Models</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/fPCA.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <p class="topless"><a href="boxplots.html"
+                        title="next chapter">Elastic Functional Boxplots</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fPCA.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="gauss_model.html" title="Gaussian Generative Models"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="boxplots.html" title="Elastic Functional Boxplots"
              >next</a> |</li>
         <li class="right" >
           <a href="time_warping.html" title="Functional Alignment"
              >previous</a> |</li>
-        <li><a href="index.html">fdasrsf 1.2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

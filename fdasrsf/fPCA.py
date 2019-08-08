@@ -77,8 +77,8 @@ def vertfPCA(fn, time, qn, no=2, showplot=True):
         for l in range(0, N2):
             c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
 
-    vfpca_results = collections.namedtuple('vfpca', ['q_pca', 'f_pca', 'latent', 'coef', 'U'])
-    vfpca = vfpca_results(q_pca, f_pca, s, c, U)
+    vfpca_results = collections.namedtuple('vfpca', ['q_pca', 'f_pca', 'latent', 'coef', 'U', 'id', 'mqn', 'time'])
+    vfpca = vfpca_results(q_pca, f_pca, s, c, U, mididx, mqn, time)
 
     if showplot:
         CBcdict = {
@@ -160,9 +160,15 @@ def horizfPCA(gam, time, no=2, showplot=True):
             tmp = np.zeros(TT)
             tmp[1:TT] = np.cumsum(psi_pca[k-1, :, j] * psi_pca[k-1, :, j])
             gam_pca[k-1, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
+    
+    N2 = gam.shape[1]
+    c = np.zeros((N2,no))
+    for k in range(0,no_pca):
+        for i in range(0,N2):
+            c[i,k] = np.sum(dot(vec[:,i]-vm,U[:,k]))
 
-    hfpca_results = collections.namedtuple('hfpca', ['gam_pca', 'psi_pca', 'latent', 'U', 'gam_mu'])
-    hfpca = hfpca_results(gam_pca, psi_pca, s, U, gam_mu)
+    hfpca_results = collections.namedtuple('hfpca', ['gam_pca', 'psi_pca', 'latent', 'U', 'gam_mu', 'coef', 'vec'])
+    hfpca = hfpca_results(gam_pca, psi_pca, s, U, gam_mu, c, vec)
 
     if showplot:
         CBcdict = {
@@ -233,7 +239,7 @@ def jointfPCA(fn, time, qn, q0, gam, no=2, showplot=True):
 
     # joint fPCA
     C = fminbound(find_C,0,1e4,(qn2,vec,q0,no,mu_psi))
-    qhat, gamhat, a, U, s, mu_g = jointfPCAd(qn2, vec, C, no, mu_psi)
+    qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(qn2, vec, C, no, mu_psi)
 
     # geodesic paths
     q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
@@ -253,8 +259,8 @@ def jointfPCA(fn, time, qn, q0, gam, no=2, showplot=True):
             f_pca[:,l,k] = uf.warp_f_gamma(np.linspace(0,1,M), fhat, gamhat)
             q_pca[:,l,k] = uf.warp_q_gamma(np.linspace(0,1,M), qhat[0:M], gamhat)
 
-    jfpca_results = collections.namedtuple('jfpca', ['q_pca', 'f_pca', 'latent', 'coef', 'U'])
-    jfpca = jfpca_results(q_pca, f_pca, s, a, U)
+    jfpca_results = collections.namedtuple('jfpca', ['q_pca', 'f_pca', 'latent', 'coef', 'U', 'mu_psi', 'mu_g', 'id', 'C', 'time', 'g', 'cov'])
+    jfpca = jfpca_results(q_pca, f_pca, s, a, U, mu_psi, mu_g, mididx, C, time, g, cov)
 
     if showplot:
         CBcdict = {
@@ -323,10 +329,10 @@ def jointfPCAd(qn, vec, C, m, mu_psi):
     U = U[:,0:m]
     s = s[0:m]
 
-    return qhat, gamhat, a, U, s, mu_g
+    return qhat, gamhat, a, U, s, mu_g, g, K
 
 def find_C(C, qn, vec, q0, m, mu_psi):
-    qhat, gamhat, a, U, s, mu_g = jointfPCAd(qn, vec, C, m, mu_psi)
+    qhat, gamhat, a, U, s, mu_g, g, K = jointfPCAd(qn, vec, C, m, mu_psi)
     (M,N) = qn.shape
     time = np.linspace(0,1,M-1)
 

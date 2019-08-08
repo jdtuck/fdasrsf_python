@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elastic Functional Boxplots &#8212; fdasrsf 1.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Gaussian Generative Models" href="gauss_model.html" />
+    <link rel="prev" title="Functional Principal Component Analysis" href="fPCA.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gauss_model.html" title="Gaussian Generative Models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fPCA.html" title="Functional Principal Component Analysis"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-boxplots">
+<span id="elastic-functional-boxplots"></span><h1>Elastic Functional Boxplots<a class="headerlink" href="#module-boxplots" title="Permalink to this headline">¶</a></h1>
+<p>Elastic Functional Boxplots</p>
+<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="function">
+<dt id="boxplots.ampbox">
+<code class="sig-prename descclassname">boxplots.</code><code class="sig-name descname">ampbox</code><span class="sig-paren">(</span><em class="sig-param">ft</em>, <em class="sig-param">f_median</em>, <em class="sig-param">qt</em>, <em class="sig-param">q_median</em>, <em class="sig-param">time</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">k_a=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#ampbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#boxplots.ampbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function constructs the amplitude boxplot using the elastic
+square-root slope (srsf) framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ft</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>f_median</strong> – vector of size M describing the median</p></li>
+<li><p><strong>qt</strong> – numpy ndarray of shape (M,N) of N srsf functions with M samples</p></li>
+<li><p><strong>q_median</strong> – vector of size M describing the srsf median</p></li>
+<li><p><strong>time</strong> – vector of size M describing the time</p></li>
+<li><p><strong>alpha</strong> – quantile value (e.g.,=.05, i.e., 95%)</p></li>
+<li><p><strong>k_a</strong> – scalar for outlier cutoff (e.g.,=1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+</dd>
+</dl>
+<p>functions with M samples
+:return Q1: First quartile
+:return Q3: Second quartile
+:return Q1a: First quantile based on alpha
+:return Q3a: Second quantile based on alpha
+:return minn: minimum extreme function
+:return maxx: maximum extreme function
+:return outlier_index: indexes of outlier functions
+:return f_median: median function
+:return q_median: median srsf
+:return plt: surface plot mesh</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="boxplots.phbox">
+<code class="sig-prename descclassname">boxplots.</code><code class="sig-name descname">phbox</code><span class="sig-paren">(</span><em class="sig-param">gam</em>, <em class="sig-param">time</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">k_a=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#phbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#boxplots.phbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function constructs phase boxplot for functional data using the elastic
+square-root slope (srsf) framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gam</strong> – numpy ndarray of shape (M,N) of N warping functions with M samples</p></li>
+<li><p><strong>alpha</strong> – quantile value (e.g.,=.05, i.e., 95%)</p></li>
+<li><p><strong>k_a</strong> – scalar for outlier cutoff (e.g.,=1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+</dd>
+</dl>
+<p>functions with M samples
+:return Q1: First quartile
+:return Q3: Second quartile
+:return Q1a: First quantile based on alpha
+:return Q3a: Second quantile based on alpha
+:return minn: minimum extreme function
+:return maxx: maximum extreme function
+:return outlier_index: indexes of outlier functions
+:return median_x: median warping function
+:return psi_median: median srsf of warping function
+:return plt: surface plot mesh</p>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fPCA.html"
+                        title="previous chapter">Functional Principal Component Analysis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gauss_model.html"
+                        title="next chapter">Gaussian Generative Models</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/boxplots.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gauss_model.html" title="Gaussian Generative Models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fPCA.html" title="Functional Principal Component Analysis"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, J. Derek Tucker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>
