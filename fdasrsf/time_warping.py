@@ -17,542 +17,272 @@ import fpls_warp as fpls
 import collections
 
 
-def srsf_align(f, time, method="mean", omethod="DP",
-               showplot=True, smoothdata=False, parallel=False, lam=0.0):
-    """
-    This function aligns a collection of functions using the elastic
-    square-root slope (srsf) framework.
+class fdawarp:
+    def __init__(self, f, time):
+        """
+        Construct an instance of the fdawarp class
+        :param f: numpy ndarray of shape (M,N) of N functions with M samples
+        :param time: vector of size M describing the sample points
+        """
+        a = time.shape[0]
 
-    :param f: numpy ndarray of shape (M,N) of N functions with M samples
-    :param time: vector of size M describing the sample points
-    :param method: (string) warp calculate Karcher Mean or Median
-    (options = "mean" or "median") (default="mean")
-    :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
-    :param showplot: Shows plots of results using matplotlib (default = T)
-    :param smoothdata: Smooth the data using a box filter (default = F)
-    :param parallel: run in parallel (default = F)
-    :param lam: controls the elasticity (default = 0)
-    :type lam: double
-    :type smoothdata: bool
-    :type f: np.ndarray
-    :type time: np.ndarray
+        if f.shape[0] != a:
+            raise Exception('Columns of f and time must be equal')
 
-    :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
-    functions with M samples
-    :return qn: aligned srvfs - similar structure to fn
-    :return q0: original srvf - similar structure to fn
-    :return fmean: function mean or median - vector of length M
-    :return mqn: srvf mean or median - vector of length M
-    :return gam: warping functions - similar structure to fn
-    :return orig_var: Original Variance of Functions
-    :return amp_var: Amplitude Variance
-    :return phase_var: Phase Variance
+        self.f = f
+        self.time = time
+    
 
-    Examples
-    >>> import tables
-    >>> fun=tables.open_file("../Data/simu_data.h5")
-    >>> f = fun.root.f[:]
-    >>> f = f.transpose()
-    >>> time = fun.root.time[:]
-    >>> out = srsf_align(f,time)
+    def srsf_align(self, method="mean", omethod="DP", smoothdata=False, parallel=False, lam=0.0):
+        """
+        This function aligns a collection of functions using the elastic
+        square-root slope (srsf) framework.
 
-    """
-    M = f.shape[0]
-    N = f.shape[1]
+        :param method: (string) warp calculate Karcher Mean or Median
+        (options = "mean" or "median") (default="mean")
+        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+        :param smoothdata: Smooth the data using a box filter (default = F)
+        :param parallel: run in parallel (default = F)
+        :param lam: controls the elasticity (default = 0)
+        :type lam: double
+        :type smoothdata: bool
+        :type f: np.ndarray
+        :type time: np.ndarray
 
-    if M > 500:
-        parallel = True
-    elif N > 100:
-        parallel = True
+        :rtype: fdawarp obj with fields
+        :return fn: aligned functions - numpy ndarray of shape (M,N) of N
+        functions with M samples
+        :return qn: aligned srvfs - similar structure to fn
+        :return q0: original srvf - similar structure to fn
+        :return fmean: function mean or median - vector of length M
+        :return mqn: srvf mean or median - vector of length M
+        :return gam: warping functions - similar structure to fn
+        :return orig_var: Original Variance of Functions
+        :return amp_var: Amplitude Variance
+        :return phase_var: Phase Variance
 
-    eps = np.finfo(np.double).eps
-    f0 = f
+        Examples
+        >>> import tables
+        >>> fun=tables.open_file("../Data/simu_data.h5")
+        >>> f = fun.root.f[:]
+        >>> f = f.transpose()
+        >>> time = fun.root.time[:]
+        >>> obj = fs.fdawarp(f,time)
+        >>> obj.srsf_align()
 
-    methods = ["mean", "median"]
-    # 0 mean, 1-median
-    method = [i for i, x in enumerate(methods) if x == method]
-    if len(method) == 0:
-        method = 0
-    else:
-        method = method[0]
+        """
+        M = self.f.shape[0]
+        N = self.f.shape[1]
 
-    if showplot:
-        plot.f_plot(time, f, title="f Original Data")
+        if M > 500:
+            parallel = True
+        elif N > 100:
+            parallel = True
 
-    # Compute SRSF function from data
-    f, g, g2 = uf.gradient_spline(time, f, smoothdata)
-    q = g / np.sqrt(abs(g) + eps)
+        eps = np.finfo(np.double).eps
+        f0 = self.f
 
-    print("Initializing...")
-    mnq = q.mean(axis=1)
-    a = mnq.repeat(N)
-    d1 = a.reshape(M, N)
-    d = (q - d1) ** 2
-    dqq = np.sqrt(d.sum(axis=0))
-    min_ind = dqq.argmin()
-    mq = q[:, min_ind]
-    mf = f[:, min_ind]
+        methods = ["mean", "median"]
+        # 0 mean, 1-median
+        method = [i for i, x in enumerate(methods) if x == method]
+        if len(method) == 0:
+            method = 0
+        else:
+            method = method[0]
 
-    if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, time,
-                                  q[:, n], omethod, lam, mf[0], f[0,n]) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        gam = np.zeros((M,N))
-        for k in range(0,N):
-            gam[:,k] = uf.optimum_reparam(mq,time,q[:,k],omethod,lam,mf[0],f[0,k])
+        # Compute SRSF function from data
+        f, g, g2 = uf.gradient_spline(self.time, self.f, smoothdata)
+        q = g / np.sqrt(abs(g) + eps)
 
-    gamI = uf.SqrtMeanInverse(gam)
-    mf = np.interp((time[-1] - time[0]) * gamI + time[0], time, mf)
-    mq = uf.f_to_srsf(mf, time)
+        print("Initializing...")
+        mnq = q.mean(axis=1)
+        a = mnq.repeat(N)
+        d1 = a.reshape(M, N)
+        d = (q - d1) ** 2
+        dqq = np.sqrt(d.sum(axis=0))
+        min_ind = dqq.argmin()
+        mq = q[:, min_ind]
+        mf = f[:, min_ind]
 
-    # Compute Karcher Mean
-    if method == 0:
-        print("Compute Karcher Mean of %d function in SRSF space..." % N)
-    if method == 1:
-        print("Compute Karcher Median of %d function in SRSF space..." % N)
-
-    MaxItr = 20
-    ds = np.repeat(0.0, MaxItr + 2)
-    ds[0] = np.inf
-    qun = np.repeat(0.0, MaxItr + 1)
-    tmp = np.zeros((M, MaxItr + 2))
-    tmp[:, 0] = mq
-    mq = tmp
-    tmp = np.zeros((M, MaxItr+2))
-    tmp[:,0] = mf
-    mf = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = f
-    f = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = q
-    q = tmp
-
-    for r in range(0, MaxItr):
-        print("updating step: r=%d" % (r + 1))
-        if r == (MaxItr - 1):
-            print("maximal number of iterations is reached")
-
-        # Matching Step
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
-                                      time, q[:, n, 0], omethod, lam, mf[0,r],
-                                      f[0,k,0] ) for n in range(N))
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, self.time,
+                                    q[:, n], omethod, lam, mf[0], f[0,n]) for n in range(N))
+            gam = np.array(out)
+            gam = gam.transpose()
+        else:
+            gam = np.zeros((M,N))
+            for k in range(0,N):
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,mf[0],f[0,k])
+
+        gamI = uf.SqrtMeanInverse(gam)
+        mf = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], self.time, mf)
+        mq = uf.f_to_srsf(mf, self.time)
+
+        # Compute Karcher Mean
+        if method == 0:
+            print("Compute Karcher Mean of %d function in SRSF space..." % N)
+        if method == 1:
+            print("Compute Karcher Median of %d function in SRSF space..." % N)
+
+        MaxItr = 20
+        ds = np.repeat(0.0, MaxItr + 2)
+        ds[0] = np.inf
+        qun = np.repeat(0.0, MaxItr + 1)
+        tmp = np.zeros((M, MaxItr + 2))
+        tmp[:, 0] = mq
+        mq = tmp
+        tmp = np.zeros((M, MaxItr+2))
+        tmp[:,0] = mf
+        mf = tmp
+        tmp = np.zeros((M, N, MaxItr + 2))
+        tmp[:, :, 0] = self.f
+        f = tmp
+        tmp = np.zeros((M, N, MaxItr + 2))
+        tmp[:, :, 0] = q
+        q = tmp
+
+        for r in range(0, MaxItr):
+            print("updating step: r=%d" % (r + 1))
+            if r == (MaxItr - 1):
+                print("maximal number of iterations is reached")
+
+            # Matching Step
+            if parallel:
+                out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
+                                        self.time, q[:, n, 0], omethod, lam, mf[0,r],
+                                        f[0,k,0] ) for n in range(N))
+                gam = np.array(out)
+                gam = gam.transpose()
+            else:
+                for k in range(0,N):
+                    gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0],
+                            omethod, lam, mf[0,r], f[0,k,0])
+
+            gam_dev = np.zeros((M, N))
+            for k in range(0, N):
+                f[:, k, r + 1] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
+                                        + self.time[0], self.time, f[:, k, 0])
+                q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], self.time)
+                gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+
+            mqt = mq[:, r]
+            a = mqt.repeat(N)
+            d1 = a.reshape(M, N)
+            d = (q[:, :, r + 1] - d1) ** 2
+            if method == 0:
+                d1 = sum(trapz(d, self.time, axis=0))
+                d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
+                ds_tmp = d1 + lam * d2
+                ds[r + 1] = ds_tmp
+
+                # Minimization Step
+                # compute the mean of the matched function
+                qtemp = q[:, :, r + 1]
+                ftemp = f[:, :, r + 1]
+                mq[:, r + 1] = qtemp.mean(axis=1)
+                mf[:, r + 1] = ftemp.mean(axis=1)
+
+                qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
+
+            if method == 1:
+                d1 = np.sqrt(sum(trapz(d, self.time, axis=0)))
+                d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
+                ds_tmp = d1 + lam * d2
+                ds[r + 1] = ds_tmp
+
+                # Minimization Step
+                # compute the mean of the matched function
+                dist_iinv = ds[r + 1] ** (-1)
+                qtemp = q[:, :, r + 1] / ds[r + 1]
+                ftemp = f[:, :, r + 1] / ds[r + 1]
+                mq[:, r + 1] = qtemp.sum(axis=1) * dist_iinv
+                mf[:, r + 1] = ftemp.sum(axis=1) * dist_iinv
+
+                qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
+
+            if qun[r] < 1e-2 or r >= MaxItr:
+                break
+
+        # Last Step with centering of gam
+        r += 1
+        if parallel:
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
+                q[:, n, 0], omethod, lam, mf[0,r], f[0,n,0]) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq[:, r], time, q[:, k, 0],
-                        omethod, lam, mf[0,r], f[0,k,0])
+                gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
+                        lam, mf[0,r], f[0,k,0])
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
-            f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k]
-                                       + time[0], time, f[:, k, 0])
-            q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
             gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
 
-        mqt = mq[:, r]
-        a = mqt.repeat(N)
-        d1 = a.reshape(M, N)
-        d = (q[:, :, r + 1] - d1) ** 2
-        if method == 0:
-            d1 = sum(trapz(d, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = d1 + lam * d2
-            ds[r + 1] = ds_tmp
+        gamI = uf.SqrtMeanInverse(gam)
+        gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+        time0 = (self.time[-1] - self.time[0]) * gamI + self.time[0]
+        mq[:, r + 1] = np.interp(time0, self.time, mq[:, r]) * np.sqrt(gamI_dev)
 
-            # Minimization Step
-            # compute the mean of the matched function
-            qtemp = q[:, :, r + 1]
-            ftemp = f[:, :, r + 1]
-            mq[:, r + 1] = qtemp.mean(axis=1)
-            mf[:, r + 1] = ftemp.mean(axis=1)
-
-            qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
-
-        if method == 1:
-            d1 = np.sqrt(sum(trapz(d, time, axis=0)))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = d1 + lam * d2
-            ds[r + 1] = ds_tmp
-
-            # Minimization Step
-            # compute the mean of the matched function
-            dist_iinv = ds[r + 1] ** (-1)
-            qtemp = q[:, :, r + 1] / ds[r + 1]
-            ftemp = f[:, :, r + 1] / ds[r + 1]
-            mq[:, r + 1] = qtemp.sum(axis=1) * dist_iinv
-            mf[:, r + 1] = ftemp.sum(axis=1) * dist_iinv
-
-            qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
-
-        if qun[r] < 1e-2 or r >= MaxItr:
-            break
-
-    # Last Step with centering of gam
-    r += 1
-    if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time,
-            q[:, n, 0], omethod, lam, mf[0,r], f[0,n,0]) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        for k in range(0,N):
-            gam[:,k] = uf.optimum_reparam(mq[:, r], time, q[:, k, 0], omethod,
-                    lam, mf[0,r], f[0,k,0])
-
-    gam_dev = np.zeros((M, N))
-    for k in range(0, N):
-        gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
-
-    gamI = uf.SqrtMeanInverse(gam)
-    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    time0 = (time[-1] - time[0]) * gamI + time[0]
-    mq[:, r + 1] = np.interp(time0, time, mq[:, r]) * np.sqrt(gamI_dev)
-
-    for k in range(0, N):
-        q[:, k, r + 1] = np.interp(time0, time, q[:, k, r]) * np.sqrt(gamI_dev)
-        f[:, k, r + 1] = np.interp(time0, time, f[:, k, r])
-        gam[:, k] = np.interp(time0, time, gam[:, k])
-
-    # Aligned data & stats
-    fn = f[:, :, r + 1]
-    qn = q[:, :, r + 1]
-    q0 = q[:, :, 0]
-    mean_f0 = f0.mean(axis=1)
-    std_f0 = f0.std(axis=1)
-    mean_fn = fn.mean(axis=1)
-    std_fn = fn.std(axis=1)
-    mqn = mq[:, r + 1]
-    tmp = np.zeros((1, M))
-    tmp = tmp.flatten()
-    tmp[1:] = cumtrapz(mqn * np.abs(mqn), time)
-    fmean = np.mean(f0[1, :]) + tmp
-
-    fgam = np.zeros((M, N))
-    for k in range(0, N):
-        time0 = (time[-1] - time[0]) * gam[:, k] + time[0]
-        fgam[:, k] = np.interp(time0, time, fmean)
-
-    var_fgam = fgam.var(axis=1)
-    orig_var = trapz(std_f0 ** 2, time)
-    amp_var = trapz(std_fn ** 2, time)
-    phase_var = trapz(var_fgam, time)
-
-    if showplot:
-        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), gam,
-                              title="Warping Functions")
-        ax.set_aspect('equal')
-
-        plot.f_plot(time, fn, title="Warped Data")
-
-        tmp = np.array([mean_f0, mean_f0 + std_f0, mean_f0 - std_f0])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="Original Data: Mean $\pm$ STD")
-
-        tmp = np.array([mean_fn, mean_fn + std_fn, mean_fn - std_fn])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="Warped Data: Mean $\pm$ STD")
-
-        plot.f_plot(time, fmean, title="$f_{mean}$")
-        plt.show()
-
-    align_results = collections.namedtuple('align', ['fn', 'qn', 'q0', 'fmean',
-                                                     'mqn', 'gam', 'orig_var',
-                                                     'amp_var', 'phase_var',
-                                                     'cost'])
-
-    out = align_results(fn, qn, q0, fmean, mqn, gam, orig_var, amp_var,
-                        phase_var, qun)
-    return out
-
-
-def srsf_align_pair(f, g, time, method="mean", showplot=True,
-                    smoothdata=False, lam=0.0):
-    """
-    This function aligns a collection of functions using the elastic square-
-    root slope (srsf) framework.
-
-    :param f: numpy ndarray of shape (M,N) of N functions with M samples
-    :param g: numpy ndarray of shape (M,N) of N functions with M samples
-    :param time: vector of size M describing the sample points
-    :param method: (string) warp calculate Karcher Mean or Median (options =
-                   "mean" or "median") (default="mean")
-    :param showplot: Shows plots of results using matplotlib (default = T)
-    :param smoothdata: Smooth the data using a box filter (default = F)
-    :param lam: controls the elasticity (default = 0)
-    :type lam: double
-    :type smoothdata: bool
-    :type f: np.ndarray
-    :type time: np.ndarray
-
-    :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
-                functions with M samples
-    :return gn: aligned functions - numpy ndarray of shape (M,N) of N
-                functions with M samples
-    :return qfn: aligned srvfs - similar structure to fn
-    :return qgn: aligned srvfs - similar structure to fn
-    :return qf0: original srvf - similar structure to fn
-    :return qg0: original srvf - similar structure to fn
-    :return fmean: f function mean or median - vector of length N
-    :return gmean: g function mean or median - vector of length N
-    :return mqfn: srvf mean or median - vector of length N
-    :return mqgn: srvf mean or median - vector of length N
-    :return gam: warping functions - similar structure to fn
-
-    """
-    M = f.shape[0]
-    N = f.shape[1]
-
-    if M > 500:
-        parallel = True
-    elif N > 100:
-        parallel = True
-    else:
-        parallel = False
-
-    eps = np.finfo(np.double).eps
-    f0 = f
-    g0 = g
-
-    methods = ["mean", "median"]
-    # 0 mean, 1-median
-    method = [i for i, x in enumerate(methods) if x == method]
-
-    if method != 0 or method != 1:
-        method = 0
-
-    if showplot:
-        plot.f_plot(time, f, title="Original Data")
-        plot.f_plot(time, g, title="g Original Data")
-
-    # Compute SRSF function from data
-    f, g1, g2 = uf.gradient_spline(time, f, smoothdata)
-    qf = g1 / np.sqrt(abs(g1) + eps)
-    g, g1, g2 = uf.gradient_spline(time, g, smoothdata)
-    qg = g1 / np.sqrt(abs(g1) + eps)
-
-    print ("Initializing...")
-    mnq = qf.mean(axis=1)
-    a = mnq.repeat(N)
-    d1 = a.reshape(M, N)
-    d = (qf - d1) ** 2
-    dqq = np.sqrt(d.sum(axis=0))
-    min_ind = dqq.argmin()
-    mq = np.column_stack((qf[:, min_ind], qg[:, min_ind]))
-    mf = np.column_stack((f[:, min_ind], g[:, min_ind]))
-
-    if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam_pair)(mq, time, qf[:, n], qg[:, n], lam) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        gam = uf.optimum_reparam_pair(mq, time, qf, qg, lam)
-
-    gamI = uf.SqrtMeanInverse(gam)
-
-    time0 = (time[-1] - time[0]) * gamI + time[0]
-    for k in range(0, 2):
-        mf[:, k] = np.interp(time0, time, mf[:, k])
-        mq[:, k] = uf.f_to_srsf(mf[:, k], time)
-
-    # Compute Karcher Mean
-    if method == 0:
-        print("Compute Karcher Mean of %d function in SRSF space..." % N)
-    if method == 1:
-        print("Compute Karcher Median of %d function in SRSF space..." % N)
-
-    MaxItr = 20
-    ds = np.repeat(0.0, MaxItr + 2)
-    ds[0] = np.inf
-    qfun = np.repeat(0.0, MaxItr + 1)
-    qgun = np.repeat(0.0, MaxItr + 1)
-    tmp = np.zeros((M, 2, MaxItr + 2))
-    tmp[:, :, 0] = mq
-    mq = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = f
-    f = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = g
-    g = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = qf
-    qf = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = qg
-    qg = tmp
-
-    for r in range(0, MaxItr):
-        print("updating step: r=%d" % (r + 1))
-        if r == (MaxItr - 1):
-            print("maximal number of iterations is reached")
-
-        # Matching Step
-        if parallel:
-            out = Parallel(n_jobs=-1)(
-                delayed(uf.optimum_reparam_pair)(mq[:, :, r], time, qf[:, n, 0], qg[:, n, 0], lam) for n in range(N))
-            gam = np.array(out)
-            gam = gam.transpose()
-        else:
-            gam = uf.optimum_reparam_pair(mq[:, :, r], time, qf[:, :, 0],
-                                          qg[:, :, 0], lam)
-
-        gam_dev = np.zeros((M, N))
         for k in range(0, N):
-            time0 = (time[-1] - time[0]) * gam[:, k] + time[0]
-            f[:, k, r + 1] = np.interp(time0, time, f[:, k, 0])
-            g[:, k, r + 1] = np.interp(time0, time, g[:, k, 0])
-            qf[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
-            qg[:, k, r + 1] = uf.f_to_srsf(g[:, k, r + 1], time)
-            gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+            q[:, k, r + 1] = np.interp(time0, self.time, q[:, k, r]) * np.sqrt(gamI_dev)
+            f[:, k, r + 1] = np.interp(time0, self.time, f[:, k, r])
+            gam[:, k] = np.interp(time0, self.time, gam[:, k])
 
-        mqt = mq[:, 0, r]
-        a = mqt.repeat(N)
-        d1 = a.reshape(M, N)
-        df = (qf[:, :, r + 1] - d1) ** 2
-        mqt = mq[:, 1, r]
-        a = mqt.repeat(N)
-        d1 = a.reshape(M, N)
-        dg = (qg[:, :, r + 1] - d1) ** 2
-        if method == 0:
-            d1 = sum(trapz(df, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = d1 + lam * d2
-            d1 = sum(trapz(dg, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp1 = d1 + lam * d2
-            ds[r + 1] = (ds_tmp + ds_tmp1) / 2
+        # Aligned data & stats
+        self.fn = f[:, :, r + 1]
+        self.qn = q[:, :, r + 1]
+        self.q0 = q[:, :, 0]
+        mean_f0 = f0.mean(axis=1)
+        std_f0 = f0.std(axis=1)
+        mean_fn = self.fn.mean(axis=1)
+        std_fn = self.fn.std(axis=1)
+        self.gam = gam
+        self.mqn = mq[:, r + 1]
+        tmp = np.zeros((1, M))
+        tmp = tmp.flatten()
+        tmp[1:] = cumtrapz(self.mqn * np.abs(self.mqn), self.time)
+        self.fmean = np.mean(f0[1, :]) + tmp
 
-            # Minimization Step
-            # compute the mean of the matched function
-            qtemp = qf[:, :, r + 1]
-            mq[:, 0, r + 1] = qtemp.mean(axis=1)
-            qtemp = qg[:, :, r + 1]
-            mq[:, 1, r + 1] = qtemp.mean(axis=1)
+        fgam = np.zeros((M, N))
+        for k in range(0, N):
+            time0 = (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0]
+            fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
-            qfun[r] = norm(mq[:, 0, r + 1] - mq[:, 0, r]) / norm(mq[:, 0, r])
-            qgun[r] = norm(mq[:, 1, r + 1] - mq[:, 1, r]) / norm(mq[:, 1, r])
+        var_fgam = fgam.var(axis=1)
+        self.orig_var = trapz(std_f0 ** 2, self.time)
+        self.amp_var = trapz(std_fn ** 2, self.time)
+        self.phase_var = trapz(var_fgam, self.time)            
 
-        if method == 1:
-            d1 = sum(trapz(df, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = np.sqrt(d1) + lam * d2
-            ds_tmp1 = np.sqrt(sum(trapz(dg, time, axis=0))) + lam * sum(
-                trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds[r + 1] = (ds_tmp + ds_tmp1) / 2
+        return
 
-            # Minimization Step
-            # compute the mean of the matched function
-            dist_iinv = ds[r + 1] ** (-1)
-            qtemp = qf[:, :, r + 1] / ds[r + 1]
-            mq[:, 0, r + 1] = qtemp.sum(axis=1) * dist_iinv
-            qtemp = qg[:, :, r + 1] / ds[r + 1]
-            mq[:, 1, r + 1] = qtemp.sum(axis=1) * dist_iinv
 
-            qfun[r] = norm(mq[:, 0, r + 1] - mq[:, 0, r]) / norm(mq[:, 0, r])
-            qgun[r] = norm(mq[:, 1, r + 1] - mq[:, 1, r]) / norm(mq[:, 1, r])
+    def plot(self):
+        M = self.f.shape[0]
+        plot.f_plot(self.time, self.f, title="f Original Data")
 
-        if (qfun[r] < 1e-2 and qgun[r] < 1e-2) or r >= MaxItr:
-            break
-
-    # Last Step with centering of gam
-    r += 1
-    if parallel:
-        out = Parallel(n_jobs=-1)(
-            delayed(uf.optimum_reparam_pair)(mq[:, :, r], time, qf[:, n, 0],
-                                             qg[:, n, 0], lam) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        gam = uf.optimum_reparam_pair(mq[:, :, r], time, qf[:, :, 0],
-                                      qg[:, :, 0], lam)
-
-    gam_dev = np.zeros((M, N))
-    for k in range(0, N):
-        gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
-
-    gamI = uf.SqrtMeanInverse(gam)
-    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    time0 = (time[-1] - time[0]) * gamI + time[0]
-    for k in range(0, 2):
-        mq[:, k, r + 1] = np.interp(time0, time,
-                                    mq[:, k, r]) * np.sqrt(gamI_dev)
-
-    for k in range(0, N):
-        qf[:, k, r + 1] = np.interp(time0, time,
-                                    qf[:, k, r]) * np.sqrt(gamI_dev)
-        f[:, k, r + 1] = np.interp(time0, time, f[:, k, r])
-        qg[:, k, r + 1] = np.interp(time0, time,
-                                    qg[:, k, r]) * np.sqrt(gamI_dev)
-        g[:, k, r + 1] = np.interp(time0, time, g[:, k, r])
-        gam[:, k] = np.interp(time0, time, gam[:, k])
-
-    # Aligned data & stats
-    fn = f[:, :, r + 1]
-    gn = g[:, :, r + 1]
-    qfn = qf[:, :, r + 1]
-    qf0 = qf[:, :, 0]
-    qgn = qg[:, :, r + 1]
-    qg0 = qg[:, :, 0]
-    mean_f0 = f0.mean(axis=1)
-    std_f0 = f0.std(axis=1)
-    mean_fn = fn.mean(axis=1)
-    std_fn = fn.std(axis=1)
-    mean_g0 = g0.mean(axis=1)
-    std_g0 = g0.std(axis=1)
-    mean_gn = gn.mean(axis=1)
-    std_gn = gn.std(axis=1)
-    mqfn = mq[:, 0, r + 1]
-    mqgn = mq[:, 1, r + 1]
-    tmp = np.zeros(M)
-    tmp[1:] = cumtrapz(mqfn * np.abs(mqfn), time)
-    fmean = np.mean(f0[1, :]) + tmp
-    tmp = np.zeros(M)
-    tmp[1:] = cumtrapz(mqgn * np.abs(mqgn), time)
-    gmean = np.mean(g0[1, :]) + tmp
-
-    if showplot:
-        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), gam,
-                              title="Warping Functions")
+        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), self.gam,
+                                title="Warping Functions")
         ax.set_aspect('equal')
 
-        plot.f_plot(time, fn, title="fn Warped Data")
-        plot.f_plot(time, gn, title="gn Warped Data")
+        plot.f_plot(self.time, self.fn, title="Warped Data")
 
+        mean_f0 = self.f.mean(axis=1)
+        std_f0 = self.f.std(axis=1)
+        mean_fn = self.fn.mean(axis=1)
+        std_fn = self.fn.std(axis=1)
         tmp = np.array([mean_f0, mean_f0 + std_f0, mean_f0 - std_f0])
         tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="f Original Data: Mean $\pm$ STD")
+        plot.f_plot(self.time, tmp, title="Original Data: Mean $\pm$ STD")
 
         tmp = np.array([mean_fn, mean_fn + std_fn, mean_fn - std_fn])
         tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="fn Warped Data: Mean $\pm$ STD")
+        plot.f_plot(self.time, tmp, title="Warped Data: Mean $\pm$ STD")
 
-        tmp = np.array([mean_g0, mean_g0 + std_g0, mean_g0 - std_g0])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="g Original Data: Mean $\pm$ STD")
-
-        tmp = np.array([mean_gn, mean_gn + std_gn, mean_gn - std_gn])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="gn Warped Data: Mean $\pm$ STD")
-
-        plot.f_plot(time, fmean, title="$f_{mean}$")
-        plot.f_plot(time, gmean, title="$g_{mean}$")
+        plot.f_plot(self.time, self.fmean, title="$f_{mean}$")
         plt.show()
 
-    align_results = collections.namedtuple('align', ['fn', 'gn', 'qfn', 'qf0',
-                                                     'qgn', 'qg0', 'fmean',
-                                                     'gmean', 'mqfn', 'mqgn',
-                                                     'gam'])
-
-    out = align_results(fn, gn, qfn, qf0, qgn, qg0, fmean, gmean, mqfn,
-                        mqgn, gam)
-    return out
+        return
 
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
