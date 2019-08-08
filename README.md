@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
+
 fdasrsf
 =======
 
