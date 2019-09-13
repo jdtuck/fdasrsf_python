@@ -5,7 +5,7 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "curve_functions", "geometry", "pcr_regssion", "tolerance"]
+__all__ = ["time_warping", "utility_functions", "curve_functions", "geometry", "pcr_regression", "tolerance"]
 
 __version__ = "1.5.0"
 
@@ -24,7 +24,7 @@ from .plot_style import f_plot, rstyle, plot_reg_open_curve, plot_geod_open_curv
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma, srsf_to_f
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
 from .utility_functions import optimum_reparam_pair, f_K_fold, zero_crossing, warp_q_gamma, resamplefunction, warp_f_gamma
-from .fPCA import vertfPCA, horizfPCA, jointfPCA
+from .fPCA import fdavpca, fdahpca, fdajpca
 from .gauss_model import gauss_model, joint_gauss_model
 from .fPLS import pls_svd
 from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic
