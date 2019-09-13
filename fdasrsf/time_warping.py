@@ -737,7 +737,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
         for l in range(0, Nstd):
             q_pca_tmp = q_pca[0:M, l, k] * np.abs(q_pca[0:M, l, k])
             q_pca_tmp2 = np.sign(q_pca[M, l, k]) * (q_pca[M, l, k] ** 2)
-            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp, q_pca_tmp2)
+            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp, q_pca_tmp2, mididx)
 
     N2 = qn.shape[1]
     c = np.zeros((N2, num_comp))
