@@ -12,30 +12,26 @@ import fdasrsf.geometry as geo
 import collections
 
 
-def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
+def gauss_model(fdawarp, n=1, sort_samples=False):
     """
     This function models the functional data using a Gaussian model
     extracted from the principal components of the srvfs
 
-    :param fn: numpy ndarray of shape (M,N) of N aligned functions with
-     M samples
-    :param time: vector of size M describing the sample points
-    :param qn: numpy ndarray of shape (M,N) of N aligned srvfs with M samples
-    :param gam: warping functions
+    :param fdawarp: fdawarp object that has been aligned
     :param n: number of random samples
     :param sort_samples: sort samples (default = T)
     :type n: integer
     :type sort_samples: bool
-    :type fn: np.ndarray
-    :type qn: np.ndarray
-    :type gam: np.ndarray
-    :type time: np.ndarray
 
-    :rtype: tuple of numpy array
+    :rtype: fdawarp object containing
     :return fs: random aligned samples
     :return gams: random warping functions
     :return ft: random samples
     """
+    fn = fdawarp.fn
+    time = fdawarp.time
+    qn = fdawarp.qn
+    gam = fdawarp.gam
 
     # Parameters
     eps = np.finfo(np.double).eps
@@ -111,42 +107,44 @@ def gauss_model(fn, time, qn, gam, n=1, sort_samples=False):
                 ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
                                      np.double(M - 1), uf.invertGamma(rgam2))
 
-    samples = collections.namedtuple('samples', ['fs', 'gams', 'ft'])
-    out = samples(fs, rgam, ft)
-    return out
+    
+    fdawarp.rsamps = True
+    fdawarp.fs = fs
+    fdawarp.gams = rgam
+    fdawarp.ft = ft
+    fdawarp.qs = q_s[0:M,:]
+
+    return fdawarp
 
 
-def joint_gauss_model(fn, time, qn, gam, q0, n=1, no=3):
+def joint_gauss_model(fdawarp, n=1, no=3):
     """
     This function models the functional data using a joint Gaussian model
     extracted from the principal components of the srsfs
 
-    :param fn: numpy ndarray of shape (M,N) of N aligned functions with
-     M samples
-    :param time: vector of size M describing the sample points
-    :param qn: numpy ndarray of shape (M,N) of N aligned srsfs with M samples
-    :param gam: warping functions
-    :param q0: numpy ndarray of shape (M,N) of N unaligned srsfs with  samples
+    :param fdawarp: fdawarp object that has been aligned
     :param n: number of random samples
-    :param n: number of principal components (default = 3)
+    :param no: number of principal components (default = 3)
     :type n: integer
-    :type sort_samples: bool
-    :type fn: np.ndarray
-    :type qn: np.ndarray
-    :type gam: np.ndarray
-    :type time: np.ndarray
+    :type no: integer
 
-    :rtype: tuple of numpy array
+    :rtype: fdawarp object containing
     :return fs: random aligned samples
     :return gams: random warping functions
     :return ft: random samples
     """
 
     # Parameters
+    fn = fdawarp.fn
+    time = fdawarp.time
+    qn = fdawarp.qn
+    gam = fdawarp.gam
+
     M = time.size
 
     # Perform PCA
-    jfpca = fpca.jointfPCA(fn, time, qn, q0, gam, no=no, showplot=False)
+    jfpca = fpca.fdajpca(fdawarp)
+    jfpca.calc_fpca(no=no)
     s = jfpca.latent
     U = jfpca.U
     C = jfpca.C
@@ -179,7 +177,10 @@ def joint_gauss_model(fn, time, qn, gam, q0, n=1, no=3):
         ft[:,ii] = uf.warp_f_gamma(np.linspace(0,1,M),fhat[:,ii],gamhat[:,ii])
 
 
-    samples = collections.namedtuple('samples', ['fs', 'gams', 'ft', 'qs'])
-    out = samples(fhat, gamhat, ft, qhat[0:M,:])
+    fdawarp.rsamps = True
+    fdawarp.fs = fhat
+    fdawarp.gams = gamhat
+    fdawarp.ft = ft
+    fdawarp.qs = qhat[0:M,:]
 
-    return out
+    return fdawarp
