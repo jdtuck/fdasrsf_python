@@ -83,6 +83,8 @@ class fdawarp:
         f0 = self.f
 
         methods = ["mean", "median"]
+        self.type = method
+
         # 0 mean, 1-median
         method = [i for i, x in enumerate(methods) if x == method]
         if len(method) == 0:
@@ -252,7 +254,7 @@ class fdawarp:
         var_fgam = fgam.var(axis=1)
         self.orig_var = trapz(std_f0 ** 2, self.time)
         self.amp_var = trapz(std_fn ** 2, self.time)
-        self.phase_var = trapz(var_fgam, self.time)            
+        self.phase_var = trapz(var_fgam, self.time)
 
         return
 

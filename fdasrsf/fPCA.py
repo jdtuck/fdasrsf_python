@@ -23,7 +23,7 @@ class fdavpca:
         :param fdawarp: fdawarp class
         """
         if fdawarp.fn.size==0:
-            raise Exception('Please align fdawarp class using time_warping!')
+            raise Exception('Please align fdawarp class using srsf_align!')
 
         self.warp_data = fdawarp
     
@@ -151,7 +151,7 @@ class fdahpca:
         :param fdawarp: fdawarp class
         """
         if fdawarp.fn.size==0:
-            raise Exception('Please align fdawarp class using time_warping!')
+            raise Exception('Please align fdawarp class using srsf_align!')
 
         self.warp_data = fdawarp
     
@@ -253,7 +253,7 @@ class fdajpca:
         :param fdawarp: fdawarp class
         """
         if fdawarp.fn.size==0:
-            raise Exception('Please align fdawarp class using time_warping!')
+            raise Exception('Please align fdawarp class using srsf_align!')
 
         self.warp_data = fdawarp
     
