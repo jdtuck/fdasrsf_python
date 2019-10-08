@@ -58,19 +58,6 @@ class ampbox:
 
         :param alpha: quantile value (e.g.,=.05, i.e., 95\%)
         :param k_a: scalar for outlier cutoff (e.g.,=1)
-
-        :rtype: ampbox object containing
-        :return warp_data: aligned functions - fdawarp object
-        :return Q1: First quartile
-        :return Q3: Second quartile
-        :return Q1a: First quantile based on alpha
-        :return Q3a: Second quantile based on alpha
-        :return minn: minimum extreme function
-        :return maxx: maximum extreme function
-        :return outlier_index: indexes of outlier functions
-        :return f_median: median function
-        :return q_median: median srsf
-        :return plt: surface plot mesh
         """
 
         if self.warp_data.rsamps:
@@ -302,19 +289,6 @@ class phbox:
 
         :param alpha: quantile value (e.g.,=.05, i.e., 95\%)
         :param k_a: scalar for outlier cutoff (e.g.,=1)
-
-        :rtype: phbox object containing
-        :return warp_data: fdawarp object
-        :return Q1: First quartile
-        :return Q3: Second quartile
-        :return Q1a: First quantile based on alpha
-        :return Q3a: Second quantile based on alpha
-        :return minn: minimum extreme function
-        :return maxx: maximum extreme function
-        :return outlier_index: indexes of outlier functions
-        :return median_x: median warping function
-        :return psi_median: median srsf of warping function
-        :return plt: surface plot mesh
         """
 
         if self.warp_data.rsamps:

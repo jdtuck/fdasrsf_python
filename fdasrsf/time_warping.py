@@ -79,20 +79,6 @@ class fdawarp:
         :param lam: controls the elasticity (default = 0)
         :type lam: double
         :type smoothdata: bool
-        :type f: np.ndarray
-        :type time: np.ndarray
-
-        :rtype: fdawarp obj with fields
-        :return fn: aligned functions - numpy ndarray of shape (M,N) of N
-        functions with M samples
-        :return qn: aligned srvfs - similar structure to fn
-        :return q0: original srvf - similar structure to fn
-        :return fmean: function mean or median - vector of length M
-        :return mqn: srvf mean or median - vector of length M
-        :return gam: warping functions - similar structure to fn
-        :return orig_var: Original Variance of Functions
-        :return amp_var: Amplitude Variance
-        :return phase_var: Phase Variance
 
         Examples
         >>> import tables
@@ -342,11 +328,6 @@ class fdawarp:
         :param sort_samples: sort samples (default = T)
         :type n: integer
         :type sort_samples: bool
-
-        :rtype: fdawarp object containing
-        :return fs: random aligned samples
-        :return gams: random warping functions
-        :return ft: random samples
         """
         fn = self.fn
         time = self.time
@@ -446,11 +427,6 @@ class fdawarp:
         :param no: number of principal components (default = 3)
         :type n: integer
         :type no: integer
-
-        :rtype: fdawarp object containing
-        :return fs: random aligned samples
-        :return gams: random warping functions
-        :return ft: random samples
         """
 
         # Parameters
