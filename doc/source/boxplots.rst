@@ -5,4 +5,4 @@ Elastic Functional Boxplots
    :members:
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2

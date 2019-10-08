@@ -20,6 +20,37 @@ import collections
 
 
 class fdawarp:
+    """
+    This class provides alignment methods for functional data using the SRVF framework
+
+    Usage:  obj = fdawarp(f,t)
+    
+    :param f: (M,N): matrix defining N functions of M samples
+    :param time: time vector of length M
+    :param fn: aligned functions
+    :param qn: aligned srvfs
+    :param q0: initial srvfs
+    :param fmean: function mean
+    :param mqn: mean srvf
+    :param gam: warping functions
+    :param psi: srvf of warping functions
+    :param stats: alignment statistics
+    :param qun: cost function
+    :param lambda: lambda
+    :param method: optimization method
+    :param gamI: invserse warping function
+    :param rsamps: random samples
+    :param fs: random aligned functions
+    :param gams: random warping functions
+    :param ft: random warped functions
+    :param qs: random aligned srvfs
+    :param type: alignment type
+    :param mcmc: mcmc output if bayesian 
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
+    """
+
     def __init__(self, f, time):
         """
         Construct an instance of the fdawarp class
@@ -41,8 +72,7 @@ class fdawarp:
         This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
 
-        :param method: (string) warp calculate Karcher Mean or Median
-        (options = "mean" or "median") (default="mean")
+        :param method: (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
         :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
@@ -271,6 +301,12 @@ class fdawarp:
 
 
     def plot(self):
+        """
+        plot plot functional alignment results
+        
+        Usage: obj.plot()
+        """
+
         M = self.f.shape[0]
         plot.f_plot(self.time, self.f, title="f Original Data")
 

@@ -15,6 +15,29 @@ import collections
 
 
 class ampbox:
+    """
+    This class provides amplitude boxplot for functional data using the
+    SRVF framework
+    
+    Usage:  obj = ampbox(warp_data)
+    
+    :param warp_data: fdawarp class with alignment data
+    :type warp_data: fdawarp
+    :param Q1: First quartile
+    :param Q3: Second quartile
+    :param Q1a: First quantile based on alpha
+    :param Q3a: Second quantile based on alpha
+    :param minn: minimum extreme function
+    :param maxx: maximum extreme function
+    :param outlier_index: indexes of outlier functions
+    :param f_median: median function
+    :param q_median: median srvf
+    :param plt: surface plot mesh
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
+    """
+
     def __init__(self, fdawarp):
         """
         Construct an instance of the ampbox class
@@ -204,6 +227,11 @@ class ampbox:
         return
 
         def plot(self):
+            """
+            plot box plot and surface plot
+
+            Usage: obj.plot()
+            """
             M = self.warp_data.time.shape[0]
             fig1, ax1 = plt.subplots()
             ax1.plot(self.warp_data.time,self.fmean,'k')
@@ -231,6 +259,29 @@ class ampbox:
 
 
 class phbox:
+    """
+    This class provides phase boxplot for functional data using the
+    SRVF framework
+    
+    Usage:  obj = phbox(warp_data)
+    
+    :param warp_data: fdawarp class with alignment data
+    :type warp_data: fdawarp
+    :param Q1: First quartile
+    :param Q3: Second quartile
+    :param Q1a: First quantile based on alpha
+    :param Q3a: Second quantile based on alpha
+    :param minn: minimum extreme function
+    :param maxx: maximum extreme function
+    :param outlier_index: indexes of outlier functions
+    :param median_x: median warping function
+    :param psi_median: median srvf of warping function
+    :param plt: surface plot mesh
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
+    """
+
     def __init__(self, fdawarp):
         """
         Construct an instance of the phbox class
@@ -424,6 +475,12 @@ class phbox:
         return
     
     def plot(self):
+        """
+        plot box plot and surface plot
+
+        Usage: obj.plot()
+        """
+
         M = self.warp_data.time.shape[0]
         time = np.linspace(0,1,M)
         fig1, ax1 = plt.subplots()

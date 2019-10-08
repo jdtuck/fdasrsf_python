@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Aug 08, 2019" "1.5" "fdasrsf"
+.TH "FDASRSF" "1" "Oct 08, 2019" "1.5" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -157,7 +157,127 @@ functions with M samples
 .UNINDENT
 .INDENT 0.0
 .TP
-.B time_warping.srsf_align(f, time, method=\(aqmean\(aq, omethod=\(aqDP\(aq, showplot=True, smoothdata=False, parallel=False, lam=0.0)
+.B class time_warping.fdawarp(f, time)
+This class provides alignment methods for functional data using the SRVF framework
+.sp
+Usage:  obj = fdawarp(f,t)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP \-\- (M,N): matrix defining N functions of M samples
+.IP \(bu 2
+\fBtime\fP \-\- time vector of length M
+.IP \(bu 2
+\fBfn\fP \-\- aligned functions
+.IP \(bu 2
+\fBqn\fP \-\- aligned srvfs
+.IP \(bu 2
+\fBq0\fP \-\- initial srvfs
+.IP \(bu 2
+\fBfmean\fP \-\- function mean
+.IP \(bu 2
+\fBmqn\fP \-\- mean srvf
+.IP \(bu 2
+\fBgam\fP \-\- warping functions
+.IP \(bu 2
+\fBpsi\fP \-\- srvf of warping functions
+.IP \(bu 2
+\fBstats\fP \-\- alignment statistics
+.IP \(bu 2
+\fBqun\fP \-\- cost function
+.IP \(bu 2
+\fBlambda\fP \-\- lambda
+.IP \(bu 2
+\fBmethod\fP \-\- optimization method
+.IP \(bu 2
+\fBgamI\fP \-\- invserse warping function
+.IP \(bu 2
+\fBrsamps\fP \-\- random samples
+.IP \(bu 2
+\fBfs\fP \-\- random aligned functions
+.IP \(bu 2
+\fBgams\fP \-\- random warping functions
+.IP \(bu 2
+\fBft\fP \-\- random warped functions
+.IP \(bu 2
+\fBqs\fP \-\- random aligned srvfs
+.IP \(bu 2
+\fBtype\fP \-\- alignment type
+.IP \(bu 2
+\fBmcmc\fP \-\- mcmc output if bayesian
+.UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  15\-Mar\-2018
+.INDENT 7.0
+.TP
+.B gauss_model(n=1, sort_samples=False)
+This function models the functional data using a Gaussian model
+extracted from the principal components of the srvfs
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBn\fP (\fIinteger\fP) \-\- number of random samples
+.IP \(bu 2
+\fBsort_samples\fP (\fI\%bool\fP) \-\- sort samples (default = T)
+.UNINDENT
+.TP
+.B Return type
+fdawarp object containing
+.TP
+.B Return fs
+random aligned samples
+.TP
+.B Return gams
+random warping functions
+.TP
+.B Return ft
+random samples
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B joint_gauss_model(n=1, no=3)
+This function models the functional data using a joint Gaussian model
+extracted from the principal components of the srsfs
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBn\fP (\fIinteger\fP) \-\- number of random samples
+.IP \(bu 2
+\fBno\fP (\fIinteger\fP) \-\- number of principal components (default = 3)
+.UNINDENT
+.TP
+.B Return type
+fdawarp object containing
+.TP
+.B Return fs
+random aligned samples
+.TP
+.B Return gams
+random warping functions
+.TP
+.B Return ft
+random samples
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B plot()
+plot plot functional alignment results
+.sp
+Usage: obj.plot()
+.UNINDENT
+.INDENT 7.0
+.TP
+.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0)
 This function aligns a collection of functions using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -165,28 +285,19 @@ square\-root slope (srsf) framework.
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBf\fP \-\- numpy ndarray of shape (M,N) of N functions with M samples
+\fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
 .IP \(bu 2
-\fBtime\fP \-\- vector of size M describing the sample points
+\fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
 .IP \(bu 2
-\fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median
+\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+.IP \(bu 2
+\fBparallel\fP \-\- run in parallel (default = F)
+.IP \(bu 2
+\fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
 .UNINDENT
-.UNINDENT
-.sp
-(options = "mean" or "median") (default="mean")
-:param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
-:param showplot: Shows plots of results using matplotlib (default = T)
-:param smoothdata: Smooth the data using a box filter (default = F)
-:param parallel: run in parallel (default = F)
-:param lam: controls the elasticity (default = 0)
-:type lam: double
-:type smoothdata: bool
-:type f: np.ndarray
-:type time: np.ndarray
-.INDENT 7.0
 .TP
 .B Return type
-tuple of numpy array
+fdawarp obj with fields
 .TP
 .B Return fn
 aligned functions \- numpy ndarray of shape (M,N) of N
@@ -208,71 +319,8 @@ Examples
 >>> f = fun.root.f[:]
 >>> f = f.transpose()
 >>> time = fun.root.time[:]
->>> out = srsf_align(f,time)
-.UNINDENT
-.INDENT 0.0
-.TP
-.B time_warping.srsf_align_pair(f, g, time, method=\(aqmean\(aq, showplot=True, smoothdata=False, lam=0.0)
-This function aligns a collection of functions using the elastic square\-
-root slope (srsf) framework.
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
-.IP \(bu 2
-\fBg\fP \-\- numpy ndarray of shape (M,N) of N functions with M samples
-.IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
-.IP \(bu 2
-\fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median (options =
-"mean" or "median") (default="mean")
-.IP \(bu 2
-\fBshowplot\fP \-\- Shows plots of results using matplotlib (default = T)
-.IP \(bu 2
-\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
-.IP \(bu 2
-\fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
-.UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of N
-functions with M samples
-.TP
-.B Return gn
-aligned functions \- numpy ndarray of shape (M,N) of N
-functions with M samples
-.TP
-.B Return qfn
-aligned srvfs \- similar structure to fn
-.TP
-.B Return qgn
-aligned srvfs \- similar structure to fn
-.TP
-.B Return qf0
-original srvf \- similar structure to fn
-.TP
-.B Return qg0
-original srvf \- similar structure to fn
-.TP
-.B Return fmean
-f function mean or median \- vector of length N
-.TP
-.B Return gmean
-g function mean or median \- vector of length N
-.TP
-.B Return mqfn
-srvf mean or median \- vector of length N
-.TP
-.B Return mqgn
-srvf mean or median \- vector of length N
-.TP
-.B Return gam
-warping functions \- similar structure to fn
+>>> obj = fs.fdawarp(f,time)
+>>> obj.srsf_align()
 .UNINDENT
 .UNINDENT
 .SH FUNCTIONAL PRINCIPAL COMPONENT ANALYSIS
@@ -282,24 +330,49 @@ Vertical and Horizontal Functional Principal Component Analysis using SRSF
 moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B fPCA.horizfPCA(gam, time, no=2, showplot=True)
-This function calculates horizontal functional principal component analysis on aligned data
+.B class fPCA.fdahpca(fdawarp)
+This class provides horizontal fPCA using the
+SRVF framework
+.sp
+Usage:  obj = fdahpca(warp_data)
 .INDENT 7.0
 .TP
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBgam\fP \-\- numpy ndarray of shape (M,N) of N warping functions
+\fBwarp_data\fP \-\- fdawarp class with alignment data
 .IP \(bu 2
-\fBtime\fP \-\- vector of size M describing the sample points
+\fBgam_pca\fP \-\- warping functions principal directions
 .IP \(bu 2
-\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 2)
+\fBpsi_pca\fP \-\- srvf principal directions
 .IP \(bu 2
-\fBshowplot\fP (\fI\%bool\fP) \-\- Shows plots of results using matplotlib (default = T)
+\fBlatent\fP \-\- latent values
+.IP \(bu 2
+\fBU\fP \-\- eigenvectors
+.IP \(bu 2
+\fBcoef\fP \-\- coeficients
+.IP \(bu 2
+\fBvec\fP \-\- shooting vectors
+.IP \(bu 2
+\fBmu\fP \-\- Karcher Mean
+.IP \(bu 2
+\fBtau\fP \-\- principal directions
 .UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  15\-Mar\-2018
+.INDENT 7.0
+.TP
+.B calc_fpca(no=3)
+This function calculates horizontal functional principal component analysis on aligned data
+.INDENT 7.0
+.TP
+.B Parameters
+\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .TP
 .B Return type
-tuple of numpy ndarray
+fdahpca object of numpy ndarray
 .TP
 .B Return q_pca
 srsf principal directions
@@ -317,9 +390,57 @@ coefficients
 eigenvectors
 .UNINDENT
 .UNINDENT
+.INDENT 7.0
+.TP
+.B plot()
+plot plot elastic horizontal fPCA results
+.sp
+Usage: obj.plot()
+.UNINDENT
+.UNINDENT
 .INDENT 0.0
 .TP
-.B fPCA.jointfPCA(fn, time, qn, q0, gam, no=2, showplot=True)
+.B class fPCA.fdajpca(fdawarp)
+This class provides joint fPCA using the
+SRVF framework
+.sp
+Usage:  obj = fdajpca(warp_data)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBwarp_data\fP \-\- fdawarp class with alignment data
+.IP \(bu 2
+\fBq_pca\fP \-\- srvf principal directions
+.IP \(bu 2
+\fBf_pca\fP \-\- f principal directions
+.IP \(bu 2
+\fBlatent\fP \-\- latent values
+.IP \(bu 2
+\fBcoef\fP \-\- prinicapl coefficients
+.IP \(bu 2
+\fBid\fP \-\- point used for f(0)
+.IP \(bu 2
+\fBmqn\fP \-\- mean srvf
+.IP \(bu 2
+\fBU\fP \-\- eigenvectors
+.IP \(bu 2
+\fBmu_psi\fP \-\- mean psi
+.IP \(bu 2
+\fBmu_g\fP \-\- mean g
+.IP \(bu 2
+\fBC\fP \-\- scaling value
+.IP \(bu 2
+\fBstds\fP \-\- geodesic directions
+.UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  18\-Mar\-2018
+.INDENT 7.0
+.TP
+.B calc_fpca(no=3, id=None)
 This function calculates joint functional principal component analysis
 on aligned data
 .INDENT 7.0
@@ -327,20 +448,13 @@ on aligned data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBfn\fP \-\- numpy ndarray of shape (M,N) of N aligned functions with M
-samples
+\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
-\fBtime\fP \-\- vector of size N describing the sample points
-.IP \(bu 2
-\fBqn\fP \-\- numpy ndarray of shape (M,N) of N aligned SRSF with M samples
-.IP \(bu 2
-\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 2)
-.IP \(bu 2
-\fBshowplot\fP (\fI\%bool\fP) \-\- Shows plots of results using matplotlib (default = T)
+\fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
 .UNINDENT
 .TP
 .B Return type
-tuple of numpy ndarray
+fdajpca object of numpy ndarray
 .TP
 .B Return q_pca
 srsf principal directions
@@ -358,9 +472,51 @@ coefficients
 eigenvectors
 .UNINDENT
 .UNINDENT
+.INDENT 7.0
+.TP
+.B plot()
+plot plot elastic vertical fPCA result
+.sp
+Usage: obj.plot()
+.UNINDENT
+.UNINDENT
 .INDENT 0.0
 .TP
-.B fPCA.vertfPCA(fn, time, qn, no=2, showplot=True)
+.B class fPCA.fdavpca(fdawarp)
+This class provides vertical fPCA using the
+SRVF framework
+.sp
+Usage:  obj = fdavpca(warp_data)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBwarp_data\fP \-\- fdawarp class with alignment data
+.IP \(bu 2
+\fBq_pca\fP \-\- srvf principal directions
+.IP \(bu 2
+\fBf_pca\fP \-\- f principal directions
+.IP \(bu 2
+\fBlatent\fP \-\- latent values
+.IP \(bu 2
+\fBcoef\fP \-\- prinicapl coefficients
+.IP \(bu 2
+\fBid\fP \-\- point used for f(0)
+.IP \(bu 2
+\fBmqn\fP \-\- mean srvf
+.IP \(bu 2
+\fBU\fP \-\- eigenvectors
+.IP \(bu 2
+\fBstds\fP \-\- geodesic directions
+.UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  15\-Mar\-2018
+.INDENT 7.0
+.TP
+.B calc_fpca(no=3, id=None)
 This function calculates vertical functional principal component analysis
 on aligned data
 .INDENT 7.0
@@ -368,20 +524,13 @@ on aligned data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBfn\fP \-\- numpy ndarray of shape (M,N) of N aligned functions with M
-samples
+\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
-\fBtime\fP \-\- vector of size N describing the sample points
-.IP \(bu 2
-\fBqn\fP \-\- numpy ndarray of shape (M,N) of N aligned SRSF with M samples
-.IP \(bu 2
-\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 2)
-.IP \(bu 2
-\fBshowplot\fP (\fI\%bool\fP) \-\- Shows plots of results using matplotlib (default = T)
+\fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
 .UNINDENT
 .TP
 .B Return type
-tuple of numpy ndarray
+fdavpca object containing
 .TP
 .B Return q_pca
 srsf principal directions
@@ -397,6 +546,13 @@ coefficients
 .TP
 .B Return U
 eigenvectors
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B plot()
+plot plot elastic vertical fPCA result
+Usage: obj.plot()
 .UNINDENT
 .UNINDENT
 .SH ELASTIC FUNCTIONAL BOXPLOTS
@@ -406,7 +562,45 @@ Elastic Functional Boxplots
 moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B boxplots.ampbox(ft, f_median, qt, q_median, time, alpha=0.05, k_a=1)
+.B class boxplots.ampbox(fdawarp)
+This class provides amplitude boxplot for functional data using the
+SRVF framework
+.sp
+Usage:  obj = ampbox(warp_data)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBwarp_data\fP (\fIfdawarp\fP) \-\- fdawarp class with alignment data
+.IP \(bu 2
+\fBQ1\fP \-\- First quartile
+.IP \(bu 2
+\fBQ3\fP \-\- Second quartile
+.IP \(bu 2
+\fBQ1a\fP \-\- First quantile based on alpha
+.IP \(bu 2
+\fBQ3a\fP \-\- Second quantile based on alpha
+.IP \(bu 2
+\fBminn\fP \-\- minimum extreme function
+.IP \(bu 2
+\fBmaxx\fP \-\- maximum extreme function
+.IP \(bu 2
+\fBoutlier_index\fP \-\- indexes of outlier functions
+.IP \(bu 2
+\fBf_median\fP \-\- median function
+.IP \(bu 2
+\fBq_median\fP \-\- median srvf
+.IP \(bu 2
+\fBplt\fP \-\- surface plot mesh
+.UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  15\-Mar\-2018
+.INDENT 7.0
+.TP
+.B construct_boxplot(alpha=0.05, k_a=1)
 This function constructs the amplitude boxplot using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -414,43 +608,90 @@ square\-root slope (srsf) framework.
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBft\fP \-\- numpy ndarray of shape (M,N) of N functions with M samples
-.IP \(bu 2
-\fBf_median\fP \-\- vector of size M describing the median
-.IP \(bu 2
-\fBqt\fP \-\- numpy ndarray of shape (M,N) of N srsf functions with M samples
-.IP \(bu 2
-\fBq_median\fP \-\- vector of size M describing the srsf median
-.IP \(bu 2
-\fBtime\fP \-\- vector of size M describing the time
-.IP \(bu 2
 \fBalpha\fP \-\- quantile value (e.g.,=.05, i.e., 95%)
 .IP \(bu 2
 \fBk_a\fP \-\- scalar for outlier cutoff (e.g.,=1)
 .UNINDENT
 .TP
 .B Return type
-tuple of numpy array
+ampbox object containing
 .TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of N
+.B Return warp_data
+aligned functions \- fdawarp object
+.TP
+.B Return Q1
+First quartile
+.TP
+.B Return Q3
+Second quartile
+.TP
+.B Return Q1a
+First quantile based on alpha
+.TP
+.B Return Q3a
+Second quantile based on alpha
+.TP
+.B Return minn
+minimum extreme function
+.TP
+.B Return maxx
+maximum extreme function
+.TP
+.B Return outlier_index
+indexes of outlier functions
+.TP
+.B Return f_median
+median function
+.TP
+.B Return q_median
+median srsf
+.TP
+.B Return plt
+surface plot mesh
 .UNINDENT
-.sp
-functions with M samples
-:return Q1: First quartile
-:return Q3: Second quartile
-:return Q1a: First quantile based on alpha
-:return Q3a: Second quantile based on alpha
-:return minn: minimum extreme function
-:return maxx: maximum extreme function
-:return outlier_index: indexes of outlier functions
-:return f_median: median function
-:return q_median: median srsf
-:return plt: surface plot mesh
+.UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B boxplots.phbox(gam, time, alpha=0.05, k_a=1)
+.B class boxplots.phbox(fdawarp)
+This class provides phase boxplot for functional data using the
+SRVF framework
+.sp
+Usage:  obj = phbox(warp_data)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBwarp_data\fP (\fIfdawarp\fP) \-\- fdawarp class with alignment data
+.IP \(bu 2
+\fBQ1\fP \-\- First quartile
+.IP \(bu 2
+\fBQ3\fP \-\- Second quartile
+.IP \(bu 2
+\fBQ1a\fP \-\- First quantile based on alpha
+.IP \(bu 2
+\fBQ3a\fP \-\- Second quantile based on alpha
+.IP \(bu 2
+\fBminn\fP \-\- minimum extreme function
+.IP \(bu 2
+\fBmaxx\fP \-\- maximum extreme function
+.IP \(bu 2
+\fBoutlier_index\fP \-\- indexes of outlier functions
+.IP \(bu 2
+\fBmedian_x\fP \-\- median warping function
+.IP \(bu 2
+\fBpsi_median\fP \-\- median srvf of warping function
+.IP \(bu 2
+\fBplt\fP \-\- surface plot mesh
+.UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  15\-Mar\-2018
+.INDENT 7.0
+.TP
+.B construct_boxplot(alpha=0.05, k_a=1)
 This function constructs phase boxplot for functional data using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -458,111 +699,54 @@ square\-root slope (srsf) framework.
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBgam\fP \-\- numpy ndarray of shape (M,N) of N warping functions with M samples
-.IP \(bu 2
 \fBalpha\fP \-\- quantile value (e.g.,=.05, i.e., 95%)
 .IP \(bu 2
 \fBk_a\fP \-\- scalar for outlier cutoff (e.g.,=1)
 .UNINDENT
 .TP
 .B Return type
-tuple of numpy array
+phbox object containing
 .TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of N
+.B Return warp_data
+fdawarp object
+.TP
+.B Return Q1
+First quartile
+.TP
+.B Return Q3
+Second quartile
+.TP
+.B Return Q1a
+First quantile based on alpha
+.TP
+.B Return Q3a
+Second quantile based on alpha
+.TP
+.B Return minn
+minimum extreme function
+.TP
+.B Return maxx
+maximum extreme function
+.TP
+.B Return outlier_index
+indexes of outlier functions
+.TP
+.B Return median_x
+median warping function
+.TP
+.B Return psi_median
+median srsf of warping function
+.TP
+.B Return plt
+surface plot mesh
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B plot()
+plot box plot and surface plot
 .sp
-functions with M samples
-:return Q1: First quartile
-:return Q3: Second quartile
-:return Q1a: First quantile based on alpha
-:return Q3a: Second quantile based on alpha
-:return minn: minimum extreme function
-:return maxx: maximum extreme function
-:return outlier_index: indexes of outlier functions
-:return median_x: median warping function
-:return psi_median: median srsf of warping function
-:return plt: surface plot mesh
-.UNINDENT
-.SH GAUSSIAN GENERATIVE MODELS
-.sp
-Gaussian Model of functional data
-.sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
-.INDENT 0.0
-.TP
-.B gauss_model.gauss_model(fn, time, qn, gam, n=1, sort_samples=False)
-This function models the functional data using a Gaussian model
-extracted from the principal components of the srvfs
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBfn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N aligned functions with
-M samples
-.IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
-.IP \(bu 2
-\fBqn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N aligned srvfs with M samples
-.IP \(bu 2
-\fBgam\fP (\fInp.ndarray\fP) \-\- warping functions
-.IP \(bu 2
-\fBn\fP (\fIinteger\fP) \-\- number of random samples
-.IP \(bu 2
-\fBsort_samples\fP (\fI\%bool\fP) \-\- sort samples (default = T)
-.UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return fs
-random aligned samples
-.TP
-.B Return gams
-random warping functions
-.TP
-.B Return ft
-random samples
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B gauss_model.joint_gauss_model(fn, time, qn, gam, q0, n=1, no=3)
-This function models the functional data using a joint Gaussian model
-extracted from the principal components of the srsfs
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBfn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N aligned functions with
-M samples
-.IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
-.IP \(bu 2
-\fBqn\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N aligned srsfs with M samples
-.IP \(bu 2
-\fBgam\fP (\fInp.ndarray\fP) \-\- warping functions
-.IP \(bu 2
-\fBq0\fP \-\- numpy ndarray of shape (M,N) of N unaligned srsfs with  samples
-.IP \(bu 2
-\fBn\fP (\fIinteger\fP) \-\- number of random samples
-.IP \(bu 2
-\fBn\fP \-\- number of principal components (default = 3)
-.UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return fs
-random aligned samples
-.TP
-.B Return gams
-random warping functions
-.TP
-.B Return ft
-random samples
+Usage: obj.plot()
 .UNINDENT
 .UNINDENT
 .SH FUNCTIONAL PRINCIPAL LEAST SQUARES
@@ -1212,8 +1396,20 @@ tuple of boxplot objects
 .B Return amp
 amplitude tolerance bounds
 .TP
+.B Rtype out_med
+ampbox object
+.TP
 .B Return ph
 phase tolerance bounds
+.TP
+.B Rtype out_med
+phbox object
+.TP
+.B Return out_med
+alignment results
+.TP
+.B Rtype out_med
+fdawarp object
 .UNINDENT
 .UNINDENT
 .INDENT 0.0

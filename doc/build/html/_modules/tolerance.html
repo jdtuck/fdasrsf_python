@@ -50,7 +50,6 @@
 <span class="kn">import</span> <span class="nn">fdasrsf.fPCA</span> <span class="k">as</span> <span class="nn">fpca</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">chi2</span>
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">eig</span>
-<span class="kn">from</span> <span class="nn">fdasrsf.gauss_model</span> <span class="k">import</span> <span class="n">joint_gauss_model</span>
 <span class="kn">from</span> <span class="nn">fdasrsf.boxplots</span> <span class="k">import</span> <span class="n">ampbox</span><span class="p">,</span> <span class="n">phbox</span>
 
 
@@ -71,14 +70,19 @@
 
 <span class="sd">    :rtype: tuple of boxplot objects</span>
 <span class="sd">    :return amp: amplitude tolerance bounds</span>
+<span class="sd">    :rtype out_med: ampbox object</span>
 <span class="sd">    :return ph: phase tolerance bounds</span>
+<span class="sd">    :rtype out_med: phbox object</span>
+<span class="sd">    :return out_med: alignment results</span>
+<span class="sd">    :rtype out_med: fdawarp object</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
     <span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="c1"># Align Data</span>
-    <span class="n">out_med</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">)</span>
+    <span class="n">out_med</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">fdawarp</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+    <span class="n">out_med</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">)</span>
 
     <span class="c1"># Calculate CI</span>
     <span class="c1"># a% tolerance bound with p%</span>
@@ -92,9 +96,11 @@
     <span class="n">bootlwr_ph</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
     <span class="n">bootupr_ph</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
-        <span class="n">samples</span> <span class="o">=</span> <span class="n">joint_gauss_model</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">gam</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="n">no</span><span class="p">)</span>
-        <span class="n">obja</span> <span class="o">=</span> <span class="n">ampbox</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">ft</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">fmean</span> <span class="p">,</span> <span class="n">samples</span><span class="o">.</span><span class="n">qs</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">mqn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
-        <span class="n">objp</span> <span class="o">=</span> <span class="n">phbox</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">gams</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">out_med</span><span class="o">.</span><span class="n">joint_gauss_model</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="n">no</span><span class="p">)</span>
+        <span class="n">obja</span> <span class="o">=</span> <span class="n">ampbox</span><span class="p">(</span><span class="n">out_med</span><span class="p">)</span>
+        <span class="n">obja</span><span class="o">.</span><span class="n">construct_boxplot</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">objp</span> <span class="o">=</span> <span class="n">phbox</span><span class="p">(</span><span class="n">out_med</span><span class="p">)</span>
+        <span class="n">objp</span><span class="o">.</span><span class="n">construct_boxplot</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
         <span class="n">bootlwr_amp</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">obja</span><span class="o">.</span><span class="n">Q1a</span>
         <span class="n">bootupr_amp</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">obja</span><span class="o">.</span><span class="n">Q3a</span>
         <span class="n">bootlwr_ph</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">objp</span><span class="o">.</span><span class="n">Q1a</span>
@@ -105,10 +111,17 @@
     <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">gradient_spline</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">boot_amp</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="n">boot_amp_q</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
     <span class="n">boot_ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">bootlwr_ph</span><span class="p">,</span><span class="n">bootupr_ph</span><span class="p">))</span>
-    <span class="n">amp</span> <span class="o">=</span> <span class="n">ampbox</span><span class="p">(</span><span class="n">boot_amp</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">fmean</span> <span class="p">,</span> <span class="n">boot_amp_q</span><span class="p">,</span> <span class="n">out_med</span><span class="o">.</span><span class="n">mqn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">ph</span> <span class="o">=</span> <span class="n">phbox</span><span class="p">(</span><span class="n">boot_ph</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">k_a</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">boot_out</span> <span class="o">=</span> <span class="n">out_med</span>
+    <span class="n">boot_out</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">boot_amp</span>
+    <span class="n">boot_out</span><span class="o">.</span><span class="n">qn</span> <span class="o">=</span> <span class="n">boot_amp_q</span>
+    <span class="n">boot_out</span><span class="o">.</span><span class="n">gam</span> <span class="o">=</span> <span class="n">boot_ph</span>
+    <span class="n">boot_out</span><span class="o">.</span><span class="n">rsamps</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">ampbox</span><span class="p">(</span><span class="n">boot_out</span><span class="p">)</span>
+    <span class="n">amp</span><span class="o">.</span><span class="n">construct_boxplot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">.</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ph</span> <span class="o">=</span> <span class="n">phbox</span><span class="p">(</span><span class="n">boot_out</span><span class="p">)</span>
+    <span class="n">ph</span><span class="o">.</span><span class="n">construct_boxplot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">.</span><span class="mi">3</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">amp</span><span class="p">,</span> <span class="n">ph</span></div>
+    <span class="k">return</span> <span class="n">amp</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">out_med</span></div>
 
 
 <div class="viewcode-block" id="pcaTB"><a class="viewcode-back" href="../tolerance.html#tolerance.pcaTB">[docs]</a><span class="k">def</span> <span class="nf">pcaTB</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">p</span><span class="o">=.</span><span class="mi">99</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -133,13 +146,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Align Data</span>
-    <span class="n">warp</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">)</span>
+    <span class="n">out_warp</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">fdawarp</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+    <span class="n">out_warp</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">)</span>
 
     <span class="c1"># Calculate pca</span>
-    <span class="n">pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">jointfPCA</span><span class="p">(</span><span class="n">warp</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">warp</span><span class="o">.</span><span class="n">qn</span><span class="p">,</span> <span class="n">warp</span><span class="o">.</span><span class="n">q0</span><span class="p">,</span> <span class="n">warp</span><span class="o">.</span><span class="n">gam</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="n">no</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">out_pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">fdajpca</span><span class="p">(</span><span class="n">out_warp</span><span class="p">)</span>
+    <span class="n">out_pca</span><span class="o">.</span><span class="n">calc_fpca</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
 
     <span class="c1"># Calculate TB</span>
-    <span class="n">tol</span> <span class="o">=</span> <span class="n">mvtol_region</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">coef</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+    <span class="n">tol</span> <span class="o">=</span> <span class="n">mvtol_region</span><span class="p">(</span><span class="n">out_pca</span><span class="o">.</span><span class="n">coef</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">warp</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">tol</span></div>
 
@@ -239,7 +254,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

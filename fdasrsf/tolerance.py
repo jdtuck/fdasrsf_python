@@ -31,7 +31,11 @@ def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
 
     :rtype: tuple of boxplot objects
     :return amp: amplitude tolerance bounds
+    :rtype out_med: ampbox object
     :return ph: phase tolerance bounds
+    :rtype out_med: phbox object
+    :return out_med: alignment results
+    :rtype out_med: fdawarp object
 
     """
     eps = np.finfo(np.double).eps
@@ -78,7 +82,7 @@ def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
     ph = phbox(boot_out)
     ph.construct_boxplot(a, .3)
 
-    return amp, ph
+    return amp, ph, out_med
 
 
 def pcaTB(f, time, a=0.5, p=.99, no=5, parallel=True):

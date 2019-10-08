@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -150,36 +149,121 @@ functions with M samples
 :return cost: cost function value</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="time_warping.srsf_align">
-<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">srsf_align</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">method='mean'</em>, <em class="sig-param">omethod='DP'</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">parallel=False</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#srsf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.srsf_align" title="Permalink to this definition">¶</a></dt>
+<dl class="class">
+<dt id="time_warping.fdawarp">
+<em class="property">class </em><code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">fdawarp</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides alignment methods for functional data using the SRVF framework</p>
+<p>Usage:  obj = fdawarp(f,t)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – (M,N): matrix defining N functions of M samples</p></li>
+<li><p><strong>time</strong> – time vector of length M</p></li>
+<li><p><strong>fn</strong> – aligned functions</p></li>
+<li><p><strong>qn</strong> – aligned srvfs</p></li>
+<li><p><strong>q0</strong> – initial srvfs</p></li>
+<li><p><strong>fmean</strong> – function mean</p></li>
+<li><p><strong>mqn</strong> – mean srvf</p></li>
+<li><p><strong>gam</strong> – warping functions</p></li>
+<li><p><strong>psi</strong> – srvf of warping functions</p></li>
+<li><p><strong>stats</strong> – alignment statistics</p></li>
+<li><p><strong>qun</strong> – cost function</p></li>
+<li><p><strong>lambda</strong> – lambda</p></li>
+<li><p><strong>method</strong> – optimization method</p></li>
+<li><p><strong>gamI</strong> – invserse warping function</p></li>
+<li><p><strong>rsamps</strong> – random samples</p></li>
+<li><p><strong>fs</strong> – random aligned functions</p></li>
+<li><p><strong>gams</strong> – random warping functions</p></li>
+<li><p><strong>ft</strong> – random warped functions</p></li>
+<li><p><strong>qs</strong> – random aligned srvfs</p></li>
+<li><p><strong>type</strong> – alignment type</p></li>
+<li><p><strong>mcmc</strong> – mcmc output if bayesian</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
+Date   :  15-Mar-2018</p>
+<dl class="method">
+<dt id="time_warping.fdawarp.gauss_model">
+<code class="sig-name descname">gauss_model</code><span class="sig-paren">(</span><em class="sig-param">n=1</em>, <em class="sig-param">sort_samples=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.gauss_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function models the functional data using a Gaussian model
+extracted from the principal components of the srvfs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
+<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – sort samples (default = T)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>fdawarp object containing</p>
+</dd>
+<dt class="field-odd">Return fs</dt>
+<dd class="field-odd"><p>random aligned samples</p>
+</dd>
+<dt class="field-even">Return gams</dt>
+<dd class="field-even"><p>random warping functions</p>
+</dd>
+<dt class="field-odd">Return ft</dt>
+<dd class="field-odd"><p>random samples</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="time_warping.fdawarp.joint_gauss_model">
+<code class="sig-name descname">joint_gauss_model</code><span class="sig-paren">(</span><em class="sig-param">n=1</em>, <em class="sig-param">no=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.joint_gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.joint_gauss_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function models the functional data using a joint Gaussian model
+extracted from the principal components of the srsfs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
+<li><p><strong>no</strong> (<em>integer</em>) – number of principal components (default = 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>fdawarp object containing</p>
+</dd>
+<dt class="field-odd">Return fs</dt>
+<dd class="field-odd"><p>random aligned samples</p>
+</dd>
+<dt class="field-even">Return gams</dt>
+<dd class="field-even"><p>random warping functions</p>
+</dd>
+<dt class="field-odd">Return ft</dt>
+<dd class="field-odd"><p>random samples</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="time_warping.fdawarp.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot plot functional alignment results</p>
+<p>Usage: obj.plot()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="time_warping.fdawarp.srsf_align">
+<code class="sig-name descname">srsf_align</code><span class="sig-paren">(</span><em class="sig-param">method='mean'</em>, <em class="sig-param">omethod='DP'</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">parallel=False</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic
 square-root slope (srsf) framework.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
-<li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median</p></li>
+<li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median (options = “mean” or “median”) (default=”mean”)</p></li>
+<li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
+<li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 </ul>
 </dd>
-</dl>
-<p>(options = “mean” or “median”) (default=”mean”)
-:param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
-:param showplot: Shows plots of results using matplotlib (default = T)
-:param smoothdata: Smooth the data using a box filter (default = F)
-:param parallel: run in parallel (default = F)
-:param lam: controls the elasticity (default = 0)
-:type lam: double
-:type smoothdata: bool
-:type f: np.ndarray
-:type time: np.ndarray</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple of numpy array</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>fdawarp obj with fields</p>
 </dd>
-<dt class="field-even">Return fn</dt>
-<dd class="field-even"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+<dt class="field-odd">Return fn</dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
 </dd>
 </dl>
 <p>functions with M samples
@@ -197,66 +281,10 @@ square-root slope (srsf) framework.</p>
 &gt;&gt;&gt; f = fun.root.f[:]
 &gt;&gt;&gt; f = f.transpose()
 &gt;&gt;&gt; time = fun.root.time[:]
-&gt;&gt;&gt; out = srsf_align(f,time)</p>
+&gt;&gt;&gt; obj = fs.fdawarp(f,time)
+&gt;&gt;&gt; obj.srsf_align()</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="time_warping.srsf_align_pair">
-<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">srsf_align_pair</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">g</em>, <em class="sig-param">time</em>, <em class="sig-param">method='mean'</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#srsf_align_pair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.srsf_align_pair" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function aligns a collection of functions using the elastic square-
-root slope (srsf) framework.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>g</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
-<li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median (options =
-“mean” or “median”) (default=”mean”)</p></li>
-<li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
-<li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of numpy array</p>
-</dd>
-<dt class="field-odd">Return fn</dt>
-<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N
-functions with M samples</p>
-</dd>
-<dt class="field-even">Return gn</dt>
-<dd class="field-even"><p>aligned functions - numpy ndarray of shape (M,N) of N
-functions with M samples</p>
-</dd>
-<dt class="field-odd">Return qfn</dt>
-<dd class="field-odd"><p>aligned srvfs - similar structure to fn</p>
-</dd>
-<dt class="field-even">Return qgn</dt>
-<dd class="field-even"><p>aligned srvfs - similar structure to fn</p>
-</dd>
-<dt class="field-odd">Return qf0</dt>
-<dd class="field-odd"><p>original srvf - similar structure to fn</p>
-</dd>
-<dt class="field-even">Return qg0</dt>
-<dd class="field-even"><p>original srvf - similar structure to fn</p>
-</dd>
-<dt class="field-odd">Return fmean</dt>
-<dd class="field-odd"><p>f function mean or median - vector of length N</p>
-</dd>
-<dt class="field-even">Return gmean</dt>
-<dd class="field-even"><p>g function mean or median - vector of length N</p>
-</dd>
-<dt class="field-odd">Return mqfn</dt>
-<dd class="field-odd"><p>srvf mean or median - vector of length N</p>
-</dd>
-<dt class="field-even">Return mqgn</dt>
-<dd class="field-even"><p>srvf mean or median - vector of length N</p>
-</dd>
-<dt class="field-odd">Return gam</dt>
-<dd class="field-odd"><p>warping functions - similar structure to fn</p>
-</dd>
-</dl>
 </dd></dl>
 
 <div class="toctree-wrapper compound">
@@ -316,7 +344,7 @@ functions with M samples</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

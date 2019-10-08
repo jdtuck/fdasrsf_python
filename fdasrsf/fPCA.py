@@ -17,6 +17,26 @@ import collections
 
 
 class fdavpca:
+    """
+    This class provides vertical fPCA using the
+    SRVF framework
+    
+    Usage:  obj = fdavpca(warp_data)
+    
+    :param warp_data: fdawarp class with alignment data
+    :param q_pca: srvf principal directions
+    :param f_pca: f principal directions
+    :param latent: latent values
+    :param coef: prinicapl coefficients
+    :param id: point used for f(0)
+    :param mqn: mean srvf
+    :param U: eigenvectors
+    :param stds: geodesic directions
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
+    """
+
     def __init__(self, fdawarp):
         """
         Construct an instance of the fdavpca class
@@ -106,6 +126,11 @@ class fdavpca:
         return
 
     def plot(self):
+        """
+        plot plot elastic vertical fPCA result
+        Usage: obj.plot()
+        """
+
         no = 3
         Nstd = self.stds.shape[0]
         N = self.time.shape[0]
@@ -145,6 +170,26 @@ class fdavpca:
         return
 
 class fdahpca:
+    """
+    This class provides horizontal fPCA using the
+    SRVF framework
+
+    Usage:  obj = fdahpca(warp_data)
+
+    :param warp_data: fdawarp class with alignment data
+    :param gam_pca: warping functions principal directions
+    :param psi_pca: srvf principal directions
+    :param latent: latent values
+    :param U: eigenvectors
+    :param coef: coeficients
+    :param vec: shooting vectors
+    :param mu: Karcher Mean
+    :param tau: principal directions
+
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
+    """
+
     def __init__(self, fdawarp):
         """
         Construct an instance of the fdavpca class
@@ -215,6 +260,12 @@ class fdahpca:
         return
 
     def plot(self):
+        """
+        plot plot elastic horizontal fPCA results
+
+        Usage: obj.plot()
+        """
+
         no = self.no
         TT = self.warp_data.time.shape[0]
         CBcdict = {
@@ -247,6 +298,29 @@ class fdahpca:
         return
 
 class fdajpca:
+    """
+    This class provides joint fPCA using the
+    SRVF framework
+    
+    Usage:  obj = fdajpca(warp_data)
+    
+    :param warp_data: fdawarp class with alignment data
+    :param q_pca: srvf principal directions
+    :param f_pca: f principal directions
+    :param latent: latent values
+    :param coef: prinicapl coefficients
+    :param id: point used for f(0)
+    :param mqn: mean srvf
+    :param U: eigenvectors
+    :param mu_psi: mean psi
+    :param mu_g: mean g
+    :param C: scaling value
+    :param stds: geodesic directions
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  18-Mar-2018
+    """
+
     def __init__(self, fdawarp):
         """
         Construct an instance of the fdavpca class
@@ -339,6 +413,11 @@ class fdajpca:
         return
     
     def plot(self):
+        """
+        plot plot elastic vertical fPCA result
+
+        Usage: obj.plot()
+        """
         no = self.no
         M = self.time.shape[0]
         CBcdict = {
