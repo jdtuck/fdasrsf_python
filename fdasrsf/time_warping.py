@@ -92,6 +92,7 @@ class fdawarp:
         """
         M = self.f.shape[0]
         N = self.f.shape[1]
+        self.lam = lam
 
         if M > 500:
             parallel = True

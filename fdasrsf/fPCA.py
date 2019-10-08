@@ -254,6 +254,7 @@ class fdahpca:
         self.coef = c
         self.latent = s
         self.gam_mu = gam_mu
+        self.psi_mu = mu
         self.vec = vec
         self.no = no
 
