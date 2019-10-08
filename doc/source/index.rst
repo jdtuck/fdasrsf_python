@@ -18,7 +18,6 @@ using functional component analysis and regression.
    time_warping
    fPCA
    boxplots
-   gauss_model
    fPLS
    regression
    pcr_regression

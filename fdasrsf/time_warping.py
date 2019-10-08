@@ -7,6 +7,8 @@ moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import matplotlib.pyplot as plt
 import fdasrsf.utility_functions as uf
+import fdasrsf.fPCA as fpca
+import fdasrsf.geometry as geo
 from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import svd
 from numpy.linalg import norm
