@@ -101,6 +101,7 @@ class fdawarp:
 
         eps = np.finfo(np.double).eps
         f0 = self.f
+        self.method = omethod
 
         methods = ["mean", "median"]
         self.type = method
