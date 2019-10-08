@@ -11,7 +11,6 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.fPCA as fpca
 from scipy.stats import chi2
 from numpy.linalg import eig
-from fdasrsf.gauss_model import joint_gauss_model
 from fdasrsf.boxplots import ampbox, phbox
 
 

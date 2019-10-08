@@ -8,6 +8,9 @@ import numpy as np
 from scipy.integrate import trapz
 import fdasrsf.utility_functions as uf
 import fdasrsf.geometry as geo
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
 import collections
 
 
@@ -177,7 +180,7 @@ class ampbox:
         part4=np.linspace(0,d3,100)
         part5=np.linspace(d3,d3+d3a,100)
         part6=np.linspace(d3+d3a,d3+d3a+du,100)
-        allparts = np.array([part1,part2[1:99],part3[1:99],part4[1:99],part5[1:99],part6[1:99]])
+        allparts = np.hstack((part1,part2[1:100],part3[1:100],part4[1:100],part5[1:100],part6[1:100]))
         U, V = np.meshgrid(time, allparts)
         U = np.transpose(U)
         V = np.transpose(V)
@@ -198,8 +201,33 @@ class ampbox:
                                                         'Q1q','Q3q'])
 
         self.plt = plt(U,V,Fs2,allparts,d1,d1a,dl,d3,d3a,du,Q1a_q,Q3a_q)                                           
-
         return
+
+        def plot(self):
+            M = self.warp_data.time.shape[0]
+            fig1, ax1 = plt.subplots()
+            ax1.plot(self.warp_data.time,self.fmean,'k')
+            ax1.plot(self.warp_data.time,self.Q1,'b')
+            ax1.plot(self.warp_data.time,self.Q3,'b')
+            ax1.plot(self.warp_data.time,self.Q1a,'g')
+            ax1.plot(self.warp_data.time,self.Q3a,'g')
+            ax1.plot(self.warp_data.time,self.minn,'r')
+            ax1.plot(self.warp_data.time,self.maxx,'r')
+            
+            fig2 = plt.figure() 
+            ax = fig2.gca(projection='3d')
+            ax.plot_surface(self.plt.U,self.plt.V,self.plt.Fs2,cmap=cm.viridis,rcount=200,ccount=200)
+            ax.plot(self.warp_data.time, np.zeros(M), self.f_median,'k')
+            ax.plot(self.warp_data.time, np.repeat(-self.plt.d1,M), self.Q1,'b')
+            ax.plot(self.warp_data.time, np.repeat(-self.plt.d1-self.plt.d1a,M),self.Q1a,'g')
+            ax.plot(self.warp_data.time, np.repeat(-self.plt.d1-self.plt.d1a-self.plt.dl,M),self.minn,'r')
+            ax.plot(self.warp_data.time, np.repeat(self.plt.d3,M),self.Q3,'b')
+            ax.plot(self.warp_data.time, np.repeat(self.plt.d3+self.plt.d3a,M),self.Q3a,'g')
+            ax.plot(self.warp_data.time, np.repeat(self.plt.d3+self.plt.d3a+self.plt.du,M),self.maxx,'r')
+
+            plt.show()
+
+            return
 
 
 class phbox:
@@ -372,7 +400,7 @@ class phbox:
         part4=np.linspace(0,d3,100)
         part5=np.linspace(d3,d3+d3a,100)
         part6=np.linspace(d3+d3a,d3+d3a+du,100)
-        allparts = np.array([part1,part2[1:99],part3[1:99],part4[1:99],part5[1:99],part6[1:99]])
+        allparts = np.hstack((part1,part2[1:100],part3[1:100],part4[1:100],part5[1:100],part6[1:100]))
         U, V = np.meshgrid(time, allparts)
         U = np.transpose(U)
         V = np.transpose(V)
@@ -393,5 +421,32 @@ class phbox:
                                                         'Q1_psi','Q3_psi'])
 
         self.plt = plt(U,V,Fs2,allparts,d1,d1a,dl,d3,d3a,du,Q1a_psi,Q3a_psi)                                           
+        return
+    
+    def plot(self):
+        M = self.warp_data.time.shape[0]
+        time = np.linspace(0,1,M)
+        fig1, ax1 = plt.subplots()
+        ax1.plot(time,self.median_x,'k')
+        ax1.plot(time,self.Q1,'b')
+        ax1.plot(time,self.Q3,'b')
+        ax1.plot(time,self.Q1a,'g')
+        ax1.plot(time,self.Q3a,'g')
+        ax1.plot(time,self.minn,'r')
+        ax1.plot(time,self.maxx,'r')
+        ax1.set_aspect('equal')
+        
+        fig2 = plt.figure() 
+        ax = fig2.gca(projection='3d')
+        ax.plot_surface(self.plt.U,self.plt.V,self.plt.Fs2,cmap=cm.viridis,rcount=200,ccount=200)
+        ax.plot(time, np.zeros(M), self.median_x-time,'k')
+        ax.plot(time, np.repeat(-self.plt.d1,M), self.Q1 - time,'b')
+        ax.plot(time, np.repeat(-self.plt.d1-self.plt.d1a,M),self.Q1a - time,'g')
+        ax.plot(time, np.repeat(-self.plt.d1-self.plt.d1a-self.plt.dl,M),self.minn - time,'r')
+        ax.plot(time, np.repeat(self.plt.d3,M),self.Q3 - time,'b')
+        ax.plot(time, np.repeat(self.plt.d3+self.plt.d3a,M),self.Q3a - time,'g')
+        ax.plot(time, np.repeat(self.plt.d3+self.plt.d3a+self.plt.du,M),self.maxx - time,'r')
+
+        plt.show()
 
         return

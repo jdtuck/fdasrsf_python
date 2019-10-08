@@ -33,6 +33,7 @@ class fdawarp:
 
         self.f = f
         self.time = time
+        self.rsamps = False
     
 
     def srsf_align(self, method="mean", omethod="DP", smoothdata=False, parallel=False, lam=0.0):
@@ -163,11 +164,17 @@ class fdawarp:
                             omethod, lam, mf[0,r], f[0,k,0])
 
             gam_dev = np.zeros((M, N))
+            vtil = np.zeros((M,N))
+            dtil = np.zeros(N)
             for k in range(0, N):
                 f[:, k, r + 1] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
                                         + self.time[0], self.time, f[:, k, 0])
                 q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], self.time)
                 gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+                v = q[:, k, r + 1] - mq[:,r]
+                d = np.sqrt(trapz(v*v, self.time))
+                vtil[:,k] = v/d
+                dtil[k] = 1.0/d
 
             mqt = mq[:, r]
             a = mqt.repeat(N)
@@ -196,11 +203,14 @@ class fdawarp:
 
                 # Minimization Step
                 # compute the mean of the matched function
-                dist_iinv = ds[r + 1] ** (-1)
-                qtemp = q[:, :, r + 1] / ds[r + 1]
-                ftemp = f[:, :, r + 1] / ds[r + 1]
-                mq[:, r + 1] = qtemp.sum(axis=1) * dist_iinv
-                mf[:, r + 1] = ftemp.sum(axis=1) * dist_iinv
+                stp = .3
+                vbar = vtil.sum(axis=1)*(1/dtil.sum())
+                qtemp = q[:, :, r + 1] 
+                ftemp = f[:, :, r + 1] 
+                mq[:, r + 1] = mq[:,r] + stp*vbar
+                tmp = np.zeros(M)
+                tmp[1:] = cumtrapz(mq[:, r + 1] * np.abs(mq[:, r + 1]), self.time)
+                mf[:, r + 1] = np.median(f0[1, :])+tmp
 
                 qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
@@ -243,8 +253,7 @@ class fdawarp:
         std_fn = self.fn.std(axis=1)
         self.gam = gam
         self.mqn = mq[:, r + 1]
-        tmp = np.zeros((1, M))
-        tmp = tmp.flatten()
+        tmp = np.zeros(M)
         tmp[1:] = cumtrapz(self.mqn * np.abs(self.mqn), self.time)
         self.fmean = np.mean(f0[1, :]) + tmp
 
