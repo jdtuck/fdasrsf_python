@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Functional Alignment &#8212; fdasrsf 1.5.0 documentation</title>
+    <title>Functional Alignment &#8212; fdasrsf 2.0.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -195,18 +195,6 @@ extracted from the principal components of the srvfs</p>
 <li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – sort samples (default = T)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>fdawarp object containing</p>
-</dd>
-<dt class="field-odd">Return fs</dt>
-<dd class="field-odd"><p>random aligned samples</p>
-</dd>
-<dt class="field-even">Return gams</dt>
-<dd class="field-even"><p>random warping functions</p>
-</dd>
-<dt class="field-odd">Return ft</dt>
-<dd class="field-odd"><p>random samples</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -221,18 +209,6 @@ extracted from the principal components of the srsfs</p>
 <li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
 <li><p><strong>no</strong> (<em>integer</em>) – number of principal components (default = 3)</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>fdawarp object containing</p>
-</dd>
-<dt class="field-odd">Return fs</dt>
-<dd class="field-odd"><p>random aligned samples</p>
-</dd>
-<dt class="field-even">Return gams</dt>
-<dd class="field-even"><p>random warping functions</p>
-</dd>
-<dt class="field-odd">Return ft</dt>
-<dd class="field-odd"><p>random samples</p>
 </dd>
 </dl>
 </dd></dl>
@@ -259,22 +235,7 @@ square-root slope (srsf) framework.</p>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>fdawarp obj with fields</p>
-</dd>
-<dt class="field-odd">Return fn</dt>
-<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
-</dd>
 </dl>
-<p>functions with M samples
-:return qn: aligned srvfs - similar structure to fn
-:return q0: original srvf - similar structure to fn
-:return fmean: function mean or median - vector of length M
-:return mqn: srvf mean or median - vector of length M
-:return gam: warping functions - similar structure to fn
-:return orig_var: Original Variance of Functions
-:return amp_var: Amplitude Variance
-:return phase_var: Phase Variance</p>
 <p>Examples
 &gt;&gt;&gt; import tables
 &gt;&gt;&gt; fun=tables.open_file(“../Data/simu_data.h5”)
@@ -339,7 +300,7 @@ square-root slope (srsf) framework.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -72,7 +72,7 @@
 
 \title{fdasrsf Documentation}
 \date{Oct 08, 2019}
-\release{1.5.0}
+\release{2.0.0}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -325,18 +325,6 @@ extracted from the principal components of the srvfs
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-fdawarp object containing
-
-\item[{Return fs}] \leavevmode
-random aligned samples
-
-\item[{Return gams}] \leavevmode
-random warping functions
-
-\item[{Return ft}] \leavevmode
-random samples
-
 \end{description}\end{quote}
 
 \end{fulllineitems}
@@ -356,18 +344,6 @@ extracted from the principal components of the srsfs
 \sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of principal components (default = 3)
 
 \end{itemize}
-
-\item[{Return type}] \leavevmode
-fdawarp object containing
-
-\item[{Return fs}] \leavevmode
-random aligned samples
-
-\item[{Return gams}] \leavevmode
-random warping functions
-
-\item[{Return ft}] \leavevmode
-random samples
 
 \end{description}\end{quote}
 
@@ -408,23 +384,7 @@ square-root slope (srsf) framework.
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-fdawarp obj with fields
-
-\item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
-
 \end{description}\end{quote}
-
-functions with M samples
-:return qn: aligned srvfs - similar structure to fn
-:return q0: original srvf - similar structure to fn
-:return fmean: function mean or median - vector of length M
-:return mqn: srvf mean or median - vector of length M
-:return gam: warping functions - similar structure to fn
-:return orig\_var: Original Variance of Functions
-:return amp\_var: Amplitude Variance
-:return phase\_var: Phase Variance
 
 Examples
 \textgreater{}\textgreater{}\textgreater{} import tables
@@ -802,42 +762,6 @@ square-root slope (srsf) framework.
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-ampbox object containing
-
-\item[{Return warp\_data}] \leavevmode
-aligned functions - fdawarp object
-
-\item[{Return Q1}] \leavevmode
-First quartile
-
-\item[{Return Q3}] \leavevmode
-Second quartile
-
-\item[{Return Q1a}] \leavevmode
-First quantile based on alpha
-
-\item[{Return Q3a}] \leavevmode
-Second quantile based on alpha
-
-\item[{Return minn}] \leavevmode
-minimum extreme function
-
-\item[{Return maxx}] \leavevmode
-maximum extreme function
-
-\item[{Return outlier\_index}] \leavevmode
-indexes of outlier functions
-
-\item[{Return f\_median}] \leavevmode
-median function
-
-\item[{Return q\_median}] \leavevmode
-median srsf
-
-\item[{Return plt}] \leavevmode
-surface plot mesh
-
 \end{description}\end{quote}
 
 \end{fulllineitems}
@@ -909,42 +833,6 @@ square-root slope (srsf) framework.
 \sphinxstyleliteralstrong{\sphinxupquote{k\_a}} \textendash{} scalar for outlier cutoff (e.g.,=1)
 
 \end{itemize}
-
-\item[{Return type}] \leavevmode
-phbox object containing
-
-\item[{Return warp\_data}] \leavevmode
-fdawarp object
-
-\item[{Return Q1}] \leavevmode
-First quartile
-
-\item[{Return Q3}] \leavevmode
-Second quartile
-
-\item[{Return Q1a}] \leavevmode
-First quantile based on alpha
-
-\item[{Return Q3a}] \leavevmode
-Second quantile based on alpha
-
-\item[{Return minn}] \leavevmode
-minimum extreme function
-
-\item[{Return maxx}] \leavevmode
-maximum extreme function
-
-\item[{Return outlier\_index}] \leavevmode
-indexes of outlier functions
-
-\item[{Return median\_x}] \leavevmode
-median warping function
-
-\item[{Return psi\_median}] \leavevmode
-median srsf of warping function
-
-\item[{Return plt}] \leavevmode
-surface plot mesh
 
 \end{description}\end{quote}
 
@@ -1516,10 +1404,153 @@ warping function
 Warping PCR Invariant Regression using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
-\index{elastic\_lpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_lpcr\_regression()}\spxextra{in module pcr\_regression}}
+\index{elastic\_lpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_lpcr\_regression}\spxextra{class in pcr\_regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_lpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_lpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+This class provides elastic logistic pcr regression for functional 
+data using the SRVF framework accounting for warping
+
+Usage:  obj = elastic\_lpcr\_regression(f,y,time)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) \% matrix defining N functions of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N (-1/1)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp object of alignment
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca}} \textendash{} class dependent on fPCA method used object of fPCA
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param Loss: logistic loss
+:param PC: probability of classification
+:param ylabels: predicted labels
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  18-Mar-2018
+\index{calc\_model() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
+This function identifies a logistic regression model with phase-variability
+using elastic pca
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} scalar specify number of principal components (default=5)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} \textendash{} smooth data using box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} calculate in parallel (default = F)
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{predict() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+\begin{quote}
+
+obj.predict(newdata)
+\end{quote}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of time points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} truth if available
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} \textendash{} smooth data if needed
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to run filter
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+\index{elastic\_mlpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_mlpcr\_regression}\spxextra{class in pcr\_regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+This class provides elastic multinomial logistic pcr regression for functional
+data using the SRVF framework accounting for warping
+
+Usage:  obj = elastic\_mlpcr\_regression(f,y,time)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) \% matrix defining N functions of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Y}} \textendash{} coded label matrix
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp object of alignment
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca}} \textendash{} class dependent on fPCA method used object of fPCA
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param Loss: logistic loss
+:param PC: probability of classification
+:param ylabels: predicted labels
+:param
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  18-Mar-2018
+\index{calc\_model() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
 This function identifies a logistic regression model with phase-variability
 using elastic pca
 \begin{quote}\begin{description}
@@ -1546,113 +1577,95 @@ using elastic pca
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
 
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run model in parallel (default = F)
+
 \end{itemize}
-
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return alpha}] \leavevmode
-alpha parameter of model
-
-\item[{Return b}] \leavevmode
-regressor vector
-
-\item[{Return y}] \leavevmode
-response vector
-
-\item[{Return warp\_data}] \leavevmode
-alignment object from srsf\_align
-
-\item[{Return pca}] \leavevmode
-fpca object from corresponding pca method
-
-\item[{Return Loss}] \leavevmode
-logistic loss
-
-\item[{Return pca.method}] \leavevmode
-string of pca method
 
 \end{description}\end{quote}
 
 \end{fulllineitems}
 
-\index{elastic\_mlpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_mlpcr\_regression()}\spxextra{in module pcr\_regression}}
+\index{predict() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}}{}
-This function identifies a logistic regression model with phase-variability
-using elastic pca
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+\begin{quote}
+
+obj.predict(newdata)
+\end{quote}
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of time points
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
-“vert”, or “horiz”, default = “combined”)
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} truth if available
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} scalar specify number of principal components (default=5)
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} \textendash{} smooth data if needed
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} \textendash{} smooth data using box filter (default = F)
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to run filter
 
 \end{itemize}
-
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return alpha}] \leavevmode
-alpha parameter of model
-
-\item[{Return b}] \leavevmode
-regressor vector
-
-\item[{Return y}] \leavevmode
-response vector
-
-\item[{Return warp\_data}] \leavevmode
-alignment object from srsf\_align
-
-\item[{Return pca}] \leavevmode
-fpca object from corresponding pca method
-
-\item[{Return Loss}] \leavevmode
-logistic loss
-
-\item[{Return pca.method}] \leavevmode
-string of pca method
 
 \end{description}\end{quote}
 
 \end{fulllineitems}
 
-\index{elastic\_pcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_pcr\_regression()}\spxextra{in module pcr\_regression}}
+
+\end{fulllineitems}
+
+\index{elastic\_pcr\_regression (class in pcr\_regression)@\spxentry{elastic\_pcr\_regression}\spxextra{class in pcr\_regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_pcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_pcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+This class provides elastic pcr regression for functional data using the
+SRVF framework accounting for warping
+
+Usage:  obj = elastic\_pcr\_regression(f,y,time)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) \% matrix defining N functions of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp object of alignment
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca}} \textendash{} class dependent on fPCA method used object of fPCA
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param SSE: sum of squared errors
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  18-Mar-2018
+\index{calc\_model() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
 This function identifies a regression model with phase-variability
 using elastic pca
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
-
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
 “vert”, or “horiz”, default = “combined”)
@@ -1674,31 +1687,46 @@ using elastic pca
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-tuple of numpy array
+\end{description}\end{quote}
 
-\item[{Return alpha}] \leavevmode
-alpha parameter of model
+\end{fulllineitems}
 
-\item[{Return b}] \leavevmode
-regressor vector
+\index{predict() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}}
 
-\item[{Return y}] \leavevmode
-response vector
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+\begin{quote}
 
-\item[{Return warp\_data}] \leavevmode
-alignment object from srsf\_align
+obj.predict(newdata)
+\end{quote}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
 
-\item[{Return pca}] \leavevmode
-fpca object from corresponding pca method
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
 
-\item[{Return SSE}] \leavevmode
-sum of squared errors
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of time points
 
-\item[{Return pca.method}] \leavevmode
-string of pca method
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} truth if available
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} \textendash{} smooth data if needed
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to run filter
+
+\end{itemize}
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
 
 \end{fulllineitems}
 

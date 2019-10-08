@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Oct 08, 2019" "1.5" "fdasrsf"
+.TH "FDASRSF" "1" "Oct 08, 2019" "2.0" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -226,18 +226,6 @@ extracted from the principal components of the srvfs
 .IP \(bu 2
 \fBsort_samples\fP (\fI\%bool\fP) \-\- sort samples (default = T)
 .UNINDENT
-.TP
-.B Return type
-fdawarp object containing
-.TP
-.B Return fs
-random aligned samples
-.TP
-.B Return gams
-random warping functions
-.TP
-.B Return ft
-random samples
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -254,18 +242,6 @@ extracted from the principal components of the srsfs
 .IP \(bu 2
 \fBno\fP (\fIinteger\fP) \-\- number of principal components (default = 3)
 .UNINDENT
-.TP
-.B Return type
-fdawarp object containing
-.TP
-.B Return fs
-random aligned samples
-.TP
-.B Return gams
-random warping functions
-.TP
-.B Return ft
-random samples
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -295,23 +271,7 @@ square\-root slope (srsf) framework.
 .IP \(bu 2
 \fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
 .UNINDENT
-.TP
-.B Return type
-fdawarp obj with fields
-.TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of N
 .UNINDENT
-.sp
-functions with M samples
-:return qn: aligned srvfs \- similar structure to fn
-:return q0: original srvf \- similar structure to fn
-:return fmean: function mean or median \- vector of length M
-:return mqn: srvf mean or median \- vector of length M
-:return gam: warping functions \- similar structure to fn
-:return orig_var: Original Variance of Functions
-:return amp_var: Amplitude Variance
-:return phase_var: Phase Variance
 .sp
 Examples
 >>> import tables
@@ -612,42 +572,6 @@ square\-root slope (srsf) framework.
 .IP \(bu 2
 \fBk_a\fP \-\- scalar for outlier cutoff (e.g.,=1)
 .UNINDENT
-.TP
-.B Return type
-ampbox object containing
-.TP
-.B Return warp_data
-aligned functions \- fdawarp object
-.TP
-.B Return Q1
-First quartile
-.TP
-.B Return Q3
-Second quartile
-.TP
-.B Return Q1a
-First quantile based on alpha
-.TP
-.B Return Q3a
-Second quantile based on alpha
-.TP
-.B Return minn
-minimum extreme function
-.TP
-.B Return maxx
-maximum extreme function
-.TP
-.B Return outlier_index
-indexes of outlier functions
-.TP
-.B Return f_median
-median function
-.TP
-.B Return q_median
-median srsf
-.TP
-.B Return plt
-surface plot mesh
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -703,42 +627,6 @@ square\-root slope (srsf) framework.
 .IP \(bu 2
 \fBk_a\fP \-\- scalar for outlier cutoff (e.g.,=1)
 .UNINDENT
-.TP
-.B Return type
-phbox object containing
-.TP
-.B Return warp_data
-fdawarp object
-.TP
-.B Return Q1
-First quartile
-.TP
-.B Return Q3
-Second quartile
-.TP
-.B Return Q1a
-First quantile based on alpha
-.TP
-.B Return Q3a
-Second quantile based on alpha
-.TP
-.B Return minn
-minimum extreme function
-.TP
-.B Return maxx
-maximum extreme function
-.TP
-.B Return outlier_index
-indexes of outlier functions
-.TP
-.B Return median_x
-median warping function
-.TP
-.B Return psi_median
-median srsf of warping function
-.TP
-.B Return plt
-surface plot mesh
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1205,7 +1093,125 @@ Warping PCR Invariant Regression using SRSF
 moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B pcr_regression.elastic_lpcr_regression(f, y, time, pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25)
+.B class pcr_regression.elastic_lpcr_regression(f, y, time)
+This class provides elastic logistic pcr regression for functional 
+data using the SRVF framework accounting for warping
+.sp
+Usage:  obj = elastic_lpcr_regression(f,y,time)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP \-\- (M,N) % matrix defining N functions of M samples
+.IP \(bu 2
+\fBy\fP \-\- response vector of length N (\-1/1)
+.IP \(bu 2
+\fBwarp_data\fP \-\- fdawarp object of alignment
+.IP \(bu 2
+\fBpca\fP \-\- class dependent on fPCA method used object of fPCA
+.UNINDENT
+.UNINDENT
+.sp
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param Loss: logistic loss
+:param PC: probability of classification
+:param ylabels: predicted labels
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  18\-Mar\-2018
+.INDENT 7.0
+.TP
+.B calc_model(pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25, parallel=False)
+This function identifies a logistic regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpca_method\fP \-\- string specifing pca method (options = "combined",
+"vert", or "horiz", default = "combined")
+.IP \(bu 2
+\fBno\fP \-\- scalar specify number of principal components (default=5)
+.IP \(bu 2
+\fBsmooth_data\fP \-\- smooth data using box filter (default = F)
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to apply box filter (default = 25)
+.IP \(bu 2
+\fBparallel\fP \-\- calculate in parallel (default = F)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B predict(newdata=None)
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+.INDENT 7.0
+.INDENT 3.5
+obj.predict(newdata)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+.IP \(bu 2
+\fBf\fP \-\- (M,N) matrix of functions
+.IP \(bu 2
+\fBtime\fP \-\- vector of time points
+.IP \(bu 2
+\fBy\fP \-\- truth if available
+.IP \(bu 2
+\fBsmooth\fP \-\- smooth data if needed
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to run filter
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class pcr_regression.elastic_mlpcr_regression(f, y, time)
+This class provides elastic multinomial logistic pcr regression for functional
+data using the SRVF framework accounting for warping
+.sp
+Usage:  obj = elastic_mlpcr_regression(f,y,time)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP \-\- (M,N) % matrix defining N functions of M samples
+.IP \(bu 2
+\fBy\fP \-\- response vector of length N
+.IP \(bu 2
+\fBY\fP \-\- coded label matrix
+.IP \(bu 2
+\fBwarp_data\fP \-\- fdawarp object of alignment
+.IP \(bu 2
+\fBpca\fP \-\- class dependent on fPCA method used object of fPCA
+.UNINDENT
+.UNINDENT
+.sp
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param Loss: logistic loss
+:param PC: probability of classification
+:param ylabels: predicted labels
+:param
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  18\-Mar\-2018
+.INDENT 7.0
+.TP
+.B calc_model(pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25, parallel=False)
 This function identifies a logistic regression model with phase\-variability
 using elastic pca
 .INDENT 7.0
@@ -1227,99 +1233,79 @@ using elastic pca
 \fBsmooth_data\fP \-\- smooth data using box filter (default = F)
 .IP \(bu 2
 \fBsparam\fP \-\- number of times to apply box filter (default = 25)
-.UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return alpha
-alpha parameter of model
-.TP
-.B Return b
-regressor vector
-.TP
-.B Return y
-response vector
-.TP
-.B Return warp_data
-alignment object from srsf_align
-.TP
-.B Return pca
-fpca object from corresponding pca method
-.TP
-.B Return Loss
-logistic loss
-.TP
-.B Return pca.method
-string of pca method
+.IP \(bu 2
+\fBparallel\fP \-\- run model in parallel (default = F)
 .UNINDENT
 .UNINDENT
-.INDENT 0.0
+.UNINDENT
+.INDENT 7.0
 .TP
-.B pcr_regression.elastic_mlpcr_regression(f, y, time, pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25)
-This function identifies a logistic regression model with phase\-variability
-using elastic pca
+.B predict(newdata=None)
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+.INDENT 7.0
+.INDENT 3.5
+obj.predict(newdata)
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
 .IP \(bu 2
-\fBy\fP \-\- numpy array of N responses
+\fBf\fP \-\- (M,N) matrix of functions
 .IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+\fBtime\fP \-\- vector of time points
 .IP \(bu 2
-\fBpca_method\fP \-\- string specifing pca method (options = "combined",
-"vert", or "horiz", default = "combined")
+\fBy\fP \-\- truth if available
 .IP \(bu 2
-\fBno\fP \-\- scalar specify number of principal components (default=5)
+\fBsmooth\fP \-\- smooth data if needed
 .IP \(bu 2
-\fBsmooth_data\fP \-\- smooth data using box filter (default = F)
-.IP \(bu 2
-\fBsparam\fP \-\- number of times to apply box filter (default = 25)
+\fBsparam\fP \-\- number of times to run filter
 .UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return alpha
-alpha parameter of model
-.TP
-.B Return b
-regressor vector
-.TP
-.B Return y
-response vector
-.TP
-.B Return warp_data
-alignment object from srsf_align
-.TP
-.B Return pca
-fpca object from corresponding pca method
-.TP
-.B Return Loss
-logistic loss
-.TP
-.B Return pca.method
-string of pca method
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B pcr_regression.elastic_pcr_regression(f, y, time, pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25, parallel=False, C=None)
+.B class pcr_regression.elastic_pcr_regression(f, y, time)
+This class provides elastic pcr regression for functional data using the
+SRVF framework accounting for warping
+.sp
+Usage:  obj = elastic_pcr_regression(f,y,time)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP \-\- (M,N) % matrix defining N functions of M samples
+.IP \(bu 2
+\fBy\fP \-\- response vector of length N
+.IP \(bu 2
+\fBwarp_data\fP \-\- fdawarp object of alignment
+.IP \(bu 2
+\fBpca\fP \-\- class dependent on fPCA method used object of fPCA
+.UNINDENT
+.UNINDENT
+.sp
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param SSE: sum of squared errors
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  18\-Mar\-2018
+.INDENT 7.0
+.TP
+.B calc_model(pca_method=\(aqcombined\(aq, no=5, smooth_data=False, sparam=25, parallel=False, C=None)
 This function identifies a regression model with phase\-variability
 using elastic pca
 .INDENT 7.0
 .TP
 .B Parameters
 .INDENT 7.0
-.IP \(bu 2
-\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
-.IP \(bu 2
-\fBy\fP \-\- numpy array of N responses
-.IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
 .IP \(bu 2
 \fBpca_method\fP \-\- string specifing pca method (options = "combined",
 "vert", or "horiz", default = "combined")
@@ -1334,30 +1320,36 @@ using elastic pca
 .IP \(bu 2
 \fBC\fP \-\- scale balance parameter for combined method (default = None)
 .UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
 .TP
-.B Return type
-tuple of numpy array
+.B predict(newdata=None)
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+.INDENT 7.0
+.INDENT 3.5
+obj.predict(newdata)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
 .TP
-.B Return alpha
-alpha parameter of model
-.TP
-.B Return b
-regressor vector
-.TP
-.B Return y
-response vector
-.TP
-.B Return warp_data
-alignment object from srsf_align
-.TP
-.B Return pca
-fpca object from corresponding pca method
-.TP
-.B Return SSE
-sum of squared errors
-.TP
-.B Return pca.method
-string of pca method
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+.IP \(bu 2
+\fBf\fP \-\- (M,N) matrix of functions
+.IP \(bu 2
+\fBtime\fP \-\- vector of time points
+.IP \(bu 2
+\fBy\fP \-\- truth if available
+.IP \(bu 2
+\fBsmooth\fP \-\- smooth data if needed
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to run filter
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .SH ELASTIC FUNCTIONAL TOLERANCE BOUNDS

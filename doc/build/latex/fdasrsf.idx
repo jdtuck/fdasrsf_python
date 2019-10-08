@@ -19,29 +19,35 @@
 \indexentry{boxplots (module)@\spxentry{boxplots}\spxextra{module}|hyperpage}{11}
 \indexentry{ampbox (class in boxplots)@\spxentry{ampbox}\spxextra{class in boxplots}|hyperpage}{11}
 \indexentry{construct\_boxplot() (boxplots.ampbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.ampbox method}|hyperpage}{11}
-\indexentry{phbox (class in boxplots)@\spxentry{phbox}\spxextra{class in boxplots}|hyperpage}{12}
+\indexentry{phbox (class in boxplots)@\spxentry{phbox}\spxextra{class in boxplots}|hyperpage}{11}
 \indexentry{construct\_boxplot() (boxplots.phbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.phbox method}|hyperpage}{12}
-\indexentry{plot() (boxplots.phbox method)@\spxentry{plot()}\spxextra{boxplots.phbox method}|hyperpage}{13}
-\indexentry{fPLS (module)@\spxentry{fPLS}\spxextra{module}|hyperpage}{15}
-\indexentry{pls\_svd() (in module fPLS)@\spxentry{pls\_svd()}\spxextra{in module fPLS}|hyperpage}{15}
-\indexentry{regression (module)@\spxentry{regression}\spxextra{module}|hyperpage}{17}
-\indexentry{elastic\_logistic() (in module regression)@\spxentry{elastic\_logistic()}\spxextra{in module regression}|hyperpage}{17}
-\indexentry{elastic\_mlogistic() (in module regression)@\spxentry{elastic\_mlogistic()}\spxextra{in module regression}|hyperpage}{17}
-\indexentry{elastic\_prediction() (in module regression)@\spxentry{elastic\_prediction()}\spxextra{in module regression}|hyperpage}{18}
-\indexentry{elastic\_regression() (in module regression)@\spxentry{elastic\_regression()}\spxextra{in module regression}|hyperpage}{18}
-\indexentry{logistic\_warp() (in module regression)@\spxentry{logistic\_warp()}\spxextra{in module regression}|hyperpage}{19}
-\indexentry{logit\_gradient() (in module regression)@\spxentry{logit\_gradient()}\spxextra{in module regression}|hyperpage}{19}
-\indexentry{logit\_hessian() (in module regression)@\spxentry{logit\_hessian()}\spxextra{in module regression}|hyperpage}{19}
-\indexentry{logit\_loss() (in module regression)@\spxentry{logit\_loss()}\spxextra{in module regression}|hyperpage}{19}
-\indexentry{mlogit\_gradient() (in module regression)@\spxentry{mlogit\_gradient()}\spxextra{in module regression}|hyperpage}{19}
-\indexentry{mlogit\_loss() (in module regression)@\spxentry{mlogit\_loss()}\spxextra{in module regression}|hyperpage}{20}
-\indexentry{mlogit\_warp\_grad() (in module regression)@\spxentry{mlogit\_warp\_grad()}\spxextra{in module regression}|hyperpage}{20}
-\indexentry{phi() (in module regression)@\spxentry{phi()}\spxextra{in module regression}|hyperpage}{20}
-\indexentry{regression\_warp() (in module regression)@\spxentry{regression\_warp()}\spxextra{in module regression}|hyperpage}{20}
-\indexentry{pcr\_regression (module)@\spxentry{pcr\_regression}\spxextra{module}|hyperpage}{23}
-\indexentry{elastic\_lpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_lpcr\_regression()}\spxextra{in module pcr\_regression}|hyperpage}{23}
-\indexentry{elastic\_mlpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_mlpcr\_regression()}\spxextra{in module pcr\_regression}|hyperpage}{23}
-\indexentry{elastic\_pcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_pcr\_regression()}\spxextra{in module pcr\_regression}|hyperpage}{24}
+\indexentry{plot() (boxplots.phbox method)@\spxentry{plot()}\spxextra{boxplots.phbox method}|hyperpage}{12}
+\indexentry{fPLS (module)@\spxentry{fPLS}\spxextra{module}|hyperpage}{13}
+\indexentry{pls\_svd() (in module fPLS)@\spxentry{pls\_svd()}\spxextra{in module fPLS}|hyperpage}{13}
+\indexentry{regression (module)@\spxentry{regression}\spxextra{module}|hyperpage}{15}
+\indexentry{elastic\_logistic() (in module regression)@\spxentry{elastic\_logistic()}\spxextra{in module regression}|hyperpage}{15}
+\indexentry{elastic\_mlogistic() (in module regression)@\spxentry{elastic\_mlogistic()}\spxextra{in module regression}|hyperpage}{15}
+\indexentry{elastic\_prediction() (in module regression)@\spxentry{elastic\_prediction()}\spxextra{in module regression}|hyperpage}{16}
+\indexentry{elastic\_regression() (in module regression)@\spxentry{elastic\_regression()}\spxextra{in module regression}|hyperpage}{16}
+\indexentry{logistic\_warp() (in module regression)@\spxentry{logistic\_warp()}\spxextra{in module regression}|hyperpage}{17}
+\indexentry{logit\_gradient() (in module regression)@\spxentry{logit\_gradient()}\spxextra{in module regression}|hyperpage}{17}
+\indexentry{logit\_hessian() (in module regression)@\spxentry{logit\_hessian()}\spxextra{in module regression}|hyperpage}{17}
+\indexentry{logit\_loss() (in module regression)@\spxentry{logit\_loss()}\spxextra{in module regression}|hyperpage}{17}
+\indexentry{mlogit\_gradient() (in module regression)@\spxentry{mlogit\_gradient()}\spxextra{in module regression}|hyperpage}{17}
+\indexentry{mlogit\_loss() (in module regression)@\spxentry{mlogit\_loss()}\spxextra{in module regression}|hyperpage}{18}
+\indexentry{mlogit\_warp\_grad() (in module regression)@\spxentry{mlogit\_warp\_grad()}\spxextra{in module regression}|hyperpage}{18}
+\indexentry{phi() (in module regression)@\spxentry{phi()}\spxextra{in module regression}|hyperpage}{18}
+\indexentry{regression\_warp() (in module regression)@\spxentry{regression\_warp()}\spxextra{in module regression}|hyperpage}{18}
+\indexentry{pcr\_regression (module)@\spxentry{pcr\_regression}\spxextra{module}|hyperpage}{21}
+\indexentry{elastic\_lpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_lpcr\_regression}\spxextra{class in pcr\_regression}|hyperpage}{21}
+\indexentry{calc\_model() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}|hyperpage}{21}
+\indexentry{predict() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}|hyperpage}{21}
+\indexentry{elastic\_mlpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_mlpcr\_regression}\spxextra{class in pcr\_regression}|hyperpage}{22}
+\indexentry{calc\_model() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}|hyperpage}{22}
+\indexentry{predict() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}|hyperpage}{22}
+\indexentry{elastic\_pcr\_regression (class in pcr\_regression)@\spxentry{elastic\_pcr\_regression}\spxextra{class in pcr\_regression}|hyperpage}{23}
+\indexentry{calc\_model() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}|hyperpage}{23}
+\indexentry{predict() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}|hyperpage}{23}
 \indexentry{tolerance (module)@\spxentry{tolerance}\spxextra{module}|hyperpage}{25}
 \indexentry{bootTB() (in module tolerance)@\spxentry{bootTB()}\spxextra{in module tolerance}|hyperpage}{25}
 \indexentry{mvtol\_region() (in module tolerance)@\spxentry{mvtol\_region()}\spxextra{in module tolerance}|hyperpage}{25}
