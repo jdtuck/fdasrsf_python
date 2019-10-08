@@ -39,7 +39,8 @@ def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
     (M, N) = f.shape
 
     # Align Data
-    out_med = fs.srsf_align(f, time, method="median", showplot=False, parallel=parallel)
+    out_med = fs.fdawarp(f, time)
+    out_med.srsf_align(method="median", parallel=parallel)
 
     # Calculate CI
     # a% tolerance bound with p%
@@ -53,9 +54,11 @@ def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
     bootlwr_ph =  np.zeros((M,B))
     bootupr_ph =  np.zeros((M,B))
     for k in range(B):
-        samples = joint_gauss_model(fn, time, qn, gam, q0, n=100, no=no)
-        obja = ampbox(samples.ft, out_med.fmean , samples.qs, out_med.mqn, time, alpha=1-p, k_a=.3)
-        objp = phbox(samples.gams, time, alpha=1-p, k_a=.3)
+        out_med.joint_gauss_model(n=100, no=no)
+        obja = ampbox(out_med)
+        obja.construct_boxplot(1-p,.3)
+        objp = phbox(out_med)
+        objp.construct_boxplot(1-p,.3)
         bootlwr_amp[:,k] = obja.Q1a
         bootupr_amp[:,k] = obja.Q3a
         bootlwr_ph[:,k] = objp.Q1a
@@ -66,8 +69,15 @@ def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
     f, g, g2 = uf.gradient_spline(time, boot_amp, False)
     boot_amp_q = g / np.sqrt(abs(g) + eps)
     boot_ph = np.hstack((bootlwr_ph,bootupr_ph))
-    amp = ampbox(boot_amp, out_med.fmean , boot_amp_q, out_med.mqn, time, alpha=a, k_a=.3)
-    ph = phbox(boot_ph, time, alpha=a, k_a=.3)
+    boot_out = out_med
+    boot_out.fn = boot_amp
+    boot_out.qn = boot_amp_q
+    boot_out.gam = boot_ph
+    boot_out.rsamps = False
+    amp = ampbox(boot_out)
+    amp.construct_boxplot(a, .3)
+    ph = phbox(boot_out)
+    ph.construct_boxplot(a, .3)
 
     return amp, ph
 
@@ -94,13 +104,15 @@ def pcaTB(f, time, a=0.5, p=.99, no=5, parallel=True):
     """
 
     # Align Data
-    warp = fs.srsf_align(f, time, method="median", showplot=False, parallel=parallel)
+    out_warp = fs.fdawarp(f, time)
+    out_warp.srsf_align( method="median", parallel=parallel)
 
     # Calculate pca
-    pca = fpca.jointfPCA(warp.fn, time, warp.qn, warp.q0, warp.gam, no=no, showplot=False)
+    out_pca = fpca.fdajpca(out_warp)
+    out_pca.calc_fpca(no)
 
     # Calculate TB
-    tol = mvtol_region(pca.coef, a, p, 100000)
+    tol = mvtol_region(out_pca.coef, a, p, 100000)
 
     return warp, pca, tol
 
