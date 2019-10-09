@@ -565,6 +565,90 @@ class fdawarp:
         return
 
 
+def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
+    """
+    This function aligns two functions using Bayesian framework. It will align
+    f2 to f1. It is based on mapping warping functions to a hypersphere, and a
+    subsequent exponential mapping to a tangent space. In the tangent space,
+    the Z-mixture pCN algorithm is used to explore both local and global
+    structure in the posterior distribution.
+   
+    The Z-mixture pCN algorithm uses a mixture distribution for the proposal
+    distribution, controlled by input parameter zpcn. The zpcn$betas must be
+    between 0 and 1, and are the coefficients of the mixture components, with
+    larger coefficients corresponding to larger shifts in parameter space. The
+    zpcn["probs"] give the probability of each shift size.
+   
+    Usage:  out = pairwise_align_bayes(f1i, f2i, time)
+            out = pairwise_align_bayes(f1i, f2i, time, mcmcopts)
+    
+    :param f1i: vector defining M samples of function 1
+    :param f2i: vector defining M samples of function 2
+    :param time: time vector of length M
+    :param mcmopts: dict of mcmc parameters
+    :type mcmcopts: dict
+  
+    default mcmc options
+    mcmcopts["iter"] = 2e4
+    mcmcopts["burnin"] = np.min(5e3,mcmcopts["iter"]/2)
+    mcmcopts["alpha0"] = 0.1
+    mcmcopts["beta0"] = 0.1
+    tmp["betas"] = np.array([0.5,0.5,0.005,0.0001])
+    tmp["probs" = np.array([0.1,0.1,0.7,0.1])
+    mcmcopts["zpcn"] = tmp
+    mcmcopts["propvar"] = 1
+    mcmcopts["initcoef" = np.repeat(0,20)
+    mcmcopts["npoints"] = 200
+    mcmcopts["extrainfo"] = True
+   
+    :rtype collection containing
+    :return f2_warped: aligned f2
+    :return gamma: warping function
+    :return g_coef: final g_coef
+    :return psi: final psi
+    :return sigma1: final sigma
+    
+    if extrainfo
+    :return accept: accept of psi samples
+    :return betas_ind
+    :return logl: log likelihood
+    :return gamma_mat: posterior gammas
+    :return gamma_stats: posterior gamma stats
+    :return xdist: phase distance posterior
+    :return ydist: amplitude distance posterior)
+    """
+
+    if mcmcopts is None:
+        mcmcopts["iter"] = 2e4
+        mcmcopts["burnin"] = np.min(5e3,mcmcopts["iter"]/2)
+        mcmcopts["alpha0"] = 0.1
+        mcmcopts["beta0"] = 0.1
+        tmp["betas"] = np.array([0.5,0.5,0.005,0.0001])
+        tmp["probs" = np.array([0.1,0.1,0.7,0.1])
+        mcmcopts["zpcn"] = tmp
+        mcmcopts["propvar"] = 1
+        mcmcopts["initcoef" = np.repeat(0,20)
+        mcmcopts["npoints"] = 200
+        mcmcopts["extrainfo"] = True
+
+    if f1i.shape[0] != f2i.shape[0]:
+        raise Exception('Length of f1 and f2 must be equal')
+
+
+    if f1i.shape[0] != time.shape[0]:
+        raise Exception('Length of f1 and time must be equal')
+    
+    if mcmcopts["zpcn"]["betas"].shape[0] != mcmcopts["zpcn"]["probs"]:
+        raise Exception('In zpcn, betas must equal length of probs')
+
+    if np.mod(mcmcopts["initcoef"], 2) != 0:
+        raise Exception('Length of mcmcopts.initcoef must be even')
+
+
+        
+    
+
+    return
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     """
