@@ -482,6 +482,89 @@ class fdawarp:
 
         return
 
+    def multiple_align_functions(self, mu, omethod="DP", smoothdata=False, parallel=False, lam=0.0):
+        """
+        This function aligns a collection of functions using the elastic square-root
+        slope (srsf) framework.
+
+        Usage:  obj.multiple_align_functions(mu)
+                obj.multiple_align_functions(lambda)
+        obj.multiple_align_functions(lambda, ...)
+    
+        :param mu: vector of function to align to
+        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+        :param smoothdata: Smooth the data using a box filter (default = F)
+        :param parallel: run in parallel (default = F)
+        :param lam: controls the elasticity (default = 0)
+        :type lam: double
+        :type smoothdata: bool
+
+        """
+
+        M = self.f.shape[0]
+        N = self.f.shape[1]
+        self.lam = lam
+
+        if M > 500:
+            parallel = True
+        elif N > 100:
+            parallel = True
+
+        eps = np.finfo(np.double).eps
+        self.method = omethod
+        self.type = "multiple"
+
+        # Compute SRSF function from data
+        f, g, g2 = uf.gradient_spline(self.time, self.f, smoothdata)
+        q = g / np.sqrt(abs(g) + eps)
+
+        mq = uf.f_to_srsf(mu, self.time)
+
+        if parallel:
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, self.time,
+                                    q[:, n], omethod, lam, mu[0], f[0,n]) for n in range(N))
+            gam = np.array(out)
+            gam = gam.transpose()
+        else:
+            gam = np.zeros((M,N))
+            for k in range(0,N):
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,mf[0],f[0,k])
+
+        self.gamI = uf.SqrtMeanInverse(gam)
+
+        fn = np.zeros((M,N))
+        qn = np.zeros((M,N))
+        for k in range(0, N):
+            fn[:, k] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
+                                    + self.time[0], self.time, f[:, k])
+            qn[:, k] = uf.f_to_srsf(f[:, k], self.time)
+
+
+        # Aligned data & stats
+        self.fn = fn
+        self.qn = qn
+        self.q0 = q
+        mean_f0 = f.mean(axis=1)
+        std_f0 = f.std(axis=1)
+        mean_fn = self.fn.mean(axis=1)
+        std_fn = self.fn.std(axis=1)
+        self.gam = gam
+        self.mqn = mq
+        self.fmean = mu
+
+        fgam = np.zeros((M, N))
+        for k in range(0, N):
+            time0 = (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0]
+            fgam[:, k] = np.interp(time0, self.time, self.fmean)
+
+        var_fgam = fgam.var(axis=1)
+        self.orig_var = trapz(std_f0 ** 2, self.time)
+        self.amp_var = trapz(std_fn ** 2, self.time)
+        self.phase_var = trapz(var_fgam, self.time)            
+
+        return
+
+
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     """
