@@ -651,7 +651,7 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     iter = mcmcopts["iter"]
     
     # normalize time to [0,1]
-    timet = (timet - timet.min())/(timet.max()-timet.min())
+    time = (time - time.min())/(time.max()-time.min())
     
     # parameter settings
     pw_sim_global_burnin = mcmcopts["burnin"]
@@ -678,8 +678,8 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
 
 
     # srsf transformation
-    q1 = uf.f_to_srsf(f1,timet)
-    q2 = uf.f_to_srsf(f2,timet)
+    q1 = uf.f_to_srsf(f1,time)
+    q2 = uf.f_to_srsf(f2,time)
 
     tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis))
 
@@ -736,9 +736,37 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     result_posterior_psi_simDomain = uf.f_psimean(pw_sim_global_domain_par, pw_sim_est_matrix)
 
     # resample to same number of points as the input f1 and f2
+    result_posterior_psi = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, np.linspace(0,1,f1.shape[0]), fill_value="extrapolate")
 
-    # @todo return g_coef, sigma1, logl, SSE, accept, accept_betas in collection
-    return
+    # transform posterior mean of psi to gamma
+    result_posterior_gamma = f_phiinv(result_posterior_psi)
+    result_posterior_gamma = uf.norm_gam(result_posterior_gamma)
+
+    # warped f2
+    f2_warped = uf.warp_f_gamma(time, f2, result_posterior_gamma)
+
+    if mcmcopts["extrainfo"]:
+        gamma_mat = np.zeros((time.shape[0],pw_sim_est_psi_matrix.shape[1]))
+        one_v = np.ones(pw_sim_est_psi_matrix.shape[0])
+        Dx = zeros(pw_sim_est_psi_matrix.shape[1])
+        Dy = Dx
+        for ii in range(0,pw_sim_est_psi_matrix.shape[1]):
+            result_i = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0], pw_sim_est_psi_matrix[:,ii], time, fill_value="extrapolate")
+            tmp = f_phiinv(result_i)
+            gamma_mat[:,ii] = uf.norm_gam(tmp)
+            v = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
+            Dx[ii] = np.sqrt(trapz(v**2,pw_sim_global_domain_par))
+            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2,gamma_mat[:,ii])
+            Dy[ii] = np.sqrt(trapz((q1-q2warp)**2,pw_sim_global_domain_par))
+
+        gamma_stats = uf.statsFun(gamma_mat)
+
+    
+    results_o = collections.namedtuple('align_bayes', ['f2_warped', 'gamma','g_coef', 'psi', 'sigma1', 'accept', 'betas_ind', 'logl', 'gamma_mat', 'gamma_stats', 'xdist', 'ydist'])
+
+    out = results_o(f2_warped, result_posterior_gamma, g_coef, result_posterior_psi, sigma1, accept[1:], accept_betas[1:], logl, gamma_mat, gamma_stats, Dx, Dy)
+
+    return(out)
 
 def f_SSEg_pw(g, q1, q2):
     obs_domain = np.linspace(0,1,g.shape[0])
