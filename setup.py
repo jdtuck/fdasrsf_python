@@ -85,6 +85,13 @@ extensions = [
         extra_compile_args=extra_args_mac,
         extra_link_args=extra_args_mac
     ),
+    Extension(name="cbayesian",
+        sources=["src/cbayesian.pyx", "src/bayesian.cpp"],
+        include_dirs=[numpy.get_include()],
+        language="c++",
+        extra_compile_args=extra_args_mac,
+        extra_link_args=extra_args_mac
+    ),
 ]
 
 
