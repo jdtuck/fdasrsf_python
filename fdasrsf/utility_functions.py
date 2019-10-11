@@ -13,7 +13,7 @@ from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
 from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
 from numpy import gradient, column_stack, append, mean
-from numpy import insert, vectorize
+from numpy import insert, vectorize, ceil, mod, array, quantile, dot
 import numpy.random as rn
 import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
@@ -854,3 +854,73 @@ def resamplefunction(x, n):
     T = x.shape[0]
     xn = interp(arange(0, n)/double(n-1), arange(0, T)/double(T-1), x)
     return(xn)
+
+def basis_fourier(f_domain, numBasis, fourierp)
+    result = zeros((f.domain.shape[0], 2*numBasis))
+    for i in range(0,2*numBasis):
+	j = ceil(i/2)
+	if mod(i,2) == 1:
+	    result[:,i] = sqrt(2) * sin(2*j*pi*f_domain/fourier_p)
+	
+	if mod(i,2) == 0:
+	    result[:,i] = sqrt(2) * cos(2*j*pi*f_domain/fourier_p)
+
+    out["x"] = f_domain
+    out["matrix"] = result
+
+    return(out)
+
+def statsFun(vec):
+    a = quantile(vec,0.025)
+    b = quantile(vec,0.975)
+    out = array([a, b])
+    return(out)
+
+def f_exp1(g):
+    out = bcalcY(f_L2norm(g), g)
+    return(out)
+
+def f_L2norm(f):
+    x = linspace(0,1,f.shape[0])
+    out = border_l2norm(x,f)
+    return(out)
+
+def f_basistofunction(f_domain, coefconst, coef, basis):
+    if basis["matrix"].shape[1] < coef.shape[0]:
+	raise Exception("In f_basistofunction, #coefficients exceeds # basis functions")
+
+    result = dot(basis["matrix"],coef)+coefconst
+    result = f_predictfunction(result, f_domain, 0)
+    return(result)
+
+def f_predictfunction(f, at, deriv):
+    x = linspace(0,1,f.shape[0])
+    if deriv == 0:
+	result = interp1d(x,f,at,fill_value="extrapolate")
+    
+    if deriv == 1:
+        fmod = interp1d(x,f,at,fill_value="extrapolate")
+        diffy1 = array([0, diff(fmod)])
+	diffy2 = array([diff(fmod),0])
+	diffx1 = array([0, diff(at)])
+	diffx2 = array([diff(at), 0])
+	
+	result = (diffy2 + diffy1) / (diffx2 + diffx1)
+
+     return(result)
+
+def f_psimean(x,y):
+    rmy = y.mean(axis=1)
+    result = rmy / f_L2norm(rmy)
+    return(result)
+
+def f_phiinv(psi):
+    f_domain = linspace(0,1,psi.shape[0])
+    result = array([0 bcuL2norm2(f_domain,psi)])
+    return(result)
+
+def norm_gam(gam):
+    gam = (gam-gam[0])/(gam[-1]-gam[0])
+    return(gam)
+
+	  
