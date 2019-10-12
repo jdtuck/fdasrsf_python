@@ -71,7 +71,7 @@
 
 
 \title{fdasrsf Documentation}
-\date{Oct 08, 2019}
+\date{Oct 11, 2019}
 \release{2.0.0}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -349,6 +349,42 @@ extracted from the principal components of the srsfs
 
 \end{fulllineitems}
 
+\index{multiple\_align\_functions() (time\_warping.fdawarp method)@\spxentry{multiple\_align\_functions()}\spxextra{time\_warping.fdawarp method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.multiple_align_functions}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{multiple\_align\_functions}}}{\emph{mu}, \emph{omethod='DP'}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+This function aligns a collection of functions using the elastic square-root
+slope (srsf) framework.
+\begin{description}
+\item[{Usage:  obj.multiple\_align\_functions(mu)}] \leavevmode
+obj.multiple\_align\_functions(lambda)
+
+\end{description}
+
+obj.multiple\_align\_functions(lambda, …)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mu}} \textendash{} vector of function to align to
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2, RBFGS) (default = DP)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run in parallel (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} controls the elasticity (default = 0)
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 \index{plot() (time\_warping.fdawarp method)@\spxentry{plot()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
@@ -397,6 +433,213 @@ Examples
 
 \end{fulllineitems}
 
+
+\end{fulllineitems}
+
+\index{normal() (in module time\_warping)@\spxentry{normal()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.normal}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{normal}}}{\emph{loc=0.0}, \emph{scale=1.0}, \emph{size=None}}{}
+Draw random samples from a normal (Gaussian) distribution.
+
+The probability density function of the normal distribution, first
+derived by De Moivre and 200 years later by both Gauss and Laplace
+independently %
+\begin{footnote}[2]\sphinxAtStartFootnote
+P. R. Peebles Jr., “Central Limit Theorem” in “Probability,
+Random Variables and Random Signal Principles”, 4th ed., 2001,
+pp. 51, 51, 125.
+%
+\end{footnote}, is often called the bell curve because of
+its characteristic shape (see the example below).
+
+The normal distributions occurs often in nature.  For example, it
+describes the commonly occurring distribution of samples influenced
+by a large number of tiny, random disturbances, each with its own
+unique distribution \sphinxfootnotemark[2].
+\begin{description}
+\item[{loc}] \leavevmode{[}float or array\_like of floats{]}
+Mean (“centre”) of the distribution.
+
+\item[{scale}] \leavevmode{[}float or array\_like of floats{]}
+Standard deviation (spread or “width”) of the distribution. Must be
+non-negative.
+
+\item[{size}] \leavevmode{[}int or tuple of ints, optional{]}
+Output shape.  If the given shape is, e.g., \sphinxcode{\sphinxupquote{(m, n, k)}}, then
+\sphinxcode{\sphinxupquote{m * n * k}} samples are drawn.  If size is \sphinxcode{\sphinxupquote{None}} (default),
+a single value is returned if \sphinxcode{\sphinxupquote{loc}} and \sphinxcode{\sphinxupquote{scale}} are both scalars.
+Otherwise, \sphinxcode{\sphinxupquote{np.broadcast(loc, scale).size}} samples are drawn.
+
+\end{description}
+\begin{description}
+\item[{out}] \leavevmode{[}ndarray or scalar{]}
+Drawn samples from the parameterized normal distribution.
+
+\end{description}
+\begin{description}
+\item[{scipy.stats.norm}] \leavevmode{[}probability density function, distribution or{]}
+cumulative density function, etc.
+
+\end{description}
+
+The probability density for the Gaussian distribution is
+\begin{equation*}
+\begin{split}p(x) = \frac{1}{\sqrt{ 2 \pi \sigma^2 }}
+e^{ - \frac{ (x - \mu)^2 } {2 \sigma^2} },\end{split}
+\end{equation*}
+where \(\mu\) is the mean and \(\sigma\) the standard
+deviation. The square of the standard deviation, \(\sigma^2\),
+is called the variance.
+
+The function has its peak at the mean, and its “spread” increases with
+the standard deviation (the function reaches 0.607 times its maximum at
+\(x + \sigma\) and \(x - \sigma\) \sphinxfootnotemark[2]).  This implies that
+\sphinxtitleref{numpy.random.normal} is more likely to return samples lying close to
+the mean, rather than those far away.
+
+Draw samples from the distribution:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mu}\PYG{p}{,} \PYG{n}{sigma} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mf}{0.1} \PYG{c+c1}{\PYGZsh{} mean and standard deviation}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{s} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{,} \PYG{n}{sigma}\PYG{p}{,} \PYG{l+m+mi}{1000}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+Verify the mean and the variance:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{s}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+go}{0.0  \PYGZsh{} may vary}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{sigma} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{std}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,} \PYG{n}{ddof}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+go}{0.1  \PYGZsh{} may vary}
+\end{sphinxVerbatim}
+
+Display the histogram of the samples, along with
+the probability density function:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{count}\PYG{p}{,} \PYG{n}{bins}\PYG{p}{,} \PYG{n}{ignored} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,} \PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{density}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{bins}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{p}{(}\PYG{n}{sigma} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{)}\PYG{p}{)} \PYG{o}{*}
+\PYG{g+gp}{... }               \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{bins} \PYG{o}{\PYGZhy{}} \PYG{n}{mu}\PYG{p}{)}\PYG{o}{*}\PYG{o}{*}\PYG{l+m+mi}{2} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{sigma}\PYG{o}{*}\PYG{o}{*}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{p}{)}\PYG{p}{,}
+\PYG{g+gp}{... }         \PYG{n}{linewidth}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{r}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+Two-by-four array of samples from N(3, 6.25):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mf}{2.5}\PYG{p}{,} \PYG{n}{size}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+go}{array([[\PYGZhy{}4.49401501,  4.00950034, \PYGZhy{}1.81814867,  7.29718677],   \PYGZsh{} random}
+\PYG{g+go}{       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]])  \PYGZsh{} random}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+\index{pairwise\_align\_bayes() (in module time\_warping)@\spxentry{pairwise\_align\_bayes()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.pairwise_align_bayes}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{pairwise\_align\_bayes}}}{\emph{f1i}, \emph{f2i}, \emph{time}, \emph{mcmcopts=None}}{}
+This function aligns two functions using Bayesian framework. It will align
+f2 to f1. It is based on mapping warping functions to a hypersphere, and a
+subsequent exponential mapping to a tangent space. In the tangent space,
+the Z-mixture pCN algorithm is used to explore both local and global
+structure in the posterior distribution.
+
+The Z-mixture pCN algorithm uses a mixture distribution for the proposal
+distribution, controlled by input parameter zpcn. The zpcn\$betas must be
+between 0 and 1, and are the coefficients of the mixture components, with
+larger coefficients corresponding to larger shifts in parameter space. The
+zpcn{[}“probs”{]} give the probability of each shift size.
+\begin{description}
+\item[{Usage:  out = pairwise\_align\_bayes(f1i, f2i, time)}] \leavevmode
+out = pairwise\_align\_bayes(f1i, f2i, time, mcmcopts)
+
+\end{description}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f1i}} \textendash{} vector defining M samples of function 1
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f2i}} \textendash{} vector defining M samples of function 2
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} time vector of length M
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mcmopts}} \textendash{} dict of mcmc parameters
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+default mcmc options:
+tmp = \{“betas”:np.array({[}0.5,0.5,0.005,0.0001{]}),”probs”:np.array({[}0.1,0.1,0.7,0.1{]})\}
+mcmcopts = \{“iter”:2*(10**4) ,”burnin”:np.minimum(5*(10**3),2*(10**4)//2),
+\begin{quote}
+
+“alpha0”:0.1, “beta0”:0.1,”zpcn”:tmp,”propvar”:1,
+“initcoef”:np.repeat(0,20), “npoints”:200, “extrainfo”:True\}
+\end{quote}
+
+:rtype collection containing
+:return f2\_warped: aligned f2
+:return gamma: warping function
+:return g\_coef: final g\_coef
+:return psi: final psi
+:return sigma1: final sigma
+
+if extrainfo
+:return accept: accept of psi samples
+:return betas\_ind
+:return logl: log likelihood
+:return gamma\_mat: posterior gammas
+:return gamma\_stats: posterior gamma stats
+:return xdist: phase distance posterior
+:return ydist: amplitude distance posterior)
+
+\end{fulllineitems}
+
+\index{rand() (in module time\_warping)@\spxentry{rand()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.rand}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{rand}}}{\emph{d0}, \emph{d1}, \emph{...}, \emph{dn}}{}
+Random values in a given shape.
+
+\begin{sphinxadmonition}{note}{Note:}
+This is a convenience function for users porting code from Matlab,
+and wraps \sphinxtitleref{numpy.random.random\_sample}. That function takes a
+tuple to specify the size of the output, which is consistent with
+other NumPy functions like \sphinxtitleref{numpy.zeros} and \sphinxtitleref{numpy.ones}.
+\end{sphinxadmonition}
+
+Create an array of the given shape and populate it with
+random samples from a uniform distribution
+over \sphinxcode{\sphinxupquote{{[}0, 1)}}.
+\begin{description}
+\item[{d0, d1, …, dn}] \leavevmode{[}int, optional{]}
+The dimensions of the returned array, must be non-negative.
+If no argument is given a single Python float is returned.
+
+\end{description}
+\begin{description}
+\item[{out}] \leavevmode{[}ndarray, shape \sphinxcode{\sphinxupquote{(d0, d1, ..., dn)}}{]}
+Random values.
+
+\end{description}
+
+random
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{g+go}{array([[ 0.14022471,  0.96360618],  \PYGZsh{}random}
+\PYG{g+go}{       [ 0.37601032,  0.25528411],  \PYGZsh{}random}
+\PYG{g+go}{       [ 0.49313049,  0.94909878]]) \PYGZsh{}random}
+\end{sphinxVerbatim}
 
 \end{fulllineitems}
 

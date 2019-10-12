@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -51,12 +52,13 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">finfo</span><span class="p">,</span> <span class="n">double</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">linspace</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">,</span> <span class="nb">round</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">diagflat</span><span class="p">,</span> <span class="n">inner</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span><span class="p">,</span> <span class="n">append</span><span class="p">,</span> <span class="n">mean</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span><span class="p">,</span> <span class="n">append</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">hstack</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">quantile</span><span class="p">,</span> <span class="n">dot</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 <span class="kn">import</span> <span class="nn">optimum_reparamN2</span> <span class="k">as</span> <span class="nn">orN2</span>
 <span class="kn">import</span> <span class="nn">optimum_reparam_N</span> <span class="k">as</span> <span class="nn">orN</span>
 <span class="kn">import</span> <span class="nn">optimum_reparam_Ng</span> <span class="k">as</span> <span class="nn">orNg</span>
+<span class="kn">import</span> <span class="nn">cbayesian</span> <span class="k">as</span> <span class="nn">bay</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
@@ -893,6 +895,75 @@
     <span class="n">T</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">xn</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">double</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span><span class="o">/</span><span class="n">double</span><span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">basis_fourier</span><span class="p">(</span><span class="n">f_domain</span><span class="p">,</span> <span class="n">numBasis</span><span class="p">,</span> <span class="n">fourier_p</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">f_domain</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">numBasis</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">numBasis</span><span class="p">):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">f_domain</span><span class="o">/</span><span class="n">fourier_p</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">f_domain</span><span class="o">/</span><span class="n">fourier_p</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="n">f_domain</span><span class="p">,</span> <span class="s2">&quot;matrix&quot;</span><span class="p">:</span><span class="n">result</span><span class="p">}</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">statsFun</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">quantile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="mf">0.025</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">quantile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="mf">0.975</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">column_stack</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f_exp1</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">bay</span><span class="o">.</span><span class="n">bcalcY</span><span class="p">(</span><span class="n">f_L2norm</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">g</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f_L2norm</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">bay</span><span class="o">.</span><span class="n">border_l2norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f_basistofunction</span><span class="p">(</span><span class="n">f_domain</span><span class="p">,</span> <span class="n">coefconst</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">basis</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">coef</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;In f_basistofunction, #coefficients exceeds # basis functions&quot;</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">],</span><span class="n">coef</span><span class="p">)</span><span class="o">+</span><span class="n">coefconst</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">f_predictfunction</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">f_domain</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f_predictfunction</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">at</span><span class="p">,</span> <span class="n">deriv</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">deriv</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">at</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">deriv</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">iterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
+        <span class="n">fmod</span> <span class="o">=</span> <span class="n">iterp</span><span class="p">(</span><span class="n">at</span><span class="p">)</span>
+        <span class="n">diffy1</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">diff</span><span class="p">(</span><span class="n">fmod</span><span class="p">)))</span>
+        <span class="n">diffy2</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="n">diff</span><span class="p">(</span><span class="n">fmod</span><span class="p">),</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">diffx1</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">diff</span><span class="p">(</span><span class="n">at</span><span class="p">)))</span>
+        <span class="n">diffx2</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="n">diff</span><span class="p">(</span><span class="n">at</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+    
+        <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">diffy2</span> <span class="o">+</span> <span class="n">diffy1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">diffx2</span> <span class="o">+</span> <span class="n">diffx1</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f_psimean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+    <span class="n">rmy</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">rmy</span> <span class="o">/</span> <span class="n">f_L2norm</span><span class="p">(</span><span class="n">rmy</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f_phiinv</span><span class="p">(</span><span class="n">psi</span><span class="p">):</span>
+    <span class="n">f_domain</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">bay</span><span class="o">.</span><span class="n">bcuL2norm2</span><span class="p">(</span><span class="n">f_domain</span><span class="p">,</span><span class="n">psi</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">norm_gam</span><span class="p">(</span><span class="n">gam</span><span class="p">):</span>
+    <span class="n">gam</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam</span><span class="o">-</span><span class="n">gam</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">gam</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">gam</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>   
 </pre></div>
 
           </div>

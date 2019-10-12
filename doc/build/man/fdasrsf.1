@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Oct 08, 2019" "2.0" "fdasrsf"
+.TH "FDASRSF" "1" "Oct 11, 2019" "2.0" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -246,6 +246,35 @@ extracted from the principal components of the srsfs
 .UNINDENT
 .INDENT 7.0
 .TP
+.B multiple_align_functions(mu, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0)
+This function aligns a collection of functions using the elastic square\-root
+slope (srsf) framework.
+.INDENT 7.0
+.TP
+.B Usage:  obj.multiple_align_functions(mu)
+obj.multiple_align_functions(lambda)
+.UNINDENT
+.sp
+obj.multiple_align_functions(lambda, ...)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmu\fP \-\- vector of function to align to
+.IP \(bu 2
+\fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
+.IP \(bu 2
+\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+.IP \(bu 2
+\fBparallel\fP \-\- run in parallel (default = F)
+.IP \(bu 2
+\fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B plot()
 plot plot functional alignment results
 .sp
@@ -282,6 +311,229 @@ Examples
 >>> obj = fs.fdawarp(f,time)
 >>> obj.srsf_align()
 .UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B time_warping.normal(loc=0.0, scale=1.0, size=None)
+Draw random samples from a normal (Gaussian) distribution.
+.sp
+The probability density function of the normal distribution, first
+derived by De Moivre and 200 years later by both Gauss and Laplace
+independently [2], is often called the bell curve because of
+its characteristic shape (see the example below).
+.sp
+The normal distributions occurs often in nature.  For example, it
+describes the commonly occurring distribution of samples influenced
+by a large number of tiny, random disturbances, each with its own
+unique distribution [2]\&.
+.INDENT 7.0
+.TP
+.B loc
+float or array_like of floats
+Mean ("centre") of the distribution.
+.TP
+.B scale
+float or array_like of floats
+Standard deviation (spread or "width") of the distribution. Must be
+non\-negative.
+.TP
+.B size
+int or tuple of ints, optional
+Output shape.  If the given shape is, e.g., \fB(m, n, k)\fP, then
+\fBm * n * k\fP samples are drawn.  If size is \fBNone\fP (default),
+a single value is returned if \fBloc\fP and \fBscale\fP are both scalars.
+Otherwise, \fBnp.broadcast(loc, scale).size\fP samples are drawn.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B out
+ndarray or scalar
+Drawn samples from the parameterized normal distribution.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B scipy.stats.norm
+probability density function, distribution or
+cumulative density function, etc.
+.UNINDENT
+.sp
+The probability density for the Gaussian distribution is
+.sp
+.ce
+p(x) = \efrac{1}{\esqrt{ 2 \epi \esigma^2 }}
+e^{ \- \efrac{ (x \- \emu)^2 } {2 \esigma^2} },
+
+
+.ce 0
+.sp
+where \emu is the mean and \esigma the standard
+deviation. The square of the standard deviation, \esigma^2,
+is called the variance.
+.sp
+The function has its peak at the mean, and its "spread" increases with
+the standard deviation (the function reaches 0.607 times its maximum at
+x + \esigma and x \- \esigma [2]).  This implies that
+\fInumpy.random.normal\fP is more likely to return samples lying close to
+the mean, rather than those far away.
+.IP [1] 5
+Wikipedia, "Normal distribution",
+\fI\%https://en.wikipedia.org/wiki/Normal_distribution\fP
+.IP [2] 5
+P. R. Peebles Jr., "Central Limit Theorem" in "Probability,
+Random Variables and Random Signal Principles", 4th ed., 2001,
+pp. 51, 51, 125.
+.sp
+Draw samples from the distribution:
+.sp
+.nf
+.ft C
+>>> mu, sigma = 0, 0.1 # mean and standard deviation
+>>> s = np.random.normal(mu, sigma, 1000)
+.ft P
+.fi
+.sp
+Verify the mean and the variance:
+.sp
+.nf
+.ft C
+>>> abs(mu \- np.mean(s))
+0.0  # may vary
+.ft P
+.fi
+.sp
+.nf
+.ft C
+>>> abs(sigma \- np.std(s, ddof=1))
+0.1  # may vary
+.ft P
+.fi
+.sp
+Display the histogram of the samples, along with
+the probability density function:
+.sp
+.nf
+.ft C
+>>> import matplotlib.pyplot as plt
+>>> count, bins, ignored = plt.hist(s, 30, density=True)
+>>> plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
+\&...                np.exp( \- (bins \- mu)**2 / (2 * sigma**2) ),
+\&...          linewidth=2, color=\(aqr\(aq)
+>>> plt.show()
+.ft P
+.fi
+.sp
+Two\-by\-four array of samples from N(3, 6.25):
+.sp
+.nf
+.ft C
+>>> np.random.normal(3, 2.5, size=(2, 4))
+array([[\-4.49401501,  4.00950034, \-1.81814867,  7.29718677],   # random
+       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]])  # random
+.ft P
+.fi
+.UNINDENT
+.INDENT 0.0
+.TP
+.B time_warping.pairwise_align_bayes(f1i, f2i, time, mcmcopts=None)
+This function aligns two functions using Bayesian framework. It will align
+f2 to f1. It is based on mapping warping functions to a hypersphere, and a
+subsequent exponential mapping to a tangent space. In the tangent space,
+the Z\-mixture pCN algorithm is used to explore both local and global
+structure in the posterior distribution.
+.sp
+The Z\-mixture pCN algorithm uses a mixture distribution for the proposal
+distribution, controlled by input parameter zpcn. The zpcn$betas must be
+between 0 and 1, and are the coefficients of the mixture components, with
+larger coefficients corresponding to larger shifts in parameter space. The
+zpcn["probs"] give the probability of each shift size.
+.INDENT 7.0
+.TP
+.B Usage:  out = pairwise_align_bayes(f1i, f2i, time)
+out = pairwise_align_bayes(f1i, f2i, time, mcmcopts)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf1i\fP \-\- vector defining M samples of function 1
+.IP \(bu 2
+\fBf2i\fP \-\- vector defining M samples of function 2
+.IP \(bu 2
+\fBtime\fP \-\- time vector of length M
+.IP \(bu 2
+\fBmcmopts\fP \-\- dict of mcmc parameters
+.UNINDENT
+.UNINDENT
+.sp
+default mcmc options:
+tmp = {"betas":np.array([0.5,0.5,0.005,0.0001]),"probs":np.array([0.1,0.1,0.7,0.1])}
+mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2),
+.INDENT 7.0
+.INDENT 3.5
+"alpha0":0.1, "beta0":0.1,"zpcn":tmp,"propvar":1,
+"initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
+.UNINDENT
+.UNINDENT
+.sp
+:rtype collection containing
+:return f2_warped: aligned f2
+:return gamma: warping function
+:return g_coef: final g_coef
+:return psi: final psi
+:return sigma1: final sigma
+.sp
+if extrainfo
+:return accept: accept of psi samples
+:return betas_ind
+:return logl: log likelihood
+:return gamma_mat: posterior gammas
+:return gamma_stats: posterior gamma stats
+:return xdist: phase distance posterior
+:return ydist: amplitude distance posterior)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B time_warping.rand(d0, d1, \&..., dn)
+Random values in a given shape.
+.sp
+\fBNOTE:\fP
+.INDENT 7.0
+.INDENT 3.5
+This is a convenience function for users porting code from Matlab,
+and wraps \fInumpy.random.random_sample\fP\&. That function takes a
+tuple to specify the size of the output, which is consistent with
+other NumPy functions like \fInumpy.zeros\fP and \fInumpy.ones\fP\&.
+.UNINDENT
+.UNINDENT
+.sp
+Create an array of the given shape and populate it with
+random samples from a uniform distribution
+over \fB[0, 1)\fP\&.
+.INDENT 7.0
+.TP
+.B d0, d1, ..., dn
+int, optional
+The dimensions of the returned array, must be non\-negative.
+If no argument is given a single Python float is returned.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B out
+ndarray, shape \fB(d0, d1, ..., dn)\fP
+Random values.
+.UNINDENT
+.sp
+random
+.sp
+.nf
+.ft C
+>>> np.random.rand(3,2)
+array([[ 0.14022471,  0.96360618],  #random
+       [ 0.37601032,  0.25528411],  #random
+       [ 0.49313049,  0.94909878]]) #random
+.ft P
+.fi
 .UNINDENT
 .SH FUNCTIONAL PRINCIPAL COMPONENT ANALYSIS
 .sp

@@ -592,18 +592,11 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     :param mcmopts: dict of mcmc parameters
     :type mcmcopts: dict
   
-    default mcmc options
-    mcmcopts["iter"] = 2e4
-    mcmcopts["burnin"] = np.min(5e3,mcmcopts["iter"]/2)
-    mcmcopts["alpha0"] = 0.1
-    mcmcopts["beta0"] = 0.1
-    tmp["betas"] = np.array([0.5,0.5,0.005,0.0001])
-    tmp["probs" = np.array([0.1,0.1,0.7,0.1])
-    mcmcopts["zpcn"] = tmp
-    mcmcopts["propvar"] = 1
-    mcmcopts["initcoef" = np.repeat(0,20)
-    mcmcopts["npoints"] = 200
-    mcmcopts["extrainfo"] = True
+    default mcmc options:
+    tmp = {"betas":np.array([0.5,0.5,0.005,0.0001]),"probs":np.array([0.1,0.1,0.7,0.1])}
+    mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2),
+                "alpha0":0.1, "beta0":0.1,"zpcn":tmp,"propvar":1,
+                "initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
    
     :rtype collection containing
     :return f2_warped: aligned f2
