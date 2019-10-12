@@ -71,8 +71,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{Aug 08, 2019}
-\release{1.5.0}
+\date{Oct 11, 2019}
+\release{2.0.0}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -231,55 +231,196 @@ functions with M samples
 
 \end{fulllineitems}
 
-\index{srsf\_align() (in module time\_warping)@\spxentry{srsf\_align()}\spxextra{in module time\_warping}}
+\index{fdawarp (class in time\_warping)@\spxentry{fdawarp}\spxextra{class in time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.srsf_align}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{f}, \emph{time}, \emph{method='mean'}, \emph{omethod='DP'}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
-This function aligns a collection of functions using the elastic
-square-root slope (srsf) framework.
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{fdawarp}}}{\emph{f}, \emph{time}}{}
+This class provides alignment methods for functional data using the SRVF framework
+
+Usage:  obj = fdawarp(f,t)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N): matrix defining N functions of M samples
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the sample points
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} time vector of length M
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} (string) warp calculate Karcher Mean or Median
+\sphinxstyleliteralstrong{\sphinxupquote{fn}} \textendash{} aligned functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qn}} \textendash{} aligned srvfs
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q0}} \textendash{} initial srvfs
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{fmean}} \textendash{} function mean
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mqn}} \textendash{} mean srvf
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{psi}} \textendash{} srvf of warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{stats}} \textendash{} alignment statistics
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qun}} \textendash{} cost function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lambda}} \textendash{} lambda
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} optimization method
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gamI}} \textendash{} invserse warping function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{rsamps}} \textendash{} random samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{fs}} \textendash{} random aligned functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{gams}} \textendash{} random warping functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{ft}} \textendash{} random warped functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{qs}} \textendash{} random aligned srvfs
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{type}} \textendash{} alignment type
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mcmc}} \textendash{} mcmc output if bayesian
 
 \end{itemize}
 
 \end{description}\end{quote}
 
-(options = “mean” or “median”) (default=”mean”)
-:param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
-:param showplot: Shows plots of results using matplotlib (default = T)
-:param smoothdata: Smooth the data using a box filter (default = F)
-:param parallel: run in parallel (default = F)
-:param lam: controls the elasticity (default = 0)
-:type lam: double
-:type smoothdata: bool
-:type f: np.ndarray
-:type time: np.ndarray
-\begin{quote}\begin{description}
-\item[{Return type}] \leavevmode
-tuple of numpy array
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  15-Mar-2018
+\index{gauss\_model() (time\_warping.fdawarp method)@\spxentry{gauss\_model()}\spxextra{time\_warping.fdawarp method}}
 
-\item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.gauss_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{gauss\_model}}}{\emph{n=1}, \emph{sort\_samples=False}}{}
+This function models the functional data using a Gaussian model
+extracted from the principal components of the srvfs
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{n}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of random samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sort\_samples}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} sort samples (default = T)
+
+\end{itemize}
 
 \end{description}\end{quote}
 
-functions with M samples
-:return qn: aligned srvfs - similar structure to fn
-:return q0: original srvf - similar structure to fn
-:return fmean: function mean or median - vector of length M
-:return mqn: srvf mean or median - vector of length M
-:return gam: warping functions - similar structure to fn
-:return orig\_var: Original Variance of Functions
-:return amp\_var: Amplitude Variance
-:return phase\_var: Phase Variance
+\end{fulllineitems}
+
+\index{joint\_gauss\_model() (time\_warping.fdawarp method)@\spxentry{joint\_gauss\_model()}\spxextra{time\_warping.fdawarp method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.joint_gauss_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{joint\_gauss\_model}}}{\emph{n=1}, \emph{no=3}}{}
+This function models the functional data using a joint Gaussian model
+extracted from the principal components of the srsfs
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{n}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of random samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of principal components (default = 3)
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{multiple\_align\_functions() (time\_warping.fdawarp method)@\spxentry{multiple\_align\_functions()}\spxextra{time\_warping.fdawarp method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.multiple_align_functions}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{multiple\_align\_functions}}}{\emph{mu}, \emph{omethod='DP'}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+This function aligns a collection of functions using the elastic square-root
+slope (srsf) framework.
+\begin{description}
+\item[{Usage:  obj.multiple\_align\_functions(mu)}] \leavevmode
+obj.multiple\_align\_functions(lambda)
+
+\end{description}
+
+obj.multiple\_align\_functions(lambda, …)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mu}} \textendash{} vector of function to align to
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2, RBFGS) (default = DP)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run in parallel (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} controls the elasticity (default = 0)
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{plot() (time\_warping.fdawarp method)@\spxentry{plot()}\spxextra{time\_warping.fdawarp method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.plot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{plot}}}{}{}
+plot plot functional alignment results
+
+Usage: obj.plot()
+
+\end{fulllineitems}
+
+\index{srsf\_align() (time\_warping.fdawarp method)@\spxentry{srsf\_align()}\spxextra{time\_warping.fdawarp method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.srsf_align}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{method='mean'}, \emph{omethod='DP'}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+This function aligns a collection of functions using the elastic
+square-root slope (srsf) framework.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} (string) warp calculate Karcher Mean or Median (options = “mean” or “median”) (default=”mean”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2, RBFGS) (default = DP)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run in parallel (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} controls the elasticity (default = 0)
+
+\end{itemize}
+
+\end{description}\end{quote}
 
 Examples
 \textgreater{}\textgreater{}\textgreater{} import tables
@@ -287,81 +428,218 @@ Examples
 \textgreater{}\textgreater{}\textgreater{} f = fun.root.f{[}:{]}
 \textgreater{}\textgreater{}\textgreater{} f = f.transpose()
 \textgreater{}\textgreater{}\textgreater{} time = fun.root.time{[}:{]}
-\textgreater{}\textgreater{}\textgreater{} out = srsf\_align(f,time)
+\textgreater{}\textgreater{}\textgreater{} obj = fs.fdawarp(f,time)
+\textgreater{}\textgreater{}\textgreater{} obj.srsf\_align()
 
 \end{fulllineitems}
 
-\index{srsf\_align\_pair() (in module time\_warping)@\spxentry{srsf\_align\_pair()}\spxextra{in module time\_warping}}
+
+\end{fulllineitems}
+
+\index{normal() (in module time\_warping)@\spxentry{normal()}\spxextra{in module time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.srsf_align_pair}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{srsf\_align\_pair}}}{\emph{f}, \emph{g}, \emph{time}, \emph{method='mean'}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{lam=0.0}}{}
-This function aligns a collection of functions using the elastic square-
-root slope (srsf) framework.
+\phantomsection\label{\detokenize{time_warping:time_warping.normal}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{normal}}}{\emph{loc=0.0}, \emph{scale=1.0}, \emph{size=None}}{}
+Draw random samples from a normal (Gaussian) distribution.
+
+The probability density function of the normal distribution, first
+derived by De Moivre and 200 years later by both Gauss and Laplace
+independently %
+\begin{footnote}[2]\sphinxAtStartFootnote
+P. R. Peebles Jr., “Central Limit Theorem” in “Probability,
+Random Variables and Random Signal Principles”, 4th ed., 2001,
+pp. 51, 51, 125.
+%
+\end{footnote}, is often called the bell curve because of
+its characteristic shape (see the example below).
+
+The normal distributions occurs often in nature.  For example, it
+describes the commonly occurring distribution of samples influenced
+by a large number of tiny, random disturbances, each with its own
+unique distribution \sphinxfootnotemark[2].
+\begin{description}
+\item[{loc}] \leavevmode{[}float or array\_like of floats{]}
+Mean (“centre”) of the distribution.
+
+\item[{scale}] \leavevmode{[}float or array\_like of floats{]}
+Standard deviation (spread or “width”) of the distribution. Must be
+non-negative.
+
+\item[{size}] \leavevmode{[}int or tuple of ints, optional{]}
+Output shape.  If the given shape is, e.g., \sphinxcode{\sphinxupquote{(m, n, k)}}, then
+\sphinxcode{\sphinxupquote{m * n * k}} samples are drawn.  If size is \sphinxcode{\sphinxupquote{None}} (default),
+a single value is returned if \sphinxcode{\sphinxupquote{loc}} and \sphinxcode{\sphinxupquote{scale}} are both scalars.
+Otherwise, \sphinxcode{\sphinxupquote{np.broadcast(loc, scale).size}} samples are drawn.
+
+\end{description}
+\begin{description}
+\item[{out}] \leavevmode{[}ndarray or scalar{]}
+Drawn samples from the parameterized normal distribution.
+
+\end{description}
+\begin{description}
+\item[{scipy.stats.norm}] \leavevmode{[}probability density function, distribution or{]}
+cumulative density function, etc.
+
+\end{description}
+
+The probability density for the Gaussian distribution is
+\begin{equation*}
+\begin{split}p(x) = \frac{1}{\sqrt{ 2 \pi \sigma^2 }}
+e^{ - \frac{ (x - \mu)^2 } {2 \sigma^2} },\end{split}
+\end{equation*}
+where \(\mu\) is the mean and \(\sigma\) the standard
+deviation. The square of the standard deviation, \(\sigma^2\),
+is called the variance.
+
+The function has its peak at the mean, and its “spread” increases with
+the standard deviation (the function reaches 0.607 times its maximum at
+\(x + \sigma\) and \(x - \sigma\) \sphinxfootnotemark[2]).  This implies that
+\sphinxtitleref{numpy.random.normal} is more likely to return samples lying close to
+the mean, rather than those far away.
+
+Draw samples from the distribution:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mu}\PYG{p}{,} \PYG{n}{sigma} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mf}{0.1} \PYG{c+c1}{\PYGZsh{} mean and standard deviation}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{s} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{,} \PYG{n}{sigma}\PYG{p}{,} \PYG{l+m+mi}{1000}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+Verify the mean and the variance:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{s}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+go}{0.0  \PYGZsh{} may vary}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{sigma} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{std}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,} \PYG{n}{ddof}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+go}{0.1  \PYGZsh{} may vary}
+\end{sphinxVerbatim}
+
+Display the histogram of the samples, along with
+the probability density function:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{count}\PYG{p}{,} \PYG{n}{bins}\PYG{p}{,} \PYG{n}{ignored} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,} \PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{density}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{bins}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{p}{(}\PYG{n}{sigma} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{)}\PYG{p}{)} \PYG{o}{*}
+\PYG{g+gp}{... }               \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{bins} \PYG{o}{\PYGZhy{}} \PYG{n}{mu}\PYG{p}{)}\PYG{o}{*}\PYG{o}{*}\PYG{l+m+mi}{2} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{sigma}\PYG{o}{*}\PYG{o}{*}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{p}{)}\PYG{p}{,}
+\PYG{g+gp}{... }         \PYG{n}{linewidth}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{r}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+Two-by-four array of samples from N(3, 6.25):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mf}{2.5}\PYG{p}{,} \PYG{n}{size}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+go}{array([[\PYGZhy{}4.49401501,  4.00950034, \PYGZhy{}1.81814867,  7.29718677],   \PYGZsh{} random}
+\PYG{g+go}{       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]])  \PYGZsh{} random}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+\index{pairwise\_align\_bayes() (in module time\_warping)@\spxentry{pairwise\_align\_bayes()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.pairwise_align_bayes}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{pairwise\_align\_bayes}}}{\emph{f1i}, \emph{f2i}, \emph{time}, \emph{mcmcopts=None}}{}
+This function aligns two functions using Bayesian framework. It will align
+f2 to f1. It is based on mapping warping functions to a hypersphere, and a
+subsequent exponential mapping to a tangent space. In the tangent space,
+the Z-mixture pCN algorithm is used to explore both local and global
+structure in the posterior distribution.
+
+The Z-mixture pCN algorithm uses a mixture distribution for the proposal
+distribution, controlled by input parameter zpcn. The zpcn\$betas must be
+between 0 and 1, and are the coefficients of the mixture components, with
+larger coefficients corresponding to larger shifts in parameter space. The
+zpcn{[}“probs”{]} give the probability of each shift size.
+\begin{description}
+\item[{Usage:  out = pairwise\_align\_bayes(f1i, f2i, time)}] \leavevmode
+out = pairwise\_align\_bayes(f1i, f2i, time, mcmcopts)
+
+\end{description}
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+\sphinxstyleliteralstrong{\sphinxupquote{f1i}} \textendash{} vector defining M samples of function 1
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{g}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+\sphinxstyleliteralstrong{\sphinxupquote{f2i}} \textendash{} vector defining M samples of function 2
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} time vector of length M
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} (string) warp calculate Karcher Mean or Median (options =
-“mean” or “median”) (default=”mean”)
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{showplot}} \textendash{} Shows plots of results using matplotlib (default = T)
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{lam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} controls the elasticity (default = 0)
+\sphinxstyleliteralstrong{\sphinxupquote{mcmopts}} \textendash{} dict of mcmc parameters
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
-functions with M samples
-
-\item[{Return gn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
-functions with M samples
-
-\item[{Return qfn}] \leavevmode
-aligned srvfs - similar structure to fn
-
-\item[{Return qgn}] \leavevmode
-aligned srvfs - similar structure to fn
-
-\item[{Return qf0}] \leavevmode
-original srvf - similar structure to fn
-
-\item[{Return qg0}] \leavevmode
-original srvf - similar structure to fn
-
-\item[{Return fmean}] \leavevmode
-f function mean or median - vector of length N
-
-\item[{Return gmean}] \leavevmode
-g function mean or median - vector of length N
-
-\item[{Return mqfn}] \leavevmode
-srvf mean or median - vector of length N
-
-\item[{Return mqgn}] \leavevmode
-srvf mean or median - vector of length N
-
-\item[{Return gam}] \leavevmode
-warping functions - similar structure to fn
-
 \end{description}\end{quote}
+
+default mcmc options:
+tmp = \{“betas”:np.array({[}0.5,0.5,0.005,0.0001{]}),”probs”:np.array({[}0.1,0.1,0.7,0.1{]})\}
+mcmcopts = \{“iter”:2*(10**4) ,”burnin”:np.minimum(5*(10**3),2*(10**4)//2),
+\begin{quote}
+
+“alpha0”:0.1, “beta0”:0.1,”zpcn”:tmp,”propvar”:1,
+“initcoef”:np.repeat(0,20), “npoints”:200, “extrainfo”:True\}
+\end{quote}
+
+:rtype collection containing
+:return f2\_warped: aligned f2
+:return gamma: warping function
+:return g\_coef: final g\_coef
+:return psi: final psi
+:return sigma1: final sigma
+
+if extrainfo
+:return accept: accept of psi samples
+:return betas\_ind
+:return logl: log likelihood
+:return gamma\_mat: posterior gammas
+:return gamma\_stats: posterior gamma stats
+:return xdist: phase distance posterior
+:return ydist: amplitude distance posterior)
+
+\end{fulllineitems}
+
+\index{rand() (in module time\_warping)@\spxentry{rand()}\spxextra{in module time\_warping}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{time_warping:time_warping.rand}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{rand}}}{\emph{d0}, \emph{d1}, \emph{...}, \emph{dn}}{}
+Random values in a given shape.
+
+\begin{sphinxadmonition}{note}{Note:}
+This is a convenience function for users porting code from Matlab,
+and wraps \sphinxtitleref{numpy.random.random\_sample}. That function takes a
+tuple to specify the size of the output, which is consistent with
+other NumPy functions like \sphinxtitleref{numpy.zeros} and \sphinxtitleref{numpy.ones}.
+\end{sphinxadmonition}
+
+Create an array of the given shape and populate it with
+random samples from a uniform distribution
+over \sphinxcode{\sphinxupquote{{[}0, 1)}}.
+\begin{description}
+\item[{d0, d1, …, dn}] \leavevmode{[}int, optional{]}
+The dimensions of the returned array, must be non-negative.
+If no argument is given a single Python float is returned.
+
+\end{description}
+\begin{description}
+\item[{out}] \leavevmode{[}ndarray, shape \sphinxcode{\sphinxupquote{(d0, d1, ..., dn)}}{]}
+Random values.
+
+\end{description}
+
+random
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{g+go}{array([[ 0.14022471,  0.96360618],  \PYGZsh{}random}
+\PYG{g+go}{       [ 0.37601032,  0.25528411],  \PYGZsh{}random}
+\PYG{g+go}{       [ 0.49313049,  0.94909878]]) \PYGZsh{}random}
+\end{sphinxVerbatim}
 
 \end{fulllineitems}
 
@@ -372,29 +650,60 @@ warping functions - similar structure to fn
 Vertical and Horizontal Functional Principal Component Analysis using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
-\index{horizfPCA() (in module fPCA)@\spxentry{horizfPCA()}\spxextra{in module fPCA}}
+\index{fdahpca (class in fPCA)@\spxentry{fdahpca}\spxextra{class in fPCA}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.horizfPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{horizfPCA}}}{\emph{gam}, \emph{time}, \emph{no=2}, \emph{showplot=True}}{}
-This function calculates horizontal functional principal component analysis on aligned data
+\phantomsection\label{\detokenize{fPCA:fPCA.fdahpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdahpca}}}{\emph{fdawarp}}{}
+This class provides horizontal fPCA using the
+SRVF framework
+
+Usage:  obj = fdahpca(warp\_data)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of shape (M,N) of N warping functions
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp class with alignment data
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the sample points
+\sphinxstyleliteralstrong{\sphinxupquote{gam\_pca}} \textendash{} warping functions principal directions
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 2)
+\sphinxstyleliteralstrong{\sphinxupquote{psi\_pca}} \textendash{} srvf principal directions
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{showplot}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Shows plots of results using matplotlib (default = T)
+\sphinxstyleliteralstrong{\sphinxupquote{latent}} \textendash{} latent values
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{U}} \textendash{} eigenvectors
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{coef}} \textendash{} coeficients
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{vec}} \textendash{} shooting vectors
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mu}} \textendash{} Karcher Mean
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{tau}} \textendash{} principal directions
 
 \end{itemize}
 
+\end{description}\end{quote}
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  15-Mar-2018
+\index{calc\_fpca() (fPCA.fdahpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdahpca method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdahpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{no=3}}{}
+This function calculates horizontal functional principal component analysis on aligned data
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 3)
+
 \item[{Return type}] \leavevmode
-tuple of numpy ndarray
+fdahpca object of numpy ndarray
 
 \item[{Return q\_pca}] \leavevmode
 srsf principal directions
@@ -415,34 +724,89 @@ eigenvectors
 
 \end{fulllineitems}
 
-\index{jointfPCA() (in module fPCA)@\spxentry{jointfPCA()}\spxextra{in module fPCA}}
+\index{plot() (fPCA.fdahpca method)@\spxentry{plot()}\spxextra{fPCA.fdahpca method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.jointfPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{jointfPCA}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{q0}, \emph{gam}, \emph{no=2}, \emph{showplot=True}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdahpca.plot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{plot}}}{}{}
+plot plot elastic horizontal fPCA results
+
+Usage: obj.plot()
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+\index{fdajpca (class in fPCA)@\spxentry{fdajpca}\spxextra{class in fPCA}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdajpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdajpca}}}{\emph{fdawarp}}{}
+This class provides joint fPCA using the
+SRVF framework
+
+Usage:  obj = fdajpca(warp\_data)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp class with alignment data
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q\_pca}} \textendash{} srvf principal directions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f\_pca}} \textendash{} f principal directions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{latent}} \textendash{} latent values
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{coef}} \textendash{} prinicapl coefficients
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{id}} \textendash{} point used for f(0)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mqn}} \textendash{} mean srvf
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{U}} \textendash{} eigenvectors
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mu\_psi}} \textendash{} mean psi
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mu\_g}} \textendash{} mean g
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{C}} \textendash{} scaling value
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{stds}} \textendash{} geodesic directions
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  18-Mar-2018
+\index{calc\_fpca() (fPCA.fdajpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdajpca method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdajpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{no=3}, \emph{id=None}}{}
 This function calculates joint functional principal component analysis
 on aligned data
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{fn}} \textendash{} numpy ndarray of shape (M,N) of N aligned functions with M
-samples
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 3)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{qn}} \textendash{} numpy ndarray of shape (M,N) of N aligned SRSF with M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 2)
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{showplot}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Shows plots of results using matplotlib (default = T)
+\sphinxstyleliteralstrong{\sphinxupquote{id}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} point to use for f(0) (default = midpoint)
 
 \end{itemize}
 
 \item[{Return type}] \leavevmode
-tuple of numpy ndarray
+fdajpca object of numpy ndarray
 
 \item[{Return q\_pca}] \leavevmode
 srsf principal directions
@@ -463,34 +827,80 @@ eigenvectors
 
 \end{fulllineitems}
 
-\index{vertfPCA() (in module fPCA)@\spxentry{vertfPCA()}\spxextra{in module fPCA}}
+\index{plot() (fPCA.fdajpca method)@\spxentry{plot()}\spxextra{fPCA.fdajpca method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.vertfPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{vertfPCA}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{no=2}, \emph{showplot=True}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdajpca.plot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{plot}}}{}{}
+plot plot elastic vertical fPCA result
+
+Usage: obj.plot()
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+\index{fdavpca (class in fPCA)@\spxentry{fdavpca}\spxextra{class in fPCA}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdavpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdavpca}}}{\emph{fdawarp}}{}
+This class provides vertical fPCA using the
+SRVF framework
+
+Usage:  obj = fdavpca(warp\_data)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp class with alignment data
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q\_pca}} \textendash{} srvf principal directions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f\_pca}} \textendash{} f principal directions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{latent}} \textendash{} latent values
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{coef}} \textendash{} prinicapl coefficients
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{id}} \textendash{} point used for f(0)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mqn}} \textendash{} mean srvf
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{U}} \textendash{} eigenvectors
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{stds}} \textendash{} geodesic directions
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  15-Mar-2018
+\index{calc\_fpca() (fPCA.fdavpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdavpca method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdavpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{no=3}, \emph{id=None}}{}
 This function calculates vertical functional principal component analysis
 on aligned data
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{fn}} \textendash{} numpy ndarray of shape (M,N) of N aligned functions with M
-samples
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 3)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{qn}} \textendash{} numpy ndarray of shape (M,N) of N aligned SRSF with M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 2)
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{showplot}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Shows plots of results using matplotlib (default = T)
+\sphinxstyleliteralstrong{\sphinxupquote{id}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} point to use for f(0) (default = midpoint)
 
 \end{itemize}
 
 \item[{Return type}] \leavevmode
-tuple of numpy ndarray
+fdavpca object containing
 
 \item[{Return q\_pca}] \leavevmode
 srsf principal directions
@@ -508,6 +918,18 @@ coefficients
 eigenvectors
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{plot() (fPCA.fdavpca method)@\spxentry{plot()}\spxextra{fPCA.fdavpca method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdavpca.plot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{plot}}}{}{}
+plot plot elastic vertical fPCA result
+Usage: obj.plot()
+
+\end{fulllineitems}
+
 
 \end{fulllineitems}
 
@@ -518,30 +940,64 @@ eigenvectors
 Elastic Functional Boxplots
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
-\index{ampbox() (in module boxplots)@\spxentry{ampbox()}\spxextra{in module boxplots}}
+\index{ampbox (class in boxplots)@\spxentry{ampbox}\spxextra{class in boxplots}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{boxplots:boxplots.ampbox}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{ampbox}}}{\emph{ft}, \emph{f\_median}, \emph{qt}, \emph{q\_median}, \emph{time}, \emph{alpha=0.05}, \emph{k\_a=1}}{}
+\phantomsection\label{\detokenize{boxplots:boxplots.ampbox}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{ampbox}}}{\emph{fdawarp}}{}
+This class provides amplitude boxplot for functional data using the
+SRVF framework
+
+Usage:  obj = ampbox(warp\_data)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} ({\hyperref[\detokenize{time_warping:time_warping.fdawarp}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{fdawarp}}}}}) \textendash{} fdawarp class with alignment data
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q1}} \textendash{} First quartile
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q3}} \textendash{} Second quartile
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q1a}} \textendash{} First quantile based on alpha
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q3a}} \textendash{} Second quantile based on alpha
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{minn}} \textendash{} minimum extreme function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{maxx}} \textendash{} maximum extreme function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{outlier\_index}} \textendash{} indexes of outlier functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f\_median}} \textendash{} median function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q\_median}} \textendash{} median srvf
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{plt}} \textendash{} surface plot mesh
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  15-Mar-2018
+\index{construct\_boxplot() (boxplots.ampbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.ampbox method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{boxplots:boxplots.ampbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{alpha=0.05}, \emph{k\_a=1}}{}
 This function constructs the amplitude boxplot using the elastic
 square-root slope (srsf) framework.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{ft}} \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{f\_median}} \textendash{} vector of size M describing the median
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{qt}} \textendash{} numpy ndarray of shape (M,N) of N srsf functions with M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{q\_median}} \textendash{} vector of size M describing the srsf median
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the time
-
-\item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} quantile value (e.g.,=.05, i.e., 95\%)
 
 \item {} 
@@ -549,40 +1005,71 @@ square-root slope (srsf) framework.
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
-
 \end{description}\end{quote}
-
-functions with M samples
-:return Q1: First quartile
-:return Q3: Second quartile
-:return Q1a: First quantile based on alpha
-:return Q3a: Second quantile based on alpha
-:return minn: minimum extreme function
-:return maxx: maximum extreme function
-:return outlier\_index: indexes of outlier functions
-:return f\_median: median function
-:return q\_median: median srsf
-:return plt: surface plot mesh
 
 \end{fulllineitems}
 
-\index{phbox() (in module boxplots)@\spxentry{phbox()}\spxextra{in module boxplots}}
+
+\end{fulllineitems}
+
+\index{phbox (class in boxplots)@\spxentry{phbox}\spxextra{class in boxplots}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{boxplots:boxplots.phbox}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{phbox}}}{\emph{gam}, \emph{time}, \emph{alpha=0.05}, \emph{k\_a=1}}{}
+\phantomsection\label{\detokenize{boxplots:boxplots.phbox}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{phbox}}}{\emph{fdawarp}}{}
+This class provides phase boxplot for functional data using the
+SRVF framework
+
+Usage:  obj = phbox(warp\_data)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} ({\hyperref[\detokenize{time_warping:time_warping.fdawarp}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{fdawarp}}}}}) \textendash{} fdawarp class with alignment data
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q1}} \textendash{} First quartile
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q3}} \textendash{} Second quartile
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q1a}} \textendash{} First quantile based on alpha
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Q3a}} \textendash{} Second quantile based on alpha
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{minn}} \textendash{} minimum extreme function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{maxx}} \textendash{} maximum extreme function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{outlier\_index}} \textendash{} indexes of outlier functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{median\_x}} \textendash{} median warping function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{psi\_median}} \textendash{} median srvf of warping function
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{plt}} \textendash{} surface plot mesh
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  15-Mar-2018
+\index{construct\_boxplot() (boxplots.phbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.phbox method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{boxplots:boxplots.phbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{alpha=0.05}, \emph{k\_a=1}}{}
 This function constructs phase boxplot for functional data using the elastic
 square-root slope (srsf) framework.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{gam}} \textendash{} numpy ndarray of shape (M,N) of N warping functions with M samples
-
-\item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} quantile value (e.g.,=.05, i.e., 95\%)
 
 \item {} 
@@ -590,125 +1077,20 @@ square-root slope (srsf) framework.
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
-
-\end{description}\end{quote}
-
-functions with M samples
-:return Q1: First quartile
-:return Q3: Second quartile
-:return Q1a: First quantile based on alpha
-:return Q3a: Second quantile based on alpha
-:return minn: minimum extreme function
-:return maxx: maximum extreme function
-:return outlier\_index: indexes of outlier functions
-:return median\_x: median warping function
-:return psi\_median: median srsf of warping function
-:return plt: surface plot mesh
-
-\end{fulllineitems}
-
-
-
-\chapter{Gaussian Generative Models}
-\label{\detokenize{gauss_model:module-gauss_model}}\label{\detokenize{gauss_model:gaussian-generative-models}}\label{\detokenize{gauss_model::doc}}\index{gauss\_model (module)@\spxentry{gauss\_model}\spxextra{module}}
-Gaussian Model of functional data
-
-moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
-\index{gauss\_model() (in module gauss\_model)@\spxentry{gauss\_model()}\spxextra{in module gauss\_model}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{gauss_model:gauss_model.gauss_model}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{gauss\_model.}}\sphinxbfcode{\sphinxupquote{gauss\_model}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{gam}, \emph{n=1}, \emph{sort\_samples=False}}{}
-This function models the functional data using a Gaussian model
-extracted from the principal components of the srvfs
-\begin{quote}\begin{description}
-\item[{Parameters}] \leavevmode\begin{itemize}
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{fn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned functions with
-M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{qn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned srvfs with M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{gam}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} warping functions
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{n}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of random samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{sort\_samples}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} sort samples (default = T)
-
-\end{itemize}
-
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return fs}] \leavevmode
-random aligned samples
-
-\item[{Return gams}] \leavevmode
-random warping functions
-
-\item[{Return ft}] \leavevmode
-random samples
-
 \end{description}\end{quote}
 
 \end{fulllineitems}
 
-\index{joint\_gauss\_model() (in module gauss\_model)@\spxentry{joint\_gauss\_model()}\spxextra{in module gauss\_model}}
+\index{plot() (boxplots.phbox method)@\spxentry{plot()}\spxextra{boxplots.phbox method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{gauss_model:gauss_model.joint_gauss_model}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{gauss\_model.}}\sphinxbfcode{\sphinxupquote{joint\_gauss\_model}}}{\emph{fn}, \emph{time}, \emph{qn}, \emph{gam}, \emph{q0}, \emph{n=1}, \emph{no=3}}{}
-This function models the functional data using a joint Gaussian model
-extracted from the principal components of the srsfs
-\begin{quote}\begin{description}
-\item[{Parameters}] \leavevmode\begin{itemize}
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{fn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned functions with
-M samples
+\phantomsection\label{\detokenize{boxplots:boxplots.phbox.plot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{plot}}}{}{}
+plot box plot and surface plot
 
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+Usage: obj.plot()
 
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{qn}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N aligned srsfs with M samples
+\end{fulllineitems}
 
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{gam}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} warping functions
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{q0}} \textendash{} numpy ndarray of shape (M,N) of N unaligned srsfs with  samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{n}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of random samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{n}} \textendash{} number of principal components (default = 3)
-
-\end{itemize}
-
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return fs}] \leavevmode
-random aligned samples
-
-\item[{Return gams}] \leavevmode
-random warping functions
-
-\item[{Return ft}] \leavevmode
-random samples
-
-\end{description}\end{quote}
 
 \end{fulllineitems}
 
@@ -1265,10 +1647,153 @@ warping function
 Warping PCR Invariant Regression using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
-\index{elastic\_lpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_lpcr\_regression()}\spxextra{in module pcr\_regression}}
+\index{elastic\_lpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_lpcr\_regression}\spxextra{class in pcr\_regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_lpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_lpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+This class provides elastic logistic pcr regression for functional 
+data using the SRVF framework accounting for warping
+
+Usage:  obj = elastic\_lpcr\_regression(f,y,time)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) \% matrix defining N functions of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N (-1/1)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp object of alignment
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca}} \textendash{} class dependent on fPCA method used object of fPCA
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param Loss: logistic loss
+:param PC: probability of classification
+:param ylabels: predicted labels
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  18-Mar-2018
+\index{calc\_model() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
+This function identifies a logistic regression model with phase-variability
+using elastic pca
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
+“vert”, or “horiz”, default = “combined”)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} scalar specify number of principal components (default=5)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} \textendash{} smooth data using box filter (default = F)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} calculate in parallel (default = F)
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{predict() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+\begin{quote}
+
+obj.predict(newdata)
+\end{quote}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of time points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} truth if available
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} \textendash{} smooth data if needed
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to run filter
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+\index{elastic\_mlpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_mlpcr\_regression}\spxextra{class in pcr\_regression}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+This class provides elastic multinomial logistic pcr regression for functional
+data using the SRVF framework accounting for warping
+
+Usage:  obj = elastic\_mlpcr\_regression(f,y,time)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) \% matrix defining N functions of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{Y}} \textendash{} coded label matrix
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp object of alignment
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca}} \textendash{} class dependent on fPCA method used object of fPCA
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param Loss: logistic loss
+:param PC: probability of classification
+:param ylabels: predicted labels
+:param
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  18-Mar-2018
+\index{calc\_model() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
 This function identifies a logistic regression model with phase-variability
 using elastic pca
 \begin{quote}\begin{description}
@@ -1295,113 +1820,95 @@ using elastic pca
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
 
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run model in parallel (default = F)
+
 \end{itemize}
-
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return alpha}] \leavevmode
-alpha parameter of model
-
-\item[{Return b}] \leavevmode
-regressor vector
-
-\item[{Return y}] \leavevmode
-response vector
-
-\item[{Return warp\_data}] \leavevmode
-alignment object from srsf\_align
-
-\item[{Return pca}] \leavevmode
-fpca object from corresponding pca method
-
-\item[{Return Loss}] \leavevmode
-logistic loss
-
-\item[{Return pca.method}] \leavevmode
-string of pca method
 
 \end{description}\end{quote}
 
 \end{fulllineitems}
 
-\index{elastic\_mlpcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_mlpcr\_regression()}\spxextra{in module pcr\_regression}}
+\index{predict() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}}{}
-This function identifies a logistic regression model with phase-variability
-using elastic pca
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+\begin{quote}
+
+obj.predict(newdata)
+\end{quote}
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of time points
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
-“vert”, or “horiz”, default = “combined”)
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} truth if available
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{no}} \textendash{} scalar specify number of principal components (default=5)
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} \textendash{} smooth data if needed
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} \textendash{} smooth data using box filter (default = F)
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to apply box filter (default = 25)
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to run filter
 
 \end{itemize}
-
-\item[{Return type}] \leavevmode
-tuple of numpy array
-
-\item[{Return alpha}] \leavevmode
-alpha parameter of model
-
-\item[{Return b}] \leavevmode
-regressor vector
-
-\item[{Return y}] \leavevmode
-response vector
-
-\item[{Return warp\_data}] \leavevmode
-alignment object from srsf\_align
-
-\item[{Return pca}] \leavevmode
-fpca object from corresponding pca method
-
-\item[{Return Loss}] \leavevmode
-logistic loss
-
-\item[{Return pca.method}] \leavevmode
-string of pca method
 
 \end{description}\end{quote}
 
 \end{fulllineitems}
 
-\index{elastic\_pcr\_regression() (in module pcr\_regression)@\spxentry{elastic\_pcr\_regression()}\spxextra{in module pcr\_regression}}
+
+\end{fulllineitems}
+
+\index{elastic\_pcr\_regression (class in pcr\_regression)@\spxentry{elastic\_pcr\_regression}\spxextra{class in pcr\_regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_pcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_pcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+This class provides elastic pcr regression for functional data using the
+SRVF framework accounting for warping
+
+Usage:  obj = elastic\_pcr\_regression(f,y,time)
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) \% matrix defining N functions of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp object of alignment
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{pca}} \textendash{} class dependent on fPCA method used object of fPCA
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param SSE: sum of squared errors
+
+Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
+Date   :  18-Mar-2018
+\index{calc\_model() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
 This function identifies a regression model with phase-variability
 using elastic pca
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of N responses
-
-\item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
-
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{pca\_method}} \textendash{} string specifing pca method (options = “combined”,
 “vert”, or “horiz”, default = “combined”)
@@ -1423,31 +1930,46 @@ using elastic pca
 
 \end{itemize}
 
-\item[{Return type}] \leavevmode
-tuple of numpy array
+\end{description}\end{quote}
 
-\item[{Return alpha}] \leavevmode
-alpha parameter of model
+\end{fulllineitems}
 
-\item[{Return b}] \leavevmode
-regressor vector
+\index{predict() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}}
 
-\item[{Return y}] \leavevmode
-response vector
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+\begin{quote}
 
-\item[{Return warp\_data}] \leavevmode
-alignment object from srsf\_align
+obj.predict(newdata)
+\end{quote}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
 
-\item[{Return pca}] \leavevmode
-fpca object from corresponding pca method
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
 
-\item[{Return SSE}] \leavevmode
-sum of squared errors
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of time points
 
-\item[{Return pca.method}] \leavevmode
-string of pca method
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} truth if available
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} \textendash{} smooth data if needed
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{sparam}} \textendash{} number of times to run filter
+
+\end{itemize}
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
 
 \end{fulllineitems}
 
@@ -1495,8 +2017,20 @@ tuple of boxplot objects
 \item[{Return amp}] \leavevmode
 amplitude tolerance bounds
 
+\item[{Rtype out\_med}] \leavevmode
+ampbox object
+
 \item[{Return ph}] \leavevmode
 phase tolerance bounds
+
+\item[{Rtype out\_med}] \leavevmode
+phbox object
+
+\item[{Return out\_med}] \leavevmode
+alignment results
+
+\item[{Rtype out\_med}] \leavevmode
+fdawarp object
 
 \end{description}\end{quote}
 
@@ -2438,7 +2972,7 @@ calculates outlier’s using geodesic distances of the SRSFs from the median
 \sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size N describing the sample points
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{mq}} \textendash{} median calculated using {\hyperref[\detokenize{time_warping:time_warping.srsf_align}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{time\_warping.srsf\_align()}}}}}
+\sphinxstyleliteralstrong{\sphinxupquote{mq}} \textendash{} median calculated using \sphinxcode{\sphinxupquote{time\_warping.srsf\_align()}}
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{k}} \textendash{} cutoff threshold (default = 1.5)
@@ -3425,7 +3959,6 @@ Component Regression,” Statistical Analysis and Data Mining, 10.1002/sam.11399
 \item\relax\sphinxstyleindexentry{fPLS}\sphinxstyleindexpageref{fPLS:\detokenize{module-fPLS}}
 \indexspace
 \bigletter{g}
-\item\relax\sphinxstyleindexentry{gauss\_model}\sphinxstyleindexpageref{gauss_model:\detokenize{module-gauss_model}}
 \item\relax\sphinxstyleindexentry{geodesic}\sphinxstyleindexpageref{geodesic:\detokenize{module-geodesic}}
 \indexspace
 \bigletter{p}

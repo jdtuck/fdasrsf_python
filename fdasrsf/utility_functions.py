@@ -12,12 +12,13 @@ from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
 from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
-from numpy import gradient, column_stack, append, mean
-from numpy import insert, vectorize
+from numpy import gradient, column_stack, append, mean, hstack
+from numpy import insert, vectorize, ceil, mod, array, quantile, dot
 import numpy.random as rn
 import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
 import optimum_reparam_Ng as orNg
+import cbayesian as bay
 import fdasrsf.geometry as geo
 import sys
 
@@ -854,3 +855,72 @@ def resamplefunction(x, n):
     T = x.shape[0]
     xn = interp(arange(0, n)/double(n-1), arange(0, T)/double(T-1), x)
     return(xn)
+
+def basis_fourier(f_domain, numBasis, fourier_p):
+    result = zeros((f_domain.shape[0], 2*numBasis))
+    for i in range(0,2*numBasis):
+        j = ceil(i/2)
+        if mod(i,2) == 1:
+            result[:,i] = sqrt(2) * sin(2*j*pi*f_domain/fourier_p)
+        
+        if mod(i,2) == 0:
+            result[:,i] = sqrt(2) * cos(2*j*pi*f_domain/fourier_p)
+
+    out = {"x":f_domain, "matrix":result}
+
+    return(out)
+
+def statsFun(vec):
+    a = quantile(vec,0.025,axis=1)
+    b = quantile(vec,0.975,axis=1)
+    out = column_stack((a, b))
+    return(out)
+
+def f_exp1(g):
+    out = bay.bcalcY(f_L2norm(g), g)
+    return(out)
+
+def f_L2norm(f):
+    x = linspace(0,1,f.shape[0])
+    out = bay.border_l2norm(x,f)
+    return(out)
+
+def f_basistofunction(f_domain, coefconst, coef, basis):
+    if basis["matrix"].shape[1] < coef.shape[0]:
+        raise Exception("In f_basistofunction, #coefficients exceeds # basis functions")
+
+    result = dot(basis["matrix"],coef)+coefconst
+    result = f_predictfunction(result, f_domain, 0)
+    return(result)
+
+def f_predictfunction(f, at, deriv):
+    x = linspace(0,1,f.shape[0])
+    if deriv == 0:
+        interp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
+        result = interp(at)
+    
+    if deriv == 1:
+        iterp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
+        fmod = iterp(at)
+        diffy1 = hstack((0, diff(fmod)))
+        diffy2 = hstack((diff(fmod),0))
+        diffx1 = hstack((0, diff(at)))
+        diffx2 = hstack((diff(at), 0))
+    
+        result = (diffy2 + diffy1) / (diffx2 + diffx1)
+
+    return(result)
+
+def f_psimean(x,y):
+    rmy = y.mean(axis=1)
+    result = rmy / f_L2norm(rmy)
+    return(result)
+
+def f_phiinv(psi):
+    f_domain = linspace(0,1,psi.shape[0])
+    result = insert(bay.bcuL2norm2(f_domain,psi),0,0)
+    return(result)
+
+def norm_gam(gam):
+    gam = (gam-gam[0])/(gam[-1]-gam[0])
+    return(gam)   

@@ -16,71 +16,124 @@ import fdasrsf.plot_style as plot
 import collections
 
 
-def vertfPCA(fn, time, qn, no=2, showplot=True):
+class fdavpca:
     """
-    This function calculates vertical functional principal component analysis
-    on aligned data
-
-    :param fn: numpy ndarray of shape (M,N) of N aligned functions with M
-               samples
-    :param time: vector of size N describing the sample points
-    :param qn: numpy ndarray of shape (M,N) of N aligned SRSF with M samples
-    :param no: number of components to extract (default = 2)
-    :param showplot: Shows plots of results using matplotlib (default = T)
-    :type showplot: bool
-    :type no: int
-
-    :rtype: tuple of numpy ndarray
-    :return q_pca: srsf principal directions
-    :return f_pca: functional principal directions
-    :return latent: latent values
-    :return coef: coefficients
-    :return U: eigenvectors
-
+    This class provides vertical fPCA using the
+    SRVF framework
+    
+    Usage:  obj = fdavpca(warp_data)
+    
+    :param warp_data: fdawarp class with alignment data
+    :param q_pca: srvf principal directions
+    :param f_pca: f principal directions
+    :param latent: latent values
+    :param coef: prinicapl coefficients
+    :param id: point used for f(0)
+    :param mqn: mean srvf
+    :param U: eigenvectors
+    :param stds: geodesic directions
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
     """
-    coef = np.arange(-2., 3.)
-    Nstd = coef.shape[0]
 
-    # FPCA
-    mq_new = qn.mean(axis=1)
-    N = mq_new.shape[0]
-    mididx = int(np.round(time.shape[0] / 2))
-    m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
-    mqn = np.append(mq_new, m_new.mean())
-    qn2 = np.vstack((qn, m_new))
-    K = np.cov(qn2)
+    def __init__(self, fdawarp):
+        """
+        Construct an instance of the fdavpca class
+        :param fdawarp: fdawarp class
+        """
+        if fdawarp.fn.size==0:
+            raise Exception('Please align fdawarp class using srsf_align!')
 
-    U, s, V = svd(K)
-    stdS = np.sqrt(s)
+        self.warp_data = fdawarp
+    
+    def calc_fpca(self, no=3, id=None):
+        """
+        This function calculates vertical functional principal component analysis
+        on aligned data
 
-    # compute the PCA in the q domain
-    q_pca = np.ndarray(shape=(N + 1, Nstd, no), dtype=float)
-    for k in range(0, no):
-        for l in range(0, Nstd):
-            q_pca[:, l, k] = mqn + coef[l] * stdS[k] * U[:, k]
+        :param no: number of components to extract (default = 3)
+        :param id: point to use for f(0) (default = midpoint)
+        :type no: int
+        :type id: int
 
-    # compute the correspondence in the f domain
-    f_pca = np.ndarray(shape=(N, Nstd, no), dtype=float)
-    for k in range(0, no):
-        for l in range(0, Nstd):
-            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca[0:N, l, k] * np.abs(q_pca[0:N, l, k]),
-                                            np.sign(q_pca[N, l, k]) * (q_pca[N, l, k] ** 2),
-                                            mididx)
-        fbar = fn.mean(axis=1)
-        fsbar = f_pca[:, :, k].mean(axis=1)
-        err = np.transpose(np.tile(fbar-fsbar, (Nstd,1)))
-        f_pca[:, :, k] += err
+        :rtype: fdavpca object containing
+        :return q_pca: srsf principal directions
+        :return f_pca: functional principal directions
+        :return latent: latent values
+        :return coef: coefficients
+        :return U: eigenvectors
 
-    N2 = qn.shape[1]
-    c = np.zeros((N2, no))
-    for k in range(0, no):
-        for l in range(0, N2):
-            c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
+        """
+        fn = self.warp_data.fn
+        time = self.warp_data.time
+        qn = self.warp_data.qn
 
-    vfpca_results = collections.namedtuple('vfpca', ['q_pca', 'f_pca', 'latent', 'coef', 'U', 'id', 'mqn', 'time'])
-    vfpca = vfpca_results(q_pca, f_pca, s, c, U, mididx, mqn, time)
+        M = time.shape[0]
+        if id is None:
+            mididx = int(np.round(M / 2))
+        else:
+            mididx = id
 
-    if showplot:
+        coef = np.arange(-2., 3.)
+        Nstd = coef.shape[0]
+
+        # FPCA
+        mq_new = qn.mean(axis=1)
+        N = mq_new.shape[0]
+        m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
+        mqn = np.append(mq_new, m_new.mean())
+        qn2 = np.vstack((qn, m_new))
+        K = np.cov(qn2)
+
+        U, s, V = svd(K)
+        stdS = np.sqrt(s)
+
+        # compute the PCA in the q domain
+        q_pca = np.ndarray(shape=(N + 1, Nstd, no), dtype=float)
+        for k in range(0, no):
+            for l in range(0, Nstd):
+                q_pca[:, l, k] = mqn + coef[l] * stdS[k] * U[:, k]
+
+        # compute the correspondence in the f domain
+        f_pca = np.ndarray(shape=(N, Nstd, no), dtype=float)
+        for k in range(0, no):
+            for l in range(0, Nstd):
+                f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca[0:N, l, k] * np.abs(q_pca[0:N, l, k]),
+                                                np.sign(q_pca[N, l, k]) * (q_pca[N, l, k] ** 2),
+                                                mididx)
+            fbar = fn.mean(axis=1)
+            fsbar = f_pca[:, :, k].mean(axis=1)
+            err = np.transpose(np.tile(fbar-fsbar, (Nstd,1)))
+            f_pca[:, :, k] += err
+
+        N2 = qn.shape[1]
+        c = np.zeros((N2, no))
+        for k in range(0, no):
+            for l in range(0, N2):
+                c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
+        
+        self.q_pca = q_pca
+        self.f_pca = f_pca
+        self.latent = s
+        self.coef = c
+        self.U = U
+        self.id = mididx
+        self.mqn = mqn
+        self.time = time
+        self.stds = coef
+
+        return
+
+    def plot(self):
+        """
+        plot plot elastic vertical fPCA result
+        Usage: obj.plot()
+        """
+
+        no = 3
+        Nstd = self.stds.shape[0]
+        N = self.time.shape[0]
         CBcdict = {
             'Bl': (0, 0, 0),
             'Or': (.9, .6, 0),
@@ -96,81 +149,126 @@ def vertfPCA(fn, time, qn, no=2, showplot=True):
         for k in range(0, no):
             axt = ax[0, k]
             for l in range(0, Nstd):
-                axt.plot(time, q_pca[0:N, l, k], color=CBcdict[cl[l]])
+                axt.plot(self.time, self.q_pca[0:N, l, k], color=CBcdict[cl[l]])
 
             axt.set_title('q domain: PD %d' % (k + 1))
             axt = ax[1, k]
             for l in range(0, Nstd):
-                axt.plot(time, f_pca[:, l, k], color=CBcdict[cl[l]])
+                axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
 
             axt.set_title('f domain: PD %d' % (k + 1))
         fig.set_tight_layout(True)
 
-        cumm_coef = 100 * np.cumsum(s) / sum(s)
+        cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
+        N = self.latent.shape[0]
         idx = np.arange(0, N + 1) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
         plt.xlabel("Percentage")
         plt.ylabel("Index")
         plt.show()
 
-    return vfpca
+        return
 
-
-def horizfPCA(gam, time, no=2, showplot=True):
+class fdahpca:
     """
-    This function calculates horizontal functional principal component analysis on aligned data
+    This class provides horizontal fPCA using the
+    SRVF framework
 
-    :param gam: numpy ndarray of shape (M,N) of N warping functions
-    :param time: vector of size M describing the sample points
-    :param no: number of components to extract (default = 2)
-    :param showplot: Shows plots of results using matplotlib (default = T)
-    :type showplot: bool
-    :type no: int
+    Usage:  obj = fdahpca(warp_data)
 
-    :rtype: tuple of numpy ndarray
-    :return q_pca: srsf principal directions
-    :return f_pca: functional principal directions
-    :return latent: latent values
-    :return coef: coefficients
-    :return U: eigenvectors
+    :param warp_data: fdawarp class with alignment data
+    :param gam_pca: warping functions principal directions
+    :param psi_pca: srvf principal directions
+    :param latent: latent values
+    :param U: eigenvectors
+    :param coef: coeficients
+    :param vec: shooting vectors
+    :param mu: Karcher Mean
+    :param tau: principal directions
 
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
     """
-    # Calculate Shooting Vectors
-    mu, gam_mu, psi, vec = uf.SqrtMean(gam)
-    tau = np.arange(1, 6)
-    TT = time.shape[0]
 
-    # TFPCA
-    K = np.cov(vec)
+    def __init__(self, fdawarp):
+        """
+        Construct an instance of the fdavpca class
+        :param fdawarp: fdawarp class
+        """
+        if fdawarp.fn.size==0:
+            raise Exception('Please align fdawarp class using srsf_align!')
 
-    U, s, V = svd(K)
-    vm = vec.mean(axis=1)
-
-    gam_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0] + 1, no), dtype=float)
-    psi_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0], no), dtype=float)
-    for j in range(0, no):
-        for k in tau:
-            v = (k - 3) * np.sqrt(s[j]) * U[:, j]
-            vn = norm(v) / np.sqrt(TT)
-            if vn < 0.0001:
-                psi_pca[k-1, :, j] = mu
-            else:
-                psi_pca[k-1, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
-
-            tmp = np.zeros(TT)
-            tmp[1:TT] = np.cumsum(psi_pca[k-1, :, j] * psi_pca[k-1, :, j])
-            gam_pca[k-1, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
+        self.warp_data = fdawarp
     
-    N2 = gam.shape[1]
-    c = np.zeros((N2,no))
-    for k in range(0,no_pca):
-        for i in range(0,N2):
-            c[i,k] = np.sum(dot(vec[:,i]-vm,U[:,k]))
+    def calc_fpca(self, no=3):
+        """
+        This function calculates horizontal functional principal component analysis on aligned data
 
-    hfpca_results = collections.namedtuple('hfpca', ['gam_pca', 'psi_pca', 'latent', 'U', 'gam_mu', 'coef', 'vec'])
-    hfpca = hfpca_results(gam_pca, psi_pca, s, U, gam_mu, c, vec)
+        :param no: number of components to extract (default = 3)
+        :type no: int
 
-    if showplot:
+        :rtype: fdahpca object of numpy ndarray
+        :return q_pca: srsf principal directions
+        :return f_pca: functional principal directions
+        :return latent: latent values
+        :return coef: coefficients
+        :return U: eigenvectors
+
+        """
+        # Calculate Shooting Vectors
+        gam = self.warp_data.gam
+        mu, gam_mu, psi, vec = uf.SqrtMean(gam)
+        tau = np.arange(1, 6)
+        TT = self.warp_data.time.shape[0]
+
+        # TFPCA
+        K = np.cov(vec)
+
+        U, s, V = svd(K)
+        vm = vec.mean(axis=1)
+
+        gam_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0] + 1, no), dtype=float)
+        psi_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0], no), dtype=float)
+        for j in range(0, no):
+            for k in tau:
+                v = (k - 3) * np.sqrt(s[j]) * U[:, j]
+                vn = norm(v) / np.sqrt(TT)
+                if vn < 0.0001:
+                    psi_pca[k-1, :, j] = mu
+                else:
+                    psi_pca[k-1, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
+
+                tmp = np.zeros(TT)
+                tmp[1:TT] = np.cumsum(psi_pca[k-1, :, j] * psi_pca[k-1, :, j])
+                gam_pca[k-1, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
+        
+        N2 = gam.shape[1]
+        c = np.zeros((N2,no))
+        for k in range(0,no):
+            for i in range(0,N2):
+                c[i,k] = np.sum(dot(vec[:,i]-vm,U[:,k]))
+        
+        self.gam_pca = gam_pca
+        self.psi_pca = psi_pca
+        self.U = U
+        self.coef = c
+        self.latent = s
+        self.gam_mu = gam_mu
+        self.psi_mu = mu
+        self.vec = vec
+        self.no = no
+
+        return
+
+    def plot(self):
+        """
+        plot plot elastic horizontal fPCA results
+
+        Usage: obj.plot()
+        """
+
+        no = self.no
+        TT = self.warp_data.time.shape[0]
         CBcdict = {
             'Bl': (0, 0, 0),
             'Or': (.9, .6, 0),
@@ -184,85 +282,145 @@ def horizfPCA(gam, time, no=2, showplot=True):
         fig, ax = plt.subplots(1, no)
         for k in range(0, no):
             axt = ax[k]
-            tmp = gam_pca[:, :, k]
+            tmp = self.gam_pca[:, :, k]
             axt.plot(np.linspace(0, 1, TT), tmp.transpose())
             axt.set_title('PD %d' % (k + 1))
             axt.set_aspect('equal')
 
         fig.set_tight_layout(True)
 
-        cumm_coef = 100 * np.cumsum(s) / sum(s)
+        cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
         idx = np.arange(0, TT-1) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
         plt.xlabel("Percentage")
         plt.ylabel("Index")
         plt.show()
 
-    return hfpca
+        return
 
-
-def jointfPCA(fn, time, qn, q0, gam, no=2, showplot=True):
+class fdajpca:
     """
-    This function calculates joint functional principal component analysis
-    on aligned data
-
-    :param fn: numpy ndarray of shape (M,N) of N aligned functions with M
-               samples
-    :param time: vector of size N describing the sample points
-    :param qn: numpy ndarray of shape (M,N) of N aligned SRSF with M samples
-    :param no: number of components to extract (default = 2)
-    :param showplot: Shows plots of results using matplotlib (default = T)
-    :type showplot: bool
-    :type no: int
-
-    :rtype: tuple of numpy ndarray
-    :return q_pca: srsf principal directions
-    :return f_pca: functional principal directions
-    :return latent: latent values
-    :return coef: coefficients
-    :return U: eigenvectors
-
-    """
-    coef = np.arange(-1., 2.)
-    Nstd = coef.shape[0]
-
-    # set up for fPCA in q-space
-    mq_new = qn.mean(axis=1)
-    M = time.shape[0]
-    mididx = int(np.round(M / 2))
-    m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
-    mqn = np.append(mq_new, m_new.mean())
-    qn2 = np.vstack((qn, m_new))
-
-    # calculate vector space of warping functions
-    mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam)
-
-    # joint fPCA
-    C = fminbound(find_C,0,1e4,(qn2,vec,q0,no,mu_psi))
-    qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(qn2, vec, C, no, mu_psi)
-
-    # geodesic paths
-    q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
-    f_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
+    This class provides joint fPCA using the
+    SRVF framework
     
-    for k in range(0, no):
-        for l in range(0, Nstd):
-            qhat = mqn + dot(U[0:(M+1),k],coef[l]*np.sqrt(s[k]))
-            vechat = dot(U[(M+1):,k],(coef[l]*np.sqrt(s[k]))/C)
-            psihat = geo.exp_map(mu_psi,vechat)
-            gamhat = cumtrapz(psihat*psihat,np.linspace(0,1,M),initial=0)
-            gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
-            if (sum(vechat)==0):
-                gamhat = np.linspace(0,1,M)
-            
-            fhat = uf.cumtrapzmid(time, qhat[0:M]*np.fabs(qhat[0:M]), np.sign(qhat[M])*(qhat[M]*qhat[M]), mididx)
-            f_pca[:,l,k] = uf.warp_f_gamma(np.linspace(0,1,M), fhat, gamhat)
-            q_pca[:,l,k] = uf.warp_q_gamma(np.linspace(0,1,M), qhat[0:M], gamhat)
+    Usage:  obj = fdajpca(warp_data)
+    
+    :param warp_data: fdawarp class with alignment data
+    :param q_pca: srvf principal directions
+    :param f_pca: f principal directions
+    :param latent: latent values
+    :param coef: prinicapl coefficients
+    :param id: point used for f(0)
+    :param mqn: mean srvf
+    :param U: eigenvectors
+    :param mu_psi: mean psi
+    :param mu_g: mean g
+    :param C: scaling value
+    :param stds: geodesic directions
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  18-Mar-2018
+    """
 
-    jfpca_results = collections.namedtuple('jfpca', ['q_pca', 'f_pca', 'latent', 'coef', 'U', 'mu_psi', 'mu_g', 'id', 'C', 'time', 'g', 'cov'])
-    jfpca = jfpca_results(q_pca, f_pca, s, a, U, mu_psi, mu_g, mididx, C, time, g, cov)
+    def __init__(self, fdawarp):
+        """
+        Construct an instance of the fdavpca class
+        :param fdawarp: fdawarp class
+        """
+        if fdawarp.fn.size==0:
+            raise Exception('Please align fdawarp class using srsf_align!')
 
-    if showplot:
+        self.warp_data = fdawarp
+    
+    def calc_fpca(self,no=3,id=None):
+        """
+        This function calculates joint functional principal component analysis
+        on aligned data
+
+        :param no: number of components to extract (default = 3)
+        :param id: point to use for f(0) (default = midpoint)
+        :type no: int
+        :type id: int
+
+        :rtype: fdajpca object of numpy ndarray
+        :return q_pca: srsf principal directions
+        :return f_pca: functional principal directions
+        :return latent: latent values
+        :return coef: coefficients
+        :return U: eigenvectors
+
+        """
+        fn = self.warp_data.fn
+        time = self.warp_data.time
+        qn = self.warp_data.qn
+        q0 = self.warp_data.q0
+        gam = self.warp_data.gam
+
+        M = time.shape[0]
+        if id is None:
+            mididx = int(np.round(M / 2))
+        else:
+            mididx = id
+
+        coef = np.arange(-1., 2.)
+        Nstd = coef.shape[0]
+
+        # set up for fPCA in q-space
+        mq_new = qn.mean(axis=1)
+        m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
+        mqn = np.append(mq_new, m_new.mean())
+        qn2 = np.vstack((qn, m_new))
+
+        # calculate vector space of warping functions
+        mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam)
+
+        # joint fPCA
+        C = fminbound(find_C,0,1e4,(qn2,vec,q0,no,mu_psi))
+        qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(qn2, vec, C, no, mu_psi)
+
+        # geodesic paths
+        q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
+        f_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
+        
+        for k in range(0, no):
+            for l in range(0, Nstd):
+                qhat = mqn + dot(U[0:(M+1),k],coef[l]*np.sqrt(s[k]))
+                vechat = dot(U[(M+1):,k],(coef[l]*np.sqrt(s[k]))/C)
+                psihat = geo.exp_map(mu_psi,vechat)
+                gamhat = cumtrapz(psihat*psihat,np.linspace(0,1,M),initial=0)
+                gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
+                if (sum(vechat)==0):
+                    gamhat = np.linspace(0,1,M)
+                
+                fhat = uf.cumtrapzmid(time, qhat[0:M]*np.fabs(qhat[0:M]), np.sign(qhat[M])*(qhat[M]*qhat[M]), mididx)
+                f_pca[:,l,k] = uf.warp_f_gamma(np.linspace(0,1,M), fhat, gamhat)
+                q_pca[:,l,k] = uf.warp_q_gamma(np.linspace(0,1,M), qhat[0:M], gamhat)
+
+        self.q_pca = q_pca
+        self.f_pca = f_pca
+        self.latent = s
+        self.coef = a
+        self.U = U
+        self.mu_psi = mu_psi
+        self.mu_g = mu_g
+        self.id = mididx
+        self.C = C
+        self.time = time
+        self.g = g
+        self.cov = cov
+        self.no = no
+        self.Nstd = coef
+
+        return
+    
+    def plot(self):
+        """
+        plot plot elastic vertical fPCA result
+
+        Usage: obj.plot()
+        """
+        no = self.no
+        M = self.time.shape[0]
         CBcdict = {
             'Bl': (0, 0, 0),
             'Or': (.9, .6, 0),
@@ -277,26 +435,25 @@ def jointfPCA(fn, time, qn, q0, gam, no=2, showplot=True):
         fig, ax = plt.subplots(2, no)
         for k in range(0, no):
             axt = ax[0, k]
-            for l in range(0, Nstd):
-                axt.plot(time, q_pca[0:M, l, k], color=CBcdict[cl[l]])
+            for l in range(0, self.Nstd):
+                axt.plot(self.time, self.q_pca[0:M, l, k], color=CBcdict[cl[l]])
 
             axt.set_title('q domain: PD %d' % (k + 1))
             axt = ax[1, k]
-            for l in range(0, Nstd):
-                axt.plot(time, f_pca[:, l, k], color=CBcdict[cl[l]])
+            for l in range(0,self.Nstd):
+                axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
 
             axt.set_title('f domain: PD %d' % (k + 1))
         fig.set_tight_layout(True)
 
-        cumm_coef = 100 * np.cumsum(s) / sum(s)
-        idx = np.arange(0, s.shape[0]) + 1
+        cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
+        idx = np.arange(0, self.latent.shape[0]) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
         plt.xlabel("Percentage")
         plt.ylabel("Index")
         plt.show()
 
-    return jfpca
-
+        return
 
 def jointfPCAd(qn, vec, C, m, mu_psi):
     (M,N) = qn.shape

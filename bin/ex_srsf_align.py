@@ -4,6 +4,7 @@ import numpy as np
 data = np.load('bin/simu_data.npz')
 time = data['arr_1']
 f = data['arr_0']
-out = fs.srsf_align(f,time,omethod="RBFGS",showplot=False)
-
+obj = fs.fdawarp(f,time)
+# obj.srsf_align(omethod="RBFGS")
+out = fs.pairwise_align_bayes(f[:,1],f[:,20],time)
 #%%

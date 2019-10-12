@@ -7,553 +7,816 @@ moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import matplotlib.pyplot as plt
 import fdasrsf.utility_functions as uf
+import fdasrsf.fPCA as fpca
+import fdasrsf.geometry as geo
 from scipy.integrate import trapz, cumtrapz
+from scipy.interpolate import interp1d
 from scipy.linalg import svd
 from numpy.linalg import norm
+from numpy.random import rand, normal
 from joblib import Parallel, delayed
 from fdasrsf.fPLS import pls_svd
+from tqdm import tqdm
 import fdasrsf.plot_style as plot
 import fpls_warp as fpls
+import cbayesian as bay
 import collections
 
 
-def srsf_align(f, time, method="mean", omethod="DP",
-               showplot=True, smoothdata=False, parallel=False, lam=0.0):
+class fdawarp:
     """
-    This function aligns a collection of functions using the elastic
-    square-root slope (srsf) framework.
+    This class provides alignment methods for functional data using the SRVF framework
 
-    :param f: numpy ndarray of shape (M,N) of N functions with M samples
-    :param time: vector of size M describing the sample points
-    :param method: (string) warp calculate Karcher Mean or Median
-    (options = "mean" or "median") (default="mean")
-    :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
-    :param showplot: Shows plots of results using matplotlib (default = T)
-    :param smoothdata: Smooth the data using a box filter (default = F)
-    :param parallel: run in parallel (default = F)
-    :param lam: controls the elasticity (default = 0)
-    :type lam: double
-    :type smoothdata: bool
-    :type f: np.ndarray
-    :type time: np.ndarray
-
-    :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
-    functions with M samples
-    :return qn: aligned srvfs - similar structure to fn
-    :return q0: original srvf - similar structure to fn
-    :return fmean: function mean or median - vector of length M
-    :return mqn: srvf mean or median - vector of length M
-    :return gam: warping functions - similar structure to fn
-    :return orig_var: Original Variance of Functions
-    :return amp_var: Amplitude Variance
-    :return phase_var: Phase Variance
-
-    Examples
-    >>> import tables
-    >>> fun=tables.open_file("../Data/simu_data.h5")
-    >>> f = fun.root.f[:]
-    >>> f = f.transpose()
-    >>> time = fun.root.time[:]
-    >>> out = srsf_align(f,time)
-
+    Usage:  obj = fdawarp(f,t)
+    
+    :param f: (M,N): matrix defining N functions of M samples
+    :param time: time vector of length M
+    :param fn: aligned functions
+    :param qn: aligned srvfs
+    :param q0: initial srvfs
+    :param fmean: function mean
+    :param mqn: mean srvf
+    :param gam: warping functions
+    :param psi: srvf of warping functions
+    :param stats: alignment statistics
+    :param qun: cost function
+    :param lambda: lambda
+    :param method: optimization method
+    :param gamI: invserse warping function
+    :param rsamps: random samples
+    :param fs: random aligned functions
+    :param gams: random warping functions
+    :param ft: random warped functions
+    :param qs: random aligned srvfs
+    :param type: alignment type
+    :param mcmc: mcmc output if bayesian 
+    
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  15-Mar-2018
     """
-    M = f.shape[0]
-    N = f.shape[1]
 
-    if M > 500:
-        parallel = True
-    elif N > 100:
-        parallel = True
+    def __init__(self, f, time):
+        """
+        Construct an instance of the fdawarp class
+        :param f: numpy ndarray of shape (M,N) of N functions with M samples
+        :param time: vector of size M describing the sample points
+        """
+        a = time.shape[0]
 
-    eps = np.finfo(np.double).eps
-    f0 = f
+        if f.shape[0] != a:
+            raise Exception('Columns of f and time must be equal')
 
-    methods = ["mean", "median"]
-    # 0 mean, 1-median
-    method = [i for i, x in enumerate(methods) if x == method]
-    if len(method) == 0:
-        method = 0
-    else:
-        method = method[0]
+        self.f = f
+        self.time = time
+        self.rsamps = False
+    
 
-    if showplot:
-        plot.f_plot(time, f, title="f Original Data")
+    def srsf_align(self, method="mean", omethod="DP", smoothdata=False, parallel=False, lam=0.0):
+        """
+        This function aligns a collection of functions using the elastic
+        square-root slope (srsf) framework.
 
-    # Compute SRSF function from data
-    f, g, g2 = uf.gradient_spline(time, f, smoothdata)
-    q = g / np.sqrt(abs(g) + eps)
+        :param method: (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
+        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+        :param smoothdata: Smooth the data using a box filter (default = F)
+        :param parallel: run in parallel (default = F)
+        :param lam: controls the elasticity (default = 0)
+        :type lam: double
+        :type smoothdata: bool
 
-    print("Initializing...")
-    mnq = q.mean(axis=1)
-    a = mnq.repeat(N)
-    d1 = a.reshape(M, N)
-    d = (q - d1) ** 2
-    dqq = np.sqrt(d.sum(axis=0))
-    min_ind = dqq.argmin()
-    mq = q[:, min_ind]
-    mf = f[:, min_ind]
+        Examples
+        >>> import tables
+        >>> fun=tables.open_file("../Data/simu_data.h5")
+        >>> f = fun.root.f[:]
+        >>> f = f.transpose()
+        >>> time = fun.root.time[:]
+        >>> obj = fs.fdawarp(f,time)
+        >>> obj.srsf_align()
 
-    if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, time,
-                                  q[:, n], omethod, lam, mf[0], f[0,n]) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        gam = np.zeros((M,N))
-        for k in range(0,N):
-            gam[:,k] = uf.optimum_reparam(mq,time,q[:,k],omethod,lam,mf[0],f[0,k])
+        """
+        M = self.f.shape[0]
+        N = self.f.shape[1]
+        self.lam = lam
 
-    gamI = uf.SqrtMeanInverse(gam)
-    mf = np.interp((time[-1] - time[0]) * gamI + time[0], time, mf)
-    mq = uf.f_to_srsf(mf, time)
+        if M > 500:
+            parallel = True
+        elif N > 100:
+            parallel = True
 
-    # Compute Karcher Mean
-    if method == 0:
-        print("Compute Karcher Mean of %d function in SRSF space..." % N)
-    if method == 1:
-        print("Compute Karcher Median of %d function in SRSF space..." % N)
+        eps = np.finfo(np.double).eps
+        f0 = self.f
+        self.method = omethod
 
-    MaxItr = 20
-    ds = np.repeat(0.0, MaxItr + 2)
-    ds[0] = np.inf
-    qun = np.repeat(0.0, MaxItr + 1)
-    tmp = np.zeros((M, MaxItr + 2))
-    tmp[:, 0] = mq
-    mq = tmp
-    tmp = np.zeros((M, MaxItr+2))
-    tmp[:,0] = mf
-    mf = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = f
-    f = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = q
-    q = tmp
+        methods = ["mean", "median"]
+        self.type = method
 
-    for r in range(0, MaxItr):
-        print("updating step: r=%d" % (r + 1))
-        if r == (MaxItr - 1):
-            print("maximal number of iterations is reached")
+        # 0 mean, 1-median
+        method = [i for i, x in enumerate(methods) if x == method]
+        if len(method) == 0:
+            method = 0
+        else:
+            method = method[0]
 
-        # Matching Step
+        # Compute SRSF function from data
+        f, g, g2 = uf.gradient_spline(self.time, self.f, smoothdata)
+        q = g / np.sqrt(abs(g) + eps)
+
+        print("Initializing...")
+        mnq = q.mean(axis=1)
+        a = mnq.repeat(N)
+        d1 = a.reshape(M, N)
+        d = (q - d1) ** 2
+        dqq = np.sqrt(d.sum(axis=0))
+        min_ind = dqq.argmin()
+        mq = q[:, min_ind]
+        mf = f[:, min_ind]
+
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
-                                      time, q[:, n, 0], omethod, lam, mf[0,r],
-                                      f[0,k,0] ) for n in range(N))
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, self.time,
+                                    q[:, n], omethod, lam, mf[0], f[0,n]) for n in range(N))
+            gam = np.array(out)
+            gam = gam.transpose()
+        else:
+            gam = np.zeros((M,N))
+            for k in range(0,N):
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,mf[0],f[0,k])
+
+        gamI = uf.SqrtMeanInverse(gam)
+        mf = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], self.time, mf)
+        mq = uf.f_to_srsf(mf, self.time)
+
+        # Compute Karcher Mean
+        if method == 0:
+            print("Compute Karcher Mean of %d function in SRSF space..." % N)
+        if method == 1:
+            print("Compute Karcher Median of %d function in SRSF space..." % N)
+
+        MaxItr = 20
+        ds = np.repeat(0.0, MaxItr + 2)
+        ds[0] = np.inf
+        qun = np.repeat(0.0, MaxItr + 1)
+        tmp = np.zeros((M, MaxItr + 2))
+        tmp[:, 0] = mq
+        mq = tmp
+        tmp = np.zeros((M, MaxItr+2))
+        tmp[:,0] = mf
+        mf = tmp
+        tmp = np.zeros((M, N, MaxItr + 2))
+        tmp[:, :, 0] = self.f
+        f = tmp
+        tmp = np.zeros((M, N, MaxItr + 2))
+        tmp[:, :, 0] = q
+        q = tmp
+
+        for r in range(0, MaxItr):
+            print("updating step: r=%d" % (r + 1))
+            if r == (MaxItr - 1):
+                print("maximal number of iterations is reached")
+
+            # Matching Step
+            if parallel:
+                out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
+                                        self.time, q[:, n, 0], omethod, lam, mf[0,r],
+                                        f[0,k,0] ) for n in range(N))
+                gam = np.array(out)
+                gam = gam.transpose()
+            else:
+                for k in range(0,N):
+                    gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0],
+                            omethod, lam, mf[0,r], f[0,k,0])
+
+            gam_dev = np.zeros((M, N))
+            vtil = np.zeros((M,N))
+            dtil = np.zeros(N)
+            for k in range(0, N):
+                f[:, k, r + 1] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
+                                        + self.time[0], self.time, f[:, k, 0])
+                q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], self.time)
+                gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+                v = q[:, k, r + 1] - mq[:,r]
+                d = np.sqrt(trapz(v*v, self.time))
+                vtil[:,k] = v/d
+                dtil[k] = 1.0/d
+
+            mqt = mq[:, r]
+            a = mqt.repeat(N)
+            d1 = a.reshape(M, N)
+            d = (q[:, :, r + 1] - d1) ** 2
+            if method == 0:
+                d1 = sum(trapz(d, self.time, axis=0))
+                d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
+                ds_tmp = d1 + lam * d2
+                ds[r + 1] = ds_tmp
+
+                # Minimization Step
+                # compute the mean of the matched function
+                qtemp = q[:, :, r + 1]
+                ftemp = f[:, :, r + 1]
+                mq[:, r + 1] = qtemp.mean(axis=1)
+                mf[:, r + 1] = ftemp.mean(axis=1)
+
+                qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
+
+            if method == 1:
+                d1 = np.sqrt(sum(trapz(d, self.time, axis=0)))
+                d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
+                ds_tmp = d1 + lam * d2
+                ds[r + 1] = ds_tmp
+
+                # Minimization Step
+                # compute the mean of the matched function
+                stp = .3
+                vbar = vtil.sum(axis=1)*(1/dtil.sum())
+                qtemp = q[:, :, r + 1] 
+                ftemp = f[:, :, r + 1] 
+                mq[:, r + 1] = mq[:,r] + stp*vbar
+                tmp = np.zeros(M)
+                tmp[1:] = cumtrapz(mq[:, r + 1] * np.abs(mq[:, r + 1]), self.time)
+                mf[:, r + 1] = np.median(f0[1, :])+tmp
+
+                qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
+
+            if qun[r] < 1e-2 or r >= MaxItr:
+                break
+
+        # Last Step with centering of gam
+        r += 1
+        if parallel:
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
+                q[:, n, 0], omethod, lam, mf[0,r], f[0,n,0]) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq[:, r], time, q[:, k, 0],
-                        omethod, lam, mf[0,r], f[0,k,0])
+                gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
+                        lam, mf[0,r], f[0,k,0])
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
-            f[:, k, r + 1] = np.interp((time[-1] - time[0]) * gam[:, k]
-                                       + time[0], time, f[:, k, 0])
-            q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
             gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
 
-        mqt = mq[:, r]
-        a = mqt.repeat(N)
-        d1 = a.reshape(M, N)
-        d = (q[:, :, r + 1] - d1) ** 2
-        if method == 0:
-            d1 = sum(trapz(d, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = d1 + lam * d2
-            ds[r + 1] = ds_tmp
+        gamI = uf.SqrtMeanInverse(gam)
+        gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+        time0 = (self.time[-1] - self.time[0]) * gamI + self.time[0]
+        mq[:, r + 1] = np.interp(time0, self.time, mq[:, r]) * np.sqrt(gamI_dev)
 
-            # Minimization Step
-            # compute the mean of the matched function
-            qtemp = q[:, :, r + 1]
-            ftemp = f[:, :, r + 1]
-            mq[:, r + 1] = qtemp.mean(axis=1)
-            mf[:, r + 1] = ftemp.mean(axis=1)
+        for k in range(0, N):
+            q[:, k, r + 1] = np.interp(time0, self.time, q[:, k, r]) * np.sqrt(gamI_dev)
+            f[:, k, r + 1] = np.interp(time0, self.time, f[:, k, r])
+            gam[:, k] = np.interp(time0, self.time, gam[:, k])
 
-            qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
+        # Aligned data & stats
+        self.fn = f[:, :, r + 1]
+        self.qn = q[:, :, r + 1]
+        self.q0 = q[:, :, 0]
+        mean_f0 = f0.mean(axis=1)
+        std_f0 = f0.std(axis=1)
+        mean_fn = self.fn.mean(axis=1)
+        std_fn = self.fn.std(axis=1)
+        self.gam = gam
+        self.mqn = mq[:, r + 1]
+        tmp = np.zeros(M)
+        tmp[1:] = cumtrapz(self.mqn * np.abs(self.mqn), self.time)
+        self.fmean = np.mean(f0[1, :]) + tmp
 
-        if method == 1:
-            d1 = np.sqrt(sum(trapz(d, time, axis=0)))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = d1 + lam * d2
-            ds[r + 1] = ds_tmp
+        fgam = np.zeros((M, N))
+        for k in range(0, N):
+            time0 = (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0]
+            fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
-            # Minimization Step
-            # compute the mean of the matched function
-            dist_iinv = ds[r + 1] ** (-1)
-            qtemp = q[:, :, r + 1] / ds[r + 1]
-            ftemp = f[:, :, r + 1] / ds[r + 1]
-            mq[:, r + 1] = qtemp.sum(axis=1) * dist_iinv
-            mf[:, r + 1] = ftemp.sum(axis=1) * dist_iinv
+        var_fgam = fgam.var(axis=1)
+        self.orig_var = trapz(std_f0 ** 2, self.time)
+        self.amp_var = trapz(std_fn ** 2, self.time)
+        self.phase_var = trapz(var_fgam, self.time)
 
-            qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
+        return
 
-        if qun[r] < 1e-2 or r >= MaxItr:
-            break
 
-    # Last Step with centering of gam
-    r += 1
-    if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], time,
-            q[:, n, 0], omethod, lam, mf[0,r], f[0,n,0]) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        for k in range(0,N):
-            gam[:,k] = uf.optimum_reparam(mq[:, r], time, q[:, k, 0], omethod,
-                    lam, mf[0,r], f[0,k,0])
+    def plot(self):
+        """
+        plot plot functional alignment results
+        
+        Usage: obj.plot()
+        """
 
-    gam_dev = np.zeros((M, N))
-    for k in range(0, N):
-        gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+        M = self.f.shape[0]
+        plot.f_plot(self.time, self.f, title="f Original Data")
 
-    gamI = uf.SqrtMeanInverse(gam)
-    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    time0 = (time[-1] - time[0]) * gamI + time[0]
-    mq[:, r + 1] = np.interp(time0, time, mq[:, r]) * np.sqrt(gamI_dev)
-
-    for k in range(0, N):
-        q[:, k, r + 1] = np.interp(time0, time, q[:, k, r]) * np.sqrt(gamI_dev)
-        f[:, k, r + 1] = np.interp(time0, time, f[:, k, r])
-        gam[:, k] = np.interp(time0, time, gam[:, k])
-
-    # Aligned data & stats
-    fn = f[:, :, r + 1]
-    qn = q[:, :, r + 1]
-    q0 = q[:, :, 0]
-    mean_f0 = f0.mean(axis=1)
-    std_f0 = f0.std(axis=1)
-    mean_fn = fn.mean(axis=1)
-    std_fn = fn.std(axis=1)
-    mqn = mq[:, r + 1]
-    tmp = np.zeros((1, M))
-    tmp = tmp.flatten()
-    tmp[1:] = cumtrapz(mqn * np.abs(mqn), time)
-    fmean = np.mean(f0[1, :]) + tmp
-
-    fgam = np.zeros((M, N))
-    for k in range(0, N):
-        time0 = (time[-1] - time[0]) * gam[:, k] + time[0]
-        fgam[:, k] = np.interp(time0, time, fmean)
-
-    var_fgam = fgam.var(axis=1)
-    orig_var = trapz(std_f0 ** 2, time)
-    amp_var = trapz(std_fn ** 2, time)
-    phase_var = trapz(var_fgam, time)
-
-    if showplot:
-        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), gam,
-                              title="Warping Functions")
+        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), self.gam,
+                                title="Warping Functions")
         ax.set_aspect('equal')
 
-        plot.f_plot(time, fn, title="Warped Data")
+        plot.f_plot(self.time, self.fn, title="Warped Data")
 
+        mean_f0 = self.f.mean(axis=1)
+        std_f0 = self.f.std(axis=1)
+        mean_fn = self.fn.mean(axis=1)
+        std_fn = self.fn.std(axis=1)
         tmp = np.array([mean_f0, mean_f0 + std_f0, mean_f0 - std_f0])
         tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="Original Data: Mean $\pm$ STD")
+        plot.f_plot(self.time, tmp, title="Original Data: Mean $\pm$ STD")
 
         tmp = np.array([mean_fn, mean_fn + std_fn, mean_fn - std_fn])
         tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="Warped Data: Mean $\pm$ STD")
+        plot.f_plot(self.time, tmp, title="Warped Data: Mean $\pm$ STD")
 
-        plot.f_plot(time, fmean, title="$f_{mean}$")
+        plot.f_plot(self.time, self.fmean, title="$f_{mean}$")
         plt.show()
 
-    align_results = collections.namedtuple('align', ['fn', 'qn', 'q0', 'fmean',
-                                                     'mqn', 'gam', 'orig_var',
-                                                     'amp_var', 'phase_var',
-                                                     'cost'])
+        return
+    
+    def gauss_model(self, n=1, sort_samples=False):
+        """
+        This function models the functional data using a Gaussian model
+        extracted from the principal components of the srvfs
 
-    out = align_results(fn, qn, q0, fmean, mqn, gam, orig_var, amp_var,
-                        phase_var, qun)
-    return out
+        :param n: number of random samples
+        :param sort_samples: sort samples (default = T)
+        :type n: integer
+        :type sort_samples: bool
+        """
+        fn = self.fn
+        time = self.time
+        qn = self.qn
+        gam = self.gam
+
+        # Parameters
+        eps = np.finfo(np.double).eps
+        binsize = np.diff(time)
+        binsize = binsize.mean()
+        M = time.size
+
+        # compute mean and covariance in q-domain
+        mq_new = qn.mean(axis=1)
+        mididx = np.round(time.shape[0] / 2)
+        m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
+        mqn = np.append(mq_new, m_new.mean())
+        qn2 = np.vstack((qn, m_new))
+        C = np.cov(qn2)
+
+        q_s = np.random.multivariate_normal(mqn, C, n)
+        q_s = q_s.transpose()
+
+        # compute the correspondence to the original function domain
+        fs = np.zeros((M, n))
+        for k in range(0, n):
+            fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]),
+                                    np.sign(q_s[M, k]) * (q_s[M, k] ** 2),
+                                    mididx)
+        fbar = fn.mean(axis=1)
+
+        fsbar = fs.mean(axis=1)
+        err = np.transpose(np.tile(fbar-fsbar, (n,1)))
+        fs += err
+
+        # random warping generation
+        rgam = uf.randomGamma(gam, n)
+        gams = np.zeros((M, n))
+        for k in range(0, n):
+            gams[:, k] = uf.invertGamma(rgam[:, k])
+
+        # sort functions and warping
+        if sort_samples:
+            mx = fs.max(axis=0)
+            seq1 = mx.argsort()
+
+            # compute the psi-function
+            fy = np.gradient(rgam, binsize)
+            psi = fy / np.sqrt(abs(fy) + eps)
+            ip = np.zeros(n)
+            len = np.zeros(n)
+            for i in range(0, n):
+                tmp = np.ones(M)
+                ip[i] = tmp.dot(psi[:, i] / M)
+                len[i] = np.arccos(tmp.dot(psi[:, i] / M))
+
+            seq2 = len.argsort()
+
+            # combine x-variability and y-variability
+            ft = np.zeros((M, n))
+            for k in range(0, n):
+                ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) /
+                                    np.double(M - 1), fs[:, seq1[k]])
+                tmp = np.isnan(ft[:, k])
+                while tmp.any():
+                    rgam2 = uf.randomGamma(gam, 1)
+                    ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) /
+                                        np.double(M - 1), uf.invertGamma(rgam2))
+        else:
+            # combine x-variability and y-variability
+            ft = np.zeros((M, n))
+            for k in range(0, n):
+                ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
+                                    np.double(M - 1), fs[:, k])
+                tmp = np.isnan(ft[:, k])
+                while tmp.any():
+                    rgam2 = uf.randomGamma(gam, 1)
+                    ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
+                                        np.double(M - 1), uf.invertGamma(rgam2))
+
+        
+        self.rsamps = True
+        self.fs = fs
+        self.gams = rgam
+        self.ft = ft
+        self.qs = q_s[0:M,:]
+
+        return
 
 
-def srsf_align_pair(f, g, time, method="mean", showplot=True,
-                    smoothdata=False, lam=0.0):
-    """
-    This function aligns a collection of functions using the elastic square-
-    root slope (srsf) framework.
+    def joint_gauss_model(self, n=1, no=3):
+        """
+        This function models the functional data using a joint Gaussian model
+        extracted from the principal components of the srsfs
 
-    :param f: numpy ndarray of shape (M,N) of N functions with M samples
-    :param g: numpy ndarray of shape (M,N) of N functions with M samples
-    :param time: vector of size M describing the sample points
-    :param method: (string) warp calculate Karcher Mean or Median (options =
-                   "mean" or "median") (default="mean")
-    :param showplot: Shows plots of results using matplotlib (default = T)
-    :param smoothdata: Smooth the data using a box filter (default = F)
-    :param lam: controls the elasticity (default = 0)
-    :type lam: double
-    :type smoothdata: bool
-    :type f: np.ndarray
-    :type time: np.ndarray
+        :param n: number of random samples
+        :param no: number of principal components (default = 3)
+        :type n: integer
+        :type no: integer
+        """
 
-    :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
-                functions with M samples
-    :return gn: aligned functions - numpy ndarray of shape (M,N) of N
-                functions with M samples
-    :return qfn: aligned srvfs - similar structure to fn
-    :return qgn: aligned srvfs - similar structure to fn
-    :return qf0: original srvf - similar structure to fn
-    :return qg0: original srvf - similar structure to fn
-    :return fmean: f function mean or median - vector of length N
-    :return gmean: g function mean or median - vector of length N
-    :return mqfn: srvf mean or median - vector of length N
-    :return mqgn: srvf mean or median - vector of length N
-    :return gam: warping functions - similar structure to fn
+        # Parameters
+        fn = self.fn
+        time = self.time
+        qn = self.qn
+        gam = self.gam
 
-    """
-    M = f.shape[0]
-    N = f.shape[1]
+        M = time.size
 
-    if M > 500:
-        parallel = True
-    elif N > 100:
-        parallel = True
-    else:
-        parallel = False
+        # Perform PCA
+        jfpca = fpca.fdajpca(self)
+        jfpca.calc_fpca(no=no)
+        s = jfpca.latent
+        U = jfpca.U
+        C = jfpca.C
+        mu_psi = jfpca.mu_psi
 
-    eps = np.finfo(np.double).eps
-    f0 = f
-    g0 = g
+        # compute mean and covariance
+        mq_new = qn.mean(axis=1)
+        mididx = jfpca.id
+        m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
+        mqn = np.append(mq_new, m_new.mean())
 
-    methods = ["mean", "median"]
-    # 0 mean, 1-median
-    method = [i for i, x in enumerate(methods) if x == method]
+        # generate random samples
+        vals = np.random.multivariate_normal(np.zeros(s.shape), np.diag(s), n)
+        
+        tmp = np.matmul(U, np.transpose(vals))
+        qhat = np.tile(mqn.T,(n,1)).T + tmp[0:M+1,:]
+        tmp = np.matmul(U, np.transpose(vals)/C)
+        vechat = tmp[(M+1):,:]
+        psihat = np.zeros((M,n))
+        gamhat = np.zeros((M,n))
+        for ii in range(n):
+            psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
+            gam_tmp = cumtrapz(psihat[:,ii]**2,np.linspace(0,1,M),initial=0.0)
+            gamhat[:,ii] = (gam_tmp - gam_tmp.min())/(gam_tmp.max()-gam_tmp.min())
+        
+        ft = np.zeros((M,n))
+        fhat = np.zeros((M,n))
+        for ii in range(n):
+            fhat[:,ii] = uf.cumtrapzmid(time, qhat[0:M,ii]*np.fabs(qhat[0:M,ii]), np.sign(qhat[M,ii])*(qhat[M,ii]*qhat[M,ii]), mididx)
+            ft[:,ii] = uf.warp_f_gamma(np.linspace(0,1,M),fhat[:,ii],gamhat[:,ii])
 
-    if method != 0 or method != 1:
-        method = 0
 
-    if showplot:
-        plot.f_plot(time, f, title="Original Data")
-        plot.f_plot(time, g, title="g Original Data")
+        self.rsamps = True
+        self.fs = fhat
+        self.gams = gamhat
+        self.ft = ft
+        self.qs = qhat[0:M,:]
 
-    # Compute SRSF function from data
-    f, g1, g2 = uf.gradient_spline(time, f, smoothdata)
-    qf = g1 / np.sqrt(abs(g1) + eps)
-    g, g1, g2 = uf.gradient_spline(time, g, smoothdata)
-    qg = g1 / np.sqrt(abs(g1) + eps)
+        return
 
-    print ("Initializing...")
-    mnq = qf.mean(axis=1)
-    a = mnq.repeat(N)
-    d1 = a.reshape(M, N)
-    d = (qf - d1) ** 2
-    dqq = np.sqrt(d.sum(axis=0))
-    min_ind = dqq.argmin()
-    mq = np.column_stack((qf[:, min_ind], qg[:, min_ind]))
-    mf = np.column_stack((f[:, min_ind], g[:, min_ind]))
+    def multiple_align_functions(self, mu, omethod="DP", smoothdata=False, parallel=False, lam=0.0):
+        """
+        This function aligns a collection of functions using the elastic square-root
+        slope (srsf) framework.
 
-    if parallel:
-        out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam_pair)(mq, time, qf[:, n], qg[:, n], lam) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        gam = uf.optimum_reparam_pair(mq, time, qf, qg, lam)
+        Usage:  obj.multiple_align_functions(mu)
+                obj.multiple_align_functions(lambda)
+        obj.multiple_align_functions(lambda, ...)
+    
+        :param mu: vector of function to align to
+        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+        :param smoothdata: Smooth the data using a box filter (default = F)
+        :param parallel: run in parallel (default = F)
+        :param lam: controls the elasticity (default = 0)
+        :type lam: double
+        :type smoothdata: bool
 
-    gamI = uf.SqrtMeanInverse(gam)
+        """
 
-    time0 = (time[-1] - time[0]) * gamI + time[0]
-    for k in range(0, 2):
-        mf[:, k] = np.interp(time0, time, mf[:, k])
-        mq[:, k] = uf.f_to_srsf(mf[:, k], time)
+        M = self.f.shape[0]
+        N = self.f.shape[1]
+        self.lam = lam
 
-    # Compute Karcher Mean
-    if method == 0:
-        print("Compute Karcher Mean of %d function in SRSF space..." % N)
-    if method == 1:
-        print("Compute Karcher Median of %d function in SRSF space..." % N)
+        if M > 500:
+            parallel = True
+        elif N > 100:
+            parallel = True
 
-    MaxItr = 20
-    ds = np.repeat(0.0, MaxItr + 2)
-    ds[0] = np.inf
-    qfun = np.repeat(0.0, MaxItr + 1)
-    qgun = np.repeat(0.0, MaxItr + 1)
-    tmp = np.zeros((M, 2, MaxItr + 2))
-    tmp[:, :, 0] = mq
-    mq = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = f
-    f = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = g
-    g = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = qf
-    qf = tmp
-    tmp = np.zeros((M, N, MaxItr + 2))
-    tmp[:, :, 0] = qg
-    qg = tmp
+        eps = np.finfo(np.double).eps
+        self.method = omethod
+        self.type = "multiple"
 
-    for r in range(0, MaxItr):
-        print("updating step: r=%d" % (r + 1))
-        if r == (MaxItr - 1):
-            print("maximal number of iterations is reached")
+        # Compute SRSF function from data
+        f, g, g2 = uf.gradient_spline(self.time, self.f, smoothdata)
+        q = g / np.sqrt(abs(g) + eps)
 
-        # Matching Step
+        mq = uf.f_to_srsf(mu, self.time)
+
         if parallel:
-            out = Parallel(n_jobs=-1)(
-                delayed(uf.optimum_reparam_pair)(mq[:, :, r], time, qf[:, n, 0], qg[:, n, 0], lam) for n in range(N))
+            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, self.time,
+                                    q[:, n], omethod, lam, mu[0], f[0,n]) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
-            gam = uf.optimum_reparam_pair(mq[:, :, r], time, qf[:, :, 0],
-                                          qg[:, :, 0], lam)
+            gam = np.zeros((M,N))
+            for k in range(0,N):
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,mu[0],f[0,k])
 
-        gam_dev = np.zeros((M, N))
+        self.gamI = uf.SqrtMeanInverse(gam)
+
+        fn = np.zeros((M,N))
+        qn = np.zeros((M,N))
         for k in range(0, N):
-            time0 = (time[-1] - time[0]) * gam[:, k] + time[0]
-            f[:, k, r + 1] = np.interp(time0, time, f[:, k, 0])
-            g[:, k, r + 1] = np.interp(time0, time, g[:, k, 0])
-            qf[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], time)
-            qg[:, k, r + 1] = uf.f_to_srsf(g[:, k, r + 1], time)
-            gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+            fn[:, k] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
+                                    + self.time[0], self.time, f[:, k])
+            qn[:, k] = uf.f_to_srsf(f[:, k], self.time)
 
-        mqt = mq[:, 0, r]
-        a = mqt.repeat(N)
-        d1 = a.reshape(M, N)
-        df = (qf[:, :, r + 1] - d1) ** 2
-        mqt = mq[:, 1, r]
-        a = mqt.repeat(N)
-        d1 = a.reshape(M, N)
-        dg = (qg[:, :, r + 1] - d1) ** 2
-        if method == 0:
-            d1 = sum(trapz(df, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = d1 + lam * d2
-            d1 = sum(trapz(dg, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp1 = d1 + lam * d2
-            ds[r + 1] = (ds_tmp + ds_tmp1) / 2
 
-            # Minimization Step
-            # compute the mean of the matched function
-            qtemp = qf[:, :, r + 1]
-            mq[:, 0, r + 1] = qtemp.mean(axis=1)
-            qtemp = qg[:, :, r + 1]
-            mq[:, 1, r + 1] = qtemp.mean(axis=1)
+        # Aligned data & stats
+        self.fn = fn
+        self.qn = qn
+        self.q0 = q
+        mean_f0 = f.mean(axis=1)
+        std_f0 = f.std(axis=1)
+        mean_fn = self.fn.mean(axis=1)
+        std_fn = self.fn.std(axis=1)
+        self.gam = gam
+        self.mqn = mq
+        self.fmean = mu
 
-            qfun[r] = norm(mq[:, 0, r + 1] - mq[:, 0, r]) / norm(mq[:, 0, r])
-            qgun[r] = norm(mq[:, 1, r + 1] - mq[:, 1, r]) / norm(mq[:, 1, r])
+        fgam = np.zeros((M, N))
+        for k in range(0, N):
+            time0 = (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0]
+            fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
-        if method == 1:
-            d1 = sum(trapz(df, time, axis=0))
-            d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds_tmp = np.sqrt(d1) + lam * d2
-            ds_tmp1 = np.sqrt(sum(trapz(dg, time, axis=0))) + lam * sum(
-                trapz((1 - np.sqrt(gam_dev)) ** 2, time, axis=0))
-            ds[r + 1] = (ds_tmp + ds_tmp1) / 2
+        var_fgam = fgam.var(axis=1)
+        self.orig_var = trapz(std_f0 ** 2, self.time)
+        self.amp_var = trapz(std_fn ** 2, self.time)
+        self.phase_var = trapz(var_fgam, self.time)            
 
-            # Minimization Step
-            # compute the mean of the matched function
-            dist_iinv = ds[r + 1] ** (-1)
-            qtemp = qf[:, :, r + 1] / ds[r + 1]
-            mq[:, 0, r + 1] = qtemp.sum(axis=1) * dist_iinv
-            qtemp = qg[:, :, r + 1] / ds[r + 1]
-            mq[:, 1, r + 1] = qtemp.sum(axis=1) * dist_iinv
+        return
 
-            qfun[r] = norm(mq[:, 0, r + 1] - mq[:, 0, r]) / norm(mq[:, 0, r])
-            qgun[r] = norm(mq[:, 1, r + 1] - mq[:, 1, r]) / norm(mq[:, 1, r])
 
-        if (qfun[r] < 1e-2 and qgun[r] < 1e-2) or r >= MaxItr:
-            break
+def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
+    """
+    This function aligns two functions using Bayesian framework. It will align
+    f2 to f1. It is based on mapping warping functions to a hypersphere, and a
+    subsequent exponential mapping to a tangent space. In the tangent space,
+    the Z-mixture pCN algorithm is used to explore both local and global
+    structure in the posterior distribution.
+   
+    The Z-mixture pCN algorithm uses a mixture distribution for the proposal
+    distribution, controlled by input parameter zpcn. The zpcn$betas must be
+    between 0 and 1, and are the coefficients of the mixture components, with
+    larger coefficients corresponding to larger shifts in parameter space. The
+    zpcn["probs"] give the probability of each shift size.
+   
+    Usage:  out = pairwise_align_bayes(f1i, f2i, time)
+            out = pairwise_align_bayes(f1i, f2i, time, mcmcopts)
+    
+    :param f1i: vector defining M samples of function 1
+    :param f2i: vector defining M samples of function 2
+    :param time: time vector of length M
+    :param mcmopts: dict of mcmc parameters
+    :type mcmcopts: dict
+  
+    default mcmc options:
+    tmp = {"betas":np.array([0.5,0.5,0.005,0.0001]),"probs":np.array([0.1,0.1,0.7,0.1])}
+    mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2),
+                "alpha0":0.1, "beta0":0.1,"zpcn":tmp,"propvar":1,
+                "initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
+   
+    :rtype collection containing
+    :return f2_warped: aligned f2
+    :return gamma: warping function
+    :return g_coef: final g_coef
+    :return psi: final psi
+    :return sigma1: final sigma
+    
+    if extrainfo
+    :return accept: accept of psi samples
+    :return betas_ind
+    :return logl: log likelihood
+    :return gamma_mat: posterior gammas
+    :return gamma_stats: posterior gamma stats
+    :return xdist: phase distance posterior
+    :return ydist: amplitude distance posterior)
+    """
 
-    # Last Step with centering of gam
-    r += 1
-    if parallel:
-        out = Parallel(n_jobs=-1)(
-            delayed(uf.optimum_reparam_pair)(mq[:, :, r], time, qf[:, n, 0],
-                                             qg[:, n, 0], lam) for n in range(N))
-        gam = np.array(out)
-        gam = gam.transpose()
-    else:
-        gam = uf.optimum_reparam_pair(mq[:, :, r], time, qf[:, :, 0],
-                                      qg[:, :, 0], lam)
+    if mcmcopts is None:
+        tmp = {"betas":np.array([0.5,0.5,0.005,0.0001]),"probs":np.array([0.1,0.1,0.7,0.1])}
+        mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2),"alpha0":0.1,
+                    "beta0":0.1,"zpcn":tmp,"propvar":1,
+                    "initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
 
-    gam_dev = np.zeros((M, N))
-    for k in range(0, N):
-        gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+    if f1i.shape[0] != f2i.shape[0]:
+        raise Exception('Length of f1 and f2 must be equal')
 
-    gamI = uf.SqrtMeanInverse(gam)
-    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    time0 = (time[-1] - time[0]) * gamI + time[0]
-    for k in range(0, 2):
-        mq[:, k, r + 1] = np.interp(time0, time,
-                                    mq[:, k, r]) * np.sqrt(gamI_dev)
+    if f1i.shape[0] != time.shape[0]:
+        raise Exception('Length of f1 and time must be equal')
+    
+    if mcmcopts["zpcn"]["betas"].shape[0] != mcmcopts["zpcn"]["probs"].shape[0]:
+        raise Exception('In zpcn, betas must equal length of probs')
 
-    for k in range(0, N):
-        qf[:, k, r + 1] = np.interp(time0, time,
-                                    qf[:, k, r]) * np.sqrt(gamI_dev)
-        f[:, k, r + 1] = np.interp(time0, time, f[:, k, r])
-        qg[:, k, r + 1] = np.interp(time0, time,
-                                    qg[:, k, r]) * np.sqrt(gamI_dev)
-        g[:, k, r + 1] = np.interp(time0, time, g[:, k, r])
-        gam[:, k] = np.interp(time0, time, gam[:, k])
+    if np.mod(mcmcopts["initcoef"].shape[0], 2) != 0:
+        raise Exception('Length of mcmcopts.initcoef must be even')
 
-    # Aligned data & stats
-    fn = f[:, :, r + 1]
-    gn = g[:, :, r + 1]
-    qfn = qf[:, :, r + 1]
-    qf0 = qf[:, :, 0]
-    qgn = qg[:, :, r + 1]
-    qg0 = qg[:, :, 0]
-    mean_f0 = f0.mean(axis=1)
-    std_f0 = f0.std(axis=1)
-    mean_fn = fn.mean(axis=1)
-    std_fn = fn.std(axis=1)
-    mean_g0 = g0.mean(axis=1)
-    std_g0 = g0.std(axis=1)
-    mean_gn = gn.mean(axis=1)
-    std_gn = gn.std(axis=1)
-    mqfn = mq[:, 0, r + 1]
-    mqgn = mq[:, 1, r + 1]
-    tmp = np.zeros(M)
-    tmp[1:] = cumtrapz(mqfn * np.abs(mqfn), time)
-    fmean = np.mean(f0[1, :]) + tmp
-    tmp = np.zeros(M)
-    tmp[1:] = cumtrapz(mqgn * np.abs(mqgn), time)
-    gmean = np.mean(g0[1, :]) + tmp
+    # Number of sig figs to report in gamma_mat
+    SIG_GAM = 13
+    iter = mcmcopts["iter"]
+    
+    # parameter settings
+    pw_sim_global_burnin = mcmcopts["burnin"]
+    valid_index = np.arange(pw_sim_global_burnin-1,iter)
+    pw_sim_global_Mg = mcmcopts["initcoef"].shape[0]//2
+    g_coef_ini = mcmcopts["initcoef"]
+    numSimPoints = mcmcopts["npoints"]
+    pw_sim_global_domain_par = np.linspace(0,1,numSimPoints)
+    g_basis = uf.basis_fourier(pw_sim_global_domain_par, pw_sim_global_Mg, 1)
+    sigma1_ini = 1
+    zpcn = mcmcopts["zpcn"]
+    pw_sim_global_sigma_g = mcmcopts["propvar"] 
 
-    if showplot:
-        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), gam,
-                              title="Warping Functions")
-        ax.set_aspect('equal')
+    def propose_g_coef(g_coef_curr):
+        pCN_beta = zpcn["betas"]
+        pCN_prob = zpcn["probs"]
+        probm = np.insert(np.cumsum(pCN_prob),0,0)
+        z = np.random.rand()
+        result = {"prop":g_coef_curr,"ind":1}
+        for i in range (0,pCN_beta.shape[0]):
+            if z <= probm[i+1] and z > probm[i]:
+                g_coef_new = normal(0, pw_sim_global_sigma_g / np.repeat(np.arange(1,pw_sim_global_Mg+1),2))
+                result["prop"] = np.sqrt(1-pCN_beta[i]**2) * g_coef_curr + pCN_beta[i] * g_coef_new
+                result["ind"] = i
 
-        plot.f_plot(time, fn, title="fn Warped Data")
-        plot.f_plot(time, gn, title="gn Warped Data")
+        return result
 
-        tmp = np.array([mean_f0, mean_f0 + std_f0, mean_f0 - std_f0])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="f Original Data: Mean $\pm$ STD")
+    # normalize time to [0,1]
+    time = (time - time.min())/(time.max()-time.min())
+    timet = np.linspace(0,1,numSimPoints)
+    f1 = uf.f_predictfunction(f1i,timet,0)
+    f2 = uf.f_predictfunction(f2i,timet,0)
 
-        tmp = np.array([mean_fn, mean_fn + std_fn, mean_fn - std_fn])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="fn Warped Data: Mean $\pm$ STD")
+    # srsf transformation
+    q1 = uf.f_to_srsf(f1,timet)
+    q1i = uf.f_to_srsf(f1i,time)
+    q2 = uf.f_to_srsf(f2,timet)
 
-        tmp = np.array([mean_g0, mean_g0 + std_g0, mean_g0 - std_g0])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="g Original Data: Mean $\pm$ STD")
+    tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis))
 
-        tmp = np.array([mean_gn, mean_gn + std_gn, mean_gn - std_gn])
-        tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="gn Warped Data: Mean $\pm$ STD")
+    if tmp.min() < 0:
+        raise Exception("Invalid initial value of g")
 
-        plot.f_plot(time, fmean, title="$f_{mean}$")
-        plot.f_plot(time, gmean, title="$g_{mean}$")
-        plt.show()
+    # result vectors
+    g_coef = np.zeros((iter,g_coef_ini.shape[0]))
+    sigma1 = np.zeros(iter)
+    logl = np.zeros(iter)
+    SSE = np.zeros(iter)
+    accept = np.zeros(iter, dtype=bool)
+    accept_betas = np.zeros(iter)
 
-    align_results = collections.namedtuple('align', ['fn', 'gn', 'qfn', 'qf0',
-                                                     'qgn', 'qg0', 'fmean',
-                                                     'gmean', 'mqfn', 'mqgn',
-                                                     'gam'])
+    # init
+    g_coef_curr = g_coef_ini
+    sigma1_curr = sigma1_ini
+    SSE_curr = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2)
+    logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2,sigma1_ini**2,SSE_curr)
+    
+    g_coef[0,:] = g_coef_ini
+    sigma1[0] = sigma1_ini
+    SSE[0] = SSE_curr
+    logl[0] = logl_curr
 
-    out = align_results(fn, gn, qfn, qf0, qgn, qg0, fmean, gmean, mqfn,
-                        mqgn, gam)
-    return out
+    # update the chain for iter-1 times
+    for m in tqdm(range(1,iter)):
+        # update g
+        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
+        
+        # update sigma1
+        newshape = q1.shape[0]/2 + mcmcopts["alpha0"]
+        newscale = 1/2 * SSE_curr + mcmcopts["beta0"]
+        sigma1_curr = np.sqrt(1/np.random.gamma(newshape,1/newscale))
+        logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, sigma1_curr**2, SSE_curr)
 
+        # save updates to results
+        g_coef[m,:] = g_coef_curr
+        sigma1[m] = sigma1_curr
+        SSE[m] = SSE_curr
+        if mcmcopts["extrainfo"]:
+            logl[m] = logl_curr
+            accept[m] = accepti
+            accept_betas[m] = zpcnInd
+
+    # calculate posterior mean of psi
+    pw_sim_est_psi_matrix = np.zeros((numSimPoints,valid_index.shape[0]))
+    for k in range(0,valid_index.shape[0]):
+        g_temp = uf.f_basistofunction(g_basis["x"],0,g_coef[valid_index[k],:],g_basis)
+        psi_temp = uf.f_exp1(g_temp)
+        pw_sim_est_psi_matrix[:,k] = psi_temp
+
+    result_posterior_psi_simDomain = uf.f_psimean(pw_sim_global_domain_par, pw_sim_est_psi_matrix)
+
+    # resample to same number of points as the input f1 and f2
+    interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, fill_value="extrapolate")
+    result_posterior_psi = interp(np.linspace(0,1,f1i.shape[0]))
+
+    # transform posterior mean of psi to gamma
+    result_posterior_gamma = uf.f_phiinv(result_posterior_psi)
+    result_posterior_gamma = uf.norm_gam(result_posterior_gamma)
+
+    # warped f2
+    f2_warped = uf.warp_f_gamma(time, f2i, result_posterior_gamma)
+
+    if mcmcopts["extrainfo"]:
+        M,N = pw_sim_est_psi_matrix.shape
+        gamma_mat = np.zeros((time.shape[0],N))
+        one_v = np.ones(M)
+        Dx = np.zeros(N)
+        Dy = Dx
+        for ii in range(0,N):
+            interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), pw_sim_est_psi_matrix[:,ii], fill_value="extrapolate")
+            result_i = interp(time)
+            tmp = uf.f_phiinv(result_i)
+            gamma_mat[:,ii] = uf.norm_gam(tmp)
+            v, theta = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
+            Dx[ii] = np.sqrt(trapz(v**2,pw_sim_global_domain_par))
+            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2,gamma_mat[:,ii])
+            Dy[ii] = np.sqrt(trapz((q1i-q2warp)**2,time))
+
+        gamma_stats = uf.statsFun(gamma_mat)
+
+    
+    results_o = collections.namedtuple('align_bayes', ['f2_warped', 'gamma','g_coef', 'psi', 'sigma1', 'accept', 'betas_ind', 'logl', 'gamma_mat', 'gamma_stats', 'xdist', 'ydist'])
+
+    out = results_o(f2_warped, result_posterior_gamma, g_coef, result_posterior_psi, sigma1, accept[1:], accept_betas[1:], logl, gamma_mat, gamma_stats, Dx, Dy)
+
+    return(out)
+
+def f_SSEg_pw(g, q1, q2):
+    obs_domain = np.linspace(0,1,g.shape[0])
+    exp1g_temp = uf.f_predictfunction(uf.f_exp1(g), obs_domain, 0)
+    pt = np.insert(bay.bcuL2norm2(obs_domain, exp1g_temp),0,0)
+    tmp = uf.f_predictfunction(q2,pt,0)
+    vec = (q1 - tmp * exp1g_temp)**2
+    out = vec.sum()
+    return(out)
+
+def f_logl_pw(g, q1, q2, var1, SSEg):
+    if SSEg == 0:
+        SSEg = f_SSEg_pw(g, q1, q2)
+
+    n = q1.shape[0]
+    out = n * np.log(1/np.sqrt(2*np.pi)) - n * np.log(np.sqrt(var1)) - SSEg / (2 * var1)
+
+    return(out)
+
+def f_updateg_pw(g_coef_curr,g_basis,var1_curr,q1,q2,SSE_curr,propose_g_coef):
+    g_coef_prop = propose_g_coef(g_coef_curr)
+
+    tst = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis))
+
+    while tst.min() < 0:
+        g_coef_prop = propose_g_coef(g_coef_curr)
+        tst = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis))
+
+    if SSE_curr == 0:
+        SSE_curr = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2)
+
+    SSE_prop = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis), q1, q2)
+
+    logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, var1_curr, SSE_curr)
+    
+    logl_prop = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis), q1, q2, var1_curr, SSE_prop)
+
+    ratio = np.minimum(1, np.exp(logl_prop-logl_curr))
+
+    u = np.random.rand()
+    if u <= ratio:
+        g_coef = g_coef_prop["prop"]
+        logl = logl_prop
+        SSE = SSE_prop
+        accept = True
+        zpcnInd = g_coef_prop["ind"]
+
+    if u > ratio:
+        g_coef = g_coef_curr
+        logl = logl_curr
+        SSE = SSE_curr
+        accept = False
+        zpcnInd = g_coef_prop["ind"]
+
+    return g_coef, logl, SSE, accept, zpcnInd
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     """
@@ -737,7 +1000,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
         for l in range(0, Nstd):
             q_pca_tmp = q_pca[0:M, l, k] * np.abs(q_pca[0:M, l, k])
             q_pca_tmp2 = np.sign(q_pca[M, l, k]) * (q_pca[M, l, k] ** 2)
-            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp, q_pca_tmp2, mididx)
+            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp, q_pca_tmp2, np.floor(time.shape[0]/2))
 
     N2 = qn.shape[1]
     c = np.zeros((N2, num_comp))

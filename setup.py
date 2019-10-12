@@ -85,6 +85,13 @@ extensions = [
         extra_compile_args=extra_args_mac,
         extra_link_args=extra_args_mac
     ),
+    Extension(name="cbayesian",
+        sources=["src/cbayesian.pyx", "src/bayesian.cpp"],
+        include_dirs=[numpy.get_include()],
+        language="c++",
+        extra_compile_args=extra_args_mac,
+        extra_link_args=extra_args_mac
+    ),
 ]
 
 
@@ -92,7 +99,7 @@ setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='1.5.0',
+    version='2.0.0',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
@@ -110,6 +117,7 @@ setup(
         "scipy",
         "joblib",
         "patsy",
+        "tqdm",
     ],
     classifiers=[
         'License :: OSI Approved :: BSD License',

@@ -5,4 +5,4 @@ Functional Alignment
    :members:
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2

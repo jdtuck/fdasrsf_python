@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Gaussian Generative Models &#8212; fdasrsf 1.5.0 documentation</title>
+    <title>Gaussian Generative Models &#8212; fdasrsf 2.0.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -16,9 +16,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Functional Principal Least Squares" href="fPLS.html" />
-    <link rel="prev" title="Elastic Functional Boxplots" href="boxplots.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,13 +27,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="fPLS.html" title="Functional Principal Least Squares"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="boxplots.html" title="Elastic Functional Boxplots"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -48,71 +40,6 @@
 <span id="gaussian-generative-models"></span><h1>Gaussian Generative Models<a class="headerlink" href="#module-gauss_model" title="Permalink to this headline">¶</a></h1>
 <p>Gaussian Model of functional data</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
-<dl class="function">
-<dt id="gauss_model.gauss_model">
-<code class="sig-prename descclassname">gauss_model.</code><code class="sig-name descname">gauss_model</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">time</em>, <em class="sig-param">qn</em>, <em class="sig-param">gam</em>, <em class="sig-param">n=1</em>, <em class="sig-param">sort_samples=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gauss_model.html#gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gauss_model.gauss_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function models the functional data using a Gaussian model
-extracted from the principal components of the srvfs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned functions with
-M samples</p></li>
-<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
-<li><p><strong>qn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned srvfs with M samples</p></li>
-<li><p><strong>gam</strong> (<em>np.ndarray</em>) – warping functions</p></li>
-<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
-<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – sort samples (default = T)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of numpy array</p>
-</dd>
-<dt class="field-odd">Return fs</dt>
-<dd class="field-odd"><p>random aligned samples</p>
-</dd>
-<dt class="field-even">Return gams</dt>
-<dd class="field-even"><p>random warping functions</p>
-</dd>
-<dt class="field-odd">Return ft</dt>
-<dd class="field-odd"><p>random samples</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="gauss_model.joint_gauss_model">
-<code class="sig-prename descclassname">gauss_model.</code><code class="sig-name descname">joint_gauss_model</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">time</em>, <em class="sig-param">qn</em>, <em class="sig-param">gam</em>, <em class="sig-param">q0</em>, <em class="sig-param">n=1</em>, <em class="sig-param">no=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gauss_model.html#joint_gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gauss_model.joint_gauss_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function models the functional data using a joint Gaussian model
-extracted from the principal components of the srsfs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned functions with
-M samples</p></li>
-<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
-<li><p><strong>qn</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N aligned srsfs with M samples</p></li>
-<li><p><strong>gam</strong> (<em>np.ndarray</em>) – warping functions</p></li>
-<li><p><strong>q0</strong> – numpy ndarray of shape (M,N) of N unaligned srsfs with  samples</p></li>
-<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
-<li><p><strong>n</strong> – number of principal components (default = 3)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of numpy array</p>
-</dd>
-<dt class="field-odd">Return fs</dt>
-<dd class="field-odd"><p>random aligned samples</p>
-</dd>
-<dt class="field-even">Return gams</dt>
-<dd class="field-even"><p>random warping functions</p>
-</dd>
-<dt class="field-odd">Return ft</dt>
-<dd class="field-odd"><p>random samples</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -123,12 +50,6 @@ M samples</p></li>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="boxplots.html"
-                        title="previous chapter">Elastic Functional Boxplots</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="fPLS.html"
-                        title="next chapter">Functional Principal Least Squares</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -159,18 +80,12 @@ M samples</p></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="fPLS.html" title="Functional Principal Least Squares"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="boxplots.html" title="Elastic Functional Boxplots"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 1.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
