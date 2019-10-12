@@ -117,6 +117,7 @@ setup(
         "scipy",
         "joblib",
         "patsy",
+        "tqdm",
     ],
     classifiers=[
         'License :: OSI Approved :: BSD License',

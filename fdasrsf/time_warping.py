@@ -16,6 +16,7 @@ from numpy.linalg import norm
 from numpy.random import rand, normal
 from joblib import Parallel, delayed
 from fdasrsf.fPLS import pls_svd
+from tqdm import tqdm
 import fdasrsf.plot_style as plot
 import fpls_warp as fpls
 import cbayesian as bay
@@ -623,8 +624,8 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
 
     if mcmcopts is None:
         tmp = {"betas":np.array([0.5,0.5,0.005,0.0001]),"probs":np.array([0.1,0.1,0.7,0.1])}
-        mcmcopts = {"iter":2e4,"burnin":np.min(5e3,2e4/2),"alpha0":0.1,
-                    "beta":0.1,"zpcn":tmp,"propvar":1,
+        mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2),"alpha0":0.1,
+                    "beta0":0.1,"zpcn":tmp,"propvar":1,
                     "initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
 
     if f1i.shape[0] != f2i.shape[0]:
@@ -633,23 +634,20 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     if f1i.shape[0] != time.shape[0]:
         raise Exception('Length of f1 and time must be equal')
     
-    if mcmcopts["zpcn"]["betas"].shape[0] != mcmcopts["zpcn"]["probs"]:
+    if mcmcopts["zpcn"]["betas"].shape[0] != mcmcopts["zpcn"]["probs"].shape[0]:
         raise Exception('In zpcn, betas must equal length of probs')
 
-    if np.mod(mcmcopts["initcoef"], 2) != 0:
+    if np.mod(mcmcopts["initcoef"].shape[0], 2) != 0:
         raise Exception('Length of mcmcopts.initcoef must be even')
 
     # Number of sig figs to report in gamma_mat
     SIG_GAM = 13
     iter = mcmcopts["iter"]
     
-    # normalize time to [0,1]
-    time = (time - time.min())/(time.max()-time.min())
-    
     # parameter settings
     pw_sim_global_burnin = mcmcopts["burnin"]
     valid_index = np.arange(pw_sim_global_burnin-1,iter)
-    pw_sim_global_Mg = mcmcopts["initcoef"]/2
+    pw_sim_global_Mg = mcmcopts["initcoef"].shape[0]//2
     g_coef_ini = mcmcopts["initcoef"]
     numSimPoints = mcmcopts["npoints"]
     pw_sim_global_domain_par = np.linspace(0,1,numSimPoints)
@@ -661,7 +659,7 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     def propose_g_coef(g_coef_curr):
         pCN_beta = zpcn["betas"]
         pCN_prob = zpcn["probs"]
-        probm = np.array([0, np.cumsum(pCN_prob)])
+        probm = np.insert(np.cumsum(pCN_prob),0,0)
         z = np.random.rand()
         result = {"prop":g_coef_curr,"ind":1}
         for i in range (0,pCN_beta.shape[0]):
@@ -672,9 +670,16 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
 
         return result
 
+    # normalize time to [0,1]
+    time = (time - time.min())/(time.max()-time.min())
+    timet = np.linspace(0,1,numSimPoints)
+    f1 = uf.f_predictfunction(f1i,timet,0)
+    f2 = uf.f_predictfunction(f2i,timet,0)
+
     # srsf transformation
-    q1 = uf.f_to_srsf(f1i,time)
-    q2 = uf.f_to_srsf(f2i,time)
+    q1 = uf.f_to_srsf(f1,timet)
+    q1i = uf.f_to_srsf(f1i,time)
+    q2 = uf.f_to_srsf(f2,timet)
 
     tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis))
 
@@ -686,7 +691,7 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     sigma1 = np.zeros(iter)
     logl = np.zeros(iter)
     SSE = np.zeros(iter)
-    accept = np.zeros(iter)
+    accept = np.zeros(iter, dtype=bool)
     accept_betas = np.zeros(iter)
 
     # init
@@ -701,10 +706,9 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     logl[0] = logl_curr
 
     # update the chain for iter-1 times
-    # @todo add progress bar....
-    for m in range(1,iter):
+    for m in tqdm(range(1,iter)):
         # update g
-        g_coef_curr, tmp, SSE_curr, accept, zpcnInd = f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
+        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
         
         # update sigma1
         newshape = q1.shape[0]/2 + mcmcopts["alpha0"]
@@ -718,20 +722,21 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
         SSE[m] = SSE_curr
         if mcmcopts["extrainfo"]:
             logl[m] = logl_curr
-            accept[m] = accept
-            accept_betas = zpcnInd
+            accept[m] = accepti
+            accept_betas[m] = zpcnInd
 
     # calculate posterior mean of psi
     pw_sim_est_psi_matrix = np.zeros((numSimPoints,valid_index.shape[0]))
     for k in range(0,valid_index.shape[0]):
-        g_temp = uf.f_basistofunction(pw_sim_global_domain_par,0,g_coef[valid_index[k],:],g_basis)
+        g_temp = uf.f_basistofunction(g_basis["x"],0,g_coef[valid_index[k],:],g_basis)
         psi_temp = uf.f_exp1(g_temp)
         pw_sim_est_psi_matrix[:,k] = psi_temp
 
     result_posterior_psi_simDomain = uf.f_psimean(pw_sim_global_domain_par, pw_sim_est_psi_matrix)
 
     # resample to same number of points as the input f1 and f2
-    result_posterior_psi = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, np.linspace(0,1,f1i.shape[0]), fill_value="extrapolate")
+    interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, fill_value="extrapolate")
+    result_posterior_psi = interp(np.linspace(0,1,f1i.shape[0]))
 
     # transform posterior mean of psi to gamma
     result_posterior_gamma = uf.f_phiinv(result_posterior_psi)
@@ -747,13 +752,14 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
         Dx = np.zeros(N)
         Dy = Dx
         for ii in range(0,N):
-            result_i = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), pw_sim_est_psi_matrix[:,ii], time, fill_value="extrapolate")
+            interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), pw_sim_est_psi_matrix[:,ii], fill_value="extrapolate")
+            result_i = interp(time)
             tmp = uf.f_phiinv(result_i)
             gamma_mat[:,ii] = uf.norm_gam(tmp)
-            v = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
+            v, theta = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
             Dx[ii] = np.sqrt(trapz(v**2,pw_sim_global_domain_par))
             q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2,gamma_mat[:,ii])
-            Dy[ii] = np.sqrt(trapz((q1-q2warp)**2,pw_sim_global_domain_par))
+            Dy[ii] = np.sqrt(trapz((q1i-q2warp)**2,time))
 
         gamma_stats = uf.statsFun(gamma_mat)
 
@@ -767,7 +773,7 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
 def f_SSEg_pw(g, q1, q2):
     obs_domain = np.linspace(0,1,g.shape[0])
     exp1g_temp = uf.f_predictfunction(uf.f_exp1(g), obs_domain, 0)
-    pt = np.array([0, bay.bcuL2norm2(obs_domain, exp1g_temp)])
+    pt = np.insert(bay.bcuL2norm2(obs_domain, exp1g_temp),0,0)
     tmp = uf.f_predictfunction(q2,pt,0)
     vec = (q1 - tmp * exp1g_temp)**2
     out = vec.sum()
@@ -789,7 +795,7 @@ def f_updateg_pw(g_coef_curr,g_basis,var1_curr,q1,q2,SSE_curr,propose_g_coef):
 
     while tst.min() < 0:
         g_coef_prop = propose_g_coef(g_coef_curr)
-        tst = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_prop,g_basis))
+        tst = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis))
 
     if SSE_curr == 0:
         SSE_curr = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2)
@@ -800,7 +806,7 @@ def f_updateg_pw(g_coef_curr,g_basis,var1_curr,q1,q2,SSE_curr,propose_g_coef):
     
     logl_prop = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis), q1, q2, var1_curr, SSE_prop)
 
-    ratio = np.min(1, np.exp(logl_prop-logl_curr))
+    ratio = np.minimum(1, np.exp(logl_prop-logl_curr))
 
     u = np.random.rand()
     if u <= ratio:

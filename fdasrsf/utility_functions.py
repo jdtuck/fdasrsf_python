@@ -12,7 +12,7 @@ from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
 from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
-from numpy import gradient, column_stack, append, mean
+from numpy import gradient, column_stack, append, mean, hstack
 from numpy import insert, vectorize, ceil, mod, array, quantile, dot
 import numpy.random as rn
 import optimum_reparamN2 as orN2
@@ -871,9 +871,9 @@ def basis_fourier(f_domain, numBasis, fourier_p):
     return(out)
 
 def statsFun(vec):
-    a = quantile(vec,0.025)
-    b = quantile(vec,0.975)
-    out = array([a, b])
+    a = quantile(vec,0.025,axis=1)
+    b = quantile(vec,0.975,axis=1)
+    out = column_stack((a, b))
     return(out)
 
 def f_exp1(g):
@@ -896,16 +896,18 @@ def f_basistofunction(f_domain, coefconst, coef, basis):
 def f_predictfunction(f, at, deriv):
     x = linspace(0,1,f.shape[0])
     if deriv == 0:
-        result = interp1d(x,f,at,fill_value="extrapolate")
+        interp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
+        result = interp(at)
     
     if deriv == 1:
-        fmod = interp1d(x,f,at,fill_value="extrapolate")
-        diffy1 = array([0, diff(fmod)])
-        diffy2 = array([diff(fmod),0])
-        diffx1 = array([0, diff(at)])
-        diffx2 = array([diff(at), 0])
+        iterp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
+        fmod = iterp(at)
+        diffy1 = hstack((0, diff(fmod)))
+        diffy2 = hstack((diff(fmod),0))
+        diffx1 = hstack((0, diff(at)))
+        diffx2 = hstack((diff(at), 0))
     
-    result = (diffy2 + diffy1) / (diffx2 + diffx1)
+        result = (diffy2 + diffy1) / (diffx2 + diffx1)
 
     return(result)
 
@@ -916,7 +918,7 @@ def f_psimean(x,y):
 
 def f_phiinv(psi):
     f_domain = linspace(0,1,psi.shape[0])
-    result = array([0, bay.bcuL2norm2(f_domain,psi)])
+    result = insert(bay.bcuL2norm2(f_domain,psi),0,0)
     return(result)
 
 def norm_gam(gam):

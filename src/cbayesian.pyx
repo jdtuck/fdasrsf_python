@@ -8,6 +8,7 @@ include "cyarma.pyx"
 from libcpp cimport bool
 
 def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):
+    y = np.ascontiguousarray(y)
     cdef vec ay = numpy_to_vec_d(y)
     cdef vec out = calcY(area, ay)
 
@@ -16,6 +17,8 @@ def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):
     return(out1)
 
 def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+    x = np.ascontiguousarray(x)
+    y = np.ascontiguousarray(y)
     cdef vec ax = numpy_to_vec_d(x)
     cdef vec ay = numpy_to_vec_d(y)
     cdef vec out = cuL2norm2(ax, ay)
@@ -25,6 +28,8 @@ def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1
     return(out1)
 
 def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+    x = np.ascontiguousarray(x)
+    y = np.ascontiguousarray(y)
     cdef vec ax = numpy_to_vec_d(x)
     cdef vec ay = numpy_to_vec_d(y)
 
@@ -33,6 +38,8 @@ def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1,
     return(out)
 
 def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+    x = np.ascontiguousarray(x)
+    y = np.ascontiguousarray(y)
     cdef vec ax = numpy_to_vec_d(x)
     cdef vec ay = numpy_to_vec_d(y)
 

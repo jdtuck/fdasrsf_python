@@ -1398,6 +1398,9 @@ static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
         __Pyx__ArgTypeTest(obj, type, name, exact))
 static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
 
+/* PyObjectCall2Args.proto */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
+
 /* DictGetItem.proto */
 #if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
 static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key);
@@ -1732,6 +1735,7 @@ static const char __pyx_k_RuntimeError[] = "RuntimeError";
 static const char __pyx_k_c_contiguous[] = "c_contiguous";
 static const char __pyx_k_f_contiguous[] = "f_contiguous";
 static const char __pyx_k_border_l2norm[] = "border_l2norm";
+static const char __pyx_k_ascontiguousarray[] = "ascontiguousarray";
 static const char __pyx_k_src_cbayesian_pyx[] = "src/cbayesian.pyx";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
@@ -1752,6 +1756,7 @@ static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_area;
+static PyObject *__pyx_n_s_ascontiguousarray;
 static PyObject *__pyx_n_s_ax;
 static PyObject *__pyx_n_s_ay;
 static PyObject *__pyx_n_s_bcalcY;
@@ -3163,8 +3168,8 @@ static PyArrayObject *__pyx_f_9cbayesian_vec_to_numpy(arma::vec const &__pyx_v_X
  * from libcpp cimport bool
  * 
  * def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ay = numpy_to_vec_d(y)
- *     cdef vec out = calcY(area, ay)
  */
 
 /* Python wrapper */
@@ -3244,9 +3249,17 @@ static PyObject *__pyx_pf_9cbayesian_bcalcY(CYTHON_UNUSED PyObject *__pyx_self, 
   __Pyx_Buffer __pyx_pybuffer_y;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  double __pyx_t_1;
+  PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyArrayObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  double __pyx_t_9;
   __Pyx_RefNannySetupContext("bcalcY", 0);
+  __Pyx_INCREF((PyObject *)__pyx_v_y);
   __pyx_pybuffer_out1.pybuffer.buf = NULL;
   __pyx_pybuffer_out1.refcount = 0;
   __pyx_pybuffernd_out1.data = NULL;
@@ -3264,43 +3277,93 @@ static PyObject *__pyx_pf_9cbayesian_bcalcY(CYTHON_UNUSED PyObject *__pyx_self, 
   /* "cbayesian.pyx":11
  * 
  * def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):
+ *     y = np.ascontiguousarray(y)             # <<<<<<<<<<<<<<
+ *     cdef vec ay = numpy_to_vec_d(y)
+ *     cdef vec out = calcY(area, ay)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 11, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 11, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, ((PyObject *)__pyx_v_y)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_y));
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 11, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 11, __pyx_L1_error)
+  __pyx_t_4 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_t_4, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_6); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+      }
+      __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
+    }
+    __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(1, 11, __pyx_L1_error)
+  }
+  __pyx_t_4 = 0;
+  __Pyx_DECREF_SET(__pyx_v_y, ((PyArrayObject *)__pyx_t_1));
+  __pyx_t_1 = 0;
+
+  /* "cbayesian.pyx":12
+ * def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ay = numpy_to_vec_d(y)             # <<<<<<<<<<<<<<
  *     cdef vec out = calcY(area, ay)
  * 
  */
   __pyx_v_ay = __pyx_f_9cbayesian_numpy_to_vec_d(((PyArrayObject *)__pyx_v_y));
 
-  /* "cbayesian.pyx":12
- * def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):
+  /* "cbayesian.pyx":13
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ay = numpy_to_vec_d(y)
  *     cdef vec out = calcY(area, ay)             # <<<<<<<<<<<<<<
  * 
  *     cdef np.ndarray[np.double_t,ndim=1] out1 = vec_to_numpy(out, None)
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_area); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
-  __pyx_v_out = calcY(__pyx_t_1, __pyx_v_ay);
+  __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_area); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 13, __pyx_L1_error)
+  __pyx_v_out = calcY(__pyx_t_9, __pyx_v_ay);
 
-  /* "cbayesian.pyx":14
+  /* "cbayesian.pyx":15
  *     cdef vec out = calcY(area, ay)
  * 
  *     cdef np.ndarray[np.double_t,ndim=1] out1 = vec_to_numpy(out, None)             # <<<<<<<<<<<<<<
  * 
  *     return(out1)
  */
-  __pyx_t_2 = ((PyObject *)__pyx_f_9cbayesian_vec_to_numpy(__pyx_v_out, ((PyArrayObject *)Py_None))); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 14, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = ((PyObject *)__pyx_f_9cbayesian_vec_to_numpy(__pyx_v_out, ((PyArrayObject *)Py_None))); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 15, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_out1.rcbuffer->pybuffer, (PyObject*)((PyArrayObject *)__pyx_t_2), &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_out1.rcbuffer->pybuffer, (PyObject*)((PyArrayObject *)__pyx_t_1), &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_out1 = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_out1.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(1, 14, __pyx_L1_error)
+      __PYX_ERR(1, 15, __pyx_L1_error)
     } else {__pyx_pybuffernd_out1.diminfo[0].strides = __pyx_pybuffernd_out1.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_out1.diminfo[0].shape = __pyx_pybuffernd_out1.rcbuffer->pybuffer.shape[0];
     }
   }
-  __pyx_v_out1 = ((PyArrayObject *)__pyx_t_2);
-  __pyx_t_2 = 0;
+  __pyx_v_out1 = ((PyArrayObject *)__pyx_t_1);
+  __pyx_t_1 = 0;
 
-  /* "cbayesian.pyx":16
+  /* "cbayesian.pyx":17
  *     cdef np.ndarray[np.double_t,ndim=1] out1 = vec_to_numpy(out, None)
  * 
  *     return(out1)             # <<<<<<<<<<<<<<
@@ -3316,13 +3379,15 @@ static PyObject *__pyx_pf_9cbayesian_bcalcY(CYTHON_UNUSED PyObject *__pyx_self, 
  * from libcpp cimport bool
  * 
  * def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ay = numpy_to_vec_d(y)
- *     cdef vec out = calcY(area, ay)
  */
 
   /* function exit code */
   __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
@@ -3338,17 +3403,18 @@ static PyObject *__pyx_pf_9cbayesian_bcalcY(CYTHON_UNUSED PyObject *__pyx_self, 
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XDECREF((PyObject *)__pyx_v_out1);
+  __Pyx_XDECREF((PyObject *)__pyx_v_y);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cbayesian.pyx":18
+/* "cbayesian.pyx":19
  *     return(out1)
  * 
  * def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
 
 /* Python wrapper */
@@ -3383,11 +3449,11 @@ static PyObject *__pyx_pw_9cbayesian_3bcuL2norm2(PyObject *__pyx_self, PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("bcuL2norm2", 1, 2, 2, 1); __PYX_ERR(1, 18, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bcuL2norm2", 1, 2, 2, 1); __PYX_ERR(1, 19, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "bcuL2norm2") < 0)) __PYX_ERR(1, 18, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "bcuL2norm2") < 0)) __PYX_ERR(1, 19, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3400,14 +3466,14 @@ static PyObject *__pyx_pw_9cbayesian_3bcuL2norm2(PyObject *__pyx_self, PyObject 
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("bcuL2norm2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 18, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("bcuL2norm2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 19, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cbayesian.bcuL2norm2", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), __pyx_ptype_5numpy_ndarray, 1, "x", 0))) __PYX_ERR(1, 18, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 1, "y", 0))) __PYX_ERR(1, 18, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), __pyx_ptype_5numpy_ndarray, 1, "x", 0))) __PYX_ERR(1, 19, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 1, "y", 0))) __PYX_ERR(1, 19, __pyx_L1_error)
   __pyx_r = __pyx_pf_9cbayesian_2bcuL2norm2(__pyx_self, __pyx_v_x, __pyx_v_y);
 
   /* function exit code */
@@ -3433,7 +3499,17 @@ static PyObject *__pyx_pf_9cbayesian_2bcuL2norm2(CYTHON_UNUSED PyObject *__pyx_s
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyArrayObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyArrayObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("bcuL2norm2", 0);
+  __Pyx_INCREF((PyObject *)__pyx_v_x);
+  __Pyx_INCREF((PyObject *)__pyx_v_y);
   __pyx_pybuffer_out1.pybuffer.buf = NULL;
   __pyx_pybuffer_out1.refcount = 0;
   __pyx_pybuffernd_out1.data = NULL;
@@ -3448,26 +3524,126 @@ static PyObject *__pyx_pf_9cbayesian_2bcuL2norm2(CYTHON_UNUSED PyObject *__pyx_s
   __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 18, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 19, __pyx_L1_error)
   }
   __pyx_pybuffernd_x.diminfo[0].strides = __pyx_pybuffernd_x.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_x.diminfo[0].shape = __pyx_pybuffernd_x.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 18, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 19, __pyx_L1_error)
   }
   __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
 
-  /* "cbayesian.pyx":19
+  /* "cbayesian.pyx":20
  * 
  * def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+ *     x = np.ascontiguousarray(x)             # <<<<<<<<<<<<<<
+ *     y = np.ascontiguousarray(y)
+ *     cdef vec ax = numpy_to_vec_d(x)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 20, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 20, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, ((PyObject *)__pyx_v_x)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_x));
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 20, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 20, __pyx_L1_error)
+  __pyx_t_4 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_x.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_t_4, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_6); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+      }
+      __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
+    }
+    __pyx_pybuffernd_x.diminfo[0].strides = __pyx_pybuffernd_x.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_x.diminfo[0].shape = __pyx_pybuffernd_x.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(1, 20, __pyx_L1_error)
+  }
+  __pyx_t_4 = 0;
+  __Pyx_DECREF_SET(__pyx_v_x, ((PyArrayObject *)__pyx_t_1));
+  __pyx_t_1 = 0;
+
+  /* "cbayesian.pyx":21
+ * def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)             # <<<<<<<<<<<<<<
+ *     cdef vec ax = numpy_to_vec_d(x)
+ *     cdef vec ay = numpy_to_vec_d(y)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 21, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 21, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, ((PyObject *)__pyx_v_y)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_y));
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 21, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 21, __pyx_L1_error)
+  __pyx_t_9 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_t_9, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_8, &__pyx_t_7, &__pyx_t_6);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_6);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_8, __pyx_t_7, __pyx_t_6);
+      }
+      __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
+    }
+    __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(1, 21, __pyx_L1_error)
+  }
+  __pyx_t_9 = 0;
+  __Pyx_DECREF_SET(__pyx_v_y, ((PyArrayObject *)__pyx_t_1));
+  __pyx_t_1 = 0;
+
+  /* "cbayesian.pyx":22
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ax = numpy_to_vec_d(x)             # <<<<<<<<<<<<<<
  *     cdef vec ay = numpy_to_vec_d(y)
  *     cdef vec out = cuL2norm2(ax, ay)
  */
   __pyx_v_ax = __pyx_f_9cbayesian_numpy_to_vec_d(((PyArrayObject *)__pyx_v_x));
 
-  /* "cbayesian.pyx":20
- * def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+  /* "cbayesian.pyx":23
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ax = numpy_to_vec_d(x)
  *     cdef vec ay = numpy_to_vec_d(y)             # <<<<<<<<<<<<<<
  *     cdef vec out = cuL2norm2(ax, ay)
@@ -3475,7 +3651,7 @@ static PyObject *__pyx_pf_9cbayesian_2bcuL2norm2(CYTHON_UNUSED PyObject *__pyx_s
  */
   __pyx_v_ay = __pyx_f_9cbayesian_numpy_to_vec_d(((PyArrayObject *)__pyx_v_y));
 
-  /* "cbayesian.pyx":21
+  /* "cbayesian.pyx":24
  *     cdef vec ax = numpy_to_vec_d(x)
  *     cdef vec ay = numpy_to_vec_d(y)
  *     cdef vec out = cuL2norm2(ax, ay)             # <<<<<<<<<<<<<<
@@ -3484,27 +3660,27 @@ static PyObject *__pyx_pf_9cbayesian_2bcuL2norm2(CYTHON_UNUSED PyObject *__pyx_s
  */
   __pyx_v_out = cuL2norm2(__pyx_v_ax, __pyx_v_ay);
 
-  /* "cbayesian.pyx":23
+  /* "cbayesian.pyx":26
  *     cdef vec out = cuL2norm2(ax, ay)
  * 
  *     cdef np.ndarray[np.double_t,ndim=1] out1 = vec_to_numpy(out, None)             # <<<<<<<<<<<<<<
  * 
  *     return(out1)
  */
-  __pyx_t_1 = ((PyObject *)__pyx_f_9cbayesian_vec_to_numpy(__pyx_v_out, ((PyArrayObject *)Py_None))); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 23, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_9cbayesian_vec_to_numpy(__pyx_v_out, ((PyArrayObject *)Py_None))); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_out1.rcbuffer->pybuffer, (PyObject*)((PyArrayObject *)__pyx_t_1), &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_out1 = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_out1.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(1, 23, __pyx_L1_error)
+      __PYX_ERR(1, 26, __pyx_L1_error)
     } else {__pyx_pybuffernd_out1.diminfo[0].strides = __pyx_pybuffernd_out1.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_out1.diminfo[0].shape = __pyx_pybuffernd_out1.rcbuffer->pybuffer.shape[0];
     }
   }
   __pyx_v_out1 = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cbayesian.pyx":25
+  /* "cbayesian.pyx":28
  *     cdef np.ndarray[np.double_t,ndim=1] out1 = vec_to_numpy(out, None)
  * 
  *     return(out1)             # <<<<<<<<<<<<<<
@@ -3516,17 +3692,19 @@ static PyObject *__pyx_pf_9cbayesian_2bcuL2norm2(CYTHON_UNUSED PyObject *__pyx_s
   __pyx_r = ((PyObject *)__pyx_v_out1);
   goto __pyx_L0;
 
-  /* "cbayesian.pyx":18
+  /* "cbayesian.pyx":19
  *     return(out1)
  * 
  * def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
@@ -3544,17 +3722,19 @@ static PyObject *__pyx_pf_9cbayesian_2bcuL2norm2(CYTHON_UNUSED PyObject *__pyx_s
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XDECREF((PyObject *)__pyx_v_out1);
+  __Pyx_XDECREF((PyObject *)__pyx_v_x);
+  __Pyx_XDECREF((PyObject *)__pyx_v_y);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cbayesian.pyx":27
+/* "cbayesian.pyx":30
  *     return(out1)
  * 
  * def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
 
 /* Python wrapper */
@@ -3589,11 +3769,11 @@ static PyObject *__pyx_pw_9cbayesian_5ctrapzCpp(PyObject *__pyx_self, PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("ctrapzCpp", 1, 2, 2, 1); __PYX_ERR(1, 27, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("ctrapzCpp", 1, 2, 2, 1); __PYX_ERR(1, 30, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "ctrapzCpp") < 0)) __PYX_ERR(1, 27, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "ctrapzCpp") < 0)) __PYX_ERR(1, 30, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3606,14 +3786,14 @@ static PyObject *__pyx_pw_9cbayesian_5ctrapzCpp(PyObject *__pyx_self, PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("ctrapzCpp", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 27, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("ctrapzCpp", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 30, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cbayesian.ctrapzCpp", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), __pyx_ptype_5numpy_ndarray, 1, "x", 0))) __PYX_ERR(1, 27, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 1, "y", 0))) __PYX_ERR(1, 27, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), __pyx_ptype_5numpy_ndarray, 1, "x", 0))) __PYX_ERR(1, 30, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 1, "y", 0))) __PYX_ERR(1, 30, __pyx_L1_error)
   __pyx_r = __pyx_pf_9cbayesian_4ctrapzCpp(__pyx_self, __pyx_v_x, __pyx_v_y);
 
   /* function exit code */
@@ -3636,7 +3816,17 @@ static PyObject *__pyx_pf_9cbayesian_4ctrapzCpp(CYTHON_UNUSED PyObject *__pyx_se
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyArrayObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyArrayObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("ctrapzCpp", 0);
+  __Pyx_INCREF((PyObject *)__pyx_v_x);
+  __Pyx_INCREF((PyObject *)__pyx_v_y);
   __pyx_pybuffer_x.pybuffer.buf = NULL;
   __pyx_pybuffer_x.refcount = 0;
   __pyx_pybuffernd_x.data = NULL;
@@ -3647,26 +3837,126 @@ static PyObject *__pyx_pf_9cbayesian_4ctrapzCpp(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 27, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 30, __pyx_L1_error)
   }
   __pyx_pybuffernd_x.diminfo[0].strides = __pyx_pybuffernd_x.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_x.diminfo[0].shape = __pyx_pybuffernd_x.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 27, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 30, __pyx_L1_error)
   }
   __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
 
-  /* "cbayesian.pyx":28
+  /* "cbayesian.pyx":31
  * 
  * def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+ *     x = np.ascontiguousarray(x)             # <<<<<<<<<<<<<<
+ *     y = np.ascontiguousarray(y)
+ *     cdef vec ax = numpy_to_vec_d(x)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, ((PyObject *)__pyx_v_x)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_x));
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 31, __pyx_L1_error)
+  __pyx_t_4 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_x.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_t_4, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_6); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+      }
+      __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
+    }
+    __pyx_pybuffernd_x.diminfo[0].strides = __pyx_pybuffernd_x.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_x.diminfo[0].shape = __pyx_pybuffernd_x.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(1, 31, __pyx_L1_error)
+  }
+  __pyx_t_4 = 0;
+  __Pyx_DECREF_SET(__pyx_v_x, ((PyArrayObject *)__pyx_t_1));
+  __pyx_t_1 = 0;
+
+  /* "cbayesian.pyx":32
+ * def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)             # <<<<<<<<<<<<<<
+ *     cdef vec ax = numpy_to_vec_d(x)
+ *     cdef vec ay = numpy_to_vec_d(y)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 32, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 32, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, ((PyObject *)__pyx_v_y)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_y));
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 32, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 32, __pyx_L1_error)
+  __pyx_t_9 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_t_9, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_8, &__pyx_t_7, &__pyx_t_6);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_6);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_8, __pyx_t_7, __pyx_t_6);
+      }
+      __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
+    }
+    __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(1, 32, __pyx_L1_error)
+  }
+  __pyx_t_9 = 0;
+  __Pyx_DECREF_SET(__pyx_v_y, ((PyArrayObject *)__pyx_t_1));
+  __pyx_t_1 = 0;
+
+  /* "cbayesian.pyx":33
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ax = numpy_to_vec_d(x)             # <<<<<<<<<<<<<<
  *     cdef vec ay = numpy_to_vec_d(y)
  * 
  */
   __pyx_v_ax = __pyx_f_9cbayesian_numpy_to_vec_d(((PyArrayObject *)__pyx_v_x));
 
-  /* "cbayesian.pyx":29
- * def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+  /* "cbayesian.pyx":34
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ax = numpy_to_vec_d(x)
  *     cdef vec ay = numpy_to_vec_d(y)             # <<<<<<<<<<<<<<
  * 
@@ -3674,7 +3964,7 @@ static PyObject *__pyx_pf_9cbayesian_4ctrapzCpp(CYTHON_UNUSED PyObject *__pyx_se
  */
   __pyx_v_ay = __pyx_f_9cbayesian_numpy_to_vec_d(((PyArrayObject *)__pyx_v_y));
 
-  /* "cbayesian.pyx":31
+  /* "cbayesian.pyx":36
  *     cdef vec ay = numpy_to_vec_d(y)
  * 
  *     cdef double out = trapzCpp(ax, ay)             # <<<<<<<<<<<<<<
@@ -3683,7 +3973,7 @@ static PyObject *__pyx_pf_9cbayesian_4ctrapzCpp(CYTHON_UNUSED PyObject *__pyx_se
  */
   __pyx_v_out = trapzCpp(__pyx_v_ax, __pyx_v_ay);
 
-  /* "cbayesian.pyx":33
+  /* "cbayesian.pyx":38
  *     cdef double out = trapzCpp(ax, ay)
  * 
  *     return(out)             # <<<<<<<<<<<<<<
@@ -3691,23 +3981,25 @@ static PyObject *__pyx_pf_9cbayesian_4ctrapzCpp(CYTHON_UNUSED PyObject *__pyx_se
  * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_out); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 33, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_out); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cbayesian.pyx":27
+  /* "cbayesian.pyx":30
  *     return(out1)
  * 
  * def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
@@ -3722,17 +4014,19 @@ static PyObject *__pyx_pf_9cbayesian_4ctrapzCpp(CYTHON_UNUSED PyObject *__pyx_se
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_x.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
   __pyx_L2:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_x);
+  __Pyx_XDECREF((PyObject *)__pyx_v_y);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cbayesian.pyx":35
+/* "cbayesian.pyx":40
  *     return(out)
  * 
  * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
 
 /* Python wrapper */
@@ -3767,11 +4061,11 @@ static PyObject *__pyx_pw_9cbayesian_7border_l2norm(PyObject *__pyx_self, PyObje
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("border_l2norm", 1, 2, 2, 1); __PYX_ERR(1, 35, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("border_l2norm", 1, 2, 2, 1); __PYX_ERR(1, 40, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "border_l2norm") < 0)) __PYX_ERR(1, 35, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "border_l2norm") < 0)) __PYX_ERR(1, 40, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3784,14 +4078,14 @@ static PyObject *__pyx_pw_9cbayesian_7border_l2norm(PyObject *__pyx_self, PyObje
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("border_l2norm", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 35, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("border_l2norm", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 40, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cbayesian.border_l2norm", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), __pyx_ptype_5numpy_ndarray, 1, "x", 0))) __PYX_ERR(1, 35, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 1, "y", 0))) __PYX_ERR(1, 35, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), __pyx_ptype_5numpy_ndarray, 1, "x", 0))) __PYX_ERR(1, 40, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 1, "y", 0))) __PYX_ERR(1, 40, __pyx_L1_error)
   __pyx_r = __pyx_pf_9cbayesian_6border_l2norm(__pyx_self, __pyx_v_x, __pyx_v_y);
 
   /* function exit code */
@@ -3814,7 +4108,17 @@ static PyObject *__pyx_pf_9cbayesian_6border_l2norm(CYTHON_UNUSED PyObject *__py
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyArrayObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyArrayObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("border_l2norm", 0);
+  __Pyx_INCREF((PyObject *)__pyx_v_x);
+  __Pyx_INCREF((PyObject *)__pyx_v_y);
   __pyx_pybuffer_x.pybuffer.buf = NULL;
   __pyx_pybuffer_x.refcount = 0;
   __pyx_pybuffernd_x.data = NULL;
@@ -3825,26 +4129,126 @@ static PyObject *__pyx_pf_9cbayesian_6border_l2norm(CYTHON_UNUSED PyObject *__py
   __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 35, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 40, __pyx_L1_error)
   }
   __pyx_pybuffernd_x.diminfo[0].strides = __pyx_pybuffernd_x.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_x.diminfo[0].shape = __pyx_pybuffernd_x.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 35, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 40, __pyx_L1_error)
   }
   __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
 
-  /* "cbayesian.pyx":36
+  /* "cbayesian.pyx":41
  * 
  * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+ *     x = np.ascontiguousarray(x)             # <<<<<<<<<<<<<<
+ *     y = np.ascontiguousarray(y)
+ *     cdef vec ax = numpy_to_vec_d(x)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, ((PyObject *)__pyx_v_x)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_x));
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 41, __pyx_L1_error)
+  __pyx_t_4 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_x.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_t_4, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_x.rcbuffer->pybuffer, (PyObject*)__pyx_v_x, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_6); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+      }
+      __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
+    }
+    __pyx_pybuffernd_x.diminfo[0].strides = __pyx_pybuffernd_x.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_x.diminfo[0].shape = __pyx_pybuffernd_x.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(1, 41, __pyx_L1_error)
+  }
+  __pyx_t_4 = 0;
+  __Pyx_DECREF_SET(__pyx_v_x, ((PyArrayObject *)__pyx_t_1));
+  __pyx_t_1 = 0;
+
+  /* "cbayesian.pyx":42
+ * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)             # <<<<<<<<<<<<<<
+ *     cdef vec ax = numpy_to_vec_d(x)
+ *     cdef vec ay = numpy_to_vec_d(y)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 42, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 42, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, ((PyObject *)__pyx_v_y)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_y));
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 42, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 42, __pyx_L1_error)
+  __pyx_t_9 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_t_9, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_8, &__pyx_t_7, &__pyx_t_6);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_6);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_8, __pyx_t_7, __pyx_t_6);
+      }
+      __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
+    }
+    __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(1, 42, __pyx_L1_error)
+  }
+  __pyx_t_9 = 0;
+  __Pyx_DECREF_SET(__pyx_v_y, ((PyArrayObject *)__pyx_t_1));
+  __pyx_t_1 = 0;
+
+  /* "cbayesian.pyx":43
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ax = numpy_to_vec_d(x)             # <<<<<<<<<<<<<<
  *     cdef vec ay = numpy_to_vec_d(y)
  * 
  */
   __pyx_v_ax = __pyx_f_9cbayesian_numpy_to_vec_d(((PyArrayObject *)__pyx_v_x));
 
-  /* "cbayesian.pyx":37
- * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):
+  /* "cbayesian.pyx":44
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ax = numpy_to_vec_d(x)
  *     cdef vec ay = numpy_to_vec_d(y)             # <<<<<<<<<<<<<<
  * 
@@ -3852,7 +4256,7 @@ static PyObject *__pyx_pf_9cbayesian_6border_l2norm(CYTHON_UNUSED PyObject *__py
  */
   __pyx_v_ay = __pyx_f_9cbayesian_numpy_to_vec_d(((PyArrayObject *)__pyx_v_y));
 
-  /* "cbayesian.pyx":39
+  /* "cbayesian.pyx":46
  *     cdef vec ay = numpy_to_vec_d(y)
  * 
  *     cdef double out = order_l2norm(ax, ay)             # <<<<<<<<<<<<<<
@@ -3861,29 +4265,31 @@ static PyObject *__pyx_pf_9cbayesian_6border_l2norm(CYTHON_UNUSED PyObject *__py
  */
   __pyx_v_out = order_l2norm(__pyx_v_ax, __pyx_v_ay);
 
-  /* "cbayesian.pyx":41
+  /* "cbayesian.pyx":48
  *     cdef double out = order_l2norm(ax, ay)
  * 
  *     return(out)             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_out); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_out); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cbayesian.pyx":35
+  /* "cbayesian.pyx":40
  *     return(out)
  * 
  * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
@@ -3898,6 +4304,8 @@ static PyObject *__pyx_pf_9cbayesian_6border_l2norm(CYTHON_UNUSED PyObject *__py
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_x.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
   __pyx_L2:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_x);
+  __Pyx_XDECREF((PyObject *)__pyx_v_y);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -6376,6 +6784,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_s_area, __pyx_k_area, sizeof(__pyx_k_area), 0, 0, 1, 1},
+  {&__pyx_n_s_ascontiguousarray, __pyx_k_ascontiguousarray, sizeof(__pyx_k_ascontiguousarray), 0, 0, 1, 1},
   {&__pyx_n_s_ax, __pyx_k_ax, sizeof(__pyx_k_ax), 0, 0, 1, 1},
   {&__pyx_n_s_ay, __pyx_k_ay, sizeof(__pyx_k_ay), 0, 0, 1, 1},
   {&__pyx_n_s_bcalcY, __pyx_k_bcalcY, sizeof(__pyx_k_bcalcY), 0, 0, 1, 1},
@@ -6518,49 +6927,49 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * from libcpp cimport bool
  * 
  * def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ay = numpy_to_vec_d(y)
- *     cdef vec out = calcY(area, ay)
  */
   __pyx_tuple__9 = PyTuple_Pack(5, __pyx_n_s_area, __pyx_n_s_y, __pyx_n_s_ay, __pyx_n_s_out, __pyx_n_s_out1); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
   __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cbayesian_pyx, __pyx_n_s_bcalcY, 10, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) __PYX_ERR(1, 10, __pyx_L1_error)
 
-  /* "cbayesian.pyx":18
+  /* "cbayesian.pyx":19
  *     return(out1)
  * 
  * def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
-  __pyx_tuple__11 = PyTuple_Pack(6, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_ax, __pyx_n_s_ay, __pyx_n_s_out, __pyx_n_s_out1); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 18, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(6, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_ax, __pyx_n_s_ay, __pyx_n_s_out, __pyx_n_s_out1); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
-  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cbayesian_pyx, __pyx_n_s_bcuL2norm2, 18, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) __PYX_ERR(1, 18, __pyx_L1_error)
+  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cbayesian_pyx, __pyx_n_s_bcuL2norm2, 19, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) __PYX_ERR(1, 19, __pyx_L1_error)
 
-  /* "cbayesian.pyx":27
+  /* "cbayesian.pyx":30
  *     return(out1)
  * 
  * def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
-  __pyx_tuple__13 = PyTuple_Pack(5, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_ax, __pyx_n_s_ay, __pyx_n_s_out); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 27, __pyx_L1_error)
+  __pyx_tuple__13 = PyTuple_Pack(5, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_ax, __pyx_n_s_ay, __pyx_n_s_out); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
-  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cbayesian_pyx, __pyx_n_s_ctrapzCpp, 27, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(1, 27, __pyx_L1_error)
+  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cbayesian_pyx, __pyx_n_s_ctrapzCpp, 30, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(1, 30, __pyx_L1_error)
 
-  /* "cbayesian.pyx":35
+  /* "cbayesian.pyx":40
  *     return(out)
  * 
  * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
-  __pyx_tuple__15 = PyTuple_Pack(5, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_ax, __pyx_n_s_ay, __pyx_n_s_out); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __pyx_tuple__15 = PyTuple_Pack(5, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_ax, __pyx_n_s_ay, __pyx_n_s_out); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cbayesian_pyx, __pyx_n_s_border_l2norm, 35, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cbayesian_pyx, __pyx_n_s_border_l2norm, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(1, 40, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -6889,48 +7298,48 @@ if (!__Pyx_RefNanny) {
  * from libcpp cimport bool
  * 
  * def bcalcY(area, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
+ *     y = np.ascontiguousarray(y)
  *     cdef vec ay = numpy_to_vec_d(y)
- *     cdef vec out = calcY(area, ay)
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9cbayesian_1bcalcY, NULL, __pyx_n_s_cbayesian); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_bcalcY, __pyx_t_1) < 0) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cbayesian.pyx":18
+  /* "cbayesian.pyx":19
  *     return(out1)
  * 
  * def bcuL2norm2(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9cbayesian_3bcuL2norm2, NULL, __pyx_n_s_cbayesian); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 18, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9cbayesian_3bcuL2norm2, NULL, __pyx_n_s_cbayesian); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bcuL2norm2, __pyx_t_1) < 0) __PYX_ERR(1, 18, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bcuL2norm2, __pyx_t_1) < 0) __PYX_ERR(1, 19, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cbayesian.pyx":27
+  /* "cbayesian.pyx":30
  *     return(out1)
  * 
  * def ctrapzCpp(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9cbayesian_5ctrapzCpp, NULL, __pyx_n_s_cbayesian); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 27, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9cbayesian_5ctrapzCpp, NULL, __pyx_n_s_cbayesian); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_ctrapzCpp, __pyx_t_1) < 0) __PYX_ERR(1, 27, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_ctrapzCpp, __pyx_t_1) < 0) __PYX_ERR(1, 30, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cbayesian.pyx":35
+  /* "cbayesian.pyx":40
  *     return(out)
  * 
  * def border_l2norm(np.ndarray[double, ndim=1, mode="c"] x, np.ndarray[double, ndim=1, mode="c"] y):             # <<<<<<<<<<<<<<
- *     cdef vec ax = numpy_to_vec_d(x)
- *     cdef vec ay = numpy_to_vec_d(y)
+ *     x = np.ascontiguousarray(x)
+ *     y = np.ascontiguousarray(y)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9cbayesian_7border_l2norm, NULL, __pyx_n_s_cbayesian); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9cbayesian_7border_l2norm, NULL, __pyx_n_s_cbayesian); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_border_l2norm, __pyx_t_1) < 0) __PYX_ERR(1, 35, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_border_l2norm, __pyx_t_1) < 0) __PYX_ERR(1, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "cbayesian.pyx":1
@@ -8291,6 +8700,35 @@ bad:
         "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
         name, type->tp_name, Py_TYPE(obj)->tp_name);
     return 0;
+}
+
+/* PyObjectCall2Args */
+  static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
+    PyObject *args, *result = NULL;
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyFunction_FastCall(function, args, 2);
+    }
+    #endif
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyCFunction_FastCall(function, args, 2);
+    }
+    #endif
+    args = PyTuple_New(2);
+    if (unlikely(!args)) goto done;
+    Py_INCREF(arg1);
+    PyTuple_SET_ITEM(args, 0, arg1);
+    Py_INCREF(arg2);
+    PyTuple_SET_ITEM(args, 1, arg2);
+    Py_INCREF(function);
+    result = __Pyx_PyObject_Call(function, args, NULL);
+    Py_DECREF(args);
+    Py_DECREF(function);
+done:
+    return result;
 }
 
 /* DictGetItem */
