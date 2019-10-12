@@ -1,4 +1,4 @@
-#include <armadillo>
+#include "armadillo"
 #include "bayesian.h"
 
 using namespace arma;

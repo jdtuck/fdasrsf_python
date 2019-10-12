@@ -1,7 +1,7 @@
 #ifndef BAYESIAN_H
 #define BAYESIAN_H
 
-#include <armadillo>
+#include "armadillo"
 
 using namespace arma;
 using namespace std;
