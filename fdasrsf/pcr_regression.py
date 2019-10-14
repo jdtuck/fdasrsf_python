@@ -1,5 +1,5 @@
 """
-Warping PCR Invariant Regression using SRSF
+Warping Invariant PCR Regression using SRSF
 
 moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
@@ -28,7 +28,6 @@ class elastic_pcr_regression:
     :param y: response vector of length N
     :param warp_data: fdawarp object of alignment
     :param pca: class dependent on fPCA method used object of fPCA
-    :param information
     :param alpha: intercept
     :param b: coefficient vector
     :param SSE: sum of squared errors
