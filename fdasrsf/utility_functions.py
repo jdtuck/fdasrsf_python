@@ -128,7 +128,7 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0):
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
-    :param method: method to apply optimzation (default="DP") options are "DP", "DP2" and "RBFGS"
+    :param method: method to apply optimization (default="DP") options are "DP", "DP2" and "RBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
 
     :rtype: vector
