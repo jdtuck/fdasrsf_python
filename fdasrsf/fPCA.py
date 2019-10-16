@@ -115,9 +115,9 @@ class fdavpca:
         
         self.q_pca = q_pca
         self.f_pca = f_pca
-        self.latent = s
+        self.latent = s[0:no]
         self.coef = c
-        self.U = U
+        self.U = U[:,0:no]
         self.id = mididx
         self.mqn = mqn
         self.time = time
