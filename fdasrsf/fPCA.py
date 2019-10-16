@@ -27,7 +27,7 @@ class fdavpca:
     :param q_pca: srvf principal directions
     :param f_pca: f principal directions
     :param latent: latent values
-    :param coef: prinicapl coefficients
+    :param coef: principal coefficients
     :param id: point used for f(0)
     :param mqn: mean srvf
     :param U: eigenvectors
@@ -309,7 +309,7 @@ class fdajpca:
     :param q_pca: srvf principal directions
     :param f_pca: f principal directions
     :param latent: latent values
-    :param coef: prinicapl coefficients
+    :param coef: principal coefficients
     :param id: point used for f(0)
     :param mqn: mean srvf
     :param U: eigenvectors
