@@ -229,7 +229,7 @@ def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
     return gam
 
 
-def elastic_distance(f1, f2, time, lam=0.0):
+def elastic_distance(f1, f2, time, method="DP", lam=0.0):
     """"
     calculates the distances between function, where f1 is aligned to
     f2. In other words
@@ -248,7 +248,7 @@ def elastic_distance(f1, f2, time, lam=0.0):
     q1 = f_to_srsf(f1, time)
     q2 = f_to_srsf(f2, time)
 
-    gam = optimum_reparam(q1, time, q2, "DP", lam)
+    gam = optimum_reparam(q1, time, q2, method, lam)
     fw = interp((time[-1] - time[0]) * gam + time[0], time, f2)
     qw = f_to_srsf(fw, time)
 
