@@ -248,7 +248,7 @@ def elastic_distance(f1, f2, time, lam=0.0):
     q1 = f_to_srsf(f1, time)
     q2 = f_to_srsf(f2, time)
 
-    gam = optimum_reparam(q1, time, q2, lam)
+    gam = optimum_reparam(q1, time, q2, "DP", lam)
     fw = interp((time[-1] - time[0]) * gam + time[0], time, f2)
     qw = f_to_srsf(fw, time)
 
@@ -451,7 +451,7 @@ def SqrtMedian(gam):
 
         vbar = vtil.sum(axis=1)*dtil.sum()**(-1)
         vbar_norm[r] = geo.L2norm(vbar)
-    
+
     vec = v
     gam_median = cumtrapz(psi_median**2,time,initial=0.0)
 
@@ -862,7 +862,7 @@ def basis_fourier(f_domain, numBasis, fourier_p):
         j = ceil(i/2)
         if mod(i,2) == 1:
             result[:,i] = sqrt(2) * sin(2*j*pi*f_domain/fourier_p)
-        
+
         if mod(i,2) == 0:
             result[:,i] = sqrt(2) * cos(2*j*pi*f_domain/fourier_p)
 
@@ -898,7 +898,7 @@ def f_predictfunction(f, at, deriv):
     if deriv == 0:
         interp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
         result = interp(at)
-    
+
     if deriv == 1:
         iterp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
         fmod = iterp(at)
@@ -906,7 +906,7 @@ def f_predictfunction(f, at, deriv):
         diffy2 = hstack((diff(fmod),0))
         diffx1 = hstack((0, diff(at)))
         diffx2 = hstack((diff(at), 0))
-    
+
         result = (diffy2 + diffy1) / (diffx2 + diffx1)
 
     return(result)
@@ -923,4 +923,4 @@ def f_phiinv(psi):
 
 def norm_gam(gam):
     gam = (gam-gam[0])/(gam[-1]-gam[0])
-    return(gam)   
+    return(gam)
