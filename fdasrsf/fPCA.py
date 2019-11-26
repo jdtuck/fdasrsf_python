@@ -20,9 +20,9 @@ class fdavpca:
     """
     This class provides vertical fPCA using the
     SRVF framework
-    
+
     Usage:  obj = fdavpca(warp_data)
-    
+
     :param warp_data: fdawarp class with alignment data
     :param q_pca: srvf principal directions
     :param f_pca: f principal directions
@@ -32,7 +32,7 @@ class fdavpca:
     :param mqn: mean srvf
     :param U: eigenvectors
     :param stds: geodesic directions
-    
+
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
     """
@@ -46,7 +46,7 @@ class fdavpca:
             raise Exception('Please align fdawarp class using srsf_align!')
 
         self.warp_data = fdawarp
-    
+
     def calc_fpca(self, no=3, id=None):
         """
         This function calculates vertical functional principal component analysis
@@ -112,7 +112,7 @@ class fdavpca:
         for k in range(0, no):
             for l in range(0, N2):
                 c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
-        
+
         self.q_pca = q_pca
         self.f_pca = f_pca
         self.latent = s[0:no]
@@ -161,7 +161,7 @@ class fdavpca:
 
         cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
         N = self.latent.shape[0]
-        idx = np.arange(0, N + 1) + 1
+        idx = np.arange(0, N) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
         plt.xlabel("Percentage")
         plt.ylabel("Index")
@@ -199,7 +199,7 @@ class fdahpca:
             raise Exception('Please align fdawarp class using srsf_align!')
 
         self.warp_data = fdawarp
-    
+
     def calc_fpca(self, no=3):
         """
         This function calculates horizontal functional principal component analysis on aligned data
@@ -227,7 +227,7 @@ class fdahpca:
         U, s, V = svd(K)
         vm = vec.mean(axis=1)
 
-        gam_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0] + 1, no), dtype=float)
+        gam_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0], no), dtype=float)
         psi_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0], no), dtype=float)
         for j in range(0, no):
             for k in tau:
@@ -238,16 +238,15 @@ class fdahpca:
                 else:
                     psi_pca[k-1, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
 
-                tmp = np.zeros(TT)
-                tmp[1:TT] = np.cumsum(psi_pca[k-1, :, j] * psi_pca[k-1, :, j])
+                tmp = cumtrapz(psi_pca[k-1, :, j] * psi_pca[k-1, :, j], np.linspace(0,1,TT), initial=0)
                 gam_pca[k-1, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
-        
+
         N2 = gam.shape[1]
         c = np.zeros((N2,no))
         for k in range(0,no):
             for i in range(0,N2):
                 c[i,k] = np.sum(dot(vec[:,i]-vm,U[:,k]))
-        
+
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
         self.U = U
@@ -289,8 +288,8 @@ class fdahpca:
 
         fig.set_tight_layout(True)
 
-        cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
-        idx = np.arange(0, TT-1) + 1
+        cumm_coef = 100 * np.cumsum(self.latent[0:no]) / sum(self.latent[0:no])
+        idx = np.arange(0, no) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
         plt.xlabel("Percentage")
         plt.ylabel("Index")
@@ -302,9 +301,9 @@ class fdajpca:
     """
     This class provides joint fPCA using the
     SRVF framework
-    
+
     Usage:  obj = fdajpca(warp_data)
-    
+
     :param warp_data: fdawarp class with alignment data
     :param q_pca: srvf principal directions
     :param f_pca: f principal directions
@@ -317,7 +316,7 @@ class fdajpca:
     :param mu_g: mean g
     :param C: scaling value
     :param stds: geodesic directions
-    
+
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  18-Mar-2018
     """
@@ -331,7 +330,7 @@ class fdajpca:
             raise Exception('Please align fdawarp class using srsf_align!')
 
         self.warp_data = fdawarp
-    
+
     def calc_fpca(self,no=3,id=None):
         """
         This function calculates joint functional principal component analysis
@@ -381,7 +380,7 @@ class fdajpca:
         # geodesic paths
         q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
         f_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
-        
+
         for k in range(0, no):
             for l in range(0, Nstd):
                 qhat = mqn + dot(U[0:(M+1),k],coef[l]*np.sqrt(s[k]))
@@ -391,7 +390,7 @@ class fdajpca:
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
                 if (sum(vechat)==0):
                     gamhat = np.linspace(0,1,M)
-                
+
                 fhat = uf.cumtrapzmid(time, qhat[0:M]*np.fabs(qhat[0:M]), np.sign(qhat[M])*(qhat[M]*qhat[M]), mididx)
                 f_pca[:,l,k] = uf.warp_f_gamma(np.linspace(0,1,M), fhat, gamhat)
                 q_pca[:,l,k] = uf.warp_q_gamma(np.linspace(0,1,M), qhat[0:M], gamhat)
@@ -412,7 +411,7 @@ class fdajpca:
         self.Nstd = coef
 
         return
-    
+
     def plot(self):
         """
         plot plot elastic vertical fPCA result
@@ -433,14 +432,15 @@ class fdajpca:
         }
         cl = sorted(CBcdict.keys())
         fig, ax = plt.subplots(2, no)
+        n = self.Nstd.shape[0]
         for k in range(0, no):
             axt = ax[0, k]
-            for l in range(0, self.Nstd):
+            for l in range(0, n):
                 axt.plot(self.time, self.q_pca[0:M, l, k], color=CBcdict[cl[l]])
 
             axt.set_title('q domain: PD %d' % (k + 1))
             axt = ax[1, k]
-            for l in range(0,self.Nstd):
+            for l in range(0, n):
                 axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
 
             axt.set_title('f domain: PD %d' % (k + 1))
@@ -482,7 +482,7 @@ def jointfPCAd(qn, vec, C, m, mu_psi):
         psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
         gam_tmp = cumtrapz(psihat[:,ii]*psihat[:,ii], np.linspace(0,1,M-1), initial=0)
         gamhat[:,ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
-    
+
     U = U[:,0:m]
     s = s[0:m]
 
