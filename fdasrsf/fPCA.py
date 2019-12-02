@@ -122,6 +122,7 @@ class fdavpca:
         self.mqn = mqn
         self.time = time
         self.stds = coef
+        self.no = no
 
         return
 
@@ -131,9 +132,10 @@ class fdavpca:
         Usage: obj.plot()
         """
 
-        no = 3
+        no = self.no
         Nstd = self.stds.shape[0]
         N = self.time.shape[0]
+        num_plot = int(np.ceil(no/3))
         CBcdict = {
             'Bl': (0, 0, 0),
             'Or': (.9, .6, 0),
@@ -145,19 +147,32 @@ class fdavpca:
             'rP': (.8, .6, .7),
         }
         cl = sorted(CBcdict.keys())
-        fig, ax = plt.subplots(2, no)
-        for k in range(0, no):
-            axt = ax[0, k]
-            for l in range(0, Nstd):
-                axt.plot(self.time, self.q_pca[0:N, l, k], color=CBcdict[cl[l]])
+        k = 0
+        for ii in range(0, num_plot):
 
-            axt.set_title('q domain: PD %d' % (k + 1))
-            axt = ax[1, k]
-            for l in range(0, Nstd):
-                axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
+            if k > (no-1):
+                break
 
-            axt.set_title('f domain: PD %d' % (k + 1))
-        fig.set_tight_layout(True)
+            fig, ax = plt.subplots(2, 3)
+            
+            for k1 in range(0,3):
+                k = k1+(ii)*3
+                axt = ax[0, k1]
+                if k > (no-1):
+                    break
+
+                for l in range(0, Nstd):
+                    axt.plot(self.time, self.q_pca[0:N, l, k], color=CBcdict[cl[l]])
+
+                axt.set_title('q domain: PD %d' % (k + 1))
+
+                axt = ax[1, k1]
+                for l in range(0, Nstd):
+                    axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
+
+                axt.set_title('f domain: PD %d' % (k + 1))
+
+            fig.set_tight_layout(True)
 
         cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
         N = self.latent.shape[0]
@@ -268,6 +283,7 @@ class fdahpca:
 
         no = self.no
         TT = self.warp_data.time.shape[0]
+        num_plot = int(np.ceil(no/3))
         CBcdict = {
             'Bl': (0, 0, 0),
             'Or': (.9, .6, 0),
@@ -278,15 +294,26 @@ class fdahpca:
             'Ve': (.8, .4, 0),
             'rP': (.8, .6, .7),
         }
-        fig, ax = plt.subplots(1, no)
-        for k in range(0, no):
-            axt = ax[k]
-            tmp = self.gam_pca[:, :, k]
-            axt.plot(np.linspace(0, 1, TT), tmp.transpose())
-            axt.set_title('PD %d' % (k + 1))
-            axt.set_aspect('equal')
+        k = 0
+        for ii in range(0, num_plot):
 
-        fig.set_tight_layout(True)
+            if k > (no-1):
+                break
+
+            fig, ax = plt.subplots(1, 3)
+            
+            for k1 in range(0,3):
+                k = k1+(ii)*3
+                axt = ax[k1]
+                if k > (no-1):
+                    break
+
+                tmp = self.gam_pca[:, :, k]
+                axt.plot(np.linspace(0, 1, TT), tmp.transpose())
+                axt.set_title('PD %d' % (k + 1))
+                axt.set_aspect('equal')
+
+            fig.set_tight_layout(True)
 
         cumm_coef = 100 * np.cumsum(self.latent[0:no]) / sum(self.latent[0:no])
         idx = np.arange(0, no) + 1
@@ -408,7 +435,7 @@ class fdajpca:
         self.g = g
         self.cov = cov
         self.no = no
-        self.Nstd = coef
+        self.stds = coef
 
         return
 
@@ -420,6 +447,8 @@ class fdajpca:
         """
         no = self.no
         M = self.time.shape[0]
+        Nstd = self.stds.shape[0]
+        num_plot = int(np.ceil(no/3))
         CBcdict = {
             'Bl': (0, 0, 0),
             'Or': (.9, .6, 0),
@@ -431,20 +460,32 @@ class fdajpca:
             'rP': (.8, .6, .7),
         }
         cl = sorted(CBcdict.keys())
-        fig, ax = plt.subplots(2, no)
-        n = self.Nstd.shape[0]
-        for k in range(0, no):
-            axt = ax[0, k]
-            for l in range(0, n):
-                axt.plot(self.time, self.q_pca[0:M, l, k], color=CBcdict[cl[l]])
+        k = 0
+        for ii in range(0, num_plot):
 
-            axt.set_title('q domain: PD %d' % (k + 1))
-            axt = ax[1, k]
-            for l in range(0, n):
-                axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
+            if k > (no-1):
+                break
 
-            axt.set_title('f domain: PD %d' % (k + 1))
-        fig.set_tight_layout(True)
+            fig, ax = plt.subplots(2, 3)
+            
+            for k1 in range(0,3):
+                k = k1+(ii)*3
+                axt = ax[0, k1]
+                if k > (no-1):
+                    break
+
+                for l in range(0, Nstd):
+                    axt.plot(self.time, self.q_pca[0:M, l, k], color=CBcdict[cl[l]])
+
+                axt.set_title('q domain: PD %d' % (k + 1))
+
+                axt = ax[1, k1]
+                for l in range(0, Nstd):
+                    axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
+
+                axt.set_title('f domain: PD %d' % (k + 1))
+
+            fig.set_tight_layout(True)
 
         cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
         idx = np.arange(0, self.latent.shape[0]) + 1
