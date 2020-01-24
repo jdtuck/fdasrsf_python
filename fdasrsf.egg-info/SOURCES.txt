@@ -25,6 +25,7 @@ fdasrsf.egg-info/PKG-INFO
 fdasrsf.egg-info/SOURCES.txt
 fdasrsf.egg-info/dependency_links.txt
 fdasrsf.egg-info/top_level.txt
+src/.DS_Store
 src/DP.c
 src/DP.h
 src/DynamicProgrammingQ2.c
