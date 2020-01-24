@@ -177,7 +177,7 @@ class fdawarp:
             if parallel:
                 out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
                                         self.time, q[:, n, 0], omethod, lam, mf[0,r],
-                                        f[0,k,0] ) for n in range(N))
+                                        f[0,n,0] ) for n in range(N))
                 gam = np.array(out)
                 gam = gam.transpose()
             else:
