@@ -37,13 +37,23 @@ class build_docs(Command):
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
 
+try:
+    blas_path = numpy.distutils.system_info.get_info('blas')['library_dirs'][0]
+except:
+    if "library_dirs" in numpy.__config__.blas_mkl_info:
+        blas_path = numpy.__config__.blas_mkl_info["library_dirs"][0]
+    elif "library_dirs" in numpy.__config__.blas_opt_info:
+        blas_path = numpy.__config__.blas_opt_info["library_dirs"][0]
+    else:
+        raise ValueError("Could not locate BLAS library.")
+
 gropt_src = []
 for file in os.listdir("src/gropt/src/"):
     if file.endswith(".cpp"):
         gropt_src.append(os.path.join("src/gropt/src/", file))
 gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
 os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
-extra_args_mac = ['-std=c++11']
+extra_args_mac = ['-lblas', '-llapack', '-std=c++11']
 if platform.system() == 'Darwin':
     extra_args_mac = ['-stdlib=libc++']
 
@@ -83,6 +93,7 @@ extensions = [
         sources=gropt_src,
         include_dirs=[numpy.get_include(), "src/gropt/incl/"],
         language="c++",
+        libraries=["blas","lapack"],
         extra_compile_args=extra_args_mac,
         extra_link_args=extra_args_mac
     ),
@@ -90,6 +101,7 @@ extensions = [
         sources=["src/cbayesian.pyx", "src/bayesian.cpp"],
         include_dirs=[numpy.get_include()],
         language="c++",
+        libraries=["blas","lapack"],
         extra_compile_args=extra_args_mac,
         extra_link_args=extra_args_mac
     ),
