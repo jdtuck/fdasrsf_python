@@ -9,7 +9,7 @@ void fpls_warp_grad(int *m1, int *n1, double *ti, double *gami, double *qf, doub
 	
 	
 	// dereference inputs
-	int TT = *m1;
+	const int TT = *m1;
 	int N = *n1, max_itr = *max_itri;
 	double t = *ti, gam = *gami;
 	double tol = *toli, delta = *deltai, display = *displayi;
@@ -20,11 +20,28 @@ void fpls_warp_grad(int *m1, int *n1, double *ti, double *gami, double *qf, doub
 	int itr = 1;
 	double tmp2 = 0;
 	double N1 = N;
-	double psi1[TT*N], gam2[TT*N], rfi_diff[TT], rgi_diff[TT], grad[TT], vec[TT], gamI[TT];
+	const int size_array = TT*N;
+	double *psi1 = malloc(sizeof(double)*size_array);
+	double *gam2 = malloc(sizeof(double)*size_array);
+	double *rfi_diff = malloc(sizeof(double)*TT);
+	double *rgi_diff = malloc(sizeof(double)*TT);
+	double *grad = malloc(sizeof(double)*TT);
+	double *vec = malloc(sizeof(double)*TT);
+	double *gamI = malloc(sizeof(double)*TT);
 	double eps = DBL_EPSILON;
-	double tmp[TT], psi2[TT*N], xout[TT], qf_tmp[TT*N], qg_tmp[TT*N];
-	double binsize, rfi[N], rgi[N], qf_tmp_diff[TT*N], qg_tmp_diff[TT*N];
-	double max_val[max_itr], tmpi, tmpj, gam1[TT*N];
+	double *tmp = malloc(sizeof(double)*TT);
+	double *psi2 = malloc(sizeof(double)*size_array);
+	double *xout = malloc(sizeof(double)*TT);
+	double *qf_tmp = malloc(sizeof(double)*size_array);
+	double *qg_tmp = malloc(sizeof(double)*size_array);
+	double binsize;
+	double *rfi = malloc(sizeof(double)*N);
+	double *rgi = malloc(sizeof(double)*N);
+	double *qf_tmp_diff = malloc(sizeof(double)*size_array);
+	double *qg_tmp_diff = malloc(sizeof(double)*size_array);
+	double *gam1 = malloc(sizeof(double)*size_array);
+	double *max_val = malloc(sizeof(double)*max_itr);
+	double tmpi, tmpj;
 	double res_cos, res_sin, max_val_change;
 	double *tmp1 = malloc(sizeof(double)*(TT));
 
@@ -206,5 +223,23 @@ void fpls_warp_grad(int *m1, int *n1, double *ti, double *gami, double *qf, doub
 		gamout[k] = gam_ptr[k];
 	}
 
+	free(psi1);
+	free(gam2);
+	free(rfi_diff);
+	free(rgi_diff);
+	free(grad);
+	free(vec);
+	free(gamI);
+	free(tmp);
+	free(psi2);
+	free(xout);
+	free(qf_tmp);
+	free(qg_tmp);
+	free(rfi);
+	free(rgi);
+	free(qf_tmp_diff);
+	free(qg_tmp_diff);
+	free(gam1);
+	free(max_val);
 	free(tmp1);
 }
