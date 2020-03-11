@@ -11,4 +11,5 @@
 *.pyc
 /dist
 .vscode/settings.json
-fdasrsf.egg-info
+fdasrsf.egg-info\
+build
