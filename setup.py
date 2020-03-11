@@ -121,7 +121,7 @@ setup(
     scripts=['bin/ex_srsf_align.py'],
     keywords=['functional data analysis'],
     description='functional data analysis using the square root slope framework',
-    long_description=open('README.md').read(),
+    long_description=open('README.md', encoding="utf8").read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
     setup_requires=['wheel'],
     requires=[
