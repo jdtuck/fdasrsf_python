@@ -4,16 +4,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Elastic Principal Component Regression &#8212; fdasrsf 2.0.0 documentation</title>
+    <title>Elastic Principal Component Regression &#8212; fdasrsf 2.0.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="regression.html" title="Elastic Regression"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -46,7 +46,7 @@
             
   <div class="section" id="module-pcr_regression">
 <span id="elastic-principal-component-regression"></span><h1>Elastic Principal Component Regression<a class="headerlink" href="#module-pcr_regression" title="Permalink to this headline">¶</a></h1>
-<p>Warping PCR Invariant Regression using SRSF</p>
+<p>Warping Invariant PCR Regression using SRSF</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="class">
 <dt id="pcr_regression.elastic_lpcr_regression">
@@ -102,7 +102,7 @@ Usage:  obj.predict()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>newdata</strong> (<em>dict</em>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
 <li><p><strong>time</strong> – vector of time points</p></li>
 <li><p><strong>y</strong> – truth if available</p></li>
@@ -174,7 +174,7 @@ Usage:  obj.predict()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>newdata</strong> (<em>dict</em>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
 <li><p><strong>time</strong> – vector of time points</p></li>
 <li><p><strong>y</strong> – truth if available</p></li>
@@ -200,13 +200,12 @@ SRVF framework accounting for warping</p>
 <li><p><strong>y</strong> – response vector of length N</p></li>
 <li><p><strong>warp_data</strong> – fdawarp object of alignment</p></li>
 <li><p><strong>pca</strong> – class dependent on fPCA method used object of fPCA</p></li>
+<li><p><strong>alpha</strong> – intercept</p></li>
+<li><p><strong>b</strong> – coefficient vector</p></li>
+<li><p><strong>SSE</strong> – sum of squared errors</p></li>
 </ul>
 </dd>
 </dl>
-<p>:param information
-:param alpha: intercept
-:param b: coefficient vector
-:param SSE: sum of squared errors</p>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  18-Mar-2018</p>
 <dl class="method">
@@ -240,7 +239,7 @@ Usage:  obj.predict()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>newdata</strong> (<em>dict</em>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
 <li><p><strong>time</strong> – vector of time points</p></li>
 <li><p><strong>y</strong> – truth if available</p></li>
@@ -285,7 +284,7 @@ Usage:  obj.predict()</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -305,12 +304,12 @@ Usage:  obj.predict()</p>
         <li class="right" >
           <a href="regression.html" title="Elastic Regression"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>

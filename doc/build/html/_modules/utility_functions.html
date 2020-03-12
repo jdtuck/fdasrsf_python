@@ -4,16 +4,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>utility_functions &#8212; fdasrsf 2.0.0 documentation</title>
+    <title>utility_functions &#8212; fdasrsf 2.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -27,7 +27,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -45,15 +45,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">UnivariateSpline</span><span class="p">,</span> <span class="n">interp1d</span>
-<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="k">import</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">cumtrapz</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span><span class="p">,</span> <span class="n">cholesky</span><span class="p">,</span> <span class="n">inv</span>
-<span class="kn">from</span> <span class="nn">scipy.stats.mstats</span> <span class="k">import</span> <span class="n">mquantiles</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">finfo</span><span class="p">,</span> <span class="n">double</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">linspace</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">,</span> <span class="nb">round</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">diagflat</span><span class="p">,</span> <span class="n">inner</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span><span class="p">,</span> <span class="n">append</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">hstack</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">quantile</span><span class="p">,</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">UnivariateSpline</span><span class="p">,</span> <span class="n">interp1d</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">cumtrapz</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span><span class="p">,</span> <span class="n">cholesky</span><span class="p">,</span> <span class="n">inv</span>
+<span class="kn">from</span> <span class="nn">scipy.stats.mstats</span> <span class="kn">import</span> <span class="n">mquantiles</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">finfo</span><span class="p">,</span> <span class="n">double</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">linspace</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">,</span> <span class="nb">round</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ones</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">diagflat</span><span class="p">,</span> <span class="n">inner</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span><span class="p">,</span> <span class="n">append</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">hstack</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">quantile</span><span class="p">,</span> <span class="n">dot</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 <span class="kn">import</span> <span class="nn">optimum_reparamN2</span> <span class="k">as</span> <span class="nn">orN2</span>
 <span class="kn">import</span> <span class="nn">optimum_reparam_N</span> <span class="k">as</span> <span class="nn">orN</span>
@@ -168,7 +168,7 @@
 <span class="sd">    :param q1: vector of size N or array of NxM samples of first SRSF</span>
 <span class="sd">    :param time: vector of size N describing the sample points</span>
 <span class="sd">    :param q2: vector of size N or array of NxM samples samples of second SRSF</span>
-<span class="sd">    :param method: method to apply optimzation (default=&quot;DP&quot;) options are &quot;DP&quot;, &quot;DP2&quot; and &quot;RBFGS&quot;</span>
+<span class="sd">    :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot;, &quot;DP2&quot; and &quot;RBFGS&quot;</span>
 <span class="sd">    :param lam: controls the amount of elasticity (default = 0.0)</span>
 
 <span class="sd">    :rtype: vector</span>
@@ -269,7 +269,7 @@
     <span class="k">return</span> <span class="n">gam</span></div>
 
 
-<div class="viewcode-block" id="elastic_distance"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_distance">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="elastic_distance"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_distance">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;&quot;</span>
 <span class="sd">    calculates the distances between function, where f1 is aligned to</span>
 <span class="sd">    f2. In other words</span>
@@ -288,7 +288,7 @@
     <span class="n">q1</span> <span class="o">=</span> <span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
     <span class="n">q2</span> <span class="o">=</span> <span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
 
-    <span class="n">gam</span> <span class="o">=</span> <span class="n">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
+    <span class="n">gam</span> <span class="o">=</span> <span class="n">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
     <span class="n">fw</span> <span class="o">=</span> <span class="n">interp</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gam</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">f2</span><span class="p">)</span>
     <span class="n">qw</span> <span class="o">=</span> <span class="n">f_to_srsf</span><span class="p">(</span><span class="n">fw</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
 
@@ -491,7 +491,7 @@
 
         <span class="n">vbar</span> <span class="o">=</span> <span class="n">vtil</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dtil</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">vbar_norm</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">L2norm</span><span class="p">(</span><span class="n">vbar</span><span class="p">)</span>
-    
+
     <span class="n">vec</span> <span class="o">=</span> <span class="n">v</span>
     <span class="n">gam_median</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psi_median</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">initial</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
@@ -902,7 +902,7 @@
         <span class="n">j</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">result</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">f_domain</span><span class="o">/</span><span class="n">fourier_p</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">result</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">f_domain</span><span class="o">/</span><span class="n">fourier_p</span><span class="p">)</span>
 
@@ -938,7 +938,7 @@
     <span class="k">if</span> <span class="n">deriv</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">at</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">deriv</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">iterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
         <span class="n">fmod</span> <span class="o">=</span> <span class="n">iterp</span><span class="p">(</span><span class="n">at</span><span class="p">)</span>
@@ -946,7 +946,7 @@
         <span class="n">diffy2</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="n">diff</span><span class="p">(</span><span class="n">fmod</span><span class="p">),</span><span class="mi">0</span><span class="p">))</span>
         <span class="n">diffx1</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">diff</span><span class="p">(</span><span class="n">at</span><span class="p">)))</span>
         <span class="n">diffx2</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="n">diff</span><span class="p">(</span><span class="n">at</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
-    
+
         <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">diffy2</span> <span class="o">+</span> <span class="n">diffy1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">diffx2</span> <span class="o">+</span> <span class="n">diffx1</span><span class="p">)</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -963,7 +963,7 @@
 
 <span class="k">def</span> <span class="nf">norm_gam</span><span class="p">(</span><span class="n">gam</span><span class="p">):</span>
     <span class="n">gam</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam</span><span class="o">-</span><span class="n">gam</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">gam</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">gam</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>   
+    <span class="k">return</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -980,7 +980,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -994,13 +994,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>

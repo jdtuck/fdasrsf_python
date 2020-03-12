@@ -58,6 +58,7 @@
 \fvset{fontsize=\small}
 \usepackage{geometry}
 
+
 % Include hyperref last.
 \usepackage{hyperref}
 % Fix anchor placement for figures with captions.
@@ -71,8 +72,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{Oct 11, 2019}
-\release{2.0.0}
+\date{Mar 12, 2020}
+\release{2.0.1}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -89,13 +90,13 @@
 
 A python package for functional data analysis using the square root
 slope framework and curves using the square root velocity framework
-which performs pair-wise and group-wise alignment as well as modeling
+which performs pair\sphinxhyphen{}wise and group\sphinxhyphen{}wise alignment as well as modeling
 using functional component analysis and regression.
 
 
 \chapter{Functional Alignment}
 \label{\detokenize{time_warping:module-time_warping}}\label{\detokenize{time_warping:functional-alignment}}\label{\detokenize{time_warping::doc}}\index{time\_warping (module)@\spxentry{time\_warping}\spxextra{module}}
-Group-wise function alignment using SRSF framework and Dynamic Programming
+Group\sphinxhyphen{}wise function alignment using SRSF framework and Dynamic Programming
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{align\_fPCA() (in module time\_warping)@\spxentry{align\_fPCA()}\spxextra{in module time\_warping}}
@@ -130,20 +131,20 @@ The functions are aligned to the principal components
 tuple of numpy array
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
+aligned functions \sphinxhyphen{} numpy ndarray of shape (M,N) of N
 functions with M samples
 
 \item[{Return qn}] \leavevmode
-aligned srvfs - similar structure to fn
+aligned srvfs \sphinxhyphen{} similar structure to fn
 
 \item[{Return q0}] \leavevmode
-original srvf - similar structure to fn
+original srvf \sphinxhyphen{} similar structure to fn
 
 \item[{Return mqn}] \leavevmode
-srvf mean or median - vector of length M
+srvf mean or median \sphinxhyphen{} vector of length M
 
 \item[{Return gam}] \leavevmode
-warping functions - similar structure to fn
+warping functions \sphinxhyphen{} similar structure to fn
 
 \item[{Return q\_pca}] \leavevmode
 srsf principal directions
@@ -211,18 +212,18 @@ principal least squares
 tuple of numpy array
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
+aligned functions \sphinxhyphen{} numpy ndarray of shape (M,N) of N
 
 \end{description}\end{quote}
 
 functions with M samples
-:return gn: aligned functions - numpy ndarray of shape (M,N) of N
+:return gn: aligned functions \sphinxhyphen{} numpy ndarray of shape (M,N) of N
 functions with M samples
-:return qfn: aligned srvfs - similar structure to fn
-:return qgn: aligned srvfs - similar structure to fn
-:return qf0: original srvf - similar structure to fn
-:return qg0: original srvf - similar structure to fn
-:return gam: warping functions - similar structure to fn
+:return qfn: aligned srvfs \sphinxhyphen{} similar structure to fn
+:return qgn: aligned srvfs \sphinxhyphen{} similar structure to fn
+:return qf0: original srvf \sphinxhyphen{} similar structure to fn
+:return qg0: original srvf \sphinxhyphen{} similar structure to fn
+:return gam: warping functions \sphinxhyphen{} similar structure to fn
 :return wqf: srsf principal weight functions
 :return wqg: srsf principal weight functions
 :return wf: srsf principal weight functions
@@ -308,7 +309,7 @@ Usage:  obj = fdawarp(f,t)
 \end{description}\end{quote}
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  15-Mar-2018
+Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{gauss\_model() (time\_warping.fdawarp method)@\spxentry{gauss\_model()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
@@ -352,8 +353,8 @@ extracted from the principal components of the srsfs
 \index{multiple\_align\_functions() (time\_warping.fdawarp method)@\spxentry{multiple\_align\_functions()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.multiple_align_functions}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{multiple\_align\_functions}}}{\emph{mu}, \emph{omethod='DP'}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
-This function aligns a collection of functions using the elastic square-root
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.multiple_align_functions}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{multiple\_align\_functions}}}{\emph{mu}, \emph{omethod=\textquotesingle{}DP\textquotesingle{}}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+This function aligns a collection of functions using the elastic square\sphinxhyphen{}root
 slope (srsf) framework.
 \begin{description}
 \item[{Usage:  obj.multiple\_align\_functions(mu)}] \leavevmode
@@ -398,9 +399,9 @@ Usage: obj.plot()
 \index{srsf\_align() (time\_warping.fdawarp method)@\spxentry{srsf\_align()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.srsf_align}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{method='mean'}, \emph{omethod='DP'}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.srsf_align}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{method=\textquotesingle{}mean\textquotesingle{}}, \emph{omethod=\textquotesingle{}DP\textquotesingle{}}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
 This function aligns a collection of functions using the elastic
-square-root slope (srsf) framework.
+square\sphinxhyphen{}root slope (srsf) framework.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -457,13 +458,18 @@ The normal distributions occurs often in nature.  For example, it
 describes the commonly occurring distribution of samples influenced
 by a large number of tiny, random disturbances, each with its own
 unique distribution \sphinxfootnotemark[2].
+
+\begin{sphinxadmonition}{note}{Note:}
+New code should use the \sphinxcode{\sphinxupquote{normal}} method of a \sphinxcode{\sphinxupquote{default\_rng()}}
+instance instead; see \sphinxtitleref{random\sphinxhyphen{}quick\sphinxhyphen{}start}.
+\end{sphinxadmonition}
 \begin{description}
 \item[{loc}] \leavevmode{[}float or array\_like of floats{]}
 Mean (“centre”) of the distribution.
 
 \item[{scale}] \leavevmode{[}float or array\_like of floats{]}
 Standard deviation (spread or “width”) of the distribution. Must be
-non-negative.
+non\sphinxhyphen{}negative.
 
 \item[{size}] \leavevmode{[}int or tuple of ints, optional{]}
 Output shape.  If the given shape is, e.g., \sphinxcode{\sphinxupquote{(m, n, k)}}, then
@@ -483,6 +489,8 @@ cumulative density function, etc.
 
 \end{description}
 
+Generator.normal: which should be used for new code.
+
 The probability density for the Gaussian distribution is
 \begin{equation*}
 \begin{split}p(x) = \frac{1}{\sqrt{ 2 \pi \sigma^2 }}
@@ -495,8 +503,8 @@ is called the variance.
 The function has its peak at the mean, and its “spread” increases with
 the standard deviation (the function reaches 0.607 times its maximum at
 \(x + \sigma\) and \(x - \sigma\) \sphinxfootnotemark[2]).  This implies that
-\sphinxtitleref{numpy.random.normal} is more likely to return samples lying close to
-the mean, rather than those far away.
+normal is more likely to return samples lying close to the mean, rather
+than those far away.
 
 Draw samples from the distribution:
 
@@ -529,7 +537,7 @@ the probability density function:
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-Two-by-four array of samples from N(3, 6.25):
+Two\sphinxhyphen{}by\sphinxhyphen{}four array of samples from N(3, 6.25):
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mf}{2.5}\PYG{p}{,} \PYG{n}{size}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
@@ -546,10 +554,10 @@ Two-by-four array of samples from N(3, 6.25):
 This function aligns two functions using Bayesian framework. It will align
 f2 to f1. It is based on mapping warping functions to a hypersphere, and a
 subsequent exponential mapping to a tangent space. In the tangent space,
-the Z-mixture pCN algorithm is used to explore both local and global
+the Z\sphinxhyphen{}mixture pCN algorithm is used to explore both local and global
 structure in the posterior distribution.
 
-The Z-mixture pCN algorithm uses a mixture distribution for the proposal
+The Z\sphinxhyphen{}mixture pCN algorithm uses a mixture distribution for the proposal
 distribution, controlled by input parameter zpcn. The zpcn\$betas must be
 between 0 and 1, and are the coefficients of the mixture components, with
 larger coefficients corresponding to larger shifts in parameter space. The
@@ -612,7 +620,7 @@ Random values in a given shape.
 
 \begin{sphinxadmonition}{note}{Note:}
 This is a convenience function for users porting code from Matlab,
-and wraps \sphinxtitleref{numpy.random.random\_sample}. That function takes a
+and wraps \sphinxtitleref{random\_sample}. That function takes a
 tuple to specify the size of the output, which is consistent with
 other NumPy functions like \sphinxtitleref{numpy.zeros} and \sphinxtitleref{numpy.ones}.
 \end{sphinxadmonition}
@@ -622,7 +630,7 @@ random samples from a uniform distribution
 over \sphinxcode{\sphinxupquote{{[}0, 1)}}.
 \begin{description}
 \item[{d0, d1, …, dn}] \leavevmode{[}int, optional{]}
-The dimensions of the returned array, must be non-negative.
+The dimensions of the returned array, must be non\sphinxhyphen{}negative.
 If no argument is given a single Python float is returned.
 
 \end{description}
@@ -692,7 +700,7 @@ Usage:  obj = fdahpca(warp\_data)
 \end{description}\end{quote}
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  15-Mar-2018
+Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_fpca() (fPCA.fdahpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdahpca method}}
 
 \begin{fulllineitems}
@@ -760,7 +768,7 @@ Usage:  obj = fdajpca(warp\_data)
 \sphinxstyleliteralstrong{\sphinxupquote{latent}} \textendash{} latent values
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{coef}} \textendash{} prinicapl coefficients
+\sphinxstyleliteralstrong{\sphinxupquote{coef}} \textendash{} principal coefficients
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{id}} \textendash{} point used for f(0)
@@ -788,7 +796,7 @@ Usage:  obj = fdajpca(warp\_data)
 \end{description}\end{quote}
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  18-Mar-2018
+Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_fpca() (fPCA.fdajpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdajpca method}}
 
 \begin{fulllineitems}
@@ -863,7 +871,7 @@ Usage:  obj = fdavpca(warp\_data)
 \sphinxstyleliteralstrong{\sphinxupquote{latent}} \textendash{} latent values
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{coef}} \textendash{} prinicapl coefficients
+\sphinxstyleliteralstrong{\sphinxupquote{coef}} \textendash{} principal coefficients
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{id}} \textendash{} point used for f(0)
@@ -882,7 +890,7 @@ Usage:  obj = fdavpca(warp\_data)
 \end{description}\end{quote}
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  15-Mar-2018
+Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_fpca() (fPCA.fdavpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdavpca method}}
 
 \begin{fulllineitems}
@@ -988,13 +996,13 @@ Usage:  obj = ampbox(warp\_data)
 \end{description}\end{quote}
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  15-Mar-2018
+Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{construct\_boxplot() (boxplots.ampbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.ampbox method}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{boxplots:boxplots.ampbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{alpha=0.05}, \emph{k\_a=1}}{}
 This function constructs the amplitude boxplot using the elastic
-square-root slope (srsf) framework.
+square\sphinxhyphen{}root slope (srsf) framework.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -1060,13 +1068,13 @@ Usage:  obj = phbox(warp\_data)
 \end{description}\end{quote}
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  15-Mar-2018
+Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{construct\_boxplot() (boxplots.phbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.phbox method}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{boxplots:boxplots.phbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{alpha=0.05}, \emph{k\_a=1}}{}
 This function constructs phase boxplot for functional data using the elastic
-square-root slope (srsf) framework.
+square\sphinxhyphen{}root slope (srsf) framework.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -1154,16 +1162,16 @@ moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdt
 \index{elastic\_logistic() (in module regression)@\spxentry{elastic\_logistic()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.elastic_logistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_logistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{regression:regression.elastic_logistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_logistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=\sphinxhyphen{}1}, \emph{smooth=False}}{}
 This function identifies a logistic regression model with
-phase-variablity using elastic methods
+phase\sphinxhyphen{}variablity using elastic methods
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{f}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} numpy ndarray of shape (M,N) of N functions with M samples
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of labels (1/-1)
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} numpy array of labels (1/\sphinxhyphen{}1)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{time}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.ndarray}}) \textendash{} vector of size M describing the sample points
@@ -1172,7 +1180,7 @@ phase-variablity using elastic methods
 \sphinxstyleliteralstrong{\sphinxupquote{B}} \textendash{} optional matrix describing Basis elements
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B-spline (default 20)
+\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B\sphinxhyphen{}spline (default 20)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (default 20)
@@ -1192,12 +1200,12 @@ alpha parameter of model
 beta(t) of model
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of M
+aligned functions \sphinxhyphen{} numpy ndarray of shape (M,N) of M
 
 \end{description}\end{quote}
 
 functions with N samples
-:return qn: aligned srvfs - similar structure to fn
+:return qn: aligned srvfs \sphinxhyphen{} similar structure to fn
 :return gamma: calculated warping functions
 :return q: original training SRSFs
 :return B: basis matrix
@@ -1209,9 +1217,9 @@ functions with N samples
 \index{elastic\_mlogistic() (in module regression)@\spxentry{elastic\_mlogistic()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.elastic_mlogistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlogistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{delta=0.01}, \emph{parallel=True}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{regression:regression.elastic_mlogistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlogistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=\sphinxhyphen{}1}, \emph{delta=0.01}, \emph{parallel=True}, \emph{smooth=False}}{}
 This function identifies a multinomial logistic regression model with
-phase-variablity using elastic methods
+phase\sphinxhyphen{}variablity using elastic methods
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -1227,7 +1235,7 @@ phase-variablity using elastic methods
 \sphinxstyleliteralstrong{\sphinxupquote{B}} \textendash{} optional matrix describing Basis elements
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B-spline (default 20)
+\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B\sphinxhyphen{}spline (default 20)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (default 20)
@@ -1247,12 +1255,12 @@ alpha parameter of model
 beta(t) of model
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
+aligned functions \sphinxhyphen{} numpy ndarray of shape (M,N) of N
 
 \end{description}\end{quote}
 
 functions with M samples
-:return qn: aligned srvfs - similar structure to fn
+:return qn: aligned srvfs \sphinxhyphen{} similar structure to fn
 :return gamma: calculated warping functions
 :return q: original training SRSFs
 :return B: basis matrix
@@ -1266,7 +1274,7 @@ functions with M samples
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{regression:regression.elastic_prediction}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_prediction}}}{\emph{f}, \emph{time}, \emph{model}, \emph{y=None}, \emph{smooth=False}}{}
 This function performs prediction from an elastic regression model
-with phase-variablity
+with phase\sphinxhyphen{}variablity
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -1293,12 +1301,12 @@ alpha parameter of model
 beta(t) of model
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of N
+aligned functions \sphinxhyphen{} numpy ndarray of shape (M,N) of N
 
 \end{description}\end{quote}
 
 functions with M samples
-:return qn: aligned srvfs - similar structure to fn
+:return qn: aligned srvfs \sphinxhyphen{} similar structure to fn
 :return gamma: calculated warping functions
 :return q: original training SRSFs
 :return B: basis matrix
@@ -1310,8 +1318,8 @@ functions with M samples
 \index{elastic\_regression() (in module regression)@\spxentry{elastic\_regression()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.elastic_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{lam=0}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=-1}, \emph{smooth=False}}{}
-This function identifies a regression model with phase-variablity
+\phantomsection\label{\detokenize{regression:regression.elastic_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{lam=0}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=\sphinxhyphen{}1}, \emph{smooth=False}}{}
+This function identifies a regression model with phase\sphinxhyphen{}variablity
 using elastic methods
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1331,7 +1339,7 @@ using elastic methods
 \sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} regularization parameter (default 0)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B-spline (default 20)
+\sphinxstyleliteralstrong{\sphinxupquote{df}} \textendash{} number of degrees of freedom B\sphinxhyphen{}spline (default 20)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (default 20)
@@ -1351,12 +1359,12 @@ alpha parameter of model
 beta(t) of model
 
 \item[{Return fn}] \leavevmode
-aligned functions - numpy ndarray of shape (M,N) of M
+aligned functions \sphinxhyphen{} numpy ndarray of shape (M,N) of M
 
 \end{description}\end{quote}
 
 functions with N samples
-:return qn: aligned srvfs - similar structure to fn
+:return qn: aligned srvfs \sphinxhyphen{} similar structure to fn
 :return gamma: calculated warping functions
 :return q: original training SRSFs
 :return B: basis matrix
@@ -1459,7 +1467,7 @@ hessian of logistic loss
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{regression:regression.logit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_loss}}}{\emph{b}, \emph{X}, \emph{y}}{}
-logistic loss function, returns Sum\{-log(phi(t))\}
+logistic loss function, returns Sum\{\sphinxhyphen{}log(phi(t))\}
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -1515,7 +1523,7 @@ gradient
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{regression:regression.mlogit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_loss}}}{\emph{b}, \emph{X}, \emph{Y}}{}
-calculates multinomial logistic loss (negative log-likelihood)
+calculates multinomial logistic loss (negative log\sphinxhyphen{}likelihood)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -1533,7 +1541,7 @@ calculates multinomial logistic loss (negative log-likelihood)
 numpy array
 
 \item[{Return nll}] \leavevmode
-negative log-likelihood
+negative log\sphinxhyphen{}likelihood
 
 \end{description}\end{quote}
 
@@ -1542,7 +1550,7 @@ negative log-likelihood
 \index{mlogit\_warp\_grad() (in module regression)@\spxentry{mlogit\_warp\_grad()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.mlogit_warp_grad}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_warp\_grad}}}{\emph{alpha}, \emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{max\_itr=8000}, \emph{tol=1e-10}, \emph{delta=0.008}, \emph{display=0}}{}
+\phantomsection\label{\detokenize{regression:regression.mlogit_warp_grad}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_warp\_grad}}}{\emph{alpha}, \emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{max\_itr=8000}, \emph{tol=1e\sphinxhyphen{}10}, \emph{delta=0.008}, \emph{display=0}}{}
 calculates optimal warping for functional multinomial logistic regression
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1565,7 +1573,7 @@ calculates optimal warping for functional multinomial logistic regression
 \sphinxstyleliteralstrong{\sphinxupquote{max\_itr}} \textendash{} maximum number of iterations (Default=8000)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{tol}} \textendash{} stopping tolerance (Default=1e-10)
+\sphinxstyleliteralstrong{\sphinxupquote{tol}} \textendash{} stopping tolerance (Default=1e\sphinxhyphen{}10)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{delta}} \textendash{} gradient step size (Default=0.008)
@@ -1589,7 +1597,7 @@ warping function
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{regression:regression.phi}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{phi}}}{\emph{t}}{}
-calculates logistic function, returns 1 / (1 + exp(-t))
+calculates logistic function, returns 1 / (1 + exp(\sphinxhyphen{}t))
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
 \sphinxstyleliteralstrong{\sphinxupquote{t}} \textendash{} scalar
@@ -1644,7 +1652,7 @@ warping function
 
 \chapter{Elastic Principal Component Regression}
 \label{\detokenize{pcr_regression:module-pcr_regression}}\label{\detokenize{pcr_regression:elastic-principal-component-regression}}\label{\detokenize{pcr_regression::doc}}\index{pcr\_regression (module)@\spxentry{pcr\_regression}\spxextra{module}}
-Warping PCR Invariant Regression using SRSF
+Warping Invariant PCR Regression using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{elastic\_lpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_lpcr\_regression}\spxextra{class in pcr\_regression}}
@@ -1661,7 +1669,7 @@ Usage:  obj = elastic\_lpcr\_regression(f,y,time)
 \sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) \% matrix defining N functions of M samples
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N (-1/1)
+\sphinxstyleliteralstrong{\sphinxupquote{y}} \textendash{} response vector of length N (\sphinxhyphen{}1/1)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{warp\_data}} \textendash{} fdawarp object of alignment
@@ -1681,12 +1689,12 @@ Usage:  obj = elastic\_lpcr\_regression(f,y,time)
 :param ylabels: predicted labels
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  18-Mar-2018
+Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_model() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
-This function identifies a logistic regression model with phase-variability
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method=\textquotesingle{}combined\textquotesingle{}}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
+This function identifies a logistic regression model with phase\sphinxhyphen{}variability
 using elastic pca
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1789,12 +1797,12 @@ Usage:  obj = elastic\_mlpcr\_regression(f,y,time)
 :param
 
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  18-Mar-2018
+Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_model() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
-This function identifies a logistic regression model with phase-variability
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method=\textquotesingle{}combined\textquotesingle{}}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
+This function identifies a logistic regression model with phase\sphinxhyphen{}variability
 using elastic pca
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1890,22 +1898,26 @@ Usage:  obj = elastic\_pcr\_regression(f,y,time)
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{pca}} \textendash{} class dependent on fPCA method used object of fPCA
 
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} \textendash{} intercept
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{b}} \textendash{} coefficient vector
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{SSE}} \textendash{} sum of squared errors
+
 \end{itemize}
 
 \end{description}\end{quote}
 
-:param information
-:param alpha: intercept
-:param b: coefficient vector
-:param SSE: sum of squared errors
-
 Author :  J. D. Tucker (JDT) \textless{}jdtuck AT sandia.gov\textgreater{}
-Date   :  18-Mar-2018
+Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_model() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method='combined'}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
-This function identifies a regression model with phase-variability
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method=\textquotesingle{}combined\textquotesingle{}}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
+This function identifies a regression model with phase\sphinxhyphen{}variability
 using elastic pca
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2043,7 +2055,7 @@ fdawarp object
 Computes tolerance factor for multivariate normal
 
 Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
-Distributions, Communications in Statistics - Simulation and Computation, 35, 461\textendash{}478.
+Distributions, Communications in Statistics \sphinxhyphen{} Simulation and Computation, 35, 461\textendash{}478.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -2312,7 +2324,7 @@ covariance
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{geodesic:geodesic.find_basis_normal_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{find\_basis\_normal\_path}}}{\emph{alpha}, \emph{k=5}}{}
 computes orthonormalized basis vectors to the normal space at each of the
-k points (q-functions) of the path alpha
+k points (q\sphinxhyphen{}functions) of the path alpha
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -2420,7 +2432,7 @@ shape space, then projects to the closed shape manifold.
 numpy ndarray
 
 \item[{Return alpha}] \leavevmode
-a path between two q-functions
+a path between two q\sphinxhyphen{}functions
 
 \item[{Return beta}] \leavevmode
 a path between two curves
@@ -2462,7 +2474,7 @@ shape space, then projects to the closed shape manifold.
 numpy ndarray
 
 \item[{Return alpha}] \leavevmode
-a path between two q-functions
+a path between two q\sphinxhyphen{}functions
 
 \item[{Return beta}] \leavevmode
 a path between two curves
@@ -2477,7 +2489,7 @@ rotation matrix
 \index{path\_straightening() (in module geodesic)@\spxentry{path\_straightening()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.path_straightening}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{path\_straightening}}}{\emph{beta1}, \emph{beta2}, \emph{betamid}, \emph{init='rand'}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.path_straightening}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{path\_straightening}}}{\emph{beta1}, \emph{beta2}, \emph{betamid}, \emph{init=\textquotesingle{}rand\textquotesingle{}}, \emph{T=100}, \emph{k=5}}{}
 Perform path straigtening to find geodesic between two shapes in either
 the space of closed curves or the space of affine standardized curves.
 This algorithm follows the steps outlined in section 4.6 of the
@@ -2528,7 +2540,7 @@ energy
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{geodesic:geodesic.update_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{update\_path}}}{\emph{alpha}, \emph{beta}, \emph{gradE}, \emph{delta}, \emph{T=100}, \emph{k=5}}{}
-Update the path along the direction -gradE
+Update the path along the direction \sphinxhyphen{}gradE
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -2708,7 +2720,7 @@ matrix describing differential operator
 \index{elastic\_distance() (in module utility\_functions)@\spxentry{elastic\_distance()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.elastic_distance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_distance}}}{\emph{f1}, \emph{f2}, \emph{time}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.elastic_distance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_distance}}}{\emph{f1}, \emph{f2}, \emph{time}, \emph{method=\textquotesingle{}DP\textquotesingle{}}, \emph{lam=0.0}}{}
 ”
 calculates the distances between function, where f1 is aligned to
 f2. In other words
@@ -2746,7 +2758,7 @@ phase distance
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{utility_functions:utility_functions.f_K_fold}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_K\_fold}}}{\emph{Nobs}, \emph{K=5}}{}
-generates sample indices for K-fold cross validation
+generates sample indices for K\sphinxhyphen{}fold cross validation
 
 :param Nobs number of observations
 :param K number of folds
@@ -2755,7 +2767,7 @@ generates sample indices for K-fold cross validation
 numpy ndarray
 
 \item[{Return train}] \leavevmode
-train indexes (Nobs*(K-1)/K X K)
+train indexes (Nobs*(K\sphinxhyphen{}1)/K X K)
 
 \item[{Return test}] \leavevmode
 test indexes (Nobs*(1/K) X K)
@@ -2768,7 +2780,7 @@ test indexes (Nobs*(1/K) X K)
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{utility_functions:utility_functions.f_to_srsf}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_to\_srsf}}}{\emph{f}, \emph{time}, \emph{smooth=False}}{}
-converts f to a square-root slope function (SRSF)
+converts f to a square\sphinxhyphen{}root slope function (SRSF)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -2821,7 +2833,7 @@ right eigenvectors
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{utility_functions:utility_functions.gradient_spline}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{gradient\_spline}}}{\emph{time}, \emph{f}, \emph{smooth=False}}{}
-This function takes the gradient of f using b-spline smoothing
+This function takes the gradient of f using b\sphinxhyphen{}spline smoothing
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
@@ -2893,7 +2905,7 @@ inverse of gam
 \index{optimum\_reparam() (in module utility\_functions)@\spxentry{optimum\_reparam()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam}}}{\emph{q1}, \emph{time}, \emph{q2}, \emph{method='DP'}, \emph{lam=0.0}, \emph{f1o=0.0}, \emph{f2o=0.0}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam}}}{\emph{q1}, \emph{time}, \emph{q2}, \emph{method=\textquotesingle{}DP\textquotesingle{}}, \emph{lam=0.0}, \emph{f1o=0.0}, \emph{f2o=0.0}}{}
 calculates the warping to align srsf q2 to q1
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2907,7 +2919,7 @@ calculates the warping to align srsf q2 to q1
 \sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} vector of size N or array of NxM samples samples of second SRSF
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} method to apply optimzation (default=”DP”) options are “DP”, “DP2” and “RBFGS”
+\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} method to apply optimization (default=”DP”) options are “DP”, “DP2” and “RBFGS”
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} controls the amount of elasticity (default = 0.0)
@@ -3168,7 +3180,7 @@ warped srsf
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{utility_functions:utility_functions.zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{zero\_crossing}}}{\emph{Y}, \emph{q}, \emph{bt}, \emph{time}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
-finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+finds zero\sphinxhyphen{}crossing of optimal gamma, gam = s*gmax + (1\sphinxhyphen{}s)*gmin
 from elastic regression model
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3295,7 +3307,7 @@ srvf of curve
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{curve_functions:curve_functions.curve_zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_zero\_crossing}}}{\emph{Y}, \emph{beta}, \emph{bt}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
-finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
+finds zero\sphinxhyphen{}crossing of optimal gamma, gam = s*gmax + (1\sphinxhyphen{}s)*gmin
 from elastic curve regression model
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3886,45 +3898,45 @@ Huang, W. 2014, Optimization Algorithms on Riemannian Manifolds with
 Applications. Ph.D. Thesis, Florida State University.
 
 Srivastava, A., Wu, W., Kurtek, S., Klassen, E. and Marron, J. S. (2011).
-Registration of Functional Data Using Fisher-Rao Metric. arXiv:1103.3817v2
+Registration of Functional Data Using Fisher\sphinxhyphen{}Rao Metric. arXiv:1103.3817v2
 {[}math.ST{]}.
 
 Tucker, J. D., Wu, W. and Srivastava, A. (2013). Generative models for
 functional data using phase and amplitude separation. Computational Statistics
-and Data Analysis 61, 50-66.
+and Data Analysis 61, 50\sphinxhyphen{}66.
 
-J. D. Tucker, W. Wu, and A. Srivastava, “Phase-Amplitude Separation of
-Proteomics Data Using Extended Fisher-Rao Metric,” Electronic Journal of
-Statistics, Vol 8, no. 2. pp 1724-1733, 2014.
+J. D. Tucker, W. Wu, and A. Srivastava, “Phase\sphinxhyphen{}Amplitude Separation of
+Proteomics Data Using Extended Fisher\sphinxhyphen{}Rao Metric,” Electronic Journal of
+Statistics, Vol 8, no. 2. pp 1724\sphinxhyphen{}1733, 2014.
 
 J. D. Tucker, W. Wu, and A. Srivastava, “Analysis of signals under compositional
 noise With applications to SONAR data,” IEEE Journal of Oceanic Engineering, Vol
-29, no. 2. pp 318-330, Apr 2014.
+29, no. 2. pp 318\sphinxhyphen{}330, Apr 2014.
 
 Srivastava, A., Klassen, E., Joshi, S., Jermyn, I., (2011). Shape analysis of
 elastic curves in euclidean spaces. Pattern Analysis and Machine Intelligence,
-IEEE Transactions on 33 (7), 1415-1428.
+IEEE Transactions on 33 (7), 1415\sphinxhyphen{}1428.
 
 S. Kurtek, A. Srivastava, and W. Wu. Signal estimation under random
-time-warpings and nonlinear signal alignment. In Proceedings of Neural
+time\sphinxhyphen{}warpings and nonlinear signal alignment. In Proceedings of Neural
 Information Processing Systems (NIPS), 2011.
 
-Wen Huang, Kyle A. Gallivan, Anuj Srivastava, Pierre-Antoine Absil. “Riemannian
+Wen Huang, Kyle A. Gallivan, Anuj Srivastava, Pierre\sphinxhyphen{}Antoine Absil. “Riemannian
 Optimization for Elastic Shape Analysis”, Short version, The 21st International
 Symposium on Mathematical Theory of Networks and Systems (MTNS 2014).
 
 Cheng, W., Dryden, I. L., and Huang, X. (2016). Bayesian registration of functions
-and curves. Bayesian Analysis, 11(2), 447-475.
+and curves. Bayesian Analysis, 11(2), 447\sphinxhyphen{}475.
 
 W. Xie, S. Kurtek, K. Bharath, and Y. Sun, A geometric approach to visualization
 of variability in functional data, Journal of American Statistical Association 112
-(2017), pp. 979-993.
+(2017), pp. 979\sphinxhyphen{}993.
 
 Lu, Y., R. Herbei, and S. Kurtek, 2017: Bayesian registration of functions with a Gaussian process prior. Journal of
 Computational and Graphical Statistics, 26, no. 4, 894\textendash{}904.
 
 Lee, S. and S. Jung, 2017: Combined analysis of amplitude and phase variations
-in functional data. arXiv:1603.01775 {[}stat.ME{]}, 1-21.
+in functional data. arXiv:1603.01775 {[}stat.ME{]}, 1\sphinxhyphen{}21.
 
 J. D. Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal
 Component Regression,” Statistical Analysis and Data Mining, 10.1002/sam.11399, 2018.

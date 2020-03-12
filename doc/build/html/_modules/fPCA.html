@@ -4,16 +4,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>fPCA &#8212; fdasrsf 2.0.0 documentation</title>
+    <title>fPCA &#8212; fdasrsf 2.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -27,7 +27,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -47,10 +47,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">dot</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span>
-<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="k">import</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">cumtrapz</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">fminbound</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">cumtrapz</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">fminbound</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.plot_style</span> <span class="k">as</span> <span class="nn">plot</span>
 <span class="kn">import</span> <span class="nn">collections</span>
@@ -60,24 +60,24 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides vertical fPCA using the</span>
 <span class="sd">    SRVF framework</span>
-<span class="sd">    </span>
+
 <span class="sd">    Usage:  obj = fdavpca(warp_data)</span>
-<span class="sd">    </span>
+
 <span class="sd">    :param warp_data: fdawarp class with alignment data</span>
 <span class="sd">    :param q_pca: srvf principal directions</span>
 <span class="sd">    :param f_pca: f principal directions</span>
 <span class="sd">    :param latent: latent values</span>
-<span class="sd">    :param coef: prinicapl coefficients</span>
+<span class="sd">    :param coef: principal coefficients</span>
 <span class="sd">    :param id: point used for f(0)</span>
 <span class="sd">    :param mqn: mean srvf</span>
 <span class="sd">    :param U: eigenvectors</span>
 <span class="sd">    :param stds: geodesic directions</span>
-<span class="sd">    </span>
+
 <span class="sd">    Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;</span>
 <span class="sd">    Date   :  15-Mar-2018</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdavpca class</span>
 <span class="sd">        :param fdawarp: fdawarp class</span>
@@ -86,7 +86,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please align fdawarp class using srsf_align!&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span> <span class="o">=</span> <span class="n">fdawarp</span>
-    
+
 <div class="viewcode-block" id="fdavpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdavpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function calculates vertical functional principal component analysis</span>
@@ -152,16 +152,17 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N2</span><span class="p">):</span>
                 <span class="n">c</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">l</span><span class="p">],</span> <span class="n">m_new</span><span class="p">[</span><span class="n">l</span><span class="p">])</span> <span class="o">-</span> <span class="n">mqn</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span> <span class="o">=</span> <span class="n">q_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span> <span class="o">=</span> <span class="n">f_pca</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">latent</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latent</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">c</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">mididx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mqn</span> <span class="o">=</span> <span class="n">mqn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stds</span> <span class="o">=</span> <span class="n">coef</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">no</span> <span class="o">=</span> <span class="n">no</span>
 
         <span class="k">return</span></div>
 
@@ -171,9 +172,10 @@
 <span class="sd">        Usage: obj.plot()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">no</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span>
         <span class="n">Nstd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
         <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
             <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -185,23 +187,36 @@
             <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">cl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CBcdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">no</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
-            <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
-                <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_plot</span><span class="p">):</span>
 
-            <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;q domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
-                <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">break</span>
 
-            <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;f domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+                <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">break</span>
+
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+                    <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;q domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+                <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+                    <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;f domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">cumm_coef</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">cumm_coef</span><span class="p">,</span> <span class="s2">&quot;Coefficient Cumulative Percentage&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Percentage&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Index&quot;</span><span class="p">)</span>
@@ -230,7 +245,7 @@
 <span class="sd">    Date   :  15-Mar-2018</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdavpca class</span>
 <span class="sd">        :param fdawarp: fdawarp class</span>
@@ -239,7 +254,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please align fdawarp class using srsf_align!&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span> <span class="o">=</span> <span class="n">fdawarp</span>
-    
+
 <div class="viewcode-block" id="fdahpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdahpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function calculates horizontal functional principal component analysis on aligned data</span>
@@ -267,7 +282,7 @@
         <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
         <span class="n">vm</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="n">gam_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">tau</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">gam_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">tau</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">psi_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">tau</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tau</span><span class="p">:</span>
@@ -278,16 +293,15 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">psi_pca</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">vn</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">vn</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">vn</span>
 
-                <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">TT</span><span class="p">)</span>
-                <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">TT</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">psi_pca</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">psi_pca</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psi_pca</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">psi_pca</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">TT</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">gam_pca</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        
+
         <span class="n">N2</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="n">no</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">no</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N2</span><span class="p">):</span>
                 <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">vm</span><span class="p">,</span><span class="n">U</span><span class="p">[:,</span><span class="n">k</span><span class="p">]))</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">gam_pca</span> <span class="o">=</span> <span class="n">gam_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">psi_pca</span> <span class="o">=</span> <span class="n">psi_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span>
@@ -309,6 +323,7 @@
 
         <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span>
         <span class="n">TT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
         <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
             <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -319,18 +334,29 @@
             <span class="s1">&#39;Ve&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
             <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">no</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
-            <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gam_pca</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">TT</span><span class="p">),</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
-            <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">axt</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_plot</span><span class="p">):</span>
 
-        <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">break</span>
 
-        <span class="n">cumm_coef</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">TT</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+                <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">k1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">break</span>
+
+                <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gam_pca</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">]</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">TT</span><span class="p">),</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">cumm_coef</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">])</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">])</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">cumm_coef</span><span class="p">,</span> <span class="s2">&quot;Coefficient Cumulative Percentage&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Percentage&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Index&quot;</span><span class="p">)</span>
@@ -342,14 +368,14 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides joint fPCA using the</span>
 <span class="sd">    SRVF framework</span>
-<span class="sd">    </span>
+
 <span class="sd">    Usage:  obj = fdajpca(warp_data)</span>
-<span class="sd">    </span>
+
 <span class="sd">    :param warp_data: fdawarp class with alignment data</span>
 <span class="sd">    :param q_pca: srvf principal directions</span>
 <span class="sd">    :param f_pca: f principal directions</span>
 <span class="sd">    :param latent: latent values</span>
-<span class="sd">    :param coef: prinicapl coefficients</span>
+<span class="sd">    :param coef: principal coefficients</span>
 <span class="sd">    :param id: point used for f(0)</span>
 <span class="sd">    :param mqn: mean srvf</span>
 <span class="sd">    :param U: eigenvectors</span>
@@ -357,12 +383,12 @@
 <span class="sd">    :param mu_g: mean g</span>
 <span class="sd">    :param C: scaling value</span>
 <span class="sd">    :param stds: geodesic directions</span>
-<span class="sd">    </span>
+
 <span class="sd">    Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;</span>
 <span class="sd">    Date   :  18-Mar-2018</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdavpca class</span>
 <span class="sd">        :param fdawarp: fdawarp class</span>
@@ -371,7 +397,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please align fdawarp class using srsf_align!&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span> <span class="o">=</span> <span class="n">fdawarp</span>
-    
+
 <div class="viewcode-block" id="fdajpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdajpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function calculates joint functional principal component analysis</span>
@@ -421,7 +447,7 @@
         <span class="c1"># geodesic paths</span>
         <span class="n">q_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">,</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">f_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">,</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        
+
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
                 <span class="n">qhat</span> <span class="o">=</span> <span class="n">mqn</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">k</span><span class="p">],</span><span class="n">coef</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
@@ -431,7 +457,7 @@
                 <span class="n">gamhat</span> <span class="o">=</span> <span class="p">(</span><span class="n">gamhat</span> <span class="o">-</span> <span class="n">gamhat</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamhat</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gamhat</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">vechat</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
                     <span class="n">gamhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
-                
+
                 <span class="n">fhat</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">]</span><span class="o">*</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">]),</span> <span class="n">mididx</span><span class="p">)</span>
                 <span class="n">f_pca</span><span class="p">[:,</span><span class="n">l</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_f_gamma</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">),</span> <span class="n">fhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">)</span>
                 <span class="n">q_pca</span><span class="p">[:,</span><span class="n">l</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">),</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">],</span> <span class="n">gamhat</span><span class="p">)</span>
@@ -449,10 +475,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">g</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cov</span> <span class="o">=</span> <span class="n">cov</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">no</span> <span class="o">=</span> <span class="n">no</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Nstd</span> <span class="o">=</span> <span class="n">coef</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stds</span> <span class="o">=</span> <span class="n">coef</span>
 
         <span class="k">return</span></div>
-    
+
 <div class="viewcode-block" id="fdajpca.plot"><a class="viewcode-back" href="../fPCA.html#fPCA.fdajpca.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot plot elastic vertical fPCA result</span>
@@ -461,6 +487,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span>
         <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Nstd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
         <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
             <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -472,19 +500,32 @@
             <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">cl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CBcdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">no</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
-            <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nstd</span><span class="p">):</span>
-                <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_plot</span><span class="p">):</span>
 
-            <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;q domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nstd</span><span class="p">):</span>
-                <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">break</span>
 
-            <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;f domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+                <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">break</span>
+
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+                    <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;q domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+                <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
+                    <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;f domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">cumm_coef</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
@@ -522,7 +563,7 @@
         <span class="n">psihat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span><span class="n">vechat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">])</span>
         <span class="n">gam_tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psihat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span><span class="o">*</span><span class="n">psihat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">gamhat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam_tmp</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gam_tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
-    
+
     <span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">]</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">]</span>
 
@@ -557,7 +598,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -571,13 +612,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>
