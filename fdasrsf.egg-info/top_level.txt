@@ -1,9 +1,0 @@
-cbayesian
-fdasrsf
-fpls_warp
-mlogit_warp
-oclogit_warp
-ocmlogit_warp
-optimum_reparamN2
-optimum_reparam_N
-optimum_reparam_Ng
