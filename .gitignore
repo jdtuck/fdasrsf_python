@@ -10,6 +10,6 @@
 *.toc
 *.pyc
 /dist
-fdasrsf.egg-info\
+fdasrsf.egg-info/
 build
 .vscode/
