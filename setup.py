@@ -2,6 +2,8 @@ import numpy
 import sys, os
 import platform
 import setuptools
+import findblas
+from findblas.distutils import build_ext_with_blas
 from distutils.core import setup
 from distutils.core import Command
 from distutils.extension import Extension
@@ -37,25 +39,24 @@ class build_docs(Command):
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
 
-try:
-    blas_path = numpy.distutils.system_info.get_info('blas')['library_dirs'][0]
-except:
-    if "library_dirs" in numpy.__config__.blas_mkl_info:
-        blas_path = numpy.__config__.blas_mkl_info["library_dirs"][0]
-    elif "library_dirs" in numpy.__config__.blas_opt_info:
-        blas_path = numpy.__config__.blas_opt_info["library_dirs"][0]
-    else:
-        raise ValueError("Could not locate BLAS library.")
-
 gropt_src = []
 for file in os.listdir("src/gropt/src/"):
     if file.endswith(".cpp"):
         gropt_src.append(os.path.join("src/gropt/src/", file))
 gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
 os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
-extra_args_mac = ['-lblas', '-llapack', '-std=c++11']
-if platform.system() == 'Darwin':
-    extra_args_mac = ['-stdlib=libc++']
+class build_ext_subclass( build_ext_with_blas ):
+    def build_extensions(self):
+        compiler = self.compiler.compiler_type
+        if compiler == 'msvc': # visual studio
+            for e in self.extensions:
+                e.extra_compile_args += ['/O2']
+        else: # everything else that cares about following standards
+            for e in self.extensions:
+                if platform.system() == 'Darwin':
+                    e.extra_compile_args += ['-stdlib=libc++']
+
+        build_ext_with_blas.build_extensions(self)
 
 extensions = [
 	Extension(name="optimum_reparamN2",
@@ -92,24 +93,18 @@ extensions = [
     Extension(name="optimum_reparam_Ng",
         sources=gropt_src,
         include_dirs=[numpy.get_include(), "src/gropt/incl/"],
-        language="c++",
-        libraries=["blas","lapack"],
-        extra_compile_args=extra_args_mac,
-        extra_link_args=extra_args_mac
+        language="c++"
     ),
     Extension(name="cbayesian",
         sources=["src/cbayesian.pyx", "src/bayesian.cpp"],
         include_dirs=[numpy.get_include()],
-        language="c++",
-        libraries=["blas","lapack"],
-        extra_compile_args=extra_args_mac,
-        extra_link_args=extra_args_mac
+        language="c++"
     ),
 ]
 
 
 setup(
-    cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
+    cmdclass={'build_ext': build_ext_subclass, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
     version='2.0.0',

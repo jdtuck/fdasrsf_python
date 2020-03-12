@@ -459,11 +459,24 @@ void invertGamma(int n, double *gam, double *out) {
 
 void SqrtMeanInverse(int *T1, int *n1, double *ti, double *gami, double *out){
     int T = *T1, n = *n1;
-    double psi[T*n], gam[T*n], mu[T], vec[T*n], v[T], y[T], tmpi, len, vm[T], mnpsi[T], dqq[n];
-    double eps = DBL_EPSILON, tmpv[T], min = 0.0, binsize, tmp, gam_mu[T];
-    int k, iter, l, n2 = 1, min_ind = 0;
     int maxiter = 30, tt = 1;
-    double lvm[maxiter];
+    const int size_array = T*n;
+    double *psi = malloc(sizeof(double)*size_array);
+    double *gam = malloc(sizeof(double)*size_array);
+    double *mu = malloc(sizeof(double)*T);
+    double *vec = malloc(sizeof(double)*size_array);
+    double *v = malloc(sizeof(double)*T);
+    double *y = malloc(sizeof(double)*T);
+    double *vm = malloc(sizeof(double)*T);
+    double *mnpsi = malloc(sizeof(double)*T);
+    double *dqq = malloc(sizeof(double)*n);
+    double *tmpv = malloc(sizeof(double)*T);
+    double *gam_mu = malloc(sizeof(double)*T);
+    double *lvm = malloc(sizeof(double)*maxiter);
+    double tmpi, len;
+    double eps = DBL_EPSILON, min = 0.0, binsize, tmp;
+    int k, iter, l, n2 = 1, min_ind = 0;
+   
     double *x = malloc(sizeof(double)*(T));
 
     for (k=0; k<maxiter; k++)
@@ -595,6 +608,18 @@ void SqrtMeanInverse(int *T1, int *n1, double *ti, double *gami, double *out){
 
     invertGamma(T, gam_mu_ptr, out);
 
+    free(psi);
+    free(gam);
+    free(mu);
+    free(vec);
+    free(v);
+    free(y);
+    free(vm);
+    free(mnpsi);
+    free(dqq);
+    free(tmpv);
+    free(gam_mu);
+    free(lvm);
     free(x);
     return;
 }
@@ -625,7 +650,10 @@ void group_action_by_gamma(int *n1, int *T1, double *q, double *gam, double *qn)
     double dt = 1.0/T, max=1, min=0;
     int j, k;
     double val;
-    double gammadot[T], ti[T], tmp[T], tmp1[T];
+    double *gammadot = malloc(sizeof(double)*T);
+    double *ti = malloc(sizeof(double)*T);
+    double *tmp = malloc(sizeof(double)*T);
+    double *tmp1 = malloc(sizeof(double)*T);
     double *gammadot_ptr, *time_ptr, *tmp_ptr, *tmp1_ptr;
 
     time_ptr = ti;
@@ -648,6 +676,12 @@ void group_action_by_gamma(int *n1, int *T1, double *q, double *gam, double *qn)
 
     for (k=0; k<T*n; k++)
         qn[k] = qn[k] / sqrt(val);
+    
+
+    free(gammadot);
+    free(ti);
+    free(tmp);
+    free(tmp1);
 
     return;
 }

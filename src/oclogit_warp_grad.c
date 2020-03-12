@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES // for C
 #include <math.h>
 #include <float.h>
 #include <stdio.h>
@@ -20,10 +21,25 @@ void oclogit_warp_grad(int *n1, int *T1, double *alpha, double *nu, double *q, i
 	int p1 = 10;
 	int itr = 0;
 	double binsize1 = 1.0;
-	double t[TT], gam1[TT], ones[TT], O1[4], f_basis[TT*p], q_tilde[TT*n];
-	double O_tmp[4], q_tmp[TT*n], O2[4], q_tilde_diff[TT*n], cbar[TT];
-	double ftmp[TT], c[TT], tmp5[TT*p], hpsi[TT], psi[TT], gam2[TT];
-	double gam_tmp[TT], max_val[max_itr+1], tmp7[TT];
+	double *t = malloc(sizeof(double) * TT);
+	double *gam1 = malloc(sizeof(double) * TT);
+	double *ones = malloc(sizeof(double) * TT);
+	double *f_basis = malloc(sizeof(double) * TT*p);
+	double *q_tilde = malloc(sizeof(double) * TT*n);
+	double *q_tmp = malloc(sizeof(double) * TT*n);
+	double *q_tilde_diff = malloc(sizeof(double) * TT*n);
+	double *cbar = malloc(sizeof(double) * TT);
+	double *ftmp = malloc(sizeof(double) * TT);
+	double *c = malloc(sizeof(double) * TT);
+	double *tmp5 = malloc(sizeof(double) * TT*p);
+	double *hpsi = malloc(sizeof(double) * TT);
+	double *psi = malloc(sizeof(double) * TT);
+	double *gam2 = malloc(sizeof(double) * TT);
+	double *gam_tmp = malloc(sizeof(double) * TT);
+	double *max_val = malloc(sizeof(double) * (max_itr+1));
+	double *tmp7 = malloc(sizeof(double) * TT);
+	double O1[4];
+	double O_tmp[4], O2[4];
 	double binsize, A, theta, B, tmp1, tmp2, thetanew, tmpi;
 	double max_val_change, res_cos, res_sin, hO;
 
@@ -196,5 +212,23 @@ void oclogit_warp_grad(int *n1, int *T1, double *alpha, double *nu, double *q, i
 	for (k=0; k<n*n; k++){
 		Oout[k] = O1_ptr[k];
 	}
+
+	free(t);
+	free(gam1);
+	free(ones);
+	free(f_basis);
+	free(q_tilde);
+	free(q_tmp);
+	free(q_tilde_diff);
+	free(cbar);
+	free(ftmp);
+	free(c);
+	free(tmp5);
+	free(hpsi);
+	free(psi);
+	free(gam2);
+	free(gam_tmp);
+	free(max_val);
+	free(tmp7);
 
 }

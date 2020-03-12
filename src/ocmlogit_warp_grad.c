@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES // for C
 #include <math.h>
 #include <float.h>
 #include <stdio.h>
@@ -21,13 +22,31 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 	int p1 = 10;
 	int itr = 0;
 	double binsize1 = 1.0;
-	double t[TT], O1[4], O2[4], binsize, E[4], A[m], O_tmp[4];
-	double gam1[TT], f_basis[TT*p], max_val[max_itr+1];
-	double q_tilde[TT*n], B[m], q_tmp[TT*n];
-	double tmpi, tmp1, tmp2[m], tmp3, tmp4, tmpi1;
-	double hO, q_tilde_diff[TT*n], c[TT*m], cbar[TT], ftmp[TT];
-	double tmp5[TT*p], tmp6[TT*m], tmp7[TT], tmp8[TT*m];
-	double hpsi[TT], ones[TT], psi[TT], gam2[TT], gam_tmp[TT];
+	double *t = malloc(sizeof(double) * TT);
+	double *A = malloc(sizeof(double) * m);
+	double *gam1 = malloc(sizeof(double) * TT);
+	double *f_basis = malloc(sizeof(double) * TT*p);
+	double *max_val = malloc(sizeof(double) * (max_itr+1));
+	double *q_tilde = malloc(sizeof(double) * TT*n);
+	double *B = malloc(sizeof(double) * m);
+	double *q_tmp = malloc(sizeof(double) * TT*n);
+	double *tmp2 = malloc(sizeof(double) * m);
+	double *q_tilde_diff = malloc(sizeof(double) * TT*n);
+	double *c = malloc(sizeof(double) * TT*m);
+	double *cbar = malloc(sizeof(double) * TT);
+	double *ftmp = malloc(sizeof(double) * TT);
+	double *tmp5 = malloc(sizeof(double) * TT*p);
+	double *tmp6 = malloc(sizeof(double) * TT*m);
+	double *tmp7 = malloc(sizeof(double) * TT);
+	double *tmp8 = malloc(sizeof(double) * TT*m);
+	double *hpsi = malloc(sizeof(double) * TT);
+	double *ones = malloc(sizeof(double) * TT);
+	double *psi = malloc(sizeof(double) * TT);
+	double *gam2 = malloc(sizeof(double) * TT);
+	double *gam_tmp = malloc(sizeof(double) * TT);
+	double O1[4], O2[4], binsize, E[4], O_tmp[4];
+	double tmpi, tmp1, tmp3, tmp4, tmpi1;
+	double hO;
 	double max_val_change, res_cos, res_sin, theta, thetanew;
 
 	// Pointers
@@ -272,5 +291,29 @@ void ocmlogit_warp_grad(int *n1, int *T1, int *m1, double *alpha, double *nu, do
 	for (k=0; k<n*n; k++){
 		Oout[k] = O1_ptr[k];
 	}
+
+
+	free(t);
+	free(A);
+	free(gam1);
+	free(f_basis);
+	free(max_val);
+	free(q_tilde);
+	free(B);
+	free(q_tmp);
+	free(tmp2);
+	free(q_tilde_diff);
+	free(c);
+	free(cbar);
+	free(ftmp);
+	free(tmp5);
+	free(tmp6);
+	free(tmp7);
+	free(tmp8);
+	free(hpsi);
+	free(ones);
+	free(psi);
+	free(gam2);
+	free(gam_tmp);
 
 }
