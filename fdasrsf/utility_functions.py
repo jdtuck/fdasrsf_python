@@ -37,11 +37,12 @@ def smooth_data(f, sparam):
     M = f.shape[0]
     N = f.shape[1]
 
+    fo = np.zeros((M,N))
     for k in range(1, sparam):
         for r in range(0, N):
-            f[1:(M - 2), r] = (f[0:(M - 3), r] + 2 * f[1:(M - 2), r] +
+            fo[1:(M - 2), r] = (f[0:(M - 3), r] + 2 * f[1:(M - 2), r] +
                                f[2:(M - 1), r]) / 4
-    return f
+    return fo
 
 
 def gradient_spline(time, f, smooth=False):
