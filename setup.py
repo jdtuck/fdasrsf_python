@@ -56,7 +56,7 @@ class build_ext_subclass( build_ext_with_blas ):
                 if platform.system() == 'Darwin':
                     e.extra_compile_args += ['-stdlib=libc++']
                 else:
-                    e.extra_compile_args += ['std=c++11']
+                    e.extra_compile_args += ['-std=c++11']
 
         build_ext_with_blas.build_extensions(self)
 
