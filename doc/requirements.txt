@@ -1,3 +1,4 @@
+findblas
 numpy
 scipy
 matplotlib
