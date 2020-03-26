@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Mar 12, 2020" "2.0" "fdasrsf"
+.TH "FDASRSF" "1" "Mar 26, 2020" "2.0" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -58,7 +58,7 @@ The functions are aligned to the principal components
 .IP \(bu 2
 \fBshowplot\fP \-\- Shows plots of results using matplotlib (default = T)
 .IP \(bu 2
-\fBsmooth_data\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmooth_data\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
 \fBsparam\fP (\fIdouble\fP) \-\- Number of times to run box filter (default = 25)
 .UNINDENT
@@ -127,7 +127,7 @@ principal least squares
 .IP \(bu 2
 \fBshowplot\fP \-\- Shows plots of results using matplotlib (default = T)
 .IP \(bu 2
-\fBsmooth_data\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmooth_data\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
 \fBdelta\fP \-\- gradient step size
 .IP \(bu 2
@@ -224,7 +224,7 @@ extracted from the principal components of the srvfs
 .IP \(bu 2
 \fBn\fP (\fIinteger\fP) \-\- number of random samples
 .IP \(bu 2
-\fBsort_samples\fP (\fI\%bool\fP) \-\- sort samples (default = T)
+\fBsort_samples\fP (\fIbool\fP) \-\- sort samples (default = T)
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -265,7 +265,7 @@ obj.multiple_align_functions(lambda, ...)
 .IP \(bu 2
 \fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
 .IP \(bu 2
-\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmoothdata\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
 \fBparallel\fP \-\- run in parallel (default = F)
 .IP \(bu 2
@@ -294,7 +294,7 @@ square\-root slope (srsf) framework.
 .IP \(bu 2
 \fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
 .IP \(bu 2
-\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmoothdata\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
 \fBparallel\fP \-\- run in parallel (default = F)
 .IP \(bu 2
@@ -591,7 +591,7 @@ This function calculates horizontal functional principal component analysis on a
 .INDENT 7.0
 .TP
 .B Parameters
-\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
+\fBno\fP (\fIint\fP) \-\- number of components to extract (default = 3)
 .TP
 .B Return type
 fdahpca object of numpy ndarray
@@ -670,9 +670,9 @@ on aligned data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
+\fBno\fP (\fIint\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
-\fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
+\fBid\fP (\fIint\fP) \-\- point to use for f(0) (default = midpoint)
 .UNINDENT
 .TP
 .B Return type
@@ -746,9 +746,9 @@ on aligned data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
+\fBno\fP (\fIint\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
-\fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
+\fBid\fP (\fIint\fP) \-\- point to use for f(0) (default = midpoint)
 .UNINDENT
 .TP
 .B Return type
@@ -1422,7 +1422,7 @@ obj.predict(newdata)
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\fBnewdata\fP (\fIdict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
 .IP \(bu 2
 \fBf\fP \-\- (M,N) matrix of functions
 .IP \(bu 2
@@ -1515,7 +1515,7 @@ obj.predict(newdata)
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\fBnewdata\fP (\fIdict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
 .IP \(bu 2
 \fBf\fP \-\- (M,N) matrix of functions
 .IP \(bu 2
@@ -1600,7 +1600,7 @@ obj.predict(newdata)
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\fBnewdata\fP (\fIdict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
 .IP \(bu 2
 \fBf\fP \-\- (M,N) matrix of functions
 .IP \(bu 2
