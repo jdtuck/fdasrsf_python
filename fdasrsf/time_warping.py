@@ -71,7 +71,7 @@ class fdawarp:
         self.rsamps = False
     
 
-    def srsf_align(self, method="mean", omethod="DP", smoothdata=False, parallel=False, lam=0.0):
+    def srsf_align(self, method="mean", omethod="DP", smoothdata=False, parallel=False, lam=0.0, cores=-1):
         """
         This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
@@ -81,6 +81,7 @@ class fdawarp:
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
+        :param cores: number of cores for parallel (default = -1 (all))
         :type lam: double
         :type smoothdata: bool
 
@@ -132,7 +133,7 @@ class fdawarp:
         mf = f[:, min_ind]
 
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, self.time,
+            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
                                     q[:, n], omethod, lam, mf[0], f[0,n]) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
@@ -175,7 +176,7 @@ class fdawarp:
 
             # Matching Step
             if parallel:
-                out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r],
+                out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r],
                                         self.time, q[:, n, 0], omethod, lam, mf[0,r],
                                         f[0,n,0] ) for n in range(N))
                 gam = np.array(out)
@@ -242,7 +243,7 @@ class fdawarp:
         # Last Step with centering of gam
         r += 1
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
+            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
                 q[:, n, 0], omethod, lam, mf[0,r], f[0,n,0]) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
@@ -486,7 +487,7 @@ class fdawarp:
 
         return
 
-    def multiple_align_functions(self, mu, omethod="DP", smoothdata=False, parallel=False, lam=0.0):
+    def multiple_align_functions(self, mu, omethod="DP", smoothdata=False, parallel=False, lam=0.0, cores=-1):
         """
         This function aligns a collection of functions using the elastic square-root
         slope (srsf) framework.
@@ -500,6 +501,7 @@ class fdawarp:
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
+        :param cores: number of cores for parallel (default = -1 (all))
         :type lam: double
         :type smoothdata: bool
 
@@ -525,7 +527,7 @@ class fdawarp:
         mq = uf.f_to_srsf(mu, self.time)
 
         if parallel:
-            out = Parallel(n_jobs=-1)(delayed(uf.optimum_reparam)(mq, self.time,
+            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
                                     q[:, n], omethod, lam, mu[0], f[0,n]) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
@@ -818,7 +820,7 @@ def f_updateg_pw(g_coef_curr,g_basis,var1_curr,q1,q2,SSE_curr,propose_g_coef):
 
     return g_coef, logl, SSE, accept, zpcnInd
 
-def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
+def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     """
     aligns a collection of functions while extracting principal components.
     The functions are aligned to the principal components
@@ -828,7 +830,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
     :param num_comp: number of fPCA components
     :param showplot: Shows plots of results using matplotlib (default = T)
     :param smooth_data: Smooth the data using a box filter (default = F)
-    :param sparam: Number of times to run box filter (default = 25)
+    :param cores: number of cores for parallel (default = -1 (all))
     :type sparam: double
     :type smooth_data: bool
     :type f: np.ndarray
@@ -917,7 +919,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False):
 
         # Matching Step
         if parallel:
-            out = Parallel(n_jobs=-1)(
+            out = Parallel(n_jobs=cores)(
                 delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr],
                                             "DP", lam) for n in range(N))
             gam_t = np.array(out)
