@@ -178,8 +178,8 @@ class fdavpca:
         N = self.latent.shape[0]
         idx = np.arange(0, N) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
-        plt.xlabel("Percentage")
-        plt.ylabel("Index")
+        plt.ylabel("Percentage")
+        plt.xlabel("Index")
         plt.show()
 
         return
