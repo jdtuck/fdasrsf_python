@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Mar 26, 2020" "2.0" "fdasrsf"
+.TH "FDASRSF" "1" "Aug 22, 2020" "2.0" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -42,7 +42,7 @@ Group\-wise function alignment using SRSF framework and Dynamic Programming
 moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B time_warping.align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False)
+.B time_warping.align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=\- 1)
 aligns a collection of functions while extracting principal components.
 The functions are aligned to the principal components
 .INDENT 7.0
@@ -58,9 +58,9 @@ The functions are aligned to the principal components
 .IP \(bu 2
 \fBshowplot\fP \-\- Shows plots of results using matplotlib (default = T)
 .IP \(bu 2
-\fBsmooth_data\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmooth_data\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
-\fBsparam\fP (\fIdouble\fP) \-\- Number of times to run box filter (default = 25)
+\fBcores\fP \-\- number of cores for parallel (default = \-1 (all))
 .UNINDENT
 .TP
 .B Return type
@@ -127,7 +127,7 @@ principal least squares
 .IP \(bu 2
 \fBshowplot\fP \-\- Shows plots of results using matplotlib (default = T)
 .IP \(bu 2
-\fBsmooth_data\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmooth_data\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
 \fBdelta\fP \-\- gradient step size
 .IP \(bu 2
@@ -224,7 +224,7 @@ extracted from the principal components of the srvfs
 .IP \(bu 2
 \fBn\fP (\fIinteger\fP) \-\- number of random samples
 .IP \(bu 2
-\fBsort_samples\fP (\fIbool\fP) \-\- sort samples (default = T)
+\fBsort_samples\fP (\fI\%bool\fP) \-\- sort samples (default = T)
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -246,7 +246,7 @@ extracted from the principal components of the srsfs
 .UNINDENT
 .INDENT 7.0
 .TP
-.B multiple_align_functions(mu, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0)
+.B multiple_align_functions(mu, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0, cores=\- 1)
 This function aligns a collection of functions using the elastic square\-root
 slope (srsf) framework.
 .INDENT 7.0
@@ -265,11 +265,13 @@ obj.multiple_align_functions(lambda, ...)
 .IP \(bu 2
 \fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
 .IP \(bu 2
-\fBsmoothdata\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
 \fBparallel\fP \-\- run in parallel (default = F)
 .IP \(bu 2
 \fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel (default = \-1 (all))
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -282,7 +284,7 @@ Usage: obj.plot()
 .UNINDENT
 .INDENT 7.0
 .TP
-.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0)
+.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0, cores=\- 1)
 This function aligns a collection of functions using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -294,11 +296,13 @@ square\-root slope (srsf) framework.
 .IP \(bu 2
 \fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
 .IP \(bu 2
-\fBsmoothdata\fP (\fIbool\fP) \-\- Smooth the data using a box filter (default = F)
+\fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
 \fBparallel\fP \-\- run in parallel (default = F)
 .IP \(bu 2
 \fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel (default = \-1 (all))
 .UNINDENT
 .UNINDENT
 .sp
@@ -591,7 +595,7 @@ This function calculates horizontal functional principal component analysis on a
 .INDENT 7.0
 .TP
 .B Parameters
-\fBno\fP (\fIint\fP) \-\- number of components to extract (default = 3)
+\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .TP
 .B Return type
 fdahpca object of numpy ndarray
@@ -670,9 +674,9 @@ on aligned data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBno\fP (\fIint\fP) \-\- number of components to extract (default = 3)
+\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
-\fBid\fP (\fIint\fP) \-\- point to use for f(0) (default = midpoint)
+\fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
 .UNINDENT
 .TP
 .B Return type
@@ -746,9 +750,9 @@ on aligned data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBno\fP (\fIint\fP) \-\- number of components to extract (default = 3)
+\fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
-\fBid\fP (\fIint\fP) \-\- point to use for f(0) (default = midpoint)
+\fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
 .UNINDENT
 .TP
 .B Return type
@@ -947,7 +951,7 @@ Warping Invariant Regression using SRSF
 moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B regression.elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=\-1, smooth=False)
+.B regression.elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=\- 1, smooth=False)
 This function identifies a logistic regression model with
 phase\-variablity using elastic methods
 .INDENT 7.0
@@ -993,7 +997,7 @@ functions with N samples
 .UNINDENT
 .INDENT 0.0
 .TP
-.B regression.elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=\-1, delta=0.01, parallel=True, smooth=False)
+.B regression.elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=\- 1, delta=0.01, parallel=True, smooth=False)
 This function identifies a multinomial logistic regression model with
 phase\-variablity using elastic methods
 .INDENT 7.0
@@ -1079,7 +1083,7 @@ functions with M samples
 .UNINDENT
 .INDENT 0.0
 .TP
-.B regression.elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=\-1, smooth=False)
+.B regression.elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=\- 1, smooth=False)
 This function identifies a regression model with phase\-variablity
 using elastic methods
 .INDENT 7.0
@@ -1422,7 +1426,7 @@ obj.predict(newdata)
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnewdata\fP (\fIdict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
 .IP \(bu 2
 \fBf\fP \-\- (M,N) matrix of functions
 .IP \(bu 2
@@ -1515,7 +1519,7 @@ obj.predict(newdata)
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnewdata\fP (\fIdict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
 .IP \(bu 2
 \fBf\fP \-\- (M,N) matrix of functions
 .IP \(bu 2
@@ -1600,7 +1604,7 @@ obj.predict(newdata)
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnewdata\fP (\fIdict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
 .IP \(bu 2
 \fBf\fP \-\- (M,N) matrix of functions
 .IP \(bu 2

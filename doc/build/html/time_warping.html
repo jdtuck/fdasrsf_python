@@ -1,9 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Functional Alignment &#8212; fdasrsf 2.0.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +36,8 @@
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>  
 
@@ -48,9 +50,9 @@
 <span id="functional-alignment"></span><h1>Functional Alignment<a class="headerlink" href="#module-time_warping" title="Permalink to this headline">¶</a></h1>
 <p>Group-wise function alignment using SRSF framework and Dynamic Programming</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
-<dl class="function">
+<dl class="py function">
 <dt id="time_warping.align_fPCA">
-<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">align_fPCA</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">num_comp=3</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.align_fPCA" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">align_fPCA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">num_comp</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">showplot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.align_fPCA" title="Permalink to this definition">¶</a></dt>
 <dd><p>aligns a collection of functions while extracting principal components.
 The functions are aligned to the principal components</p>
 <dl class="field-list simple">
@@ -60,8 +62,8 @@ The functions are aligned to the principal components</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>num_comp</strong> – number of fPCA components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
-<li><p><strong>sparam</strong> (<em>double</em>) – Number of times to run box filter (default = 25)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -110,9 +112,9 @@ functions with M samples</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="time_warping.align_fPLS">
-<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">align_fPLS</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">g</em>, <em class="sig-param">time</em>, <em class="sig-param">comps=3</em>, <em class="sig-param">showplot=True</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">max_itr=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.align_fPLS" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">align_fPLS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">g</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">comps</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">showplot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">delta</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.align_fPLS" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions while performing
 principal least squares</p>
 <dl class="field-list simple">
@@ -123,7 +125,7 @@ principal least squares</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>comps</strong> – number of fPLS components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>delta</strong> – gradient step size</p></li>
 <li><p><strong>max_itr</strong> – maximum number of iterations</p></li>
 </ul>
@@ -150,9 +152,9 @@ functions with M samples
 :return cost: cost function value</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="time_warping.fdawarp">
-<em class="property">class </em><code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">fdawarp</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">fdawarp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">time</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides alignment methods for functional data using the SRVF framework</p>
 <p>Usage:  obj = fdawarp(f,t)</p>
 <dl class="field-list simple">
@@ -184,24 +186,24 @@ functions with M samples
 </dl>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  15-Mar-2018</p>
-<dl class="method">
+<dl class="py method">
 <dt id="time_warping.fdawarp.gauss_model">
-<code class="sig-name descname">gauss_model</code><span class="sig-paren">(</span><em class="sig-param">n=1</em>, <em class="sig-param">sort_samples=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.gauss_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">gauss_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">sort_samples</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.gauss_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function models the functional data using a Gaussian model
 extracted from the principal components of the srvfs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
-<li><p><strong>sort_samples</strong> (<em>bool</em>) – sort samples (default = T)</p></li>
+<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – sort samples (default = T)</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="time_warping.fdawarp.joint_gauss_model">
-<code class="sig-name descname">joint_gauss_model</code><span class="sig-paren">(</span><em class="sig-param">n=1</em>, <em class="sig-param">no=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.joint_gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.joint_gauss_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">joint_gauss_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">no</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.joint_gauss_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.joint_gauss_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function models the functional data using a joint Gaussian model
 extracted from the principal components of the srsfs</p>
 <dl class="field-list simple">
@@ -214,9 +216,9 @@ extracted from the principal components of the srsfs</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="time_warping.fdawarp.multiple_align_functions">
-<code class="sig-name descname">multiple_align_functions</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">omethod='DP'</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">parallel=False</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.multiple_align_functions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.multiple_align_functions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">multiple_align_functions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mu</span></em>, <em class="sig-param"><span class="n">omethod</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.multiple_align_functions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.multiple_align_functions" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic square-root
 slope (srsf) framework.</p>
 <dl class="simple">
@@ -229,24 +231,25 @@ slope (srsf) framework.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mu</strong> – vector of function to align to</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
-<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="time_warping.fdawarp.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot plot functional alignment results</p>
 <p>Usage: obj.plot()</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="time_warping.fdawarp.srsf_align">
-<code class="sig-name descname">srsf_align</code><span class="sig-paren">(</span><em class="sig-param">method='mean'</em>, <em class="sig-param">omethod='DP'</em>, <em class="sig-param">smoothdata=False</em>, <em class="sig-param">parallel=False</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">srsf_align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">omethod</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic
 square-root slope (srsf) framework.</p>
 <dl class="field-list simple">
@@ -254,9 +257,10 @@ square-root slope (srsf) framework.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median (options = “mean” or “median”) (default=”mean”)</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
-<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
 </dl>
@@ -272,9 +276,9 @@ square-root slope (srsf) framework.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="time_warping.normal">
-<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">normal</code><span class="sig-paren">(</span><em class="sig-param">loc=0.0</em>, <em class="sig-param">scale=1.0</em>, <em class="sig-param">size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.normal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">normal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">loc</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.normal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw random samples from a normal (Gaussian) distribution.</p>
 <p>The probability density function of the normal distribution, first
 derived by De Moivre and 200 years later by both Gauss and Laplace
@@ -365,9 +369,9 @@ the probability density function:</p>
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="time_warping.pairwise_align_bayes">
-<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">pairwise_align_bayes</code><span class="sig-paren">(</span><em class="sig-param">f1i</em>, <em class="sig-param">f2i</em>, <em class="sig-param">time</em>, <em class="sig-param">mcmcopts=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">pairwise_align_bayes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f1i</span></em>, <em class="sig-param"><span class="n">f2i</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">mcmcopts</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns two functions using Bayesian framework. It will align
 f2 to f1. It is based on mapping warping functions to a hypersphere, and a
 subsequent exponential mapping to a tangent space. In the tangent space,
@@ -415,7 +419,7 @@ mcmcopts = {“iter”:2*(10**4) ,”burnin”:np.minimum(5*(10**3),2*(10**4)//2
 :return ydist: amplitude distance posterior)</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="time_warping.rand">
 <code class="sig-prename descclassname">time_warping.</code><code class="sig-name descname">rand</code><span class="sig-paren">(</span><em class="sig-param">d0</em>, <em class="sig-param">d1</em>, <em class="sig-param">...</em>, <em class="sig-param">dn</em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.rand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Random values in a given shape.</p>
@@ -452,6 +456,7 @@ If no argument is given a single Python float is returned.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -499,12 +504,13 @@ If no argument is given a single Python float is returned.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

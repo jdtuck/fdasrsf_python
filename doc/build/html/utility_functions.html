@@ -1,9 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Utility Functions &#8212; fdasrsf 2.0.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +36,8 @@
         <li class="right" >
           <a href="geodesic.html" title="SRVF Geodesic Computation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Utility Functions</a></li> 
       </ul>
     </div>  
 
@@ -48,9 +50,9 @@
 <span id="utility-functions"></span><h1>Utility Functions<a class="headerlink" href="#module-utility_functions" title="Permalink to this headline">¶</a></h1>
 <p>Utility functions for SRSF Manipulations</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.SqrtMean">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">SqrtMean</code><span class="sig-paren">(</span><em class="sig-param">gam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMean" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">SqrtMean</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gam</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMean" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the srsf of warping functions with corresponding shooting vectors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -75,9 +77,9 @@ with N samples</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.SqrtMeanInverse">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">SqrtMeanInverse</code><span class="sig-paren">(</span><em class="sig-param">gam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMeanInverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMeanInverse" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">SqrtMeanInverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gam</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMeanInverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMeanInverse" title="Permalink to this definition">¶</a></dt>
 <dd><p>finds the inverse of the mean of the set of the diffeomorphisms gamma</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -93,9 +95,9 @@ with N samples</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.SqrtMedian">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">SqrtMedian</code><span class="sig-paren">(</span><em class="sig-param">gam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMedian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMedian" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">SqrtMedian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gam</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMedian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.SqrtMedian" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the median srsf of warping functions with corresponding shooting vectors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -120,9 +122,9 @@ with N samples</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.cumtrapzmid">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">cumtrapzmid</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">c</em>, <em class="sig-param">mid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#cumtrapzmid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.cumtrapzmid" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">cumtrapzmid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">c</span></em>, <em class="sig-param"><span class="n">mid</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#cumtrapzmid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.cumtrapzmid" title="Permalink to this definition">¶</a></dt>
 <dd><p>cumulative trapezoidal numerical integration taken from midpoint</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -142,9 +144,9 @@ with N samples</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.diffop">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">diffop</code><span class="sig-paren">(</span><em class="sig-param">n</em>, <em class="sig-param">binsize=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#diffop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.diffop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">diffop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#diffop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.diffop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a second order differential operator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -162,9 +164,9 @@ with N samples</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.elastic_distance">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">elastic_distance</code><span class="sig-paren">(</span><em class="sig-param">f1</em>, <em class="sig-param">f2</em>, <em class="sig-param">time</em>, <em class="sig-param">method='DP'</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">elastic_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f1</span></em>, <em class="sig-param"><span class="n">f2</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>”
 calculates the distances between function, where f1 is aligned to
 f2. In other words
@@ -190,9 +192,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.f_K_fold">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">f_K_fold</code><span class="sig-paren">(</span><em class="sig-param">Nobs</em>, <em class="sig-param">K=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_K_fold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.f_K_fold" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">f_K_fold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Nobs</span></em>, <em class="sig-param"><span class="n">K</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_K_fold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.f_K_fold" title="Permalink to this definition">¶</a></dt>
 <dd><p>generates sample indices for K-fold cross validation</p>
 <p>:param Nobs number of observations
 :param K number of folds</p>
@@ -209,9 +211,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.f_to_srsf">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">f_to_srsf</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">time</em>, <em class="sig-param">smooth=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_to_srsf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.f_to_srsf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">f_to_srsf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_to_srsf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.f_to_srsf" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts f to a square-root slope function (SRSF)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -229,9 +231,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.geigen">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">geigen</code><span class="sig-paren">(</span><em class="sig-param">Amat</em>, <em class="sig-param">Bmat</em>, <em class="sig-param">Cmat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#geigen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.geigen" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">geigen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Amat</span></em>, <em class="sig-param"><span class="n">Bmat</span></em>, <em class="sig-param"><span class="n">Cmat</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#geigen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.geigen" title="Permalink to this definition">¶</a></dt>
 <dd><p>generalized eigenvalue problem of the form</p>
 <p>max tr L’AM / sqrt(tr L’BL tr M’CM) w.r.t. L and M</p>
 <p>:param Amat numpy ndarray of shape (M,N)
@@ -253,9 +255,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.gradient_spline">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">gradient_spline</code><span class="sig-paren">(</span><em class="sig-param">time</em>, <em class="sig-param">f</em>, <em class="sig-param">smooth=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#gradient_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.gradient_spline" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">gradient_spline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#gradient_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.gradient_spline" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function takes the gradient of f using b-spline smoothing</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -280,9 +282,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.innerprod_q">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">innerprod_q</code><span class="sig-paren">(</span><em class="sig-param">time</em>, <em class="sig-param">q1</em>, <em class="sig-param">q2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#innerprod_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.innerprod_q" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">innerprod_q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#innerprod_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.innerprod_q" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the innerproduct between two srsfs</p>
 <p>:param time vector descrbing time samples
 :param q1 vector of srsf 1
@@ -297,9 +299,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.invertGamma">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">invertGamma</code><span class="sig-paren">(</span><em class="sig-param">gam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#invertGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.invertGamma" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">invertGamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gam</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#invertGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.invertGamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>finds the inverse of the diffeomorphism gamma</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -314,9 +316,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.optimum_reparam">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">time</em>, <em class="sig-param">q2</em>, <em class="sig-param">method='DP'</em>, <em class="sig-param">lam=0.0</em>, <em class="sig-param">f1o=0.0</em>, <em class="sig-param">f2o=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q2</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">f1o</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">f2o</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the warping to align srsf q2 to q1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -337,9 +339,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.optimum_reparam_pair">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam_pair</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">time</em>, <em class="sig-param">q1</em>, <em class="sig-param">q2</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam_pair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam_pair" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam_pair</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam_pair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam_pair" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the warping to align srsf pair q1 and q2 to q</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -360,9 +362,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.outlier_detection">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">outlier_detection</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">time</em>, <em class="sig-param">mq</em>, <em class="sig-param">k=1.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#outlier_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.outlier_detection" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">outlier_detection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">mq</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">1.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#outlier_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.outlier_detection" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates outlier’s using geodesic distances of the SRSFs from the median</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -379,9 +381,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.randomGamma">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">randomGamma</code><span class="sig-paren">(</span><em class="sig-param">gam</em>, <em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#randomGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.randomGamma" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">randomGamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gam</span></em>, <em class="sig-param"><span class="n">num</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#randomGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.randomGamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>generates random warping functions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -396,9 +398,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.resamplefunction">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">resamplefunction</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#resamplefunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.resamplefunction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">resamplefunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#resamplefunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.resamplefunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>resample function using n points</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -416,9 +418,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.rgam">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">rgam</code><span class="sig-paren">(</span><em class="sig-param">N</em>, <em class="sig-param">sigma</em>, <em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#rgam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.rgam" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">rgam</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">N</span></em>, <em class="sig-param"><span class="n">sigma</span></em>, <em class="sig-param"><span class="n">num</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#rgam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.rgam" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates random warping functions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -434,9 +436,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.smooth_data">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">smooth_data</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">sparam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#smooth_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.smooth_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">smooth_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">sparam</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#smooth_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.smooth_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function smooths a collection of functions using a box filter</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -454,9 +456,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.srsf_to_f">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">srsf_to_f</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">time</em>, <em class="sig-param">f0=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#srsf_to_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.srsf_to_f" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">srsf_to_f</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">f0</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#srsf_to_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.srsf_to_f" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts q (srsf) to a function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -475,9 +477,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.update_progress">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><em class="sig-param">progress</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.update_progress" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">progress</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.update_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function creates a progress bar</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -486,9 +488,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.warp_f_gamma">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">warp_f_gamma</code><span class="sig-paren">(</span><em class="sig-param">time</em>, <em class="sig-param">f</em>, <em class="sig-param">gam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_f_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.warp_f_gamma" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">warp_f_gamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">gam</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_f_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.warp_f_gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>warps a function f by gam</p>
 <p>:param time vector describing time samples
 :param q vector describing srsf
@@ -503,9 +505,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.warp_q_gamma">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">warp_q_gamma</code><span class="sig-paren">(</span><em class="sig-param">time</em>, <em class="sig-param">q</em>, <em class="sig-param">gam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_q_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.warp_q_gamma" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">warp_q_gamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">gam</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_q_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.warp_q_gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>warps a srsf q by gam</p>
 <p>:param time vector describing time samples
 :param q vector describing srsf
@@ -520,9 +522,9 @@ calculates the elastic distances</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="utility_functions.zero_crossing">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">zero_crossing</code><span class="sig-paren">(</span><em class="sig-param">Y</em>, <em class="sig-param">q</em>, <em class="sig-param">bt</em>, <em class="sig-param">time</em>, <em class="sig-param">y_max</em>, <em class="sig-param">y_min</em>, <em class="sig-param">gmax</em>, <em class="sig-param">gmin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#zero_crossing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.zero_crossing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">zero_crossing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Y</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">bt</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">y_max</span></em>, <em class="sig-param"><span class="n">y_min</span></em>, <em class="sig-param"><span class="n">gmax</span></em>, <em class="sig-param"><span class="n">gmin</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#zero_crossing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.zero_crossing" title="Permalink to this definition">¶</a></dt>
 <dd><p>finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
 from elastic regression model</p>
 <dl class="field-list simple">
@@ -550,6 +552,7 @@ from elastic regression model</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -597,12 +600,13 @@ from elastic regression model</p>
         <li class="right" >
           <a href="geodesic.html" title="SRVF Geodesic Computation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Utility Functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

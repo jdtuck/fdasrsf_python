@@ -1,4 +1,5 @@
-\indexentry{time\_warping (module)@\spxentry{time\_warping}\spxextra{module}|hyperpage}{3}
+\indexentry{module@\spxentry{module}!time\_warping@\spxentry{time\_warping}|hyperpage}{3}
+\indexentry{time\_warping@\spxentry{time\_warping}!module@\spxentry{module}|hyperpage}{3}
 \indexentry{align\_fPCA() (in module time\_warping)@\spxentry{align\_fPCA()}\spxextra{in module time\_warping}|hyperpage}{3}
 \indexentry{align\_fPLS() (in module time\_warping)@\spxentry{align\_fPLS()}\spxextra{in module time\_warping}|hyperpage}{3}
 \indexentry{fdawarp (class in time\_warping)@\spxentry{fdawarp}\spxextra{class in time\_warping}|hyperpage}{4}
@@ -10,7 +11,8 @@
 \indexentry{normal() (in module time\_warping)@\spxentry{normal()}\spxextra{in module time\_warping}|hyperpage}{6}
 \indexentry{pairwise\_align\_bayes() (in module time\_warping)@\spxentry{pairwise\_align\_bayes()}\spxextra{in module time\_warping}|hyperpage}{7}
 \indexentry{rand() (in module time\_warping)@\spxentry{rand()}\spxextra{in module time\_warping}|hyperpage}{7}
-\indexentry{fPCA (module)@\spxentry{fPCA}\spxextra{module}|hyperpage}{9}
+\indexentry{module@\spxentry{module}!fPCA@\spxentry{fPCA}|hyperpage}{9}
+\indexentry{fPCA@\spxentry{fPCA}!module@\spxentry{module}|hyperpage}{9}
 \indexentry{fdahpca (class in fPCA)@\spxentry{fdahpca}\spxextra{class in fPCA}|hyperpage}{9}
 \indexentry{calc\_fpca() (fPCA.fdahpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdahpca method}|hyperpage}{9}
 \indexentry{plot() (fPCA.fdahpca method)@\spxentry{plot()}\spxextra{fPCA.fdahpca method}|hyperpage}{9}
@@ -20,15 +22,18 @@
 \indexentry{fdavpca (class in fPCA)@\spxentry{fdavpca}\spxextra{class in fPCA}|hyperpage}{10}
 \indexentry{calc\_fpca() (fPCA.fdavpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdavpca method}|hyperpage}{11}
 \indexentry{plot() (fPCA.fdavpca method)@\spxentry{plot()}\spxextra{fPCA.fdavpca method}|hyperpage}{11}
-\indexentry{boxplots (module)@\spxentry{boxplots}\spxextra{module}|hyperpage}{13}
+\indexentry{module@\spxentry{module}!boxplots@\spxentry{boxplots}|hyperpage}{13}
+\indexentry{boxplots@\spxentry{boxplots}!module@\spxentry{module}|hyperpage}{13}
 \indexentry{ampbox (class in boxplots)@\spxentry{ampbox}\spxextra{class in boxplots}|hyperpage}{13}
 \indexentry{construct\_boxplot() (boxplots.ampbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.ampbox method}|hyperpage}{13}
 \indexentry{phbox (class in boxplots)@\spxentry{phbox}\spxextra{class in boxplots}|hyperpage}{13}
 \indexentry{construct\_boxplot() (boxplots.phbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.phbox method}|hyperpage}{14}
 \indexentry{plot() (boxplots.phbox method)@\spxentry{plot()}\spxextra{boxplots.phbox method}|hyperpage}{14}
-\indexentry{fPLS (module)@\spxentry{fPLS}\spxextra{module}|hyperpage}{15}
+\indexentry{module@\spxentry{module}!fPLS@\spxentry{fPLS}|hyperpage}{15}
+\indexentry{fPLS@\spxentry{fPLS}!module@\spxentry{module}|hyperpage}{15}
 \indexentry{pls\_svd() (in module fPLS)@\spxentry{pls\_svd()}\spxextra{in module fPLS}|hyperpage}{15}
-\indexentry{regression (module)@\spxentry{regression}\spxextra{module}|hyperpage}{17}
+\indexentry{module@\spxentry{module}!regression@\spxentry{regression}|hyperpage}{17}
+\indexentry{regression@\spxentry{regression}!module@\spxentry{module}|hyperpage}{17}
 \indexentry{elastic\_logistic() (in module regression)@\spxentry{elastic\_logistic()}\spxextra{in module regression}|hyperpage}{17}
 \indexentry{elastic\_mlogistic() (in module regression)@\spxentry{elastic\_mlogistic()}\spxextra{in module regression}|hyperpage}{17}
 \indexentry{elastic\_prediction() (in module regression)@\spxentry{elastic\_prediction()}\spxextra{in module regression}|hyperpage}{18}
@@ -42,7 +47,8 @@
 \indexentry{mlogit\_warp\_grad() (in module regression)@\spxentry{mlogit\_warp\_grad()}\spxextra{in module regression}|hyperpage}{20}
 \indexentry{phi() (in module regression)@\spxentry{phi()}\spxextra{in module regression}|hyperpage}{20}
 \indexentry{regression\_warp() (in module regression)@\spxentry{regression\_warp()}\spxextra{in module regression}|hyperpage}{20}
-\indexentry{pcr\_regression (module)@\spxentry{pcr\_regression}\spxextra{module}|hyperpage}{23}
+\indexentry{module@\spxentry{module}!pcr\_regression@\spxentry{pcr\_regression}|hyperpage}{23}
+\indexentry{pcr\_regression@\spxentry{pcr\_regression}!module@\spxentry{module}|hyperpage}{23}
 \indexentry{elastic\_lpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_lpcr\_regression}\spxextra{class in pcr\_regression}|hyperpage}{23}
 \indexentry{calc\_model() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}|hyperpage}{23}
 \indexentry{predict() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}|hyperpage}{23}
@@ -52,12 +58,14 @@
 \indexentry{elastic\_pcr\_regression (class in pcr\_regression)@\spxentry{elastic\_pcr\_regression}\spxextra{class in pcr\_regression}|hyperpage}{25}
 \indexentry{calc\_model() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}|hyperpage}{25}
 \indexentry{predict() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}|hyperpage}{25}
-\indexentry{tolerance (module)@\spxentry{tolerance}\spxextra{module}|hyperpage}{27}
+\indexentry{module@\spxentry{module}!tolerance@\spxentry{tolerance}|hyperpage}{27}
+\indexentry{tolerance@\spxentry{tolerance}!module@\spxentry{module}|hyperpage}{27}
 \indexentry{bootTB() (in module tolerance)@\spxentry{bootTB()}\spxextra{in module tolerance}|hyperpage}{27}
 \indexentry{mvtol\_region() (in module tolerance)@\spxentry{mvtol\_region()}\spxextra{in module tolerance}|hyperpage}{27}
 \indexentry{pcaTB() (in module tolerance)@\spxentry{pcaTB()}\spxextra{in module tolerance}|hyperpage}{28}
 \indexentry{rwishart() (in module tolerance)@\spxentry{rwishart()}\spxextra{in module tolerance}|hyperpage}{28}
-\indexentry{geodesic (module)@\spxentry{geodesic}\spxextra{module}|hyperpage}{29}
+\indexentry{module@\spxentry{module}!geodesic@\spxentry{geodesic}|hyperpage}{29}
+\indexentry{geodesic@\spxentry{geodesic}!module@\spxentry{module}|hyperpage}{29}
 \indexentry{back\_parallel\_transport() (in module geodesic)@\spxentry{back\_parallel\_transport()}\spxextra{in module geodesic}|hyperpage}{29}
 \indexentry{calc\_alphadot() (in module geodesic)@\spxentry{calc\_alphadot()}\spxextra{in module geodesic}|hyperpage}{29}
 \indexentry{calculate\_energy() (in module geodesic)@\spxentry{calculate\_energy()}\spxextra{in module geodesic}|hyperpage}{29}
@@ -70,7 +78,8 @@
 \indexentry{init\_path\_rand() (in module geodesic)@\spxentry{init\_path\_rand()}\spxextra{in module geodesic}|hyperpage}{31}
 \indexentry{path\_straightening() (in module geodesic)@\spxentry{path\_straightening()}\spxextra{in module geodesic}|hyperpage}{31}
 \indexentry{update\_path() (in module geodesic)@\spxentry{update\_path()}\spxextra{in module geodesic}|hyperpage}{32}
-\indexentry{utility\_functions (module)@\spxentry{utility\_functions}\spxextra{module}|hyperpage}{33}
+\indexentry{module@\spxentry{module}!utility\_functions@\spxentry{utility\_functions}|hyperpage}{33}
+\indexentry{utility\_functions@\spxentry{utility\_functions}!module@\spxentry{module}|hyperpage}{33}
 \indexentry{SqrtMean() (in module utility\_functions)@\spxentry{SqrtMean()}\spxextra{in module utility\_functions}|hyperpage}{33}
 \indexentry{SqrtMeanInverse() (in module utility\_functions)@\spxentry{SqrtMeanInverse()}\spxextra{in module utility\_functions}|hyperpage}{33}
 \indexentry{SqrtMedian() (in module utility\_functions)@\spxentry{SqrtMedian()}\spxextra{in module utility\_functions}|hyperpage}{33}
@@ -95,7 +104,8 @@
 \indexentry{warp\_f\_gamma() (in module utility\_functions)@\spxentry{warp\_f\_gamma()}\spxextra{in module utility\_functions}|hyperpage}{37}
 \indexentry{warp\_q\_gamma() (in module utility\_functions)@\spxentry{warp\_q\_gamma()}\spxextra{in module utility\_functions}|hyperpage}{37}
 \indexentry{zero\_crossing() (in module utility\_functions)@\spxentry{zero\_crossing()}\spxextra{in module utility\_functions}|hyperpage}{37}
-\indexentry{curve\_functions (module)@\spxentry{curve\_functions}\spxextra{module}|hyperpage}{39}
+\indexentry{module@\spxentry{module}!curve\_functions@\spxentry{curve\_functions}|hyperpage}{39}
+\indexentry{curve\_functions@\spxentry{curve\_functions}!module@\spxentry{module}|hyperpage}{39}
 \indexentry{calc\_j() (in module curve\_functions)@\spxentry{calc\_j()}\spxextra{in module curve\_functions}|hyperpage}{39}
 \indexentry{calculate\_variance() (in module curve\_functions)@\spxentry{calculate\_variance()}\spxextra{in module curve\_functions}|hyperpage}{39}
 \indexentry{calculatecentroid() (in module curve\_functions)@\spxentry{calculatecentroid()}\spxextra{in module curve\_functions}|hyperpage}{39}

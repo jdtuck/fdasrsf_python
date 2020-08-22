@@ -1,9 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SRVF Geodesic Computation &#8212; fdasrsf 2.0.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +36,8 @@
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SRVF Geodesic Computation</a></li> 
       </ul>
     </div>  
 
@@ -48,9 +50,9 @@
 <span id="srvf-geodesic-computation"></span><h1>SRVF Geodesic Computation<a class="headerlink" href="#module-geodesic" title="Permalink to this headline">¶</a></h1>
 <p>geodesic calculation for SRVF (curves) open and closed)</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.back_parallel_transport">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">back_parallel_transport</code><span class="sig-paren">(</span><em class="sig-param">u1</em>, <em class="sig-param">alpha</em>, <em class="sig-param">basis</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#back_parallel_transport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.back_parallel_transport" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">back_parallel_transport</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">u1</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">basis</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#back_parallel_transport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.back_parallel_transport" title="Permalink to this definition">¶</a></dt>
 <dd><p>backwards parallel translates q1 and q2 along manifold</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -71,9 +73,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.calc_alphadot">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calc_alphadot</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">basis</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calc_alphadot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calc_alphadot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calc_alphadot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">basis</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calc_alphadot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calc_alphadot" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates derivative along the path alpha</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -93,9 +95,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.calculate_energy">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calculate_energy</code><span class="sig-paren">(</span><em class="sig-param">alphadot</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calculate_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calculate_energy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alphadot</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calculate_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates energy along path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -114,9 +116,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.calculate_gradE">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calculate_gradE</code><span class="sig-paren">(</span><em class="sig-param">u</em>, <em class="sig-param">utilde</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_gradE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calculate_gradE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">calculate_gradE</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">u</span></em>, <em class="sig-param"><span class="n">utilde</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_gradE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.calculate_gradE" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates gradient of energy along path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -139,9 +141,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.cov_integral">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">cov_integral</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">alphadot</em>, <em class="sig-param">basis</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#cov_integral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.cov_integral" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">cov_integral</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">alphadot</span></em>, <em class="sig-param"><span class="n">basis</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#cov_integral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.cov_integral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates covariance along path alpha</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -162,9 +164,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.find_basis_normal_path">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">find_basis_normal_path</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#find_basis_normal_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.find_basis_normal_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">find_basis_normal_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#find_basis_normal_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.find_basis_normal_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>computes orthonormalized basis vectors to the normal space at each of the
 k points (q-functions) of the path alpha</p>
 <dl class="field-list simple">
@@ -183,9 +185,9 @@ k points (q-functions) of the path alpha</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.geod_dist_path_strt">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">geod_dist_path_strt</code><span class="sig-paren">(</span><em class="sig-param">beta</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_dist_path_strt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.geod_dist_path_strt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">geod_dist_path_strt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_dist_path_strt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.geod_dist_path_strt" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate geodisc distance for path straightening</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -203,9 +205,9 @@ k points (q-functions) of the path alpha</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.geod_sphere">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">geod_sphere</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.geod_sphere" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">geod_sphere</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.geod_sphere" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function caluclates the geodecis between open curves beta1 and
 beta2 with k steps along path</p>
 <dl class="field-list simple">
@@ -231,9 +233,9 @@ beta2 with k steps along path</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.init_path_geod">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">init_path_geod</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_geod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.init_path_geod" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">init_path_geod</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_geod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.init_path_geod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a path in cal{C}. beta1, beta2 are already
 standardized curves. Creates a path from beta1 to beta2 in
 shape space, then projects to the closed shape manifold.</p>
@@ -261,9 +263,9 @@ shape space, then projects to the closed shape manifold.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.init_path_rand">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">init_path_rand</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta_mid</em>, <em class="sig-param">beta2</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_rand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.init_path_rand" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">init_path_rand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta_mid</span></em>, <em class="sig-param"><span class="n">beta2</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_rand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.init_path_rand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a path in cal{C}. beta1, beta_mid beta2 are already
 standardized curves. Creates a path from beta1 to beta_mid to beta2 in
 shape space, then projects to the closed shape manifold.</p>
@@ -292,9 +294,9 @@ shape space, then projects to the closed shape manifold.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.path_straightening">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">path_straightening</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em>, <em class="sig-param">betamid</em>, <em class="sig-param">init='rand'</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#path_straightening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.path_straightening" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">path_straightening</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em>, <em class="sig-param"><span class="n">betamid</span></em>, <em class="sig-param"><span class="n">init</span><span class="o">=</span><span class="default_value">'rand'</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#path_straightening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.path_straightening" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform path straigtening to find geodesic between two shapes in either
 the space of closed curves or the space of affine standardized curves.
 This algorithm follows the steps outlined in section 4.6 of the
@@ -329,9 +331,9 @@ Default = NULL, only needed for init “rand”)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="geodesic.update_path">
-<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">update_path</code><span class="sig-paren">(</span><em class="sig-param">alpha</em>, <em class="sig-param">beta</em>, <em class="sig-param">gradE</em>, <em class="sig-param">delta</em>, <em class="sig-param">T=100</em>, <em class="sig-param">k=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#update_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.update_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">update_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">gradE</span></em>, <em class="sig-param"><span class="n">delta</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#update_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.update_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the path along the direction -gradE</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -359,6 +361,7 @@ Default = NULL, only needed for init “rand”)</p></li>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -406,12 +409,13 @@ Default = NULL, only needed for init “rand”)</p></li>
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SRVF Geodesic Computation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

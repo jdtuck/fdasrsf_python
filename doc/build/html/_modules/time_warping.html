@@ -1,9 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>time_warping &#8212; fdasrsf 2.0.2 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -13,7 +14,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -28,7 +29,8 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">time_warping</a></li> 
       </ul>
     </div>  
 
@@ -111,7 +113,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rsamps</span> <span class="o">=</span> <span class="kc">False</span>
     
 
-<div class="viewcode-block" id="fdawarp.srsf_align"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.srsf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srsf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="fdawarp.srsf_align"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.srsf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srsf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function aligns a collection of functions using the elastic</span>
 <span class="sd">        square-root slope (srsf) framework.</span>
@@ -121,6 +123,7 @@
 <span class="sd">        :param smoothdata: Smooth the data using a box filter (default = F)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param lam: controls the elasticity (default = 0)</span>
+<span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :type lam: double</span>
 <span class="sd">        :type smoothdata: bool</span>
 
@@ -172,7 +175,7 @@
         <span class="n">mf</span> <span class="o">=</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">min_ind</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                                     <span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">mf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -215,7 +218,7 @@
 
             <span class="c1"># Matching Step</span>
             <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">mf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">r</span><span class="p">],</span>
                                         <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
                 <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
@@ -282,7 +285,7 @@
         <span class="c1"># Last Step with centering of gam</span>
         <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                 <span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">mf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">r</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -526,7 +529,7 @@
 
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="fdawarp.multiple_align_functions"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.multiple_align_functions">[docs]</a>    <span class="k">def</span> <span class="nf">multiple_align_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="fdawarp.multiple_align_functions"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.multiple_align_functions">[docs]</a>    <span class="k">def</span> <span class="nf">multiple_align_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function aligns a collection of functions using the elastic square-root</span>
 <span class="sd">        slope (srsf) framework.</span>
@@ -540,6 +543,7 @@
 <span class="sd">        :param smoothdata: Smooth the data using a box filter (default = F)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param lam: controls the elasticity (default = 0)</span>
+<span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :type lam: double</span>
 <span class="sd">        :type smoothdata: bool</span>
 
@@ -565,7 +569,7 @@
         <span class="n">mq</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                                     <span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -858,7 +862,7 @@
 
     <span class="k">return</span> <span class="n">g_coef</span><span class="p">,</span> <span class="n">logl</span><span class="p">,</span> <span class="n">SSE</span><span class="p">,</span> <span class="n">accept</span><span class="p">,</span> <span class="n">zpcnInd</span>
 
-<div class="viewcode-block" id="align_fPCA"><a class="viewcode-back" href="../time_warping.html#time_warping.align_fPCA">[docs]</a><span class="k">def</span> <span class="nf">align_fPCA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">num_comp</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="align_fPCA"><a class="viewcode-back" href="../time_warping.html#time_warping.align_fPCA">[docs]</a><span class="k">def</span> <span class="nf">align_fPCA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">num_comp</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    aligns a collection of functions while extracting principal components.</span>
 <span class="sd">    The functions are aligned to the principal components</span>
@@ -868,7 +872,7 @@
 <span class="sd">    :param num_comp: number of fPCA components</span>
 <span class="sd">    :param showplot: Shows plots of results using matplotlib (default = T)</span>
 <span class="sd">    :param smooth_data: Smooth the data using a box filter (default = F)</span>
-<span class="sd">    :param sparam: Number of times to run box filter (default = 25)</span>
+<span class="sd">    :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">    :type sparam: double</span>
 <span class="sd">    :type smooth_data: bool</span>
 <span class="sd">    :type f: np.ndarray</span>
@@ -957,7 +961,7 @@
 
         <span class="c1"># Matching Step</span>
         <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span>
                 <span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">qhat</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">qi</span><span class="p">[:,</span> <span class="n">n</span><span class="p">,</span> <span class="n">itr</span><span class="p">],</span>
                                             <span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
             <span class="n">gam_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
@@ -1303,6 +1307,7 @@
     <span class="k">return</span> <span class="n">out</span></div>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -1332,12 +1337,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">time_warping</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

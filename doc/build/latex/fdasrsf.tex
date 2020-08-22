@@ -66,13 +66,14 @@
 % Set up styles of URL: it should be placed after hyperref.
 \urlstyle{same}
 
+
 \usepackage{sphinxmessages}
 \setcounter{tocdepth}{2}
 
 
 
 \title{fdasrsf Documentation}
-\date{Mar 26, 2020}
+\date{Aug 22, 2020}
 \release{2.0.2}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -95,14 +96,14 @@ using functional component analysis and regression.
 
 
 \chapter{Functional Alignment}
-\label{\detokenize{time_warping:module-time_warping}}\label{\detokenize{time_warping:functional-alignment}}\label{\detokenize{time_warping::doc}}\index{time\_warping (module)@\spxentry{time\_warping}\spxextra{module}}
+\label{\detokenize{time_warping:module-time_warping}}\label{\detokenize{time_warping:functional-alignment}}\label{\detokenize{time_warping::doc}}\index{module@\spxentry{module}!time\_warping@\spxentry{time\_warping}}\index{time\_warping@\spxentry{time\_warping}!module@\spxentry{module}}
 Group\sphinxhyphen{}wise function alignment using SRSF framework and Dynamic Programming
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{align\_fPCA() (in module time\_warping)@\spxentry{align\_fPCA()}\spxextra{in module time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.align_fPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{align\_fPCA}}}{\emph{f}, \emph{time}, \emph{num\_comp=3}, \emph{showplot=True}, \emph{smoothdata=False}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.align_fPCA}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{align\_fPCA}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{num\_comp}\DUrole{o}{=}\DUrole{default_value}{3}}, \emph{\DUrole{n}{showplot}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{smoothdata}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{cores}\DUrole{o}{=}\DUrole{default_value}{\sphinxhyphen{} 1}}}{}
 aligns a collection of functions while extracting principal components.
 The functions are aligned to the principal components
 \begin{quote}\begin{description}
@@ -120,10 +121,10 @@ The functions are aligned to the principal components
 \sphinxstyleliteralstrong{\sphinxupquote{showplot}} \textendash{} Shows plots of results using matplotlib (default = T)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}) \textendash{} Smooth the data using a box filter (default = F)
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{sparam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} Number of times to run box filter (default = 25)
+\sphinxstyleliteralstrong{\sphinxupquote{cores}} \textendash{} number of cores for parallel (default = \sphinxhyphen{}1 (all))
 
 \end{itemize}
 
@@ -177,7 +178,7 @@ Phase Variance
 \index{align\_fPLS() (in module time\_warping)@\spxentry{align\_fPLS()}\spxextra{in module time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.align_fPLS}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{align\_fPLS}}}{\emph{f}, \emph{g}, \emph{time}, \emph{comps=3}, \emph{showplot=True}, \emph{smoothdata=False}, \emph{delta=0.01}, \emph{max\_itr=100}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.align_fPLS}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{align\_fPLS}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{g}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{comps}\DUrole{o}{=}\DUrole{default_value}{3}}, \emph{\DUrole{n}{showplot}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{smoothdata}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{delta}\DUrole{o}{=}\DUrole{default_value}{0.01}}, \emph{\DUrole{n}{max\_itr}\DUrole{o}{=}\DUrole{default_value}{100}}}{}
 This function aligns a collection of functions while performing
 principal least squares
 \begin{quote}\begin{description}
@@ -198,7 +199,7 @@ principal least squares
 \sphinxstyleliteralstrong{\sphinxupquote{showplot}} \textendash{} Shows plots of results using matplotlib (default = T)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}) \textendash{} Smooth the data using a box filter (default = F)
+\sphinxstyleliteralstrong{\sphinxupquote{smooth\_data}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{delta}} \textendash{} gradient step size
@@ -235,7 +236,7 @@ functions with M samples
 \index{fdawarp (class in time\_warping)@\spxentry{fdawarp}\spxextra{class in time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{fdawarp}}}{\emph{f}, \emph{time}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{fdawarp}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{time}}}{}
 This class provides alignment methods for functional data using the SRVF framework
 
 Usage:  obj = fdawarp(f,t)
@@ -313,7 +314,7 @@ Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{gauss\_model() (time\_warping.fdawarp method)@\spxentry{gauss\_model()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.gauss_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{gauss\_model}}}{\emph{n=1}, \emph{sort\_samples=False}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.gauss_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{gauss\_model}}}{\emph{\DUrole{n}{n}\DUrole{o}{=}\DUrole{default_value}{1}}, \emph{\DUrole{n}{sort\_samples}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function models the functional data using a Gaussian model
 extracted from the principal components of the srvfs
 \begin{quote}\begin{description}
@@ -322,7 +323,7 @@ extracted from the principal components of the srvfs
 \sphinxstyleliteralstrong{\sphinxupquote{n}} (\sphinxstyleliteralemphasis{\sphinxupquote{integer}}) \textendash{} number of random samples
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{sort\_samples}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}) \textendash{} sort samples (default = T)
+\sphinxstyleliteralstrong{\sphinxupquote{sort\_samples}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} sort samples (default = T)
 
 \end{itemize}
 
@@ -333,7 +334,7 @@ extracted from the principal components of the srvfs
 \index{joint\_gauss\_model() (time\_warping.fdawarp method)@\spxentry{joint\_gauss\_model()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.joint_gauss_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{joint\_gauss\_model}}}{\emph{n=1}, \emph{no=3}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.joint_gauss_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{joint\_gauss\_model}}}{\emph{\DUrole{n}{n}\DUrole{o}{=}\DUrole{default_value}{1}}, \emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{3}}}{}
 This function models the functional data using a joint Gaussian model
 extracted from the principal components of the srsfs
 \begin{quote}\begin{description}
@@ -353,7 +354,7 @@ extracted from the principal components of the srsfs
 \index{multiple\_align\_functions() (time\_warping.fdawarp method)@\spxentry{multiple\_align\_functions()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.multiple_align_functions}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{multiple\_align\_functions}}}{\emph{mu}, \emph{omethod=\textquotesingle{}DP\textquotesingle{}}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.multiple_align_functions}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{multiple\_align\_functions}}}{\emph{\DUrole{n}{mu}}, \emph{\DUrole{n}{omethod}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}DP\textquotesingle{}}}, \emph{\DUrole{n}{smoothdata}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{cores}\DUrole{o}{=}\DUrole{default_value}{\sphinxhyphen{} 1}}}{}
 This function aligns a collection of functions using the elastic square\sphinxhyphen{}root
 slope (srsf) framework.
 \begin{description}
@@ -372,13 +373,16 @@ obj.multiple\_align\_functions(lambda, …)
 \sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2, RBFGS) (default = DP)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}) \textendash{} Smooth the data using a box filter (default = F)
+\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run in parallel (default = F)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{lam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} controls the elasticity (default = 0)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{cores}} \textendash{} number of cores for parallel (default = \sphinxhyphen{}1 (all))
 
 \end{itemize}
 
@@ -399,7 +403,7 @@ Usage: obj.plot()
 \index{srsf\_align() (time\_warping.fdawarp method)@\spxentry{srsf\_align()}\spxextra{time\_warping.fdawarp method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.srsf_align}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{method=\textquotesingle{}mean\textquotesingle{}}, \emph{omethod=\textquotesingle{}DP\textquotesingle{}}, \emph{smoothdata=False}, \emph{parallel=False}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.fdawarp.srsf_align}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{srsf\_align}}}{\emph{\DUrole{n}{method}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}mean\textquotesingle{}}}, \emph{\DUrole{n}{omethod}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}DP\textquotesingle{}}}, \emph{\DUrole{n}{smoothdata}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{cores}\DUrole{o}{=}\DUrole{default_value}{\sphinxhyphen{} 1}}}{}
 This function aligns a collection of functions using the elastic
 square\sphinxhyphen{}root slope (srsf) framework.
 \begin{quote}\begin{description}
@@ -411,13 +415,16 @@ square\sphinxhyphen{}root slope (srsf) framework.
 \sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2, RBFGS) (default = DP)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}) \textendash{} Smooth the data using a box filter (default = F)
+\sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{parallel}} \textendash{} run in parallel (default = F)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{lam}} (\sphinxstyleliteralemphasis{\sphinxupquote{double}}) \textendash{} controls the elasticity (default = 0)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{cores}} \textendash{} number of cores for parallel (default = \sphinxhyphen{}1 (all))
 
 \end{itemize}
 
@@ -440,7 +447,7 @@ Examples
 \index{normal() (in module time\_warping)@\spxentry{normal()}\spxextra{in module time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.normal}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{normal}}}{\emph{loc=0.0}, \emph{scale=1.0}, \emph{size=None}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.normal}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{normal}}}{\emph{\DUrole{n}{loc}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{scale}\DUrole{o}{=}\DUrole{default_value}{1.0}}, \emph{\DUrole{n}{size}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 Draw random samples from a normal (Gaussian) distribution.
 
 The probability density function of the normal distribution, first
@@ -550,7 +557,7 @@ Two\sphinxhyphen{}by\sphinxhyphen{}four array of samples from N(3, 6.25):
 \index{pairwise\_align\_bayes() (in module time\_warping)@\spxentry{pairwise\_align\_bayes()}\spxextra{in module time\_warping}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{time_warping:time_warping.pairwise_align_bayes}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{pairwise\_align\_bayes}}}{\emph{f1i}, \emph{f2i}, \emph{time}, \emph{mcmcopts=None}}{}
+\phantomsection\label{\detokenize{time_warping:time_warping.pairwise_align_bayes}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{time\_warping.}}\sphinxbfcode{\sphinxupquote{pairwise\_align\_bayes}}}{\emph{\DUrole{n}{f1i}}, \emph{\DUrole{n}{f2i}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{mcmcopts}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 This function aligns two functions using Bayesian framework. It will align
 f2 to f1. It is based on mapping warping functions to a hypersphere, and a
 subsequent exponential mapping to a tangent space. In the tangent space,
@@ -654,14 +661,14 @@ random
 
 
 \chapter{Functional Principal Component Analysis}
-\label{\detokenize{fPCA:module-fPCA}}\label{\detokenize{fPCA:functional-principal-component-analysis}}\label{\detokenize{fPCA::doc}}\index{fPCA (module)@\spxentry{fPCA}\spxextra{module}}
+\label{\detokenize{fPCA:module-fPCA}}\label{\detokenize{fPCA:functional-principal-component-analysis}}\label{\detokenize{fPCA::doc}}\index{module@\spxentry{module}!fPCA@\spxentry{fPCA}}\index{fPCA@\spxentry{fPCA}!module@\spxentry{module}}
 Vertical and Horizontal Functional Principal Component Analysis using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{fdahpca (class in fPCA)@\spxentry{fdahpca}\spxextra{class in fPCA}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.fdahpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdahpca}}}{\emph{fdawarp}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdahpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdahpca}}}{\emph{\DUrole{n}{fdawarp}}}{}
 This class provides horizontal fPCA using the
 SRVF framework
 
@@ -704,11 +711,11 @@ Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_fpca() (fPCA.fdahpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdahpca method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.fdahpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{no=3}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdahpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{3}}}{}
 This function calculates horizontal functional principal component analysis on aligned data
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
-\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} number of components to extract (default = 3)
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 3)
 
 \item[{Return type}] \leavevmode
 fdahpca object of numpy ndarray
@@ -748,7 +755,7 @@ Usage: obj.plot()
 \index{fdajpca (class in fPCA)@\spxentry{fdajpca}\spxextra{class in fPCA}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.fdajpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdajpca}}}{\emph{fdawarp}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdajpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdajpca}}}{\emph{\DUrole{n}{fdawarp}}}{}
 This class provides joint fPCA using the
 SRVF framework
 
@@ -800,16 +807,16 @@ Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_fpca() (fPCA.fdajpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdajpca method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.fdajpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{no=3}, \emph{id=None}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdajpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{3}}, \emph{\DUrole{n}{id}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 This function calculates joint functional principal component analysis
 on aligned data
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} number of components to extract (default = 3)
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 3)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{id}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} point to use for f(0) (default = midpoint)
+\sphinxstyleliteralstrong{\sphinxupquote{id}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} point to use for f(0) (default = midpoint)
 
 \end{itemize}
 
@@ -851,7 +858,7 @@ Usage: obj.plot()
 \index{fdavpca (class in fPCA)@\spxentry{fdavpca}\spxextra{class in fPCA}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.fdavpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdavpca}}}{\emph{fdawarp}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdavpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{fPCA.}}\sphinxbfcode{\sphinxupquote{fdavpca}}}{\emph{\DUrole{n}{fdawarp}}}{}
 This class provides vertical fPCA using the
 SRVF framework
 
@@ -894,16 +901,16 @@ Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_fpca() (fPCA.fdavpca method)@\spxentry{calc\_fpca()}\spxextra{fPCA.fdavpca method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPCA:fPCA.fdavpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{no=3}, \emph{id=None}}{}
+\phantomsection\label{\detokenize{fPCA:fPCA.fdavpca.calc_fpca}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_fpca}}}{\emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{3}}, \emph{\DUrole{n}{id}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 This function calculates vertical functional principal component analysis
 on aligned data
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} number of components to extract (default = 3)
+\sphinxstyleliteralstrong{\sphinxupquote{no}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of components to extract (default = 3)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{id}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} point to use for f(0) (default = midpoint)
+\sphinxstyleliteralstrong{\sphinxupquote{id}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} point to use for f(0) (default = midpoint)
 
 \end{itemize}
 
@@ -944,14 +951,14 @@ Usage: obj.plot()
 
 
 \chapter{Elastic Functional Boxplots}
-\label{\detokenize{boxplots:module-boxplots}}\label{\detokenize{boxplots:elastic-functional-boxplots}}\label{\detokenize{boxplots::doc}}\index{boxplots (module)@\spxentry{boxplots}\spxextra{module}}
+\label{\detokenize{boxplots:module-boxplots}}\label{\detokenize{boxplots:elastic-functional-boxplots}}\label{\detokenize{boxplots::doc}}\index{module@\spxentry{module}!boxplots@\spxentry{boxplots}}\index{boxplots@\spxentry{boxplots}!module@\spxentry{module}}
 Elastic Functional Boxplots
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{ampbox (class in boxplots)@\spxentry{ampbox}\spxextra{class in boxplots}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{boxplots:boxplots.ampbox}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{ampbox}}}{\emph{fdawarp}}{}
+\phantomsection\label{\detokenize{boxplots:boxplots.ampbox}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{ampbox}}}{\emph{\DUrole{n}{fdawarp}}}{}
 This class provides amplitude boxplot for functional data using the
 SRVF framework
 
@@ -1000,7 +1007,7 @@ Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{construct\_boxplot() (boxplots.ampbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.ampbox method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{boxplots:boxplots.ampbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{alpha=0.05}, \emph{k\_a=1}}{}
+\phantomsection\label{\detokenize{boxplots:boxplots.ampbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{\DUrole{n}{alpha}\DUrole{o}{=}\DUrole{default_value}{0.05}}, \emph{\DUrole{n}{k\_a}\DUrole{o}{=}\DUrole{default_value}{1}}}{}
 This function constructs the amplitude boxplot using the elastic
 square\sphinxhyphen{}root slope (srsf) framework.
 \begin{quote}\begin{description}
@@ -1023,7 +1030,7 @@ square\sphinxhyphen{}root slope (srsf) framework.
 \index{phbox (class in boxplots)@\spxentry{phbox}\spxextra{class in boxplots}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{boxplots:boxplots.phbox}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{phbox}}}{\emph{fdawarp}}{}
+\phantomsection\label{\detokenize{boxplots:boxplots.phbox}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{boxplots.}}\sphinxbfcode{\sphinxupquote{phbox}}}{\emph{\DUrole{n}{fdawarp}}}{}
 This class provides phase boxplot for functional data using the
 SRVF framework
 
@@ -1072,7 +1079,7 @@ Date   :  15\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{construct\_boxplot() (boxplots.phbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.phbox method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{boxplots:boxplots.phbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{alpha=0.05}, \emph{k\_a=1}}{}
+\phantomsection\label{\detokenize{boxplots:boxplots.phbox.construct_boxplot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_boxplot}}}{\emph{\DUrole{n}{alpha}\DUrole{o}{=}\DUrole{default_value}{0.05}}, \emph{\DUrole{n}{k\_a}\DUrole{o}{=}\DUrole{default_value}{1}}}{}
 This function constructs phase boxplot for functional data using the elastic
 square\sphinxhyphen{}root slope (srsf) framework.
 \begin{quote}\begin{description}
@@ -1105,14 +1112,14 @@ Usage: obj.plot()
 
 
 \chapter{Functional Principal Least Squares}
-\label{\detokenize{fPLS:module-fPLS}}\label{\detokenize{fPLS:functional-principal-least-squares}}\label{\detokenize{fPLS::doc}}\index{fPLS (module)@\spxentry{fPLS}\spxextra{module}}
+\label{\detokenize{fPLS:module-fPLS}}\label{\detokenize{fPLS:functional-principal-least-squares}}\label{\detokenize{fPLS::doc}}\index{module@\spxentry{module}!fPLS@\spxentry{fPLS}}\index{fPLS@\spxentry{fPLS}!module@\spxentry{module}}
 Partial Least Squares using SVD
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{pls\_svd() (in module fPLS)@\spxentry{pls\_svd()}\spxextra{in module fPLS}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{fPLS:fPLS.pls_svd}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPLS.}}\sphinxbfcode{\sphinxupquote{pls\_svd}}}{\emph{time}, \emph{qf}, \emph{qg}, \emph{no}, \emph{alpha=0.0}}{}
+\phantomsection\label{\detokenize{fPLS:fPLS.pls_svd}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{fPLS.}}\sphinxbfcode{\sphinxupquote{pls\_svd}}}{\emph{\DUrole{n}{time}}, \emph{\DUrole{n}{qf}}, \emph{\DUrole{n}{qg}}, \emph{\DUrole{n}{no}}, \emph{\DUrole{n}{alpha}\DUrole{o}{=}\DUrole{default_value}{0.0}}}{}
 This function computes the partial least squares using SVD
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1155,14 +1162,14 @@ singular values
 
 
 \chapter{Elastic Regression}
-\label{\detokenize{regression:module-regression}}\label{\detokenize{regression:elastic-regression}}\label{\detokenize{regression::doc}}\index{regression (module)@\spxentry{regression}\spxextra{module}}
+\label{\detokenize{regression:module-regression}}\label{\detokenize{regression:elastic-regression}}\label{\detokenize{regression::doc}}\index{module@\spxentry{module}!regression@\spxentry{regression}}\index{regression@\spxentry{regression}!module@\spxentry{module}}
 Warping Invariant Regression using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{elastic\_logistic() (in module regression)@\spxentry{elastic\_logistic()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.elastic_logistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_logistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=\sphinxhyphen{}1}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{regression:regression.elastic_logistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_logistic}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{B}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{df}\DUrole{o}{=}\DUrole{default_value}{20}}, \emph{\DUrole{n}{max\_itr}\DUrole{o}{=}\DUrole{default_value}{20}}, \emph{\DUrole{n}{cores}\DUrole{o}{=}\DUrole{default_value}{\sphinxhyphen{} 1}}, \emph{\DUrole{n}{smooth}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function identifies a logistic regression model with
 phase\sphinxhyphen{}variablity using elastic methods
 \begin{quote}\begin{description}
@@ -1217,7 +1224,7 @@ functions with N samples
 \index{elastic\_mlogistic() (in module regression)@\spxentry{elastic\_mlogistic()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.elastic_mlogistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlogistic}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=\sphinxhyphen{}1}, \emph{delta=0.01}, \emph{parallel=True}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{regression:regression.elastic_mlogistic}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlogistic}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{B}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{df}\DUrole{o}{=}\DUrole{default_value}{20}}, \emph{\DUrole{n}{max\_itr}\DUrole{o}{=}\DUrole{default_value}{20}}, \emph{\DUrole{n}{cores}\DUrole{o}{=}\DUrole{default_value}{\sphinxhyphen{} 1}}, \emph{\DUrole{n}{delta}\DUrole{o}{=}\DUrole{default_value}{0.01}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{smooth}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function identifies a multinomial logistic regression model with
 phase\sphinxhyphen{}variablity using elastic methods
 \begin{quote}\begin{description}
@@ -1272,7 +1279,7 @@ functions with M samples
 \index{elastic\_prediction() (in module regression)@\spxentry{elastic\_prediction()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.elastic_prediction}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_prediction}}}{\emph{f}, \emph{time}, \emph{model}, \emph{y=None}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{regression:regression.elastic_prediction}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_prediction}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{model}}, \emph{\DUrole{n}{y}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{smooth}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function performs prediction from an elastic regression model
 with phase\sphinxhyphen{}variablity
 \begin{quote}\begin{description}
@@ -1318,7 +1325,7 @@ functions with M samples
 \index{elastic\_regression() (in module regression)@\spxentry{elastic\_regression()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.elastic_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_regression}}}{\emph{f}, \emph{y}, \emph{time}, \emph{B=None}, \emph{lam=0}, \emph{df=20}, \emph{max\_itr=20}, \emph{cores=\sphinxhyphen{}1}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{regression:regression.elastic_regression}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{elastic\_regression}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{B}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0}}, \emph{\DUrole{n}{df}\DUrole{o}{=}\DUrole{default_value}{20}}, \emph{\DUrole{n}{max\_itr}\DUrole{o}{=}\DUrole{default_value}{20}}, \emph{\DUrole{n}{cores}\DUrole{o}{=}\DUrole{default_value}{\sphinxhyphen{} 1}}, \emph{\DUrole{n}{smooth}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function identifies a regression model with phase\sphinxhyphen{}variablity
 using elastic methods
 \begin{quote}\begin{description}
@@ -1376,7 +1383,7 @@ functions with N samples
 \index{logistic\_warp() (in module regression)@\spxentry{logistic\_warp()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.logistic_warp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logistic\_warp}}}{\emph{beta}, \emph{time}, \emph{q}, \emph{y}}{}
+\phantomsection\label{\detokenize{regression:regression.logistic_warp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logistic\_warp}}}{\emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{q}}, \emph{\DUrole{n}{y}}}{}
 calculates optimal warping for function logistic regression
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1407,7 +1414,7 @@ warping function
 \index{logit\_gradient() (in module regression)@\spxentry{logit\_gradient()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.logit_gradient}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_gradient}}}{\emph{b}, \emph{X}, \emph{y}}{}
+\phantomsection\label{\detokenize{regression:regression.logit_gradient}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_gradient}}}{\emph{\DUrole{n}{b}}, \emph{\DUrole{n}{X}}, \emph{\DUrole{n}{y}}}{}
 calculates gradient of the logistic loss
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1435,7 +1442,7 @@ gradient of logisitc loss
 \index{logit\_hessian() (in module regression)@\spxentry{logit\_hessian()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.logit_hessian}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_hessian}}}{\emph{s}, \emph{b}, \emph{X}, \emph{y}}{}
+\phantomsection\label{\detokenize{regression:regression.logit_hessian}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_hessian}}}{\emph{\DUrole{n}{s}}, \emph{\DUrole{n}{b}}, \emph{\DUrole{n}{X}}, \emph{\DUrole{n}{y}}}{}
 calculates hessian of the logistic loss
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1466,7 +1473,7 @@ hessian of logistic loss
 \index{logit\_loss() (in module regression)@\spxentry{logit\_loss()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.logit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_loss}}}{\emph{b}, \emph{X}, \emph{y}}{}
+\phantomsection\label{\detokenize{regression:regression.logit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{logit\_loss}}}{\emph{\DUrole{n}{b}}, \emph{\DUrole{n}{X}}, \emph{\DUrole{n}{y}}}{}
 logistic loss function, returns Sum\{\sphinxhyphen{}log(phi(t))\}
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1494,7 +1501,7 @@ loss value
 \index{mlogit\_gradient() (in module regression)@\spxentry{mlogit\_gradient()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.mlogit_gradient}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_gradient}}}{\emph{b}, \emph{X}, \emph{Y}}{}
+\phantomsection\label{\detokenize{regression:regression.mlogit_gradient}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_gradient}}}{\emph{\DUrole{n}{b}}, \emph{\DUrole{n}{X}}, \emph{\DUrole{n}{Y}}}{}
 calculates gradient of the multinomial logistic loss
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1522,7 +1529,7 @@ gradient
 \index{mlogit\_loss() (in module regression)@\spxentry{mlogit\_loss()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.mlogit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_loss}}}{\emph{b}, \emph{X}, \emph{Y}}{}
+\phantomsection\label{\detokenize{regression:regression.mlogit_loss}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_loss}}}{\emph{\DUrole{n}{b}}, \emph{\DUrole{n}{X}}, \emph{\DUrole{n}{Y}}}{}
 calculates multinomial logistic loss (negative log\sphinxhyphen{}likelihood)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1550,7 +1557,7 @@ negative log\sphinxhyphen{}likelihood
 \index{mlogit\_warp\_grad() (in module regression)@\spxentry{mlogit\_warp\_grad()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.mlogit_warp_grad}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_warp\_grad}}}{\emph{alpha}, \emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{max\_itr=8000}, \emph{tol=1e\sphinxhyphen{}10}, \emph{delta=0.008}, \emph{display=0}}{}
+\phantomsection\label{\detokenize{regression:regression.mlogit_warp_grad}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{mlogit\_warp\_grad}}}{\emph{\DUrole{n}{alpha}}, \emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{q}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{max\_itr}\DUrole{o}{=}\DUrole{default_value}{8000}}, \emph{\DUrole{n}{tol}\DUrole{o}{=}\DUrole{default_value}{1e\sphinxhyphen{}10}}, \emph{\DUrole{n}{delta}\DUrole{o}{=}\DUrole{default_value}{0.008}}, \emph{\DUrole{n}{display}\DUrole{o}{=}\DUrole{default_value}{0}}}{}
 calculates optimal warping for functional multinomial logistic regression
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1596,7 +1603,7 @@ warping function
 \index{phi() (in module regression)@\spxentry{phi()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.phi}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{phi}}}{\emph{t}}{}
+\phantomsection\label{\detokenize{regression:regression.phi}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{phi}}}{\emph{\DUrole{n}{t}}}{}
 calculates logistic function, returns 1 / (1 + exp(\sphinxhyphen{}t))
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -1615,7 +1622,7 @@ return value
 \index{regression\_warp() (in module regression)@\spxentry{regression\_warp()}\spxextra{in module regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{regression:regression.regression_warp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{regression\_warp}}}{\emph{beta}, \emph{time}, \emph{q}, \emph{y}, \emph{alpha}}{}
+\phantomsection\label{\detokenize{regression:regression.regression_warp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{regression.}}\sphinxbfcode{\sphinxupquote{regression\_warp}}}{\emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{q}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{alpha}}}{}
 calculates optimal warping for function linear regression
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -1651,14 +1658,14 @@ warping function
 
 
 \chapter{Elastic Principal Component Regression}
-\label{\detokenize{pcr_regression:module-pcr_regression}}\label{\detokenize{pcr_regression:elastic-principal-component-regression}}\label{\detokenize{pcr_regression::doc}}\index{pcr\_regression (module)@\spxentry{pcr\_regression}\spxextra{module}}
+\label{\detokenize{pcr_regression:module-pcr_regression}}\label{\detokenize{pcr_regression:elastic-principal-component-regression}}\label{\detokenize{pcr_regression::doc}}\index{module@\spxentry{module}!pcr\_regression@\spxentry{pcr\_regression}}\index{pcr\_regression@\spxentry{pcr\_regression}!module@\spxentry{module}}
 Warping Invariant PCR Regression using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{elastic\_lpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_lpcr\_regression}\spxextra{class in pcr\_regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_lpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_lpcr\_regression}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{time}}}{}
 This class provides elastic logistic pcr regression for functional 
 data using the SRVF framework accounting for warping
 
@@ -1693,7 +1700,7 @@ Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_model() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method=\textquotesingle{}combined\textquotesingle{}}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{\DUrole{n}{pca\_method}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}combined\textquotesingle{}}}, \emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{5}}, \emph{\DUrole{n}{smooth\_data}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{sparam}\DUrole{o}{=}\DUrole{default_value}{25}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function identifies a logistic regression model with phase\sphinxhyphen{}variability
 using elastic pca
 \begin{quote}\begin{description}
@@ -1723,7 +1730,7 @@ using elastic pca
 \index{predict() (pcr\_regression.elastic\_lpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_lpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_lpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{\DUrole{n}{newdata}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 This function performs prediction on regression model on new data if available or current stored data in object
 Usage:  obj.predict()
 \begin{quote}
@@ -1733,7 +1740,7 @@ obj.predict(newdata)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxstyleliteralemphasis{\sphinxupquote{dict}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
@@ -1762,7 +1769,7 @@ obj.predict(newdata)
 \index{elastic\_mlpcr\_regression (class in pcr\_regression)@\spxentry{elastic\_mlpcr\_regression}\spxextra{class in pcr\_regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlpcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_mlpcr\_regression}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{time}}}{}
 This class provides elastic multinomial logistic pcr regression for functional
 data using the SRVF framework accounting for warping
 
@@ -1801,7 +1808,7 @@ Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_model() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method=\textquotesingle{}combined\textquotesingle{}}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{\DUrole{n}{pca\_method}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}combined\textquotesingle{}}}, \emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{5}}, \emph{\DUrole{n}{smooth\_data}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{sparam}\DUrole{o}{=}\DUrole{default_value}{25}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function identifies a logistic regression model with phase\sphinxhyphen{}variability
 using elastic pca
 \begin{quote}\begin{description}
@@ -1840,7 +1847,7 @@ using elastic pca
 \index{predict() (pcr\_regression.elastic\_mlpcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_mlpcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_mlpcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{\DUrole{n}{newdata}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 This function performs prediction on regression model on new data if available or current stored data in object
 Usage:  obj.predict()
 \begin{quote}
@@ -1850,7 +1857,7 @@ obj.predict(newdata)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxstyleliteralemphasis{\sphinxupquote{dict}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
@@ -1879,7 +1886,7 @@ obj.predict(newdata)
 \index{elastic\_pcr\_regression (class in pcr\_regression)@\spxentry{elastic\_pcr\_regression}\spxextra{class in pcr\_regression}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_pcr\_regression}}}{\emph{f}, \emph{y}, \emph{time}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{pcr\_regression.}}\sphinxbfcode{\sphinxupquote{elastic\_pcr\_regression}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{time}}}{}
 This class provides elastic pcr regression for functional data using the
 SRVF framework accounting for warping
 
@@ -1916,7 +1923,7 @@ Date   :  18\sphinxhyphen{}Mar\sphinxhyphen{}2018
 \index{calc\_model() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{calc\_model()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{pca\_method=\textquotesingle{}combined\textquotesingle{}}, \emph{no=5}, \emph{smooth\_data=False}, \emph{sparam=25}, \emph{parallel=False}, \emph{C=None}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.calc_model}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{calc\_model}}}{\emph{\DUrole{n}{pca\_method}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}combined\textquotesingle{}}}, \emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{5}}, \emph{\DUrole{n}{smooth\_data}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{sparam}\DUrole{o}{=}\DUrole{default_value}{25}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{C}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 This function identifies a regression model with phase\sphinxhyphen{}variability
 using elastic pca
 \begin{quote}\begin{description}
@@ -1949,7 +1956,7 @@ using elastic pca
 \index{predict() (pcr\_regression.elastic\_pcr\_regression method)@\spxentry{predict()}\spxextra{pcr\_regression.elastic\_pcr\_regression method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{newdata=None}}{}
+\phantomsection\label{\detokenize{pcr_regression:pcr_regression.elastic_pcr_regression.predict}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{predict}}}{\emph{\DUrole{n}{newdata}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 This function performs prediction on regression model on new data if available or current stored data in object
 Usage:  obj.predict()
 \begin{quote}
@@ -1959,7 +1966,7 @@ obj.predict(newdata)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxstyleliteralemphasis{\sphinxupquote{dict}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
+\sphinxstyleliteralstrong{\sphinxupquote{newdata}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#dict}{\sphinxstyleliteralemphasis{\sphinxupquote{dict}}}) \textendash{} dict containing new data for prediction (needs the keys below, if None predicts on training data)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} (M,N) matrix of functions
@@ -1988,14 +1995,14 @@ obj.predict(newdata)
 
 
 \chapter{Elastic Functional Tolerance Bounds}
-\label{\detokenize{tolerance:module-tolerance}}\label{\detokenize{tolerance:elastic-functional-tolerance-bounds}}\label{\detokenize{tolerance::doc}}\index{tolerance (module)@\spxentry{tolerance}\spxextra{module}}
+\label{\detokenize{tolerance:module-tolerance}}\label{\detokenize{tolerance:elastic-functional-tolerance-bounds}}\label{\detokenize{tolerance::doc}}\index{module@\spxentry{module}!tolerance@\spxentry{tolerance}}\index{tolerance@\spxentry{tolerance}!module@\spxentry{module}}
 Functional Tolerance Bounds using SRSF
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{bootTB() (in module tolerance)@\spxentry{bootTB()}\spxextra{in module tolerance}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{tolerance:tolerance.bootTB}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{bootTB}}}{\emph{f}, \emph{time}, \emph{a=0.5}, \emph{p=0.99}, \emph{B=500}, \emph{no=5}, \emph{parallel=True}}{}
+\phantomsection\label{\detokenize{tolerance:tolerance.bootTB}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{bootTB}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{a}\DUrole{o}{=}\DUrole{default_value}{0.5}}, \emph{\DUrole{n}{p}\DUrole{o}{=}\DUrole{default_value}{0.99}}, \emph{\DUrole{n}{B}\DUrole{o}{=}\DUrole{default_value}{500}}, \emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{5}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{True}}}{}
 This function computes tolerance bounds for functional data containing
 phase and amplitude variation using bootstrap sampling
 \begin{quote}\begin{description}
@@ -2051,7 +2058,7 @@ fdawarp object
 \index{mvtol\_region() (in module tolerance)@\spxentry{mvtol\_region()}\spxextra{in module tolerance}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{tolerance:tolerance.mvtol_region}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{mvtol\_region}}}{\emph{x}, \emph{alpha}, \emph{P}, \emph{B}}{}
+\phantomsection\label{\detokenize{tolerance:tolerance.mvtol_region}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{mvtol\_region}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{alpha}}, \emph{\DUrole{n}{P}}, \emph{\DUrole{n}{B}}}{}
 Computes tolerance factor for multivariate normal
 
 Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
@@ -2085,7 +2092,7 @@ tolerance factor
 \index{pcaTB() (in module tolerance)@\spxentry{pcaTB()}\spxextra{in module tolerance}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{tolerance:tolerance.pcaTB}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{pcaTB}}}{\emph{f}, \emph{time}, \emph{a=0.5}, \emph{p=0.99}, \emph{no=5}, \emph{parallel=True}}{}
+\phantomsection\label{\detokenize{tolerance:tolerance.pcaTB}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{pcaTB}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{a}\DUrole{o}{=}\DUrole{default_value}{0.5}}, \emph{\DUrole{n}{p}\DUrole{o}{=}\DUrole{default_value}{0.99}}, \emph{\DUrole{n}{no}\DUrole{o}{=}\DUrole{default_value}{5}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{True}}}{}
 This function computes tolerance bounds for functional data containing
 phase and amplitude variation using fPCA
 \begin{quote}\begin{description}
@@ -2129,7 +2136,7 @@ tolerance factor
 \index{rwishart() (in module tolerance)@\spxentry{rwishart()}\spxextra{in module tolerance}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{tolerance:tolerance.rwishart}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{rwishart}}}{\emph{df}, \emph{p}}{}
+\phantomsection\label{\detokenize{tolerance:tolerance.rwishart}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{tolerance.}}\sphinxbfcode{\sphinxupquote{rwishart}}}{\emph{\DUrole{n}{df}}, \emph{\DUrole{n}{p}}}{}
 Computes a random wishart matrix
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2154,14 +2161,14 @@ matrix
 
 
 \chapter{SRVF Geodesic Computation}
-\label{\detokenize{geodesic:module-geodesic}}\label{\detokenize{geodesic:srvf-geodesic-computation}}\label{\detokenize{geodesic::doc}}\index{geodesic (module)@\spxentry{geodesic}\spxextra{module}}
+\label{\detokenize{geodesic:module-geodesic}}\label{\detokenize{geodesic:srvf-geodesic-computation}}\label{\detokenize{geodesic::doc}}\index{module@\spxentry{module}!geodesic@\spxentry{geodesic}}\index{geodesic@\spxentry{geodesic}!module@\spxentry{module}}
 geodesic calculation for SRVF (curves) open and closed)
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{back\_parallel\_transport() (in module geodesic)@\spxentry{back\_parallel\_transport()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.back_parallel_transport}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{back\_parallel\_transport}}}{\emph{u1}, \emph{alpha}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.back_parallel_transport}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{back\_parallel\_transport}}}{\emph{\DUrole{n}{u1}}, \emph{\DUrole{n}{alpha}}, \emph{\DUrole{n}{basis}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 backwards parallel translates q1 and q2 along manifold
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2195,7 +2202,7 @@ translated vector
 \index{calc\_alphadot() (in module geodesic)@\spxentry{calc\_alphadot()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.calc_alphadot}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calc\_alphadot}}}{\emph{alpha}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.calc_alphadot}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calc\_alphadot}}}{\emph{\DUrole{n}{alpha}}, \emph{\DUrole{n}{basis}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 calculates derivative along the path alpha
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2226,7 +2233,7 @@ derivative of alpha
 \index{calculate\_energy() (in module geodesic)@\spxentry{calculate\_energy()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.calculate_energy}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calculate\_energy}}}{\emph{alphadot}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.calculate_energy}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calculate\_energy}}}{\emph{\DUrole{n}{alphadot}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 calculates energy along path
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2254,7 +2261,7 @@ energy
 \index{calculate\_gradE() (in module geodesic)@\spxentry{calculate\_gradE()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.calculate_gradE}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calculate\_gradE}}}{\emph{u}, \emph{utilde}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.calculate_gradE}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{calculate\_gradE}}}{\emph{\DUrole{n}{u}}, \emph{\DUrole{n}{utilde}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 calculates gradient of energy along path
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2288,7 +2295,7 @@ norm of gradient of energy
 \index{cov\_integral() (in module geodesic)@\spxentry{cov\_integral()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.cov_integral}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{cov\_integral}}}{\emph{alpha}, \emph{alphadot}, \emph{basis}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.cov_integral}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{cov\_integral}}}{\emph{\DUrole{n}{alpha}}, \emph{\DUrole{n}{alphadot}}, \emph{\DUrole{n}{basis}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 Calculates covariance along path alpha
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2322,7 +2329,7 @@ covariance
 \index{find\_basis\_normal\_path() (in module geodesic)@\spxentry{find\_basis\_normal\_path()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.find_basis_normal_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{find\_basis\_normal\_path}}}{\emph{alpha}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.find_basis_normal_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{find\_basis\_normal\_path}}}{\emph{\DUrole{n}{alpha}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 computes orthonormalized basis vectors to the normal space at each of the
 k points (q\sphinxhyphen{}functions) of the path alpha
 \begin{quote}\begin{description}
@@ -2348,7 +2355,7 @@ basis vectors along the path
 \index{geod\_dist\_path\_strt() (in module geodesic)@\spxentry{geod\_dist\_path\_strt()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.geod_dist_path_strt}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{geod\_dist\_path\_strt}}}{\emph{beta}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.geod_dist_path_strt}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{geod\_dist\_path\_strt}}}{\emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 calculate geodisc distance for path straightening
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2373,7 +2380,7 @@ geodesic distance
 \index{geod\_sphere() (in module geodesic)@\spxentry{geod\_sphere()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.geod_sphere}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{geod\_sphere}}}{\emph{beta1}, \emph{beta2}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.geod_sphere}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{geod\_sphere}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta2}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 This function caluclates the geodecis between open curves beta1 and
 beta2 with k steps along path
 \begin{quote}\begin{description}
@@ -2408,7 +2415,7 @@ rotation matrix
 \index{init\_path\_geod() (in module geodesic)@\spxentry{init\_path\_geod()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.init_path_geod}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{init\_path\_geod}}}{\emph{beta1}, \emph{beta2}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.init_path_geod}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{init\_path\_geod}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta2}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 Initializes a path in cal\{C\}. beta1, beta2 are already
 standardized curves. Creates a path from beta1 to beta2 in
 shape space, then projects to the closed shape manifold.
@@ -2447,7 +2454,7 @@ rotation matrix
 \index{init\_path\_rand() (in module geodesic)@\spxentry{init\_path\_rand()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.init_path_rand}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{init\_path\_rand}}}{\emph{beta1}, \emph{beta\_mid}, \emph{beta2}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.init_path_rand}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{init\_path\_rand}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta\_mid}}, \emph{\DUrole{n}{beta2}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 Initializes a path in cal\{C\}. beta1, beta\_mid beta2 are already
 standardized curves. Creates a path from beta1 to beta\_mid to beta2 in
 shape space, then projects to the closed shape manifold.
@@ -2489,7 +2496,7 @@ rotation matrix
 \index{path\_straightening() (in module geodesic)@\spxentry{path\_straightening()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.path_straightening}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{path\_straightening}}}{\emph{beta1}, \emph{beta2}, \emph{betamid}, \emph{init=\textquotesingle{}rand\textquotesingle{}}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.path_straightening}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{path\_straightening}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta2}}, \emph{\DUrole{n}{betamid}}, \emph{\DUrole{n}{init}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}rand\textquotesingle{}}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 Perform path straigtening to find geodesic between two shapes in either
 the space of closed curves or the space of affine standardized curves.
 This algorithm follows the steps outlined in section 4.6 of the
@@ -2539,7 +2546,7 @@ energy
 \index{update\_path() (in module geodesic)@\spxentry{update\_path()}\spxextra{in module geodesic}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{geodesic:geodesic.update_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{update\_path}}}{\emph{alpha}, \emph{beta}, \emph{gradE}, \emph{delta}, \emph{T=100}, \emph{k=5}}{}
+\phantomsection\label{\detokenize{geodesic:geodesic.update_path}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{geodesic.}}\sphinxbfcode{\sphinxupquote{update\_path}}}{\emph{\DUrole{n}{alpha}}, \emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{gradE}}, \emph{\DUrole{n}{delta}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 Update the path along the direction \sphinxhyphen{}gradE
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2579,14 +2586,14 @@ updated path of curves
 
 
 \chapter{Utility Functions}
-\label{\detokenize{utility_functions:module-utility_functions}}\label{\detokenize{utility_functions:utility-functions}}\label{\detokenize{utility_functions::doc}}\index{utility\_functions (module)@\spxentry{utility\_functions}\spxextra{module}}
+\label{\detokenize{utility_functions:module-utility_functions}}\label{\detokenize{utility_functions:utility-functions}}\label{\detokenize{utility_functions::doc}}\index{module@\spxentry{module}!utility\_functions@\spxentry{utility\_functions}}\index{utility\_functions@\spxentry{utility\_functions}!module@\spxentry{module}}
 Utility functions for SRSF Manipulations
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{SqrtMean() (in module utility\_functions)@\spxentry{SqrtMean()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMean}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMean}}}{\emph{gam}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMean}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMean}}}{\emph{\DUrole{n}{gam}}}{}
 calculates the srsf of warping functions with corresponding shooting vectors
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -2615,7 +2622,7 @@ numpy ndarray of shape (M,N) of M shooting vectors
 \index{SqrtMeanInverse() (in module utility\_functions)@\spxentry{SqrtMeanInverse()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMeanInverse}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMeanInverse}}}{\emph{gam}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMeanInverse}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMeanInverse}}}{\emph{\DUrole{n}{gam}}}{}
 finds the inverse of the mean of the set of the diffeomorphisms gamma
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -2635,7 +2642,7 @@ inverse of gam
 \index{SqrtMedian() (in module utility\_functions)@\spxentry{SqrtMedian()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMedian}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMedian}}}{\emph{gam}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.SqrtMedian}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{SqrtMedian}}}{\emph{\DUrole{n}{gam}}}{}
 calculates the median srsf of warping functions with corresponding shooting vectors
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -2664,7 +2671,7 @@ numpy ndarray of shape (M,N) of M shooting vectors
 \index{cumtrapzmid() (in module utility\_functions)@\spxentry{cumtrapzmid()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.cumtrapzmid}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{cumtrapzmid}}}{\emph{x}, \emph{y}, \emph{c}, \emph{mid}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.cumtrapzmid}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{cumtrapzmid}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{y}}, \emph{\DUrole{n}{c}}, \emph{\DUrole{n}{mid}}}{}
 cumulative trapezoidal numerical integration taken from midpoint
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2695,7 +2702,7 @@ cumulative integration
 \index{diffop() (in module utility\_functions)@\spxentry{diffop()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.diffop}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{diffop}}}{\emph{n}, \emph{binsize=1}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.diffop}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{diffop}}}{\emph{\DUrole{n}{n}}, \emph{\DUrole{n}{binsize}\DUrole{o}{=}\DUrole{default_value}{1}}}{}
 Creates a second order differential operator
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2720,7 +2727,7 @@ matrix describing differential operator
 \index{elastic\_distance() (in module utility\_functions)@\spxentry{elastic\_distance()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.elastic_distance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_distance}}}{\emph{f1}, \emph{f2}, \emph{time}, \emph{method=\textquotesingle{}DP\textquotesingle{}}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.elastic_distance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_distance}}}{\emph{\DUrole{n}{f1}}, \emph{\DUrole{n}{f2}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{method}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}DP\textquotesingle{}}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0.0}}}{}
 ”
 calculates the distances between function, where f1 is aligned to
 f2. In other words
@@ -2757,7 +2764,7 @@ phase distance
 \index{f\_K\_fold() (in module utility\_functions)@\spxentry{f\_K\_fold()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.f_K_fold}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_K\_fold}}}{\emph{Nobs}, \emph{K=5}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.f_K_fold}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_K\_fold}}}{\emph{\DUrole{n}{Nobs}}, \emph{\DUrole{n}{K}\DUrole{o}{=}\DUrole{default_value}{5}}}{}
 generates sample indices for K\sphinxhyphen{}fold cross validation
 
 :param Nobs number of observations
@@ -2779,7 +2786,7 @@ test indexes (Nobs*(1/K) X K)
 \index{f\_to\_srsf() (in module utility\_functions)@\spxentry{f\_to\_srsf()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.f_to_srsf}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_to\_srsf}}}{\emph{f}, \emph{time}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.f_to_srsf}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{f\_to\_srsf}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{smooth}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 converts f to a square\sphinxhyphen{}root slope function (SRSF)
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2804,7 +2811,7 @@ srsf of f
 \index{geigen() (in module utility\_functions)@\spxentry{geigen()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.geigen}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{geigen}}}{\emph{Amat}, \emph{Bmat}, \emph{Cmat}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.geigen}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{geigen}}}{\emph{\DUrole{n}{Amat}}, \emph{\DUrole{n}{Bmat}}, \emph{\DUrole{n}{Cmat}}}{}
 generalized eigenvalue problem of the form
 
 max tr L’AM / sqrt(tr L’BL tr M’CM) w.r.t. L and M
@@ -2832,7 +2839,7 @@ right eigenvectors
 \index{gradient\_spline() (in module utility\_functions)@\spxentry{gradient\_spline()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.gradient_spline}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{gradient\_spline}}}{\emph{time}, \emph{f}, \emph{smooth=False}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.gradient_spline}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{gradient\_spline}}}{\emph{\DUrole{n}{time}}, \emph{\DUrole{n}{f}}, \emph{\DUrole{n}{smooth}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 This function takes the gradient of f using b\sphinxhyphen{}spline smoothing
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2866,7 +2873,7 @@ second derivative of each function
 \index{innerprod\_q() (in module utility\_functions)@\spxentry{innerprod\_q()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.innerprod_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{innerprod\_q}}}{\emph{time}, \emph{q1}, \emph{q2}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.innerprod_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{innerprod\_q}}}{\emph{\DUrole{n}{time}}, \emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}}{}
 calculates the innerproduct between two srsfs
 
 :param time vector descrbing time samples
@@ -2886,7 +2893,7 @@ inner product value
 \index{invertGamma() (in module utility\_functions)@\spxentry{invertGamma()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.invertGamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{invertGamma}}}{\emph{gam}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.invertGamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{invertGamma}}}{\emph{\DUrole{n}{gam}}}{}
 finds the inverse of the diffeomorphism gamma
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -2905,7 +2912,7 @@ inverse of gam
 \index{optimum\_reparam() (in module utility\_functions)@\spxentry{optimum\_reparam()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam}}}{\emph{q1}, \emph{time}, \emph{q2}, \emph{method=\textquotesingle{}DP\textquotesingle{}}, \emph{lam=0.0}, \emph{f1o=0.0}, \emph{f2o=0.0}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{q2}}, \emph{\DUrole{n}{method}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}DP\textquotesingle{}}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{f1o}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{f2o}\DUrole{o}{=}\DUrole{default_value}{0.0}}}{}
 calculates the warping to align srsf q2 to q1
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2939,7 +2946,7 @@ describing the warping function used to align q2 with q1
 \index{optimum\_reparam\_pair() (in module utility\_functions)@\spxentry{optimum\_reparam\_pair()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam_pair}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam\_pair}}}{\emph{q}, \emph{time}, \emph{q1}, \emph{q2}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.optimum_reparam_pair}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam\_pair}}}{\emph{\DUrole{n}{q}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0.0}}}{}
 calculates the warping to align srsf pair q1 and q2 to q
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -2973,7 +2980,7 @@ describing the warping function used to align q2 with q1
 \index{outlier\_detection() (in module utility\_functions)@\spxentry{outlier\_detection()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.outlier_detection}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{outlier\_detection}}}{\emph{q}, \emph{time}, \emph{mq}, \emph{k=1.5}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.outlier_detection}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{outlier\_detection}}}{\emph{\DUrole{n}{q}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{mq}}, \emph{\DUrole{n}{k}\DUrole{o}{=}\DUrole{default_value}{1.5}}}{}
 calculates outlier’s using geodesic distances of the SRSFs from the median
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3001,7 +3008,7 @@ q\_outlier: outlier functions
 \index{randomGamma() (in module utility\_functions)@\spxentry{randomGamma()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.randomGamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{randomGamma}}}{\emph{gam}, \emph{num}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.randomGamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{randomGamma}}}{\emph{\DUrole{n}{gam}}, \emph{\DUrole{n}{num}}}{}
 generates random warping functions
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3023,7 +3030,7 @@ rgam: random warping functions
 \index{resamplefunction() (in module utility\_functions)@\spxentry{resamplefunction()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.resamplefunction}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{resamplefunction}}}{\emph{x}, \emph{n}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.resamplefunction}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{resamplefunction}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{n}}}{}
 resample function using n points
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3048,7 +3055,7 @@ resampled function
 \index{rgam() (in module utility\_functions)@\spxentry{rgam()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.rgam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{rgam}}}{\emph{N}, \emph{sigma}, \emph{num}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.rgam}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{rgam}}}{\emph{\DUrole{n}{N}}, \emph{\DUrole{n}{sigma}}, \emph{\DUrole{n}{num}}}{}
 Generates random warping functions
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3073,7 +3080,7 @@ gam: numpy ndarray of warping functions
 \index{smooth\_data() (in module utility\_functions)@\spxentry{smooth\_data()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.smooth_data}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{smooth\_data}}}{\emph{f}, \emph{sparam}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.smooth_data}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{smooth\_data}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{sparam}}}{}
 This function smooths a collection of functions using a box filter
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3098,7 +3105,7 @@ smoothed functions functions
 \index{srsf\_to\_f() (in module utility\_functions)@\spxentry{srsf\_to\_f()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.srsf_to_f}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{srsf\_to\_f}}}{\emph{q}, \emph{time}, \emph{f0=0.0}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.srsf_to_f}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{srsf\_to\_f}}}{\emph{\DUrole{n}{q}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{f0}\DUrole{o}{=}\DUrole{default_value}{0.0}}}{}
 converts q (srsf) to a function
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3126,7 +3133,7 @@ function
 \index{update\_progress() (in module utility\_functions)@\spxentry{update\_progress()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.update_progress}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{update\_progress}}}{\emph{progress}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.update_progress}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{update\_progress}}}{\emph{\DUrole{n}{progress}}}{}
 This function creates a progress bar
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3139,7 +3146,7 @@ This function creates a progress bar
 \index{warp\_f\_gamma() (in module utility\_functions)@\spxentry{warp\_f\_gamma()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.warp_f_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{warp\_f\_gamma}}}{\emph{time}, \emph{f}, \emph{gam}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.warp_f_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{warp\_f\_gamma}}}{\emph{\DUrole{n}{time}}, \emph{\DUrole{n}{f}}, \emph{\DUrole{n}{gam}}}{}
 warps a function f by gam
 
 :param time vector describing time samples
@@ -3159,7 +3166,7 @@ warped srsf
 \index{warp\_q\_gamma() (in module utility\_functions)@\spxentry{warp\_q\_gamma()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.warp_q_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{warp\_q\_gamma}}}{\emph{time}, \emph{q}, \emph{gam}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.warp_q_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{warp\_q\_gamma}}}{\emph{\DUrole{n}{time}}, \emph{\DUrole{n}{q}}, \emph{\DUrole{n}{gam}}}{}
 warps a srsf q by gam
 
 :param time vector describing time samples
@@ -3179,7 +3186,7 @@ warped srsf
 \index{zero\_crossing() (in module utility\_functions)@\spxentry{zero\_crossing()}\spxextra{in module utility\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{utility_functions:utility_functions.zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{zero\_crossing}}}{\emph{Y}, \emph{q}, \emph{bt}, \emph{time}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{zero\_crossing}}}{\emph{\DUrole{n}{Y}}, \emph{\DUrole{n}{q}}, \emph{\DUrole{n}{bt}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{y\_max}}, \emph{\DUrole{n}{y\_min}}, \emph{\DUrole{n}{gmax}}, \emph{\DUrole{n}{gmin}}}{}
 finds zero\sphinxhyphen{}crossing of optimal gamma, gam = s*gmax + (1\sphinxhyphen{}s)*gmin
 from elastic regression model
 \begin{quote}\begin{description}
@@ -3223,14 +3230,14 @@ optimal warping function
 
 
 \chapter{Curve Functions}
-\label{\detokenize{curve_functions:module-curve_functions}}\label{\detokenize{curve_functions:curve-functions}}\label{\detokenize{curve_functions::doc}}\index{curve\_functions (module)@\spxentry{curve\_functions}\spxextra{module}}
+\label{\detokenize{curve_functions:module-curve_functions}}\label{\detokenize{curve_functions:curve-functions}}\label{\detokenize{curve_functions::doc}}\index{module@\spxentry{module}!curve\_functions@\spxentry{curve\_functions}}\index{curve\_functions@\spxentry{curve\_functions}!module@\spxentry{module}}
 functions for SRVF curve manipulations
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
 \index{calc\_j() (in module curve\_functions)@\spxentry{calc\_j()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.calc_j}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calc\_j}}}{\emph{basis}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.calc_j}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calc\_j}}}{\emph{\DUrole{n}{basis}}}{}
 Calculates Jacobian matrix from normal basis
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3249,7 +3256,7 @@ Jacobian
 \index{calculate\_variance() (in module curve\_functions)@\spxentry{calculate\_variance()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.calculate_variance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calculate\_variance}}}{\emph{beta}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.calculate_variance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calculate\_variance}}}{\emph{\DUrole{n}{beta}}}{}
 This function calculates variance of curve beta
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3268,7 +3275,7 @@ variance
 \index{calculatecentroid() (in module curve\_functions)@\spxentry{calculatecentroid()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.calculatecentroid}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calculatecentroid}}}{\emph{beta}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.calculatecentroid}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{calculatecentroid}}}{\emph{\DUrole{n}{beta}}}{}
 This function calculates centroid of a parameterized curve
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3287,7 +3294,7 @@ center coordinates
 \index{curve\_to\_q() (in module curve\_functions)@\spxentry{curve\_to\_q()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_to_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_to\_q}}}{\emph{beta}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_to_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_to\_q}}}{\emph{\DUrole{n}{beta}}}{}
 This function converts curve beta to srvf q
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3306,7 +3313,7 @@ srvf of curve
 \index{curve\_zero\_crossing() (in module curve\_functions)@\spxentry{curve\_zero\_crossing()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_zero\_crossing}}}{\emph{Y}, \emph{beta}, \emph{bt}, \emph{y\_max}, \emph{y\_min}, \emph{gmax}, \emph{gmin}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_zero_crossing}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_zero\_crossing}}}{\emph{\DUrole{n}{Y}}, \emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{bt}}, \emph{\DUrole{n}{y\_max}}, \emph{\DUrole{n}{y\_min}}, \emph{\DUrole{n}{gmax}}, \emph{\DUrole{n}{gmin}}}{}
 finds zero\sphinxhyphen{}crossing of optimal gamma, gam = s*gmax + (1\sphinxhyphen{}s)*gmin
 from elastic curve regression model
 \begin{quote}\begin{description}
@@ -3350,7 +3357,7 @@ rotation matrix
 \index{find\_basis\_normal() (in module curve\_functions)@\spxentry{find\_basis\_normal()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.find_basis_normal}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_basis\_normal}}}{\emph{q}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_basis_normal}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_basis\_normal}}}{\emph{\DUrole{n}{q}}}{}
 Finds the basis normal to the srvf
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3369,7 +3376,7 @@ list containing basis vectors
 \index{find\_best\_rotation() (in module curve\_functions)@\spxentry{find\_best\_rotation()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.find_best_rotation}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_best\_rotation}}}{\emph{q1}, \emph{q2}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_best_rotation}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_best\_rotation}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}}{}
 This function calculates the best rotation between two srvfs using
 procustes rigid alignment
 \begin{quote}\begin{description}
@@ -3398,7 +3405,7 @@ rotation matrix
 \index{find\_rotation\_and\_seed\_coord() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_coord()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.find_rotation_and_seed_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_rotation\_and\_seed\_coord}}}{\emph{beta1}, \emph{beta2}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_rotation_and_seed_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_rotation\_and\_seed\_coord}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta2}}}{}
 This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1
 \begin{quote}\begin{description}
@@ -3430,7 +3437,7 @@ seed
 \index{find\_rotation\_and\_seed\_q() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_q()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.find_rotation_and_seed_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_rotation\_and\_seed\_q}}}{\emph{q1}, \emph{q2}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.find_rotation_and_seed_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{find\_rotation\_and\_seed\_q}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}}{}
 This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1
 \begin{quote}\begin{description}
@@ -3462,7 +3469,7 @@ seed
 \index{gram\_schmidt() (in module curve\_functions)@\spxentry{gram\_schmidt()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.gram_schmidt}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{gram\_schmidt}}}{\emph{basis}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.gram_schmidt}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{gram\_schmidt}}}{\emph{\DUrole{n}{basis}}}{}
 Performs Gram Schmidt Orthogonlization of a basis\_o
 \begin{quote}
 \begin{quote}\begin{description}
@@ -3483,7 +3490,7 @@ orthogonlized basis
 \index{group\_action\_by\_gamma() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.group_action_by_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{group\_action\_by\_gamma}}}{\emph{q}, \emph{gamma}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.group_action_by_gamma}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{group\_action\_by\_gamma}}}{\emph{\DUrole{n}{q}}, \emph{\DUrole{n}{gamma}}}{}
 This function reparamerized srvf q by gamma
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3508,7 +3515,7 @@ reparatermized srvf
 \index{group\_action\_by\_gamma\_coord() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma\_coord()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.group_action_by_gamma_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{group\_action\_by\_gamma\_coord}}}{\emph{f}, \emph{gamma}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.group_action_by_gamma_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{group\_action\_by\_gamma\_coord}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{gamma}}}{}
 This function reparamerized curve f by gamma
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3533,7 +3540,7 @@ reparatermized curve
 \index{innerprod\_q2() (in module curve\_functions)@\spxentry{innerprod\_q2()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.innerprod_q2}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{innerprod\_q2}}}{\emph{q1}, \emph{q2}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.innerprod_q2}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{innerprod\_q2}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}}{}
 This function calculates the inner product in srvf space
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3558,7 +3565,7 @@ inner product
 \index{inverse\_exp() (in module curve\_functions)@\spxentry{inverse\_exp()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.inverse_exp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{inverse\_exp}}}{\emph{q1}, \emph{q2}, \emph{beta2}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.inverse_exp}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{inverse\_exp}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}, \emph{\DUrole{n}{beta2}}}{}
 Calculate the inverse exponential to obtain a shooting vector from
 q1 to q2 in shape space of open curves
 \begin{quote}\begin{description}
@@ -3587,7 +3594,7 @@ shooting vectors
 \index{inverse\_exp\_coord() (in module curve\_functions)@\spxentry{inverse\_exp\_coord()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.inverse_exp_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{inverse\_exp\_coord}}}{\emph{beta1}, \emph{beta2}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.inverse_exp_coord}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{inverse\_exp\_coord}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta2}}}{}
 Calculate the inverse exponential to obtain a shooting vector from
 beta1 to beta2 in shape space of open curves
 \begin{quote}\begin{description}
@@ -3616,7 +3623,7 @@ distance
 \index{optimum\_reparam\_curve() (in module curve\_functions)@\spxentry{optimum\_reparam\_curve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.optimum_reparam_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam\_curve}}}{\emph{q1}, \emph{q2}, \emph{lam=0.0}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.optimum_reparam_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{optimum\_reparam\_curve}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0.0}}}{}
 calculates the warping to align srsf q2 to q1
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3647,7 +3654,7 @@ describing the warping function used to align q2 with q1
 \index{parallel\_translate() (in module curve\_functions)@\spxentry{parallel\_translate()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.parallel_translate}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{parallel\_translate}}}{\emph{w}, \emph{q1}, \emph{q2}, \emph{basis}, \emph{mode=0}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.parallel_translate}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{parallel\_translate}}}{\emph{\DUrole{n}{w}}, \emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}, \emph{\DUrole{n}{basis}}, \emph{\DUrole{n}{mode}\DUrole{o}{=}\DUrole{default_value}{0}}}{}
 parallel translates q1 and q2 along manifold
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3681,7 +3688,7 @@ translated vector
 \index{pre\_proc\_curve() (in module curve\_functions)@\spxentry{pre\_proc\_curve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.pre_proc_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{pre\_proc\_curve}}}{\emph{beta}, \emph{T=100}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.pre_proc_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{pre\_proc\_curve}}}{\emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{T}\DUrole{o}{=}\DUrole{default_value}{100}}}{}
 This function prepcoessed a curve beta to set of closed curves
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3712,7 +3719,7 @@ alignment matrix (not used currently)
 \index{project\_curve() (in module curve\_functions)@\spxentry{project\_curve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.project_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{project\_curve}}}{\emph{q}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.project_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{project\_curve}}}{\emph{\DUrole{n}{q}}}{}
 This function projects srvf q to set of close curves
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3731,7 +3738,7 @@ project srvf
 \index{project\_tangent() (in module curve\_functions)@\spxentry{project\_tangent()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.project_tangent}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{project\_tangent}}}{\emph{w}, \emph{q}, \emph{basis}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.project_tangent}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{project\_tangent}}}{\emph{\DUrole{n}{w}}, \emph{\DUrole{n}{q}}, \emph{\DUrole{n}{basis}}}{}
 projects srvf to tangent space w using basis
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3759,7 +3766,7 @@ projected q
 \index{psi() (in module curve\_functions)@\spxentry{psi()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.psi}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{psi}}}{\emph{x}, \emph{a}, \emph{q}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.psi}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{psi}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{a}}, \emph{\DUrole{n}{q}}}{}
 This function formats variance output
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3796,7 +3803,7 @@ curve end
 \index{q\_to\_curve() (in module curve\_functions)@\spxentry{q\_to\_curve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.q_to_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{q\_to\_curve}}}{\emph{q}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.q_to_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{q\_to\_curve}}}{\emph{\DUrole{n}{q}}}{}
 This function converts srvf to beta
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3815,7 +3822,7 @@ parameterized curve
 \index{resamplecurve() (in module curve\_functions)@\spxentry{resamplecurve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.resamplecurve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{resamplecurve}}}{\emph{x}, \emph{N=100}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.resamplecurve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{resamplecurve}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{N}\DUrole{o}{=}\DUrole{default_value}{100}}}{}
 This function resamples a curve to have N samples
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3840,7 +3847,7 @@ resampled curve
 \index{scale\_curve() (in module curve\_functions)@\spxentry{scale\_curve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.scale_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{scale\_curve}}}{\emph{beta}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.scale_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{scale\_curve}}}{\emph{\DUrole{n}{beta}}}{}
 scales curve to length 1
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
@@ -3862,7 +3869,7 @@ scale factor used
 \index{shift\_f() (in module curve\_functions)@\spxentry{shift\_f()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.shift_f}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{shift\_f}}}{\emph{f}, \emph{tau}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.shift_f}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{shift\_f}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{tau}}}{}
 shifts a curve f by tau
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}

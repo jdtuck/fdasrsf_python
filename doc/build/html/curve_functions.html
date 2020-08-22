@@ -1,9 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Curve Functions &#8212; fdasrsf 2.0.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,7 +32,8 @@
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>  
 
@@ -44,9 +46,9 @@
 <span id="curve-functions"></span><h1>Curve Functions<a class="headerlink" href="#module-curve_functions" title="Permalink to this headline">¶</a></h1>
 <p>functions for SRVF curve manipulations</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.calc_j">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calc_j</code><span class="sig-paren">(</span><em class="sig-param">basis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calc_j"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calc_j" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calc_j</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">basis</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calc_j"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calc_j" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates Jacobian matrix from normal basis</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -61,9 +63,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.calculate_variance">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calculate_variance</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calculate_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calculate_variance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calculate_variance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calculate_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calculate_variance" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates variance of curve beta</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -78,9 +80,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.calculatecentroid">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calculatecentroid</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calculatecentroid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calculatecentroid" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calculatecentroid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calculatecentroid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calculatecentroid" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates centroid of a parameterized curve</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -95,9 +97,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.curve_to_q">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_to_q</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_to_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_to_q" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_to_q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_to_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_to_q" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function converts curve beta to srvf q</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -112,9 +114,9 @@
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.curve_zero_crossing">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_zero_crossing</code><span class="sig-paren">(</span><em class="sig-param">Y</em>, <em class="sig-param">beta</em>, <em class="sig-param">bt</em>, <em class="sig-param">y_max</em>, <em class="sig-param">y_min</em>, <em class="sig-param">gmax</em>, <em class="sig-param">gmin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_zero_crossing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_zero_crossing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_zero_crossing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Y</span></em>, <em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">bt</span></em>, <em class="sig-param"><span class="n">y_max</span></em>, <em class="sig-param"><span class="n">y_min</span></em>, <em class="sig-param"><span class="n">gmax</span></em>, <em class="sig-param"><span class="n">gmin</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_zero_crossing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_zero_crossing" title="Permalink to this definition">¶</a></dt>
 <dd><p>finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
 from elastic curve regression model</p>
 <dl class="field-list simple">
@@ -141,9 +143,9 @@ from elastic curve regression model</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.find_basis_normal">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_basis_normal</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_basis_normal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_basis_normal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_basis_normal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_basis_normal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_basis_normal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the basis normal to the srvf</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -158,9 +160,9 @@ from elastic curve regression model</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.find_best_rotation">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_best_rotation</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_best_rotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_best_rotation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_best_rotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_best_rotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_best_rotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates the best rotation between two srvfs using
 procustes rigid alignment</p>
 <dl class="field-list simple">
@@ -182,9 +184,9 @@ procustes rigid alignment</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.find_rotation_and_seed_coord">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_rotation_and_seed_coord</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_coord" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_rotation_and_seed_coord</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_coord" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1</p>
 <dl class="field-list simple">
@@ -209,9 +211,9 @@ registered (seed) shapes w.r.t. beta1</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.find_rotation_and_seed_q">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_rotation_and_seed_q</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_q" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">find_rotation_and_seed_q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_q" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1</p>
 <dl class="field-list simple">
@@ -236,9 +238,9 @@ registered (seed) shapes w.r.t. beta1</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.gram_schmidt">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">gram_schmidt</code><span class="sig-paren">(</span><em class="sig-param">basis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#gram_schmidt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.gram_schmidt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">gram_schmidt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">basis</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#gram_schmidt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.gram_schmidt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs Gram Schmidt Orthogonlization of a basis_o</p>
 <blockquote>
 <div><dl class="field-list simple">
@@ -255,9 +257,9 @@ registered (seed) shapes w.r.t. beta1</p>
 </div></blockquote>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.group_action_by_gamma">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">group_action_by_gamma</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">gamma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#group_action_by_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.group_action_by_gamma" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">group_action_by_gamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">gamma</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#group_action_by_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.group_action_by_gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function reparamerized srvf q by gamma</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -275,9 +277,9 @@ registered (seed) shapes w.r.t. beta1</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.group_action_by_gamma_coord">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">group_action_by_gamma_coord</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">gamma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#group_action_by_gamma_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.group_action_by_gamma_coord" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">group_action_by_gamma_coord</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">gamma</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#group_action_by_gamma_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.group_action_by_gamma_coord" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function reparamerized curve f by gamma</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -295,9 +297,9 @@ registered (seed) shapes w.r.t. beta1</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.innerprod_q2">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">innerprod_q2</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#innerprod_q2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.innerprod_q2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">innerprod_q2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#innerprod_q2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.innerprod_q2" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates the inner product in srvf space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -315,9 +317,9 @@ registered (seed) shapes w.r.t. beta1</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.inverse_exp">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">inverse_exp</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em>, <em class="sig-param">beta2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#inverse_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.inverse_exp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">inverse_exp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em>, <em class="sig-param"><span class="n">beta2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#inverse_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.inverse_exp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the inverse exponential to obtain a shooting vector from
 q1 to q2 in shape space of open curves</p>
 <dl class="field-list simple">
@@ -337,9 +339,9 @@ q1 to q2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.inverse_exp_coord">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">inverse_exp_coord</code><span class="sig-paren">(</span><em class="sig-param">beta1</em>, <em class="sig-param">beta2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#inverse_exp_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.inverse_exp_coord" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">inverse_exp_coord</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#inverse_exp_coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.inverse_exp_coord" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the inverse exponential to obtain a shooting vector from
 beta1 to beta2 in shape space of open curves</p>
 <dl class="field-list simple">
@@ -361,9 +363,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.optimum_reparam_curve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">optimum_reparam_curve</code><span class="sig-paren">(</span><em class="sig-param">q1</em>, <em class="sig-param">q2</em>, <em class="sig-param">lam=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#optimum_reparam_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.optimum_reparam_curve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">optimum_reparam_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#optimum_reparam_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.optimum_reparam_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the warping to align srsf q2 to q1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -383,9 +385,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.parallel_translate">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">parallel_translate</code><span class="sig-paren">(</span><em class="sig-param">w</em>, <em class="sig-param">q1</em>, <em class="sig-param">q2</em>, <em class="sig-param">basis</em>, <em class="sig-param">mode=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#parallel_translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.parallel_translate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">parallel_translate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">w</span></em>, <em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em>, <em class="sig-param"><span class="n">basis</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#parallel_translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.parallel_translate" title="Permalink to this definition">¶</a></dt>
 <dd><p>parallel translates q1 and q2 along manifold</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -406,9 +408,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.pre_proc_curve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">pre_proc_curve</code><span class="sig-paren">(</span><em class="sig-param">beta</em>, <em class="sig-param">T=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#pre_proc_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.pre_proc_curve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">pre_proc_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#pre_proc_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.pre_proc_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function prepcoessed a curve beta to set of closed curves</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -432,9 +434,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.project_curve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">project_curve</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#project_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.project_curve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">project_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#project_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.project_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function projects srvf q to set of close curves</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -449,9 +451,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.project_tangent">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">project_tangent</code><span class="sig-paren">(</span><em class="sig-param">w</em>, <em class="sig-param">q</em>, <em class="sig-param">basis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#project_tangent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.project_tangent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">project_tangent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">w</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">basis</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#project_tangent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.project_tangent" title="Permalink to this definition">¶</a></dt>
 <dd><p>projects srvf to tangent space w using basis</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -470,9 +472,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.psi">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">psi</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">a</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#psi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.psi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">psi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">a</span></em>, <em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#psi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.psi" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function formats variance output</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -500,9 +502,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.q_to_curve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">q_to_curve</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#q_to_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.q_to_curve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">q_to_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#q_to_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.q_to_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function converts srvf to beta</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -517,9 +519,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.resamplecurve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">resamplecurve</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">N=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#resamplecurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.resamplecurve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">resamplecurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#resamplecurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.resamplecurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function resamples a curve to have N samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -537,9 +539,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.scale_curve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">scale_curve</code><span class="sig-paren">(</span><em class="sig-param">beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#scale_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.scale_curve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">scale_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#scale_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.scale_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>scales curve to length 1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -557,9 +559,9 @@ beta1 to beta2 in shape space of open curves</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="curve_functions.shift_f">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">shift_f</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">tau</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#shift_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.shift_f" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">shift_f</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">tau</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#shift_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.shift_f" title="Permalink to this definition">¶</a></dt>
 <dd><p>shifts a curve f by tau</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -580,6 +582,7 @@ beta1 to beta2 in shape space of open curves</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -621,12 +624,13 @@ beta1 to beta2 in shape space of open curves</p>
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, J. Derek Tucker.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>
