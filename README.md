@@ -10,7 +10,7 @@ using functional component analysis and regression.
 
 ### Installation
 ------------------------------------------------------------------------------
-v2.0.2 is on pip and can be installed using
+v2.0.3 is on pip and can be installed using
 > `pip install fdasrsf`
 
 To install the most up to date version on github
