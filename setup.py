@@ -121,6 +121,18 @@ setup(
     long_description=open('README.md', encoding="utf8").read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
     setup_requires=['wheel'],
+    install_requires=[
+        "Cython",
+        "matplotlib",
+        "numpy",
+        "scipy",
+        "joblib",
+        "patsy",
+        "tqdm",
+        "findblas",
+        "six",
+        "pyparsing",
+    ],
     requires=[
         "Cython",
         "matplotlib",
