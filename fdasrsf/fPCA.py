@@ -318,8 +318,8 @@ class fdahpca:
         cumm_coef = 100 * np.cumsum(self.latent[0:no]) / sum(self.latent[0:no])
         idx = np.arange(0, no) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
-        plt.xlabel("Percentage")
-        plt.ylabel("Index")
+        plt.ylabel("Percentage")
+        plt.xlabel("Index")
         plt.show()
 
         return
@@ -490,8 +490,8 @@ class fdajpca:
         cumm_coef = 100 * np.cumsum(self.latent) / sum(self.latent)
         idx = np.arange(0, self.latent.shape[0]) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
-        plt.xlabel("Percentage")
-        plt.ylabel("Index")
+        plt.ylabel("Percentage")
+        plt.xlabel("Index")
         plt.show()
 
         return
