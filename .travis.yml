@@ -14,8 +14,6 @@ before_install:
 install:
   - . ./bin/create_testenv.sh
   - pip install codecov
-  - pip install findblas
-  - pip install -r requirements.txt
   - conda list && pip freeze
 
 after_success:

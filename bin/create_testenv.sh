@@ -33,6 +33,7 @@ if [ -z ${GLOBAL} ]; then
     conda install -c conda-forge mamba --yes
     mamba env create -f environment-dev.yml
     conda activate ${ENVNAME}
+    pip install findblas
   fi
 fi
 

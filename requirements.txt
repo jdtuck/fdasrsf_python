@@ -11,4 +11,5 @@ python-dateutil
 scipy
 six
 tornado
+tqdm
 findblas
