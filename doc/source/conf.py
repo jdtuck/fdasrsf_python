@@ -250,7 +250,7 @@ texinfo_documents = [
 epub_title = u'fdasrsf'
 epub_author = u'J. Derek Tucker'
 epub_publisher = u'J. Derek Tucker'
-epub_copyright = u'2019, J. Derek Tucker'
+epub_copyright = u'2020, J. Derek Tucker'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
