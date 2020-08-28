@@ -145,7 +145,7 @@ def Basis_Normal_A(q):
     e = eye(n)
     Ev = zeros((n,T,n))
     for i in range(0,n):
-        Ev[:,:,i] = tile(e[:,i], (1, T))
+        Ev[:,:,i] = tile(e[:,i], (T, 1)).T
     
     qnorm = zeros(T)
     for t in range(0,T):
@@ -517,7 +517,7 @@ def project_curve(q):
             for j in range(0,n):
                 J[i,j] = 3 * trapz(qnew[i,:]*qnew[j,:],s)
         
-        J += eye(J.shape)
+        J += eye(n)
 
         for i in range(0,T):
             qnorm[i] = norm(qnew[:,i])

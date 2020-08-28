@@ -358,6 +358,7 @@ class fdacurve:
                 
             ax.set_aspect('equal')
             plt.axis('off')
+            plt.title('PD %d' % (j+1))
 
 
 def karcher_calc(beta, q, betamean, mu, basis, mode):
