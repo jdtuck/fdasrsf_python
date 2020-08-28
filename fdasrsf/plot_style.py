@@ -113,6 +113,23 @@ def f_plot(time, f, title="Data", bw=False, pres=False):
     return fig, ax
 
 
+def plot_curve(beta):
+    """
+    plots curve
+
+    :param beta: numpy array of shape (2,M) of M samples
+
+    :return fig: figure defintion
+    :return ax: axes
+    """
+    fig, ax = plt.subplots()
+    ax.plot(beta[0, :], beta[1, :], 'r', linewidth=2)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    return fig,ax
+
+
 def plot_reg_open_curve(beta1, beta2n):
     """
     plots registration between two open curves using matplotlib
