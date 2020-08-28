@@ -7,7 +7,7 @@ moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
-from numpy import zeros, cumsum, linspace, gradient, sqrt, ascontiguousarray
+from numpy import zeros, ones, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
 from numpy import arccos, fabs
 from scipy.linalg import norm, svd, det, solve
@@ -15,12 +15,13 @@ import optimum_reparam_N as orN
 import fdasrsf.utility_functions as uf
 
 
-def resamplecurve(x, N=100):
+def resamplecurve(x, N=100, mode='O'):
     """
     This function resamples a curve to have N samples
 
     :param x: numpy ndarray of shape (2,M) of M samples
     :param N: Number of samples for new curve (default = 100)
+    :param mode: Open ('O') or closed curve ('C') (default 'O')
 
     :rtype: numpy ndarray
     :return xn: resampled curve
@@ -39,6 +40,11 @@ def resamplecurve(x, N=100):
     for r in range(0, n):
         s = InterpolatedUnivariateSpline(cumdel, x[r, :], k=3)
         xn[r, :] = s(newdel)
+
+    if mode == 'C':
+        q = curve_to_q(xn)
+        qn = project_curve(q)
+        xn = q_to_curve(qn)
 
     return (xn)
 
@@ -68,22 +74,23 @@ def calculatecentroid(beta):
     return (centroid)
 
 
-def curve_to_q(beta):
+def curve_to_q(beta,scale=True,mode='O'):
     """
     This function converts curve beta to srvf q
 
     :param beta: numpy ndarray of shape (2,M) of M samples
+    :param scale: scale curve to length 1
+    :param mode: Open ('O') or closed curve ('C') (default 'O')
 
     :rtype: numpy ndarray
     :return q: srvf of curve
+    :return len: length of curve
 
     """
     n, T = beta.shape
     v = gradient(beta, 1. / (T - 1))
     v = v[1]
 
-    length = sum(sqrt(sum(v * v))) / T
-    v = v / length
     q = zeros((n, T))
     for i in range(0, T):
         L = sqrt(norm(v[:, i]))
@@ -92,32 +99,65 @@ def curve_to_q(beta):
         else:
             q[:, i] = v[:, i] * 0.0001
 
-    q = q / sqrt(innerprod_q2(q, q))
+    len1 = sqrt(innerprod_q2(q,q))
+    if scale:
+        q = q / sqrt(innerprod_q2(q, q))
+    
+    if mode == 'C':
+        q = project_curve(q)
 
-    return (q)
+    return (q, len1)
 
 
-def q_to_curve(q):
+def q_to_curve(q,scale=1):
     """
     This function converts srvf to beta
 
-    :param q: numpy ndarray of shape (2,M) of M samples
+    :param q: numpy ndarray of shape (n,M) of M samples
+    :param scale: scale of curve
 
     :rtype: numpy ndarray
     :return beta: parameterized curve
 
     """
-    T = q.shape[1]
+    n,T = q.shape
     qnorm = zeros(T)
     for i in range(0, T):
         qnorm[i] = norm(q[:, i])
 
-    integrand = zeros((2, T))
-    integrand[0, :] = q[0, :] * qnorm
-    integrand[1, :] = q[1, :] * qnorm
-    beta = cumtrapz(integrand, axis=1, initial=0) / T
+    beta = zeros((n,T))
+    for i in range(0,n):
+        beta[i,:] = cumtrapz(q[i, :] * qnorm * scale, initial=0)/T
 
     return (beta)
+
+
+def Basis_Normal_A(q):
+    """
+    Find Normal Basis
+
+    :param q: numpy ndarray (n,T) defining T points on n dimensional SRVF
+
+    :rtype list
+    :return delg: basis
+    """
+    n,T = q.shape
+    e = eye(n)
+    Ev = zeros((n,T,n))
+    for i in range(0,n):
+        Ev[:,:,i] = tile(e[:,i], (1, T))
+    
+    qnorm = zeros(T)
+    for t in range(0,T):
+        qnorm[t] = norm(q[:,t])
+    
+    delG = list()
+    for i in range(0,n):
+        tmp1 = tile(q[i,:]/qnorm, (n,1))
+        tmp2 = tile(qnorm, (n,1))
+        delG.append(tmp1*q + tmp2*Ev[:,:,i])
+    
+    return delG
 
 
 def optimum_reparam_curve(q1, q2, lam=0.0):
@@ -448,55 +488,63 @@ def project_curve(q):
 
     :rtype: numpy ndarray
     :return qproj: project srvf
-
     """
-    T = q.shape[1]
-    tol = 1e-5
-    maxit = 200
-    itr = 1
-    delta = 0.5
-    x = q_to_curve(q)
-    a = -1 * calculatecentroid(x)
+    n,T = q.shape
+    if n==2:
+        dt = 0.35
+    if n==3:
+        dt = 0.2
+    epsilon = 1e-6
 
-    psi1, psi2, psi3, psi4 = psi(x, a, q)
+    iter = 1
+    res = ones(n)
+    J = zeros((n,n))
 
-    r = vstack((psi3, psi4))
-    rnorm = zeros(maxit + 1)
-    rnorm[0] = norm(r)
+    s = linspace(0,1,T)
 
-    while itr <= maxit:
-        basis = find_basis_normal(q)
+    qnew = q.copy()
+    qnew = qnew / sqrt(innerprod_q2(qnew,qnew))
 
-        # calculate Jacobian
-        j = calc_j(basis)
-
-        # Newton-Raphson step to update q
-        y = solve(j, -r)
-        dq = delta * (y[0] * basis[0] + y[1] * basis[1])
-        normdq = sqrt(innerprod_q2(dq, dq))
-        q = cos(normdq) * q + sin(normdq) * dq / normdq
-        q /= sqrt(innerprod_q2(q, q))
-
-        # update x and a from the new q
-        beta_new = q_to_curve(q)
-        x = beta_new
-        a = -1 * calculatecentroid(x)
-        beta_new = x + tile(a, [T, 1]).T
-
-        # calculate the new value of psi
-        psi1, psi2, psi3, psi4 = psi(x, a, q)
-        r = vstack((psi3, psi4))
-        rnorm[itr] = norm(r)
-
-        if norm(r) < tol:
+    qnorm = zeros(T)
+    G = zeros(n)
+    C = zeros(300)
+    while (norm(res) > epsilon):
+        if iter > 300:
             break
 
-        itr += 1
+        # Jacobian
+        for i in range(0,n):
+            for j in range(0,n):
+                J[i,j] = 3 * trapz(qnew[i,:]*qnew[j,:],s)
+        
+        J += eye(J.shape)
 
-    rnorm = rnorm[0:itr]
-    qproj = q
+        for i in range(0,T):
+            qnorm[i] = norm(qnew[:,i])
+        
+        # Compute the residue
+        for i in range(0,n):
+            G[i] = trapz(qnew[i,:]*qnorm,s)
+        
+        res = -G
 
-    return (qproj)
+        if (norm(res) < epsilon):
+            break
+
+        x = solve(J,res)
+        C[iter] = norm(res)
+
+        delG = Basis_Normal_A(qnew)
+        temp = 0
+        for i in range(0,n):
+            temp += x[i]*delG[i]*dt
+        
+        qnew += temp
+        iter += 1
+    
+    qnew = qnew/sqrt(innerprod_q2(qnew,qnew))
+
+    return qnew
 
 
 def pre_proc_curve(beta, T=100):
@@ -522,6 +570,20 @@ def pre_proc_curve(beta, T=100):
 
     return (betanew, qnew, A)
 
+
+def elastic_distance_curve(beta1, beta2):
+    """
+    Calculates the two elastic distances between two curves
+    :param beta1: numpy ndarray of shape (2,M) of M samples
+    :param beta2: numpy ndarray of shape (2,M) of M samples
+
+    :rtype: scalar
+    :return dist: distance
+    """
+    v,d = inverse_exp_coord(beta1, beta2)
+
+    return d
+    
 
 def inverse_exp_coord(beta1, beta2):
     """
