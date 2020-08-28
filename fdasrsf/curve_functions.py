@@ -859,6 +859,26 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
     return (gamma, O_hat, tau)
 
 
+def elastic_shooting(q1,v):
+    """
+    Calculates shooting vector from v to q1
+
+    :param q1: vector of srvf
+    :param v: shooting vector
+
+    :rtype numpy ndarray
+    :return q2n: vector of srvf
+    """
+    d = sqrt(innerprod_q2(v,v))
+    if d < 0.00001:
+        q2n = q1
+    else:
+        q2n = cos(d)*q1 + (sin(d)/d)*v
+        q2n = project_curve(q2n)
+    
+    return (q2n)
+
+
 def rot_mat(theta):
     O = array([(cos(theta), -1*sin(theta)), (sin(theta), cos(theta))])
 
