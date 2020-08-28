@@ -16,5 +16,8 @@ install:
   - pip install codecov
   - conda list && pip freeze
 
+script:
+  - . ./bin/test.sh
+
 after_success:
   - codecov
