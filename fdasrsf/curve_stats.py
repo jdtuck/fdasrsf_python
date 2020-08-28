@@ -295,7 +295,30 @@ class fdacurve:
 
             samples[i] = cf.q_to_curve(q2)
 
-        return(samples)
+        self.samples = samples
+        return
+    
+
+    def plot(self):
+        """
+        plot curve mean results
+        """
+        fig, ax = plt.subplots()
+        n,T,K = self.beta.shape
+        for ii in range(0,K):
+            ax.plot(self.beta[1,:,ii],self.beta[2,:,ii])
+        plt.title('Curves')
+        ax.set_aspect('equal')
+        plt.axis('off')
+        plt.gca().invert_yaxis()
+
+        if hasattr(self,'beta_mean'):
+            fig, ax = plt.subplots()
+            ax.plot(self.beta_mean[1,:],self.beta_mean[2,:])
+            plt.title('Karcher Mean')
+            ax.set_aspect('equal')
+            plt.axis('off')
+            plt.gca().invert_yaxis()
 
 
 def karcher_calc(beta, q, betamean, mu, basis, mode):
