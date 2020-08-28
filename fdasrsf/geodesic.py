@@ -1,7 +1,7 @@
 """
-geodesic calculation for SRVF (curves) open and closed)
+geodesic calculation for SRVF (curves) open and closed
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
@@ -15,7 +15,7 @@ import fdasrsf.curve_functions as cf
 
 def geod_sphere(beta1, beta2, k=5):
     """
-    This function caluclates the geodecis between open curves beta1 and
+    This function calculates the geodesics between open curves beta1 and
     beta2 with k steps along path
 
     :param beta1: numpy ndarray of shape (2,M) of M samples
@@ -88,7 +88,7 @@ def geod_sphere(beta1, beta2, k=5):
 
 def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
     """
-    Perform path straigtening to find geodesic between two shapes in either
+    Perform path straightening to find geodesic between two shapes in either
     the space of closed curves or the space of affine standardized curves.
     This algorithm follows the steps outlined in section 4.6 of the
     manuscript.
@@ -97,7 +97,7 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
     :param beta2: numpy ndarray of shape (2,M) of M samples (end curve)
     :param betamid: numpy ndarray of shape (2,M) of M samples (mid curve
      Default = NULL, only needed for init "rand")
-    :param init: initilizae path geodesic or random (Default = "rand")
+    :param init: initialize path geodesic or random (Default = "rand")
     :param T: Number of samples of curve (Default = 100)
     :param k: number of samples along path (Default = 5)
 
@@ -143,7 +143,7 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
 
     while i < maxit:
         # algorithm 8:
-        # compute dalpha/dt along alpha using finite difference appox
+        # compute dalpha/dt along alpha using finite difference approx
         # First calculate basis for normal sapce at each point in alpha
         basis = find_basis_normal_path(alpha, k)
         alphadot = calc_alphadot(alpha, basis, T, k)
@@ -160,7 +160,7 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
         utilde = back_parallel_transport(u1[:, :, -1], alpha, basis, T, k)
 
         # algorithm 11:
-        # compute graident vector field of E in \cal{H}_{O}
+        # compute gradient vector field of E in \cal{H}_{O}
         gradE, normgradE = calculate_gradE(u1, utilde, T, k)
         gradEnorm[i] = norm(normgradE)
         g = gradEnorm[i]

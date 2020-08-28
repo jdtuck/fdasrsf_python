@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elastic Regression &#8212; fdasrsf 2.0.2 documentation</title>
+    <title>Elastic Regression &#8212; fdasrsf 2.1.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Regression</a></li> 
       </ul>
     </div>  
@@ -49,12 +49,12 @@
   <div class="section" id="module-regression">
 <span id="elastic-regression"></span><h1>Elastic Regression<a class="headerlink" href="#module-regression" title="Permalink to this headline">¶</a></h1>
 <p>Warping Invariant Regression using SRSF</p>
-<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
 <dt id="regression.elastic_logistic">
 <code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_logistic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">B</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_logistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function identifies a logistic regression model with
-phase-variablity using elastic methods</p>
+phase-variability using elastic methods</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -93,7 +93,7 @@ phase-variablity using elastic methods</p>
 <dt id="regression.elastic_mlogistic">
 <code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_mlogistic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">B</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">delta</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_mlogistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function identifies a multinomial logistic regression model with
-phase-variablity using elastic methods</p>
+phase-variability using elastic methods</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -132,13 +132,13 @@ phase-variablity using elastic methods</p>
 <dt id="regression.elastic_prediction">
 <code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_prediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_prediction" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function performs prediction from an elastic regression model
-with phase-variablity</p>
+with phase-variability</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
 <li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
-<li><p><strong>model</strong> – indentified model from elastic_regression</p></li>
+<li><p><strong>model</strong> – identified model from elastic_regression</p></li>
 <li><p><strong>y</strong> – truth, optional used to calculate SSE</p></li>
 </ul>
 </dd>
@@ -167,7 +167,7 @@ with phase-variablity</p>
 <dl class="py function">
 <dt id="regression.elastic_regression">
 <code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_regression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">B</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_regression" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function identifies a regression model with phase-variablity
+<dd><p>This function identifies a regression model with phase-variability
 using elastic methods</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -242,7 +242,7 @@ using elastic methods</p>
 <dd class="field-even"><p>numpy array</p>
 </dd>
 <dt class="field-odd">Return grad</dt>
-<dd class="field-odd"><p>gradient of logisitc loss</p>
+<dd class="field-odd"><p>gradient of logistic loss</p>
 </dd>
 </dl>
 </dd></dl>
@@ -455,12 +455,12 @@ using elastic methods</p>
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Regression</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, J. Derek Tucker.
+        &#169; Copyright 2020, J. Derek Tucker.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>

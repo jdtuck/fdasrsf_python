@@ -1,7 +1,7 @@
 """
 Warping Invariant Regression using SRVF
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
@@ -143,7 +143,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
                         deltaO=.1, deltag=.05, method=1):
     """
     This function identifies a logistic regression model with
-    phase-variablity using elastic methods for open curves
+    phase-variability using elastic methods for open curves
 
     :param beta: numpy ndarray of shape (n, M, N) describing N curves
     in R^M
@@ -159,7 +159,7 @@ def oc_elastic_logistic(beta, y, B=None, df=60, T=100, max_itr=40, cores=-1,
     :return alpha: alpha parameter of model
     :return nu: nu(t) of model
     :return betan: aligned curves - numpy ndarray of shape (n,T,N)
-    :return O: calulated rotation matrices
+    :return O: calculated rotation matrices
     :return gamma: calculated warping functions
     :return B: basis matrix
     :return b: basis coefficients
@@ -376,7 +376,7 @@ def oc_elastic_mlogistic(beta, y, B=None, df=20, T=100, max_itr=30, cores=-1,
 
 def oc_elastic_prediction(beta, model, y=None):
     """
-    This function identifies a regression model with phase-variablity
+    This function identifies a regression model with phase-variability
     using elastic methods
 
     :param beta: numpy ndarray of shape (M,N) of M functions with N samples
@@ -651,7 +651,7 @@ def logit_gradient(b, X, y, lam=0.0):
     responses
 
     :rtype: numpy array
-    :return grad: gradient of logisitc loss
+    :return grad: gradient of logistic loss
 
     """
     z = X.dot(b)

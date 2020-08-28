@@ -1,7 +1,7 @@
 """
 Vertical and Horizontal Functional Principal Component Analysis using SRSF
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 import numpy as np
@@ -196,7 +196,7 @@ class fdahpca:
     :param psi_pca: srvf principal directions
     :param latent: latent values
     :param U: eigenvectors
-    :param coef: coeficients
+    :param coef: coefficients
     :param vec: shooting vectors
     :param mu: Karcher Mean
     :param tau: principal directions

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>curve_functions &#8212; fdasrsf 2.0.2 documentation</title>
+    <title>curve_functions &#8212; fdasrsf 2.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">curve_functions</a></li> 
       </ul>
@@ -43,13 +43,13 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">functions for SRVF curve manipulations</span>
 
-<span class="sd">moduleauthor:: Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
+<span class="sd">moduleauthor:: J. Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">InterpolatedUnivariateSpline</span><span class="p">,</span> <span class="n">interp1d</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">cumtrapz</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ascontiguousarray</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ascontiguousarray</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">finfo</span><span class="p">,</span> <span class="n">double</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">fabs</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span><span class="p">,</span> <span class="n">det</span><span class="p">,</span> <span class="n">solve</span>
@@ -57,12 +57,13 @@
 <span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
 
 
-<div class="viewcode-block" id="resamplecurve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.resamplecurve">[docs]</a><span class="k">def</span> <span class="nf">resamplecurve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<div class="viewcode-block" id="resamplecurve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.resamplecurve">[docs]</a><span class="k">def</span> <span class="nf">resamplecurve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;O&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function resamples a curve to have N samples</span>
 
 <span class="sd">    :param x: numpy ndarray of shape (2,M) of M samples</span>
 <span class="sd">    :param N: Number of samples for new curve (default = 100)</span>
+<span class="sd">    :param mode: Open (&#39;O&#39;) or closed curve (&#39;C&#39;) (default &#39;O&#39;)</span>
 
 <span class="sd">    :rtype: numpy ndarray</span>
 <span class="sd">    :return xn: resampled curve</span>
@@ -81,6 +82,11 @@
     <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">InterpolatedUnivariateSpline</span><span class="p">(</span><span class="n">cumdel</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="p">:],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
         <span class="n">xn</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">s</span><span class="p">(</span><span class="n">newdel</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">curve_to_q</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span>
+        <span class="n">qn</span> <span class="o">=</span> <span class="n">project_curve</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+        <span class="n">xn</span> <span class="o">=</span> <span class="n">q_to_curve</span><span class="p">(</span><span class="n">qn</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">xn</span><span class="p">)</span></div>
 
@@ -110,22 +116,23 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">centroid</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="curve_to_q"><a class="viewcode-back" href="../curve_functions.html#curve_functions.curve_to_q">[docs]</a><span class="k">def</span> <span class="nf">curve_to_q</span><span class="p">(</span><span class="n">beta</span><span class="p">):</span>
+<div class="viewcode-block" id="curve_to_q"><a class="viewcode-back" href="../curve_functions.html#curve_functions.curve_to_q">[docs]</a><span class="k">def</span> <span class="nf">curve_to_q</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;O&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function converts curve beta to srvf q</span>
 
 <span class="sd">    :param beta: numpy ndarray of shape (2,M) of M samples</span>
+<span class="sd">    :param scale: scale curve to length 1</span>
+<span class="sd">    :param mode: Open (&#39;O&#39;) or closed curve (&#39;C&#39;) (default &#39;O&#39;)</span>
 
 <span class="sd">    :rtype: numpy ndarray</span>
 <span class="sd">    :return q: srvf of curve</span>
+<span class="sd">    :return len: length of curve</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">gradient</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="n">length</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="n">v</span><span class="p">)))</span> <span class="o">/</span> <span class="n">T</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="n">length</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
@@ -134,32 +141,65 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">q</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.0001</span>
 
-    <span class="n">q</span> <span class="o">=</span> <span class="n">q</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
+    <span class="n">len1</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">q</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">q</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">project_curve</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">q</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">q</span></div>
 
 
-<div class="viewcode-block" id="q_to_curve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.q_to_curve">[docs]</a><span class="k">def</span> <span class="nf">q_to_curve</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+<div class="viewcode-block" id="q_to_curve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.q_to_curve">[docs]</a><span class="k">def</span> <span class="nf">q_to_curve</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function converts srvf to beta</span>
 
-<span class="sd">    :param q: numpy ndarray of shape (2,M) of M samples</span>
+<span class="sd">    :param q: numpy ndarray of shape (n,M) of M samples</span>
+<span class="sd">    :param scale: scale of curve</span>
 
 <span class="sd">    :rtype: numpy ndarray</span>
 <span class="sd">    :return beta: parameterized curve</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">T</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n</span><span class="p">,</span><span class="n">T</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">qnorm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
         <span class="n">qnorm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">q</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
 
-    <span class="n">integrand</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
-    <span class="n">integrand</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">qnorm</span>
-    <span class="n">integrand</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">qnorm</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">integrand</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">T</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">T</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">beta</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">qnorm</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">T</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">beta</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Basis_Normal_A"><a class="viewcode-back" href="../curve_functions.html#curve_functions.Basis_Normal_A">[docs]</a><span class="k">def</span> <span class="nf">Basis_Normal_A</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find Normal Basis</span>
+
+<span class="sd">    :param q: numpy ndarray (n,T) defining T points on n dimensional SRVF</span>
+
+<span class="sd">    :rtype list</span>
+<span class="sd">    :return delg: basis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span><span class="p">,</span><span class="n">T</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">Ev</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">Ev</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span><span class="p">(</span><span class="n">e</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+    
+    <span class="n">qnorm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">):</span>
+        <span class="n">qnorm</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">q</span><span class="p">[:,</span><span class="n">t</span><span class="p">])</span>
+    
+    <span class="n">delG</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">tmp1</span> <span class="o">=</span> <span class="n">tile</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">/</span><span class="n">qnorm</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">tmp2</span> <span class="o">=</span> <span class="n">tile</span><span class="p">(</span><span class="n">qnorm</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">delG</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp1</span><span class="o">*</span><span class="n">q</span> <span class="o">+</span> <span class="n">tmp2</span><span class="o">*</span><span class="n">Ev</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">delG</span></div>
 
 
 <div class="viewcode-block" id="optimum_reparam_curve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.optimum_reparam_curve">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam_curve</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
@@ -490,55 +530,63 @@
 
 <span class="sd">    :rtype: numpy ndarray</span>
 <span class="sd">    :return qproj: project srvf</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">T</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-5</span>
-    <span class="n">maxit</span> <span class="o">=</span> <span class="mi">200</span>
-    <span class="n">itr</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">q_to_curve</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">n</span><span class="p">,</span><span class="n">T</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.35</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-6</span>
 
-    <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">,</span> <span class="n">psi3</span><span class="p">,</span> <span class="n">psi4</span> <span class="o">=</span> <span class="n">psi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+    <span class="nb">iter</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
 
-    <span class="n">r</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="n">psi3</span><span class="p">,</span> <span class="n">psi4</span><span class="p">))</span>
-    <span class="n">rnorm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">rnorm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
 
-    <span class="k">while</span> <span class="n">itr</span> <span class="o">&lt;=</span> <span class="n">maxit</span><span class="p">:</span>
-        <span class="n">basis</span> <span class="o">=</span> <span class="n">find_basis_normal</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">qnew</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">qnew</span> <span class="o">=</span> <span class="n">qnew</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">qnew</span><span class="p">,</span><span class="n">qnew</span><span class="p">))</span>
 
-        <span class="c1"># calculate Jacobian</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">calc_j</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
-
-        <span class="c1"># Newton-Raphson step to update q</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="n">r</span><span class="p">)</span>
-        <span class="n">dq</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">basis</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">normdq</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">dq</span><span class="p">,</span> <span class="n">dq</span><span class="p">))</span>
-        <span class="n">q</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">normdq</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span> <span class="o">+</span> <span class="n">sin</span><span class="p">(</span><span class="n">normdq</span><span class="p">)</span> <span class="o">*</span> <span class="n">dq</span> <span class="o">/</span> <span class="n">normdq</span>
-        <span class="n">q</span> <span class="o">/=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
-
-        <span class="c1"># update x and a from the new q</span>
-        <span class="n">beta_new</span> <span class="o">=</span> <span class="n">q_to_curve</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">beta_new</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">beta_new</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tile</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-
-        <span class="c1"># calculate the new value of psi</span>
-        <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">,</span> <span class="n">psi3</span><span class="p">,</span> <span class="n">psi4</span> <span class="o">=</span> <span class="n">psi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="n">psi3</span><span class="p">,</span> <span class="n">psi4</span><span class="p">))</span>
-        <span class="n">rnorm</span><span class="p">[</span><span class="n">itr</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+    <span class="n">qnorm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">iter</span> <span class="o">&gt;</span> <span class="mi">300</span><span class="p">:</span>
             <span class="k">break</span>
 
-        <span class="n">itr</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Jacobian</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">J</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qnew</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">*</span><span class="n">qnew</span><span class="p">[</span><span class="n">j</span><span class="p">,:],</span><span class="n">s</span><span class="p">)</span>
+        
+        <span class="n">J</span> <span class="o">+=</span> <span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
-    <span class="n">rnorm</span> <span class="o">=</span> <span class="n">rnorm</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">itr</span><span class="p">]</span>
-    <span class="n">qproj</span> <span class="o">=</span> <span class="n">q</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">):</span>
+            <span class="n">qnorm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">qnew</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
+        
+        <span class="c1"># Compute the residue</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qnew</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">*</span><span class="n">qnorm</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
+        
+        <span class="n">res</span> <span class="o">=</span> <span class="o">-</span><span class="n">G</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">qproj</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">):</span>
+            <span class="k">break</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">res</span><span class="p">)</span>
+        <span class="n">C</span><span class="p">[</span><span class="nb">iter</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+        <span class="n">delG</span> <span class="o">=</span> <span class="n">Basis_Normal_A</span><span class="p">(</span><span class="n">qnew</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">delG</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">dt</span>
+        
+        <span class="n">qnew</span> <span class="o">+=</span> <span class="n">temp</span>
+        <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="n">qnew</span> <span class="o">=</span> <span class="n">qnew</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">qnew</span><span class="p">,</span><span class="n">qnew</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">qnew</span></div>
 
 
 <div class="viewcode-block" id="pre_proc_curve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.pre_proc_curve">[docs]</a><span class="k">def</span> <span class="nf">pre_proc_curve</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
@@ -564,6 +612,24 @@
 
     <span class="k">return</span> <span class="p">(</span><span class="n">betanew</span><span class="p">,</span> <span class="n">qnew</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="elastic_distance_curve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.elastic_distance_curve">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance_curve</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the two elastic distances between two curves</span>
+<span class="sd">    :param beta1: numpy ndarray of shape (2,M) of M samples</span>
+<span class="sd">    :param beta2: numpy ndarray of shape (2,M) of M samples</span>
+
+<span class="sd">    :rtype: scalar</span>
+<span class="sd">    :return dist: distance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">beta1</span> <span class="o">==</span> <span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">v</span><span class="p">,</span><span class="n">d</span> <span class="o">=</span> <span class="n">inverse_exp_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">d</span></div>
+    
 
 <div class="viewcode-block" id="inverse_exp_coord"><a class="viewcode-back" href="../curve_functions.html#curve_functions.inverse_exp_coord">[docs]</a><span class="k">def</span> <span class="nf">inverse_exp_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -839,6 +905,26 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">O_hat</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="elastic_shooting"><a class="viewcode-back" href="../curve_functions.html#curve_functions.elastic_shooting">[docs]</a><span class="k">def</span> <span class="nf">elastic_shooting</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates shooting vector from v to q1</span>
+
+<span class="sd">    :param q1: vector of srvf</span>
+<span class="sd">    :param v: shooting vector</span>
+
+<span class="sd">    :rtype numpy ndarray</span>
+<span class="sd">    :return q2n: vector of srvf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.00001</span><span class="p">:</span>
+        <span class="n">q2n</span> <span class="o">=</span> <span class="n">q1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">q2n</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span> <span class="o">+</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">v</span>
+        <span class="n">q2n</span> <span class="o">=</span> <span class="n">project_curve</span><span class="p">(</span><span class="n">q2n</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">q2n</span><span class="p">)</span></div>
+
+
 <span class="k">def</span> <span class="nf">rot_mat</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
     <span class="n">O</span> <span class="o">=</span> <span class="n">array</span><span class="p">([(</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)),</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))])</span>
 
@@ -874,13 +960,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">curve_functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, J. Derek Tucker.
+        &#169; Copyright 2020, J. Derek Tucker.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>

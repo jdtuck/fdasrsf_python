@@ -1,7 +1,6 @@
 certifi
 cycler
 Cython
-fdasrsf
 joblib
 kiwisolver
 matplotlib
@@ -12,4 +11,5 @@ python-dateutil
 scipy
 six
 tornado
+tqdm
 findblas

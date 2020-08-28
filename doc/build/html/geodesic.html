@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SRVF Geodesic Computation &#8212; fdasrsf 2.0.2 documentation</title>
+    <title>SRVF Geodesic Computation &#8212; fdasrsf 2.1.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Utility Functions" href="utility_functions.html" />
-    <link rel="prev" title="Elastic Functional Tolerance Bounds" href="tolerance.html" /> 
+    <link rel="prev" title="Curve Registration" href="curve_statistics.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -34,9 +34,9 @@
           <a href="utility_functions.html" title="Utility Functions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
+          <a href="curve_statistics.html" title="Curve Registration"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">SRVF Geodesic Computation</a></li> 
       </ul>
     </div>  
@@ -48,8 +48,8 @@
             
   <div class="section" id="module-geodesic">
 <span id="srvf-geodesic-computation"></span><h1>SRVF Geodesic Computation<a class="headerlink" href="#module-geodesic" title="Permalink to this headline">¶</a></h1>
-<p>geodesic calculation for SRVF (curves) open and closed)</p>
-<p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<p>geodesic calculation for SRVF (curves) open and closed</p>
+<p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
 <dt id="geodesic.back_parallel_transport">
 <code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">back_parallel_transport</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">u1</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">basis</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#back_parallel_transport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.back_parallel_transport" title="Permalink to this definition">¶</a></dt>
@@ -208,7 +208,7 @@ k points (q-functions) of the path alpha</p>
 <dl class="py function">
 <dt id="geodesic.geod_sphere">
 <code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">geod_sphere</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.geod_sphere" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function caluclates the geodecis between open curves beta1 and
+<dd><p>This function calculates the geodesics between open curves beta1 and
 beta2 with k steps along path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -297,7 +297,7 @@ shape space, then projects to the closed shape manifold.</p>
 <dl class="py function">
 <dt id="geodesic.path_straightening">
 <code class="sig-prename descclassname">geodesic.</code><code class="sig-name descname">path_straightening</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em>, <em class="sig-param"><span class="n">betamid</span></em>, <em class="sig-param"><span class="n">init</span><span class="o">=</span><span class="default_value">'rand'</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#path_straightening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geodesic.path_straightening" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform path straigtening to find geodesic between two shapes in either
+<dd><p>Perform path straightening to find geodesic between two shapes in either
 the space of closed curves or the space of affine standardized curves.
 This algorithm follows the steps outlined in section 4.6 of the
 manuscript.</p>
@@ -308,7 +308,7 @@ manuscript.</p>
 <li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples (end curve)</p></li>
 <li><p><strong>betamid</strong> – numpy ndarray of shape (2,M) of M samples (mid curve
 Default = NULL, only needed for init “rand”)</p></li>
-<li><p><strong>init</strong> – initilizae path geodesic or random (Default = “rand”)</p></li>
+<li><p><strong>init</strong> – initialize path geodesic or random (Default = “rand”)</p></li>
 <li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
 <li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
 </ul>
@@ -368,8 +368,8 @@ Default = NULL, only needed for init “rand”)</p></li>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tolerance.html"
-                        title="previous chapter">Elastic Functional Tolerance Bounds</a></p>
+  <p class="topless"><a href="curve_statistics.html"
+                        title="previous chapter">Curve Registration</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="utility_functions.html"
                         title="next chapter">Utility Functions</a></p>
@@ -407,14 +407,14 @@ Default = NULL, only needed for init “rand”)</p></li>
           <a href="utility_functions.html" title="Utility Functions"
              >next</a> |</li>
         <li class="right" >
-          <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
+          <a href="curve_statistics.html" title="Curve Registration"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">SRVF Geodesic Computation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, J. Derek Tucker.
+        &#169; Copyright 2020, J. Derek Tucker.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>

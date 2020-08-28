@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Aug 22, 2020" "2.0" "fdasrsf"
+.TH "FDASRSF" "1" "Aug 28, 2020" "2.1" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -39,7 +39,7 @@ using functional component analysis and regression.
 .sp
 Group\-wise function alignment using SRSF framework and Dynamic Programming
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B time_warping.align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=\- 1)
@@ -192,7 +192,7 @@ Usage:  obj = fdawarp(f,t)
 .IP \(bu 2
 \fBmethod\fP \-\- optimization method
 .IP \(bu 2
-\fBgamI\fP \-\- invserse warping function
+\fBgamI\fP \-\- inverse warping function
 .IP \(bu 2
 \fBrsamps\fP \-\- random samples
 .IP \(bu 2
@@ -553,7 +553,7 @@ array([[ 0.14022471,  0.96360618],  #random
 .sp
 Vertical and Horizontal Functional Principal Component Analysis using SRSF
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B class fPCA.fdahpca(fdawarp)
@@ -576,7 +576,7 @@ Usage:  obj = fdahpca(warp_data)
 .IP \(bu 2
 \fBU\fP \-\- eigenvectors
 .IP \(bu 2
-\fBcoef\fP \-\- coeficients
+\fBcoef\fP \-\- coefficients
 .IP \(bu 2
 \fBvec\fP \-\- shooting vectors
 .IP \(bu 2
@@ -785,7 +785,7 @@ Usage: obj.plot()
 .sp
 Elastic Functional Boxplots
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B class boxplots.ampbox(fdawarp)
@@ -839,6 +839,13 @@ square\-root slope (srsf) framework.
 \fBk_a\fP \-\- scalar for outlier cutoff (e.g.,=1)
 .UNINDENT
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B plot()
+plot box plot and surface plot
+.sp
+Usage: obj.plot()
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -907,7 +914,7 @@ Usage: obj.plot()
 .sp
 Partial Least Squares using SVD
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B fPLS.pls_svd(time, qf, qg, no, alpha=0.0)
@@ -948,12 +955,12 @@ singular values
 .sp
 Warping Invariant Regression using SRSF
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B regression.elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=\- 1, smooth=False)
 This function identifies a logistic regression model with
-phase\-variablity using elastic methods
+phase\-variability using elastic methods
 .INDENT 7.0
 .TP
 .B Parameters
@@ -999,7 +1006,7 @@ functions with N samples
 .TP
 .B regression.elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=\- 1, delta=0.01, parallel=True, smooth=False)
 This function identifies a multinomial logistic regression model with
-phase\-variablity using elastic methods
+phase\-variability using elastic methods
 .INDENT 7.0
 .TP
 .B Parameters
@@ -1045,7 +1052,7 @@ functions with M samples
 .TP
 .B regression.elastic_prediction(f, time, model, y=None, smooth=False)
 This function performs prediction from an elastic regression model
-with phase\-variablity
+with phase\-variability
 .INDENT 7.0
 .TP
 .B Parameters
@@ -1055,7 +1062,7 @@ with phase\-variablity
 .IP \(bu 2
 \fBtime\fP \-\- vector of size M describing the sample points
 .IP \(bu 2
-\fBmodel\fP \-\- indentified model from elastic_regression
+\fBmodel\fP \-\- identified model from elastic_regression
 .IP \(bu 2
 \fBy\fP \-\- truth, optional used to calculate SSE
 .UNINDENT
@@ -1084,7 +1091,7 @@ functions with M samples
 .INDENT 0.0
 .TP
 .B regression.elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=\- 1, smooth=False)
-This function identifies a regression model with phase\-variablity
+This function identifies a regression model with phase\-variability
 using elastic methods
 .INDENT 7.0
 .TP
@@ -1174,7 +1181,7 @@ calculates gradient of the logistic loss
 numpy array
 .TP
 .B Return grad
-gradient of logisitc loss
+gradient of logistic loss
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -1356,7 +1363,7 @@ warping function
 .sp
 Warping Invariant PCR Regression using SRSF
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B class pcr_regression.elastic_lpcr_regression(f, y, time)
@@ -1623,7 +1630,7 @@ obj.predict(newdata)
 .sp
 Functional Tolerance Bounds using SRSF
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B tolerance.bootTB(f, time, a=0.5, p=0.99, B=500, no=5, parallel=True)
@@ -1756,11 +1763,167 @@ double
 matrix
 .UNINDENT
 .UNINDENT
+.SH CURVE REGISTRATION
+.sp
+statistic calculation for SRVF (curves) open and closed using Karcher
+Mean and Variance
+.sp
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+.INDENT 0.0
+.TP
+.B class curve_stats.fdacurve(beta, mode=\(aqO\(aq, N=200, scale=True)
+This class provides alignment methods for open and closed curves using the SRVF framework
+.sp
+Usage: obj = fdacurve(beta, mode, N, scale)
+:param beta: numpy ndarray of shape (n, M, N) describing N curves
+in R^M
+:param mode: Open (\(aqO\(aq) or closed curve (\(aqC\(aq) (default \(aqO\(aq)
+:param N: resample curve to N points
+:param scale: scale curve to length 1 (true/false)
+:param q:        (n,T,K) matrix defining n dimensional srvf on T samples with K srvfs
+:param betan:     aligned curves
+:param qn:        aligned srvfs
+:param basis:     calculated basis
+:param beta_mean: karcher mean curve
+:param q_mean:    karcher mean srvf
+:param gams:      warping functions
+:param v:         shooting vectors
+:param C:         karcher covariance
+:param s:         pca singular values
+:param U:         pca singular vectors
+:param coef:      pca coefficients
+:param qun:       cost function
+:param samples:   random samples
+:param gamr:      random warping functions
+:param cent:      center
+:param scale:     scale
+:param E:         energy
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  26\-Aug\-2020
+.INDENT 7.0
+.TP
+.B karcher_cov()
+This calculates the mean of a set of curves
+.UNINDENT
+.INDENT 7.0
+.TP
+.B karcher_mean(parallel=False, cores=\- 1)
+This calculates the mean of a set of curves
+:param parallel: run in parallel (default = F)
+:param cores: number of cores for parallel (default = \-1 (all))
+.UNINDENT
+.INDENT 7.0
+.TP
+.B plot()
+plot curve mean results
+.UNINDENT
+.INDENT 7.0
+.TP
+.B sample_shapes(no=3, numSamp=10)
+Computes sample shapes from mean and covariance
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBno\fP \-\- number of direction (default 3)
+.IP \(bu 2
+\fBnumSamp\fP \-\- number of samples (default 10)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shape_pca(no=10)
+Computes principal direction of variation specified by no. N is
+Number of shapes away from mean. Creates 2*N+1 shape sequence
+.INDENT 7.0
+.TP
+.B Parameters
+\fBno\fP \-\- number of direction (default 3)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B srvf_align()
+This calculates the mean of a set of curves and aligns them
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B curve_stats.randn(d0, d1, \&..., dn)
+Return a sample (or samples) from the "standard normal" distribution.
+.sp
+\fBNOTE:\fP
+.INDENT 7.0
+.INDENT 3.5
+This is a convenience function for users porting code from Matlab,
+and wraps \fIstandard_normal\fP\&. That function takes a
+tuple to specify the size of the output, which is consistent with
+other NumPy functions like \fInumpy.zeros\fP and \fInumpy.ones\fP\&.
+.UNINDENT
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 7.0
+.INDENT 3.5
+New code should use the \fBstandard_normal\fP method of a \fBdefault_rng()\fP
+instance instead; see \fIrandom\-quick\-start\fP\&.
+.UNINDENT
+.UNINDENT
+.sp
+If positive int_like arguments are provided, \fIrandn\fP generates an array
+of shape \fB(d0, d1, ..., dn)\fP, filled
+with random floats sampled from a univariate "normal" (Gaussian)
+distribution of mean 0 and variance 1. A single float randomly sampled
+from the distribution is returned if no argument is provided.
+.INDENT 7.0
+.TP
+.B d0, d1, ..., dn
+int, optional
+The dimensions of the returned array, must be non\-negative.
+If no argument is given a single Python float is returned.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Z
+ndarray or float
+A \fB(d0, d1, ..., dn)\fP\-shaped array of floating\-point samples from
+the standard normal distribution, or a single such float if
+no parameters were supplied.
+.UNINDENT
+.sp
+standard_normal : Similar, but takes a tuple as its argument.
+normal : Also accepts mu and sigma arguments.
+Generator.standard_normal: which should be used for new code.
+.sp
+For random samples from N(\emu, \esigma^2), use:
+.sp
+\fBsigma * np.random.randn(...) + mu\fP
+.sp
+.nf
+.ft C
+>>> np.random.randn()
+2.1923875335537315  # random
+.ft P
+.fi
+.sp
+Two\-by\-four array of samples from N(3, 6.25):
+.sp
+.nf
+.ft C
+>>> 3 + 2.5 * np.random.randn(2, 4)
+array([[\-4.49401501,  4.00950034, \-1.81814867,  7.29718677],   # random
+       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]])  # random
+.ft P
+.fi
+.UNINDENT
 .SH SRVF GEODESIC COMPUTATION
 .sp
-geodesic calculation for SRVF (curves) open and closed)
+geodesic calculation for SRVF (curves) open and closed
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B geodesic.back_parallel_transport(u1, alpha, basis, T=100, k=5)
@@ -1937,7 +2100,7 @@ geodesic distance
 .INDENT 0.0
 .TP
 .B geodesic.geod_sphere(beta1, beta2, k=5)
-This function caluclates the geodecis between open curves beta1 and
+This function calculates the geodesics between open curves beta1 and
 beta2 with k steps along path
 .INDENT 7.0
 .TP
@@ -2035,7 +2198,7 @@ rotation matrix
 .INDENT 0.0
 .TP
 .B geodesic.path_straightening(beta1, beta2, betamid, init=\(aqrand\(aq, T=100, k=5)
-Perform path straigtening to find geodesic between two shapes in either
+Perform path straightening to find geodesic between two shapes in either
 the space of closed curves or the space of affine standardized curves.
 This algorithm follows the steps outlined in section 4.6 of the
 manuscript.
@@ -2051,7 +2214,7 @@ manuscript.
 \fBbetamid\fP \-\- numpy ndarray of shape (2,M) of M samples (mid curve
 Default = NULL, only needed for init "rand")
 .IP \(bu 2
-\fBinit\fP \-\- initilizae path geodesic or random (Default = "rand")
+\fBinit\fP \-\- initialize path geodesic or random (Default = "rand")
 .IP \(bu 2
 \fBT\fP \-\- Number of samples of curve (Default = 100)
 .IP \(bu 2
@@ -2110,7 +2273,7 @@ updated path of curves
 .sp
 Utility functions for SRSF Manipulations
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B utility_functions.SqrtMean(gam)
@@ -2645,7 +2808,20 @@ optimal warping function
 .sp
 functions for SRVF curve manipulations
 .sp
-moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+.INDENT 0.0
+.TP
+.B curve_functions.Basis_Normal_A(q)
+Find Normal Basis
+.INDENT 7.0
+.TP
+.B Parameters
+\fBq\fP \-\- numpy ndarray (n,T) defining T points on n dimensional SRVF
+.UNINDENT
+.sp
+:rtype list
+:return delg: basis
+.UNINDENT
 .INDENT 0.0
 .TP
 .B curve_functions.calc_j(basis)
@@ -2696,18 +2872,28 @@ center coordinates
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.curve_to_q(beta)
+.B curve_functions.curve_to_q(beta, scale=True, mode=\(aqO\(aq)
 This function converts curve beta to srvf q
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
 \fBbeta\fP \-\- numpy ndarray of shape (2,M) of M samples
+.IP \(bu 2
+\fBscale\fP \-\- scale curve to length 1
+.IP \(bu 2
+\fBmode\fP \-\- Open (\(aqO\(aq) or closed curve (\(aqC\(aq) (default \(aqO\(aq)
+.UNINDENT
 .TP
 .B Return type
 numpy ndarray
 .TP
 .B Return q
 srvf of curve
+.TP
+.B Return len
+length of curve
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -2744,6 +2930,39 @@ optimal warping function
 .B Return O_hat
 rotation matrix
 .UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B curve_functions.elastic_distance_curve(beta1, beta2)
+Calculates the two elastic distances between two curves
+:param beta1: numpy ndarray of shape (2,M) of M samples
+:param beta2: numpy ndarray of shape (2,M) of M samples
+.INDENT 7.0
+.TP
+.B Return type
+scalar
+.TP
+.B Return dist
+distance
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B curve_functions.elastic_shooting(q1, v)
+Calculates shooting vector from v to q1
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBq1\fP \-\- vector of srvf
+.IP \(bu 2
+\fBv\fP \-\- shooting vector
+.UNINDENT
+.UNINDENT
+.sp
+:rtype numpy ndarray
+:return q2n: vector of srvf
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -3126,12 +3345,17 @@ curve end
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.q_to_curve(q)
+.B curve_functions.q_to_curve(q, scale=1)
 This function converts srvf to beta
 .INDENT 7.0
 .TP
 .B Parameters
-\fBq\fP \-\- numpy ndarray of shape (2,M) of M samples
+.INDENT 7.0
+.IP \(bu 2
+\fBq\fP \-\- numpy ndarray of shape (n,M) of M samples
+.IP \(bu 2
+\fBscale\fP \-\- scale of curve
+.UNINDENT
 .TP
 .B Return type
 numpy ndarray
@@ -3142,7 +3366,7 @@ parameterized curve
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.resamplecurve(x, N=100)
+.B curve_functions.resamplecurve(x, N=100, mode=\(aqO\(aq)
 This function resamples a curve to have N samples
 .INDENT 7.0
 .TP
@@ -3152,6 +3376,8 @@ This function resamples a curve to have N samples
 \fBx\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBN\fP \-\- Number of samples for new curve (default = 100)
+.IP \(bu 2
+\fBmode\fP \-\- Open (\(aqO\(aq) or closed curve (\(aqC\(aq) (default \(aqO\(aq)
 .UNINDENT
 .TP
 .B Return type
@@ -3201,8 +3427,6 @@ numpy ndarray
 shifted curve
 .UNINDENT
 .UNINDENT
-.sp
-References:
 .INDENT 0.0
 .INDENT 3.5
 Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
@@ -3252,11 +3476,21 @@ of variability in functional data, Journal of American Statistical Association 1
 Lu, Y., R. Herbei, and S. Kurtek, 2017: Bayesian registration of functions with a Gaussian process prior. Journal of
 Computational and Graphical Statistics, 26, no. 4, 894–904.
 .sp
-Lee, S. and S. Jung, 2017: Combined analysis of amplitude and phase variations
-in functional data. arXiv:1603.01775 [stat.ME], 1\-21.
-.sp
-J. D. Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal
-Component Regression,” Statistical Analysis and Data Mining, 10.1002/sam.11399, 2018.
+Lee, S. and S. Jung, 2017: Combined analysis of amplitude and phase variations in functional data. arXiv:1603.01775 [stat.ME], 1–21.
+.INDENT 0.0
+.IP J. 3
+.INDENT 3.0
+.IP D. 3
+Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal Component Regression,” Statistical Analysis and Data Mining, vol. 12, no. 2, pp. 101\-115, 2019.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP J. 3
+.INDENT 3.0
+.IP D. 3
+Tucker, J. R. Lewis, C. King, and S. Kurtek, “A Geometric Approach for Computing Tolerance Bounds for Elastic Functional Data,” Journal of Applied Statistics, 10.1080/02664763.2019.1645818, 2019.
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -3270,6 +3504,6 @@ search
 .SH AUTHOR
 J. Derek Tucker
 .SH COPYRIGHT
-2019, J. Derek Tucker
+2020, J. Derek Tucker
 .\" Generated by docutils manpage writer.
 .

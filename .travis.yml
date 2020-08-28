@@ -1,6 +1,23 @@
 language: python
-python:
-  - "3.7"
-# command to install dependencies
+
+cache:
+  directories:
+    - $HOME/miniconda3
+
+addons:
+  apt_packages:
+    - pandoc
+
+before_install:
+  - . ./bin/install_miniconda.sh
+
 install:
-  - pip install -r requirements.txt
+  - . ./bin/create_testenv.sh
+  - pip install codecov
+  - conda list && pip freeze
+
+script:
+  - . ./bin/test.sh
+
+after_success:
+  - codecov

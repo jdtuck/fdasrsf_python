@@ -1,7 +1,7 @@
 """
 Partial Least Squares using SVD
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 import numpy as np
