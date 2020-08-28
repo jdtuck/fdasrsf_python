@@ -5,11 +5,12 @@ Mean and Variance
 moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
 
 """
-from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty, cov, inf, mean
+from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty, cov, inf, mean, arange
 from numpy.linalg import svd
 from numpy.random import randn
 import fdasrsf.curve_functions as cf
 import fdasrsf.utility_functions as uf
+import fdasrsf.plot_style as plot
 import matplotlib.pyplot as plt
 from joblib import Parallel, delayed
 import collections
@@ -172,6 +173,8 @@ class fdacurve:
 
         self.qn = zeros((n, T, N))
         self.betan = zeros((n, T, N))
+        self.gams = zeros((T,N))
+        C = zeros((T,N))
         centroid2 = cf.calculatecentroid(self.beta_mean)
         self.beta_mean = self.beta_mean - tile(centroid2, [T, 1]).T
         q_mu = cf.curve_to_q(self.beta_mean)
@@ -194,6 +197,7 @@ class fdacurve:
 
             # Optimize over SO(n)
             beta1, O_hat, tau = cf.find_rotation_and_seed_coord(self.beta_mean, beta1)
+            self.gams[:,ii] = gamI
             self.qn[:, :, ii] = cf.curve_to_q(beta1)
             self.betan[:, :, ii] = beta1
 
@@ -213,18 +217,17 @@ class fdacurve:
             tmp = self.v[:,:,i]
             tmpv[:,i] = tmp.flatten()
 
-        self.C = cov(tmpv.T)
+        self.C = cov(tmpv)
 
         return
 
 
-    def shape_pca(self, no=3, N=5):
+    def shape_pca(self, no=10):
         """
         Computes principal direction of variation specified by no. N is
         Number of shapes away from mean. Creates 2*N+1 shape sequence
 
         :param no: number of direction (default 3)
-        :param N: number of shapes (2*N+1) (default 5)
         """
         if not hasattr(self, 'C'):
             self.karcher_cov()
@@ -239,7 +242,8 @@ class fdacurve:
         x = zeros((no,K))
         for ii in range(0,K):
             tmpv = self.v[:,:,ii]
-            x[:,ii] = self.U.dot((tmpv.flatten()- VM.flatten()))
+            Utmp = self.U.T
+            x[:,ii] = Utmp.dot((tmpv.flatten()- VM.flatten()))
         
         self.coef = x
 
@@ -311,6 +315,11 @@ class fdacurve:
         ax.set_aspect('equal')
         plt.axis('off')
         plt.gca().invert_yaxis()
+        
+        if hasattr(self,'gams'):
+            M = self.gams.shape[0]
+            fig, ax = plot.f_plot(arange(0, M) / float(M - 1), self.gams,
+                                    title="Warping Functions")
 
         if hasattr(self,'beta_mean'):
             fig, ax = plt.subplots()
@@ -319,6 +328,36 @@ class fdacurve:
             ax.set_aspect('equal')
             plt.axis('off')
             plt.gca().invert_yaxis()
+    
+
+    def plot_pca(self):
+
+        if not hasattr(self,'s'):
+            raise NameError('Calculate PCA')
+        
+        fig, ax = plt.subplots()
+        ax.plot(self.s)
+        plt.title('Singular Values')
+
+        # plot principal modes of variability
+        VM = mean(self.v,2)
+        VM = VM.flatten()
+        for j in range(0,4):
+            fig, ax = plt.subplots()
+            for i in range(1,11):
+                tmp = VM + 0.5*(i-5)*sqrt(self.s[j])*self.U[:,j]
+                m,n = self.q_mean.shape
+                v1 = tmp.reshape(m,n)
+                q2n = cf.elastic_shooting(self.q_mean,v1)
+
+                p = cf.q_to_curve(q2n)
+                if i == 5:
+                    ax.plot(0.2*i + p[0,:], p[1,:], 'k', linewidth=2)
+                else:
+                    ax.plot(0.2*i + p[0,:], p[1,:], linewidth=2)
+                
+            ax.set_aspect('equal')
+            plt.axis('off')
 
 
 def karcher_calc(beta, q, betamean, mu, basis, mode):
