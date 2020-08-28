@@ -15,7 +15,7 @@ dependencies:
   - scipy
   - six
   - tqdm
-    tornado
+  - tornado
   - numpy>=1.13
   - scipy>=0.18
   - pandas >=0.18
