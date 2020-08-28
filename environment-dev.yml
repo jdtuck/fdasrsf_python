@@ -32,8 +32,6 @@ dependencies:
   - parameterized
   - black
   - ipywidgets
-  - dataclasses  # python_version < 3.7
-  - contextvars  # python_version < 3.7
   - mkl-service
   - dill
   - libblas=*=*mkl
