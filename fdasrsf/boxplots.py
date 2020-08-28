@@ -1,7 +1,7 @@
 """
 Elastic Functional Boxplots
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 import numpy as np
@@ -213,36 +213,34 @@ class ampbox:
         self.plt = plt(U,V,Fs2,allparts,d1,d1a,dl,d3,d3a,du,Q1a_q,Q3a_q)                                           
         return
 
-        def plot(self):
-            """
-            plot box plot and surface plot
+    def plot(self):
+        """
+        plot box plot and surface plot
 
-            Usage: obj.plot()
-            """
-            M = self.warp_data.time.shape[0]
-            fig1, ax1 = plt.subplots()
-            ax1.plot(self.warp_data.time,self.fmean,'k')
-            ax1.plot(self.warp_data.time,self.Q1,'b')
-            ax1.plot(self.warp_data.time,self.Q3,'b')
-            ax1.plot(self.warp_data.time,self.Q1a,'g')
-            ax1.plot(self.warp_data.time,self.Q3a,'g')
-            ax1.plot(self.warp_data.time,self.minn,'r')
-            ax1.plot(self.warp_data.time,self.maxx,'r')
-            
-            fig2 = plt.figure() 
-            ax = fig2.gca(projection='3d')
-            ax.plot_surface(self.plt.U,self.plt.V,self.plt.Fs2,cmap=cm.viridis,rcount=200,ccount=200)
-            ax.plot(self.warp_data.time, np.zeros(M), self.f_median,'k')
-            ax.plot(self.warp_data.time, np.repeat(-self.plt.d1,M), self.Q1,'b')
-            ax.plot(self.warp_data.time, np.repeat(-self.plt.d1-self.plt.d1a,M),self.Q1a,'g')
-            ax.plot(self.warp_data.time, np.repeat(-self.plt.d1-self.plt.d1a-self.plt.dl,M),self.minn,'r')
-            ax.plot(self.warp_data.time, np.repeat(self.plt.d3,M),self.Q3,'b')
-            ax.plot(self.warp_data.time, np.repeat(self.plt.d3+self.plt.d3a,M),self.Q3a,'g')
-            ax.plot(self.warp_data.time, np.repeat(self.plt.d3+self.plt.d3a+self.plt.du,M),self.maxx,'r')
+        Usage: obj.plot()
+        """
+        M = self.warp_data.time.shape[0]
+        fig1, ax1 = plt.subplots()
+        ax1.plot(self.warp_data.time,self.f_median,'k')
+        ax1.plot(self.warp_data.time,self.Q1,'b')
+        ax1.plot(self.warp_data.time,self.Q3,'b')
+        ax1.plot(self.warp_data.time,self.Q1a,'g')
+        ax1.plot(self.warp_data.time,self.Q3a,'g')
+        ax1.plot(self.warp_data.time,self.minn,'r')
+        ax1.plot(self.warp_data.time,self.maxx,'r')
+        
+        fig2 = plt.figure() 
+        ax = fig2.gca(projection='3d')
+        ax.plot_surface(self.plt.U,self.plt.V,self.plt.Fs2,cmap=cm.viridis,rcount=200,ccount=200)
+        ax.plot(self.warp_data.time, np.zeros(M), self.f_median,'k')
+        ax.plot(self.warp_data.time, np.repeat(-self.plt.d1,M), self.Q1,'b')
+        ax.plot(self.warp_data.time, np.repeat(-self.plt.d1-self.plt.d1a,M),self.Q1a,'g')
+        ax.plot(self.warp_data.time, np.repeat(-self.plt.d1-self.plt.d1a-self.plt.dl,M),self.minn,'r')
+        ax.plot(self.warp_data.time, np.repeat(self.plt.d3,M),self.Q3,'b')
+        ax.plot(self.warp_data.time, np.repeat(self.plt.d3+self.plt.d3a,M),self.Q3a,'g')
+        ax.plot(self.warp_data.time, np.repeat(self.plt.d3+self.plt.d3a+self.plt.du,M),self.maxx,'r')
 
-            plt.show()
-
-            return
+        plt.show()
 
 
 class phbox:
