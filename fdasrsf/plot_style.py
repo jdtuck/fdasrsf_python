@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 
 
 def rstyle(ax, pres=False):
-    """Styles x,y axes to appear like ggplot2
+    """
+    Styles x,y axes to appear like ggplot2
     Must be called after all plot and axis manipulation operations have been
     carried out (needs to know final tick spacing)
     """
@@ -55,7 +56,8 @@ def rstyle(ax, pres=False):
 
 
 def rstyle_bw(ax):
-    """Styles x,y axes to appear like ggplot2
+    """
+    Styles x,y axes to appear like ggplot2
     Must be called after all plot and axis manipulation operations have been
     carried out (needs to know final tick spacing)
     """
