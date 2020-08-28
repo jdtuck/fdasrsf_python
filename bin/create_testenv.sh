@@ -39,5 +39,5 @@ fi
 
 #  Install editable using the setup.py
 if [ -z ${NO_SETUP} ]; then
-  python setup.py build_ext --inplace
+  python setup.py install
 fi
