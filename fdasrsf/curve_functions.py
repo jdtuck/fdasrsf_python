@@ -580,7 +580,11 @@ def elastic_distance_curve(beta1, beta2):
     :rtype: scalar
     :return dist: distance
     """
-    v,d = inverse_exp_coord(beta1, beta2)
+
+    if (beta1 == beta2).all():
+        d = 0.0
+    else:
+        v,d = inverse_exp_coord(beta1, beta2)
 
     return d
     
