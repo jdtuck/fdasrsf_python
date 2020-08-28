@@ -106,7 +106,7 @@ def curve_to_q(beta,scale=True,mode='O'):
     if mode == 'C':
         q = project_curve(q)
 
-    return (q, len1)
+    return q
 
 
 def q_to_curve(q,scale=1):

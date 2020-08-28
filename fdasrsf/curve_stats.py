@@ -66,7 +66,7 @@ class fdacurve:
         for ii in range(0,K):
             beta1[:,:,ii] = cf.resamplecurve(beta[:,:,ii],N,mode)
             a = -cf.calculatecentroid(beta1[:,:,ii])
-            beta1[:,:,ii] += tile(a, (1,N))
+            beta1[:,:,ii] += tile(a, (N,1)).T
             q[:,:,ii] = cf.curve_to_q(beta1[:,:,ii], self.scale, self.mode)
             cent1[:,ii] = -a
         
