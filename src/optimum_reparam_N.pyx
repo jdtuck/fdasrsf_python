@@ -176,7 +176,7 @@ def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[
 
     return gam
 
-def coptimum_reparam_curve_f(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
+def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
                      np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0):
     """
     cython interface for calculates the warping to align curve q2 to q1

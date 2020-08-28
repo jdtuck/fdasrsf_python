@@ -94,9 +94,7 @@ class fdacurve:
         mu = self.q[:, :, 0]
         betamean = self.beta[:,:,0]
         itr = 0
-        T = mu.shape[1]
-        N = mu.shape[0]
-        K = self.q.shape[2]
+
         gamma = zeros((T,N))
         maxit = 20
 
@@ -110,7 +108,7 @@ class fdacurve:
 
         print("Computing Karcher Mean of %d curves in SRVF space.." % N)
         while itr < maxit:
-            print("updating step: %d" % itr)
+            print("updating step: %d" % (itr+1))
 
             if iter == maxit:
                 print("maximal number of iterations reached")
@@ -118,6 +116,8 @@ class fdacurve:
             mu = mu / sqrt(cf.innerprod_q2(mu, mu))
             if mode == 1:
                 self.basis = cf.find_basis_normal(mu)
+            else:
+                self.basis = []
 
             sumv = zeros((n, T))
             sumd[0] = inf
@@ -155,8 +155,8 @@ class fdacurve:
         self.q_mean = mu
         self.beta_mean = betamean
         self.v = v
-        self.qun = sumd[0:itr]
-        self.E = normvbar[0:(itr-1)]
+        self.qun = sumd[0:(itr+1)]
+        self.E = normvbar[0:(itr+1)]
 
         return
 
@@ -306,7 +306,7 @@ class fdacurve:
         fig, ax = plt.subplots()
         n,T,K = self.beta.shape
         for ii in range(0,K):
-            ax.plot(self.beta[1,:,ii],self.beta[2,:,ii])
+            ax.plot(self.beta[0,:,ii],self.beta[1,:,ii])
         plt.title('Curves')
         ax.set_aspect('equal')
         plt.axis('off')
@@ -314,7 +314,7 @@ class fdacurve:
 
         if hasattr(self,'beta_mean'):
             fig, ax = plt.subplots()
-            ax.plot(self.beta_mean[1,:],self.beta_mean[2,:])
+            ax.plot(self.beta_mean[0,:],self.beta_mean[1,:])
             plt.title('Karcher Mean')
             ax.set_aspect('equal')
             plt.axis('off')
