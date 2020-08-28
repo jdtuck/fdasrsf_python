@@ -1,7 +1,7 @@
 """
 Utility functions for SRSF Manipulations
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 

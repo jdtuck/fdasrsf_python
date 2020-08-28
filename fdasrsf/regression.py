@@ -1,7 +1,7 @@
 """
 Warping Invariant Regression using SRSF
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
@@ -20,7 +20,7 @@ import collections
 def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20,
                        cores=-1, smooth=False):
     """
-    This function identifies a regression model with phase-variablity
+    This function identifies a regression model with phase-variability
     using elastic methods
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
@@ -160,7 +160,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
                      smooth=False):
     """
     This function identifies a logistic regression model with
-    phase-variablity using elastic methods
+    phase-variability using elastic methods
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
     :param y: numpy array of labels (1/-1)
@@ -283,7 +283,7 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
                       delta=.01, parallel=True, smooth=False):
     """
     This function identifies a multinomial logistic regression model with
-    phase-variablity using elastic methods
+    phase-variability using elastic methods
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
     :param y: numpy array of labels {1,2,...,m} for m classes
@@ -406,11 +406,11 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
 def elastic_prediction(f, time, model, y=None, smooth=False):
     """
     This function performs prediction from an elastic regression model
-    with phase-variablity
+    with phase-variability
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
     :param time: vector of size M describing the sample points
-    :param model: indentified model from elastic_regression
+    :param model: identified model from elastic_regression
     :param y: truth, optional used to calculate SSE
 
     :rtype: tuple of numpy array
@@ -611,7 +611,7 @@ def logit_gradient(b, X, y):
     :param y: numpy ndarray of shape (1,N) responses
 
     :rtype: numpy array
-    :return grad: gradient of logisitc loss
+    :return grad: gradient of logistic loss
 
     """
     z = X.dot(b)

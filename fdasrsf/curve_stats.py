@@ -2,7 +2,7 @@
 statistic calculation for SRVF (curves) open and closed using Karcher
 Mean and Variance
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty, cov, inf, mean, arange
@@ -328,6 +328,8 @@ class fdacurve:
             ax.set_aspect('equal')
             plt.axis('off')
             plt.gca().invert_yaxis()
+        
+        plt.show()
     
 
     def plot_pca(self):
@@ -359,6 +361,8 @@ class fdacurve:
             ax.set_aspect('equal')
             plt.axis('off')
             plt.title('PD %d' % (j+1))
+        
+        plt.show()
 
 
 def karcher_calc(beta, q, betamean, mu, basis, mode):

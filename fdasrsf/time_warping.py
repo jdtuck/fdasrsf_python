@@ -1,7 +1,7 @@
 """
 Group-wise function alignment using SRSF framework and Dynamic Programming
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 import numpy as np
@@ -42,7 +42,7 @@ class fdawarp:
     :param qun: cost function
     :param lambda: lambda
     :param method: optimization method
-    :param gamI: invserse warping function
+    :param gamI: inverse warping function
     :param rsamps: random samples
     :param fs: random aligned functions
     :param gams: random warping functions

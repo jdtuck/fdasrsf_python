@@ -1,7 +1,7 @@
 """
 Warping Invariant PCR Regression using SRSF
 
-moduleauthor:: Derek Tucker <jdtuck@sandia.gov>
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 

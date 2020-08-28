@@ -5,7 +5,7 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "curve_functions", "geometry", "pcr_regression", "tolerance"]
+__all__ = ["time_warping", "utility_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA"]
 
 __version__ = "2.1.0"
 
@@ -35,3 +35,4 @@ from .curve_functions import q_to_curve
 from .curve_stats import fdacurve
 from .curve_regression import oc_elastic_logistic, oc_elastic_prediction, preproc_open_curve, oc_elastic_mlogistic
 from .geometry import inv_exp_map, exp_map
+from .geodesic import geod_sphere, path_straightening
