@@ -781,7 +781,7 @@ def f_K_fold(Nobs, K=5):
     for ii in range(0, K):
         tf = vectorize(lambda x: x in arange(k[ii, 0],
                        k[ii, 1] + 1))(arange(0, Nobs))
-        train[:, ii] = ids[~tf]
+        train[:, ii] = ids[not tf]
         test[:, ii] = ids[tf]
 
     return train, test
