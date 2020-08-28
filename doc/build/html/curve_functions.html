@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Curve Functions &#8212; fdasrsf 2.0.2 documentation</title>
+    <title>Curve Functions &#8212; fdasrsf 2.1.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>  
@@ -46,6 +46,19 @@
 <span id="curve-functions"></span><h1>Curve Functions<a class="headerlink" href="#module-curve_functions" title="Permalink to this headline">¶</a></h1>
 <p>functions for SRVF curve manipulations</p>
 <p>moduleauthor:: Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="py function">
+<dt id="curve_functions.Basis_Normal_A">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">Basis_Normal_A</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#Basis_Normal_A"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.Basis_Normal_A" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find Normal Basis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> – numpy ndarray (n,T) defining T points on n dimensional SRVF</p>
+</dd>
+</dl>
+<p>:rtype list
+:return delg: basis</p>
+</dd></dl>
+
 <dl class="py function">
 <dt id="curve_functions.calc_j">
 <code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">calc_j</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">basis</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#calc_j"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.calc_j" title="Permalink to this definition">¶</a></dt>
@@ -99,17 +112,24 @@
 
 <dl class="py function">
 <dt id="curve_functions.curve_to_q">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_to_q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_to_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_to_q" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">curve_to_q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'O'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_to_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.curve_to_q" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function converts curve beta to srvf q</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>scale</strong> – scale curve to length 1</p></li>
+<li><p><strong>mode</strong> – Open (‘O’) or closed curve (‘C’) (default ‘O’)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>numpy ndarray</p>
 </dd>
 <dt class="field-odd">Return q</dt>
 <dd class="field-odd"><p>srvf of curve</p>
+</dd>
+<dt class="field-even">Return len</dt>
+<dd class="field-even"><p>length of curve</p>
 </dd>
 </dl>
 </dd></dl>
@@ -141,6 +161,38 @@ from elastic curve regression model</p>
 <dd class="field-even"><p>rotation matrix</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="curve_functions.elastic_distance_curve">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">elastic_distance_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#elastic_distance_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.elastic_distance_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the two elastic distances between two curves
+:param beta1: numpy ndarray of shape (2,M) of M samples
+:param beta2: numpy ndarray of shape (2,M) of M samples</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+<dt class="field-even">Return dist</dt>
+<dd class="field-even"><p>distance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="curve_functions.elastic_shooting">
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">elastic_shooting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">v</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#elastic_shooting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.elastic_shooting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates shooting vector from v to q1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q1</strong> – vector of srvf</p></li>
+<li><p><strong>v</strong> – shooting vector</p></li>
+</ul>
+</dd>
+</dl>
+<p>:rtype numpy ndarray
+:return q2n: vector of srvf</p>
 </dd></dl>
 
 <dl class="py function">
@@ -504,11 +556,14 @@ beta1 to beta2 in shape space of open curves</p>
 
 <dl class="py function">
 <dt id="curve_functions.q_to_curve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">q_to_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#q_to_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.q_to_curve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">q_to_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#q_to_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.q_to_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function converts srvf to beta</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>q</strong> – numpy ndarray of shape (2,M) of M samples</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q</strong> – numpy ndarray of shape (n,M) of M samples</p></li>
+<li><p><strong>scale</strong> – scale of curve</p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>numpy ndarray</p>
@@ -521,13 +576,14 @@ beta1 to beta2 in shape space of open curves</p>
 
 <dl class="py function">
 <dt id="curve_functions.resamplecurve">
-<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">resamplecurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#resamplecurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.resamplecurve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">curve_functions.</code><code class="sig-name descname">resamplecurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'O'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#resamplecurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_functions.resamplecurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function resamples a curve to have N samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>N</strong> – Number of samples for new curve (default = 100)</p></li>
+<li><p><strong>mode</strong> – Open (‘O’) or closed curve (‘C’) (default ‘O’)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -624,12 +680,12 @@ beta1 to beta2 in shape space of open curves</p>
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, J. Derek Tucker.
+        &#169; Copyright 2020, J. Derek Tucker.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>

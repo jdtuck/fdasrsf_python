@@ -73,8 +73,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{Aug 22, 2020}
-\release{2.0.2}
+\date{Aug 28, 2020}
+\release{2.1.0}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -3234,6 +3234,22 @@ optimal warping function
 functions for SRVF curve manipulations
 
 moduleauthor:: Derek Tucker \textless{}\sphinxhref{mailto:jdtuck@sandia.gov}{jdtuck@sandia.gov}\textgreater{}
+\index{Basis\_Normal\_A() (in module curve\_functions)@\spxentry{Basis\_Normal\_A()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.Basis_Normal_A}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{Basis\_Normal\_A}}}{\emph{\DUrole{n}{q}}}{}
+Find Normal Basis
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray (n,T) defining T points on n dimensional SRVF
+
+\end{description}\end{quote}
+
+:rtype list
+:return delg: basis
+
+\end{fulllineitems}
+
 \index{calc\_j() (in module curve\_functions)@\spxentry{calc\_j()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
@@ -3294,17 +3310,29 @@ center coordinates
 \index{curve\_to\_q() (in module curve\_functions)@\spxentry{curve\_to\_q()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_to_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_to\_q}}}{\emph{\DUrole{n}{beta}}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.curve_to_q}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{curve\_to\_q}}}{\emph{\DUrole{n}{beta}}, \emph{\DUrole{n}{scale}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{mode}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}O\textquotesingle{}}}}{}
 This function converts curve beta to srvf q
 \begin{quote}\begin{description}
-\item[{Parameters}] \leavevmode
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{beta}} \textendash{} numpy ndarray of shape (2,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{scale}} \textendash{} scale curve to length 1
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mode}} \textendash{} Open (‘O’) or closed curve (‘C’) (default ‘O’)
+
+\end{itemize}
 
 \item[{Return type}] \leavevmode
 numpy ndarray
 
 \item[{Return q}] \leavevmode
 srvf of curve
+
+\item[{Return len}] \leavevmode
+length of curve
 
 \end{description}\end{quote}
 
@@ -3351,6 +3379,46 @@ optimal warping function
 rotation matrix
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{elastic\_distance\_curve() (in module curve\_functions)@\spxentry{elastic\_distance\_curve()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.elastic_distance_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_distance\_curve}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta2}}}{}
+Calculates the two elastic distances between two curves
+:param beta1: numpy ndarray of shape (2,M) of M samples
+:param beta2: numpy ndarray of shape (2,M) of M samples
+\begin{quote}\begin{description}
+\item[{Return type}] \leavevmode
+scalar
+
+\item[{Return dist}] \leavevmode
+distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{elastic\_shooting() (in module curve\_functions)@\spxentry{elastic\_shooting()}\spxextra{in module curve\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.elastic_shooting}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_shooting}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{v}}}{}
+Calculates shooting vector from v to q1
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} vector of srvf
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{v}} \textendash{} shooting vector
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+:rtype numpy ndarray
+:return q2n: vector of srvf
 
 \end{fulllineitems}
 
@@ -3803,11 +3871,17 @@ curve end
 \index{q\_to\_curve() (in module curve\_functions)@\spxentry{q\_to\_curve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.q_to_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{q\_to\_curve}}}{\emph{\DUrole{n}{q}}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.q_to_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{q\_to\_curve}}}{\emph{\DUrole{n}{q}}, \emph{\DUrole{n}{scale}\DUrole{o}{=}\DUrole{default_value}{1}}}{}
 This function converts srvf to beta
 \begin{quote}\begin{description}
-\item[{Parameters}] \leavevmode
-\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (2,M) of M samples
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q}} \textendash{} numpy ndarray of shape (n,M) of M samples
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{scale}} \textendash{} scale of curve
+
+\end{itemize}
 
 \item[{Return type}] \leavevmode
 numpy ndarray
@@ -3822,7 +3896,7 @@ parameterized curve
 \index{resamplecurve() (in module curve\_functions)@\spxentry{resamplecurve()}\spxextra{in module curve\_functions}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_functions:curve_functions.resamplecurve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{resamplecurve}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{N}\DUrole{o}{=}\DUrole{default_value}{100}}}{}
+\phantomsection\label{\detokenize{curve_functions:curve_functions.resamplecurve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{curve\_functions.}}\sphinxbfcode{\sphinxupquote{resamplecurve}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{N}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{mode}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}O\textquotesingle{}}}}{}
 This function resamples a curve to have N samples
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode\begin{itemize}
@@ -3831,6 +3905,9 @@ This function resamples a curve to have N samples
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{N}} \textendash{} Number of samples for new curve (default = 100)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{mode}} \textendash{} Open (‘O’) or closed curve (‘C’) (default ‘O’)
 
 \end{itemize}
 
