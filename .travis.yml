@@ -9,10 +9,10 @@ addons:
     - pandoc
 
 before_install:
-  - . ./scripts/install_miniconda.sh
+  - . ./bin/install_miniconda.sh
 
 install:
-  - . ./scripts/create_testenv.sh
+  - . ./bin/create_testenv.sh
   - pip install codecov
   - pip install -r requirements.txt
   - conda list && pip freeze
