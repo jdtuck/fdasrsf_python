@@ -10,6 +10,7 @@ from numpy.linalg import svd
 from numpy.random import randn
 import fdasrsf.curve_functions as cf
 import fdasrsf.utility_functions as uf
+import matplotlib.pyplot as plt
 from joblib import Parallel, delayed
 import collections
 
