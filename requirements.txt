@@ -1,7 +1,6 @@
 certifi
 cycler
 Cython
-fdasrsf
 joblib
 kiwisolver
 matplotlib
