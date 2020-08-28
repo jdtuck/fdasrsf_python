@@ -4,6 +4,7 @@ channels:
   - defaults
 dependencies:
   - python=3.7
+  - findblas
   - arviz>=0.9
   - numpy>=1.13
   - scipy>=0.18
@@ -35,5 +36,4 @@ dependencies:
   - mkl-service
   - dill
   - libblas=*=*mkl
-  - pip:
-    - black_nbconvert
+  

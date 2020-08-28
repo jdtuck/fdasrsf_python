@@ -1,4 +1,5 @@
 [![Build Status](https://img.shields.io/travis/jdtuck/fdasrsf_python.svg?style=flat-square&label=linux)](https://travis-ci.org/github/jdtuck/fdasrsf_python)
+[![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
 
 fdasrsf
