@@ -26,6 +26,7 @@
 \indexentry{boxplots@\spxentry{boxplots}!module@\spxentry{module}|hyperpage}{13}
 \indexentry{ampbox (class in boxplots)@\spxentry{ampbox}\spxextra{class in boxplots}|hyperpage}{13}
 \indexentry{construct\_boxplot() (boxplots.ampbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.ampbox method}|hyperpage}{13}
+\indexentry{plot() (boxplots.ampbox method)@\spxentry{plot()}\spxextra{boxplots.ampbox method}|hyperpage}{13}
 \indexentry{phbox (class in boxplots)@\spxentry{phbox}\spxextra{class in boxplots}|hyperpage}{13}
 \indexentry{construct\_boxplot() (boxplots.phbox method)@\spxentry{construct\_boxplot()}\spxextra{boxplots.phbox method}|hyperpage}{14}
 \indexentry{plot() (boxplots.phbox method)@\spxentry{plot()}\spxextra{boxplots.phbox method}|hyperpage}{14}
@@ -64,73 +65,83 @@
 \indexentry{mvtol\_region() (in module tolerance)@\spxentry{mvtol\_region()}\spxextra{in module tolerance}|hyperpage}{27}
 \indexentry{pcaTB() (in module tolerance)@\spxentry{pcaTB()}\spxextra{in module tolerance}|hyperpage}{28}
 \indexentry{rwishart() (in module tolerance)@\spxentry{rwishart()}\spxextra{in module tolerance}|hyperpage}{28}
-\indexentry{module@\spxentry{module}!geodesic@\spxentry{geodesic}|hyperpage}{29}
-\indexentry{geodesic@\spxentry{geodesic}!module@\spxentry{module}|hyperpage}{29}
-\indexentry{back\_parallel\_transport() (in module geodesic)@\spxentry{back\_parallel\_transport()}\spxextra{in module geodesic}|hyperpage}{29}
-\indexentry{calc\_alphadot() (in module geodesic)@\spxentry{calc\_alphadot()}\spxextra{in module geodesic}|hyperpage}{29}
-\indexentry{calculate\_energy() (in module geodesic)@\spxentry{calculate\_energy()}\spxextra{in module geodesic}|hyperpage}{29}
-\indexentry{calculate\_gradE() (in module geodesic)@\spxentry{calculate\_gradE()}\spxextra{in module geodesic}|hyperpage}{30}
-\indexentry{cov\_integral() (in module geodesic)@\spxentry{cov\_integral()}\spxextra{in module geodesic}|hyperpage}{30}
-\indexentry{find\_basis\_normal\_path() (in module geodesic)@\spxentry{find\_basis\_normal\_path()}\spxextra{in module geodesic}|hyperpage}{30}
-\indexentry{geod\_dist\_path\_strt() (in module geodesic)@\spxentry{geod\_dist\_path\_strt()}\spxextra{in module geodesic}|hyperpage}{30}
-\indexentry{geod\_sphere() (in module geodesic)@\spxentry{geod\_sphere()}\spxextra{in module geodesic}|hyperpage}{30}
-\indexentry{init\_path\_geod() (in module geodesic)@\spxentry{init\_path\_geod()}\spxextra{in module geodesic}|hyperpage}{31}
-\indexentry{init\_path\_rand() (in module geodesic)@\spxentry{init\_path\_rand()}\spxextra{in module geodesic}|hyperpage}{31}
-\indexentry{path\_straightening() (in module geodesic)@\spxentry{path\_straightening()}\spxextra{in module geodesic}|hyperpage}{31}
-\indexentry{update\_path() (in module geodesic)@\spxentry{update\_path()}\spxextra{in module geodesic}|hyperpage}{32}
-\indexentry{module@\spxentry{module}!utility\_functions@\spxentry{utility\_functions}|hyperpage}{33}
-\indexentry{utility\_functions@\spxentry{utility\_functions}!module@\spxentry{module}|hyperpage}{33}
-\indexentry{SqrtMean() (in module utility\_functions)@\spxentry{SqrtMean()}\spxextra{in module utility\_functions}|hyperpage}{33}
-\indexentry{SqrtMeanInverse() (in module utility\_functions)@\spxentry{SqrtMeanInverse()}\spxextra{in module utility\_functions}|hyperpage}{33}
-\indexentry{SqrtMedian() (in module utility\_functions)@\spxentry{SqrtMedian()}\spxextra{in module utility\_functions}|hyperpage}{33}
-\indexentry{cumtrapzmid() (in module utility\_functions)@\spxentry{cumtrapzmid()}\spxextra{in module utility\_functions}|hyperpage}{33}
-\indexentry{diffop() (in module utility\_functions)@\spxentry{diffop()}\spxextra{in module utility\_functions}|hyperpage}{34}
-\indexentry{elastic\_distance() (in module utility\_functions)@\spxentry{elastic\_distance()}\spxextra{in module utility\_functions}|hyperpage}{34}
-\indexentry{f\_K\_fold() (in module utility\_functions)@\spxentry{f\_K\_fold()}\spxextra{in module utility\_functions}|hyperpage}{34}
-\indexentry{f\_to\_srsf() (in module utility\_functions)@\spxentry{f\_to\_srsf()}\spxextra{in module utility\_functions}|hyperpage}{34}
-\indexentry{geigen() (in module utility\_functions)@\spxentry{geigen()}\spxextra{in module utility\_functions}|hyperpage}{34}
-\indexentry{gradient\_spline() (in module utility\_functions)@\spxentry{gradient\_spline()}\spxextra{in module utility\_functions}|hyperpage}{35}
-\indexentry{innerprod\_q() (in module utility\_functions)@\spxentry{innerprod\_q()}\spxextra{in module utility\_functions}|hyperpage}{35}
-\indexentry{invertGamma() (in module utility\_functions)@\spxentry{invertGamma()}\spxextra{in module utility\_functions}|hyperpage}{35}
-\indexentry{optimum\_reparam() (in module utility\_functions)@\spxentry{optimum\_reparam()}\spxextra{in module utility\_functions}|hyperpage}{35}
-\indexentry{optimum\_reparam\_pair() (in module utility\_functions)@\spxentry{optimum\_reparam\_pair()}\spxextra{in module utility\_functions}|hyperpage}{35}
-\indexentry{outlier\_detection() (in module utility\_functions)@\spxentry{outlier\_detection()}\spxextra{in module utility\_functions}|hyperpage}{36}
-\indexentry{randomGamma() (in module utility\_functions)@\spxentry{randomGamma()}\spxextra{in module utility\_functions}|hyperpage}{36}
-\indexentry{resamplefunction() (in module utility\_functions)@\spxentry{resamplefunction()}\spxextra{in module utility\_functions}|hyperpage}{36}
-\indexentry{rgam() (in module utility\_functions)@\spxentry{rgam()}\spxextra{in module utility\_functions}|hyperpage}{36}
-\indexentry{smooth\_data() (in module utility\_functions)@\spxentry{smooth\_data()}\spxextra{in module utility\_functions}|hyperpage}{36}
-\indexentry{srsf\_to\_f() (in module utility\_functions)@\spxentry{srsf\_to\_f()}\spxextra{in module utility\_functions}|hyperpage}{37}
-\indexentry{update\_progress() (in module utility\_functions)@\spxentry{update\_progress()}\spxextra{in module utility\_functions}|hyperpage}{37}
-\indexentry{warp\_f\_gamma() (in module utility\_functions)@\spxentry{warp\_f\_gamma()}\spxextra{in module utility\_functions}|hyperpage}{37}
-\indexentry{warp\_q\_gamma() (in module utility\_functions)@\spxentry{warp\_q\_gamma()}\spxextra{in module utility\_functions}|hyperpage}{37}
-\indexentry{zero\_crossing() (in module utility\_functions)@\spxentry{zero\_crossing()}\spxextra{in module utility\_functions}|hyperpage}{37}
-\indexentry{module@\spxentry{module}!curve\_functions@\spxentry{curve\_functions}|hyperpage}{39}
-\indexentry{curve\_functions@\spxentry{curve\_functions}!module@\spxentry{module}|hyperpage}{39}
-\indexentry{Basis\_Normal\_A() (in module curve\_functions)@\spxentry{Basis\_Normal\_A()}\spxextra{in module curve\_functions}|hyperpage}{39}
-\indexentry{calc\_j() (in module curve\_functions)@\spxentry{calc\_j()}\spxextra{in module curve\_functions}|hyperpage}{39}
-\indexentry{calculate\_variance() (in module curve\_functions)@\spxentry{calculate\_variance()}\spxextra{in module curve\_functions}|hyperpage}{39}
-\indexentry{calculatecentroid() (in module curve\_functions)@\spxentry{calculatecentroid()}\spxextra{in module curve\_functions}|hyperpage}{39}
-\indexentry{curve\_to\_q() (in module curve\_functions)@\spxentry{curve\_to\_q()}\spxextra{in module curve\_functions}|hyperpage}{39}
-\indexentry{curve\_zero\_crossing() (in module curve\_functions)@\spxentry{curve\_zero\_crossing()}\spxextra{in module curve\_functions}|hyperpage}{40}
-\indexentry{elastic\_distance\_curve() (in module curve\_functions)@\spxentry{elastic\_distance\_curve()}\spxextra{in module curve\_functions}|hyperpage}{40}
-\indexentry{elastic\_shooting() (in module curve\_functions)@\spxentry{elastic\_shooting()}\spxextra{in module curve\_functions}|hyperpage}{40}
-\indexentry{find\_basis\_normal() (in module curve\_functions)@\spxentry{find\_basis\_normal()}\spxextra{in module curve\_functions}|hyperpage}{40}
-\indexentry{find\_best\_rotation() (in module curve\_functions)@\spxentry{find\_best\_rotation()}\spxextra{in module curve\_functions}|hyperpage}{40}
-\indexentry{find\_rotation\_and\_seed\_coord() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_coord()}\spxextra{in module curve\_functions}|hyperpage}{40}
-\indexentry{find\_rotation\_and\_seed\_q() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_q()}\spxextra{in module curve\_functions}|hyperpage}{41}
-\indexentry{gram\_schmidt() (in module curve\_functions)@\spxentry{gram\_schmidt()}\spxextra{in module curve\_functions}|hyperpage}{41}
-\indexentry{group\_action\_by\_gamma() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma()}\spxextra{in module curve\_functions}|hyperpage}{41}
-\indexentry{group\_action\_by\_gamma\_coord() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma\_coord()}\spxextra{in module curve\_functions}|hyperpage}{41}
-\indexentry{innerprod\_q2() (in module curve\_functions)@\spxentry{innerprod\_q2()}\spxextra{in module curve\_functions}|hyperpage}{41}
-\indexentry{inverse\_exp() (in module curve\_functions)@\spxentry{inverse\_exp()}\spxextra{in module curve\_functions}|hyperpage}{42}
-\indexentry{inverse\_exp\_coord() (in module curve\_functions)@\spxentry{inverse\_exp\_coord()}\spxextra{in module curve\_functions}|hyperpage}{42}
-\indexentry{optimum\_reparam\_curve() (in module curve\_functions)@\spxentry{optimum\_reparam\_curve()}\spxextra{in module curve\_functions}|hyperpage}{42}
-\indexentry{parallel\_translate() (in module curve\_functions)@\spxentry{parallel\_translate()}\spxextra{in module curve\_functions}|hyperpage}{42}
-\indexentry{pre\_proc\_curve() (in module curve\_functions)@\spxentry{pre\_proc\_curve()}\spxextra{in module curve\_functions}|hyperpage}{43}
-\indexentry{project\_curve() (in module curve\_functions)@\spxentry{project\_curve()}\spxextra{in module curve\_functions}|hyperpage}{43}
-\indexentry{project\_tangent() (in module curve\_functions)@\spxentry{project\_tangent()}\spxextra{in module curve\_functions}|hyperpage}{43}
-\indexentry{psi() (in module curve\_functions)@\spxentry{psi()}\spxextra{in module curve\_functions}|hyperpage}{43}
-\indexentry{q\_to\_curve() (in module curve\_functions)@\spxentry{q\_to\_curve()}\spxextra{in module curve\_functions}|hyperpage}{43}
-\indexentry{resamplecurve() (in module curve\_functions)@\spxentry{resamplecurve()}\spxextra{in module curve\_functions}|hyperpage}{44}
-\indexentry{scale\_curve() (in module curve\_functions)@\spxentry{scale\_curve()}\spxextra{in module curve\_functions}|hyperpage}{44}
-\indexentry{shift\_f() (in module curve\_functions)@\spxentry{shift\_f()}\spxextra{in module curve\_functions}|hyperpage}{44}
+\indexentry{module@\spxentry{module}!curve\_stats@\spxentry{curve\_stats}|hyperpage}{29}
+\indexentry{curve\_stats@\spxentry{curve\_stats}!module@\spxentry{module}|hyperpage}{29}
+\indexentry{fdacurve (class in curve\_stats)@\spxentry{fdacurve}\spxextra{class in curve\_stats}|hyperpage}{29}
+\indexentry{karcher\_cov() (curve\_stats.fdacurve method)@\spxentry{karcher\_cov()}\spxextra{curve\_stats.fdacurve method}|hyperpage}{29}
+\indexentry{karcher\_mean() (curve\_stats.fdacurve method)@\spxentry{karcher\_mean()}\spxextra{curve\_stats.fdacurve method}|hyperpage}{29}
+\indexentry{plot() (curve\_stats.fdacurve method)@\spxentry{plot()}\spxextra{curve\_stats.fdacurve method}|hyperpage}{29}
+\indexentry{sample\_shapes() (curve\_stats.fdacurve method)@\spxentry{sample\_shapes()}\spxextra{curve\_stats.fdacurve method}|hyperpage}{29}
+\indexentry{shape\_pca() (curve\_stats.fdacurve method)@\spxentry{shape\_pca()}\spxextra{curve\_stats.fdacurve method}|hyperpage}{29}
+\indexentry{srvf\_align() (curve\_stats.fdacurve method)@\spxentry{srvf\_align()}\spxextra{curve\_stats.fdacurve method}|hyperpage}{29}
+\indexentry{randn() (in module curve\_stats)@\spxentry{randn()}\spxextra{in module curve\_stats}|hyperpage}{29}
+\indexentry{module@\spxentry{module}!geodesic@\spxentry{geodesic}|hyperpage}{31}
+\indexentry{geodesic@\spxentry{geodesic}!module@\spxentry{module}|hyperpage}{31}
+\indexentry{back\_parallel\_transport() (in module geodesic)@\spxentry{back\_parallel\_transport()}\spxextra{in module geodesic}|hyperpage}{31}
+\indexentry{calc\_alphadot() (in module geodesic)@\spxentry{calc\_alphadot()}\spxextra{in module geodesic}|hyperpage}{31}
+\indexentry{calculate\_energy() (in module geodesic)@\spxentry{calculate\_energy()}\spxextra{in module geodesic}|hyperpage}{31}
+\indexentry{calculate\_gradE() (in module geodesic)@\spxentry{calculate\_gradE()}\spxextra{in module geodesic}|hyperpage}{32}
+\indexentry{cov\_integral() (in module geodesic)@\spxentry{cov\_integral()}\spxextra{in module geodesic}|hyperpage}{32}
+\indexentry{find\_basis\_normal\_path() (in module geodesic)@\spxentry{find\_basis\_normal\_path()}\spxextra{in module geodesic}|hyperpage}{32}
+\indexentry{geod\_dist\_path\_strt() (in module geodesic)@\spxentry{geod\_dist\_path\_strt()}\spxextra{in module geodesic}|hyperpage}{32}
+\indexentry{geod\_sphere() (in module geodesic)@\spxentry{geod\_sphere()}\spxextra{in module geodesic}|hyperpage}{32}
+\indexentry{init\_path\_geod() (in module geodesic)@\spxentry{init\_path\_geod()}\spxextra{in module geodesic}|hyperpage}{33}
+\indexentry{init\_path\_rand() (in module geodesic)@\spxentry{init\_path\_rand()}\spxextra{in module geodesic}|hyperpage}{33}
+\indexentry{path\_straightening() (in module geodesic)@\spxentry{path\_straightening()}\spxextra{in module geodesic}|hyperpage}{33}
+\indexentry{update\_path() (in module geodesic)@\spxentry{update\_path()}\spxextra{in module geodesic}|hyperpage}{34}
+\indexentry{module@\spxentry{module}!utility\_functions@\spxentry{utility\_functions}|hyperpage}{35}
+\indexentry{utility\_functions@\spxentry{utility\_functions}!module@\spxentry{module}|hyperpage}{35}
+\indexentry{SqrtMean() (in module utility\_functions)@\spxentry{SqrtMean()}\spxextra{in module utility\_functions}|hyperpage}{35}
+\indexentry{SqrtMeanInverse() (in module utility\_functions)@\spxentry{SqrtMeanInverse()}\spxextra{in module utility\_functions}|hyperpage}{35}
+\indexentry{SqrtMedian() (in module utility\_functions)@\spxentry{SqrtMedian()}\spxextra{in module utility\_functions}|hyperpage}{35}
+\indexentry{cumtrapzmid() (in module utility\_functions)@\spxentry{cumtrapzmid()}\spxextra{in module utility\_functions}|hyperpage}{35}
+\indexentry{diffop() (in module utility\_functions)@\spxentry{diffop()}\spxextra{in module utility\_functions}|hyperpage}{36}
+\indexentry{elastic\_distance() (in module utility\_functions)@\spxentry{elastic\_distance()}\spxextra{in module utility\_functions}|hyperpage}{36}
+\indexentry{f\_K\_fold() (in module utility\_functions)@\spxentry{f\_K\_fold()}\spxextra{in module utility\_functions}|hyperpage}{36}
+\indexentry{f\_to\_srsf() (in module utility\_functions)@\spxentry{f\_to\_srsf()}\spxextra{in module utility\_functions}|hyperpage}{36}
+\indexentry{geigen() (in module utility\_functions)@\spxentry{geigen()}\spxextra{in module utility\_functions}|hyperpage}{36}
+\indexentry{gradient\_spline() (in module utility\_functions)@\spxentry{gradient\_spline()}\spxextra{in module utility\_functions}|hyperpage}{37}
+\indexentry{innerprod\_q() (in module utility\_functions)@\spxentry{innerprod\_q()}\spxextra{in module utility\_functions}|hyperpage}{37}
+\indexentry{invertGamma() (in module utility\_functions)@\spxentry{invertGamma()}\spxextra{in module utility\_functions}|hyperpage}{37}
+\indexentry{optimum\_reparam() (in module utility\_functions)@\spxentry{optimum\_reparam()}\spxextra{in module utility\_functions}|hyperpage}{37}
+\indexentry{optimum\_reparam\_pair() (in module utility\_functions)@\spxentry{optimum\_reparam\_pair()}\spxextra{in module utility\_functions}|hyperpage}{37}
+\indexentry{outlier\_detection() (in module utility\_functions)@\spxentry{outlier\_detection()}\spxextra{in module utility\_functions}|hyperpage}{38}
+\indexentry{randomGamma() (in module utility\_functions)@\spxentry{randomGamma()}\spxextra{in module utility\_functions}|hyperpage}{38}
+\indexentry{resamplefunction() (in module utility\_functions)@\spxentry{resamplefunction()}\spxextra{in module utility\_functions}|hyperpage}{38}
+\indexentry{rgam() (in module utility\_functions)@\spxentry{rgam()}\spxextra{in module utility\_functions}|hyperpage}{38}
+\indexentry{smooth\_data() (in module utility\_functions)@\spxentry{smooth\_data()}\spxextra{in module utility\_functions}|hyperpage}{38}
+\indexentry{srsf\_to\_f() (in module utility\_functions)@\spxentry{srsf\_to\_f()}\spxextra{in module utility\_functions}|hyperpage}{39}
+\indexentry{update\_progress() (in module utility\_functions)@\spxentry{update\_progress()}\spxextra{in module utility\_functions}|hyperpage}{39}
+\indexentry{warp\_f\_gamma() (in module utility\_functions)@\spxentry{warp\_f\_gamma()}\spxextra{in module utility\_functions}|hyperpage}{39}
+\indexentry{warp\_q\_gamma() (in module utility\_functions)@\spxentry{warp\_q\_gamma()}\spxextra{in module utility\_functions}|hyperpage}{39}
+\indexentry{zero\_crossing() (in module utility\_functions)@\spxentry{zero\_crossing()}\spxextra{in module utility\_functions}|hyperpage}{39}
+\indexentry{module@\spxentry{module}!curve\_functions@\spxentry{curve\_functions}|hyperpage}{41}
+\indexentry{curve\_functions@\spxentry{curve\_functions}!module@\spxentry{module}|hyperpage}{41}
+\indexentry{Basis\_Normal\_A() (in module curve\_functions)@\spxentry{Basis\_Normal\_A()}\spxextra{in module curve\_functions}|hyperpage}{41}
+\indexentry{calc\_j() (in module curve\_functions)@\spxentry{calc\_j()}\spxextra{in module curve\_functions}|hyperpage}{41}
+\indexentry{calculate\_variance() (in module curve\_functions)@\spxentry{calculate\_variance()}\spxextra{in module curve\_functions}|hyperpage}{41}
+\indexentry{calculatecentroid() (in module curve\_functions)@\spxentry{calculatecentroid()}\spxextra{in module curve\_functions}|hyperpage}{41}
+\indexentry{curve\_to\_q() (in module curve\_functions)@\spxentry{curve\_to\_q()}\spxextra{in module curve\_functions}|hyperpage}{41}
+\indexentry{curve\_zero\_crossing() (in module curve\_functions)@\spxentry{curve\_zero\_crossing()}\spxextra{in module curve\_functions}|hyperpage}{42}
+\indexentry{elastic\_distance\_curve() (in module curve\_functions)@\spxentry{elastic\_distance\_curve()}\spxextra{in module curve\_functions}|hyperpage}{42}
+\indexentry{elastic\_shooting() (in module curve\_functions)@\spxentry{elastic\_shooting()}\spxextra{in module curve\_functions}|hyperpage}{42}
+\indexentry{find\_basis\_normal() (in module curve\_functions)@\spxentry{find\_basis\_normal()}\spxextra{in module curve\_functions}|hyperpage}{42}
+\indexentry{find\_best\_rotation() (in module curve\_functions)@\spxentry{find\_best\_rotation()}\spxextra{in module curve\_functions}|hyperpage}{42}
+\indexentry{find\_rotation\_and\_seed\_coord() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_coord()}\spxextra{in module curve\_functions}|hyperpage}{42}
+\indexentry{find\_rotation\_and\_seed\_q() (in module curve\_functions)@\spxentry{find\_rotation\_and\_seed\_q()}\spxextra{in module curve\_functions}|hyperpage}{43}
+\indexentry{gram\_schmidt() (in module curve\_functions)@\spxentry{gram\_schmidt()}\spxextra{in module curve\_functions}|hyperpage}{43}
+\indexentry{group\_action\_by\_gamma() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma()}\spxextra{in module curve\_functions}|hyperpage}{43}
+\indexentry{group\_action\_by\_gamma\_coord() (in module curve\_functions)@\spxentry{group\_action\_by\_gamma\_coord()}\spxextra{in module curve\_functions}|hyperpage}{43}
+\indexentry{innerprod\_q2() (in module curve\_functions)@\spxentry{innerprod\_q2()}\spxextra{in module curve\_functions}|hyperpage}{43}
+\indexentry{inverse\_exp() (in module curve\_functions)@\spxentry{inverse\_exp()}\spxextra{in module curve\_functions}|hyperpage}{44}
+\indexentry{inverse\_exp\_coord() (in module curve\_functions)@\spxentry{inverse\_exp\_coord()}\spxextra{in module curve\_functions}|hyperpage}{44}
+\indexentry{optimum\_reparam\_curve() (in module curve\_functions)@\spxentry{optimum\_reparam\_curve()}\spxextra{in module curve\_functions}|hyperpage}{44}
+\indexentry{parallel\_translate() (in module curve\_functions)@\spxentry{parallel\_translate()}\spxextra{in module curve\_functions}|hyperpage}{44}
+\indexentry{pre\_proc\_curve() (in module curve\_functions)@\spxentry{pre\_proc\_curve()}\spxextra{in module curve\_functions}|hyperpage}{45}
+\indexentry{project\_curve() (in module curve\_functions)@\spxentry{project\_curve()}\spxextra{in module curve\_functions}|hyperpage}{45}
+\indexentry{project\_tangent() (in module curve\_functions)@\spxentry{project\_tangent()}\spxextra{in module curve\_functions}|hyperpage}{45}
+\indexentry{psi() (in module curve\_functions)@\spxentry{psi()}\spxextra{in module curve\_functions}|hyperpage}{45}
+\indexentry{q\_to\_curve() (in module curve\_functions)@\spxentry{q\_to\_curve()}\spxextra{in module curve\_functions}|hyperpage}{45}
+\indexentry{resamplecurve() (in module curve\_functions)@\spxentry{resamplecurve()}\spxextra{in module curve\_functions}|hyperpage}{46}
+\indexentry{scale\_curve() (in module curve\_functions)@\spxentry{scale\_curve()}\spxextra{in module curve\_functions}|hyperpage}{46}
+\indexentry{shift\_f() (in module curve\_functions)@\spxentry{shift\_f()}\spxextra{in module curve\_functions}|hyperpage}{46}

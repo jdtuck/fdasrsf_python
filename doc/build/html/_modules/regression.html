@@ -43,7 +43,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Warping Invariant Regression using SRSF</span>
 
-<span class="sd">moduleauthor:: Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
+<span class="sd">moduleauthor:: J. Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -62,7 +62,7 @@
 <div class="viewcode-block" id="elastic_regression"><a class="viewcode-back" href="../regression.html#regression.elastic_regression">[docs]</a><span class="k">def</span> <span class="nf">elastic_regression</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                        <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function identifies a regression model with phase-variablity</span>
+<span class="sd">    This function identifies a regression model with phase-variability</span>
 <span class="sd">    using elastic methods</span>
 
 <span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -202,7 +202,7 @@
                      <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function identifies a logistic regression model with</span>
-<span class="sd">    phase-variablity using elastic methods</span>
+<span class="sd">    phase-variability using elastic methods</span>
 
 <span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
 <span class="sd">    :param y: numpy array of labels (1/-1)</span>
@@ -325,7 +325,7 @@
                       <span class="n">delta</span><span class="o">=.</span><span class="mi">01</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function identifies a multinomial logistic regression model with</span>
-<span class="sd">    phase-variablity using elastic methods</span>
+<span class="sd">    phase-variability using elastic methods</span>
 
 <span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
 <span class="sd">    :param y: numpy array of labels {1,2,...,m} for m classes</span>
@@ -448,11 +448,11 @@
 <div class="viewcode-block" id="elastic_prediction"><a class="viewcode-back" href="../regression.html#regression.elastic_prediction">[docs]</a><span class="k">def</span> <span class="nf">elastic_prediction</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function performs prediction from an elastic regression model</span>
-<span class="sd">    with phase-variablity</span>
+<span class="sd">    with phase-variability</span>
 
 <span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
 <span class="sd">    :param time: vector of size M describing the sample points</span>
-<span class="sd">    :param model: indentified model from elastic_regression</span>
+<span class="sd">    :param model: identified model from elastic_regression</span>
 <span class="sd">    :param y: truth, optional used to calculate SSE</span>
 
 <span class="sd">    :rtype: tuple of numpy array</span>
@@ -653,7 +653,7 @@
 <span class="sd">    :param y: numpy ndarray of shape (1,N) responses</span>
 
 <span class="sd">    :rtype: numpy array</span>
-<span class="sd">    :return grad: gradient of logisitc loss</span>
+<span class="sd">    :return grad: gradient of logistic loss</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>

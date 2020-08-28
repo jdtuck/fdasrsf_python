@@ -1,3 +1,4 @@
+[![Build Status](https://img.shields.io/travis/jdtuck/fdasrsf_python.svg?style=flat-square&label=linux)](https://travis-ci.org/github/jdtuck/fdasrsf_python)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
 
 fdasrsf
@@ -10,7 +11,7 @@ using functional component analysis and regression.
 
 ### Installation
 ------------------------------------------------------------------------------
-v2.0.3 is on pip and can be installed using
+v2.1.0 is on pip and can be installed using
 > `pip install fdasrsf`
 
 To install the most up to date version on github

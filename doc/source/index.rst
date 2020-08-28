@@ -27,7 +27,8 @@ using functional component analysis and regression.
    utility_functions
    curve_functions
 
-References:
+References
+==========
 
    Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
    Methods. Ph.D. Thesis, Florida State University.

@@ -41,9 +41,9 @@
             
   <h1>Source code for geodesic</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">geodesic calculation for SRVF (curves) open and closed)</span>
+<span class="sd">geodesic calculation for SRVF (curves) open and closed</span>
 
-<span class="sd">moduleauthor:: Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
+<span class="sd">moduleauthor:: J. Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -57,7 +57,7 @@
 
 <div class="viewcode-block" id="geod_sphere"><a class="viewcode-back" href="../geodesic.html#geodesic.geod_sphere">[docs]</a><span class="k">def</span> <span class="nf">geod_sphere</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function caluclates the geodecis between open curves beta1 and</span>
+<span class="sd">    This function calculates the geodesics between open curves beta1 and</span>
 <span class="sd">    beta2 with k steps along path</span>
 
 <span class="sd">    :param beta1: numpy ndarray of shape (2,M) of M samples</span>
@@ -130,7 +130,7 @@
 
 <div class="viewcode-block" id="path_straightening"><a class="viewcode-back" href="../geodesic.html#geodesic.path_straightening">[docs]</a><span class="k">def</span> <span class="nf">path_straightening</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">betamid</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">&quot;rand&quot;</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Perform path straigtening to find geodesic between two shapes in either</span>
+<span class="sd">    Perform path straightening to find geodesic between two shapes in either</span>
 <span class="sd">    the space of closed curves or the space of affine standardized curves.</span>
 <span class="sd">    This algorithm follows the steps outlined in section 4.6 of the</span>
 <span class="sd">    manuscript.</span>
@@ -139,7 +139,7 @@
 <span class="sd">    :param beta2: numpy ndarray of shape (2,M) of M samples (end curve)</span>
 <span class="sd">    :param betamid: numpy ndarray of shape (2,M) of M samples (mid curve</span>
 <span class="sd">     Default = NULL, only needed for init &quot;rand&quot;)</span>
-<span class="sd">    :param init: initilizae path geodesic or random (Default = &quot;rand&quot;)</span>
+<span class="sd">    :param init: initialize path geodesic or random (Default = &quot;rand&quot;)</span>
 <span class="sd">    :param T: Number of samples of curve (Default = 100)</span>
 <span class="sd">    :param k: number of samples along path (Default = 5)</span>
 
@@ -185,7 +185,7 @@
 
     <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxit</span><span class="p">:</span>
         <span class="c1"># algorithm 8:</span>
-        <span class="c1"># compute dalpha/dt along alpha using finite difference appox</span>
+        <span class="c1"># compute dalpha/dt along alpha using finite difference approx</span>
         <span class="c1"># First calculate basis for normal sapce at each point in alpha</span>
         <span class="n">basis</span> <span class="o">=</span> <span class="n">find_basis_normal_path</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
         <span class="n">alphadot</span> <span class="o">=</span> <span class="n">calc_alphadot</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
@@ -202,7 +202,7 @@
         <span class="n">utilde</span> <span class="o">=</span> <span class="n">back_parallel_transport</span><span class="p">(</span><span class="n">u1</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
         <span class="c1"># algorithm 11:</span>
-        <span class="c1"># compute graident vector field of E in \cal{H}_{O}</span>
+        <span class="c1"># compute gradient vector field of E in \cal{H}_{O}</span>
         <span class="n">gradE</span><span class="p">,</span> <span class="n">normgradE</span> <span class="o">=</span> <span class="n">calculate_gradE</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">utilde</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
         <span class="n">gradEnorm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">normgradE</span><span class="p">)</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">gradEnorm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
