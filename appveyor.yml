@@ -1,13 +1,16 @@
 # appveyor.yml
 ---
 environment:
+  # Appveyor machines come with miniconda already installed.
+  CONDA_INSTALL_LOCN: "C:\\Miniconda-x64"
+
   matrix:
-  - TOXENV: py36
-  - TOXENV: py37
+  - CONDA: 37
 
 build_script:
   # Build the compiled extension
-  - "%CMD_IN_ENV% python setup.py build"
+  - pip install findblas
+  - python setup.py build
 
 test_script:
-  - "%CMD_IN_ENV% python setup.py ./bin/tests.py"
+  - python ./bin/tests.py
