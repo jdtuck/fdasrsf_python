@@ -18,7 +18,7 @@ install:
 
 script:
   - . ./bin/test.sh
-  - coverage run .bin/tests.py
+  - coverage run ./bin/tests.py
 
 after_success:
   - codecov
