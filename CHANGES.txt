@@ -2,7 +2,7 @@ v2.1.0, 2020-08-26 -- add curve class and refactor and bugfixes
 v2.0.3, 2020-08-21 -- bugfixes
 v2.0.2, 2020-04-10 -- bugfixes
 v2.0.1, 2020-03-10 -- update c, c++ to work with windows
-v2.0.0, 2019-10-21 -- changed to class structure and added regression cde
+v2.0.0, 2019-10-21 -- changed to class structure and added regression code
 v1.5.0, 2019-08-07 -- added tolerance bound
 v1.4.3, 2019-07-30 -- added RBFGS optimzation
 v1.4.0, 2019-05-10 -- added joint PCA
