@@ -2,23 +2,28 @@
 ---
 environment:
   matrix:
-    - PYTHON_VERSION: 3.7
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON_VERSION: 3.7
       MINICONDA: C:\Miniconda3
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
 
 install:
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PYTHON%\\Lib\\site-packages;%PATH%;"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
+  - conda install -y -q setuptools
   - conda info -a
-  - "conda create -q -n test-environment -c conda-forge python=%PYTHON_VERSION% numpy scipy Cython joblib matplotlib patsy tqdm mkl"
+  - "conda create -q -n test-environment -c conda-forge python=%PYTHON_VERSION% numpy scipy cython joblib matplotlib patsy tqdm mkl"
   - activate test-environment
   - pip install findblas
+  - pip install -r requirements.txt
 
 build_script:
   # Build the compiled extension
+  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
   - python setup.py install
 
 test_script:
