@@ -12,16 +12,18 @@ init:
 install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PYTHON%\\Lib\\site-packages;%PATH%;"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - conda config --add channels conda-forge
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda install -y -q setuptools
   - conda info -a
-  - "conda create -q -n test-environment -c conda-forge python=%PYTHON_VERSION% numpy scipy cython joblib matplotlib patsy tqdm mkl"
+  - "conda create -q -n test-environment -c conda-forge python=%PYTHON_VERSION% mkl=2018.0.3 numpy scipy cython joblib matplotlib patsy tqdm"
   - activate test-environment
+  - conda install --yes lapack ecos multiprocess
   - pip install findblas
-  - pip install -e .
+  - python setup.py install
 
-
+build: false
 
 test_script:
   - python ./bin/tests.py
