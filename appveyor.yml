@@ -1,0 +1,13 @@
+# appveyor.yml
+---
+environment:
+  matrix:
+  - TOXENV: py36
+  - TOXENV: py37
+
+build_script:
+  # Build the compiled extension
+  - "%CMD_IN_ENV% python setup.py build"
+
+test_script:
+  - "%CMD_IN_ENV% python setup.py ./bin/tests.py"
