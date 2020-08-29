@@ -19,12 +19,9 @@ install:
   - "conda create -q -n test-environment -c conda-forge python=%PYTHON_VERSION% numpy scipy cython joblib matplotlib patsy tqdm mkl"
   - activate test-environment
   - pip install findblas
-  - pip install -r requirements.txt
+  - pip install -e .
 
-build_script:
-  # Build the compiled extension
-  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-  - python setup.py install
+
 
 test_script:
   - python ./bin/tests.py
