@@ -1,15 +1,22 @@
 # appveyor.yml
 ---
 environment:
-  # Appveyor machines come with miniconda already installed.
-  CONDA_INSTALL_LOCN: "C:\\Miniconda-x64"
-
   matrix:
-  - CONDA: 37
+    - PYTHON_VERSION: 3.7
+      MINICONDA: C:\Miniconda3
+
+init:
+  - "ECHO %PYTHON_VERSION% %MINICONDA%"
+
+install:
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - pip install findblas
 
 build_script:
   # Build the compiled extension
-  - pip install findblas
   - python setup.py build
 
 test_script:
