@@ -1,4 +1,4 @@
-v2.1.0, 2020-08-26 -- add curve class and refactor
+v2.1.0, 2020-08-26 -- add curve class and refactor and bugfixes
 v2.0.3, 2020-08-21 -- bugfixes
 v2.0.2, 2020-04-10 -- bugfixes
 v2.0.1, 2020-03-10 -- update c, c++ to work with windows
