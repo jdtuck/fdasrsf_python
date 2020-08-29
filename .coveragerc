@@ -1,4 +1,6 @@
 [run]
+source=fdasrsf
+
 omit =
     # exclude tests files from coverage calculation
     fdasrsf_python/bin/*
