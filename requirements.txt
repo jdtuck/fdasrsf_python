@@ -11,5 +11,6 @@ python-dateutil
 scipy
 six
 tornado
-tqdm
+lapack
+mkl
 findblas
