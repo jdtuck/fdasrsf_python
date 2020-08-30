@@ -5,7 +5,7 @@ ARG SRC_DIR=.
 MAINTAINER J. Derek Tucker <jdtuck@sandia.gov>
 
 ADD $SRC_DIR /home/jovyan/
-RUN /bin/bash /home/jovyan/scripts/create_testenv.sh --global --no-setup
+RUN /bin/bash /home/jovyan/bin/create_testenv.sh --global --no-setup
 
 #  matplotlib nonsense
 ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
