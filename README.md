@@ -3,7 +3,7 @@
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/fdasrsf.svg)](https://badge.fury.io/py/fdasrsf)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jdtuck/fdasrsf_python/master?filepath=%2Fnotebooks)
-![Docker Automated build](https://img.shields.io/docker/automated/tetonedge/fdasrsf)
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/tetonedge/fdasrsf)
 
 
 fdasrsf
