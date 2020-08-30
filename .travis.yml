@@ -8,23 +8,26 @@ addons:
   apt_packages:
     - pandoc
 
-before_install:
-  - . ./bin/install_miniconda.sh
-
-install:
-  - . ./bin/create_testenv.sh
-  - pip install codecov
-  - conda list && pip freeze
-
-script:
-  - . ./bin/test.sh
-  - coverage run -m unittest discover
-
-after_success:
-  - codecov
+stages:
+  - test
+  - name: binder
+    if: (branch = master) AND (NOT (type IN (pull_request)))
 
 jobs:
   include:
+  - name: Test
+    stage: test
+    before_install:
+      - . ./bin/install_miniconda.sh
+    install:
+      - . ./bin/create_testenv.sh
+      - pip install codecov
+      - conda list && pip freeze
+    script:
+      - . ./bin/test.sh
+      - coverage run -m unittest discover
+    after_success:
+      - codecov
   - name: Update Binder
     stage: binder
     before_install: skip
