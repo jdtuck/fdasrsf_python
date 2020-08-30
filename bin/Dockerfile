@@ -14,7 +14,7 @@ ENV MPLBACKEND=Agg
 RUN pip install seaborn
 # Import matplotlib the first time to build the font cache.
 RUN python -c "import matplotlib.pyplot"
-RUN sudo chmod -R 777 fdasrf
+RUN chmod -R 777 fdasrf
 RUN cd /home/jovyan/fdasrsf; python setup.py install --user
 
 ENV PYTHONPATH $PYTHONPATH:"$HOME"
