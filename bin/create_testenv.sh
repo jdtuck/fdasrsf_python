@@ -32,7 +32,6 @@ if [ -z ${GLOBAL} ]; then
     conda update -n base conda --yes
     conda config --set channel_priority strict
     conda install -c conda-forge mamba --yes
-    conda install -c mkl-dev --yes
     mamba env create -f environment-dev.yml
     conda activate ${ENVNAME}
     pip install findblas
@@ -41,7 +40,7 @@ else
   pip install findblas
   conda config --add channels conda-forge
   conda update -n base conda --yes
-  conda install -c mkl-dev --yes
+  conda install mkl-dev --yes
 fi
 
 #  Install editable using the setup.py
