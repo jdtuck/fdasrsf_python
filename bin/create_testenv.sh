@@ -40,7 +40,7 @@ else
   pip install findblas
   conda config --add channels conda-forge
   conda update -n base conda --yes
-  conda install mkl-devel --yes
+  conda install mkl-devel cython --yes
 fi
 
 #  Install editable using the setup.py
