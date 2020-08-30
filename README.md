@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.org/jdtuck/fdasrsf_python)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
-[![PyPI version](https://badge.fury.io/ py/fdasrsf.svg)](https://badge.fury.io/py/fdasrsf)
+[![PyPI version](https://badge.fury.io/py/fdasrsf.svg)](https://badge.fury.io/py/fdasrsf)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jdtuck/fdasrsf_python/master?filepath=%2Fnotebooks)
 ![Docker Automated build](https://img.shields.io/docker/automated/tetonedge/fdasrsf)
 
