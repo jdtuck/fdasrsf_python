@@ -1,0 +1,17 @@
+name: binder
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - Cython
+  - joblib
+  - matplotlib
+  - patsy
+  - tqdm
+  - scipy
+  - mkl
+  - lapack
+  - pip
+  - pip:
+    - findblas
