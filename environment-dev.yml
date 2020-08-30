@@ -43,7 +43,7 @@ dependencies:
   - parameterized
   - black
   - ipywidgets
-  - mkl-dev
+  - mkl-devel
   - dill
   - libblas=*=*mkl
   
