@@ -22,7 +22,7 @@ init:
   - ps: Write-Host $Env:APPVEYOR_REPO_NAME
 
 install:
-  - cmd: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat"
+  - '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat"'
   # Load the conda root environment, configure and install some packages
   - '"%CONDA%\Scripts\activate.bat"'
   - conda config --set always_yes yes --set changeps1 no
