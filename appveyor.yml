@@ -8,7 +8,6 @@ environment:
 image: Visual Studio 2019
 
 platform:
-  - x86
   - x64
 
 init:
@@ -36,4 +35,4 @@ install:
 build: false
 
 test_script:
-  - python ./bin/tests.py
+  - python -m unittest discover
