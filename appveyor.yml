@@ -2,25 +2,36 @@
 ---
 environment:
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      PYTHON_VERSION: 3.7
+    - PYTHON_VERSION: 3.7
       MINICONDA: C:\Miniconda3
 
+image: Visual Sutdio 2017
+
+platform:
+  - x86
+  - x64
+
 init:
-  - "ECHO %PYTHON_VERSION% %MINICONDA%"
+  - ps: if ($Env:PLATFORM -eq "x64") { $Env:CONDA = "${Env:CONDA}-x64" }
+  - ps: Write-Host $Env:PYTHON_VERSION
+  - ps: Write-Host $Env:CONDA
+  - ps: Write-Host $Env:GITHUB_REPO_NAME
+  - ps: Write-Host $Env:PLATFORM
+  - ps: Write-Host $Env:APPVEYOR_REPO_TAG
+  - ps: Write-Host $Env:APPVEYOR_REPO_TAG_NAME
+  - ps: Write-Host $Env:APPVEYOR_REPO_NAME
 
 install:
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PYTHON%\\Lib\\site-packages;%PATH%;"
-  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
-  - conda config --add channels conda-forge
+  - "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
+  # Load the conda root environment, configure and install some packages
+  - '"%CONDA%\Scripts\activate.bat"'
   - conda config --set always_yes yes --set changeps1 no
+  - conda config --add channels conda-forge
   - conda update -q conda
-  - conda install -y -q setuptools
-  - conda info -a
-  - "conda create -q -n test-environment -c conda-forge python=%PYTHON_VERSION% mkl-devel numpy scipy cython joblib matplotlib patsy tqdm"
-  - activate test-environment
-  - conda install --yes lapack
+  - conda install conda-build anaconda-client numpy cython scipy joblib matplotlib patsy tqdm
   - pip install findblas
+  # Show conda info for debugging
+  - conda info -a
   - python setup.py install
 
 build: false
