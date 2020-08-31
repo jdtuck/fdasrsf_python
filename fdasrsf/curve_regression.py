@@ -18,8 +18,6 @@ from joblib import Parallel, delayed
 import ocmlogit_warp as mw
 import oclogit_warp as lw
 import collections
-from IPython.core.debugger import Tracer
-
 
 def oc_elastic_regression(beta, y, B=None, df=40, T=200, max_itr=20, cores=-1):
     """
