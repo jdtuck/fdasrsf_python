@@ -1,7 +1,7 @@
+import setuptools
 import numpy
 import sys, os
 import platform
-import setuptools
 import findblas
 from findblas.distutils import build_ext_with_blas
 from distutils.core import setup
