@@ -109,7 +109,7 @@ setup(
     cmdclass={'build_ext': build_ext_subclass, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='2.1.5',
+    version='2.1.6',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',

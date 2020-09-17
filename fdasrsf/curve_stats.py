@@ -123,7 +123,7 @@ class fdacurve:
             sumv = zeros((n, T))
             sumd[0] = inf
             sumd[itr+1] = 0
-            out = Parallel(n_jobs=-1)(delayed(karcher_calc)(self.beta[:, :, n],
+            out = Parallel(n_jobs=cores)(delayed(karcher_calc)(self.beta[:, :, n],
                                     self.q[:, :, n], betamean, mu, self.basis, mode) for n in range(N))
             v = zeros((n, T, N))
             for i in range(0, N):
@@ -162,9 +162,11 @@ class fdacurve:
         return
 
 
-    def srvf_align(self):
+    def srvf_align(self, parallel=False, cores=-1):
         """
-        This calculates the mean of a set of curves and aligns them
+        This aligns a set of curves to the mean and computes mean if not computed
+        :param parallel: run in parallel (default = F)
+        :param cores: number of cores for parallel (default = -1 (all))
         """
         n, T, N = self.beta.shape
         # find mean
@@ -179,27 +181,13 @@ class fdacurve:
         self.beta_mean = self.beta_mean - tile(centroid2, [T, 1]).T
         q_mu = cf.curve_to_q(self.beta_mean)
         # align to mean
+
+        out = Parallel(n_jobs=-1)(delayed(align_sub)(self.beta_mean,
+                                    q_mu, self.beta[:, :, n]) for n in range(N))
         for ii in range(0, N):
-            beta1 = self.beta[:, :, ii]
-
-            # Iteratively optimize over SO(n) x Gamma
-            for i in range(0, 1):
-                # Optimize over SO(n)
-                beta1, O_hat, tau = cf.find_rotation_and_seed_coord(self.beta_mean,
-                                                                    beta1)
-                q1 = cf.curve_to_q(beta1)
-
-                # Optimize over Gamma
-                gam = cf.optimum_reparam_curve(q1, q_mu, 0.0)
-                gamI = uf.invertGamma(gam)
-                # Applying optimal re-parameterization to the second curve
-                beta1 = cf.group_action_by_gamma_coord(beta1, gamI)
-
-            # Optimize over SO(n)
-            beta1, O_hat, tau = cf.find_rotation_and_seed_coord(self.beta_mean, beta1)
-            self.gams[:,ii] = gamI
-            self.qn[:, :, ii] = cf.curve_to_q(beta1)
-            self.betan[:, :, ii] = beta1
+            self.gams[:,ii] = out[i][2]
+            self.qn[:, :, ii] = cf.curve_to_q(out[i][0])
+            self.betan[:, :, ii] = out[i][0]
 
         return
 
@@ -376,3 +364,22 @@ def karcher_calc(beta, q, betamean, mu, basis, mode):
         v = cf.project_tangent(w, q, basis)
 
     return(v, d)
+
+def align_sub(beta_mean, q_mu, beta1):
+    # Iteratively optimize over SO(n) x Gamma
+    for i in range(0, 1):
+        # Optimize over SO(n)
+        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(beta_mean,
+                                                            beta1)
+        q1 = cf.curve_to_q(beta1)
+
+        # Optimize over Gamma
+        gam = cf.optimum_reparam_curve(q1, q_mu, 0.0)
+        gamI = uf.invertGamma(gam)
+        # Applying optimal re-parameterization to the second curve
+        beta1 = cf.group_action_by_gamma_coord(beta1, gamI)
+
+    # Optimize over SO(n)
+    beta1, O_hat, tau = cf.find_rotation_and_seed_coord(beta_mean, beta1)
+
+    return(beta1,q1,gamI)
