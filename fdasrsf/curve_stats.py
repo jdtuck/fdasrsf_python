@@ -70,7 +70,7 @@ class fdacurve:
             beta1[:,:,ii] += tile(a, (N,1)).T
             q[:,:,ii] = cf.curve_to_q(beta1[:,:,ii], self.scale, self.mode)
             cent1[:,ii] = -a
-        
+
         self.q = q
         self.beta = beta
         self.cent = cent1
@@ -113,7 +113,7 @@ class fdacurve:
 
             if iter == maxit:
                 print("maximal number of iterations reached")
-            
+
             mu = mu / sqrt(cf.innerprod_q2(mu, mu))
             if mode == 1:
                 self.basis = cf.find_basis_normal(mu)
@@ -152,7 +152,7 @@ class fdacurve:
                 break
 
             itr += 1
-        
+
         self.q_mean = mu
         self.beta_mean = betamean
         self.v = v
@@ -185,9 +185,9 @@ class fdacurve:
         out = Parallel(n_jobs=-1)(delayed(align_sub)(self.beta_mean,
                                     q_mu, self.beta[:, :, n]) for n in range(N))
         for ii in range(0, N):
-            self.gams[:,ii] = out[i][2]
-            self.qn[:, :, ii] = cf.curve_to_q(out[i][0])
-            self.betan[:, :, ii] = out[i][0]
+            self.gams[:,ii] = out[ii][2]
+            self.qn[:, :, ii] = cf.curve_to_q(out[ii][0])
+            self.betan[:, :, ii] = out[ii][0]
 
         return
 
@@ -232,7 +232,7 @@ class fdacurve:
             tmpv = self.v[:,:,ii]
             Utmp = self.U.T
             x[:,ii] = Utmp.dot((tmpv.flatten()- VM.flatten()))
-        
+
         self.coef = x
 
         return
@@ -289,7 +289,7 @@ class fdacurve:
 
         self.samples = samples
         return
-    
+
 
     def plot(self):
         """
@@ -303,7 +303,7 @@ class fdacurve:
         ax.set_aspect('equal')
         plt.axis('off')
         plt.gca().invert_yaxis()
-        
+
         if hasattr(self,'gams'):
             M = self.gams.shape[0]
             fig, ax = plot.f_plot(arange(0, M) / float(M - 1), self.gams,
@@ -316,15 +316,15 @@ class fdacurve:
             ax.set_aspect('equal')
             plt.axis('off')
             plt.gca().invert_yaxis()
-        
+
         plt.show()
-    
+
 
     def plot_pca(self):
 
         if not hasattr(self,'s'):
             raise NameError('Calculate PCA')
-        
+
         fig, ax = plt.subplots()
         ax.plot(self.s)
         plt.title('Singular Values')
@@ -345,11 +345,11 @@ class fdacurve:
                     ax.plot(0.2*i + p[0,:], p[1,:], 'k', linewidth=2)
                 else:
                     ax.plot(0.2*i + p[0,:], p[1,:], linewidth=2)
-                
+
             ax.set_aspect('equal')
             plt.axis('off')
             plt.title('PD %d' % (j+1))
-        
+
         plt.show()
 
 
