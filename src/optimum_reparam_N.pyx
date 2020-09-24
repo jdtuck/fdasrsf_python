@@ -5,6 +5,18 @@ from numpy.linalg import norm
 cimport numpy as np
 from cpython cimport array
 
+# cpdef api  np.ndarray[double, ndim=1, mode="c"] reparm_dp(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] q2):
+#    cdef int M, n1, disp
+#    cdef double lam
+#    M = q1.shape[0]
+#    n1 = 1
+#    disp = 0
+#    lam = 0
+#    cdef np.ndarray[double, ndim=1, mode="c"] gami = np.zeros(M)
+#    cDP.DP(&q2[0], &q1[0], &n1, &M, &lam, &disp, &gami[0])
+#    gam = (gami - gami[0]) / (gami[-1] - gami[0])
+#    return gam
+
 def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double, ndim=1, mode="c"] time,
                       np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0):
     """
