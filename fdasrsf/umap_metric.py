@@ -171,7 +171,7 @@ def efda_distance_curve(q1, q2):
     if tst.sum() == 0:
         dist = 0
     else:
-        n = 2
+        n = int64(2)
         T = int64(q1.shape[0]/n)
         q1_i = reshape(q1, (n,T))
         q2_i = reshape(q2, (n,T))
