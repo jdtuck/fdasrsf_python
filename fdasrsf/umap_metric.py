@@ -5,6 +5,10 @@ import _DP
 from numpy import linspace, interp, zeros, diff, double, sqrt, arange, float64, int32, zeros, frombuffer, ascontiguousarray, empty
 from numpy.linalg import norm
 
+
+DP = lib.DP
+cffi_utils.register_module(_DP)
+
 @numba.jit()
 def grad(f, binsize):
     n = f.shape[0]
