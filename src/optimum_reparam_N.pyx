@@ -5,17 +5,6 @@ from numpy.linalg import norm
 cimport numpy as np
 from cpython cimport array
 
-# cpdef api  np.ndarray[double, ndim=1, mode="c"] reparm_dp(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] q2):
-#    cdef int M, n1, disp
-#    cdef double lam
-#    M = q1.shape[0]
-#    n1 = 1
-#    disp = 0
-#    lam = 0
-#    cdef np.ndarray[double, ndim=1, mode="c"] gami = np.zeros(M)
-#    cDP.DP(&q2[0], &q1[0], &n1, &M, &lam, &disp, &gami[0])
-#    gam = (gami - gami[0]) / (gami[-1] - gami[0])
-#    return gam
 
 def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double, ndim=1, mode="c"] time,
                       np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0):
@@ -46,7 +35,7 @@ def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[doubl
         qi = q[:, k] / norm(q[:, k])
         qi = np.ascontiguousarray(qi)
 
-        cDP.DP(&qi[0], &mq[0], &n1, &M, &lam, &disp, &gami[0])
+        cDP.DP(&qi[0], &mq[0], n1, M, lam, disp, &gami[0])
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
@@ -83,7 +72,7 @@ def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doub
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        cDP.DP(&q2i[0], &q1i[0], &n1, &M, &lam, &disp, &gami[0])
+        cDP.DP(&q2i[0], &q1i[0], n1, M, lam, disp, &gami[0])
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
@@ -111,7 +100,7 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     q2 = q2 / norm(q2)
     cdef np.ndarray[double, ndim=1, mode="c"] gami = np.zeros(M)
 
-    cDP.DP(&q2[0], &q1[0], &n1, &M, &lam, &disp, &gami[0])
+    cDP.DP(&q2[0], &q1[0], n1, M, lam, disp, &gami[0])
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
@@ -149,7 +138,7 @@ def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        cDP.DP(&q2i[0], &q1i[0], &n1, &M, &lam, &disp, &gami[0])
+        cDP.DP(&q2i[0], &q1i[0], n1, M, lam, disp, &gami[0])
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
@@ -183,7 +172,7 @@ def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[
     q1i = np.ascontiguousarray(q1i)
     q2i = np.ascontiguousarray(q2i)
 
-    cDP.DP(&q2i[0], &q1i[0], &N, &M, &lam, &disp, &gami[0])
+    cDP.DP(&q2i[0], &q1i[0], N, M, lam, disp, &gami[0])
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
@@ -217,7 +206,7 @@ def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[d
     q1i = np.ascontiguousarray(q1i)
     q2i = np.ascontiguousarray(q2i)
 
-    cDP.DP(&q2i[0], &q1i[0], &n1, &M, &lam, &disp, &gami[0])
+    cDP.DP(&q2i[0], &q1i[0], n1, M, lam, disp, &gami[0])
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
