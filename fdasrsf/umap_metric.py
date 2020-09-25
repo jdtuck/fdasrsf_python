@@ -2,8 +2,8 @@ import numba
 from numba.core.typing import cffi_utils
 from _DP import ffi, lib
 import _DP
-from numpy import linspace, interp, zeros, diff, double, sqrt, arange, float64, int32
-from numpy import zeros, frombuffer, ascontiguousarray, empty, roll, dot, eye, arccos
+from numpy import linspace, interp, zeros, diff, double, sqrt, arange, float64, int32, int64
+from numpy import zeros, frombuffer, ascontiguousarray, empty, roll, dot, eye, arccos, reshape
 from numpy.linalg import norm, svd, det
 
 
@@ -161,8 +161,8 @@ def efda_distance_curve(q1, q2):
     q2 is aligned to q1. In other words calculates the elastic distance.
     This metric is set up for use with UMAP or t-sne from scikit-learn
 
-    :param q1: vector of size N
-    :param q2: vector of size N
+    :param q1: vector of size n*M
+    :param q2: vector of size n*M
 
     :rtype: scalar
     :return dist: shape distance
@@ -171,13 +171,16 @@ def efda_distance_curve(q1, q2):
     if tst.sum() == 0:
         dist = 0
     else:
-        n, T = q1.shape
+        n = 2
+        T = int64(q1.shape[0]/n)
+        q1_i = reshape(q1, (n,T))
+        q2_i = reshape(q2, (n,T))
         x = linspace(0,1,T)
         # optimize over SO(n)
-        q2new = find_seed_rot(q1, q2)
+        q2new = find_seed_rot(q1_i, q2_i)
 
         # optimize over Gamma
-        gam = warp_curve(q1, q2new)
+        gam = warp_curve(q1_i, q2new)
         gamI = interp(x,gam,x)
         gam_dev = grad(gamI, 1. / T)
         qwarp = zeros((n,T))
@@ -189,9 +192,9 @@ def efda_distance_curve(q1, q2):
         Ltwo = tmp.sum() / T
         qwarp = qwarp / sqrt(Ltwo)
 
-        q2n = find_seed_rot(q1, qwarp)
+        q2n = find_seed_rot(q1_i, qwarp)
 
-        tmp = q1 * q2n
+        tmp = q1_i * q2n
         q1dotq2 = tmp.sum() / T
         dist = arccos(q1dotq2)
        
