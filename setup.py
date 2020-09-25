@@ -131,6 +131,8 @@ setup(
         "tqdm",
         "findblas",
         "six",
+        "numba",
+        "cffi",
         "pyparsing",
     ],
     classifiers=[
