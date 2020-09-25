@@ -177,6 +177,9 @@ def efda_distance_curve(q1, q2):
         q2 = ascontiguousarray(q2)
         q1_i = q1.reshape((n,T))
         q2_i = q2.reshape((n,T))
+        # UMAP uses float32, need 64 for a lot of the computation
+        q1_i = q1_i.astype(double)
+        q2_i = q2_i.astype(double)
         x = linspace(0,1,T)
         # optimize over SO(n)
         q2new = find_seed_rot(q1_i, q2_i)
