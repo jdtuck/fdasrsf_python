@@ -10,6 +10,9 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 
+sys.path.insert(1, 'src/')
+import dp_build
+
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (3, 6):
     print(("fdasrsf requires Python 3.6 or newer. Python %d.%d detected" % sys.version_info[:2]))
@@ -102,6 +105,7 @@ extensions = [
         include_dirs=[numpy.get_include()],
         language="c++"
     ),
+    dp_build.ffibuilder.distutils_extension(),
 ]
 
 
@@ -120,7 +124,7 @@ setup(
     description='functional data analysis using the square root slope framework',
     long_description=open('README.md', encoding="utf8").read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
-    setup_requires=['findblas'],
+    setup_requires=['findblas',"cffi>=1.0.0"],
     install_requires=[
         "Cython",
         "matplotlib",
@@ -132,7 +136,7 @@ setup(
         "findblas",
         "six",
         "numba",
-        "cffi",
+        "cffi>=1.0.0",
         "pyparsing",
     ],
     classifiers=[
