@@ -173,8 +173,8 @@ def efda_distance_curve(q1, q2):
     else:
         n = int64(2)
         T = int64(q1.shape[0]/n)
-        q1_i = reshape(q1, (n,T))
-        q2_i = reshape(q2, (n,T))
+        q1_i = q1.reshape((n,T))
+        q2_i = q2.reshape((n,T))
         x = linspace(0,1,T)
         # optimize over SO(n)
         q2new = find_seed_rot(q1_i, q2_i)
