@@ -173,6 +173,8 @@ def efda_distance_curve(q1, q2):
     else:
         n = int64(2)
         T = int64(q1.shape[0]/n)
+        q1 = ascontiguousarray(q1)
+        q2 = ascontiguousarray(q2)
         q1_i = q1.reshape((n,T))
         q2_i = q2.reshape((n,T))
         x = linspace(0,1,T)
