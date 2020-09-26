@@ -139,6 +139,9 @@ def efda_distance(q1, q2):
     if tst.sum() == 0:
         dist = 0
     else:
+        # UMAP uses float32, need 64 for a lot of the computation
+        q1 = q1.astype(double)
+        q2 = q2.astype(double)
         gam = warp(q1, q2)
         M = q1.shape[0]
         time = linspace(0,1,q1.shape[0])
