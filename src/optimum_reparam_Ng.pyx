@@ -334,15 +334,14 @@ def coptimum_reparam_pair_f(np.ndarray[double, ndim=2, mode="c"] f1, np.ndarray[
     return gam
 
 
-def coptimum_reparam_curve_f(np.ndarray[double, ndim=2, mode="c"] f1, np.ndarray[double, ndim=1, mode="c"] time,
-                     np.ndarray[double, ndim=2, mode="c"] f2, 
+def coptimum_reparam_curve_f(np.ndarray[double, ndim=2, mode="c"] f1,
+                      np.ndarray[double, ndim=2, mode="c"] f2, 
                       onlyDP=False, rotated=False, isclosed=False, skipm=0,
                       auto=0, w=0.0, lam1=0.0):
     """
     cython interface for calculates the warping to align curve f2 to f1
 
     :param f1: matrix of size nxN samples of first SRVF
-    :param time: vector of size N describing the sample points
     :param f2: matrix of size nxN samples of second SRVF
     :param onlyDP: use onlyDP (default = False)
     :param rotated: solve for rotation (default = False)
