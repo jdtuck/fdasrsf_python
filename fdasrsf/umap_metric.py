@@ -2,8 +2,9 @@ import numba
 from numba.core.typing import cffi_utils
 from _DP import ffi, lib
 import _DP
-from numpy import linspace, interp, zeros, diff, double, sqrt, arange, float64, int32, int64
-from numpy import zeros, frombuffer, ascontiguousarray, empty, roll, dot, eye, arccos, reshape
+from numpy import linspace, interp, zeros, diff, double, sqrt, arange, float64, int32, int64, trapz, ones
+from numpy import zeros, frombuffer, ascontiguousarray, empty, load, roll, dot, eye, arccos, reshape, float32
+from numpy import kron
 from numpy.linalg import norm, svd, det
 
 
@@ -82,6 +83,28 @@ def shift_curve(f, tau):
     return (fn)
 
 @numba.jit()
+def c_to_q(beta):
+    n, T = beta.shape
+    v = zeros((n,T))
+    for i in range(n):
+        v[i,:] = grad(beta[i,:], 1./(T-1))
+
+    q = zeros((n,T))
+    for i in range(T):
+        L = sqrt(norm(v[:,i]))
+        if L > 0.0001:
+            q[:, i] = v[:, i] / L
+        else:
+            q[:, i] = v[:, i] * 0.0001
+    
+    tmp = q*q
+    tmp.sum() / T
+    tmp1 = tmp.sum() / T
+    q = q / sqrt(tmp1)
+
+    return(q)
+
+@numba.jit()
 def find_rot(q1, q2):
     q1 = ascontiguousarray(q1)
     q2 = ascontiguousarray(q2)
@@ -101,31 +124,54 @@ def find_rot(q1, q2):
     return R
 
 @numba.jit()
-def find_seed_rot(q1, q2):
-    q1 = ascontiguousarray(q1)
-    q2 = ascontiguousarray(q2)
-    n, T = q1.shape
+def find_seed_rot(beta1, beta2):
+    beta1 = ascontiguousarray(beta1)
+    beta2 = ascontiguousarray(beta2)
+    q1 = c_to_q(beta1)
+    n, T = beta1.shape
     Ltwo = zeros(T)
     Rlist = zeros((n, n, T))
     for ctr in range(0,T):
-        q2n = shift_curve(q2, ctr)
-        R = find_rot(q1,q2n)
+        beta2n = shift_curve(beta2, ctr)
+        R = find_rot(beta1,beta2n)
         Rlist[:, :, ctr] = R
-        q2new = R.dot(q2)
+        beta2new = R.dot(beta2n)
+        q2new = c_to_q(beta2new)
         cst = q1 - q2new
         tmp = cst * cst
         Ltwo[ctr] = tmp.sum() / T
     
     tau = Ltwo.argmin()
     O_hat = Rlist[:, :, tau]
-    q2new = shift_curve(q2, tau)
-    q2new = O_hat.dot(q2new)
-    return q2new
+    beta2new = shift_curve(beta2, tau)
+    beta2new = O_hat.dot(beta2new)
+
+    return beta2new
+
+@numba.njit()
+def curve_center(beta):
+    n, T = beta.shape
+    betadot = zeros((n,T))
+    for i in range(n):
+        betadot[i,:] = grad(beta[i,:], 1./(T-1))
+    
+    normbetadot = zeros(T)
+    integrand = zeros((n,T))
+    for i in range(T):
+        normbetadot[i] = norm(betadot[:,i])
+        integrand[:,i] = beta[:,i] * normbetadot[i]
+    
+    scale = trapz(normbetadot, linspace(0,1,T))
+    centroid = zeros(n)
+    for i in range(n):
+        centroid[i] = trapz(integrand[i,:], linspace(0,1,T))/scale
+    
+    return centroid
 
 @numba.njit()
 def efda_distance(q1, q2):
     """"
-    calculates the distances between square root slope functions, where 
+    calculates the distances between two curves, where 
     q2 is aligned to q1. In other words calculates the elastic distances/
     This metric is set up for use with UMAP or t-sne from scikit-learn
 
@@ -139,9 +185,6 @@ def efda_distance(q1, q2):
     if tst.sum() == 0:
         dist = 0
     else:
-        # UMAP uses float32, need 64 for a lot of the computation
-        q1 = q1.astype(double)
-        q2 = q2.astype(double)
         gam = warp(q1, q2)
         M = q1.shape[0]
         time = linspace(0,1,q1.shape[0])
@@ -158,51 +201,60 @@ def efda_distance(q1, q2):
     return dist
 
 @numba.njit()
-def efda_distance_curve(q1, q2):
+def efda_distance_curve(beta1, beta2):
     """"
-    calculates the distances between square root velocity functions, where 
-    q2 is aligned to q1. In other words calculates the elastic distance.
+    calculates the distances between two curves, where 
+    beta2 is aligned to beta1. In other words calculates the elastic distance.
     This metric is set up for use with UMAP or t-sne from scikit-learn
 
-    :param q1: vector of size n*M
-    :param q2: vector of size n*M
+    :param beta1: vector of size n*M
+    :param beta2: vector of size n*M
 
     :rtype: scalar
     :return dist: shape distance
     """
-    tst = q1-q2
+    tst = beta1-beta2
     if tst.sum() == 0:
         dist = 0
     else:
         n = int64(2)
-        T = int64(q1.shape[0]/n)
+        T = int64(beta1.shape[0]/n)
+        beta1 = ascontiguousarray(beta1)
+        beta2 = ascontiguousarray(beta2)
+        beta1_i = beta1.reshape((n,T))
+        beta2_i = beta2.reshape((n,T))
+        beta1_i = beta1_i.astype(double)
+        beta2_i = beta2_i.astype(double)
+
+        centroid1 = curve_center(beta1_i)
+        beta1_i = beta1_i - kron(ones((T,1)), centroid1).T
+        centroid2 = curve_center(beta2_i)
+        beta2_i = beta2_i - kron(ones((T,1)), centroid2).T
+
+        q1 = c_to_q(beta1_i)
+
         q1 = ascontiguousarray(q1)
-        q2 = ascontiguousarray(q2)
-        q1_i = q1.reshape((n,T))
-        q2_i = q2.reshape((n,T))
         # UMAP uses float32, need 64 for a lot of the computation
-        q1_i = q1_i.astype(double)
-        q2_i = q2_i.astype(double)
+        
         x = linspace(0,1,T)
+
         # optimize over SO(n)
-        q2new = find_seed_rot(q1_i, q2_i)
+        beta2_i = find_seed_rot(beta1_i, beta2_i)
+        q2 = c_to_q(beta2_i)
 
         # optimize over Gamma
-        gam = warp_curve(q1_i, q2new)
+        gam = warp_curve(q1, q2)
         gamI = interp(x,gam,x)
-        gam_dev = grad(gamI, 1. / T)
-        qwarp = zeros((n,T))
+
+        # apply warp
+        beta_warp = np.zeros((n,T))
         for j in range(0,n):
-            qwarp[j,:] = interp(gamI, x, q2new[j,:])
-            qwarp[j,:] = qwarp[j,:] * sqrt(gam_dev)
-        
-        tmp = qwarp * qwarp
-        Ltwo = tmp.sum() / T
-        qwarp = qwarp / sqrt(Ltwo)
+            beta_warp[j,:] = interp(gamI, x, beta2_i[j,:])
 
-        q2n = find_seed_rot(q1_i, qwarp)
+        beta2_in = find_seed_rot(beta1_i, beta_warp)
 
-        tmp = q1_i * q2n
+        q2 = c_to_q(beta2_in)
+        tmp = q1 * q2
         q1dotq2 = tmp.sum() / T
         dist = arccos(q1dotq2)
        
