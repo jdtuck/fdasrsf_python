@@ -247,7 +247,7 @@ def efda_distance_curve(beta1, beta2):
         gamI = interp(x,gam,x)
 
         # apply warp
-        beta_warp = np.zeros((n,T))
+        beta_warp = zeros((n,T))
         for j in range(0,n):
             beta_warp[j,:] = interp(gamI, x, beta2_i[j,:])
 
