@@ -12,8 +12,9 @@ from scipy.stats.mstats import mquantiles
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
 from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
-from numpy import gradient, column_stack, append, mean, hstack
+from numpy import gradient, column_stack, append, mean, hstack, median
 from numpy import insert, vectorize, ceil, mod, array, quantile, dot
+from joblib import Parallel, delayed
 import numpy.random as rn
 import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
@@ -228,6 +229,57 @@ def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
                                           ascontiguousarray(q2), lam)
 
     return gam
+
+
+def distmat(f,f1,time,idx):
+    N = f.shape[1]
+    dp = zeros(N)
+    da = zeros(N)
+    for jj in range(N):
+        Dy,Dx = elastic_distance(f[:,jj], f1, time)
+
+        da[jj] = Dy
+        dp[jj] = Dx
+    
+    return(da, dp)
+
+
+def elastic_depth(f, time, lam=0.0, parallel=True):
+    """
+    calculates the elastic depth between functions in matrix f
+
+    :param f: matrix of size MxN (M time points for N functions)
+    :param time: vector of size M describing the sample points
+    :param lam: controls the elasticity (default = 0.0)
+
+    :rtype: scalar
+    :return amp: amplitude depth
+    :return phase: phase depth
+
+    """
+
+    obs, fns = f.shape
+
+    amp_dist = zeros((fns,fns))
+    phs_dist = zeros((fns,fns))
+
+    if parallel:
+        out = Parallel(n_jobs=-1)(delayed(distmat)(f, f[:, n], time, n) for n in range(fns))
+        for i in range(0, fns):
+            amp_dist[i, :] = out[i][0]
+            phs_dist[i, :] = out[i][1]
+    else:
+        for i in range(0, fns):
+            amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i)
+    
+    amp_dist = amp_dist + amp_dist.T
+    phs_dist = phs_dist + phs_dist.T
+
+    amp = 1 / (1 + median(amp_dist,axis=0))
+    phase = 1 / (1 + median(phs_dist,axis=0))
+    phase = ((2+pi)/pi) * (phase - 2/(2+pi))
+
+    return amp, phase
 
 
 def elastic_distance(f1, f2, time, method="DP", lam=0.0):
