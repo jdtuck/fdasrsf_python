@@ -120,7 +120,7 @@ setup(
     description='functional data analysis using the square root slope framework',
     long_description=open('README.md', encoding="utf8").read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
-    setup_requires=['findblas'],
+    setup_requires=['numpy','findblas'],
     install_requires=[
         "Cython",
         "matplotlib",

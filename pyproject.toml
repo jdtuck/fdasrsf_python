@@ -1,2 +1,2 @@
 [build-system]
-requires = ["setuptools>=46.0", "wheel", "findblas"]  # PEP 518 - what is required to build
+requires = ["setuptools>=46.0", "wheel", "numpy", "findblas"]  # PEP 518 - what is required to build
