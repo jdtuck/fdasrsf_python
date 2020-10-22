@@ -1,5 +1,7 @@
 findblas
 numpy
+cffi
+numba
 scipy
 matplotlib
 Cython

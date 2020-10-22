@@ -1,4 +1,5 @@
-v2.1.5, 2020-09-16 -- add parallel to curves
+v2.1.7, 2020-09-25 -- added numba metrics to use in UMAP
+v2.1.6, 2020-09-16 -- add parallel to curves
 v2.1.5, 2020-09-07 -- bugfixes in setup
 v2.1.1, 2020-08-31 -- bugfixes and add CI
 v2.1.0, 2020-08-26 -- add curve class and refactor and bugfixes
