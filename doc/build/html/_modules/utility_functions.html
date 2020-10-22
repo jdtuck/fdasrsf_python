@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>utility_functions &#8212; fdasrsf 2.1.0 documentation</title>
+    <title>utility_functions &#8212; fdasrsf 2.1.7 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>
@@ -54,8 +54,9 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">finfo</span><span class="p">,</span> <span class="n">double</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">linspace</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">,</span> <span class="nb">round</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ones</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">diagflat</span><span class="p">,</span> <span class="n">inner</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span><span class="p">,</span> <span class="n">append</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">hstack</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span><span class="p">,</span> <span class="n">append</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">median</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">quantile</span><span class="p">,</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 <span class="kn">import</span> <span class="nn">optimum_reparamN2</span> <span class="k">as</span> <span class="nn">orN2</span>
 <span class="kn">import</span> <span class="nn">optimum_reparam_N</span> <span class="k">as</span> <span class="nn">orN</span>
@@ -270,6 +271,57 @@
                                           <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">gam</span></div>
+
+
+<span class="k">def</span> <span class="nf">distmat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">f1</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">idx</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">da</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">Dy</span><span class="p">,</span><span class="n">Dx</span> <span class="o">=</span> <span class="n">elastic_distance</span><span class="p">(</span><span class="n">f</span><span class="p">[:,</span><span class="n">jj</span><span class="p">],</span> <span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+        <span class="n">da</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dy</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dx</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="elastic_depth"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_depth">[docs]</a><span class="k">def</span> <span class="nf">elastic_depth</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    calculates the elastic depth between functions in matrix f</span>
+
+<span class="sd">    :param f: matrix of size MxN (M time points for N functions)</span>
+<span class="sd">    :param time: vector of size M describing the sample points</span>
+<span class="sd">    :param lam: controls the elasticity (default = 0.0)</span>
+
+<span class="sd">    :rtype: scalar</span>
+<span class="sd">    :return amp: amplitude depth</span>
+<span class="sd">    :return phase: phase depth</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">obs</span><span class="p">,</span> <span class="n">fns</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">amp_dist</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">fns</span><span class="p">,</span><span class="n">fns</span><span class="p">))</span>
+    <span class="n">phs_dist</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">fns</span><span class="p">,</span><span class="n">fns</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">distmat</span><span class="p">)(</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fns</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fns</span><span class="p">):</span>
+            <span class="n">amp_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">phs_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fns</span><span class="p">):</span>
+            <span class="n">amp_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">phs_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">distmat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    
+    <span class="n">amp_dist</span> <span class="o">=</span> <span class="n">amp_dist</span> <span class="o">+</span> <span class="n">amp_dist</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">phs_dist</span> <span class="o">=</span> <span class="n">phs_dist</span> <span class="o">+</span> <span class="n">phs_dist</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="n">amp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">median</span><span class="p">(</span><span class="n">amp_dist</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">median</span><span class="p">(</span><span class="n">phs_dist</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span><span class="o">+</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">phase</span> <span class="o">-</span> <span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">+</span><span class="n">pi</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">amp</span><span class="p">,</span> <span class="n">phase</span></div>
 
 
 <div class="viewcode-block" id="elastic_distance"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_distance">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
@@ -998,7 +1050,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>

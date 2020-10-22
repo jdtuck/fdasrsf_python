@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Aug 28, 2020" "2.1" "fdasrsf"
+.TH "FDASRSF" "1" "Oct 22, 2020" "2.1" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -1846,8 +1846,10 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence
 .UNINDENT
 .INDENT 7.0
 .TP
-.B srvf_align()
-This calculates the mean of a set of curves and aligns them
+.B srvf_align(parallel=False, cores=\- 1)
+This aligns a set of curves to the mean and computes mean if not computed
+:param parallel: run in parallel (default = F)
+:param cores: number of cores for parallel (default = \-1 (all))
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -2387,6 +2389,32 @@ numpy ndarray
 .TP
 .B Return m
 matrix describing differential operator
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B utility_functions.elastic_depth(f, time, lam=0.0, parallel=True)
+calculates the elastic depth between functions in matrix f
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP \-\- matrix of size MxN (M time points for N functions)
+.IP \(bu 2
+\fBtime\fP \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBlam\fP \-\- controls the elasticity (default = 0.0)
+.UNINDENT
+.TP
+.B Return type
+scalar
+.TP
+.B Return amp
+amplitude depth
+.TP
+.B Return phase
+phase depth
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -3427,6 +3455,55 @@ numpy ndarray
 shifted curve
 .UNINDENT
 .UNINDENT
+.SH UMAP EFDA METRICS
+.INDENT 0.0
+.TP
+.B umap_metric.efda_distance(q1, q2)
+"
+calculates the distances between two curves, where 
+q2 is aligned to q1. In other words calculates the elastic distances/
+This metric is set up for use with UMAP or t\-sne from scikit\-learn
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBq1\fP \-\- vector of size N
+.IP \(bu 2
+\fBq2\fP \-\- vector of size N
+.UNINDENT
+.TP
+.B Return type
+scalar
+.TP
+.B Return dist
+amplitude distance
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B umap_metric.efda_distance_curve(beta1, beta2)
+"
+calculates the distances between two curves, where 
+beta2 is aligned to beta1. In other words calculates the elastic distance.
+This metric is set up for use with UMAP or t\-sne from scikit\-learn
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBbeta1\fP \-\- vector of size n*M
+.IP \(bu 2
+\fBbeta2\fP \-\- vector of size n*M
+.UNINDENT
+.TP
+.B Return type
+scalar
+.TP
+.B Return dist
+shape distance
+.UNINDENT
+.UNINDENT
 .INDENT 0.0
 .INDENT 3.5
 Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
@@ -3490,6 +3567,10 @@ Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal Componen
 .IP D. 3
 Tucker, J. R. Lewis, C. King, and S. Kurtek, “A Geometric Approach for Computing Tolerance Bounds for Elastic Functional Data,” Journal of Applied Statistics, 10.1080/02664763.2019.1645818, 2019.
 .UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP T. 3
+Harris, J. D. Tucker, B. Li, and L. Shand, "Elastic depths for detecting shape anomalies in functional data," Technometrics, 10.1080/00401706.2020.1811156, 2020.
 .UNINDENT
 .UNINDENT
 .UNINDENT

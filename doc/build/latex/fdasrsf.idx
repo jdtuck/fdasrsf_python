@@ -96,20 +96,21 @@
 \indexentry{SqrtMedian() (in module utility\_functions)@\spxentry{SqrtMedian()}\spxextra{in module utility\_functions}|hyperpage}{35}
 \indexentry{cumtrapzmid() (in module utility\_functions)@\spxentry{cumtrapzmid()}\spxextra{in module utility\_functions}|hyperpage}{35}
 \indexentry{diffop() (in module utility\_functions)@\spxentry{diffop()}\spxextra{in module utility\_functions}|hyperpage}{36}
+\indexentry{elastic\_depth() (in module utility\_functions)@\spxentry{elastic\_depth()}\spxextra{in module utility\_functions}|hyperpage}{36}
 \indexentry{elastic\_distance() (in module utility\_functions)@\spxentry{elastic\_distance()}\spxextra{in module utility\_functions}|hyperpage}{36}
 \indexentry{f\_K\_fold() (in module utility\_functions)@\spxentry{f\_K\_fold()}\spxextra{in module utility\_functions}|hyperpage}{36}
 \indexentry{f\_to\_srsf() (in module utility\_functions)@\spxentry{f\_to\_srsf()}\spxextra{in module utility\_functions}|hyperpage}{36}
-\indexentry{geigen() (in module utility\_functions)@\spxentry{geigen()}\spxextra{in module utility\_functions}|hyperpage}{36}
+\indexentry{geigen() (in module utility\_functions)@\spxentry{geigen()}\spxextra{in module utility\_functions}|hyperpage}{37}
 \indexentry{gradient\_spline() (in module utility\_functions)@\spxentry{gradient\_spline()}\spxextra{in module utility\_functions}|hyperpage}{37}
 \indexentry{innerprod\_q() (in module utility\_functions)@\spxentry{innerprod\_q()}\spxextra{in module utility\_functions}|hyperpage}{37}
 \indexentry{invertGamma() (in module utility\_functions)@\spxentry{invertGamma()}\spxextra{in module utility\_functions}|hyperpage}{37}
 \indexentry{optimum\_reparam() (in module utility\_functions)@\spxentry{optimum\_reparam()}\spxextra{in module utility\_functions}|hyperpage}{37}
-\indexentry{optimum\_reparam\_pair() (in module utility\_functions)@\spxentry{optimum\_reparam\_pair()}\spxextra{in module utility\_functions}|hyperpage}{37}
+\indexentry{optimum\_reparam\_pair() (in module utility\_functions)@\spxentry{optimum\_reparam\_pair()}\spxextra{in module utility\_functions}|hyperpage}{38}
 \indexentry{outlier\_detection() (in module utility\_functions)@\spxentry{outlier\_detection()}\spxextra{in module utility\_functions}|hyperpage}{38}
 \indexentry{randomGamma() (in module utility\_functions)@\spxentry{randomGamma()}\spxextra{in module utility\_functions}|hyperpage}{38}
 \indexentry{resamplefunction() (in module utility\_functions)@\spxentry{resamplefunction()}\spxextra{in module utility\_functions}|hyperpage}{38}
 \indexentry{rgam() (in module utility\_functions)@\spxentry{rgam()}\spxextra{in module utility\_functions}|hyperpage}{38}
-\indexentry{smooth\_data() (in module utility\_functions)@\spxentry{smooth\_data()}\spxextra{in module utility\_functions}|hyperpage}{38}
+\indexentry{smooth\_data() (in module utility\_functions)@\spxentry{smooth\_data()}\spxextra{in module utility\_functions}|hyperpage}{39}
 \indexentry{srsf\_to\_f() (in module utility\_functions)@\spxentry{srsf\_to\_f()}\spxextra{in module utility\_functions}|hyperpage}{39}
 \indexentry{update\_progress() (in module utility\_functions)@\spxentry{update\_progress()}\spxextra{in module utility\_functions}|hyperpage}{39}
 \indexentry{warp\_f\_gamma() (in module utility\_functions)@\spxentry{warp\_f\_gamma()}\spxextra{in module utility\_functions}|hyperpage}{39}
@@ -145,3 +146,7 @@
 \indexentry{resamplecurve() (in module curve\_functions)@\spxentry{resamplecurve()}\spxextra{in module curve\_functions}|hyperpage}{46}
 \indexentry{scale\_curve() (in module curve\_functions)@\spxentry{scale\_curve()}\spxextra{in module curve\_functions}|hyperpage}{46}
 \indexentry{shift\_f() (in module curve\_functions)@\spxentry{shift\_f()}\spxextra{in module curve\_functions}|hyperpage}{46}
+\indexentry{module@\spxentry{module}!umap\_metric@\spxentry{umap\_metric}|hyperpage}{47}
+\indexentry{umap\_metric@\spxentry{umap\_metric}!module@\spxentry{module}|hyperpage}{47}
+\indexentry{efda\_distance() (in module umap\_metric)@\spxentry{efda\_distance()}\spxextra{in module umap\_metric}|hyperpage}{47}
+\indexentry{efda\_distance\_curve() (in module umap\_metric)@\spxentry{efda\_distance\_curve()}\spxextra{in module umap\_metric}|hyperpage}{47}

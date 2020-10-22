@@ -73,8 +73,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{Aug 28, 2020}
-\release{2.1.0}
+\date{Oct 22, 2020}
+\release{2.1.7}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -2271,8 +2271,10 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence
 \index{srvf\_align() (curve\_stats.fdacurve method)@\spxentry{srvf\_align()}\spxextra{curve\_stats.fdacurve method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{curve_statistics:curve_stats.fdacurve.srvf_align}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{srvf\_align}}}{}{}
-This calculates the mean of a set of curves and aligns them
+\phantomsection\label{\detokenize{curve_statistics:curve_stats.fdacurve.srvf_align}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{srvf\_align}}}{\emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{cores}\DUrole{o}{=}\DUrole{default_value}{\sphinxhyphen{} 1}}}{}
+This aligns a set of curves to the mean and computes mean if not computed
+:param parallel: run in parallel (default = F)
+:param cores: number of cores for parallel (default = \sphinxhyphen{}1 (all))
 
 \end{fulllineitems}
 
@@ -2900,6 +2902,37 @@ numpy ndarray
 
 \item[{Return m}] \leavevmode
 matrix describing differential operator
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{elastic\_depth() (in module utility\_functions)@\spxentry{elastic\_depth()}\spxextra{in module utility\_functions}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{utility_functions:utility_functions.elastic_depth}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{utility\_functions.}}\sphinxbfcode{\sphinxupquote{elastic\_depth}}}{\emph{\DUrole{n}{f}}, \emph{\DUrole{n}{time}}, \emph{\DUrole{n}{lam}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{parallel}\DUrole{o}{=}\DUrole{default_value}{True}}}{}
+calculates the elastic depth between functions in matrix f
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{f}} \textendash{} matrix of size MxN (M time points for N functions)
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{time}} \textendash{} vector of size M describing the sample points
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} controls the elasticity (default = 0.0)
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+scalar
+
+\item[{Return amp}] \leavevmode
+amplitude depth
+
+\item[{Return phase}] \leavevmode
+phase depth
 
 \end{description}\end{quote}
 
@@ -4151,6 +4184,65 @@ shifted curve
 
 
 
+\chapter{UMAP EFDA Metrics}
+\label{\detokenize{umap_metric:module-umap_metric}}\label{\detokenize{umap_metric:umap-efda-metrics}}\label{\detokenize{umap_metric::doc}}\index{module@\spxentry{module}!umap\_metric@\spxentry{umap\_metric}}\index{umap\_metric@\spxentry{umap\_metric}!module@\spxentry{module}}\index{efda\_distance() (in module umap\_metric)@\spxentry{efda\_distance()}\spxextra{in module umap\_metric}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{umap_metric:umap_metric.efda_distance}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{umap\_metric.}}\sphinxbfcode{\sphinxupquote{efda\_distance}}}{\emph{\DUrole{n}{q1}}, \emph{\DUrole{n}{q2}}}{}
+”
+calculates the distances between two curves, where 
+q2 is aligned to q1. In other words calculates the elastic distances/
+This metric is set up for use with UMAP or t\sphinxhyphen{}sne from scikit\sphinxhyphen{}learn
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q1}} \textendash{} vector of size N
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} vector of size N
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+scalar
+
+\item[{Return dist}] \leavevmode
+amplitude distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{efda\_distance\_curve() (in module umap\_metric)@\spxentry{efda\_distance\_curve()}\spxextra{in module umap\_metric}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{umap_metric:umap_metric.efda_distance_curve}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{umap\_metric.}}\sphinxbfcode{\sphinxupquote{efda\_distance\_curve}}}{\emph{\DUrole{n}{beta1}}, \emph{\DUrole{n}{beta2}}}{}
+”
+calculates the distances between two curves, where 
+beta2 is aligned to beta1. In other words calculates the elastic distance.
+This metric is set up for use with UMAP or t\sphinxhyphen{}sne from scikit\sphinxhyphen{}learn
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta1}} \textendash{} vector of size n*M
+
+\item {} 
+\sphinxstyleliteralstrong{\sphinxupquote{beta2}} \textendash{} vector of size n*M
+
+\end{itemize}
+
+\item[{Return type}] \leavevmode
+scalar
+
+\item[{Return dist}] \leavevmode
+shape distance
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
 \chapter{References}
 \label{\detokenize{index:references}}\begin{quote}
 
@@ -4226,6 +4318,13 @@ Tucker, J. R. Lewis, C. King, and S. Kurtek, “A Geometric Approach for Computi
 \end{enumerate}
 
 \end{enumerate}
+\begin{enumerate}
+\sphinxsetlistlabels{\Alph}{enumi}{enumii}{}{.}%
+\setcounter{enumi}{19}
+\item {} 
+Harris, J. D. Tucker, B. Li, and L. Shand, “Elastic depths for detecting shape anomalies in functional data,” Technometrics, 10.1080/00401706.2020.1811156, 2020.
+
+\end{enumerate}
 \end{quote}
 
 
@@ -4271,6 +4370,7 @@ Tucker, J. R. Lewis, C. King, and S. Kurtek, “A Geometric Approach for Computi
 \item\relax\sphinxstyleindexentry{tolerance}\sphinxstyleindexpageref{tolerance:\detokenize{module-tolerance}}
 \indexspace
 \bigletter{u}
+\item\relax\sphinxstyleindexentry{umap\_metric}\sphinxstyleindexpageref{umap_metric:\detokenize{module-umap_metric}}
 \item\relax\sphinxstyleindexentry{utility\_functions}\sphinxstyleindexpageref{utility_functions:\detokenize{module-utility_functions}}
 \end{sphinxtheindex}
 
