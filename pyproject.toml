@@ -1,2 +1,45 @@
+[project]
+name = "fdasrsf"
+version = "2.1.9"
+description = "functional data analysis using the square root slope framework"
+authors = [
+    "J. Derek Tucker <jdtuck@sandia.gov>"
+]
+license = "BSD"
+readme = "README.md"
+python = "^3.6"
+homepage = "http://research.tetonedge.net"
+repository = "https://github.com/jdtuck/fdasrsf_python"
+documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
+
+keywords = ["functional data analysis"]
+
+dependencies=[
+        "Cython",
+        "matplotlib",
+        "numpy",
+        "scipy",
+        "joblib",
+        "patsy",
+        "tqdm",
+        "findblas",
+        "six",
+        "numba",
+        "mkl-devel",
+        "cffi>=1.0.0",
+        "pyparsing",
+    ]
+
+classifiers = [
+    'License :: OSI Approved :: BSD License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Topic :: Scientific/Engineering',
+    'Topic :: Scientific/Engineering :: Mathematics',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.6',
+]
+
 [build-system]
 requires = ["setuptools>=46.0", "wheel", "mkl-devel", "cffi>=1.0.0", "Cython", "numpy", "findblas"]  # PEP 518 - what is required to build
+build-backend = "setuptools.build_meta"
