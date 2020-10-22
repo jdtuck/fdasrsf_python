@@ -1,6 +1,8 @@
 certifi
 cycler
 Cython
+cffi
+numba
 joblib
 kiwisolver
 matplotlib

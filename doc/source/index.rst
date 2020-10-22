@@ -26,6 +26,7 @@ using functional component analysis and regression.
    geodesic
    utility_functions
    curve_functions
+   umap_metric
 
 References
 ==========
