@@ -10,6 +10,7 @@ numpy
 patsy
 pyparsing
 python-dateutil
+mkl-devel
 scipy
 six
 tornado
