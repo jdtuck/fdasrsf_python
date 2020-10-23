@@ -52,10 +52,7 @@ artifacts:
 
 deploy_script:
   - ps: |
-      if($env:APPVEYOR_REPO_TAG -eq 'true') {
-        Write-Output ("Deploying " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
-        python -m pip install twine
-        python -m twine upload -u tetonedge -p ${Env:password} --skip-existing dist/*.whl
-      } else {
-        Write-Output "No tag for deployment"
-      }
+      Write-Output ("Deploying " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
+      python -m pip install twine
+      python -m twine upload -u tetonedge -p ${Env:password} --skip-existing dist/*.whl
+
