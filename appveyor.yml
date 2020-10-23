@@ -6,8 +6,6 @@ environment:
       MINICONDA: C:\Miniconda36
     - PYTHON_VERSION: 3.7
       MINICONDA: C:\Miniconda37
-    - PYTHON_VERSION: 3.8
-      MINICONDA: C:\Miniconda38
   password:
     secure: UhR8G1TzKJP0CBHTq7e65g==
 
