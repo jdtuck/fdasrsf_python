@@ -45,6 +45,7 @@ test_script:
 
 after_test:
   - python setup.py bdist_wheel
+  - python setup.py sdist
 
 artifacts:
   # bdist_wheel puts your built wheel in the dist directory
@@ -56,6 +57,7 @@ deploy_script:
         Write-Output ("Deploying " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
         python -m pip install twine
         python -m twine upload -u tetonedge -p ${Env:password} --skip-existing dist/*.whl
+        python -m twine upload -u tetonedge -p ${Env:password} --skip-existing dist/*.tar.gz
       } else {
         Write-Output "No tag for deployment"
       }
