@@ -18,7 +18,6 @@ from joblib import Parallel, delayed
 import numpy.random as rn
 import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
-import optimum_reparam_Ng as orNg
 import cbayesian as bay
 import fdasrsf.geometry as geo
 import sys
@@ -130,7 +129,7 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0):
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
-    :param method: method to apply optimization (default="DP") options are "DP", "DP2" and "RBFGS"
+    :param method: method to apply optimization (default="DP") options are "DP" and "DP2"
     :param lam: controls the amount of elasticity (default = 0.0)
 
     :rtype: vector
@@ -162,42 +161,6 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0):
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
                                         ascontiguousarray(q2), lam)
-    elif method == "RBFGS":
-        onlyDP=False
-        rotated=False
-        isclosed=False
-        skipm=0
-        auto=0
-        w=0.0
-        if q1.ndim == 1 and q2.ndim == 1:
-            q1 = q1 / norm(q1)
-            q2 = q2 / norm(q2)
-            f1 = srsf_to_f(q1,time,f1o)
-            f2 = srsf_to_f(q2,time,f2o)
-            gam = orNg.coptimum_reparam(ascontiguousarray(f1), time,
-                                    ascontiguousarray(f2), onlyDP, rotated,
-                                    isclosed, skipm, auto, w, lam)
-
-        if q1.ndim == 1 and q2.ndim == 2:
-            f1 = srsf_to_f(q1,time)
-            f2 = zeros(q2.shape)
-            M,N = q2.shape
-            for i in range(0, N):
-                f2[:,i] = srsf_to_f(q2[:,i],time)
-            gam = orNg.coptimum_reparam_N(ascontiguousarray(f1), time,
-                                        ascontiguousarray(f2), onlyDP, rotated,
-                                    isclosed, skipm, auto, w, lam)
-
-        if q1.ndim == 2 and q2.ndim == 2:
-            f1 = zeros(q1.shape)
-            f2 = zeros(q2.shape)
-            M,N = q2.shape
-            for i in range(0, N):
-                f1[:,i] = srsf_to_f(q1[:,i],time)
-                f2[:,i] = srsf_to_f(q2[:,i],time)
-            gam = orNg.coptimum_reparam_N2(ascontiguousarray(f1), time,
-                                        ascontiguousarray(f2), onlyDP, rotated,
-                                    isclosed, skipm, auto, w, lam)
     else:
         raise Exception('Invalid Optimization Method')
 

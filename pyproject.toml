@@ -1,6 +1,6 @@
 [project]
 name = "fdasrsf"
-version = "2.1.10"
+version = "2.1.11"
 description = "functional data analysis using the square root slope framework"
 authors = [
     "J. Derek Tucker <jdtuck@sandia.gov>"
@@ -22,10 +22,8 @@ dependencies=[
         "joblib",
         "patsy",
         "tqdm",
-        "findblas",
         "six",
         "numba",
-        "mkl-devel",
         "cffi>=1.0.0",
         "pyparsing",
     ]
@@ -41,5 +39,5 @@ classifiers = [
 ]
 
 [build-system]
-requires = ["setuptools>=46.0", "wheel", "mkl-devel", "cffi>=1.0.0", "Cython", "numpy", "findblas"]  # PEP 518 - what is required to build
+requires = ["setuptools>=46.0", "wheel", "cffi>=1.0.0", "Cython", "numpy"]  # PEP 518 - what is required to build
 build-backend = "setuptools.build_meta"

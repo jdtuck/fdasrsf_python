@@ -2,15 +2,12 @@ import setuptools
 import numpy
 import sys, os
 import platform
-import findblas
-from findblas.distutils import build_ext_with_blas
 from distutils.core import setup
 from distutils.core import Command
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 from setuptools import dist
-dist.Distribution().fetch_build_eggs(['mkl-devel'])
 
 sys.path.insert(1, 'src/')
 import dp_build
@@ -44,26 +41,7 @@ class build_docs(Command):
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
 
-gropt_src = []
-for file in os.listdir("src/gropt/src/"):
-    if file.endswith(".cpp"):
-        gropt_src.append(os.path.join("src/gropt/src/", file))
-gropt_src.insert(0,"src/optimum_reparam_Ng.pyx")
 os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
-class build_ext_subclass( build_ext_with_blas ):
-    def build_extensions(self):
-        compiler = self.compiler.compiler_type
-        if compiler == 'msvc': # visual studio
-            for e in self.extensions:
-                e.extra_compile_args += ['/O2']
-        else: # everything else that cares about following standards
-            for e in self.extensions:
-                if platform.system() == 'Darwin':
-                    e.extra_compile_args += ['-stdlib=libc++']
-                else:
-                    e.extra_compile_args += ['-std=c++11']
-
-        build_ext_with_blas.build_extensions(self)
 
 extensions = [
 	Extension(name="optimum_reparamN2",
@@ -97,11 +75,6 @@ extensions = [
         include_dirs=[numpy.get_include()],
         language="c"
     ),
-    Extension(name="optimum_reparam_Ng",
-        sources=gropt_src,
-        include_dirs=[numpy.get_include(), "src/gropt/incl/"],
-        language="c++"
-    ),
     Extension(name="cbayesian",
         sources=["src/cbayesian.pyx", "src/bayesian.cpp"],
         include_dirs=[numpy.get_include()],
@@ -112,10 +85,10 @@ extensions = [
 
 
 setup(
-    cmdclass={'build_ext': build_ext_subclass, 'build_docs': build_docs},
+    cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='2.1.10',
+    version='2.1.11',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
@@ -126,7 +99,7 @@ setup(
     description='functional data analysis using the square root slope framework',
     long_description=open('README.md', encoding="utf8").read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
-    setup_requires=['Cython','numpy','mkl-devel','findblas',"cffi>=1.0.0"],
+    setup_requires=['Cython','numpy',"cffi>=1.0.0"],
     install_requires=[
         "Cython",
         "matplotlib",
@@ -135,10 +108,8 @@ setup(
         "joblib",
         "patsy",
         "tqdm",
-        "findblas",
         "six",
         "numba",
-        "mkl-devel",
         "cffi>=1.0.0",
         "pyparsing",
     ],
