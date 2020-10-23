@@ -12,7 +12,6 @@ from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
 from numpy import arccos, fabs
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparam_N as orN
-import optimum_reparam_Ng as orNg
 import fdasrsf.utility_functions as uf
 
 

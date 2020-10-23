@@ -77,7 +77,7 @@ class fdawarp:
         square-root slope (srsf) framework.
 
         :param method: (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
-        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+        :param omethod: optimization method (DP, DP2) (default = DP)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
@@ -497,7 +497,7 @@ class fdawarp:
         obj.multiple_align_functions(lambda, ...)
     
         :param mu: vector of function to align to
-        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+        :param omethod: optimization method (DP, DP2) (default = DP)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
