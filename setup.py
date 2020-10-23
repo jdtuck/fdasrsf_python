@@ -9,6 +9,8 @@ from distutils.core import Command
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
+from setuptools import dist
+dist.Distribution().fetch_build_eggs(['mkl-devel'])
 
 sys.path.insert(1, 'src/')
 import dp_build
@@ -113,7 +115,7 @@ setup(
     cmdclass={'build_ext': build_ext_subclass, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='2.1.9',
+    version='2.1.10',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
