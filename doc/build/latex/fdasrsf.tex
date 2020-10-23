@@ -73,8 +73,8 @@
 
 
 \title{fdasrsf Documentation}
-\date{Oct 22, 2020}
-\release{2.1.7}
+\date{Oct 23, 2020}
+\release{2.1.11}
 \author{J. Derek Tucker}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -370,7 +370,7 @@ obj.multiple\_align\_functions(lambda, …)
 \sphinxstyleliteralstrong{\sphinxupquote{mu}} \textendash{} vector of function to align to
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2, RBFGS) (default = DP)
+\sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2) (default = DP)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
@@ -412,7 +412,7 @@ square\sphinxhyphen{}root slope (srsf) framework.
 \sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} (string) warp calculate Karcher Mean or Median (options = “mean” or “median”) (default=”mean”)
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2, RBFGS) (default = DP)
+\sphinxstyleliteralstrong{\sphinxupquote{omethod}} \textendash{} optimization method (DP, DP2) (default = DP)
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{smoothdata}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxstyleliteralemphasis{\sphinxupquote{bool}}}) \textendash{} Smooth the data using a box filter (default = F)
@@ -3140,7 +3140,7 @@ calculates the warping to align srsf q2 to q1
 \sphinxstyleliteralstrong{\sphinxupquote{q2}} \textendash{} vector of size N or array of NxM samples samples of second SRSF
 
 \item {} 
-\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} method to apply optimization (default=”DP”) options are “DP”, “DP2” and “RBFGS”
+\sphinxstyleliteralstrong{\sphinxupquote{method}} \textendash{} method to apply optimization (default=”DP”) options are “DP” and “DP2”
 
 \item {} 
 \sphinxstyleliteralstrong{\sphinxupquote{lam}} \textendash{} controls the amount of elasticity (default = 0.0)
