@@ -2,8 +2,6 @@ import setuptools
 import numpy
 import sys, os
 import platform
-import findblas
-from findblas.distutils import build_ext_with_blas
 from distutils.core import setup
 from distutils.core import Command
 from distutils.extension import Extension
