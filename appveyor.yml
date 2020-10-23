@@ -2,7 +2,11 @@
 ---
 environment:
   matrix:
+    - PYTHON_VERSION: 3.6
+      MINICONDA: C:\Miniconda3
     - PYTHON_VERSION: 3.7
+      MINICONDA: C:\Miniconda3
+    - PYTHON_VERSION: 3.8
       MINICONDA: C:\Miniconda3
 
 image: Visual Studio 2019
@@ -36,3 +40,11 @@ build: false
 
 test_script:
   - python -m unittest discover
+
+after_test:
+  - pyton setup.py bdist_wheel
+
+artifacts:
+  # bdist_wheel puts your built wheel in the dist directory
+  - path: dist\*
+
