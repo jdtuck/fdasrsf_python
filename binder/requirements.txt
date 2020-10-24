@@ -11,4 +11,4 @@ python-dateutil
 scipy
 six
 tornado
-findblas
+fdasrsf
