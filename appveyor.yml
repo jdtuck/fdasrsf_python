@@ -8,6 +8,8 @@ environment:
       MINICONDA: C:\Miniconda36
     - PYTHON_VERSION: 3.7
       MINICONDA: C:\Miniconda37
+    - PYTHON_VERSION: 3.8
+      MINICONDA: C:\Miniconda38
   password:
     secure: UhR8G1TzKJP0CBHTq7e65g==
 
@@ -24,7 +26,7 @@ init:
   - ps: Write-Host $Env:APPVEYOR_REPO_NAME
 
 install:
-  - '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat"'
+  - '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=amd64'
   # Load the conda root environment, configure and install some packages
   - '"%MINICONDA%\Scripts\activate.bat"'
   - conda config --set always_yes yes --set changeps1 no
