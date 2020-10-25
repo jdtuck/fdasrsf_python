@@ -108,13 +108,12 @@ def c_to_q(beta):
 def find_rot(q1, q2):
     q1 = ascontiguousarray(q1)
     q2 = ascontiguousarray(q2)
-    eps = 2.220446049250313e-16
     n = q1.shape[0]
     A = q1.dot(q2.T)
     U, s, V = svd(A)
 
-    tst = abs(det(U)*det(V)-1)
-    if tst < 10*eps:
+    tst = det(A)
+    if tst > 0:
         S = eye(n)
     else:
         S = eye(n)
