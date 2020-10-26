@@ -13,7 +13,7 @@ fdasrsf
 A python package for functional data analysis using the square root
 slope framework and curves using the square root velocity framework
 which performs pair-wise and group-wise alignment as well as modeling
-using functional component analysis and regression.
+using functional component analysis and regression. 
 
 ### Installation
 ------------------------------------------------------------------------------
@@ -28,6 +28,12 @@ depends on
 
 ------------------------------------------------------------------------------
 
+### Documentation
+The documentation is available at
+`fdasrsf-python.readthedocs.io/en/latest/ <https://fdasrsf-python.readthedocs.io/en/latest/>`_, which
+includes detailed information of the different modules, classes and methods of
+the package, along with several examples showing different functionalities.
+
 ### Contributions
 All contributions are welcome. You can help this project be better by reporting issues, bugs, 
 or forking the repo and creating a pull request.
@@ -37,6 +43,9 @@ The package is licensed under the BSD 3-Clause License. A copy of the
 [license](LICENSE.txt) can be found along with the code.
 
 ### References
+See references below on methods implemented in this package, some of the papers can be
+found at this [website](http://research.tetonedge.net)
+
 Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
 Methods. Ph.D. Thesis, Florida State University.
 
