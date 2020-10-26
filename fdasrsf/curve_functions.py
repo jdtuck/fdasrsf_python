@@ -9,7 +9,7 @@ from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
 from numpy import zeros, ones, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
-from numpy import arccos, fabs, floor
+from numpy import arccos, fabs, floor, fliplr
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparam_N as orN
 import fdasrsf.utility_functions as uf
@@ -29,6 +29,10 @@ def resamplecurve(x, N=100, mode='O'):
     """
     n, T = x.shape
     xn = zeros((n, N))
+
+    tst = x[:,1]-x[:,0]
+    if tst[0] < 0:
+        x = fliplr(x)
 
     delta = zeros(T)
     for r in range(1, T):
