@@ -7,7 +7,7 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA"]
 
-__version__ = "2.1.11"
+__version__ = "2.1.12"
 
 import sys
 
