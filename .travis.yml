@@ -10,8 +10,6 @@ addons:
 
 stages:
   - test
-  - name: binder
-    if: (branch = master) AND (NOT (type IN (pull_request)))
 
 jobs:
   include:
@@ -28,15 +26,6 @@ jobs:
       - coverage run -m unittest discover
     after_success:
       - codecov
-  - name: Update Binder
-    stage: binder
-    before_install: skip
-    install: skip
-    script:
-    # Use Binder build API to trigger repo2docker to build image on GKE and OVH Binder Federation clusters
-    - bash binder/trigger_binder.sh https://gke.mybinder.org/build/gh/jdtuck/fdasrsf_python/"${TRAVIS_BRANCH}"
-    - bash binder/trigger_binder.sh https://ovh.mybinder.org/build/gh/jdtuck/fdasrsf_python/"${TRAVIS_BRANCH}"
-    after_success: skip
 
 deploy:
   provider: pypi
