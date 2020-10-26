@@ -194,8 +194,8 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
 
 # path straightening helper functions
 def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
-    """
-    Initializes a path in \cal{C}. beta1, beta_mid beta2 are already
+    r"""
+    Initializes a path in :math:`\cal{C}`. beta1, beta_mid beta2 are already
     standardized curves. Creates a path from beta1 to beta_mid to beta2 in
     shape space, then projects to the closed shape manifold.
 
@@ -273,8 +273,8 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
 
 
 def init_path_geod(beta1, beta2, T=100, k=5):
-    """
-    Initializes a path in \cal{C}. beta1, beta2 are already
+    r"""
+    Initializes a path in :math:`\cal{C}`. beta1, beta2 are already
     standardized curves. Creates a path from beta1 to beta2 in
     shape space, then projects to the closed shape manifold.
 

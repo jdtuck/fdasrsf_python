@@ -315,11 +315,11 @@ class fdawarp:
         std_fn = self.fn.std(axis=1)
         tmp = np.array([mean_f0, mean_f0 + std_f0, mean_f0 - std_f0])
         tmp = tmp.transpose()
-        plot.f_plot(self.time, tmp, title="Original Data: Mean $\pm$ STD")
+        plot.f_plot(self.time, tmp, title=r"Original Data: Mean $\pm$ STD")
 
         tmp = np.array([mean_fn, mean_fn + std_fn, mean_fn - std_fn])
         tmp = tmp.transpose()
-        plot.f_plot(self.time, tmp, title="Warped Data: Mean $\pm$ STD")
+        plot.f_plot(self.time, tmp, title=r"Warped Data: Mean $\pm$ STD")
 
         plot.f_plot(self.time, self.fmean, title="$f_{mean}$")
         plt.show()
@@ -1032,11 +1032,11 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
 
         tmp = np.array([mean_f0, mean_f0 + std_f0, mean_f0 - std_f0])
         tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="Original Data: Mean $\pm$ STD")
+        plot.f_plot(time, tmp, title=r"Original Data: Mean $\pm$ STD")
 
         tmp = np.array([mean_fn, mean_fn + std_fn, mean_fn - std_fn])
         tmp = tmp.transpose()
-        plot.f_plot(time, tmp, title="Warped Data: Mean $\pm$ STD")
+        plot.f_plot(time, tmp, title=r"Warped Data: Mean $\pm$ STD")
 
         # PCA Plots
         fig, ax = plt.subplots(2, num_comp)
