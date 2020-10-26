@@ -23,7 +23,7 @@ v2.1.12 is on pip and can be installed using
 To install the most up to date version on github
 > `python setup.py install`
 
-please see [requirements][requirements.txt] for a list of packages `fdasrsf`
+please see [requirements](requirements.txt) for a list of packages `fdasrsf`
 depends on
 
 ------------------------------------------------------------------------------
