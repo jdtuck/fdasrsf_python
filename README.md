@@ -23,7 +23,17 @@ v2.1.12 is on pip and can be installed using
 To install the most up to date version on github
 > `python setup.py install`
 
+please see [requirements][requirements.txt] for a list of packages `fdasrsf`
+depends on
 ------------------------------------------------------------------------------
+
+### Contributions
+All contributions are welcome. You can help this project be better by reporting issues, bugs, 
+or forking the repo and creating a pull request.
+
+### License
+The package is licensed under the BSD 3-Clause License. A copy of the
+[license](LICENSE.txt) can be found along with the code.
 
 ### References
 Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
