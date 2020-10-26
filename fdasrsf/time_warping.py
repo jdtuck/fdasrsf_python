@@ -981,7 +981,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     std_fn = fn.std(axis=1)
 
     # Get Final PCA
-    mididx = np.round(time.shape[0] / 2)
+    mididx = int(np.round(time.shape[0] / 2))
     m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
     mqn2 = np.append(mqn, m_new.mean())
     qn2 = np.vstack((qn, m_new))
@@ -1002,7 +1002,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         for l in range(0, Nstd):
             q_pca_tmp = q_pca[0:M, l, k] * np.abs(q_pca[0:M, l, k])
             q_pca_tmp2 = np.sign(q_pca[M, l, k]) * (q_pca[M, l, k] ** 2)
-            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp, q_pca_tmp2, np.floor(time.shape[0]/2))
+            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp, q_pca_tmp2, np.floor(time.shape[0]/2), mididx)
 
     N2 = qn.shape[1]
     c = np.zeros((N2, num_comp))
