@@ -430,7 +430,7 @@ def find_rotation_and_seed_coord(beta1, beta2, mode=0):
             gamIbest = gamI
             minE = Ec
 
-    return (beta2best, Rbest, gamIbest)
+    return (beta2best, q2best, Rbest, gamIbest)
 
 
 def find_rotation_and_seed_q(q1, q2):
@@ -641,8 +641,7 @@ def inverse_exp_coord(beta1, beta2, mode=0):
     q1 = curve_to_q(beta1)
 
     # Iteratively optimize over SO(n) x Gamma
-    beta2n, O_hat, gamI = find_rotation_and_seed_coord(beta1, beta2, mode)
-    q2n = curve_to_q(beta2n)
+    beta2n, q2n, O_hat, gamI = find_rotation_and_seed_coord(beta1, beta2, mode)
 
     # Compute geodesic distance
     q1dotq2 = innerprod_q2(q1, q2n)
