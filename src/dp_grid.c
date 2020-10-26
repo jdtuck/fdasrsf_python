@@ -271,10 +271,9 @@ int dp_lookup( double *T, int n, double t )
 
 void dp_all_indexes( double *p, int np, double *tv, int ntv, int *idxv )
 {
-  int pi;
+  int pi = 0;
   int i;
 
-  pi=0;
   for ( i=0; i<ntv; ++i )
   {
     while ( pi < np-2 && tv[i] >= p[pi+1] ) ++pi;
@@ -282,3 +281,135 @@ void dp_all_indexes( double *p, int np, double *tv, int ntv, int *idxv )
   }
 }
 
+/**
+ * @brief Greatest common divisor.
+ *
+ * Computes the greatest common divisor between a and b using the Euclidean
+ * algorithm.
+ *
+ * @param[in] a First positive number.
+ * @param[in] b Second positive number.
+ *
+ * @return Greatest common divisor of @a a and @a b.
+ */
+static unsigned int gcd(unsigned int a, unsigned int b) {
+
+	unsigned int temp;
+
+    /* Swap if b > a */
+    if(b > a) {
+        temp = a;
+        a = b;
+        b = temp;
+    }
+
+    /* Iterative Euclidean algorithm */
+    while (b != 0)
+    {
+        a %= b;
+        temp = a;
+        a = b;
+        b = temp;
+    }
+    return a;
+}
+
+/**
+ * @brief Computes the number of elements in the nbhd grid.
+ *
+ * This is the number of elements in the set
+ * @f[
+ *              \{ (i,j) : \text{gcd}(i,j) = 1 & 1 \leq i,j \leq n \}
+ * @f]
+ *
+ * This number corresponds with the OEIS A018805 sequence and can be computed
+ * using the following formula:
+ * @f[
+ *               a(n) = n^2 - \sum_{j=2}^n a(floor(n/j))
+ * @f]
+ *
+ * @param[in] n Number of points in each axis of the grid.
+ * @param[out] states Array of size @a n, where the computed number of
+ *                    elements will be placed recursively for each number
+ *                    less than @a n, in order to not repeat computations.
+ *
+ * @return Number of elements in the set for the input @a n.
+ */
+static size_t compute_nbhd_count_rec(size_t n, int *states) {
+
+    if (states[n] != -1) {
+        return states[n];
+    }
+
+    size_t an = n * n;
+
+    for(size_t j = 2; j <= n; j++) {
+        an -= compute_nbhd_count_rec(n / j, states);
+    }
+
+    states[n] = an;
+
+    return an;
+}
+
+/**
+ * @brief Computes the number of elements in the nbhd grid.
+ *
+ * This is the number of elements in the set
+ * @f[
+ *              \{ (i,j) : \text{gcd}(i,j) = 1 & 1 \leq i,j \leq n \}
+ * @f]
+ *
+ * This number corresponds with the OEIS A018805 sequence and can be computed
+ * using the following formula:
+ * @f[
+ *               a(n) = n^2 - \sum_{j=2}^n a(floor(n/j))
+ * @f]
+ *
+ * @param[in] n Number of points in each axis of the grid.
+ *
+ * @return Number of elements in the set.
+ */
+static size_t compute_nbhd_count(size_t n) {
+
+    int * states = malloc((n + 1) * sizeof(*states));
+
+    for(size_t i = 0; i < n + 1; states[i++] = -1);
+
+    size_t an = compute_nbhd_count_rec(n, states);
+
+    free(states);
+
+    return an;
+}
+
+/**
+ * @brief Creates the nbhd grid.
+ *
+ * @param[in] nbhd_dim Number of points in each grid axis.
+ * @param[out] nbhd_count Number of points in the set.
+ *
+ * @return Set of points.
+ */
+static int * dp_generate_nbhd(size_t nbhd_dim, size_t *nbhd_count) {
+
+	size_t k = 0;
+
+    *nbhd_count = compute_nbhd_count(nbhd_dim) ;
+
+    /* Allocate memory for the partition, using the exact amount of we can use
+    ~60% of memory that if we use nbhd_dim^2 */
+    int * dp_nbhd = malloc(2 * (*nbhd_count) * sizeof(*dp_nbhd));
+
+    for(size_t i = 1; i <= nbhd_dim; i++) {
+        for(size_t j = 1; j <= nbhd_dim; j++) {
+            /* If irreducible fraction add as a coordinate */
+            if (gcd(i, j) == 1) {
+                dp_nbhd[k++] = i;
+                dp_nbhd[k++] = j;
+            }
+        }
+    }
+
+    return dp_nbhd;
+}
