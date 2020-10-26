@@ -56,7 +56,7 @@ class ampbox:
         This function constructs the amplitude boxplot using the elastic
         square-root slope (srsf) framework.
 
-        :param alpha: quantile value (e.g.,=.05, i.e., 95\%)
+        :param alpha: quantile value (e.g.,=.05, i.e., 95%)
         :param k_a: scalar for outlier cutoff (e.g.,=1)
         """
 
@@ -285,7 +285,7 @@ class phbox:
         This function constructs phase boxplot for functional data using the elastic
         square-root slope (srsf) framework.
 
-        :param alpha: quantile value (e.g.,=.05, i.e., 95\%)
+        :param alpha: quantile value (e.g.,=.05, i.e., 95%)
         :param k_a: scalar for outlier cutoff (e.g.,=1)
         """
 
