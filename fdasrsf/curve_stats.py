@@ -190,11 +190,11 @@ class fdacurve:
         q_mu = cf.curve_to_q(self.beta_mean)
         # align to mean
 
-        out = Parallel(n_jobs=-1)(delayed(align_sub)(self.beta_mean,
-                                    q_mu, self.beta[:, :, n], mode) for n in range(N))
+        out = Parallel(n_jobs=-1)(delayed(cf.find_rotation_and_seed_coord)(self.beta_mean,
+                                  self.beta[:, :, n], mode) for n in range(N))
         for ii in range(0, N):
-            self.gams[:,ii] = out[ii][2]
-            self.qn[:, :, ii] = cf.curve_to_q(out[ii][0], mode=self.mode)
+            self.gams[:,ii] = out[ii][3]
+            self.qn[:, :, ii] = out[ii][1]
             self.betan[:, :, ii] = out[ii][0]
 
         return
@@ -372,14 +372,3 @@ def karcher_calc(beta, q, betamean, mu, basis, mode):
         v = cf.project_tangent(w, q, basis)
 
     return(v, d)
-
-def align_sub(beta_mean, q_mu, beta1, mode):
-    # Iteratively optimize over SO(n) x Gamma
-    beta1new, O_hat, gamI = cf.find_rotation_and_seed_coord(beta_mean, beta1, mode)
-    if mode == 1:
-        mode1 = 'C'
-    else:
-        mode1 = 'O'
-    q1new = cf.curve_to_q(beta1new, mode=mode1)
-
-    return(beta1new,q1new,gamI)
