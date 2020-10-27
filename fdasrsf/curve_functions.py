@@ -9,10 +9,9 @@ from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
 from numpy import zeros, ones, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
-from numpy import arccos, fabs
+from numpy import arccos, fabs, floor, fliplr
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparam_N as orN
-import optimum_reparam_Ng as orNg
 import fdasrsf.utility_functions as uf
 
 
@@ -30,6 +29,10 @@ def resamplecurve(x, N=100, mode='O'):
     """
     n, T = x.shape
     xn = zeros((n, N))
+
+    tst = x[:,1]-x[:,0]
+    if tst[0] < 0:
+        x = fliplr(x)
 
     delta = zeros(T)
     for r in range(1, T):
@@ -211,12 +214,11 @@ def find_best_rotation(q1, q2):
     :return R: rotation matrix
 
     """
-    eps = finfo(double).eps
-    n, T = q1.shape
+    n = q1.shape[0]
     A = q1.dot(q2.T)
     U, s, V = svd(A)
 
-    if (abs(det(U) * det(V) - 1) < 10 * eps):
+    if (det(A) > 0):
         S = eye(n)
     else:
         S = eye(n)
@@ -372,13 +374,14 @@ def shift_f(f, tau):
     return (fn)
 
 
-def find_rotation_and_seed_coord(beta1, beta2):
+def find_rotation_and_seed_coord(beta1, beta2, mode=0):
     """
     This function returns a candidate list of optimally oriented and
     registered (seed) shapes w.r.t. beta1
 
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
+    :param mode: Open (0) or Closed (1)
 
     :rtype: numpy ndarray
     :return beta2new: optimal rotated beta2 to beta1
@@ -388,21 +391,46 @@ def find_rotation_and_seed_coord(beta1, beta2):
     """
     n, T = beta1.shape
     q1 = curve_to_q(beta1)
-    Ltwo = zeros(T)
-    Rlist = zeros((n, n, T))
-    for ctr in range(0, T):
-        beta2n = shift_f(beta2, ctr)
+    scl = 4.
+    minE = 1000
+    if mode == 1:
+        end_idx = int(floor(T/scl))
+        scl = 4
+    else:
+        end_idx = 0
+    
+    for ctr in range(0, end_idx+1):
+        if mode == 1:
+            beta2n = shift_f(beta2, scl*ctr)
+        else:
+            beta2n = beta2
+        
         beta2new, R = find_best_rotation(beta1, beta2n)
         q2new = curve_to_q(beta2new)
-        Ltwo[ctr] = innerprod_q2(q1 - q2new, q1 - q2new)
-        Rlist[:, :, ctr] = R
 
-    tau = Ltwo.argmin()
-    O_hat = Rlist[:, :, tau]
-    beta2new = shift_f(beta2, tau)
-    beta2new = O_hat.dot(beta2new)
+        # Reparam
+        if norm(q1-q2new,'fro') > 0.0001:
+            gam = optimum_reparam_curve(q2new, q1, 0.0)
+            gamI = uf.invertGamma(gam)
+            beta2new = group_action_by_gamma_coord(beta2new,gamI)
+            q2new = curve_to_q(beta2new)
+            if mode == 1:
+                q2new = project_curve(q2new)
+        else:
+            gamI = linspace(0,1,T)
+        
+        tmp = innerprod_q2(q1,q2new)
+        if tmp > 1:
+            tmp = 1
+        Ec = arccos(tmp)
+        if Ec < minE:
+            Rbest = R
+            beta2best = beta2new
+            q2best = q2new
+            gamIbest = gamI
+            minE = Ec
 
-    return (beta2new, O_hat, tau)
+    return (beta2best, q2best, Rbest, gamIbest)
 
 
 def find_rotation_and_seed_q(q1, q2):
@@ -536,7 +564,7 @@ def project_curve(q):
         C[iter] = norm(res)
 
         delG = Basis_Normal_A(qnew)
-        temp = 0
+        temp = zeros((n,T))
         for i in range(0,n):
             temp += x[i]*delG[i]*dt
         
@@ -590,13 +618,14 @@ def elastic_distance_curve(beta1, beta2):
     return d
     
 
-def inverse_exp_coord(beta1, beta2):
+def inverse_exp_coord(beta1, beta2, mode=0):
     """
     Calculate the inverse exponential to obtain a shooting vector from
     beta1 to beta2 in shape space of open curves
 
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
+    :param mode: open (0) or closed (1) curve
 
     :rtype: numpy ndarray
     :return v: shooting vectors
@@ -612,23 +641,14 @@ def inverse_exp_coord(beta1, beta2):
     q1 = curve_to_q(beta1)
 
     # Iteratively optimize over SO(n) x Gamma
-    for i in range(0, 1):
-        # Optimize over SO(n)
-        beta2, O_hat, tau = find_rotation_and_seed_coord(beta1, beta2)
-        q2 = curve_to_q(beta2)
-
-        # Optimize over Gamma
-        gam = optimum_reparam_curve(q2, q1, 0.0)
-        gamI = uf.invertGamma(gam)
-        # Applying optimal re-parameterization to the second curve
-        beta2 = group_action_by_gamma_coord(beta2, gamI)
-
-    # Optimize over SO(n)
-    beta2, O_hat, tau = find_rotation_and_seed_coord(beta1, beta2)
-    q2n = curve_to_q(beta2)
+    beta2n, q2n, O_hat, gamI = find_rotation_and_seed_coord(beta1, beta2, mode)
 
     # Compute geodesic distance
     q1dotq2 = innerprod_q2(q1, q2n)
+    if q1dotq2 > 1:
+        q1dotq2 = 1
+    elif q1dotq2 < -1:
+        q1dotq2 = -1
     dist = arccos(q1dotq2)
 
     # Compute shooting vector

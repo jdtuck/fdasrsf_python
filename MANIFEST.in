@@ -1,4 +1,5 @@
 graft src
+graft notebooks
 include LICENSE.txt
 include README.md
 include bin/MPEG7.npz

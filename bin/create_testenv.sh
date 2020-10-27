@@ -34,13 +34,11 @@ if [ -z ${GLOBAL} ]; then
     conda install -c conda-forge mamba --yes
     mamba env create -f environment-dev.yml
     conda activate ${ENVNAME}
-    pip install findblas
   fi
 else
-  pip install findblas
   conda config --add channels conda-forge
   conda update -n base conda --yes
-  conda install mkl-devel cython matplotlib --yes
+  conda install cython matplotlib --yes
 fi
 
 #  Install editable using the setup.py

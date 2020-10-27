@@ -72,7 +72,7 @@ class fdacurve:
             cent1[:,ii] = -a
 
         self.q = q
-        self.beta = beta
+        self.beta = beta1
         self.cent = cent1
 
 
@@ -169,6 +169,14 @@ class fdacurve:
         :param cores: number of cores for parallel (default = -1 (all))
         """
         n, T, N = self.beta.shape
+
+        modes = ['O', 'C']
+        mode = [i for i, x in enumerate(modes) if x == self.mode]
+        if len(mode) == 0:
+            mode = 0
+        else:
+            mode = mode[0]
+
         # find mean
         if not hasattr(self, 'beta_mean'):
             self.karcher_mean()
@@ -182,11 +190,11 @@ class fdacurve:
         q_mu = cf.curve_to_q(self.beta_mean)
         # align to mean
 
-        out = Parallel(n_jobs=-1)(delayed(align_sub)(self.beta_mean,
-                                    q_mu, self.beta[:, :, n]) for n in range(N))
+        out = Parallel(n_jobs=-1)(delayed(cf.find_rotation_and_seed_coord)(self.beta_mean,
+                                  self.beta[:, :, n], mode) for n in range(N))
         for ii in range(0, N):
-            self.gams[:,ii] = out[ii][2]
-            self.qn[:, :, ii] = cf.curve_to_q(out[ii][0])
+            self.gams[:,ii] = out[ii][3]
+            self.qn[:, :, ii] = out[ii][1]
             self.betan[:, :, ii] = out[ii][0]
 
         return
@@ -355,7 +363,7 @@ class fdacurve:
 
 def karcher_calc(beta, q, betamean, mu, basis, mode):
     # Compute shooting vector from mu to q_i
-    w, d = cf.inverse_exp_coord(betamean, beta)
+    w, d = cf.inverse_exp_coord(betamean, beta, mode)
 
     # Project to tangent space of manifold to obtain v_i
     if mode == 0:
@@ -364,22 +372,3 @@ def karcher_calc(beta, q, betamean, mu, basis, mode):
         v = cf.project_tangent(w, q, basis)
 
     return(v, d)
-
-def align_sub(beta_mean, q_mu, beta1):
-    # Iteratively optimize over SO(n) x Gamma
-    for i in range(0, 1):
-        # Optimize over SO(n)
-        beta1, O_hat, tau = cf.find_rotation_and_seed_coord(beta_mean,
-                                                            beta1)
-        q1 = cf.curve_to_q(beta1)
-
-        # Optimize over Gamma
-        gam = cf.optimum_reparam_curve(q1, q_mu, 0.0)
-        gamI = uf.invertGamma(gam)
-        # Applying optimal re-parameterization to the second curve
-        beta1 = cf.group_action_by_gamma_coord(beta1, gamI)
-
-    # Optimize over SO(n)
-    beta1, O_hat, tau = cf.find_rotation_and_seed_coord(beta_mean, beta1)
-
-    return(beta1,q1,gamI)

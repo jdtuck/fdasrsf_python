@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.org/jdtuck/fdasrsf_python)
+[![Build Status](https://travis-ci.com/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.com/jdtuck/fdasrsf_python)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
 [![Build status](https://img.shields.io/appveyor/ci/jdtuck/fdasrsf-python.svg?style=flat-square&label=windows)](https://ci.appveyor.com/project/jdtuck/fdasrsf-python/branch/master)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
@@ -13,19 +13,39 @@ fdasrsf
 A python package for functional data analysis using the square root
 slope framework and curves using the square root velocity framework
 which performs pair-wise and group-wise alignment as well as modeling
-using functional component analysis and regression.
+using functional component analysis and regression. 
 
 ### Installation
 ------------------------------------------------------------------------------
-v2.1.10 is on pip and can be installed using
+v2.1.13 is on pip and can be installed using
 > `pip install fdasrsf`
 
 To install the most up to date version on github
 > `python setup.py install`
 
+please see [requirements](requirements.txt) for a list of packages `fdasrsf`
+depends on
+
 ------------------------------------------------------------------------------
 
+### Documentation
+The documentation is available at
+[fdasrsf-python.readthedocs.io/en/latest](https://fdasrsf-python.readthedocs.io/en/latest/), which
+includes detailed information of the different modules, classes and methods of
+the package, along with several examples showing different functionalities.
+
+### Contributions
+All contributions are welcome. You can help this project be better by reporting issues, bugs, 
+or forking the repo and creating a pull request.
+
+### License
+The package is licensed under the BSD 3-Clause License. A copy of the
+[license](LICENSE.txt) can be found along with the code.
+
 ### References
+See references below on methods implemented in this package, some of the papers can be
+found at this [website](http://research.tetonedge.net)
+
 Tucker, J. D. 2014, Functional Component Analysis and Regression using Elastic
 Methods. Ph.D. Thesis, Florida State University.
 

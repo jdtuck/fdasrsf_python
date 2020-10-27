@@ -1,9 +1,7 @@
-name: testenv
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.7
   - arviz>=0.9
   - Cython
   - joblib
@@ -15,12 +13,10 @@ dependencies:
   - scipy
   - six
   - tqdm
-  - cffi
-  - numba
   - tornado
   - numpy>=1.13
   - scipy>=0.18
-  - pandas >=0.18
+  - pandas=1.0.3
   - patsy>=0.5
   - h5py>=2.7
   - typing-extensions>=3.7
@@ -38,6 +34,7 @@ dependencies:
   - pytest-cov>=2.5
   - pytest>=3.0
   - recommonmark>=0.4
+  - scikit-learn
   - seaborn>=0.8
   - sphinx-autobuild>=0.7
   - sphinx>=1.5
@@ -45,5 +42,8 @@ dependencies:
   - parameterized
   - black
   - ipywidgets
+  - mkl-devel
   - dill
-  
+  - libblas=*=*mkl
+  - xlrd
+  - pip

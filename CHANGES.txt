@@ -1,21 +1,23 @@
-v2.1.9, 2020-10-22 -- bugfixes
-v2.1.8, 2020-10-22 -- bugfixes
-v2.1.7, 2020-10-22 -- added numba metrics to use in UMAP
-v2.1.6, 2020-09-16 -- add parallel to curves
-v2.1.5, 2020-09-07 -- bugfixes in setup
-v2.1.1, 2020-08-31 -- bugfixes and add CI
-v2.1.0, 2020-08-26 -- add curve class and refactor and bugfixes
-v2.0.3, 2020-08-21 -- bugfixes
-v2.0.2, 2020-04-10 -- bugfixes
-v2.0.1, 2020-03-10 -- update c, c++ to work with windows
-v2.0.0, 2019-10-21 -- changed to class structure and added regression code
-v1.5.0, 2019-08-07 -- added tolerance bound
-v1.4.3, 2019-07-30 -- added RBFGS optimzation
-v1.4.0, 2019-05-10 -- added joint PCA
-v1.3.0, 2019-04-10 -- updates from R package and python3
-v1.2.1, 2014-12-06 -- fixed comment issues
-v1.2.0, 2014-02-06 -- added registration for open and closed curves
-v1.1.1, 2014-01-05 -- added regression processing
-v1.1.0, 2013-09-30 -- added partial least squares processing
-v1.0.1, 2013-08-24 -- added parallel processing to time warping
-v1.0.0, 2013-08-22 -- initial release
+v2.1.13, 2020-10-26 -- UMAP updates
+v2.1.12, 2020-10-24 -- bugfixes to curve functions
+v2.1.9,  2020-10-22 -- bugfixes
+v2.1.8,  2020-10-22 -- bugfixes
+v2.1.7,  2020-10-22 -- added numba metrics to use in UMAP
+v2.1.6,  2020-09-16 -- add parallel to curves
+v2.1.5,  2020-09-07 -- bugfixes in setup
+v2.1.1,  2020-08-31 -- bugfixes and add CI
+v2.1.0,  2020-08-26 -- add curve class and refactor and bugfixes
+v2.0.3,  2020-08-21 -- bugfixes
+v2.0.2,  2020-04-10 -- bugfixes
+v2.0.1,  2020-03-10 -- update c, c++ to work with windows
+v2.0.0,  2019-10-21 -- changed to class structure and added regression code
+v1.5.0,  2019-08-07 -- added tolerance bound
+v1.4.3,  2019-07-30 -- added RBFGS optimzation
+v1.4.0,  2019-05-10 -- added joint PCA
+v1.3.0,  2019-04-10 -- updates from R package and python3
+v1.2.1,  2014-12-06 -- fixed comment issues
+v1.2.0,  2014-02-06 -- added registration for open and closed curves
+v1.1.1,  2014-01-05 -- added regression processing
+v1.1.0,  2013-09-30 -- added partial least squares processing
+v1.0.1,  2013-08-24 -- added parallel processing to time warping
+v1.0.0,  2013-08-22 -- initial release

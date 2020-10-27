@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Oct 22, 2020" "2.1" "fdasrsf"
+.TH "FDASRSF" "1" "Oct 23, 2020" "2.1" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -263,7 +263,7 @@ obj.multiple_align_functions(lambda, ...)
 .IP \(bu 2
 \fBmu\fP \-\- vector of function to align to
 .IP \(bu 2
-\fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
+\fBomethod\fP \-\- optimization method (DP, DP2) (default = DP)
 .IP \(bu 2
 \fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
@@ -294,7 +294,7 @@ square\-root slope (srsf) framework.
 .IP \(bu 2
 \fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
 .IP \(bu 2
-\fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
+\fBomethod\fP \-\- optimization method (DP, DP2) (default = DP)
 .IP \(bu 2
 \fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
@@ -2590,7 +2590,7 @@ calculates the warping to align srsf q2 to q1
 .IP \(bu 2
 \fBq2\fP \-\- vector of size N or array of NxM samples samples of second SRSF
 .IP \(bu 2
-\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP", "DP2" and "RBFGS"
+\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" and "DP2"
 .IP \(bu 2
 \fBlam\fP \-\- controls the amount of elasticity (default = 0.0)
 .UNINDENT

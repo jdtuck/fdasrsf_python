@@ -1,17 +1,17 @@
 # appveyor.yml
 ---
+image: 
+  - Visual Studio 2019
 environment:
   matrix:
     - PYTHON_VERSION: 3.6
-      MINICONDA: C:\Miniconda3
+      MINICONDA: C:\Miniconda36
     - PYTHON_VERSION: 3.7
-      MINICONDA: C:\Miniconda3
+      MINICONDA: C:\Miniconda37
     - PYTHON_VERSION: 3.8
-      MINICONDA: C:\Miniconda3
+      MINICONDA: C:\Miniconda38
   password:
     secure: UhR8G1TzKJP0CBHTq7e65g==
-
-image: Visual Studio 2019
 
 platform:
   - x64
@@ -26,14 +26,13 @@ init:
   - ps: Write-Host $Env:APPVEYOR_REPO_NAME
 
 install:
-  - '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat"'
+  - '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=amd64'
   # Load the conda root environment, configure and install some packages
   - '"%MINICONDA%\Scripts\activate.bat"'
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels conda-forge
   - conda update -q conda
-  - conda install conda-build anaconda-client numpy-devel cython scipy joblib matplotlib patsy tqdm cffi numba mkl-devel
-  - pip install findblas
+  - conda install conda-build anaconda-client numpy-devel cython scipy joblib matplotlib patsy tqdm cffi numba
   # Show conda info for debugging
   - conda info -a
   - python setup.py install
@@ -45,7 +44,6 @@ test_script:
 
 after_test:
   - python setup.py bdist_wheel
-  - python setup.py sdist
 
 artifacts:
   # bdist_wheel puts your built wheel in the dist directory
@@ -57,7 +55,6 @@ deploy_script:
         Write-Output ("Deploying " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
         python -m pip install twine
         python -m twine upload -u tetonedge -p ${Env:password} --skip-existing dist/*.whl
-        python -m twine upload -u tetonedge -p ${Env:password} --skip-existing dist/*.tar.gz
       } else {
         Write-Output "No tag for deployment"
       }
