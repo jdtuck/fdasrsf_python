@@ -122,7 +122,7 @@ def srsf_to_f(q, time, f0=0.0):
     return f
 
 
-def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0):
+def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0, grid_dim=7):
     """
     calculates the warping to align srsf q2 to q1
 
@@ -131,6 +131,7 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0):
     :param q2: vector of size N or array of NxM samples samples of second SRSF
     :param method: method to apply optimization (default="DP") options are "DP" and "DP2"
     :param lam: controls the amount of elasticity (default = 0.0)
+    :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype: vector
     :return gam: describing the warping function used to align q2 with q1
@@ -152,15 +153,15 @@ def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0):
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN2.coptimum_reparam(ascontiguousarray(q1), time,
-                                    ascontiguousarray(q2), lam)
+                                    ascontiguousarray(q2), lam, grid_dim)
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam)
+                                        ascontiguousarray(q2), lam, grid_dim)
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam)
+                                        ascontiguousarray(q2), lam, grid_dim)
     else:
         raise Exception('Invalid Optimization Method')
 
