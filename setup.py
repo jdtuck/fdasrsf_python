@@ -46,7 +46,7 @@ os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
 extensions = [
 	Extension(name="optimum_reparamN2",
 	    sources=["src/optimum_reparamN2.pyx", "src/DynamicProgrammingQ2.c",
-        "src/dp_grid.c"],
+        "src/dp_grid.c", "src/dp_nbhd.c"],
 	    include_dirs=[numpy.get_include()],
 	    language="c"
 	),
