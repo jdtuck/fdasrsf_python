@@ -30,7 +30,7 @@ depends on
 
 ### Documentation
 The documentation is available at
-`fdasrsf-python.readthedocs.io/en/latest/ <https://fdasrsf-python.readthedocs.io/en/latest/>`_, which
+[fdasrsf-python.readthedocs.io/en/latest](https://fdasrsf-python.readthedocs.io/en/latest/), which
 includes detailed information of the different modules, classes and methods of
 the package, along with several examples showing different functionalities.
 
