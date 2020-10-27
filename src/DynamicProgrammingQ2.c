@@ -5,14 +5,13 @@
 #include "dp_nbhd.h"
 
 void DynamicProgrammingQ2(double *Q1, double *T1, double *Q2, double *T2, int m1, int n1, int n2,
-double *tv1, double *tv2, int n1v, int n2v, double *G, double *T, double *size, double lam1){
+double *tv1, double *tv2, int n1v, int n2v, double *G, double *T, double *size, double lam1,
+size_t nbhd_dim){
   int *idxv1 = 0;
   int *idxv2 = 0;
   double *E = 0; /* E[ntv1*j+i] = cost of best path to (tv1[i],tv2[j]) */
   int *P = 0; /* P[ntv1*j+i] = predecessor of (tv1[i],tv2[j]) along best path */
   size_t nbhd_count; /* Number of indexes */
-
-  size_t nbhd_dim = 7;
 
   idxv1=(int*)malloc((n1v)*sizeof(int));
   idxv2=(int*)malloc((n2v)*sizeof(int));
