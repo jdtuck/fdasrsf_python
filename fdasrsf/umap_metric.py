@@ -4,8 +4,8 @@ from _DP import ffi, lib
 import _DP
 from numpy import linspace, interp, zeros, diff, double, sqrt, arange, float64, int32, int64, trapz, ones
 from numpy import zeros, frombuffer, ascontiguousarray, empty, load, roll, dot, eye, arccos, reshape, float32
-from numpy import kron
-from numpy.linalg import norm, svd, det
+from numpy import kron, floor
+from numpy.linalg import norm, svd, det, solve
 
 
 DP = lib.DP
@@ -42,6 +42,28 @@ def warp(q1, q2):
     DP(q2i,q1i,n1,M,lam,disp,gami)
        
     return gam
+
+@numba.jit()
+def basis(q):
+    n,T = q.shape
+    e = eye(n)
+    Ev = zeros((n,T,n))
+    for i in range(0,n):
+        x = e[:,i]
+        Ev[:,:,i] = x.repeat(T).reshape((-1, T))
+    
+    qnorm = zeros(T)
+    for t in range(0,T):
+        qnorm[t] = norm(q[:,t])
+    
+    delG = list()
+    for i in range(0,n):
+        x = q[i,:]/qnorm
+        tmp1 = x.repeat(n).reshape((-1, n)).T
+        tmp2 = qnorm.repeat(n).reshape((-1, n)).T
+        delG.append(tmp1*q + tmp2*Ev[:,:,i])
+    
+    return delG
 
 @numba.jit()
 def freshape(f):
@@ -83,7 +105,7 @@ def shift_curve(f, tau):
     return (fn)
 
 @numba.jit()
-def c_to_q(beta):
+def c_to_q(beta, closed):
     n, T = beta.shape
     v = zeros((n,T))
     for i in range(n):
@@ -101,6 +123,9 @@ def c_to_q(beta):
     tmp.sum() / T
     tmp1 = tmp.sum() / T
     q = q / sqrt(tmp1)
+
+    if closed == 1:
+        q = proj_c(q)
 
     return(q)
 
@@ -122,30 +147,118 @@ def find_rot(q1, q2):
     R = U.dot(S).dot(V.T)
     return R
 
+@numba.njit()
+def inner_prod(q1,q2):
+    T = q1.shape[1]
+    cst = q1 * q2
+    tmp = cst.sum() / T
+    return tmp
+
+@numba.njit()
+def proj_c(q):
+    n,T = q.shape
+    if n==2:
+        dt = 0.35
+    if n==3:
+        dt = 0.2
+    epsilon = 1e-6
+
+    iter = 1
+    res = ones(n)
+    J = zeros((n,n))
+
+    s = linspace(0,1,T)
+
+    qnew = q / sqrt(inner_prod(q,q))
+    qnorm = zeros(T)
+    G = zeros(n)
+    C = zeros(300)
+    while (norm(res) > epsilon):
+        if iter > 300:
+            break
+
+        # Jacobian
+        for i in range(0,n):
+            for j in range(0,n):
+                J[i,j] = 3 * trapz(qnew[i,:]*qnew[j,:],s)
+        
+        J += eye(n)
+
+        for i in range(0,T):
+            qnorm[i] = norm(qnew[:,i])
+        
+        # Compute the residue
+        for i in range(0,n):
+            G[i] = trapz(qnew[i,:]*qnorm,s)
+        
+        res = -G
+
+        if (norm(res) < epsilon):
+            break
+
+        x = solve(J,res)
+        C[iter] = norm(res)
+
+        delG = basis(qnew)
+        temp = zeros((n,T))
+        for i in range(0,n):
+            temp += x[i]*delG[i]*dt
+        
+        qnew += temp
+        iter += 1
+    
+    qnew = qnew/sqrt(inner_prod(qnew,qnew))
+
+    return q
+
 @numba.jit()
-def find_seed_rot(beta1, beta2):
+def find_seed_rot(beta1, beta2, closed):
     beta1 = ascontiguousarray(beta1)
     beta2 = ascontiguousarray(beta2)
-    q1 = c_to_q(beta1)
-    n, T = beta1.shape
-    Ltwo = zeros(T)
-    Rlist = zeros((n, n, T))
-    for ctr in range(0,T):
-        beta2n = shift_curve(beta2, ctr)
-        R = find_rot(beta1,beta2n)
-        Rlist[:, :, ctr] = R
-        beta2new = R.dot(beta2n)
-        q2new = c_to_q(beta2new)
-        cst = q1 - q2new
-        tmp = cst * cst
-        Ltwo[ctr] = tmp.sum() / T
-    
-    tau = Ltwo.argmin()
-    O_hat = Rlist[:, :, tau]
-    beta2new = shift_curve(beta2, tau)
-    beta2new = O_hat.dot(beta2new)
+    q1 = c_to_q(beta1, closed)
 
-    return beta2new
+    n, T = beta1.shape
+    scl = 4.
+    minE = 1000
+    if closed == 1:
+        end_idx = int(floor(T/scl))
+        scli = 4
+    else:
+        end_idx = 0
+
+    x = linspace(0,1,T)
+    for ctr in range(0,end_idx+1):
+        if closed == 1:
+            shift = int(scli*ctr)
+            beta2n = shift_curve(beta2, shift)
+        else:
+            beta2n = beta2
+
+        R = find_rot(beta1,beta2n)
+        beta2new = R.dot(beta2n)
+        q2new = c_to_q(beta2new, closed)
+
+        gam = warp_curve(q1, q2new)
+        gamI = interp(x,gam,x)
+
+        # apply warp
+        beta_warp = zeros((n,T))
+        for j in range(0,n):
+            beta_warp[j,:] = interp(gamI, x, beta2new[j,:])
+        
+        q2new = c_to_q(beta2new, closed)
+
+        if closed == 1:
+            q2new = proj_c(q2new)
+        
+        tmp = inner_prod(q1,q2new)
+        if tmp > 1:
+            tmp = 1
+        Ec = arccos(tmp)
+        if Ec < minE:
+            q2best = q2new
+
+    return q2best
 
 @numba.njit()
 def curve_center(beta):
@@ -200,7 +313,7 @@ def efda_distance(q1, q2):
     return dist
 
 @numba.njit()
-def efda_distance_curve(beta1, beta2):
+def efda_distance_curve(beta1, beta2, closed):
     """"
     calculates the distances between two curves, where 
     beta2 is aligned to beta1. In other words calculates the elastic distance.
@@ -208,13 +321,14 @@ def efda_distance_curve(beta1, beta2):
 
     :param beta1: vector of size n*M
     :param beta2: vector of size n*M
+    :param closed: (0) if open curves and (1) if closed curves
 
     :rtype: scalar
     :return dist: shape distance
     """
     tst = beta1-beta2
     if tst.sum() == 0:
-        dist = 0
+        dist = 0.
     else:
         n = int64(2)
         T = int64(beta1.shape[0]/n)
@@ -224,37 +338,23 @@ def efda_distance_curve(beta1, beta2):
         beta2_i = beta2.reshape((n,T))
         beta1_i = beta1_i.astype(double)
         beta2_i = beta2_i.astype(double)
-
+        
         centroid1 = curve_center(beta1_i)
         beta1_i = beta1_i - kron(ones((T,1)), centroid1).T
         centroid2 = curve_center(beta2_i)
         beta2_i = beta2_i - kron(ones((T,1)), centroid2).T
-
-        q1 = c_to_q(beta1_i)
+        
+        q1 = c_to_q(beta1_i, closed)
 
         q1 = ascontiguousarray(q1)
-        # UMAP uses float32, need 64 for a lot of the computation
-        
-        x = linspace(0,1,T)
+        # optimize over SO(n) x Gamma
+        q2 = find_seed_rot(beta1_i, beta2_i, closed)
 
-        # optimize over SO(n)
-        beta2_i = find_seed_rot(beta1_i, beta2_i)
-        q2 = c_to_q(beta2_i)
-
-        # optimize over Gamma
-        gam = warp_curve(q1, q2)
-        gamI = interp(x,gam,x)
-
-        # apply warp
-        beta_warp = zeros((n,T))
-        for j in range(0,n):
-            beta_warp[j,:] = interp(gamI, x, beta2_i[j,:])
-
-        beta2_in = find_seed_rot(beta1_i, beta_warp)
-
-        q2 = c_to_q(beta2_in)
-        tmp = q1 * q2
-        q1dotq2 = tmp.sum() / T
+        q1dotq2 = inner_prod(q1,q2)
+        if q1dotq2 > 1:
+            q1dotq2 = 1
+        elif q1dotq2 < -1:
+            q1dotq2 = -1
         dist = arccos(q1dotq2)
        
     return dist

@@ -564,7 +564,7 @@ def project_curve(q):
         C[iter] = norm(res)
 
         delG = Basis_Normal_A(qnew)
-        temp = 0
+        temp = zeros((n,T))
         for i in range(0,n):
             temp += x[i]*delG[i]*dt
         
