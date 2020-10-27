@@ -122,14 +122,14 @@ def srsf_to_f(q, time, f0=0.0):
     return f
 
 
-def optimum_reparam(q1, time, q2, method="DP", lam=0.0, f1o=0.0, f2o=0.0, grid_dim=7):
+def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, f1o=0.0, f2o=0.0, grid_dim=7):
     """
     calculates the warping to align srsf q2 to q1
 
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
-    :param method: method to apply optimization (default="DP") options are "DP" and "DP2"
+    :param method: method to apply optimization (default="DP2") options are "DP" and "DP2"
     :param lam: controls the amount of elasticity (default = 0.0)
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
