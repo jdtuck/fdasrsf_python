@@ -1,3 +1,11 @@
+"""
+Distance metrics for functions and curves in R^n for use with UMAP
+(https://github.com/lmcinnes/umap)
+
+moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
+
+"""
+
 import numba
 from numba.core.typing import cffi_utils
 from _DP import ffi, lib
