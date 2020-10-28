@@ -20,7 +20,7 @@ import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
 import cbayesian as bay
 import fdasrsf.geometry as geo
-from fdasrsf.rlbfgs import rlbfgs
+from fdasrsf.rbfgs import rlbfgs
 import sys
 
 

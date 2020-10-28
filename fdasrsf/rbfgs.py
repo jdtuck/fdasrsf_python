@@ -12,11 +12,11 @@ from numpy.linalg import norm
 
 class rlbfgs:
 
-    """
+    r"""
     This class provides alignment methods for functional data using the SRVF framework
     using the Riemannian limited memory BFGS solver.  The solver is designed to operate 
-    on the positive orthant of the unit hypersphere in L^2([0,1],R). The set of all functions
-    h=\sqrt{\dot{\gamma}}, where \gamma is a diffeomorphism, is that manifold.
+    on the positive orthant of the unit hypersphere in :math:`L^2([0,1],R)`. The set of all functions
+    :math:`h=\sqrt{\dot{\gamma}}`, where :math:`\gamma` is a diffeomorphism, is that manifold.
 
     The inputs q1 and q2 are the square root velocity functions of curves in
     R^n to be aligned. Here, q2 will be aligned to q1.
@@ -271,9 +271,9 @@ class rlbfgs:
         return
 
     def alignment_cost(self, h, q2k):
-        """
-        Evaluate the cost function f = ||q1 - ((q2,hk),h)||^2.
-        h=sqrt{\dot{\gamma}} is a sequential update of cumulative warping hk
+        r"""
+        Evaluate the cost function :math:`f = ||q1 - ((q2,hk),h)||^2`.
+        :math:`h=sqrt{\dot{\gamma}}` is a sequential update of cumulative warping hk
         """
         q2new = self.group_action_SRVF(q2k,h)
         f = self.normL2(self.q1-q2new)**2
@@ -281,10 +281,10 @@ class rlbfgs:
         return f
 
     def alignment_costgrad(self, q2k):
-        """
-        Evaluate the cost function f = ||q1 - (q2,hk)||^2, and
+        r"""
+        Evaluate the cost function :math:`f = ||q1 - (q2,hk)||^2`, and
         evaluate the gradient g = grad f in the tangent space of identity.
-        hk=sqrt{\dot{\gamma_k}} is the cumulative warping of q2 produced by an
+        :math:`hk=sqrt{\dot{\gamma_k}}` is the cumulative warping of q2 produced by an
         iterative sequential optimization algorithm.
         """
         t = self.t
