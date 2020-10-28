@@ -1,3 +1,4 @@
+# cython: language_level=2
 from libcpp cimport bool
 cimport cyarma
 from cyarma cimport vec

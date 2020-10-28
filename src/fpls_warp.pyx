@@ -1,3 +1,4 @@
+# cython: language_level=2
 cimport cfPLS
 import numpy as np
 
