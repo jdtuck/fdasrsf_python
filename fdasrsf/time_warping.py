@@ -71,17 +71,18 @@ class fdawarp:
         self.rsamps = False
     
 
-    def srsf_align(self, method="mean", omethod="DP", smoothdata=False, parallel=False, lam=0.0, cores=-1):
+    def srsf_align(self, method="mean", omethod="DP2", smoothdata=False, parallel=False, lam=0.0, cores=-1, grid_dim=7):
         """
         This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
 
         :param method: (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
-        :param omethod: optimization method (DP, DP2) (default = DP)
+        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP2)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
+        :param grid_dim: size of the grid, for the DP2 method only (default = 7)
         :type lam: double
         :type smoothdata: bool
 
@@ -134,13 +135,13 @@ class fdawarp:
 
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
-                                    q[:, n], omethod, lam) for n in range(N))
+                                    q[:, n], omethod, lam, grid_dim) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             gam = np.zeros((M,N))
             for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam)
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,grid_dim)
 
         gamI = uf.SqrtMeanInverse(gam)
         mf = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], self.time, mf)
@@ -177,13 +178,13 @@ class fdawarp:
             # Matching Step
             if parallel:
                 out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r],
-                                        self.time, q[:, n, 0], omethod, lam) for n in range(N))
+                                        self.time, q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
                 gam = np.array(out)
                 gam = gam.transpose()
             else:
                 for k in range(0,N):
                     gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0],
-                            omethod, lam)
+                            omethod, lam, grid_dim)
 
             gam_dev = np.zeros((M, N))
             vtil = np.zeros((M,N))
@@ -243,13 +244,13 @@ class fdawarp:
         r += 1
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
-                q[:, n, 0], omethod, lam) for n in range(N))
+                q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             for k in range(0,N):
                 gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
-                        lam)
+                        lam, grid_dim)
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
@@ -486,7 +487,7 @@ class fdawarp:
 
         return
 
-    def multiple_align_functions(self, mu, omethod="DP", smoothdata=False, parallel=False, lam=0.0, cores=-1):
+    def multiple_align_functions(self, mu, omethod="DP2", smoothdata=False, parallel=False, lam=0.0, cores=-1, grid_dim=7):
         """
         This function aligns a collection of functions using the elastic square-root
         slope (srsf) framework.
@@ -496,11 +497,12 @@ class fdawarp:
         obj.multiple_align_functions(lambda, ...)
     
         :param mu: vector of function to align to
-        :param omethod: optimization method (DP, DP2) (default = DP)
+        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
+        :param grid_dim: size of the grid, for the DP2 method only (default = 7)
         :type lam: double
         :type smoothdata: bool
 
@@ -527,13 +529,13 @@ class fdawarp:
 
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
-                                    q[:, n], omethod, lam) for n in range(N))
+                                    q[:, n], omethod, lam, grid_dim) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             gam = np.zeros((M,N))
             for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam)
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,grid_dim)
 
         self.gamI = uf.SqrtMeanInverse(gam)
 
