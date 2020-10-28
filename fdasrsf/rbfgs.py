@@ -7,6 +7,8 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import time
 from scipy.integrate import trapz, cumtrapz
+from scipy.interpolate import UnivariateSpline
+from numpy.linalg import norm
 
 class rlbfgs:
 
@@ -47,10 +49,14 @@ class rlbfgs:
         :param t: time vector of length N
         """
 
-        self.q1 = q1
-        self.q2 = q2
         self.t = t
         self.T = t.shape[0]
+        if q1.ndim > 1:    
+            self.q1 = q1/self.innerProdL2(q1,q1)
+            self.q2 = q2/self.innerProdL2(q2,q2)
+        else:
+            self.q1 = q1/norm(q1)
+            self.q2 = q2/norm(q2)
     
     def solve(self, maxiter=30, verb=0):
         """
@@ -112,7 +118,7 @@ class rlbfgs:
         stepsize = 1
 
         # sores wether the step is accepted byt he cautious update check
-        accpeted = True
+        accepted = True
 
         # compute cost function and its gradient
         hCurCost, hCurGradient = self.alignment_costgrad(q2tilde)
@@ -141,7 +147,7 @@ class rlbfgs:
             timetic = time.time()
 
             # run standard stopping criterion checks
-            stop = self.stoppingcriterion(options, info, k+1)
+            stop = self.stoppingcriterion(options, info, k)
 
             if stop == 0:
                 if stats["stepsize"] < options["minstepsize"]:
@@ -232,9 +238,9 @@ class rlbfgs:
                         rhoHistory[memory] = rhok
                     # if we are not out of memory
                 else:
-                    sHistory[j+1] = sk
-                    yHistory[j+1] = yk
-                    rhoHistory[j+1] = rhok
+                    sHistory[j] = sk
+                    yHistory[j] = yk
+                    rhoHistory[j] = rhok
                 
                 j += 1
 
@@ -294,7 +300,10 @@ class rlbfgs:
         v = np.zeros(T)
         tmp = dq*q2kdot
         tmp1 = dq*q2k
-        v[1:] = 2*cumtrapz(tmp.sum(axis=0)-tmp1.sum(axis=0), t)
+        if tmp.ndim > 1:
+            v[1:] = 2*cumtrapz(tmp.sum(axis=0)-tmp1.sum(axis=0), t)
+        else:
+            v[1:] = 2*cumtrapz(tmp-tmp1, t)
         g = v - trapz(v,t)
 
         return f, g 
@@ -310,8 +319,8 @@ class rlbfgs:
         inner_s_q = np.zeros(j)
 
         for i in range(j,0,-1):
-            inner_s_q[i] = rhoHistory[i] * self.inner(sHistory[i],q)
-            q = q - inner_s_q[i] * yHistory[i]
+            inner_s_q[i-1] = rhoHistory[i-1] * self.inner(sHistory[i-1],q)
+            q = q - inner_s_q[i-1] * yHistory[i-1]
         
         r = scaleFactor * q
 
@@ -341,7 +350,6 @@ class rlbfgs:
         of that vector, thus: stepsize = alpha*norm_d. The step is executed by
         computing the exponential mapping exp_{hid}(alpha*d), giving newh.
         """
-        q1 = self.q1
         contraction_factor = .5
         suff_decr = 1e-6
         max_ls_steps = 25
@@ -362,7 +370,7 @@ class rlbfgs:
         # backtrack while the Armijo criterion is not satisfied
         # or if newh goes outside positive orthant
         tst = newh<=0
-        while (ls_backtrack and ((newf > (f0 + suff_decr*alpha*df0)) or (tst.sum>0))):
+        while (ls_backtrack and ((newf > (f0 + suff_decr*alpha*df0)) or (tst.sum()>0))):
             # reduce the step size
             alpha *= contraction_factor
 
@@ -425,7 +433,10 @@ class rlbfgs:
 
     def innerProdL2(self,f1,f2):
         tmp = f1*f2
-        val = trapz(tmp.sum(axis=0),self.t)
+        if tmp.ndim > 1:
+            val = trapz(tmp.sum(axis=0),self.t)
+        else:
+            val = trapz(tmp,self.t)
         return val
 
     def dist(self, f1, f2):
