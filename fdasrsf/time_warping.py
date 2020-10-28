@@ -134,13 +134,13 @@ class fdawarp:
 
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
-                                    q[:, n], omethod, lam, mf[0], f[0,n]) for n in range(N))
+                                    q[:, n], omethod, lam) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             gam = np.zeros((M,N))
             for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,mf[0],f[0,k])
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam)
 
         gamI = uf.SqrtMeanInverse(gam)
         mf = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], self.time, mf)
@@ -177,14 +177,13 @@ class fdawarp:
             # Matching Step
             if parallel:
                 out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r],
-                                        self.time, q[:, n, 0], omethod, lam, mf[0,r],
-                                        f[0,n,0] ) for n in range(N))
+                                        self.time, q[:, n, 0], omethod, lam) for n in range(N))
                 gam = np.array(out)
                 gam = gam.transpose()
             else:
                 for k in range(0,N):
                     gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0],
-                            omethod, lam, mf[0,r], f[0,k,0])
+                            omethod, lam)
 
             gam_dev = np.zeros((M, N))
             vtil = np.zeros((M,N))
@@ -244,13 +243,13 @@ class fdawarp:
         r += 1
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
-                q[:, n, 0], omethod, lam, mf[0,r], f[0,n,0]) for n in range(N))
+                q[:, n, 0], omethod, lam) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             for k in range(0,N):
                 gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
-                        lam, mf[0,r], f[0,k,0])
+                        lam)
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
@@ -528,13 +527,13 @@ class fdawarp:
 
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
-                                    q[:, n], omethod, lam, mu[0], f[0,n]) for n in range(N))
+                                    q[:, n], omethod, lam) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
             gam = np.zeros((M,N))
             for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,mu[0],f[0,k])
+                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam)
 
         self.gamI = uf.SqrtMeanInverse(gam)
 
@@ -1002,7 +1001,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         for l in range(0, Nstd):
             q_pca_tmp = q_pca[0:M, l, k] * np.abs(q_pca[0:M, l, k])
             q_pca_tmp2 = np.sign(q_pca[M, l, k]) * (q_pca[M, l, k] ** 2)
-            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp, q_pca_tmp2, np.floor(time.shape[0]/2), mididx)
+            f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca_tmp2, np.floor(time.shape[0]/2), mididx)
 
     N2 = qn.shape[1]
     c = np.zeros((N2, num_comp))

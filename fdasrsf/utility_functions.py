@@ -122,7 +122,7 @@ def srsf_to_f(q, time, f0=0.0):
     return f
 
 
-def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, f1o=0.0, f2o=0.0, grid_dim=7):
+def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
     """
     calculates the warping to align srsf q2 to q1
 
