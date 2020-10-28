@@ -363,12 +363,12 @@ class fdacurve:
         plt.show()
 
 
-def karcher_calc(beta, q, betamean, mu, basis, mode, method):
+def karcher_calc(beta, q, betamean, mu, basis, closed, method):
     # Compute shooting vector from mu to q_i
-    w, d = cf.inverse_exp_coord(betamean, beta, mode, method)
+    w, d = cf.inverse_exp_coord(betamean, beta, closed, method)
 
     # Project to tangent space of manifold to obtain v_i
-    if mode == 0:
+    if closed == 0:
         v = w
     else:
         v = cf.project_tangent(w, q, basis)
