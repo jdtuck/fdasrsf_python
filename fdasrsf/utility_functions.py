@@ -216,12 +216,12 @@ def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
     return gam
 
 
-def distmat(f,f1,time,idx):
+def distmat(f,f1,time,idx,method):
     N = f.shape[1]
     dp = zeros(N)
     da = zeros(N)
     for jj in range(N):
-        Dy,Dx = elastic_distance(f[:,jj], f1, time)
+        Dy,Dx = elastic_distance(f[:,jj], f1, time, method)
 
         da[jj] = Dy
         dp[jj] = Dx
@@ -229,12 +229,13 @@ def distmat(f,f1,time,idx):
     return(da, dp)
 
 
-def elastic_depth(f, time, lam=0.0, parallel=True):
+def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
     """
     calculates the elastic depth between functions in matrix f
 
     :param f: matrix of size MxN (M time points for N functions)
     :param time: vector of size M describing the sample points
+    :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the elasticity (default = 0.0)
 
     :rtype: scalar
@@ -249,13 +250,13 @@ def elastic_depth(f, time, lam=0.0, parallel=True):
     phs_dist = zeros((fns,fns))
 
     if parallel:
-        out = Parallel(n_jobs=-1)(delayed(distmat)(f, f[:, n], time, n) for n in range(fns))
+        out = Parallel(n_jobs=-1)(delayed(distmat)(f, f[:, n], time, n, method) for n in range(fns))
         for i in range(0, fns):
             amp_dist[i, :] = out[i][0]
             phs_dist[i, :] = out[i][1]
     else:
         for i in range(0, fns):
-            amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i)
+            amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i, method)
     
     amp_dist = amp_dist + amp_dist.T
     phs_dist = phs_dist + phs_dist.T
@@ -267,7 +268,7 @@ def elastic_depth(f, time, lam=0.0, parallel=True):
     return amp, phase
 
 
-def elastic_distance(f1, f2, time, method="DP", lam=0.0):
+def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
     """"
     calculates the distances between function, where f1 is aligned to
     f2. In other words
@@ -276,6 +277,7 @@ def elastic_distance(f1, f2, time, method="DP", lam=0.0):
     :param f1: vector of size N
     :param f2: vector of size N
     :param time: vector of size N describing the sample points
+    :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the elasticity (default = 0.0)
 
     :rtype: scalar
