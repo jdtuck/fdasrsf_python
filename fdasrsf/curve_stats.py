@@ -76,11 +76,12 @@ class fdacurve:
         self.cent = cent1
 
 
-    def karcher_mean(self, parallel=False, cores=-1):
+    def karcher_mean(self, parallel=False, cores=-1, method="DP"):
         """
         This calculates the mean of a set of curves
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
+        :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
         """
         n, T, N = self.beta.shape
 
@@ -124,7 +125,7 @@ class fdacurve:
             sumd[0] = inf
             sumd[itr+1] = 0
             out = Parallel(n_jobs=cores)(delayed(karcher_calc)(self.beta[:, :, n],
-                                    self.q[:, :, n], betamean, mu, self.basis, mode) for n in range(N))
+                                    self.q[:, :, n], betamean, mu, self.basis, mode, method) for n in range(N))
             v = zeros((n, T, N))
             for i in range(0, N):
                 v[:, :, i] = out[i][0]
@@ -162,11 +163,12 @@ class fdacurve:
         return
 
 
-    def srvf_align(self, parallel=False, cores=-1):
+    def srvf_align(self, parallel=False, cores=-1, method="DP"):
         """
         This aligns a set of curves to the mean and computes mean if not computed
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
+        :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
         """
         n, T, N = self.beta.shape
 
@@ -191,7 +193,7 @@ class fdacurve:
         # align to mean
 
         out = Parallel(n_jobs=-1)(delayed(cf.find_rotation_and_seed_coord)(self.beta_mean,
-                                  self.beta[:, :, n], mode) for n in range(N))
+                                  self.beta[:, :, n], mode, method) for n in range(N))
         for ii in range(0, N):
             self.gams[:,ii] = out[ii][3]
             self.qn[:, :, ii] = out[ii][1]
@@ -361,9 +363,9 @@ class fdacurve:
         plt.show()
 
 
-def karcher_calc(beta, q, betamean, mu, basis, mode):
+def karcher_calc(beta, q, betamean, mu, basis, mode, method):
     # Compute shooting vector from mu to q_i
-    w, d = cf.inverse_exp_coord(betamean, beta, mode)
+    w, d = cf.inverse_exp_coord(betamean, beta, mode, method)
 
     # Project to tangent space of manifold to obtain v_i
     if mode == 0:

@@ -13,6 +13,7 @@ from numpy import arccos, fabs, floor, fliplr
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparam_N as orN
 import fdasrsf.utility_functions as uf
+from fdasrsf.rbfgs import rlbfgs
 
 
 def resamplecurve(x, N=100, mode='O'):
@@ -164,7 +165,7 @@ def Basis_Normal_A(q):
     return delG
 
 
-def optimum_reparam_curve(q1, q2, lam=0.0):
+def optimum_reparam_curve(q1, q2, lam=0.0, method="DP"):
     """
     calculates the warping to align srsf q2 to q1
 
@@ -172,14 +173,22 @@ def optimum_reparam_curve(q1, q2, lam=0.0):
     :param time: vector of size N describing the sample points
     :param q2: matrix of size nxN or array of NxM samples samples of second SRVF
     :param lam: controls the amount of elasticity (default = 0.0)
+    :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: vector
     :return gam: describing the warping function used to align q2 with q1
 
     """
     time = linspace(0, 1, q1.shape[1])
-    gam = orN.coptimum_reparam_curve(ascontiguousarray(q1), time,
-                                     ascontiguousarray(q2), lam)
+    if method == "DP":
+        gam = orN.coptimum_reparam_curve(ascontiguousarray(q1), time,
+                                         ascontiguousarray(q2), lam)
+    elif method == "RBFGS":
+        obj = rlbfgs(q1,q2,time)
+        obj.solve()
+        gam = obj.gammaOpt
+    else:
+        raise Exception('Invalid Optimization Method')
 
     return gam
 
@@ -374,33 +383,34 @@ def shift_f(f, tau):
     return (fn)
 
 
-def find_rotation_and_seed_coord(beta1, beta2, mode=0):
+def find_rotation_and_seed_coord(beta1, beta2, closed=0, method="DP"):
     """
     This function returns a candidate list of optimally oriented and
     registered (seed) shapes w.r.t. beta1
 
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
-    :param mode: Open (0) or Closed (1)
+    :param closed: Open (0) or Closed (1)
+    :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: numpy ndarray
     :return beta2new: optimal rotated beta2 to beta1
     :return O: rotation matrix
     :return tau: seed
-
     """
+
     n, T = beta1.shape
     q1 = curve_to_q(beta1)
     scl = 4.
     minE = 1000
-    if mode == 1:
+    if closed == 1:
         end_idx = int(floor(T/scl))
         scl = 4
     else:
         end_idx = 0
     
     for ctr in range(0, end_idx+1):
-        if mode == 1:
+        if closed == 1:
             beta2n = shift_f(beta2, scl*ctr)
         else:
             beta2n = beta2
@@ -410,11 +420,11 @@ def find_rotation_and_seed_coord(beta1, beta2, mode=0):
 
         # Reparam
         if norm(q1-q2new,'fro') > 0.0001:
-            gam = optimum_reparam_curve(q2new, q1, 0.0)
+            gam = optimum_reparam_curve(q2new, q1, 0.0, method)
             gamI = uf.invertGamma(gam)
             beta2new = group_action_by_gamma_coord(beta2new,gamI)
             q2new = curve_to_q(beta2new)
-            if mode == 1:
+            if closed == 1:
                 q2new = project_curve(q2new)
         else:
             gamI = linspace(0,1,T)
@@ -600,11 +610,13 @@ def pre_proc_curve(beta, T=100):
     return (betanew, qnew, A)
 
 
-def elastic_distance_curve(beta1, beta2):
+def elastic_distance_curve(beta1, beta2, closed=0, method="DP"):
     """
     Calculates the two elastic distances between two curves
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
+    :param closed: open (0) or closed (1) curve (default=0)
+    :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: scalar
     :return dist: distance
@@ -613,19 +625,20 @@ def elastic_distance_curve(beta1, beta2):
     if (beta1 == beta2).all():
         d = 0.0
     else:
-        v,d = inverse_exp_coord(beta1, beta2)
+        v,d = inverse_exp_coord(beta1, beta2, closed, method)
 
     return d
     
 
-def inverse_exp_coord(beta1, beta2, mode=0):
+def inverse_exp_coord(beta1, beta2, closed=0, method="DP"):
     """
     Calculate the inverse exponential to obtain a shooting vector from
     beta1 to beta2 in shape space of open curves
 
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
-    :param mode: open (0) or closed (1) curve
+    :param closed: open (0) or closed (1) curve
+    :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: numpy ndarray
     :return v: shooting vectors
@@ -641,7 +654,7 @@ def inverse_exp_coord(beta1, beta2, mode=0):
     q1 = curve_to_q(beta1)
 
     # Iteratively optimize over SO(n) x Gamma
-    beta2n, q2n, O_hat, gamI = find_rotation_and_seed_coord(beta1, beta2, mode)
+    beta2n, q2n, O_hat, gamI = find_rotation_and_seed_coord(beta1, beta2, closed, method)
 
     # Compute geodesic distance
     q1dotq2 = innerprod_q2(q1, q2n)

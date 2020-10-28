@@ -52,8 +52,8 @@ class rlbfgs:
         self.t = t
         self.T = t.shape[0]
         if q1.ndim > 1:    
-            self.q1 = q1/self.innerProdL2(q1,q1)
-            self.q2 = q2/self.innerProdL2(q2,q2)
+            self.q1 = q1
+            self.q2 = q2
         else:
             self.q1 = q1/norm(q1)
             self.q2 = q2/norm(q2)
@@ -296,14 +296,19 @@ class rlbfgs:
 
         # compute cost gradient
         q2kdot = np.gradient(q2k, 1/(T-1))
+        if q2k.ndim > 1:
+            q2kdot = q2kdot[1]
         dq = q1-q2k
         v = np.zeros(T)
         tmp = dq*q2kdot
         tmp1 = dq*q2k
         if tmp.ndim > 1:
-            v[1:] = 2*cumtrapz(tmp.sum(axis=0)-tmp1.sum(axis=0), t)
+            v[1:] = 2*cumtrapz(tmp.sum(axis=0),t)
+            v = v - tmp1.sum(axis=0)
         else:
-            v[1:] = 2*cumtrapz(tmp-tmp1, t)
+            v[1:] = 2*cumtrapz(tmp, t)
+            v = v - tmp1
+
         g = v - trapz(v,t)
 
         return f, g 
@@ -378,6 +383,7 @@ class rlbfgs:
             newh = self.exp(hid, d, alpha)
             newf = self.alignment_cost(newh, q2k)
             cost_evaluations += 1
+            tst = newh<=0
 
             # make sure we don't run out of budget
             if cost_evaluations >= max_ls_steps:
@@ -417,8 +423,9 @@ class rlbfgs:
         p = q.shape[0]
         gamma = np.zeros(self.T)
         gamma[1:] = cumtrapz(h**2,self.t)
+        gamma = gamma / gamma[-1]
         h = np.sqrt(np.gradient(gamma,self.t))
-        qnew = q
+        qnew = np.zeros(q.shape)
         if q.ndim > 1:
             for i in range(0,p):
                 qnew[i,:] = np.interp(gamma,self.t,q[i,:])*h
