@@ -107,6 +107,7 @@ setup(
         "scipy",
         "joblib",
         "patsy",
+        "time",
         "tqdm",
         "six",
         "numba",

@@ -17,6 +17,7 @@ dependencies:
   - tqdm
   - cffi
   - numba
+  - time
   - tornado
   - numpy>=1.13
   - scipy>=0.18
