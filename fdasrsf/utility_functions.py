@@ -165,12 +165,14 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
                                           ascontiguousarray(q2), lam, grid_dim)
     elif method == "RBFGS":
         if q1.ndim == 1 and q2.ndim == 1:
+            time = linspace(0,1,q1.shape[0])
             obj = rlbfgs(q1,q2,time)
             obj.solve()
             gam = obj.gammaOpt
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = zeros(q2.shape)
+            time = linspace(0,1,q1.shape[0])
             for i in range(0,q2.shape[1]):
                 obj = rlbfgs(q1,q2[:,i],time)
                 obj.solve()
@@ -178,6 +180,7 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
     
         if q1.ndim == 2 and q2.ndim == 2:
             gam = zeros(q2.shape)
+            time = linspace(0,1,q1.shape[0])
             for i in range(0,q2.shape[1]):
                 obj = rlbfgs(q1[:,i],q2[:,i],time)
                 obj.solve()
