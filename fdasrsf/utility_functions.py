@@ -20,6 +20,7 @@ import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
 import cbayesian as bay
 import fdasrsf.geometry as geo
+from fdasrsf.rlbfgs import rlbfgs
 import sys
 
 
@@ -129,7 +130,7 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
-    :param method: method to apply optimization (default="DP2") options are "DP" and "DP2"
+    :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
@@ -141,19 +142,19 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
     if method == "DP":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN.coptimum_reparam(ascontiguousarray(q1), time,
-                                    ascontiguousarray(q2), lam)
+                                       ascontiguousarray(q2), lam)
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam)
+                                         ascontiguousarray(q2), lam)
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N2(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam)
+                                          ascontiguousarray(q2), lam)
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN2.coptimum_reparam(ascontiguousarray(q1), time,
-                                    ascontiguousarray(q2), lam, grid_dim)
+                                        ascontiguousarray(q2), lam, grid_dim)
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN(ascontiguousarray(q1), time,
@@ -161,7 +162,27 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam, grid_dim)
+                                          ascontiguousarray(q2), lam, grid_dim)
+    elif method == "RBFGS":
+        if q1.ndim == 1 and q2.ndim == 1:
+            obj = rlbfgs(q1,q2,time)
+            obj.solve()
+            gam = obj.gammaOpt
+
+        if q1.ndim == 1 and q2.ndim == 2:
+            gam = zeros(q2.shape)
+            for i in range(0,q2.shape[1]):
+                obj = rlbfgs(q1,q2[:,i],time)
+                obj.solve()
+                gam[:,i] = obj.gammaOpt
+    
+        if q1.ndim == 2 and q2.ndim == 2:
+            gam = zeros(q2.shape)
+            for i in range(0,q2.shape[1]):
+                obj = rlbfgs(q1[:,i],q2[:,i],time)
+                obj.solve()
+                gam[:,i] = obj.gammaOpt
+           
     else:
         raise Exception('Invalid Optimization Method')
 

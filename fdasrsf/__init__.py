@@ -37,3 +37,4 @@ from .curve_regression import oc_elastic_logistic, oc_elastic_prediction, prepro
 from .geometry import inv_exp_map, exp_map
 from .geodesic import geod_sphere, path_straightening
 from .umap_metric import efda_distance, efda_distance_curve
+from .rbfgs import rlbfgs
