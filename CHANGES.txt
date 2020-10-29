@@ -1,3 +1,4 @@
+v2.2.20, 2020-10-28 -- RBFGS complete rewrite, exposed optimization methods
 v2.1.13, 2020-10-26 -- UMAP updates
 v2.1.12, 2020-10-24 -- bugfixes to curve functions
 v2.1.9,  2020-10-22 -- bugfixes
