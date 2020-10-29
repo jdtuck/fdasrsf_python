@@ -20,6 +20,7 @@ import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
 import cbayesian as bay
 import fdasrsf.geometry as geo
+from fdasrsf.rbfgs import rlbfgs
 import sys
 
 
@@ -122,14 +123,14 @@ def srsf_to_f(q, time, f0=0.0):
     return f
 
 
-def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, f1o=0.0, f2o=0.0, grid_dim=7):
+def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
     """
     calculates the warping to align srsf q2 to q1
 
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
-    :param method: method to apply optimization (default="DP2") options are "DP" and "DP2"
+    :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
@@ -141,19 +142,19 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, f1o=0.0, f2o=0.0, grid_
     if method == "DP":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN.coptimum_reparam(ascontiguousarray(q1), time,
-                                    ascontiguousarray(q2), lam)
+                                       ascontiguousarray(q2), lam)
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam)
+                                         ascontiguousarray(q2), lam)
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N2(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam)
+                                          ascontiguousarray(q2), lam)
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN2.coptimum_reparam(ascontiguousarray(q1), time,
-                                    ascontiguousarray(q2), lam, grid_dim)
+                                        ascontiguousarray(q2), lam, grid_dim)
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN(ascontiguousarray(q1), time,
@@ -161,7 +162,30 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, f1o=0.0, f2o=0.0, grid_
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam, grid_dim)
+                                          ascontiguousarray(q2), lam, grid_dim)
+    elif method == "RBFGS":
+        if q1.ndim == 1 and q2.ndim == 1:
+            time = linspace(0,1,q1.shape[0])
+            obj = rlbfgs(q1,q2,time)
+            obj.solve()
+            gam = obj.gammaOpt
+
+        if q1.ndim == 1 and q2.ndim == 2:
+            gam = zeros(q2.shape)
+            time = linspace(0,1,q1.shape[0])
+            for i in range(0,q2.shape[1]):
+                obj = rlbfgs(q1,q2[:,i],time)
+                obj.solve()
+                gam[:,i] = obj.gammaOpt
+    
+        if q1.ndim == 2 and q2.ndim == 2:
+            gam = zeros(q2.shape)
+            time = linspace(0,1,q1.shape[0])
+            for i in range(0,q2.shape[1]):
+                obj = rlbfgs(q1[:,i],q2[:,i],time)
+                obj.solve()
+                gam[:,i] = obj.gammaOpt
+           
     else:
         raise Exception('Invalid Optimization Method')
 
@@ -195,12 +219,12 @@ def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
     return gam
 
 
-def distmat(f,f1,time,idx):
+def distmat(f,f1,time,idx,method):
     N = f.shape[1]
     dp = zeros(N)
     da = zeros(N)
     for jj in range(N):
-        Dy,Dx = elastic_distance(f[:,jj], f1, time)
+        Dy,Dx = elastic_distance(f[:,jj], f1, time, method)
 
         da[jj] = Dy
         dp[jj] = Dx
@@ -208,12 +232,13 @@ def distmat(f,f1,time,idx):
     return(da, dp)
 
 
-def elastic_depth(f, time, lam=0.0, parallel=True):
+def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
     """
     calculates the elastic depth between functions in matrix f
 
     :param f: matrix of size MxN (M time points for N functions)
     :param time: vector of size M describing the sample points
+    :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the elasticity (default = 0.0)
 
     :rtype: scalar
@@ -228,13 +253,13 @@ def elastic_depth(f, time, lam=0.0, parallel=True):
     phs_dist = zeros((fns,fns))
 
     if parallel:
-        out = Parallel(n_jobs=-1)(delayed(distmat)(f, f[:, n], time, n) for n in range(fns))
+        out = Parallel(n_jobs=-1)(delayed(distmat)(f, f[:, n], time, n, method) for n in range(fns))
         for i in range(0, fns):
             amp_dist[i, :] = out[i][0]
             phs_dist[i, :] = out[i][1]
     else:
         for i in range(0, fns):
-            amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i)
+            amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i, method)
     
     amp_dist = amp_dist + amp_dist.T
     phs_dist = phs_dist + phs_dist.T
@@ -246,7 +271,7 @@ def elastic_depth(f, time, lam=0.0, parallel=True):
     return amp, phase
 
 
-def elastic_distance(f1, f2, time, method="DP", lam=0.0):
+def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
     """"
     calculates the distances between function, where f1 is aligned to
     f2. In other words
@@ -255,6 +280,7 @@ def elastic_distance(f1, f2, time, method="DP", lam=0.0):
     :param f1: vector of size N
     :param f2: vector of size N
     :param time: vector of size N describing the sample points
+    :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the elasticity (default = 0.0)
 
     :rtype: scalar

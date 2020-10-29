@@ -19,3 +19,4 @@ src/mlogit_warp.c
 src/oclogit_warp.c
 src/optimum_reparam_N.c
 src/optimum_reparamN2.c
+src/ocmlogit_warp.c
