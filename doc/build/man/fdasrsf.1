@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Oct 23, 2020" "2.1" "fdasrsf"
+.TH "FDASRSF" "1" "Oct 28, 2020" "2.2" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -246,7 +246,7 @@ extracted from the principal components of the srsfs
 .UNINDENT
 .INDENT 7.0
 .TP
-.B multiple_align_functions(mu, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0, cores=\- 1)
+.B multiple_align_functions(mu, omethod=\(aqDP2\(aq, smoothdata=False, parallel=False, lam=0.0, cores=\- 1, grid_dim=7)
 This function aligns a collection of functions using the elastic square\-root
 slope (srsf) framework.
 .INDENT 7.0
@@ -263,7 +263,7 @@ obj.multiple_align_functions(lambda, ...)
 .IP \(bu 2
 \fBmu\fP \-\- vector of function to align to
 .IP \(bu 2
-\fBomethod\fP \-\- optimization method (DP, DP2) (default = DP)
+\fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
 .IP \(bu 2
 \fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
@@ -272,6 +272,8 @@ obj.multiple_align_functions(lambda, ...)
 \fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
 .IP \(bu 2
 \fBcores\fP \-\- number of cores for parallel (default = \-1 (all))
+.IP \(bu 2
+\fBgrid_dim\fP \-\- size of the grid, for the DP2 method only (default = 7)
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -284,7 +286,7 @@ Usage: obj.plot()
 .UNINDENT
 .INDENT 7.0
 .TP
-.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP\(aq, smoothdata=False, parallel=False, lam=0.0, cores=\- 1)
+.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP2\(aq, smoothdata=False, parallel=False, lam=0.0, cores=\- 1, grid_dim=7)
 This function aligns a collection of functions using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -294,7 +296,7 @@ square\-root slope (srsf) framework.
 .IP \(bu 2
 \fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
 .IP \(bu 2
-\fBomethod\fP \-\- optimization method (DP, DP2) (default = DP)
+\fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP2)
 .IP \(bu 2
 \fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
@@ -303,6 +305,8 @@ square\-root slope (srsf) framework.
 \fBlam\fP (\fIdouble\fP) \-\- controls the elasticity (default = 0)
 .IP \(bu 2
 \fBcores\fP \-\- number of cores for parallel (default = \-1 (all))
+.IP \(bu 2
+\fBgrid_dim\fP \-\- size of the grid, for the DP2 method only (default = 7)
 .UNINDENT
 .UNINDENT
 .sp
@@ -335,7 +339,7 @@ unique distribution [2]\&.
 .INDENT 7.0
 .INDENT 3.5
 New code should use the \fBnormal\fP method of a \fBdefault_rng()\fP
-instance instead; see \fIrandom\-quick\-start\fP\&.
+instance instead; please see the random\-quick\-start\&.
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1808,10 +1812,11 @@ This calculates the mean of a set of curves
 .UNINDENT
 .INDENT 7.0
 .TP
-.B karcher_mean(parallel=False, cores=\- 1)
+.B karcher_mean(parallel=False, cores=\- 1, method=\(aqDP\(aq)
 This calculates the mean of a set of curves
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = \-1 (all))
+:param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1846,10 +1851,11 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence
 .UNINDENT
 .INDENT 7.0
 .TP
-.B srvf_align(parallel=False, cores=\- 1)
+.B srvf_align(parallel=False, cores=\- 1, method=\(aqDP\(aq)
 This aligns a set of curves to the mean and computes mean if not computed
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = \-1 (all))
+:param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -1871,7 +1877,7 @@ other NumPy functions like \fInumpy.zeros\fP and \fInumpy.ones\fP\&.
 .INDENT 7.0
 .INDENT 3.5
 New code should use the \fBstandard_normal\fP method of a \fBdefault_rng()\fP
-instance instead; see \fIrandom\-quick\-start\fP\&.
+instance instead; please see the random\-quick\-start\&.
 .UNINDENT
 .UNINDENT
 .sp
@@ -2132,7 +2138,7 @@ rotation matrix
 .INDENT 0.0
 .TP
 .B geodesic.init_path_geod(beta1, beta2, T=100, k=5)
-Initializes a path in cal{C}. beta1, beta2 are already
+Initializes a path in \ecal{C}\&. beta1, beta2 are already
 standardized curves. Creates a path from beta1 to beta2 in
 shape space, then projects to the closed shape manifold.
 .INDENT 7.0
@@ -2165,7 +2171,7 @@ rotation matrix
 .INDENT 0.0
 .TP
 .B geodesic.init_path_rand(beta1, beta_mid, beta2, T=100, k=5)
-Initializes a path in cal{C}. beta1, beta_mid beta2 are already
+Initializes a path in \ecal{C}\&. beta1, beta_mid beta2 are already
 standardized curves. Creates a path from beta1 to beta_mid to beta2 in
 shape space, then projects to the closed shape manifold.
 .INDENT 7.0
@@ -2393,7 +2399,7 @@ matrix describing differential operator
 .UNINDENT
 .INDENT 0.0
 .TP
-.B utility_functions.elastic_depth(f, time, lam=0.0, parallel=True)
+.B utility_functions.elastic_depth(f, time, method=\(aqDP2\(aq, lam=0.0, parallel=True)
 calculates the elastic depth between functions in matrix f
 .INDENT 7.0
 .TP
@@ -2403,6 +2409,8 @@ calculates the elastic depth between functions in matrix f
 \fBf\fP \-\- matrix of size MxN (M time points for N functions)
 .IP \(bu 2
 \fBtime\fP \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBmethod\fP \-\- method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
 .IP \(bu 2
 \fBlam\fP \-\- controls the elasticity (default = 0.0)
 .UNINDENT
@@ -2419,7 +2427,7 @@ phase depth
 .UNINDENT
 .INDENT 0.0
 .TP
-.B utility_functions.elastic_distance(f1, f2, time, method=\(aqDP\(aq, lam=0.0)
+.B utility_functions.elastic_distance(f1, f2, time, method=\(aqDP2\(aq, lam=0.0)
 "
 calculates the distances between function, where f1 is aligned to
 f2. In other words
@@ -2434,6 +2442,8 @@ calculates the elastic distances
 \fBf2\fP \-\- vector of size N
 .IP \(bu 2
 \fBtime\fP \-\- vector of size N describing the sample points
+.IP \(bu 2
+\fBmethod\fP \-\- method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
 .IP \(bu 2
 \fBlam\fP \-\- controls the elasticity (default = 0.0)
 .UNINDENT
@@ -2577,7 +2587,7 @@ inverse of gam
 .UNINDENT
 .INDENT 0.0
 .TP
-.B utility_functions.optimum_reparam(q1, time, q2, method=\(aqDP\(aq, lam=0.0, f1o=0.0, f2o=0.0)
+.B utility_functions.optimum_reparam(q1, time, q2, method=\(aqDP2\(aq, lam=0.0, grid_dim=7)
 calculates the warping to align srsf q2 to q1
 .INDENT 7.0
 .TP
@@ -2590,9 +2600,11 @@ calculates the warping to align srsf q2 to q1
 .IP \(bu 2
 \fBq2\fP \-\- vector of size N or array of NxM samples samples of second SRSF
 .IP \(bu 2
-\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" and "DP2"
+\fBmethod\fP \-\- method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
 .IP \(bu 2
 \fBlam\fP \-\- controls the amount of elasticity (default = 0.0)
+.IP \(bu 2
+\fBgrid_dim\fP \-\- size of the grid, for the DP2 method only (default = 7)
 .UNINDENT
 .TP
 .B Return type
@@ -2961,10 +2973,12 @@ rotation matrix
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.elastic_distance_curve(beta1, beta2)
+.B curve_functions.elastic_distance_curve(beta1, beta2, closed=0, method=\(aqDP\(aq)
 Calculates the two elastic distances between two curves
 :param beta1: numpy ndarray of shape (2,M) of M samples
 :param beta2: numpy ndarray of shape (2,M) of M samples
+:param closed: open (0) or closed (1) curve (default=0)
+:param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .INDENT 7.0
 .TP
 .B Return type
@@ -3035,7 +3049,7 @@ rotation matrix
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.find_rotation_and_seed_coord(beta1, beta2)
+.B curve_functions.find_rotation_and_seed_coord(beta1, beta2, closed=0, method=\(aqDP\(aq)
 This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1
 .INDENT 7.0
@@ -3046,6 +3060,10 @@ registered (seed) shapes w.r.t. beta1
 \fBbeta1\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBbeta2\fP \-\- numpy ndarray of shape (2,M) of M samples
+.IP \(bu 2
+\fBclosed\fP \-\- Open (0) or Closed (1)
+.IP \(bu 2
+\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
 .TP
 .B Return type
@@ -3198,7 +3216,7 @@ shooting vectors
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.inverse_exp_coord(beta1, beta2)
+.B curve_functions.inverse_exp_coord(beta1, beta2, closed=0, method=\(aqDP\(aq)
 Calculate the inverse exponential to obtain a shooting vector from
 beta1 to beta2 in shape space of open curves
 .INDENT 7.0
@@ -3209,6 +3227,10 @@ beta1 to beta2 in shape space of open curves
 \fBbeta1\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBbeta2\fP \-\- numpy ndarray of shape (2,M) of M samples
+.IP \(bu 2
+\fBclosed\fP \-\- open (0) or closed (1) curve
+.IP \(bu 2
+\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
 .TP
 .B Return type
@@ -3223,7 +3245,7 @@ distance
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.optimum_reparam_curve(q1, q2, lam=0.0)
+.B curve_functions.optimum_reparam_curve(q1, q2, lam=0.0, method=\(aqDP\(aq)
 calculates the warping to align srsf q2 to q1
 .INDENT 7.0
 .TP
@@ -3237,6 +3259,8 @@ calculates the warping to align srsf q2 to q1
 \fBq2\fP \-\- matrix of size nxN or array of NxM samples samples of second SRVF
 .IP \(bu 2
 \fBlam\fP \-\- controls the amount of elasticity (default = 0.0)
+.IP \(bu 2
+\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
 .TP
 .B Return type
@@ -3456,6 +3480,11 @@ shifted curve
 .UNINDENT
 .UNINDENT
 .SH UMAP EFDA METRICS
+.sp
+Distance metrics for functions and curves in R^n for use with UMAP
+(\fI\%https://github.com/lmcinnes/umap\fP)
+.sp
+moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
 .B umap_metric.efda_distance(q1, q2)
@@ -3482,7 +3511,7 @@ amplitude distance
 .UNINDENT
 .INDENT 0.0
 .TP
-.B umap_metric.efda_distance_curve(beta1, beta2)
+.B umap_metric.efda_distance_curve(beta1, beta2, closed)
 "
 calculates the distances between two curves, where 
 beta2 is aligned to beta1. In other words calculates the elastic distance.
@@ -3495,6 +3524,12 @@ This metric is set up for use with UMAP or t\-sne from scikit\-learn
 \fBbeta1\fP \-\- vector of size n*M
 .IP \(bu 2
 \fBbeta2\fP \-\- vector of size n*M
+.IP \(bu 2
+\fBclosed\fP \-\- .INDENT 2.0
+.IP 0. 4
+if open curves and (1) if closed curves
+.UNINDENT
+
 .UNINDENT
 .TP
 .B Return type
@@ -3550,28 +3585,20 @@ W. Xie, S. Kurtek, K. Bharath, and Y. Sun, A geometric approach to visualization
 of variability in functional data, Journal of American Statistical Association 112
 (2017), pp. 979\-993.
 .sp
-Lu, Y., R. Herbei, and S. Kurtek, 2017: Bayesian registration of functions with a Gaussian process prior. Journal of
-Computational and Graphical Statistics, 26, no. 4, 894–904.
+Lu, Y., R. Herbei, and S. Kurtek, 2017: Bayesian registration of functions with a
+Gaussian process prior. Journal of Computational and Graphical Statistics, 26, no. 4, 894–904.
 .sp
-Lee, S. and S. Jung, 2017: Combined analysis of amplitude and phase variations in functional data. arXiv:1603.01775 [stat.ME], 1–21.
-.INDENT 0.0
-.IP J. 3
-.INDENT 3.0
-.IP D. 3
-Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal Component Regression,” Statistical Analysis and Data Mining, vol. 12, no. 2, pp. 101\-115, 2019.
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.IP J. 3
-.INDENT 3.0
-.IP D. 3
-Tucker, J. R. Lewis, C. King, and S. Kurtek, “A Geometric Approach for Computing Tolerance Bounds for Elastic Functional Data,” Journal of Applied Statistics, 10.1080/02664763.2019.1645818, 2019.
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.IP T. 3
-Harris, J. D. Tucker, B. Li, and L. Shand, "Elastic depths for detecting shape anomalies in functional data," Technometrics, 10.1080/00401706.2020.1811156, 2020.
-.UNINDENT
+Lee, S. and S. Jung, 2017: Combined analysis of amplitude and phase variations in
+functional data. arXiv:1603.01775 [stat.ME], 1–21.
+.sp
+J. D. Tucker, J. R. Lewis, and A. Srivastava, “Elastic Functional Principal Component
+Regression,” Statistical Analysis and Data Mining, vol. 12, no. 2, pp. 101\-115, 2019.
+.sp
+J. D. Tucker, J. R. Lewis, C. King, and S. Kurtek, “A Geometric Approach for Computing
+Tolerance Bounds for Elastic Functional Data,” Journal of Applied Statistics, 10.1080/02664763.2019.1645818, 2019.
+.sp
+T. Harris, J. D. Tucker, B. Li, and L. Shand, "Elastic depths for detecting shape
+anomalies in functional data," Technometrics, 10.1080/00401706.2020.1811156, 2020.
 .UNINDENT
 .UNINDENT
 .INDENT 0.0

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Functional Principal Least Squares &#8212; fdasrsf 2.2.0 documentation</title>
+    <title>UMAP EFDA Metrics &#8212; fdasrsf 2.2.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -18,8 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Elastic Regression" href="regression.html" />
-    <link rel="prev" title="Elastic Functional Boxplots" href="boxplots.html" /> 
+    <link rel="prev" title="Curve Functions" href="curve_functions.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,13 +30,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="regression.html" title="Elastic Regression"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="boxplots.html" title="Elastic Functional Boxplots"
+          <a href="curve_functions.html" title="Curve Functions"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Functional Principal Least Squares</a></li> 
+        <li class="nav-item nav-item-this"><a href="">UMAP EFDA Metrics</a></li> 
       </ul>
     </div>  
 
@@ -46,42 +42,63 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fPLS">
-<span id="functional-principal-least-squares"></span><h1>Functional Principal Least Squares<a class="headerlink" href="#module-fPLS" title="Permalink to this headline">¶</a></h1>
-<p>Partial Least Squares using SVD</p>
+  <div class="section" id="module-umap_metric">
+<span id="umap-efda-metrics"></span><h1>UMAP EFDA Metrics<a class="headerlink" href="#module-umap_metric" title="Permalink to this headline">¶</a></h1>
+<p>Distance metrics for functions and curves in R^n for use with UMAP
+(<a class="reference external" href="https://github.com/lmcinnes/umap">https://github.com/lmcinnes/umap</a>)</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
-<dt id="fPLS.pls_svd">
-<code class="sig-prename descclassname">fPLS.</code><code class="sig-name descname">pls_svd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">qf</span></em>, <em class="sig-param"><span class="n">qg</span></em>, <em class="sig-param"><span class="n">no</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPLS.html#pls_svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fPLS.pls_svd" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function computes the partial least squares using SVD</p>
+<dt id="umap_metric.efda_distance">
+<code class="sig-prename descclassname">umap_metric.</code><code class="sig-name descname">efda_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">q2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#umap_metric.efda_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>”
+calculates the distances between two curves, where 
+q2 is aligned to q1. In other words calculates the elastic distances/
+This metric is set up for use with UMAP or t-sne from scikit-learn</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> – vector describing time samples</p></li>
-<li><p><strong>qf</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>qg</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>no</strong> – number of components</p></li>
-<li><p><strong>alpha</strong> – amount of smoothing (Default = 0.0 i.e., none)</p></li>
+<li><p><strong>q1</strong> – vector of size N</p></li>
+<li><p><strong>q2</strong> – vector of size N</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>numpy ndarray</p>
+<dd class="field-even"><p>scalar</p>
 </dd>
-<dt class="field-odd">Return wqf</dt>
-<dd class="field-odd"><p>f weight function</p>
-</dd>
-<dt class="field-even">Return wqg</dt>
-<dd class="field-even"><p>g weight function</p>
-</dd>
-<dt class="field-odd">Return alpha</dt>
-<dd class="field-odd"><p>smoothing value</p>
-</dd>
-<dt class="field-even">Return values</dt>
-<dd class="field-even"><p>singular values</p>
+<dt class="field-odd">Return dist</dt>
+<dd class="field-odd"><p>amplitude distance</p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="umap_metric.efda_distance_curve">
+<code class="sig-prename descclassname">umap_metric.</code><code class="sig-name descname">efda_distance_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta1</span></em>, <em class="sig-param"><span class="n">beta2</span></em>, <em class="sig-param"><span class="n">closed</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#umap_metric.efda_distance_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>”
+calculates the distances between two curves, where 
+beta2 is aligned to beta1. In other words calculates the elastic distance.
+This metric is set up for use with UMAP or t-sne from scikit-learn</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta1</strong> – vector of size n*M</p></li>
+<li><p><strong>beta2</strong> – vector of size n*M</p></li>
+<li><p><strong>closed</strong> – <ol class="arabic simple" start="0">
+<li><p>if open curves and (1) if closed curves</p></li>
+</ol>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>scalar</p>
+</dd>
+<dt class="field-odd">Return dist</dt>
+<dd class="field-odd"><p>shape distance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
 </div>
 
 
@@ -92,15 +109,12 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="boxplots.html"
-                        title="previous chapter">Elastic Functional Boxplots</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="regression.html"
-                        title="next chapter">Elastic Regression</a></p>
+  <p class="topless"><a href="curve_functions.html"
+                        title="previous chapter">Curve Functions</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/fPLS.rst.txt"
+      <li><a href="_sources/umap_metric.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -128,13 +142,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="regression.html" title="Elastic Regression"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="boxplots.html" title="Elastic Functional Boxplots"
+          <a href="curve_functions.html" title="Curve Functions"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Functional Principal Least Squares</a></li> 
+        <li class="nav-item nav-item-this"><a href="">UMAP EFDA Metrics</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

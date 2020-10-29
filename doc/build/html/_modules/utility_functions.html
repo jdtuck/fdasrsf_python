@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>utility_functions &#8212; fdasrsf 2.1.11 documentation</title>
+    <title>utility_functions &#8212; fdasrsf 2.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>
@@ -62,6 +62,7 @@
 <span class="kn">import</span> <span class="nn">optimum_reparam_N</span> <span class="k">as</span> <span class="nn">orN</span>
 <span class="kn">import</span> <span class="nn">cbayesian</span> <span class="k">as</span> <span class="nn">bay</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
+<span class="kn">from</span> <span class="nn">fdasrsf.rbfgs</span> <span class="kn">import</span> <span class="n">rlbfgs</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 
@@ -164,15 +165,16 @@
     <span class="k">return</span> <span class="n">f</span></div>
 
 
-<div class="viewcode-block" id="optimum_reparam"><a class="viewcode-back" href="../utility_functions.html#utility_functions.optimum_reparam">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">f1o</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">f2o</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="optimum_reparam"><a class="viewcode-back" href="../utility_functions.html#utility_functions.optimum_reparam">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates the warping to align srsf q2 to q1</span>
 
 <span class="sd">    :param q1: vector of size N or array of NxM samples of first SRSF</span>
 <span class="sd">    :param time: vector of size N describing the sample points</span>
 <span class="sd">    :param q2: vector of size N or array of NxM samples samples of second SRSF</span>
-<span class="sd">    :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot; and &quot;DP2&quot;</span>
+<span class="sd">    :param method: method to apply optimization (default=&quot;DP2&quot;) options are &quot;DP&quot;,&quot;DP2&quot;,&quot;RBFGS&quot;</span>
 <span class="sd">    :param lam: controls the amount of elasticity (default = 0.0)</span>
+<span class="sd">    :param grid_dim: size of the grid, for the DP2 method only (default = 7)</span>
 
 <span class="sd">    :rtype: vector</span>
 <span class="sd">    :return gam: describing the warping function used to align q2 with q1</span>
@@ -182,27 +184,50 @@
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparam</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                    <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+                                       <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparam_N</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+                                         <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparam_N2</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+                                          <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP2&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">orN2</span><span class="o">.</span><span class="n">coptimum_reparam</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                    <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">orN2</span><span class="o">.</span><span class="n">coptimum_reparamN</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">orN2</span><span class="o">.</span><span class="n">coptimum_reparamN2</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
-                                        <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">)</span>
+                                          <span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;RBFGS&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">rlbfgs</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">time</span><span class="p">)</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">gammaOpt</span>
+
+        <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">q2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">q2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">rlbfgs</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">time</span><span class="p">)</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+                <span class="n">gam</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">gammaOpt</span>
+    
+        <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">q2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">q2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">rlbfgs</span><span class="p">(</span><span class="n">q1</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">q2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">time</span><span class="p">)</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+                <span class="n">gam</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">gammaOpt</span>
+           
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid Optimization Method&#39;</span><span class="p">)</span>
 
@@ -236,12 +261,12 @@
     <span class="k">return</span> <span class="n">gam</span></div>
 
 
-<span class="k">def</span> <span class="nf">distmat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">f1</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">idx</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">distmat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">f1</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">method</span><span class="p">):</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">dp</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
     <span class="n">da</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
-        <span class="n">Dy</span><span class="p">,</span><span class="n">Dx</span> <span class="o">=</span> <span class="n">elastic_distance</span><span class="p">(</span><span class="n">f</span><span class="p">[:,</span><span class="n">jj</span><span class="p">],</span> <span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+        <span class="n">Dy</span><span class="p">,</span><span class="n">Dx</span> <span class="o">=</span> <span class="n">elastic_distance</span><span class="p">(</span><span class="n">f</span><span class="p">[:,</span><span class="n">jj</span><span class="p">],</span> <span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
 
         <span class="n">da</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dy</span>
         <span class="n">dp</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dx</span>
@@ -249,12 +274,13 @@
     <span class="k">return</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="elastic_depth"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_depth">[docs]</a><span class="k">def</span> <span class="nf">elastic_depth</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="elastic_depth"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_depth">[docs]</a><span class="k">def</span> <span class="nf">elastic_depth</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates the elastic depth between functions in matrix f</span>
 
 <span class="sd">    :param f: matrix of size MxN (M time points for N functions)</span>
 <span class="sd">    :param time: vector of size M describing the sample points</span>
+<span class="sd">    :param method: method to apply optimization (default=&quot;DP2&quot;) options are &quot;DP&quot;,&quot;DP2&quot;,&quot;RBFGS&quot;</span>
 <span class="sd">    :param lam: controls the elasticity (default = 0.0)</span>
 
 <span class="sd">    :rtype: scalar</span>
@@ -269,13 +295,13 @@
     <span class="n">phs_dist</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">fns</span><span class="p">,</span><span class="n">fns</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">distmat</span><span class="p">)(</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fns</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">distmat</span><span class="p">)(</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fns</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fns</span><span class="p">):</span>
             <span class="n">amp_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">phs_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fns</span><span class="p">):</span>
-            <span class="n">amp_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">phs_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">distmat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">amp_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">phs_dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">distmat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
     
     <span class="n">amp_dist</span> <span class="o">=</span> <span class="n">amp_dist</span> <span class="o">+</span> <span class="n">amp_dist</span><span class="o">.</span><span class="n">T</span>
     <span class="n">phs_dist</span> <span class="o">=</span> <span class="n">phs_dist</span> <span class="o">+</span> <span class="n">phs_dist</span><span class="o">.</span><span class="n">T</span>
@@ -287,7 +313,7 @@
     <span class="k">return</span> <span class="n">amp</span><span class="p">,</span> <span class="n">phase</span></div>
 
 
-<div class="viewcode-block" id="elastic_distance"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_distance">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="elastic_distance"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_distance">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;&quot;</span>
 <span class="sd">    calculates the distances between function, where f1 is aligned to</span>
 <span class="sd">    f2. In other words</span>
@@ -296,6 +322,7 @@
 <span class="sd">    :param f1: vector of size N</span>
 <span class="sd">    :param f2: vector of size N</span>
 <span class="sd">    :param time: vector of size N describing the sample points</span>
+<span class="sd">    :param method: method to apply optimization (default=&quot;DP2&quot;) options are &quot;DP&quot;,&quot;DP2&quot;,&quot;RBFGS&quot;</span>
 <span class="sd">    :param lam: controls the elasticity (default = 0.0)</span>
 
 <span class="sd">    :rtype: scalar</span>
@@ -1013,7 +1040,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.1.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>

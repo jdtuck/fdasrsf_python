@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Utility Functions &#8212; fdasrsf 2.1.11 documentation</title>
+    <title>Utility Functions &#8212; fdasrsf 2.2.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="geodesic.html" title="SRVF Geodesic Computation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Utility Functions</a></li> 
       </ul>
     </div>  
@@ -166,13 +166,14 @@ with N samples</p>
 
 <dl class="py function">
 <dt id="utility_functions.elastic_depth">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">elastic_depth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.elastic_depth" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">elastic_depth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP2'</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.elastic_depth" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the elastic depth between functions in matrix f</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – matrix of size MxN (M time points for N functions)</p></li>
 <li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
+<li><p><strong>method</strong> – method to apply optimization (default=”DP2”) options are “DP”,”DP2”,”RBFGS”</p></li>
 <li><p><strong>lam</strong> – controls the elasticity (default = 0.0)</p></li>
 </ul>
 </dd>
@@ -190,7 +191,7 @@ with N samples</p>
 
 <dl class="py function">
 <dt id="utility_functions.elastic_distance">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">elastic_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f1</span></em>, <em class="sig-param"><span class="n">f2</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">elastic_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f1</span></em>, <em class="sig-param"><span class="n">f2</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP2'</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>”
 calculates the distances between function, where f1 is aligned to
 f2. In other words
@@ -201,6 +202,7 @@ calculates the elastic distances</p>
 <li><p><strong>f1</strong> – vector of size N</p></li>
 <li><p><strong>f2</strong> – vector of size N</p></li>
 <li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
+<li><p><strong>method</strong> – method to apply optimization (default=”DP2”) options are “DP”,”DP2”,”RBFGS”</p></li>
 <li><p><strong>lam</strong> – controls the elasticity (default = 0.0)</p></li>
 </ul>
 </dd>
@@ -342,7 +344,7 @@ calculates the elastic distances</p>
 
 <dl class="py function">
 <dt id="utility_functions.optimum_reparam">
-<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q2</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">f1o</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">f2o</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">utility_functions.</code><code class="sig-name descname">optimum_reparam</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q1</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q2</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP2'</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">grid_dim</span><span class="o">=</span><span class="default_value">7</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the warping to align srsf q2 to q1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -350,8 +352,9 @@ calculates the elastic distances</p>
 <li><p><strong>q1</strong> – vector of size N or array of NxM samples of first SRSF</p></li>
 <li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
 <li><p><strong>q2</strong> – vector of size N or array of NxM samples samples of second SRSF</p></li>
-<li><p><strong>method</strong> – method to apply optimization (default=”DP”) options are “DP” and “DP2”</p></li>
+<li><p><strong>method</strong> – method to apply optimization (default=”DP2”) options are “DP”,”DP2”,”RBFGS”</p></li>
 <li><p><strong>lam</strong> – controls the amount of elasticity (default = 0.0)</p></li>
+<li><p><strong>grid_dim</strong> – size of the grid, for the DP2 method only (default = 7)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -624,7 +627,7 @@ from elastic regression model</p>
         <li class="right" >
           <a href="geodesic.html" title="SRVF Geodesic Computation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Utility Functions</a></li> 
       </ul>
     </div>

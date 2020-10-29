@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Functional Alignment &#8212; fdasrsf 2.1.11 documentation</title>
+    <title>Functional Alignment &#8212; fdasrsf 2.2.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>  
@@ -218,7 +218,7 @@ extracted from the principal components of the srsfs</p>
 
 <dl class="py method">
 <dt id="time_warping.fdawarp.multiple_align_functions">
-<code class="sig-name descname">multiple_align_functions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mu</span></em>, <em class="sig-param"><span class="n">omethod</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.multiple_align_functions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.multiple_align_functions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">multiple_align_functions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mu</span></em>, <em class="sig-param"><span class="n">omethod</span><span class="o">=</span><span class="default_value">'DP2'</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">grid_dim</span><span class="o">=</span><span class="default_value">7</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.multiple_align_functions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.multiple_align_functions" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic square-root
 slope (srsf) framework.</p>
 <dl class="simple">
@@ -230,11 +230,12 @@ slope (srsf) framework.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mu</strong> – vector of function to align to</p></li>
-<li><p><strong>omethod</strong> – optimization method (DP, DP2) (default = DP)</p></li>
+<li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
 <li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
+<li><p><strong>grid_dim</strong> – size of the grid, for the DP2 method only (default = 7)</p></li>
 </ul>
 </dd>
 </dl>
@@ -249,18 +250,19 @@ slope (srsf) framework.</p>
 
 <dl class="py method">
 <dt id="time_warping.fdawarp.srsf_align">
-<code class="sig-name descname">srsf_align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">omethod</span><span class="o">=</span><span class="default_value">'DP'</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">srsf_align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">omethod</span><span class="o">=</span><span class="default_value">'DP2'</span></em>, <em class="sig-param"><span class="n">smoothdata</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">grid_dim</span><span class="o">=</span><span class="default_value">7</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic
 square-root slope (srsf) framework.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median (options = “mean” or “median”) (default=”mean”)</p></li>
-<li><p><strong>omethod</strong> – optimization method (DP, DP2) (default = DP)</p></li>
+<li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP2)</p></li>
 <li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
+<li><p><strong>grid_dim</strong> – size of the grid, for the DP2 method only (default = 7)</p></li>
 </ul>
 </dd>
 </dl>
@@ -291,7 +293,7 @@ unique distribution <a class="footnote-reference brackets" href="#id5" id="id2">
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>New code should use the <code class="docutils literal notranslate"><span class="pre">normal</span></code> method of a <code class="docutils literal notranslate"><span class="pre">default_rng()</span></code>
-instance instead; see <cite>random-quick-start</cite>.</p>
+instance instead; please see the <span class="xref std std-ref">random-quick-start</span>.</p>
 </div>
 <dl class="simple">
 <dt>loc<span class="classifier">float or array_like of floats</span></dt><dd><p>Mean (“centre”) of the distribution.</p>
@@ -504,7 +506,7 @@ If no argument is given a single Python float is returned.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.1.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>
