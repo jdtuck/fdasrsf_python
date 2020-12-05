@@ -299,7 +299,13 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
     M = time.shape[0]
     psi = sqrt(diff(gam) * (M - 1))
     mu = ones(M - 1)
-    Dx = real(arccos(sum(mu * psi) / double(M - 1)))
+    q1dotq2 = sum(mu * psi) / double(M - 1)
+    if q1dotq2 > 1:
+        q1dotq2 = 1
+    elif q1dotq2 < -1:
+        q1dotq2 = -1
+
+    Dx = real(arccos(q1dotq2))
 
     return Dy, Dx
 
@@ -507,7 +513,7 @@ def cumtrapzmid(x, y, c, mid):
 
     :param x: vector of size N describing the time samples
     :param y: vector of size N describing the function
-    :param c: midpoint
+    :param c: midpointtic
     :param mid: midpiont location
 
     :rtype: vector
