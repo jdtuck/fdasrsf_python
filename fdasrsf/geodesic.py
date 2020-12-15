@@ -54,11 +54,11 @@ def geod_sphere(beta1, beta2, k=5):
             PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
             PsiX[:, :, tau] = cf.q_to_curve(PsiQ[:, :, tau])
 
-        path = PsiQ
+        path = PsiX
     else:
         path = 0
 
-    return(dist, path, O1)
+    return(dist, path, PsiQ)
 
 
 def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
