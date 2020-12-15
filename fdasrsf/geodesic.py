@@ -29,8 +29,6 @@ def geod_sphere(beta1, beta2, k=5):
 
     """
     lam = 0.0
-    elastic = 1
-    rotation = 1
     returnpath = 1
     n, T = beta1.shape
 
@@ -43,31 +41,8 @@ def geod_sphere(beta1, beta2, k=5):
     beta2 = beta2 - tile(centroid2, [T, 1]).T
 
     q1 = cf.curve_to_q(beta1)
-    if rotation:
-        beta2, O1, tau = cf.find_rotation_and_seed_coord(beta1, beta2)
-        q2 = cf.curve_to_q(beta2)
-    else:
-        O1 = eye(2)
-        q2 = cf.curve_to_q(beta2)
-
-    if elastic:
-        # Find the optimal coorespondence
-        gam = cf.optimum_reparam_curve(q2, q1, lam)
-        gamI = uf.invertGamma(gam)
-        # Applying optimal re-parameterization to the second curve
-        beta2n = cf.group_action_by_gamma_coord(beta2, gamI)
-        q2n = cf.curve_to_q(beta2n)
-
-        if rotation:
-            beta2n, O2, tau = cf.find_rotation_and_seed_coord(beta1, beta2n)
-            centroid2 = cf.calculatecentroid(beta2n)
-            beta2n = beta2n - tile(centroid2, [T, 1]).T
-            q2n = cf.curve_to_q(beta2n)
-            O = O1.dot(O2)
-    else:
-        q2n = q2
-        O = O1
-
+    beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(beta1, beta2)
+    
     # Forming geodesic between the registered curves
     dist = arccos(cf.innerprod_q2(q1, q2n))
 
@@ -83,7 +58,7 @@ def geod_sphere(beta1, beta2, k=5):
     else:
         path = 0
 
-    return(dist, path, O)
+    return(dist, path, O1)
 
 
 def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
