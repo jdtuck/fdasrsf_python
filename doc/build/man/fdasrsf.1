@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Oct 28, 2020" "2.2" "fdasrsf"
+.TH "FDASRSF" "1" "Jan 29, 2021" "2.2" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -1775,7 +1775,7 @@ Mean and Variance
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B class curve_stats.fdacurve(beta, mode=\(aqO\(aq, N=200, scale=True)
+.B class curve_stats.fdacurve(beta, mode=\(aqO\(aq, N=200, scale=False)
 This class provides alignment methods for open and closed curves using the SRVF framework
 .sp
 Usage: obj = fdacurve(beta, mode, N, scale)
@@ -1784,24 +1784,28 @@ in R^M
 :param mode: Open (\(aqO\(aq) or closed curve (\(aqC\(aq) (default \(aqO\(aq)
 :param N: resample curve to N points
 :param scale: scale curve to length 1 (true/false)
-:param q:        (n,T,K) matrix defining n dimensional srvf on T samples with K srvfs
-:param betan:     aligned curves
-:param qn:        aligned srvfs
-:param basis:     calculated basis
-:param beta_mean: karcher mean curve
-:param q_mean:    karcher mean srvf
-:param gams:      warping functions
-:param v:         shooting vectors
-:param C:         karcher covariance
-:param s:         pca singular values
-:param U:         pca singular vectors
-:param coef:      pca coefficients
-:param qun:       cost function
-:param samples:   random samples
-:param gamr:      random warping functions
-:param cent:      center
-:param scale:     scale
-:param E:         energy
+:param q:           (n,T,K) matrix defining n dimensional srvf on T samples with K srvfs
+:param betan:       aligned curves
+:param qn:          aligned srvfs
+:param basis:       calculated basis
+:param beta_mean:   karcher mean curve
+:param q_mean:      karcher mean srvf
+:param gams:        warping functions
+:param v:           shooting vectors
+:param C:           karcher covariance
+:param s:           pca singular values
+:param U:           pca singular vectors
+:param coef:        pca coefficients
+:param qun:         cost function
+:param samples:     random samples
+:param gamr:        random warping functions
+:param cent:        center
+:param scale:       scale
+:param len:         length of curve
+:param len_q:       length of srvf
+:param mean_scale   mean length
+:param mean_scale_q mean length srvf
+:param E:           energy
 .sp
 Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
 Date   :  26\-Aug\-2020
@@ -2364,7 +2368,7 @@ cumulative trapezoidal numerical integration taken from midpoint
 .IP \(bu 2
 \fBy\fP \-\- vector of size N describing the function
 .IP \(bu 2
-\fBc\fP \-\- midpoint
+\fBc\fP \-\- midpointtic
 .IP \(bu 2
 \fBmid\fP \-\- midpiont location
 .UNINDENT
@@ -2912,7 +2916,7 @@ center coordinates
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.curve_to_q(beta, scale=True, mode=\(aqO\(aq)
+.B curve_functions.curve_to_q(beta, mode=\(aqO\(aq)
 This function converts curve beta to srvf q
 .INDENT 7.0
 .TP
@@ -2920,8 +2924,6 @@ This function converts curve beta to srvf q
 .INDENT 7.0
 .IP \(bu 2
 \fBbeta\fP \-\- numpy ndarray of shape (2,M) of M samples
-.IP \(bu 2
-\fBscale\fP \-\- scale curve to length 1
 .IP \(bu 2
 \fBmode\fP \-\- Open (\(aqO\(aq) or closed curve (\(aqC\(aq) (default \(aqO\(aq)
 .UNINDENT
@@ -2932,8 +2934,11 @@ numpy ndarray
 .B Return q
 srvf of curve
 .TP
-.B Return len
+.B Return lenb
 length of curve
+.TP
+.B Return lenq
+length of srvf
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -2973,11 +2978,12 @@ rotation matrix
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.elastic_distance_curve(beta1, beta2, closed=0, method=\(aqDP\(aq)
+.B curve_functions.elastic_distance_curve(beta1, beta2, closed=0, scale=False, method=\(aqDP\(aq)
 Calculates the two elastic distances between two curves
 :param beta1: numpy ndarray of shape (2,M) of M samples
 :param beta2: numpy ndarray of shape (2,M) of M samples
 :param closed: open (0) or closed (1) curve (default=0)
+:param scale: include scale (default=False)
 :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .INDENT 7.0
 .TP
@@ -2985,7 +2991,7 @@ Calculates the two elastic distances between two curves
 scalar
 .TP
 .B Return dist
-distance
+shape distance
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -3092,6 +3098,38 @@ registered (seed) shapes w.r.t. beta1
 \fBq1\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBq2\fP \-\- numpy ndarray of shape (2,M) of M samples
+.UNINDENT
+.TP
+.B Return type
+numpy ndarray
+.TP
+.B Return beta2new
+optimal rotated beta2 to beta1
+.TP
+.B Return O
+rotation matrix
+.TP
+.B Return tau
+seed
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B curve_functions.find_rotation_and_seed_unique(q1, q2, closed=0, method=\(aqDP\(aq)
+This function returns a candidate list of optimally oriented and
+registered (seed) shapes w.r.t. beta1
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBbeta1\fP \-\- numpy ndarray of shape (2,M) of M samples
+.IP \(bu 2
+\fBbeta2\fP \-\- numpy ndarray of shape (2,M) of M samples
+.IP \(bu 2
+\fBclosed\fP \-\- Open (0) or Closed (1)
+.IP \(bu 2
+\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
 .TP
 .B Return type

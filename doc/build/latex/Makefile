@@ -3,34 +3,38 @@
 ALLDOCS = $(basename $(wildcard *.tex))
 ALLPDF = $(addsuffix .pdf,$(ALLDOCS))
 ALLDVI = $(addsuffix .dvi,$(ALLDOCS))
+ALLXDV =
 ALLPS  = $(addsuffix .ps,$(ALLDOCS))
 
 # Prefix for archive names
 ARCHIVEPREFIX =
-# Additional LaTeX options
-LATEXOPTS =
-# format: pdf or dvi
+# Additional LaTeX options (passed via variables in latexmkrc/latexmkjarc file)
+export LATEXOPTS ?=
+# Additional latexmk options
+LATEXMKOPTS ?=
+# format: pdf or dvi (used only by archive targets)
 FMT = pdf
 
-LATEX = latex
-PDFLATEX = pdflatex
-MAKEINDEX = makeindex
+LATEX = latexmk -dvi
+PDFLATEX = latexmk -pdf -dvi- -ps-
 
+
+%.dvi: %.tex FORCE_MAKE
+	$(LATEX) $(LATEXMKOPTS) '$<'
+
+%.ps: %.dvi
+	dvips '$<'
+
+%.pdf: %.tex FORCE_MAKE
+	$(PDFLATEX) $(LATEXMKOPTS) '$<'
 
 all: $(ALLPDF)
-all-pdf: $(ALLPDF)
+
 all-dvi: $(ALLDVI)
+
 all-ps: $(ALLPS)
 
-all-pdf-ja:
-	for f in *.pdf *.png *.gif *.jpg *.jpeg; do extractbb $$f; done
-	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
-	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
-	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
-	-for f in *.idx; do mendex -U -f -d "`basename $$f .idx`.dic" -s python.ist $$f; done
-	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
-	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
-	for f in *.dvi; do dvipdfmx $$f; done
+all-pdf: $(ALLPDF)
 
 zip: all-$(FMT)
 	mkdir $(ARCHIVEPREFIX)docs-$(FMT)
@@ -53,29 +57,8 @@ bz2: tar
 xz: tar
 	xz -9 -k $(ARCHIVEPREFIX)docs-$(FMT).tar
 
-# The number of LaTeX runs is quite conservative, but I don't expect it
-# to get run often, so the little extra time won't hurt.
-%.dvi: %.tex
-	$(LATEX) $(LATEXOPTS) '$<'
-	$(LATEX) $(LATEXOPTS) '$<'
-	$(LATEX) $(LATEXOPTS) '$<'
-	-$(MAKEINDEX) -s python.ist '$(basename $<).idx'
-	$(LATEX) $(LATEXOPTS) '$<'
-	$(LATEX) $(LATEXOPTS) '$<'
-
-%.pdf: %.tex
-	$(PDFLATEX) $(LATEXOPTS) '$<'
-	$(PDFLATEX) $(LATEXOPTS) '$<'
-	$(PDFLATEX) $(LATEXOPTS) '$<'
-	-$(MAKEINDEX) -s python.ist '$(basename $<).idx'
-	$(PDFLATEX) $(LATEXOPTS) '$<'
-	$(PDFLATEX) $(LATEXOPTS) '$<'
-
-%.ps: %.dvi
-	dvips '$<'
-
 clean:
-	rm -f *.log *.ind *.aux *.toc *.syn *.idx *.out *.ilg *.pla *.ps *.tar *.tar.gz *.tar.bz2 *.tar.xz $(ALLPDF) $(ALLDVI)
+	rm -f *.log *.ind *.aux *.toc *.syn *.idx *.out *.ilg *.pla *.ps *.tar *.tar.gz *.tar.bz2 *.tar.xz $(ALLPDF) $(ALLDVI) $(ALLXDV) *.fls *.fdb_latexmk
 
 .PHONY: all all-pdf all-dvi all-ps clean zip tar gz bz2 xz
-.PHONY: all-pdf-ja
+.PHONY: FORCE_MAKE

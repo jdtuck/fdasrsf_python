@@ -5,15 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>utility_functions &#8212; fdasrsf 2.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <title>utility_functions &#8212; fdasrsf 2.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
@@ -28,7 +27,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>
@@ -341,7 +340,13 @@
     <span class="n">M</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">psi</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">mu</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">Dx</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">arccos</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="n">psi</span><span class="p">)</span> <span class="o">/</span> <span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+    <span class="n">q1dotq2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="n">psi</span><span class="p">)</span> <span class="o">/</span> <span class="n">double</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">q1dotq2</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">q1dotq2</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">q1dotq2</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">q1dotq2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="n">Dx</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">arccos</span><span class="p">(</span><span class="n">q1dotq2</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">Dx</span></div>
 
@@ -549,7 +554,7 @@
 
 <span class="sd">    :param x: vector of size N describing the time samples</span>
 <span class="sd">    :param y: vector of size N describing the function</span>
-<span class="sd">    :param c: midpoint</span>
+<span class="sd">    :param c: midpointtic</span>
 <span class="sd">    :param mid: midpiont location</span>
 
 <span class="sd">    :rtype: vector</span>
@@ -1040,14 +1045,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>
 </html>

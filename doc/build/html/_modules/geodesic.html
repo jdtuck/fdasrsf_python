@@ -5,15 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geodesic &#8212; fdasrsf 2.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <title>geodesic &#8212; fdasrsf 2.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
@@ -28,7 +27,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">geodesic</a></li> 
       </ul>
@@ -71,8 +70,6 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lam</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">elastic</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">rotation</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">returnpath</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">n</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">beta1</span><span class="o">.</span><span class="n">shape</span>
 
@@ -85,31 +82,8 @@
     <span class="n">beta2</span> <span class="o">=</span> <span class="n">beta2</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid2</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 
     <span class="n">q1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rotation</span><span class="p">:</span>
-        <span class="n">beta2</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">)</span>
-        <span class="n">q2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">O1</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">q2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">elastic</span><span class="p">:</span>
-        <span class="c1"># Find the optimal coorespondence</span>
-        <span class="n">gam</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">optimum_reparam_curve</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
-        <span class="n">gamI</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
-        <span class="c1"># Applying optimal re-parameterization to the second curve</span>
-        <span class="n">beta2n</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">group_action_by_gamma_coord</span><span class="p">(</span><span class="n">beta2</span><span class="p">,</span> <span class="n">gamI</span><span class="p">)</span>
-        <span class="n">q2n</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2n</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">rotation</span><span class="p">:</span>
-            <span class="n">beta2n</span><span class="p">,</span> <span class="n">O2</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2n</span><span class="p">)</span>
-            <span class="n">centroid2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta2n</span><span class="p">)</span>
-            <span class="n">beta2n</span> <span class="o">=</span> <span class="n">beta2n</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid2</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-            <span class="n">q2n</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2n</span><span class="p">)</span>
-            <span class="n">O</span> <span class="o">=</span> <span class="n">O1</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">O2</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">q2n</span> <span class="o">=</span> <span class="n">q2</span>
-        <span class="n">O</span> <span class="o">=</span> <span class="n">O1</span>
-
+    <span class="n">beta2</span><span class="p">,</span> <span class="n">q2n</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">)</span>
+    
     <span class="c1"># Forming geodesic between the registered curves</span>
     <span class="n">dist</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2n</span><span class="p">))</span>
 
@@ -121,11 +95,11 @@
             <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="o">-</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span><span class="p">)</span><span class="o">/</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
             <span class="n">PsiX</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
 
-        <span class="n">path</span> <span class="o">=</span> <span class="n">PsiQ</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">PsiX</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">O</span><span class="p">)</span></div>
+    <span class="k">return</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">PsiQ</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="path_straightening"><a class="viewcode-back" href="../geodesic.html#geodesic.path_straightening">[docs]</a><span class="k">def</span> <span class="nf">path_straightening</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">betamid</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">&quot;rand&quot;</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -580,14 +554,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">geodesic</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>
 </html>

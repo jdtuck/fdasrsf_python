@@ -5,15 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Functional Alignment &#8212; fdasrsf 2.2.0 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <title>Functional Alignment &#8212; fdasrsf 2.2.2 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>  
@@ -62,7 +61,7 @@ The functions are aligned to the principal components</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>num_comp</strong> – number of fPCA components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
@@ -125,7 +124,7 @@ principal least squares</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>comps</strong> – number of fPLS components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>delta</strong> – gradient step size</p></li>
 <li><p><strong>max_itr</strong> – maximum number of iterations</p></li>
 </ul>
@@ -195,7 +194,7 @@ extracted from the principal components of the srvfs</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
-<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – sort samples (default = T)</p></li>
+<li><p><strong>sort_samples</strong> (<em>bool</em>) – sort samples (default = T)</p></li>
 </ul>
 </dd>
 </dl>
@@ -231,7 +230,7 @@ slope (srsf) framework.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mu</strong> – vector of function to align to</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
-<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
@@ -258,7 +257,7 @@ square-root slope (srsf) framework.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median (options = “mean” or “median”) (default=”mean”)</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP2)</p></li>
-<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
@@ -506,13 +505,13 @@ If no argument is given a single Python float is returned.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>
 </html>

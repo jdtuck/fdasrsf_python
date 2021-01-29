@@ -8,6 +8,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 from numpy import arccos, sin, cos, linspace, zeros, sqrt
 from scipy.integrate import trapz
 
+
 def inv_exp_map(Psi, psi):
     tmp = inner_product(Psi,psi)
     if tmp > 1:
@@ -30,11 +31,13 @@ def exp_map(psi, v):
     expgam = cos(v_norm) * psi + sin(v_norm) * v / v_norm
     return expgam
 
+
 def inner_product(psi1, psi2):
     M = psi1.shape[0]
     t = linspace(0,1,M)
     ip = trapz(psi1*psi2, t)
     return ip
+
 
 def L2norm(psi):
     M = psi.shape[0]

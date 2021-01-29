@@ -5,15 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Curve Registration &#8212; fdasrsf 2.2.0 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <title>Curve Registration &#8212; fdasrsf 2.2.2 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Registration</a></li> 
       </ul>
     </div>  
@@ -53,7 +52,7 @@ Mean and Variance</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py class">
 <dt id="curve_stats.fdacurve">
-<em class="property">class </em><code class="sig-prename descclassname">curve_stats.</code><code class="sig-name descname">fdacurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'O'</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">curve_stats.</code><code class="sig-name descname">fdacurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'O'</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides alignment methods for open and closed curves using the SRVF framework</p>
 <p>Usage: obj = fdacurve(beta, mode, N, scale)
 :param beta: numpy ndarray of shape (n, M, N) describing N curves
@@ -61,24 +60,28 @@ in R^M
 :param mode: Open (‘O’) or closed curve (‘C’) (default ‘O’)
 :param N: resample curve to N points
 :param scale: scale curve to length 1 (true/false)
-:param q:        (n,T,K) matrix defining n dimensional srvf on T samples with K srvfs
-:param betan:     aligned curves
-:param qn:        aligned srvfs
-:param basis:     calculated basis
-:param beta_mean: karcher mean curve
-:param q_mean:    karcher mean srvf
-:param gams:      warping functions
-:param v:         shooting vectors
-:param C:         karcher covariance
-:param s:         pca singular values
-:param U:         pca singular vectors
-:param coef:      pca coefficients
-:param qun:       cost function
-:param samples:   random samples
-:param gamr:      random warping functions
-:param cent:      center
-:param scale:     scale
-:param E:         energy</p>
+:param q:           (n,T,K) matrix defining n dimensional srvf on T samples with K srvfs
+:param betan:       aligned curves
+:param qn:          aligned srvfs
+:param basis:       calculated basis
+:param beta_mean:   karcher mean curve
+:param q_mean:      karcher mean srvf
+:param gams:        warping functions
+:param v:           shooting vectors
+:param C:           karcher covariance
+:param s:           pca singular values
+:param U:           pca singular vectors
+:param coef:        pca coefficients
+:param qun:         cost function
+:param samples:     random samples
+:param gamr:        random warping functions
+:param cent:        center
+:param scale:       scale
+:param len:         length of curve
+:param len_q:       length of srvf
+:param mean_scale   mean length
+:param mean_scale_q mean length srvf
+:param E:           energy</p>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  26-Aug-2020</p>
 <dl class="py method">
@@ -239,13 +242,13 @@ Generator.standard_normal: which should be used for new code.</p>
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Registration</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>
 </html>
