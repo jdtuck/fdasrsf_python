@@ -47,7 +47,7 @@ def resamplecurve(x, N=100, mode='O'):
         xn[r, :] = s(newdel)
 
     if mode == 'C':
-        q = curve_to_q(xn)
+        q = curve_to_q(xn)[0]
         qn = project_curve(q)
         xn = q_to_curve(qn)
 
@@ -79,17 +79,17 @@ def calculatecentroid(beta):
     return (centroid)
 
 
-def curve_to_q(beta,scale=True,mode='O'):
+def curve_to_q(beta,mode='O'):
     """
     This function converts curve beta to srvf q
 
     :param beta: numpy ndarray of shape (2,M) of M samples
-    :param scale: scale curve to length 1
     :param mode: Open ('O') or closed curve ('C') (default 'O')
 
     :rtype: numpy ndarray
     :return q: srvf of curve
-    :return len: length of curve
+    :return lenb: length of curve
+    :return lenq: length of srvf
 
     """
     n, T = beta.shape
@@ -97,6 +97,7 @@ def curve_to_q(beta,scale=True,mode='O'):
     v = v[1]
 
     q = zeros((n, T))
+    lenb = sqrt(innerprod_q2(v,v))
     for i in range(0, T):
         L = sqrt(norm(v[:, i]))
         if L > 0.0001:
@@ -104,14 +105,13 @@ def curve_to_q(beta,scale=True,mode='O'):
         else:
             q[:, i] = v[:, i] * 0.0001
 
-    len1 = sqrt(innerprod_q2(q,q))
-    if scale:
-        q = q / sqrt(innerprod_q2(q, q))
+    lenq = sqrt(innerprod_q2(q,q))
+    q = q / lenq
     
     if mode == 'C':
         q = project_curve(q)
 
-    return q
+    return (q, lenb, lenq)
 
 
 def q_to_curve(q,scale=1):
@@ -132,7 +132,9 @@ def q_to_curve(q,scale=1):
 
     beta = zeros((n,T))
     for i in range(0,n):
-        beta[i,:] = cumtrapz(q[i, :] * qnorm * scale, initial=0)/T
+        beta[i,:] = cumtrapz(q[i, :] * qnorm, initial=0)/T
+
+    beta = scale*beta
 
     return (beta)
 
@@ -383,6 +385,65 @@ def shift_f(f, tau):
     return (fn)
 
 
+def find_rotation_and_seed_unique(q1, q2, closed=0, method="DP"):
+    """
+    This function returns a candidate list of optimally oriented and
+    registered (seed) shapes w.r.t. beta1
+
+    :param beta1: numpy ndarray of shape (2,M) of M samples
+    :param beta2: numpy ndarray of shape (2,M) of M samples
+    :param closed: Open (0) or Closed (1)
+    :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
+
+    :rtype: numpy ndarray
+    :return beta2new: optimal rotated beta2 to beta1
+    :return O: rotation matrix
+    :return tau: seed
+    """
+
+    T = q1.shape[1]
+
+    scl = 4.
+    minE = 1000
+    if closed == 1:
+        end_idx = int(floor(T/scl))
+        scl = 4
+    else:
+        end_idx = 0
+    
+    for ctr in range(0, end_idx+1):
+        if closed == 1:
+            q2n = shift_f(q2, scl*ctr)
+        else:
+            q2n = q2.copy()
+        
+        q2new, R = find_best_rotation(q1, q2n)
+
+        # Reparam
+        if norm(q1-q2new,'fro') > 0.0001:
+            gam = optimum_reparam_curve(q2new, q1, 0.0, method)
+            gamI = uf.invertGamma(gam)
+            p2n = q_to_curve(q2n)
+            p2n = group_action_by_gamma_coord(p2n,gamI)
+            q2new = curve_to_q(p2n)[0]
+            if closed == 1:
+                q2new = project_curve(q2new)
+        else:
+            gamI = linspace(0,1,T)
+        
+        tmp = innerprod_q2(q1,q2new)
+        if tmp > 1:
+            tmp = 1
+        Ec = arccos(tmp)
+        if Ec < minE:
+            Rbest = R
+            q2best = q2new
+            gamIbest = gamI
+            minE = Ec
+
+    return (q2best, Rbest, gamIbest)
+
+
 def find_rotation_and_seed_coord(beta1, beta2, closed=0, method="DP"):
     """
     This function returns a candidate list of optimally oriented and
@@ -400,7 +461,7 @@ def find_rotation_and_seed_coord(beta1, beta2, closed=0, method="DP"):
     """
 
     n, T = beta1.shape
-    q1 = curve_to_q(beta1)
+    q1 = curve_to_q(beta1)[0]
     scl = 4.
     minE = 1000
     if closed == 1:
@@ -416,14 +477,14 @@ def find_rotation_and_seed_coord(beta1, beta2, closed=0, method="DP"):
             beta2n = beta2
         
         beta2new, R = find_best_rotation(beta1, beta2n)
-        q2new = curve_to_q(beta2new)
+        q2new = curve_to_q(beta2new)[0]
 
         # Reparam
         if norm(q1-q2new,'fro') > 0.0001:
             gam = optimum_reparam_curve(q2new, q1, 0.0, method)
             gamI = uf.invertGamma(gam)
             beta2new = group_action_by_gamma_coord(beta2new,gamI)
-            q2new = curve_to_q(beta2new)
+            q2new = curve_to_q(beta2new)[0]
             if closed == 1:
                 q2new = project_curve(q2new)
         else:
@@ -600,7 +661,7 @@ def pre_proc_curve(beta, T=100):
 
     """
     beta = resamplecurve(beta, T)
-    q = curve_to_q(beta)
+    q = curve_to_q(beta)[0]
     qnew = project_curve(q)
     x = q_to_curve(qnew)
     a = -1 * calculatecentroid(x)
@@ -651,7 +712,7 @@ def inverse_exp_coord(beta1, beta2, closed=0, method="DP"):
     centroid2 = calculatecentroid(beta2)
     beta2 = beta2 - tile(centroid2, [T, 1]).T
 
-    q1 = curve_to_q(beta1)
+    q1 = curve_to_q(beta1)[0]
 
     # Iteratively optimize over SO(n) x Gamma
     beta2n, q2n, O_hat, gamI = find_rotation_and_seed_coord(beta1, beta2, closed, method)
@@ -705,7 +766,7 @@ def inverse_exp(q1, q2, beta2):
 
     # Applying optimal re-parameterization to the second curve
     beta2 = group_action_by_gamma_coord(beta2, gamI)
-    q2 = curve_to_q(beta2)
+    q2 = curve_to_q(beta2)[0]
 
     # Optimize over SO(n)
     q2, O2, tau = find_rotation_and_seed_q(q1, q2)
@@ -875,7 +936,7 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
 
         beta1 = group_action_by_gamma_coord(beta1, gamma)
         beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
-        q1 = curve_to_q(beta1)
+        q1 = curve_to_q(beta1)[0]
         f[ii] = innerprod_q2(q1, bt) - Y
 
         if fabs(f[ii]) < 1e-5:

@@ -5,7 +5,8 @@ Mean and Variance
 moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
-from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty, cov, inf, mean, arange
+from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty, cov, inf, mean, arange, prod
+from numpy import append, arccos, cumsum, sum
 from numpy.linalg import svd
 from numpy.random import randn
 import fdasrsf.curve_functions as cf
@@ -25,36 +26,40 @@ class fdacurve:
     :param mode: Open ('O') or closed curve ('C') (default 'O')
     :param N: resample curve to N points
     :param scale: scale curve to length 1 (true/false)
-    :param q:        (n,T,K) matrix defining n dimensional srvf on T samples with K srvfs
-    :param betan:     aligned curves
-    :param qn:        aligned srvfs
-    :param basis:     calculated basis
-    :param beta_mean: karcher mean curve
-    :param q_mean:    karcher mean srvf
-    :param gams:      warping functions
-    :param v:         shooting vectors
-    :param C:         karcher covariance
-    :param s:         pca singular values
-    :param U:         pca singular vectors
-    :param coef:      pca coefficients
-    :param qun:       cost function
-    :param samples:   random samples
-    :param gamr:      random warping functions
-    :param cent:      center
-    :param scale:     scale
-    :param E:         energy
+    :param q:           (n,T,K) matrix defining n dimensional srvf on T samples with K srvfs
+    :param betan:       aligned curves
+    :param qn:          aligned srvfs
+    :param basis:       calculated basis
+    :param beta_mean:   karcher mean curve
+    :param q_mean:      karcher mean srvf
+    :param gams:        warping functions
+    :param v:           shooting vectors
+    :param C:           karcher covariance
+    :param s:           pca singular values
+    :param U:           pca singular vectors
+    :param coef:        pca coefficients
+    :param qun:         cost function
+    :param samples:     random samples
+    :param gamr:        random warping functions
+    :param cent:        center
+    :param scale:       scale
+    :param len:         length of curve
+    :param len_q:       length of srvf
+    :param mean_scale   mean length
+    :param mean_scale_q mean length srvf
+    :param E:           energy
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  26-Aug-2020
     """
 
-    def __init__(self, beta, mode='O', N=200, scale=True):
+    def __init__(self, beta, mode='O', N=200, scale=False):
         """
         fdacurve Construct an instance of this class
         :param beta: (n,T,K) matrix defining n dimensional curve on T samples with K curves
         :param mode:  Open ('O') or closed curve ('C') (default 'O')
         :param N: resample curve to N points
-        :param scale: scale curve to length 1 (true/false)
+        :param scale: include scale (true/false)
         """
         self.mode = mode
         self.scale = scale
@@ -64,16 +69,23 @@ class fdacurve:
         q = zeros((n,N,K))
         beta1 = zeros((n,N,K))
         cent1 = zeros((n,K))
+        len1 = zeros(K)
+        lenq1 = zeros(K)
         for ii in range(0,K):
-            beta1[:,:,ii] = cf.resamplecurve(beta[:,:,ii],N,mode)
+            if (beta.shape[1] != N):
+                beta1[:,:,ii] = cf.resamplecurve(beta[:,:,ii],N,mode)
+            else:
+                beta1[:,:,ii] = beta[:,:,ii]
             a = -cf.calculatecentroid(beta1[:,:,ii])
             beta1[:,:,ii] += tile(a, (N,1)).T
-            q[:,:,ii] = cf.curve_to_q(beta1[:,:,ii], self.scale, self.mode)
+            q[:,:,ii], len1[ii], lenq1[ii] = cf.curve_to_q(beta1[:,:,ii], mode)
             cent1[:,ii] = -a
 
         self.q = q
         self.beta = beta1
         self.cent = cent1
+        self.len = len1
+        self.len_q = lenq1
 
 
     def karcher_mean(self, parallel=False, cores=-1, method="DP"):
@@ -102,6 +114,7 @@ class fdacurve:
 
         sumd = zeros(maxit+1)
         v = zeros((n, T, N))
+        sumv = zeros((n,T))
         normvbar = zeros(maxit+1)
 
         delta = 0.5
@@ -124,12 +137,15 @@ class fdacurve:
             sumv = zeros((n, T))
             sumd[0] = inf
             sumd[itr+1] = 0
-            out = Parallel(n_jobs=cores)(delayed(karcher_calc)(self.beta[:, :, n],
-                                    self.q[:, :, n], betamean, mu, self.basis, mode, method) for n in range(N))
+            out = Parallel(n_jobs=cores)(delayed(karcher_calc)(mu, self.q[:, :, n], self.basis, 
+                                                               mode, method) for n in range(N))
             v = zeros((n, T, N))
+            gamma = zeros((T,N))
             for i in range(0, N):
                 v[:, :, i] = out[i][0]
-                sumd[itr+1] = sumd[itr+1] + out[i][1]**2
+                gamma[:, i] = out[i][1]
+                sumv += v[:, :, i]
+                sumd[itr+1] = sumd[itr+1] + out[i][2]**2
 
             sumv = v.sum(axis=2)
 
@@ -139,7 +155,9 @@ class fdacurve:
             normvbar[itr] = sqrt(cf.innerprod_q2(vbar, vbar))
             normv = normvbar[itr]
 
-            if normv > tolv and fabs(sumd[itr+1]-sumd[itr]) > told:
+            if ((sumd[itr]-sumd[itr+1]) < 0):
+                break
+            elif (normv > tolv and fabs(sumd[itr+1]-sumd[itr]) > told):
                 # Update mu in direction of vbar
                 mu = cos(delta*normvbar[itr])*mu + sin(delta*normvbar[itr]) * vbar/normvbar[itr]
 
@@ -154,6 +172,12 @@ class fdacurve:
 
             itr += 1
 
+        # compute average length
+        if self.scale:
+            self.mean_scale = (prod(self.len))**(1./self.len.shape[0])
+            self.mean_scale_q = (prod(self.len_q))**(1./self.len.shape[0])
+            betamean = self.mean_scale * betamean
+        
         self.q_mean = mu
         self.beta_mean = betamean
         self.v = v
@@ -186,18 +210,17 @@ class fdacurve:
         self.qn = zeros((n, T, N))
         self.betan = zeros((n, T, N))
         self.gams = zeros((T,N))
-        C = zeros((T,N))
         centroid2 = cf.calculatecentroid(self.beta_mean)
         self.beta_mean = self.beta_mean - tile(centroid2, [T, 1]).T
-        q_mu = cf.curve_to_q(self.beta_mean)
-        # align to mean
 
-        out = Parallel(n_jobs=-1)(delayed(cf.find_rotation_and_seed_coord)(self.beta_mean,
-                                  self.beta[:, :, n], mode, method) for n in range(N))
+        # align to mean
+        out = Parallel(n_jobs=-1)(delayed(cf.find_rotation_and_seed_unique)(self.q_mean,
+                                          self.q[:, :, n], mode, method) for n in range(N))
         for ii in range(0, N):
-            self.gams[:,ii] = out[ii][3]
-            self.qn[:, :, ii] = out[ii][1]
-            self.betan[:, :, ii] = out[ii][0]
+            self.gams[:,ii] = out[ii][2]
+            self.qn[:, :, ii] = out[ii][0]
+            btmp = out[ii][1].dot(self.beta[:,:,ii])
+            self.betan[:, :, ii] = cf.group_action_by_gamma_coord(btmp,out[ii][2])
 
         return
 
@@ -209,13 +232,30 @@ class fdacurve:
         """
         if not hasattr(self, 'beta_mean'):
             self.karcher_mean()
+
         M,N,K = self.v.shape
-        tmpv = zeros((M*N,K))
+
+        N1 = M*N
+        if (self.scale):
+            N1 += 1
+
+        tmpv = zeros((N1,K))
         for i in range(0,K):
             tmp = self.v[:,:,i]
-            tmpv[:,i] = tmp.flatten()
+            tmpv1 = tmp.flatten()
+            if (self.scale):
+                tmpv1 = append(tmpv1, self.len[i])
 
-        self.C = cov(tmpv)
+            tmpv[:,i] = tmpv1
+
+        if (self.scale):
+            VM = mean(self.v, 2)
+            VM = VM.flatten()
+            VM = append(VM, self.mean_scale)
+            tmpv = tmpv - tile(VM, [K, 1]).T
+            self.C = cov(tmpv)
+        else:
+            self.C = cov(tmpv)
 
         return
 
@@ -237,11 +277,18 @@ class fdacurve:
         # express shapes as coefficients
         K = self.beta.shape[2]
         VM = mean(self.v,2)
+        VM = VM.flatten()
+        if (self.scale):
+            VM = append(VM, self.mean_scale)
+
         x = zeros((no,K))
         for ii in range(0,K):
             tmpv = self.v[:,:,ii]
+            tmpv1 = tmpv.flatten()
+            if (self.scale):
+                tmpv1 = append(tmpv1, self.len[ii])
             Utmp = self.U.T
-            x[:,ii] = Utmp.dot((tmpv.flatten()- VM.flatten()))
+            x[:,ii] = Utmp.dot((tmpv1- VM))
 
         self.coef = x
 
@@ -336,25 +383,39 @@ class fdacurve:
             raise NameError('Calculate PCA')
 
         fig, ax = plt.subplots()
-        ax.plot(self.s)
-        plt.title('Singular Values')
+        ax.plot(cumsum(self.s)/sum(self.s)*100)
+        plt.title('Variability Explained')
+        plt.xlabel('PC')
 
         # plot principal modes of variability
         VM = mean(self.v,2)
         VM = VM.flatten()
+        if (self.scale):
+            VM = append(VM, self.mean_scale)
+
         for j in range(0,4):
             fig, ax = plt.subplots()
             for i in range(1,11):
                 tmp = VM + 0.5*(i-5)*sqrt(self.s[j])*self.U[:,j]
                 m,n = self.q_mean.shape
+                if (self.scale):
+                    tmp_scale = tmp[-1]
+                    tmp = tmp[0:-1]
+                else:
+                    tmp_scale = 1
                 v1 = tmp.reshape(m,n)
                 q2n = cf.elastic_shooting(self.q_mean,v1)
 
-                p = cf.q_to_curve(q2n)
+                p = cf.q_to_curve(q2n, tmp_scale)
+
+                mv = 0.2
+                if (self.scale):
+                    mv *= self.mean_scale
+                
                 if i == 5:
-                    ax.plot(0.2*i + p[0,:], p[1,:], 'k', linewidth=2)
+                    ax.plot(mv*i + p[0,:], p[1,:], 'k', linewidth=2)
                 else:
-                    ax.plot(0.2*i + p[0,:], p[1,:], linewidth=2)
+                    ax.plot(mv*i + p[0,:], p[1,:], linewidth=2)
 
             ax.set_aspect('equal')
             plt.axis('off')
@@ -363,9 +424,24 @@ class fdacurve:
         plt.show()
 
 
-def karcher_calc(beta, q, betamean, mu, basis, closed, method):
+def karcher_calc(mu, q, basis, closed, method):
     # Compute shooting vector from mu to q_i
-    w, d = cf.inverse_exp_coord(betamean, beta, closed, method)
+    qn_t, R, gamI = cf.find_rotation_and_seed_unique(mu, q, closed, method)
+    qn_t = qn_t / sqrt(cf.innerprod_q2(qn_t,qn_t))
+
+    q1dotq2 = cf.innerprod_q2(mu,qn_t)
+
+    if (q1dotq2 > 1):
+        q1dotq2 = 1
+    
+    d = arccos(q1dotq2)
+
+    u = qn_t - q1dotq2*mu
+    normu = sqrt(cf.innerprod_q2(u,u))
+    if (normu>1e-4):
+        w = u*arccos(q1dotq2)/normu
+    else:
+        w = zeros(qn_t.shape)
 
     # Project to tangent space of manifold to obtain v_i
     if closed == 0:
@@ -373,4 +449,4 @@ def karcher_calc(beta, q, betamean, mu, basis, closed, method):
     else:
         v = cf.project_tangent(w, q, basis)
 
-    return(v, d)
+    return(v, gamI, d)
