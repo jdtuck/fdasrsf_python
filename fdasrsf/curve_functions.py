@@ -9,7 +9,7 @@ from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
 from numpy import zeros, ones, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
-from numpy import arccos, fabs, floor, fliplr
+from numpy import arccos, fabs, floor, fliplr, log
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparam_N as orN
 import fdasrsf.utility_functions as uf
@@ -671,22 +671,44 @@ def pre_proc_curve(beta, T=100):
     return (betanew, qnew, A)
 
 
-def elastic_distance_curve(beta1, beta2, closed=0, method="DP"):
+def elastic_distance_curve(beta1, beta2, closed=0, scale=False, method="DP"):
     """
     Calculates the two elastic distances between two curves
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param closed: open (0) or closed (1) curve (default=0)
+    :param scale: include scale (default=False)
     :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: scalar
-    :return dist: distance
+    :return dist: shape distance
     """
 
     if (beta1 == beta2).all():
         d = 0.0
     else:
-        v,d = inverse_exp_coord(beta1, beta2, closed, method)
+        N = beta1.shape[1]
+        a = -calculatecentroid(beta1)
+        beta1 += tile(a, (N,1)).T
+        a = -calculatecentroid(beta2)
+        beta2 += tile(a, (N,1)).T
+
+        q1, len1, lenq1 = curve_to_q(beta1)
+        q2, len2, lenq2 = curve_to_q(beta2)
+
+        # compute shooting vector from q1 to q2
+        beta2best, qn_t, Rbest, gam = find_rotation_and_seed_coord(beta1, beta2, closed, method)
+
+        q1dotq2 = innerprod_q2(q1, qn_t)
+        if q1dotq2 > 1:
+            q1dotq2 = 1
+        elif q1dotq2 < -1:
+            q1dotq2 = -1
+        
+        if scale:
+            d = sqrt(arccos(q1dotq2)**2+log(lenq1/lenq2)**2)
+        else:
+            d = arccos(q1dotq2)
 
     return d
     
