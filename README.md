@@ -5,7 +5,7 @@
 [![PyPI version](https://badge.fury.io/py/fdasrsf.svg)](https://badge.fury.io/py/fdasrsf)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jdtuck/fdasrsf_python/master?filepath=%2Fnotebooks)
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/tetonedge/fdasrsf)](https://hub.docker.com/r/tetonedge/fdasrsf)
-
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/fdasrsf/badges/version.svg)](https://anaconda.org/conda-forge/fdasrsf)
 
 fdasrsf
 =======
