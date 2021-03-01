@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elastic Regression &#8212; fdasrsf 2.2.2 documentation</title>
+    <title>Elastic Regression &#8212; fdasrsf 2.2.3 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
@@ -13,7 +13,6 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +34,7 @@
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Regression</a></li> 
       </ul>
     </div>  
@@ -51,7 +50,7 @@
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
 <dt id="regression.elastic_logistic">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_logistic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">B</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_logistic" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">elastic_logistic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_logistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function identifies a logistic regression model with
 phase-variability using elastic methods</p>
 <dl class="field-list simple">
@@ -90,7 +89,7 @@ phase-variability using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.elastic_mlogistic">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_mlogistic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">B</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">delta</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_mlogistic" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">elastic_mlogistic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_mlogistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function identifies a multinomial logistic regression model with
 phase-variability using elastic methods</p>
 <dl class="field-list simple">
@@ -129,7 +128,7 @@ phase-variability using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.elastic_prediction">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_prediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_prediction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">elastic_prediction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_prediction" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function performs prediction from an elastic regression model
 with phase-variability</p>
 <dl class="field-list simple">
@@ -165,7 +164,7 @@ with phase-variability</p>
 
 <dl class="py function">
 <dt id="regression.elastic_regression">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">elastic_regression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">B</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lam</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.elastic_regression" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">elastic_regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_regression" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function identifies a regression model with phase-variability
 using elastic methods</p>
 <dl class="field-list simple">
@@ -205,7 +204,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.logistic_warp">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logistic_warp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logistic_warp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logistic_warp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">logistic_warp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logistic_warp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.logistic_warp" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates optimal warping for function logistic regression</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -227,7 +226,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.logit_gradient">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logit_gradient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logit_gradient" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">logit_gradient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.logit_gradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates gradient of the logistic loss</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -248,7 +247,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.logit_hessian">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logit_hessian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_hessian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logit_hessian" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">logit_hessian</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_hessian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.logit_hessian" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates hessian of the logistic loss</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -270,7 +269,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.logit_loss">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">logit_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.logit_loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">logit_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#logit_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.logit_loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>logistic loss function, returns Sum{-log(phi(t))}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -291,7 +290,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.mlogit_gradient">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">mlogit_gradient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">Y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.mlogit_gradient" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">mlogit_gradient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.mlogit_gradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates gradient of the multinomial logistic loss</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -312,7 +311,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.mlogit_loss">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">mlogit_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">Y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.mlogit_loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">mlogit_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.mlogit_loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates multinomial logistic loss (negative log-likelihood)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -333,7 +332,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.mlogit_warp_grad">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">mlogit_warp_grad</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">max_itr</span><span class="o">=</span><span class="default_value">8000</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-10</span></em>, <em class="sig-param"><span class="n">delta</span><span class="o">=</span><span class="default_value">0.008</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_warp_grad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.mlogit_warp_grad" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">mlogit_warp_grad</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.008</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#mlogit_warp_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.mlogit_warp_grad" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates optimal warping for functional multinomial logistic regression</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -360,7 +359,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.phi">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">phi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.phi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">phi</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#phi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.phi" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates logistic function, returns 1 / (1 + exp(-t))</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -377,7 +376,7 @@ using elastic methods</p>
 
 <dl class="py function">
 <dt id="regression.regression_warp">
-<code class="sig-prename descclassname">regression.</code><code class="sig-name descname">regression_warp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#regression_warp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#regression.regression_warp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">regression_warp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#regression_warp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.regression_warp" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates optimal warping for function linear regression</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -454,13 +453,13 @@ using elastic methods</p>
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Regression</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
     </div>
   </body>
 </html>

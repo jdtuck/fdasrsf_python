@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Curve Registration &#8212; fdasrsf 2.2.2 documentation</title>
+    <title>Curve Registration &#8212; fdasrsf 2.2.3 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Registration</a></li> 
       </ul>
     </div>  
@@ -52,7 +52,7 @@ Mean and Variance</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py class">
 <dt id="curve_stats.fdacurve">
-<em class="property">class </em><code class="sig-prename descclassname">curve_stats.</code><code class="sig-name descname">fdacurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'O'</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">curve_stats.</span></code><code class="sig-name descname"><span class="pre">fdacurve</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'O'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides alignment methods for open and closed curves using the SRVF framework</p>
 <p>Usage: obj = fdacurve(beta, mode, N, scale)
 :param beta: numpy ndarray of shape (n, M, N) describing N curves
@@ -86,13 +86,13 @@ in R^M
 Date   :  26-Aug-2020</p>
 <dl class="py method">
 <dt id="curve_stats.fdacurve.karcher_cov">
-<code class="sig-name descname">karcher_cov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_cov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_cov" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">karcher_cov</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_cov"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_cov" title="Permalink to this definition">¶</a></dt>
 <dd><p>This calculates the mean of a set of curves</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="curve_stats.fdacurve.karcher_mean">
-<code class="sig-name descname">karcher_mean</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_mean" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">karcher_mean</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_mean" title="Permalink to this definition">¶</a></dt>
 <dd><p>This calculates the mean of a set of curves
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = -1 (all))
@@ -101,13 +101,13 @@ Date   :  26-Aug-2020</p>
 
 <dl class="py method">
 <dt id="curve_stats.fdacurve.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">plot</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot curve mean results</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="curve_stats.fdacurve.sample_shapes">
-<code class="sig-name descname">sample_shapes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">no</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">numSamp</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.sample_shapes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve.sample_shapes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">sample_shapes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numSamp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.sample_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.sample_shapes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes sample shapes from mean and covariance</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -121,7 +121,7 @@ Date   :  26-Aug-2020</p>
 
 <dl class="py method">
 <dt id="curve_stats.fdacurve.shape_pca">
-<code class="sig-name descname">shape_pca</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">no</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.shape_pca"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve.shape_pca" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">shape_pca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.shape_pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.shape_pca" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes principal direction of variation specified by no. N is
 Number of shapes away from mean. Creates 2*N+1 shape sequence</p>
 <dl class="field-list simple">
@@ -133,7 +133,7 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence</p>
 
 <dl class="py method">
 <dt id="curve_stats.fdacurve.srvf_align">
-<code class="sig-name descname">srvf_align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parallel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cores</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'DP'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.srvf_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#curve_stats.fdacurve.srvf_align" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">srvf_align</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.srvf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.srvf_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>This aligns a set of curves to the mean and computes mean if not computed
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = -1 (all))
@@ -144,7 +144,7 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence</p>
 
 <dl class="py function">
 <dt id="curve_stats.randn">
-<code class="sig-prename descclassname">curve_stats.</code><code class="sig-name descname">randn</code><span class="sig-paren">(</span><em class="sig-param">d0</em>, <em class="sig-param">d1</em>, <em class="sig-param">...</em>, <em class="sig-param">dn</em><span class="sig-paren">)</span><a class="headerlink" href="#curve_stats.randn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">curve_stats.</span></code><code class="sig-name descname"><span class="pre">randn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">d0</span></em>, <em class="sig-param"><span class="pre">d1</span></em>, <em class="sig-param"><span class="pre">...</span></em>, <em class="sig-param"><span class="pre">dn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#curve_stats.randn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a sample (or samples) from the “standard normal” distribution.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -242,13 +242,13 @@ Generator.standard_normal: which should be used for new code.</p>
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Registration</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
     </div>
   </body>
 </html>
