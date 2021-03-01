@@ -40,7 +40,7 @@ def geod_sphere(beta1, beta2, k=5):
     centroid2 = cf.calculatecentroid(beta2)
     beta2 = beta2 - tile(centroid2, [T, 1]).T
 
-    q1 = cf.curve_to_q(beta1)
+    q1 = cf.curve_to_q(beta1)[0]
     beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(beta1, beta2)
     
     # Forming geodesic between the registered curves
@@ -189,12 +189,12 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
     alpha = zeros((2, T, k))
     beta = zeros((2, T, k))
 
-    q1 = cf.curve_to_q(beta1)
-    q_mid = cf.curve_to_q(beta_mid)
+    q1 = cf.curve_to_q(beta1)[0]
+    q_mid = cf.curve_to_q(beta_mid)[0]
 
     # find optimal rotation of q2
     beta2, O1, tau1 = cf.find_rotation_and_seed_coord(beta1, beta2)
-    q2 = cf.curve_to_q(beta2)
+    q2 = cf.curve_to_q(beta2)[0]
 
     # find the optimal coorespondence
     gam = cf.optimum_reparam_curve(q2, q1)
@@ -207,7 +207,7 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
     beta2n, O2, tau1 = cf.find_rotation_and_seed_coord(beta1, beta2n)
     centroid2 = cf.calculatecentroid(beta2n)
     beta2n = beta2n - tile(centroid2, [T, 1]).T
-    q2n = cf.curve_to_q(beta2n)
+    q2n = cf.curve_to_q(beta2n)[0]
     O = O1.dot(O2)
 
     # Initialize a path as a geodesic through q1 --- q_mid --- q2
@@ -476,8 +476,8 @@ def geod_dist_path_strt(beta, k=5):
     for i in range(1, k):
         beta1 = beta[:, :, i-1]
         beta2 = beta[:, :, i]
-        q1 = cf.curve_to_q(beta1)
-        q2 = cf.curve_to_q(beta2)
+        q1 = cf.curve_to_q(beta1)[0]
+        q2 = cf.curve_to_q(beta2)[0]
         d = arccos(cf.innerprod_q2(q1, q2))
         dist += d
 
