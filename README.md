@@ -20,6 +20,10 @@ using functional component analysis and regression.
 v2.2.3 is on pip and can be installed using
 > `pip install fdasrsf`
 
+or conda
+
+> `conda install -c conda-forge fdasrsf`
+
 To install the most up to date version on github
 > `python setup.py install`
 
