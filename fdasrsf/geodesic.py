@@ -13,7 +13,7 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 
 
-def geod_sphere(beta1, beta2, k=5):
+def geod_sphere(beta1, beta2, k=5, scale=False):
     """
     This function calculates the geodesics between open curves beta1 and
     beta2 with k steps along path
@@ -21,6 +21,7 @@ def geod_sphere(beta1, beta2, k=5):
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param k: number of samples along path (Default = 5)
+    :param scale: include length (Default = False)
 
     :rtype: numpy ndarray
     :return dist: geodesic distance
@@ -40,7 +41,9 @@ def geod_sphere(beta1, beta2, k=5):
     centroid2 = cf.calculatecentroid(beta2)
     beta2 = beta2 - tile(centroid2, [T, 1]).T
 
-    q1 = cf.curve_to_q(beta1)[0]
+    q1, len1, lenq1 = cf.curve_to_q(beta1)
+    if scale:
+        q2, len2, lenq2 = cf.curve_to_q(beta2)
     beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(beta1, beta2)
     
     # Forming geodesic between the registered curves
@@ -50,9 +53,14 @@ def geod_sphere(beta1, beta2, k=5):
         PsiQ = zeros((n, T, k))
         PsiX = zeros((n, T, k))
         for tau in range(0, k):
-            s = dist * tau / (k - 1.)
+            tau1 = tau / (k)
+            s = dist * tau1
             PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
-            PsiX[:, :, tau] = cf.q_to_curve(PsiQ[:, :, tau])
+            if scale:
+                scl = len1**(1-tau1)*len1**(tau1)
+            else:
+                scl = 1
+            PsiX[:, :, tau] = scl*cf.q_to_curve(PsiQ[:, :, tau])
 
         path = PsiX
     else:
