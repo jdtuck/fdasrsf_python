@@ -60,7 +60,10 @@ def geod_sphere(beta1, beta2, k=5, scale=False):
                 scl = len1**(1-tau1)*len1**(tau1)
             else:
                 scl = 1
-            PsiX[:, :, tau] = scl*cf.q_to_curve(PsiQ[:, :, tau])
+            beta = scl*cf.q_to_curve(PsiQ[:, :, tau])
+            centroid = cf.calculatecentroid(beta)
+            beta = beta - tile(centroid, [T, 1]).T
+            PsiX[:, :, tau] = beta
 
         path = PsiX
     else:
