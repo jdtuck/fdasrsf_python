@@ -53,7 +53,11 @@ def geod_sphere(beta1, beta2, k=5, scale=False):
         PsiQ = zeros((n, T, k))
         PsiX = zeros((n, T, k))
         for tau in range(0, k):
-            tau1 = tau / (k)
+            if tau == 0:
+                tau1 = 0
+            else:
+                tau1 = tau / (k - 1.)
+                
             s = dist * tau1
             PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
             if scale:
