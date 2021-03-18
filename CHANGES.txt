@@ -1,6 +1,7 @@
-v2.2.3,  2021-02-328 -- bugfixes
+v2.2.3,  2021-03-18 -- bugfixes
+v2.2.3,  2021-02-28 -- bugfixes
 v2.2.2,  2021-01-30 -- bugfixes and add scale
-v2.2.1,  2020-12-215 -- bugfixes
+v2.2.1,  2020-12-15 -- bugfixes
 v2.2.0,  2020-10-28 -- RBFGS complete rewrite, exposed optimization methods
 v2.1.13, 2020-10-26 -- UMAP updates
 v2.1.12, 2020-10-24 -- bugfixes to curve functions

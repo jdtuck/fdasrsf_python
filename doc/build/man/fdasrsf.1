@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Feb 28, 2021" "2.2" "fdasrsf"
+.TH "FDASRSF" "1" "Mar 18, 2021" "2.2" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .
@@ -2111,7 +2111,7 @@ geodesic distance
 .UNINDENT
 .INDENT 0.0
 .TP
-.B geodesic.geod_sphere(beta1, beta2, k=5)
+.B geodesic.geod_sphere(beta1, beta2, k=5, scale=False)
 This function calculates the geodesics between open curves beta1 and
 beta2 with k steps along path
 .INDENT 7.0
@@ -2124,6 +2124,8 @@ beta2 with k steps along path
 \fBbeta2\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBk\fP \-\- number of samples along path (Default = 5)
+.IP \(bu 2
+\fBscale\fP \-\- include length (Default = False)
 .UNINDENT
 .TP
 .B Return type

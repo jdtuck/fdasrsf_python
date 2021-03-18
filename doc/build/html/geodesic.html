@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SRVF Geodesic Computation &#8212; fdasrsf 2.2.3 documentation</title>
+    <title>SRVF Geodesic Computation &#8212; fdasrsf 2.2.24 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="curve_statistics.html" title="Curve Registration"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">SRVF Geodesic Computation</a></li> 
       </ul>
     </div>  
@@ -206,7 +206,7 @@ k points (q-functions) of the path alpha</p>
 
 <dl class="py function">
 <dt id="geodesic.geod_sphere">
-<code class="sig-prename descclassname"><span class="pre">geodesic.</span></code><code class="sig-name descname"><span class="pre">geod_sphere</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.geod_sphere" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">geodesic.</span></code><code class="sig-name descname"><span class="pre">geod_sphere</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.geod_sphere" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates the geodesics between open curves beta1 and
 beta2 with k steps along path</p>
 <dl class="field-list simple">
@@ -215,6 +215,7 @@ beta2 with k steps along path</p>
 <li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
+<li><p><strong>scale</strong> – include length (Default = False)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -408,13 +409,13 @@ Default = NULL, only needed for init “rand”)</p></li>
         <li class="right" >
           <a href="curve_statistics.html" title="Curve Registration"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">SRVF Geodesic Computation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
     </div>
   </body>
 </html>
