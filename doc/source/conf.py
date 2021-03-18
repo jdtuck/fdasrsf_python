@@ -43,7 +43,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'fdasrsf'
-copyright = u'2020, J. Derek Tucker'
+copyright = u'2021, J. Derek Tucker'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -250,7 +250,7 @@ texinfo_documents = [
 epub_title = u'fdasrsf'
 epub_author = u'J. Derek Tucker'
 epub_publisher = u'J. Derek Tucker'
-epub_copyright = u'2020, J. Derek Tucker'
+epub_copyright = u'2021, J. Derek Tucker'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
