@@ -8,6 +8,8 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 from setuptools import dist
+from distutils.sysconfig import get_config_var, get_python_inc
+from distutils.version import LooseVersion
 
 sys.path.insert(1, 'src/')
 import dp_build
@@ -41,7 +43,9 @@ class build_docs(Command):
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
 
-os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
+if (sys.platform == 'darwin'):
+    mac_ver = str(LooseVersion(get_config_var('MACOSX_DEPLOYMENT_TARGET')))
+    os.environ['MACOSX_DEPLOYMENT_TARGET'] = mac_ver
 
 extensions = [
 	Extension(name="optimum_reparamN2",
