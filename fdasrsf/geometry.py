@@ -28,7 +28,10 @@ def inv_exp_map(Psi, psi):
 
 def exp_map(psi, v):
     v_norm = L2norm(v)
-    expgam = cos(v_norm) * psi + sin(v_norm) * v / v_norm
+    if v_norm.sum() == 0:
+        expgam = cos(v_norm) * psi
+    else:
+        expgam = cos(v_norm) * psi + sin(v_norm) * v / v_norm
     return expgam
 
 

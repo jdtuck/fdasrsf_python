@@ -11,6 +11,7 @@ from scipy import dot
 from scipy.linalg import norm, svd
 from scipy.integrate import trapz, cumtrapz
 from scipy.optimize import fminbound
+from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
 import fdasrsf.plot_style as plot
 import collections
@@ -358,15 +359,19 @@ class fdajpca:
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self,no=3,id=None):
+    def calc_fpca(self, no=3, id=None, parallel=False, cores=-1):
         """
         This function calculates joint functional principal component analysis
         on aligned data
 
         :param no: number of components to extract (default = 3)
         :param id: point to use for f(0) (default = midpoint)
+        :param parallel: run in parallel (default = F)
+        :param cores: number of cores for parallel (default = -1 (all))
         :type no: int
         :type id: int
+        :type parallel: bool
+        :type cores: int
 
         :rtype: fdajpca object of numpy ndarray
         :return q_pca: srsf principal directions
@@ -401,8 +406,8 @@ class fdajpca:
         mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam)
 
         # joint fPCA
-        C = fminbound(find_C,0,1e4,(qn2,vec,q0,no,mu_psi))
-        qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(qn2, vec, C, no, mu_psi)
+        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0,no, mu_psi, parallel, cores))
+        qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(qn2, vec, C, no, mu_psi, parallel, cores)
 
         # geodesic paths
         q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
@@ -496,7 +501,7 @@ class fdajpca:
 
         return
 
-def jointfPCAd(qn, vec, C, m, mu_psi):
+def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     (M,N) = qn.shape
     g = np.vstack((qn, C*vec))
 
@@ -519,26 +524,49 @@ def jointfPCAd(qn, vec, C, m, mu_psi):
     vechat = dot(U[M:,0:m], a.T/C)
     psihat = np.zeros((M-1,N))
     gamhat = np.zeros((M-1,N))
-    for ii in range(0,N):
-        psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
-        gam_tmp = cumtrapz(psihat[:,ii]*psihat[:,ii], np.linspace(0,1,M-1), initial=0)
-        gamhat[:,ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
+    if parallel:
+        out = Parallel(n_jobs=cores)(delayed(jfpca_sub)(mu_psi, vechat[:,n]) for n in range(N))
+        gamhat = np.array(out)
+        gamhat = gamhat.transpose()
+    else:
+        for ii in range(0,N):
+            psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
+            gam_tmp = cumtrapz(psihat[:,ii]*psihat[:,ii], np.linspace(0,1,M-1), initial=0)
+            gamhat[:,ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
     U = U[:,0:m]
     s = s[0:m]
 
     return qhat, gamhat, a, U, s, mu_g, g, K
 
-def find_C(C, qn, vec, q0, m, mu_psi):
-    qhat, gamhat, a, U, s, mu_g, g, K = jointfPCAd(qn, vec, C, m, mu_psi)
+def jfpca_sub(mu_psi, vechat):
+    M = mu_psi.shape[0]
+    psihat = geo.exp_map(mu_psi, vechat)
+    gam_tmp = cumtrapz(psihat*psihat, np.linspace(0,1,M), initial=0)
+    gamhat = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
+
+    return gamhat
+
+def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
+    qhat, gamhat, a, U, s, mu_g, g, K = jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores)
     (M,N) = qn.shape
     time = np.linspace(0,1,M-1)
 
     d = np.zeros(N)
-    for i in range(0,N):
-        tmp = uf.warp_q_gamma(time, qhat[0:(M-1),i], uf.invertGamma(gamhat[:,i]))
-        d[i] = trapz((tmp-q0[:,i])*(tmp-q0[:,i]), time)
+    if parallel:
+        out = Parallel(n_jobs=cores)(delayed(find_C_sub)(time, qhat[0:(M-1),n], gamhat[:,n], q0[:,n]) for n in range(N))
+        d = np.array(out)
+    else:
+        for i in range(0,N):
+            tmp = uf.warp_q_gamma(time, qhat[0:(M-1),i], uf.invertGamma(gamhat[:,i]))
+            d[i] = trapz((tmp-q0[:,i])*(tmp-q0[:,i]), time)
 
     out = sum(d*d)/N
 
     return out
+
+def find_C_sub(time, qhat, gamhat, q0):
+    tmp = uf.warp_q_gamma(time, qhat, uf.invertGamma(gamhat))
+    d = trapz((tmp-q0)*(tmp-q0), time)
+
+    return d
