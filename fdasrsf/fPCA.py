@@ -403,7 +403,7 @@ class fdajpca:
         qn2 = np.vstack((qn, m_new))
 
         # calculate vector space of warping functions
-        mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam)
+        mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam, parallel, cores)
 
         # joint fPCA
         C = fminbound(find_C, 0, 1e4, (qn2, vec, q0,no, mu_psi, parallel, cores))

@@ -386,12 +386,14 @@ def SqrtMeanInverse(gam):
     return gamI
 
 
-def SqrtMean(gam):
+def SqrtMean(gam, parallel=False, cores=-1):
     """
     calculates the srsf of warping functions with corresponding shooting vectors
 
     :param gam: numpy ndarray of shape (M,N) of M warping functions
                 with N samples
+    :param parallel: run in parallel (default = F)
+    :param cores: number of cores for parallel (default = -1 (all))
 
     :rtype: 2 numpy ndarray and vector
     :return mu: Karcher mean psi function
@@ -405,8 +407,14 @@ def SqrtMean(gam):
     time = linspace(0,1,T)
     binsize = mean(diff(time))
     psi = zeros((T, n))
-    for k in range(0, n):
-        psi[:, k] = sqrt(gradient(gam[:, k],binsize))
+    if parallel:
+        out = Parallel(n_jobs=cores)(delayed(gradient)(gam[:,k], binsize) for k in range(n))
+        psi = array(out)
+        psi = psi.transpose()
+        psi = sqrt(psi)
+    else:
+        for k in range(0, n):
+            psi[:, k] = sqrt(gradient(gam[:, k],binsize))
 
     # Find Direction
     mnpsi = psi.mean(axis=1)
@@ -423,9 +431,14 @@ def SqrtMean(gam):
     stp = .3
     itr = 0
 
-    for i in range(0,n):
-        out, theta = geo.inv_exp_map(mu,psi[:,i])
-        vec[:,i] = out
+    if parallel:
+        out = Parallel(n_jobs=cores)(delayed(inv_exp_map_sub)(mu, psi[:,i]) for i in range(n))
+        vec = array(out)
+        vec = vec.transpose()
+    else:
+        for i in range(0,n):
+            out, theta = geo.inv_exp_map(mu,psi[:,i])
+            vec[:,i] = out
 
     vbar = vec.mean(axis=1)
     lvm[itr] = geo.L2norm(vbar)
@@ -433,9 +446,14 @@ def SqrtMean(gam):
     while (lvm[itr] > 0.00000001) and (itr<maxiter):
         mu = geo.exp_map(mu, stp*vbar)
         itr += 1
-        for i in range(0,n):
-            out, theta = geo.inv_exp_map(mu,psi[:,i])
-            vec[:,i] = out
+        if parallel:
+            out = Parallel(n_jobs=cores)(delayed(inv_exp_map_sub)(mu, psi[:,i]) for i in range(n))
+            vec = array(out)
+            vec = vec.transpose()
+        else:
+            for i in range(0,n):
+                out, theta = geo.inv_exp_map(mu,psi[:,i])
+                vec[:,i] = out
 
         vbar = vec.mean(axis=1)
         lvm[itr] = geo.L2norm(vbar)
@@ -445,6 +463,11 @@ def SqrtMean(gam):
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
 
     return mu, gam_mu, psi, vec
+
+
+def inv_exp_map_sub(mu, psi):
+    out, theta = geo.inv_exp_map(mu, psi)
+    return out
 
 
 def SqrtMedian(gam):
