@@ -444,7 +444,7 @@ def find_rotation_and_seed_unique(q1, q2, closed=0, method="DP"):
     return (q2best, Rbest, gamIbest)
 
 
-def find_rotation_and_seed_coord(beta1, beta2, closed=0, method="DP"):
+def find_rotation_and_seed_coord(beta1, beta2, closed=0, rotation=True, method="DP"):
     """
     This function returns a candidate list of optimally oriented and
     registered (seed) shapes w.r.t. beta1
@@ -452,6 +452,7 @@ def find_rotation_and_seed_coord(beta1, beta2, closed=0, method="DP"):
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param closed: Open (0) or Closed (1)
+    :param rotation: find rotation (default=True)
     :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: numpy ndarray
@@ -476,7 +477,11 @@ def find_rotation_and_seed_coord(beta1, beta2, closed=0, method="DP"):
         else:
             beta2n = beta2
         
-        beta2new, R = find_best_rotation(beta1, beta2n)
+        if rotation:
+            beta2new, R = find_best_rotation(beta1, beta2n)
+        else:
+            beta2new = beta2n
+            R = eye(n)
         q2new = curve_to_q(beta2new)[0]
 
         # Reparam

@@ -13,7 +13,7 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 
 
-def geod_sphere(beta1, beta2, k=5, scale=False, center=True):
+def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     """
     This function calculates the geodesics between open curves beta1 and
     beta2 with k steps along path
@@ -22,6 +22,7 @@ def geod_sphere(beta1, beta2, k=5, scale=False, center=True):
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param k: number of samples along path (Default = 5)
     :param scale: include length (Default = False)
+    :param rotation: include rotation (Default = True)
     :param center: center curves at origin (Default = True)
 
     :rtype: numpy ndarray
@@ -46,7 +47,7 @@ def geod_sphere(beta1, beta2, k=5, scale=False, center=True):
     q1, len1, lenq1 = cf.curve_to_q(beta1)
     if scale:
         q2, len2, lenq2 = cf.curve_to_q(beta2)
-    beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(beta1, beta2)
+    beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(beta1, beta2, rotation=rotation)
     
     # Forming geodesic between the registered curves
     dist = arccos(cf.innerprod_q2(q1, q2n))
