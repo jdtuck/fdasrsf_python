@@ -13,7 +13,7 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 
 
-def geod_sphere(beta1, beta2, k=5, scale=False):
+def geod_sphere(beta1, beta2, k=5, scale=False, center=True):
     """
     This function calculates the geodesics between open curves beta1 and
     beta2 with k steps along path
@@ -22,6 +22,7 @@ def geod_sphere(beta1, beta2, k=5, scale=False):
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param k: number of samples along path (Default = 5)
     :param scale: include length (Default = False)
+    :param center: center curves at origin (Default = True)
 
     :rtype: numpy ndarray
     :return dist: geodesic distance
@@ -36,10 +37,11 @@ def geod_sphere(beta1, beta2, k=5, scale=False):
     beta1 = cf.resamplecurve(beta1, T)
     beta2 = cf.resamplecurve(beta2, T)
 
-    centroid1 = cf.calculatecentroid(beta1)
-    beta1 = beta1 - tile(centroid1, [T, 1]).T
-    centroid2 = cf.calculatecentroid(beta2)
-    beta2 = beta2 - tile(centroid2, [T, 1]).T
+    if center:
+        centroid1 = cf.calculatecentroid(beta1)
+        beta1 = beta1 - tile(centroid1, [T, 1]).T
+        centroid2 = cf.calculatecentroid(beta2)
+        beta2 = beta2 - tile(centroid2, [T, 1]).T
 
     q1, len1, lenq1 = cf.curve_to_q(beta1)
     if scale:
@@ -65,8 +67,9 @@ def geod_sphere(beta1, beta2, k=5, scale=False):
             else:
                 scl = 1
             beta = scl*cf.q_to_curve(PsiQ[:, :, tau])
-            centroid = cf.calculatecentroid(beta)
-            beta = beta - tile(centroid, [T, 1]).T
+            if center:
+                centroid = cf.calculatecentroid(beta)
+                beta = beta - tile(centroid, [T, 1]).T
             PsiX[:, :, tau] = beta
 
         path = PsiX
