@@ -16,12 +16,13 @@ import fdasrsf.utility_functions as uf
 from fdasrsf.rbfgs import rlbfgs
 
 
-def resamplecurve(x, N=100, mode='O'):
+def resamplecurve(x, N=100, time=None, mode='O'):
     """
     This function resamples a curve to have N samples
 
     :param x: numpy ndarray of shape (2,M) of M samples
     :param N: Number of samples for new curve (default = 100)
+    :param time: timing vector (Default=None)
     :param mode: Open ('O') or closed curve ('C') (default 'O')
 
     :rtype: numpy ndarray
@@ -39,7 +40,12 @@ def resamplecurve(x, N=100, mode='O'):
     for r in range(1, T):
         delta[r] = norm(x[:, r] - x[:, r - 1])
 
-    cumdel = cumsum(delta) / delta.sum()
+    if time is None: 
+        cumdel = cumsum(delta) / delta.sum()
+    else:
+        time -= time[0]
+        time /= time[-1]
+        cumdel = time
     newdel = linspace(0, 1, N)
 
     for r in range(0, n):
