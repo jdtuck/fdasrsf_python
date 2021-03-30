@@ -64,7 +64,7 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
             s = dist * tau1
             PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
             if scale:
-                scl = len1**(1-tau1)*len1**(tau1)
+                scl = len1**(1-tau1)*len2**(tau1)
             else:
                 scl = 1
             beta = scl*cf.q_to_curve(PsiQ[:, :, tau])
