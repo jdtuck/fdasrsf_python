@@ -268,7 +268,7 @@ def calculate_variance(beta):
         normbetadot[i] = norm(betadot[:, i])
         a1 = (beta[:, i] - centroid)
         a1 = a1.reshape((n, 1))
-        integrand[:, :, i] = a1.dot(a1.T) * normbetadot[i]
+        integrand[:, :, i] = a1 @ a1.T * normbetadot[i]
 
     l = trapz(normbetadot, t)
     variance = trapz(integrand, t, axis=2)
@@ -541,7 +541,7 @@ def find_rotation_and_seed_q(q1, q2):
     tau = Ltwo.argmin()
     O_hat = Rlist[:, :, tau]
     q2new = shift_f(q2, tau)
-    q2new = O_hat.dot(q2new)
+    q2new = O_hat @ q2new
 
     return (q2new, O_hat, tau)
 
@@ -986,7 +986,7 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
     beta1, O_hat, tau = find_rotation_and_seed_coord(betanu, beta)
     beta1 = group_action_by_gamma_coord(beta1, gamma)
     beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
-    O_hat = O_hat.dot(O_hat1)
+    O_hat = O_hat @ O_hat1
 
     return (gamma, O_hat, tau)
 

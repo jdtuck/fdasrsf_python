@@ -227,7 +227,7 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
     centroid2 = cf.calculatecentroid(beta2n)
     beta2n = beta2n - tile(centroid2, [T, 1]).T
     q2n = cf.curve_to_q(beta2n)[0]
-    O = O1.dot(O2)
+    O = O1 @ O2
 
     # Initialize a path as a geodesic through q1 --- q_mid --- q2
     theta1 = arccos(cf.innerprod_q2(q1, q_mid))
