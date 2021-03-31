@@ -232,7 +232,7 @@ def find_best_rotation(q1, q2):
 
     """
     n = q1.shape[0]
-    A = q1.dot(q2.T)
+    A = q1@q2.T
     U, s, V = svd(A)
 
     if (det(A) > 0):
@@ -241,8 +241,8 @@ def find_best_rotation(q1, q2):
         S = eye(n)
         S[:, -1] = -S[:, -1]
 
-    R = U.dot(S).dot(V.T)
-    q2new = R.dot(q2)
+    R = U@S@V.T
+    q2new = R@q2
 
     return (q2new, R)
 
