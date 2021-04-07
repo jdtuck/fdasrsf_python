@@ -297,9 +297,11 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
 
     Dy = sqrt(trapz((qw - q1) ** 2, time))
     M = time.shape[0]
-    psi = sqrt(diff(gam) * (M - 1))
-    mu = ones(M - 1)
-    q1dotq2 = sum(mu * psi) / double(M - 1)
+
+    time1 = linspace(0,1,M)
+    binsize = mean(diff(time))
+    psi = sqrt(gradient(gam,binsize))
+    q1dotq2 = trapz(psi, time1)
     if q1dotq2 > 1:
         q1dotq2 = 1
     elif q1dotq2 < -1:
