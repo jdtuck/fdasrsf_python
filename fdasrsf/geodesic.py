@@ -35,8 +35,8 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     returnpath = 1
     n, T = beta1.shape
 
-    beta1 = cf.resamplecurve(beta1, T)
-    beta2 = cf.resamplecurve(beta2, T)
+    #beta1 = cf.resamplecurve(beta1, T)
+    #beta2 = cf.resamplecurve(beta2, T)
 
     if center:
         centroid1 = cf.calculatecentroid(beta1)
