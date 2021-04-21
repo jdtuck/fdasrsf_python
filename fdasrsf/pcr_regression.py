@@ -209,7 +209,7 @@ class elastic_pcr_regression:
             for ii in range(0,n):
                 self.y_pred[ii] = self.alpha + np.sum(a[ii,:]*self.b)
             
-            if y == None:
+            if y is None:
                 self.SSE = np.nan
             else:
                 self.SSE = np.sum((y-self.y_pred)**2)
@@ -377,7 +377,8 @@ class elastic_lpcr_regression:
                 binsize = np.mean(np.diff(self.time))
                 for i in range(0,n):
                     psi[:,i] = np.sqrt(np.gradient(gam[:,i],binsize))
-                    vec[:,i] = geo.inv_exp_map(mu_psi, psi[:,i])
+                    out, theta = geo.inv_exp_map(mu_psi, psi[:,i])
+                    vec[:,i] = out
                 
                 g = np.vstack((qn1, C*vec))
                 a = np.zeros((n,no))
@@ -402,7 +403,8 @@ class elastic_lpcr_regression:
                 binsize = np.mean(np.diff(self.time))
                 for i in range(0,n):
                     psi[:,i] = np.sqrt(np.gradient(gam[:,i],binsize))
-                    vec[:,i] = geo.inv_exp_map(mu_psi, psi[:,i])
+                    out, theta = geo.inv_exp_map(mu_psi, psi[:,i])
+                    vec[:,i] = out
                 
                 vm = self.pca.vec.mean(axis=1)
 
@@ -415,7 +417,7 @@ class elastic_lpcr_regression:
             for ii in range(0,n):
                 self.y_pred[ii] = self.alpha + np.sum(a[ii,:]*self.b)
             
-            if y == None:
+            if y is None:
                 self.y_pred = rg.phi(self.y_pred)
                 self.y_labels = np.ones(n)
                 self.y_labels[self.y_pred < 0.5] = -1
@@ -616,7 +618,8 @@ class elastic_mlpcr_regression:
                 binsize = np.mean(np.diff(self.time))
                 for i in range(0,n):
                     psi[:,i] = np.sqrt(np.gradient(gam[:,i],binsize))
-                    vec[:,i] = geo.inv_exp_map(mu_psi, psi[:,i])
+                    out, theta = geo.inv_exp_map(mu_psi, psi[:,i])
+                    vec[:,i] = out
                 
                 g = np.vstack((qn1, C*vec))
                 a = np.zeros((n,no))
@@ -641,7 +644,8 @@ class elastic_mlpcr_regression:
                 binsize = np.mean(np.diff(self.time))
                 for i in range(0,n):
                     psi[:,i] = np.sqrt(np.gradient(gam[:,i],binsize))
-                    vec[:,i] = geo.inv_exp_map(mu_psi, psi[:,i])
+                    out, theta = geo.inv_exp_map(mu_psi, psi[:,i])
+                    vec[:,i] = out
                 
                 vm = self.pca.vec.mean(axis=1)
 
@@ -656,7 +660,7 @@ class elastic_mlpcr_regression:
                     self.y_pred[ii,jj] = self.alpha[jj] + np.sum(a[ii,:]*self.b[:,jj])
             
             
-            if y == None:
+            if y is None:
                 self.y_pred = rg.phi(self.y_pred.reshape((1,n*m)))
                 self.y_pred = self.y_pred.reshape((n,m))
                 self.y_labels = np.argmax(self.y_pred,axis=1)
