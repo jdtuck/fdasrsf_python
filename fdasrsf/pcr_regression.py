@@ -138,8 +138,8 @@ class elastic_pcr_regression:
             f = newdata['f']
             time = newdata['time']
             y = newdata['y']
-            sparam = newdata['sparam']
             if newdata['smooth']:
+                sparam = newdata['sparam']
                 f = fs.smooth_data(f,sparam)
             
             q1 = fs.f_to_srsf(f,time)
@@ -169,7 +169,8 @@ class elastic_pcr_regression:
                 binsize = np.mean(np.diff(self.time))
                 for i in range(0,n):
                     psi[:,i] = np.sqrt(np.gradient(gam[:,i],binsize))
-                    vec[:,i] = geo.inv_exp_map(mu_psi, psi[:,i])
+                    out, theta = geo.inv_exp_map(mu_psi, psi[:,i])
+                    vec[:,i] = out
                 
                 g = np.vstack((qn1, C*vec))
                 a = np.zeros((n,no))
@@ -194,7 +195,8 @@ class elastic_pcr_regression:
                 binsize = np.mean(np.diff(self.time))
                 for i in range(0,n):
                     psi[:,i] = np.sqrt(np.gradient(gam[:,i],binsize))
-                    vec[:,i] = geo.inv_exp_map(mu_psi, psi[:,i])
+                    out, theta = geo.inv_exp_map(mu_psi, psi[:,i])
+                    vec[:,i] = out
                 
                 vm = self.pca.vec.mean(axis=1)
 
@@ -344,8 +346,8 @@ class elastic_lpcr_regression:
             f = newdata['f']
             time = newdata['time']
             y = newdata['y']
-            sparam = newdata['sparam']
             if newdata['smooth']:
+                sparam = newdata['sparam']
                 f = fs.smooth_data(f,sparam)
             
             q1 = fs.f_to_srsf(f,time)
@@ -583,8 +585,8 @@ class elastic_mlpcr_regression:
             f = newdata['f']
             time = newdata['time']
             y = newdata['y']
-            sparam = newdata['sparam']
             if newdata['smooth']:
+                sparam = newdata['sparam']
                 f = fs.smooth_data(f,sparam)
             
             q1 = fs.f_to_srsf(f,time)
