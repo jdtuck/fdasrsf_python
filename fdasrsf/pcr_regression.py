@@ -212,7 +212,7 @@ class elastic_pcr_regression:
             else:
                 self.SSE = np.sum((y-self.y_pred)**2)
         else:
-            n = self.pca.coef.shape[1]
+            n = self.pca.coef.shape[0]
             self.y_pred = np.zeros(n)
             for ii in range(0,n):
                 self.y_pred[ii] = self.alpha + np.dot(self.pca.coef[ii,:],self.b)
