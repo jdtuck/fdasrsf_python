@@ -265,9 +265,9 @@ class fdahpca:
 
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
-        self.U = U
+        self.U = U[:,0:no]
         self.coef = c
-        self.latent = s
+        self.latent = s[0:no]
         self.gam_mu = gam_mu
         self.psi_mu = mu
         self.vec = vec
@@ -429,9 +429,9 @@ class fdajpca:
 
         self.q_pca = q_pca
         self.f_pca = f_pca
-        self.latent = s
+        self.latent = s[0:no]
         self.coef = a
-        self.U = U
+        self.U = U[:,0:no]
         self.mu_psi = mu_psi
         self.mu_g = mu_g
         self.id = mididx
