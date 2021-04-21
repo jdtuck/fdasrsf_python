@@ -103,7 +103,7 @@ class elastic_pcr_regression:
         # compute the SSE
         int_X = np.zeros(N1)
         for ii in range(0,N1):
-            int_X[ii] = np.sum(self.pca.coef*b)
+            int_X[ii] = np.sum(self.pca.coef[ii,:]*b)
         
         SSE = np.sum((self.y-alpha-int_X)**2)
 
