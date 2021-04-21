@@ -286,20 +286,20 @@ class elastic_lpcr_regression:
 
         # Calculate PCA
         if pca_method=='combined':
-            out_pca = fpca.fdajpca(self.warp_data)
+            self.pca = fpca.fdajpca(self.warp_data)
         elif pca_method=='vert':
-            out_pca = fpca.fdavpca(self.warp_data)
+            self.pca = fpca.fdavpca(self.warp_data)
         elif pca_method=='horiz':
-            out_pca = fpca.fdahpca(self.warp_data)
+            self.pca = fpca.fdahpca(self.warp_data)
         else:
             raise Exception('Invalid fPCA Method')
-        out_pca.calc_fpca(no)
+        self.pca.calc_fpca(no)
         
         # OLS using PCA basis
         lam = 0
         R = 0
         Phi = np.ones((N1, no+1))
-        Phi[:,1:(no+1)] = out_pca.coef
+        Phi[:,1:(no+1)] = self.pca.coef
         # Find alpha and beta using l_bfgs
         b0 = np.zeros(no+1)
         out = fmin_l_bfgs_b(rg.logit_loss, b0, fprime=rg.logit_gradient,
@@ -316,7 +316,6 @@ class elastic_lpcr_regression:
 
         self.alpha = alpha
         self.b = b
-        self.pca = out_pca
         self.LL = LL
         self.pca_method = pca_method
 
@@ -429,7 +428,7 @@ class elastic_lpcr_regression:
                 FN = np.sum(y[self.y_labels == 1] == -1)
                 self.PC = (TP+TN)/(TP+FP+FN+TN)
         else:
-            n = self.pca.coef.shape[1]
+            n = self.pca.coef.shape[0]
             self.y_pred = np.zeros(n)
             for ii in range(0,n):
                 self.y_pred[ii] = self.alpha + np.dot(self.pca.coef[ii,:],self.b)
@@ -524,20 +523,20 @@ class elastic_mlpcr_regression:
 
         # Calculate PCA
         if pca_method=='combined':
-            out_pca = fpca.fdajpca(self.warp_data)
+            self.pca = fpca.fdajpca(self.warp_data)
         elif pca_method=='vert':
-            out_pca = fpca.fdavpca(self.warp_data)
+            self.pca = fpca.fdavpca(self.warp_data)
         elif pca_method=='horiz':
-            out_pca = fpca.fdahpca(self.warp_data)
+            self.pca = fpca.fdahpca(self.warp_data)
         else:
             raise Exception('Invalid fPCA Method')
-        out_pca.calc_fpca(no)
+        self.pca.calc_fpca(no)
         
         # OLS using PCA basis
         lam = 0
         R = 0
         Phi = np.ones((N1, no+1))
-        Phi[:,1:(no+1)] = out_pca.coef
+        Phi[:,1:(no+1)] = self.pca.coef
         # Find alpha and beta using l_bfgs
         b0 = np.zeros(self.n_classes*(no+1))
         out = fmin_l_bfgs_b(rg.mlogit_loss, b0, fprime=rg.mlogit_gradient,
@@ -555,7 +554,6 @@ class elastic_mlpcr_regression:
 
         self.alpha = alpha
         self.b = b
-        self.pca = out_pca
         self.LL = LL
         self.pca_method = pca_method
 
@@ -677,7 +675,7 @@ class elastic_mlpcr_regression:
                 
                 self.PCo = np.sum(y == self.y_labels)/self.y_labels.shape[0]
         else:
-            n = self.pca.coef.shape[1]
+            n = self.pca.coef.shape[0]
             self.y_pred = np.zeros((n,m))
             for ii in range(0,n):
                 for jj in range(0,m):
