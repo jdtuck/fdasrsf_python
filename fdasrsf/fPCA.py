@@ -441,6 +441,7 @@ class fdajpca:
         self.cov = cov
         self.no = no
         self.stds = coef
+        self.vec = vec
 
         return
 
