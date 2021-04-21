@@ -150,7 +150,7 @@ class elastic_pcr_regression:
             qn = np.zeros((M,n))
             gam = np.zeros((M,n))
             for ii in range(0,n):
-                gam[:,ii] = uf.optimum_reparam(mq,time,q1[:,ii],omethod)
+                gam[:,ii] = uf.optimum_reparam(mq,time,q1[:,ii],omethod,lam)
                 fn[:,ii] = uf.warp_f_gamma(time,f[:,ii],gam[:,ii])
                 qn[:,ii] = uf.f_to_srsf(fn[:,ii],time)
             
@@ -207,7 +207,7 @@ class elastic_pcr_regression:
                 raise Exception('Invalid fPCA Method')
 
             for ii in range(0,n):
-                self.y_pred[ii] = self.alpha + np.sum(a[ii,:]*self.b)
+                self.y_pred[ii] = self.alpha + np.dot(a[ii,:],self.b)
             
             if y is None:
                 self.SSE = np.nan
