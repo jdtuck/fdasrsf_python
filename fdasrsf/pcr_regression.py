@@ -79,20 +79,20 @@ class elastic_pcr_regression:
 
         # Calculate PCA
         if pca_method=='combined':
-            self.out_pca = fpca.fdajpca(self.warp_data)
+            self.pca = fpca.fdajpca(self.warp_data)
         elif pca_method=='vert':
-            self.out_pca = fpca.fdavpca(self.warp_data)
+            self.pca = fpca.fdavpca(self.warp_data)
         elif pca_method=='horiz':
-            self.out_pca = fpca.fdahpca(self.warp_data)
+            self.pca = fpca.fdahpca(self.warp_data)
         else:
             raise Exception('Invalid fPCA Method')
-        self.out_pca.calc_fpca(no)
+        self.pca.calc_fpca(no)
         
         # OLS using PCA basis
         lam = 0
         R = 0
         Phi = np.ones((N1, no+1))
-        Phi[:,1:(no+1)] = self.out_pca.coef
+        Phi[:,1:(no+1)] = self.pca.coef
         xx = dot(Phi.T, Phi)
         inv_xx = inv(xx + lam * R)
         xy = dot(Phi.T, self.y)
@@ -103,13 +103,12 @@ class elastic_pcr_regression:
         # compute the SSE
         int_X = np.zeros(N1)
         for ii in range(0,N1):
-            int_X[ii] = np.sum(self.out_pca.coef*b)
+            int_X[ii] = np.sum(self.pca.coef*b)
         
         SSE = np.sum((self.y-alpha-int_X)**2)
 
         self.alpha = alpha
         self.b = b
-        self.pca = out_pca
         self.SSE = SSE
         self.pca_method = pca_method
 
