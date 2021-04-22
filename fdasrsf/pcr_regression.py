@@ -154,12 +154,12 @@ class elastic_pcr_regression:
                 fn[:,ii] = uf.warp_f_gamma(time,f[:,ii],gam[:,ii])
                 qn[:,ii] = uf.f_to_srsf(fn[:,ii],time)
             
-            m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
-            qn1 = np.vstack((qn, m_new))
             U = self.pca.U
             no = U.shape[1]
 
             if self.pca.__class__.__name__ == 'fdajpca':
+                m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
+                qn1 = np.vstack((qn, m_new))
                 C = self.pca.C
                 TT = self.time.shape[0]
                 mu_g = self.pca.mu_g
@@ -180,6 +180,8 @@ class elastic_pcr_regression:
                         a[i,j] = dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdavpca':
+                m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
+                qn1 = np.vstack((qn, m_new))
                 a = np.zeros((n,no))
                 for i in range(0,n):
                     for j in range(0,no):
@@ -362,12 +364,12 @@ class elastic_lpcr_regression:
                 fn[:,ii] = uf.warp_f_gamma(time,f[:,ii],gam[:,ii])
                 qn[:,ii] = uf.f_to_srsf(fn[:,ii],time)
             
-            m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
-            qn1 = np.vstack((qn, m_new))
             U = self.pca.U
             no = U.shape[1]
 
             if self.pca.__class__.__name__ == 'fdajpca':
+                m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
+                qn1 = np.vstack((qn, m_new))
                 C = self.pca.C
                 TT = self.time.shape[0]
                 mu_g = self.pca.mu_g
@@ -388,6 +390,8 @@ class elastic_lpcr_regression:
                         a[i,j] = dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdavpca':
+                m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
+                qn1 = np.vstack((qn, m_new))
                 a = np.zeros((n,no))
                 for i in range(0,n):
                     for j in range(0,no):
@@ -603,12 +607,12 @@ class elastic_mlpcr_regression:
                 fn[:,ii] = uf.warp_f_gamma(time,f[:,ii],gam[:,ii])
                 qn[:,ii] = uf.f_to_srsf(fn[:,ii],time)
             
-            m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
-            qn1 = np.vstack((qn, m_new))
             U = self.pca.U
             no = U.shape[1]
 
             if self.pca.__class__.__name__ == 'fdajpca':
+                m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
+                qn1 = np.vstack((qn, m_new))
                 C = self.pca.C
                 TT = self.time.shape[0]
                 mu_g = self.pca.mu_g
@@ -629,6 +633,8 @@ class elastic_mlpcr_regression:
                         a[i,j] = dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdavpca':
+                m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
+                qn1 = np.vstack((qn, m_new))
                 a = np.zeros((n,no))
                 for i in range(0,n):
                     for j in range(0,no):
