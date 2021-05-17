@@ -48,13 +48,14 @@ class fdavpca:
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, id=None):
+    def calc_fpca(self, no=3, id=None, stds = np.arange(-1, 2)):
         """
         This function calculates vertical functional principal component analysis
         on aligned data
 
         :param no: number of components to extract (default = 3)
         :param id: point to use for f(0) (default = midpoint)
+        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)
         :type no: int
         :type id: int
 
@@ -76,8 +77,7 @@ class fdavpca:
         else:
             mididx = id
 
-        coef = np.arange(-2., 3.)
-        Nstd = coef.shape[0]
+        Nstd = stds.shape[0]
 
         # FPCA
         mq_new = qn.mean(axis=1)
@@ -94,7 +94,7 @@ class fdavpca:
         q_pca = np.ndarray(shape=(N + 1, Nstd, no), dtype=float)
         for k in range(0, no):
             for l in range(0, Nstd):
-                q_pca[:, l, k] = mqn + coef[l] * stdS[k] * U[:, k]
+                q_pca[:, l, k] = mqn + stds[l] * stdS[k] * U[:, k]
 
         # compute the correspondence in the f domain
         f_pca = np.ndarray(shape=(N, Nstd, no), dtype=float)
@@ -122,7 +122,7 @@ class fdavpca:
         self.id = mididx
         self.mqn = mqn
         self.time = time
-        self.stds = coef
+        self.stds = stds
         self.no = no
 
         return
@@ -216,11 +216,12 @@ class fdahpca:
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3):
+    def calc_fpca(self, no=3, stds = np.arange(-1, 2)):
         """
         This function calculates horizontal functional principal component analysis on aligned data
 
         :param no: number of components to extract (default = 3)
+        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)
         :type no: int
 
         :rtype: fdahpca object of numpy ndarray
@@ -234,7 +235,6 @@ class fdahpca:
         # Calculate Shooting Vectors
         gam = self.warp_data.gam
         mu, gam_mu, psi, vec = uf.SqrtMean(gam)
-        tau = np.arange(1, 6)
         TT = self.warp_data.time.shape[0]
 
         # TFPCA
@@ -243,19 +243,21 @@ class fdahpca:
         U, s, V = svd(K)
         vm = vec.mean(axis=1)
 
-        gam_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0], no), dtype=float)
-        psi_pca = np.ndarray(shape=(tau.shape[0], mu.shape[0], no), dtype=float)
+        gam_pca = np.ndarray(shape=(stds.shape[0], mu.shape[0], no), dtype=float)
+        psi_pca = np.ndarray(shape=(stds.shape[0], mu.shape[0], no), dtype=float)
         for j in range(0, no):
-            for k in tau:
-                v = (k - 3) * np.sqrt(s[j]) * U[:, j]
+            cnt = 0
+            for k in stds:
+                v = k * np.sqrt(s[j]) * U[:, j]
                 vn = norm(v) / np.sqrt(TT)
                 if vn < 0.0001:
-                    psi_pca[k-1, :, j] = mu
+                    psi_pca[cnt, :, j] = mu
                 else:
-                    psi_pca[k-1, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
+                    psi_pca[cnt, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
 
-                tmp = cumtrapz(psi_pca[k-1, :, j] * psi_pca[k-1, :, j], np.linspace(0,1,TT), initial=0)
-                gam_pca[k-1, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
+                tmp = cumtrapz(psi_pca[cnt, :, j] * psi_pca[cnt, :, j], np.linspace(0,1,TT), initial=0)
+                gam_pca[cnt, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
+                cnt += 1
 
         N2 = gam.shape[1]
         c = np.zeros((N2,no))
@@ -272,6 +274,7 @@ class fdahpca:
         self.psi_mu = mu
         self.vec = vec
         self.no = no
+        self.stds = stds
 
         return
 
@@ -359,13 +362,15 @@ class fdajpca:
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, id=None, parallel=False, cores=-1):
+    def calc_fpca(self, no=3, stds = np.arange(-1., 2.), 
+                  id=None, parallel=False, cores=-1):
         """
         This function calculates joint functional principal component analysis
         on aligned data
 
         :param no: number of components to extract (default = 3)
         :param id: point to use for f(0) (default = midpoint)
+        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
         :type no: int
@@ -393,8 +398,7 @@ class fdajpca:
         else:
             mididx = id
 
-        coef = np.arange(-1., 2.)
-        Nstd = coef.shape[0]
+        Nstd = stds.shape[0]
 
         # set up for fPCA in q-space
         mq_new = qn.mean(axis=1)
@@ -415,8 +419,8 @@ class fdajpca:
 
         for k in range(0, no):
             for l in range(0, Nstd):
-                qhat = mqn + dot(U[0:(M+1),k],coef[l]*np.sqrt(s[k]))
-                vechat = dot(U[(M+1):,k],(coef[l]*np.sqrt(s[k]))/C)
+                qhat = mqn + dot(U[0:(M+1),k],stds[l]*np.sqrt(s[k]))
+                vechat = dot(U[(M+1):,k],(stds[l]*np.sqrt(s[k]))/C)
                 psihat = geo.exp_map(mu_psi,vechat)
                 gamhat = cumtrapz(psihat*psihat,np.linspace(0,1,M),initial=0)
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
@@ -440,7 +444,7 @@ class fdajpca:
         self.g = g
         self.cov = cov
         self.no = no
-        self.stds = coef
+        self.stds = stds
 
         return
 
