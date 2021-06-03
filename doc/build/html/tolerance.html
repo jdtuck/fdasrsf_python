@@ -4,12 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elastic Functional Tolerance Bounds &#8212; fdasrsf 2.2.24 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Elastic Functional Tolerance Bounds &#8212; fdasrsf 2.2.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -34,7 +35,7 @@
         <li class="right" >
           <a href="pcr_regression.html" title="Elastic Principal Component Regression"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Functional Tolerance Bounds</a></li> 
       </ul>
     </div>  
@@ -44,13 +45,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-tolerance">
+  <section id="module-tolerance">
 <span id="elastic-functional-tolerance-bounds"></span><h1>Elastic Functional Tolerance Bounds<a class="headerlink" href="#module-tolerance" title="Permalink to this headline">¶</a></h1>
 <p>Functional Tolerance Bounds using SRSF</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
-<dt id="tolerance.bootTB">
-<code class="sig-prename descclassname"><span class="pre">tolerance.</span></code><code class="sig-name descname"><span class="pre">bootTB</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#bootTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.bootTB" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tolerance.bootTB">
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">bootTB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#bootTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.bootTB" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function computes tolerance bounds for functional data containing
 phase and amplitude variation using bootstrap sampling</p>
 <dl class="field-list simple">
@@ -90,8 +91,8 @@ phase and amplitude variation using bootstrap sampling</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tolerance.mvtol_region">
-<code class="sig-prename descclassname"><span class="pre">tolerance.</span></code><code class="sig-name descname"><span class="pre">mvtol_region</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#mvtol_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.mvtol_region" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tolerance.mvtol_region">
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">mvtol_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#mvtol_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.mvtol_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes tolerance factor for multivariate normal</p>
 <p>Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
 Distributions, Communications in Statistics - Simulation and Computation, 35, 461–478.</p>
@@ -114,8 +115,8 @@ Distributions, Communications in Statistics - Simulation and Computation, 35, 46
 </dd></dl>
 
 <dl class="py function">
-<dt id="tolerance.pcaTB">
-<code class="sig-prename descclassname"><span class="pre">tolerance.</span></code><code class="sig-name descname"><span class="pre">pcaTB</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#pcaTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.pcaTB" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tolerance.pcaTB">
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">pcaTB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#pcaTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.pcaTB" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function computes tolerance bounds for functional data containing
 phase and amplitude variation using fPCA</p>
 <dl class="field-list simple">
@@ -145,8 +146,8 @@ phase and amplitude variation using fPCA</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tolerance.rwishart">
-<code class="sig-prename descclassname"><span class="pre">tolerance.</span></code><code class="sig-name descname"><span class="pre">rwishart</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#rwishart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.rwishart" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tolerance.rwishart">
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">rwishart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#rwishart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.rwishart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a random wishart matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -166,7 +167,7 @@ phase and amplitude variation using fPCA</p>
 
 <div class="toctree-wrapper compound">
 </div>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -217,13 +218,13 @@ phase and amplitude variation using fPCA</p>
         <li class="right" >
           <a href="pcr_regression.html" title="Elastic Principal Component Regression"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Functional Tolerance Bounds</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+        &#169; Copyright 2021, J. Derek Tucker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

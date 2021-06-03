@@ -81,6 +81,7 @@ class fdawarp:
                        (options = "mean" or "median") (default="mean")
         :param omethod: optimization method (DP, DP2, RBFGS) (default = DP2)
         :param smoothdata: Smooth the data using a box filter (default = F)
+        :param MaxItr: Maximum number of iterations (default = 20)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
@@ -579,11 +580,11 @@ def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
     This function aligns f2 to f1 using the elastic square-root
         slope (srsf) framework.
 
-    Usage:  out = pairwise_align_functions(f1i, f2i, time)
-            out = pairwise_align_functions(f1i, f2i, time, lam)
+    Usage:  out = pairwise_align_functions(f1, f2, time)
+            out = pairwise_align_functions(f1, f2, time, omethod, lam, grid_dim)
     
-    :param f1i: vector defining M samples of function 1
-    :param f2i: vector defining M samples of function 2
+    :param f1: vector defining M samples of function 1
+    :param f2: vector defining M samples of function 2
     :param time: time vector of length M
     :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
     :param lam: controls the elasticity (default = 0)

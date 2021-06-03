@@ -4,12 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Functional Principal Component Analysis &#8212; fdasrsf 2.2.24 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Functional Principal Component Analysis &#8212; fdasrsf 2.2.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -34,7 +35,7 @@
         <li class="right" >
           <a href="time_warping.html" title="Functional Alignment"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Principal Component Analysis</a></li> 
       </ul>
     </div>  
@@ -44,13 +45,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fPCA">
+  <section id="module-fPCA">
 <span id="functional-principal-component-analysis"></span><h1>Functional Principal Component Analysis<a class="headerlink" href="#module-fPCA" title="Permalink to this headline">¶</a></h1>
 <p>Vertical and Horizontal Functional Principal Component Analysis using SRSF</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py class">
-<dt id="fPCA.fdahpca">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fPCA.</span></code><code class="sig-name descname"><span class="pre">fdahpca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdahpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdahpca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdahpca">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fPCA.</span></span><span class="sig-name descname"><span class="pre">fdahpca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdahpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdahpca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides horizontal fPCA using the
 SRVF framework</p>
 <p>Usage:  obj = fdahpca(warp_data)</p>
@@ -72,12 +73,15 @@ SRVF framework</p>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  15-Mar-2018</p>
 <dl class="py method">
-<dt id="fPCA.fdahpca.calc_fpca">
-<code class="sig-name descname"><span class="pre">calc_fpca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdahpca.calc_fpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdahpca.calc_fpca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdahpca.calc_fpca">
+<span class="sig-name descname"><span class="pre">calc_fpca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([-</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">1])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdahpca.calc_fpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdahpca.calc_fpca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates horizontal functional principal component analysis on aligned data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of components to extract (default = 3)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of components to extract (default = 3)</p></li>
+<li><p><strong>stds</strong> – number of standard deviations along gedoesic to compute (default = -1,0,1)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>fdahpca object of numpy ndarray</p>
@@ -101,8 +105,8 @@ Date   :  15-Mar-2018</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fPCA.fdahpca.plot">
-<code class="sig-name descname"><span class="pre">plot</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdahpca.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdahpca.plot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdahpca.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdahpca.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdahpca.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot plot elastic horizontal fPCA results</p>
 <p>Usage: obj.plot()</p>
 </dd></dl>
@@ -110,8 +114,8 @@ Date   :  15-Mar-2018</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="fPCA.fdajpca">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fPCA.</span></code><code class="sig-name descname"><span class="pre">fdajpca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdajpca">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fPCA.</span></span><span class="sig-name descname"><span class="pre">fdajpca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides joint fPCA using the
 SRVF framework</p>
 <p>Usage:  obj = fdajpca(warp_data)</p>
@@ -136,8 +140,8 @@ SRVF framework</p>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  18-Mar-2018</p>
 <dl class="py method">
-<dt id="fPCA.fdajpca.calc_fpca">
-<code class="sig-name descname"><span class="pre">calc_fpca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpca.calc_fpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpca.calc_fpca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdajpca.calc_fpca">
+<span class="sig-name descname"><span class="pre">calc_fpca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([-</span> <span class="pre">1.,</span> <span class="pre">0.,</span> <span class="pre">1.])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpca.calc_fpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpca.calc_fpca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates joint functional principal component analysis
 on aligned data</p>
 <dl class="field-list simple">
@@ -145,6 +149,9 @@ on aligned data</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of components to extract (default = 3)</p></li>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – point to use for f(0) (default = midpoint)</p></li>
+<li><p><strong>stds</strong> – number of standard deviations along gedoesic to compute (default = -1,0,1)</p></li>
+<li><p><strong>parallel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – run in parallel (default = F)</p></li>
+<li><p><strong>cores</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -169,8 +176,8 @@ on aligned data</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fPCA.fdajpca.plot">
-<code class="sig-name descname"><span class="pre">plot</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpca.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpca.plot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdajpca.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpca.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpca.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot plot elastic vertical fPCA result</p>
 <p>Usage: obj.plot()</p>
 </dd></dl>
@@ -178,8 +185,8 @@ on aligned data</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="fPCA.fdavpca">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fPCA.</span></code><code class="sig-name descname"><span class="pre">fdavpca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdavpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdavpca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdavpca">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fPCA.</span></span><span class="sig-name descname"><span class="pre">fdavpca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdavpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdavpca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides vertical fPCA using the
 SRVF framework</p>
 <p>Usage:  obj = fdavpca(warp_data)</p>
@@ -201,8 +208,8 @@ SRVF framework</p>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  15-Mar-2018</p>
 <dl class="py method">
-<dt id="fPCA.fdavpca.calc_fpca">
-<code class="sig-name descname"><span class="pre">calc_fpca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdavpca.calc_fpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdavpca.calc_fpca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdavpca.calc_fpca">
+<span class="sig-name descname"><span class="pre">calc_fpca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([-</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">1])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdavpca.calc_fpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdavpca.calc_fpca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates vertical functional principal component analysis
 on aligned data</p>
 <dl class="field-list simple">
@@ -210,6 +217,7 @@ on aligned data</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of components to extract (default = 3)</p></li>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – point to use for f(0) (default = midpoint)</p></li>
+<li><p><strong>stds</strong> – number of standard deviations along gedoesic to compute (default = -1,0,1)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -234,8 +242,8 @@ on aligned data</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fPCA.fdavpca.plot">
-<code class="sig-name descname"><span class="pre">plot</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdavpca.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdavpca.plot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fPCA.fdavpca.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdavpca.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdavpca.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot plot elastic vertical fPCA result
 Usage: obj.plot()</p>
 </dd></dl>
@@ -244,7 +252,7 @@ Usage: obj.plot()</p>
 
 <div class="toctree-wrapper compound">
 </div>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -295,13 +303,13 @@ Usage: obj.plot()</p>
         <li class="right" >
           <a href="time_warping.html" title="Functional Alignment"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Principal Component Analysis</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+        &#169; Copyright 2021, J. Derek Tucker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

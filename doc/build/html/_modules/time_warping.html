@@ -5,15 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>time_warping &#8212; fdasrsf 2.2.2 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <title>time_warping &#8212; fdasrsf 2.2.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -27,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">time_warping</a></li> 
       </ul>
@@ -112,14 +111,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rsamps</span> <span class="o">=</span> <span class="kc">False</span>
     
 
-<div class="viewcode-block" id="fdawarp.srsf_align"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.srsf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srsf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<div class="viewcode-block" id="fdawarp.srsf_align"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.srsf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srsf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">MaxItr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                   <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function aligns a collection of functions using the elastic</span>
 <span class="sd">        square-root slope (srsf) framework.</span>
 
-<span class="sd">        :param method: (string) warp calculate Karcher Mean or Median (options = &quot;mean&quot; or &quot;median&quot;) (default=&quot;mean&quot;)</span>
+<span class="sd">        :param method: (string) warp calculate Karcher Mean or Median </span>
+<span class="sd">                       (options = &quot;mean&quot; or &quot;median&quot;) (default=&quot;mean&quot;)</span>
 <span class="sd">        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP2)</span>
 <span class="sd">        :param smoothdata: Smooth the data using a box filter (default = F)</span>
+<span class="sd">        :param MaxItr: Maximum number of iterations (default = 20)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param lam: controls the elasticity (default = 0)</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
@@ -194,7 +196,6 @@
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute Karcher Median of </span><span class="si">%d</span><span class="s2"> function in SRSF space...&quot;</span> <span class="o">%</span> <span class="n">N</span><span class="p">)</span>
 
-        <span class="n">MaxItr</span> <span class="o">=</span> <span class="mi">20</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="n">qun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -267,7 +268,7 @@
 
                 <span class="c1"># Minimization Step</span>
                 <span class="c1"># compute the mean of the matched function</span>
-                <span class="n">stp</span> <span class="o">=</span> <span class="o">.</span><span class="mi">3</span>
+                <span class="n">stp</span> <span class="o">=</span> <span class="mf">.3</span>
                 <span class="n">vbar</span> <span class="o">=</span> <span class="n">vtil</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">dtil</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
                 <span class="n">qtemp</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> 
                 <span class="n">ftemp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> 
@@ -528,7 +529,8 @@
 
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="fdawarp.multiple_align_functions"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.multiple_align_functions">[docs]</a>    <span class="k">def</span> <span class="nf">multiple_align_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<div class="viewcode-block" id="fdawarp.multiple_align_functions"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.multiple_align_functions">[docs]</a>    <span class="k">def</span> <span class="nf">multiple_align_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function aligns a collection of functions using the elastic square-root</span>
 <span class="sd">        slope (srsf) framework.</span>
@@ -611,6 +613,40 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">phase_var</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">var_fgam</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>            
 
         <span class="k">return</span></div></div>
+
+
+<div class="viewcode-block" id="pairwise_align_functions"><a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_functions">[docs]</a><span class="k">def</span> <span class="nf">pairwise_align_functions</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function aligns f2 to f1 using the elastic square-root</span>
+<span class="sd">        slope (srsf) framework.</span>
+
+<span class="sd">    Usage:  out = pairwise_align_functions(f1, f2, time)</span>
+<span class="sd">            out = pairwise_align_functions(f1, f2, time, omethod, lam, grid_dim)</span>
+<span class="sd">    </span>
+<span class="sd">    :param f1: vector defining M samples of function 1</span>
+<span class="sd">    :param f2: vector defining M samples of function 2</span>
+<span class="sd">    :param time: time vector of length M</span>
+<span class="sd">    :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)</span>
+<span class="sd">    :param lam: controls the elasticity (default = 0)</span>
+<span class="sd">    :param grid_dim: size of the grid, for the DP2 method only (default = 7)</span>
+
+<span class="sd">    :rtype list containing</span>
+<span class="sd">    :return f2n: aligned f2</span>
+<span class="sd">    :return gam: warping function</span>
+<span class="sd">    :return q2n: aligned q2 (srsf)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+    <span class="n">gam</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">omethod</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span>
+
+    <span class="n">f2n</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_f_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f2</span> <span class="p">,</span> <span class="n">gam</span><span class="p">)</span>
+    <span class="n">q2n</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f2n</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">f2n</span><span class="p">,</span> <span class="n">gam</span><span class="p">,</span> <span class="n">q2n</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="pairwise_align_bayes"><a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_bayes">[docs]</a><span class="k">def</span> <span class="nf">pairwise_align_bayes</span><span class="p">(</span><span class="n">f1i</span><span class="p">,</span> <span class="n">f2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1055,13 +1091,13 @@
     <span class="k">if</span> <span class="n">showplot</span><span class="p">:</span>
         <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">35</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">),</span>
-            <span class="s1">&#39;bG&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">),</span>
-            <span class="s1">&#39;Ye&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">95</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">25</span><span class="p">),</span>
-            <span class="s1">&#39;Bu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">45</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
-            <span class="s1">&#39;Ve&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
+            <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.35</span><span class="p">,</span> <span class="mf">.7</span><span class="p">,</span> <span class="mf">.9</span><span class="p">),</span>
+            <span class="s1">&#39;bG&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.5</span><span class="p">),</span>
+            <span class="s1">&#39;Ye&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.95</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mf">.25</span><span class="p">),</span>
+            <span class="s1">&#39;Bu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.45</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
+            <span class="s1">&#39;Ve&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">cl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CBcdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
@@ -1336,14 +1372,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">time_warping</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+        &#169; Copyright 2021, J. Derek Tucker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

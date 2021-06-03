@@ -4,12 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elastic Functional Boxplots &#8212; fdasrsf 2.2.24 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Elastic Functional Boxplots &#8212; fdasrsf 2.2.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -34,7 +35,7 @@
         <li class="right" >
           <a href="fPCA.html" title="Functional Principal Component Analysis"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Functional Boxplots</a></li> 
       </ul>
     </div>  
@@ -44,13 +45,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-boxplots">
+  <section id="module-boxplots">
 <span id="elastic-functional-boxplots"></span><h1>Elastic Functional Boxplots<a class="headerlink" href="#module-boxplots" title="Permalink to this headline">¶</a></h1>
 <p>Elastic Functional Boxplots</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py class">
-<dt id="boxplots.ampbox">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">boxplots.</span></code><code class="sig-name descname"><span class="pre">ampbox</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#ampbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.ampbox" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="boxplots.ampbox">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">boxplots.</span></span><span class="sig-name descname"><span class="pre">ampbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#ampbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.ampbox" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides amplitude boxplot for functional data using the
 SRVF framework</p>
 <p>Usage:  obj = ampbox(warp_data)</p>
@@ -74,8 +75,8 @@ SRVF framework</p>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  15-Mar-2018</p>
 <dl class="py method">
-<dt id="boxplots.ampbox.construct_boxplot">
-<code class="sig-name descname"><span class="pre">construct_boxplot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#ampbox.construct_boxplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.ampbox.construct_boxplot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="boxplots.ampbox.construct_boxplot">
+<span class="sig-name descname"><span class="pre">construct_boxplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#ampbox.construct_boxplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.ampbox.construct_boxplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function constructs the amplitude boxplot using the elastic
 square-root slope (srsf) framework.</p>
 <dl class="field-list simple">
@@ -89,8 +90,8 @@ square-root slope (srsf) framework.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="boxplots.ampbox.plot">
-<code class="sig-name descname"><span class="pre">plot</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#ampbox.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.ampbox.plot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="boxplots.ampbox.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#ampbox.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.ampbox.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot box plot and surface plot</p>
 <p>Usage: obj.plot()</p>
 </dd></dl>
@@ -98,8 +99,8 @@ square-root slope (srsf) framework.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="boxplots.phbox">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">boxplots.</span></code><code class="sig-name descname"><span class="pre">phbox</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#phbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.phbox" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="boxplots.phbox">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">boxplots.</span></span><span class="sig-name descname"><span class="pre">phbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#phbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.phbox" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides phase boxplot for functional data using the
 SRVF framework</p>
 <p>Usage:  obj = phbox(warp_data)</p>
@@ -123,8 +124,8 @@ SRVF framework</p>
 <p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
 Date   :  15-Mar-2018</p>
 <dl class="py method">
-<dt id="boxplots.phbox.construct_boxplot">
-<code class="sig-name descname"><span class="pre">construct_boxplot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#phbox.construct_boxplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.phbox.construct_boxplot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="boxplots.phbox.construct_boxplot">
+<span class="sig-name descname"><span class="pre">construct_boxplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#phbox.construct_boxplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.phbox.construct_boxplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function constructs phase boxplot for functional data using the elastic
 square-root slope (srsf) framework.</p>
 <dl class="field-list simple">
@@ -138,8 +139,8 @@ square-root slope (srsf) framework.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="boxplots.phbox.plot">
-<code class="sig-name descname"><span class="pre">plot</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#phbox.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.phbox.plot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="boxplots.phbox.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/boxplots.html#phbox.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boxplots.phbox.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot box plot and surface plot</p>
 <p>Usage: obj.plot()</p>
 </dd></dl>
@@ -148,7 +149,7 @@ square-root slope (srsf) framework.</p>
 
 <div class="toctree-wrapper compound">
 </div>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -199,13 +200,13 @@ square-root slope (srsf) framework.</p>
         <li class="right" >
           <a href="fPCA.html" title="Functional Principal Component Analysis"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Functional Boxplots</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+        &#169; Copyright 2021, J. Derek Tucker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

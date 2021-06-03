@@ -4,12 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UMAP EFDA Metrics &#8212; fdasrsf 2.2.24 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>UMAP EFDA Metrics &#8212; fdasrsf 2.2.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -30,7 +31,7 @@
         <li class="right" >
           <a href="curve_functions.html" title="Curve Functions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">UMAP EFDA Metrics</a></li> 
       </ul>
     </div>  
@@ -40,14 +41,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-umap_metric">
+  <section id="module-umap_metric">
 <span id="umap-efda-metrics"></span><h1>UMAP EFDA Metrics<a class="headerlink" href="#module-umap_metric" title="Permalink to this headline">¶</a></h1>
 <p>Distance metrics for functions and curves in R^n for use with UMAP
 (<a class="reference external" href="https://github.com/lmcinnes/umap">https://github.com/lmcinnes/umap</a>)</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
-<dt id="umap_metric.efda_distance">
-<code class="sig-prename descclassname"><span class="pre">umap_metric.</span></code><code class="sig-name descname"><span class="pre">efda_distance</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#umap_metric.efda_distance" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="umap_metric.efda_distance">
+<span class="sig-prename descclassname"><span class="pre">umap_metric.</span></span><span class="sig-name descname"><span class="pre">efda_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#umap_metric.efda_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>”
 calculates the distances between two curves, where 
 q2 is aligned to q1. In other words calculates the elastic distances/
@@ -69,8 +70,8 @@ This metric is set up for use with UMAP or t-sne from scikit-learn</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="umap_metric.efda_distance_curve">
-<code class="sig-prename descclassname"><span class="pre">umap_metric.</span></code><code class="sig-name descname"><span class="pre">efda_distance_curve</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#umap_metric.efda_distance_curve" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="umap_metric.efda_distance_curve">
+<span class="sig-prename descclassname"><span class="pre">umap_metric.</span></span><span class="sig-name descname"><span class="pre">efda_distance_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#umap_metric.efda_distance_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>”
 calculates the distances between two curves, where 
 beta2 is aligned to beta1. In other words calculates the elastic distance.
@@ -97,7 +98,7 @@ This metric is set up for use with UMAP or t-sne from scikit-learn</p>
 
 <div class="toctree-wrapper compound">
 </div>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -142,13 +143,13 @@ This metric is set up for use with UMAP or t-sne from scikit-learn</p>
         <li class="right" >
           <a href="curve_functions.html" title="Curve Functions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">UMAP EFDA Metrics</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+        &#169; Copyright 2021, J. Derek Tucker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -5,11 +5,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geodesic &#8212; fdasrsf 2.2.24 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <title>geodesic &#8212; fdasrsf 2.2.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">geodesic</a></li> 
       </ul>
@@ -53,7 +53,7 @@
 <span class="kn">import</span> <span class="nn">fdasrsf.curve_functions</span> <span class="k">as</span> <span class="nn">cf</span>
 
 
-<div class="viewcode-block" id="geod_sphere"><a class="viewcode-back" href="../geodesic.html#geodesic.geod_sphere">[docs]</a><span class="k">def</span> <span class="nf">geod_sphere</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="geod_sphere"><a class="viewcode-back" href="../geodesic.html#geodesic.geod_sphere">[docs]</a><span class="k">def</span> <span class="nf">geod_sphere</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function calculates the geodesics between open curves beta1 and</span>
 <span class="sd">    beta2 with k steps along path</span>
@@ -62,6 +62,8 @@
 <span class="sd">    :param beta2: numpy ndarray of shape (2,M) of M samples</span>
 <span class="sd">    :param k: number of samples along path (Default = 5)</span>
 <span class="sd">    :param scale: include length (Default = False)</span>
+<span class="sd">    :param rotation: include rotation (Default = True)</span>
+<span class="sd">    :param center: center curves at origin (Default = True)</span>
 
 <span class="sd">    :rtype: numpy ndarray</span>
 <span class="sd">    :return dist: geodesic distance</span>
@@ -73,18 +75,19 @@
     <span class="n">returnpath</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">n</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">beta1</span><span class="o">.</span><span class="n">shape</span>
 
-    <span class="n">beta1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">resamplecurve</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
-    <span class="n">beta2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">resamplecurve</span><span class="p">(</span><span class="n">beta2</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+    <span class="c1">#beta1 = cf.resamplecurve(beta1, T)</span>
+    <span class="c1">#beta2 = cf.resamplecurve(beta2, T)</span>
 
-    <span class="n">centroid1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span>
-    <span class="n">beta1</span> <span class="o">=</span> <span class="n">beta1</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid1</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">centroid2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span>
-    <span class="n">beta2</span> <span class="o">=</span> <span class="n">beta2</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid2</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">if</span> <span class="n">center</span><span class="p">:</span>
+        <span class="n">centroid1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span>
+        <span class="n">beta1</span> <span class="o">=</span> <span class="n">beta1</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid1</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">centroid2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span>
+        <span class="n">beta2</span> <span class="o">=</span> <span class="n">beta2</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid2</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 
     <span class="n">q1</span><span class="p">,</span> <span class="n">len1</span><span class="p">,</span> <span class="n">lenq1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
         <span class="n">q2</span><span class="p">,</span> <span class="n">len2</span><span class="p">,</span> <span class="n">lenq2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span>
-    <span class="n">beta2</span><span class="p">,</span> <span class="n">q2n</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">)</span>
+    <span class="n">beta2</span><span class="p">,</span> <span class="n">q2n</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
     
     <span class="c1"># Forming geodesic between the registered curves</span>
     <span class="n">dist</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2n</span><span class="p">))</span>
@@ -101,12 +104,13 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">tau1</span>
             <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="o">-</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span><span class="p">)</span><span class="o">/</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
-                <span class="n">scl</span> <span class="o">=</span> <span class="n">len1</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">len1</span><span class="o">**</span><span class="p">(</span><span class="n">tau1</span><span class="p">)</span>
+                <span class="n">scl</span> <span class="o">=</span> <span class="n">len1</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">len2</span><span class="o">**</span><span class="p">(</span><span class="n">tau1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">scl</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="n">scl</span><span class="o">*</span><span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
-            <span class="n">centroid</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
-            <span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">if</span> <span class="n">center</span><span class="p">:</span>
+                <span class="n">centroid</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+                <span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
             <span class="n">PsiX</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span>
 
         <span class="n">path</span> <span class="o">=</span> <span class="n">PsiX</span>
@@ -263,7 +267,7 @@
     <span class="n">centroid2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta2n</span><span class="p">)</span>
     <span class="n">beta2n</span> <span class="o">=</span> <span class="n">beta2n</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid2</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
     <span class="n">q2n</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2n</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">O</span> <span class="o">=</span> <span class="n">O1</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">O2</span><span class="p">)</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">O1</span> <span class="o">@</span> <span class="n">O2</span>
 
     <span class="c1"># Initialize a path as a geodesic through q1 --- q_mid --- q2</span>
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q_mid</span><span class="p">))</span>
@@ -568,14 +572,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">geodesic</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+        &#169; Copyright 2021, J. Derek Tucker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>
