@@ -1,4 +1,4 @@
-v2.2.9,  2021-06-93 -- bugfixes and add pariwise alignment function
+v2.2.9,  2021-06-93 -- bugfixes and add pairwise alignment function
 v2.2.8,  2021-04-23 -- bugfixes
 v2.2.7,  2021-04-07 -- bugfixes
 v2.2.6,  2021-03-24 -- bugfixes
@@ -21,7 +21,7 @@ v2.0.2,  2020-04-10 -- bugfixes
 v2.0.1,  2020-03-10 -- update c, c++ to work with windows
 v2.0.0,  2019-10-21 -- changed to class structure and added regression code
 v1.5.0,  2019-08-07 -- added tolerance bound
-v1.4.3,  2019-07-30 -- added RBFGS optimzation
+v1.4.3,  2019-07-30 -- added RBFGS optimization
 v1.4.0,  2019-05-10 -- added joint PCA
 v1.3.0,  2019-04-10 -- updates from R package and python3
 v1.2.1,  2014-12-06 -- fixed comment issues
