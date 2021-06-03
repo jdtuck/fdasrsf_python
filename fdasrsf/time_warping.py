@@ -71,12 +71,14 @@ class fdawarp:
         self.rsamps = False
     
 
-    def srsf_align(self, method="mean", omethod="DP2", smoothdata=False, parallel=False, lam=0.0, cores=-1, grid_dim=7):
+    def srsf_align(self, method="mean", omethod="DP2", smoothdata=False, MaxItr=20,
+                   parallel=False, lam=0.0, cores=-1, grid_dim=7):
         """
         This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
 
-        :param method: (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
+        :param method: (string) warp calculate Karcher Mean or Median 
+                       (options = "mean" or "median") (default="mean")
         :param omethod: optimization method (DP, DP2, RBFGS) (default = DP2)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
@@ -153,7 +155,6 @@ class fdawarp:
         if method == 1:
             print("Compute Karcher Median of %d function in SRSF space..." % N)
 
-        MaxItr = 20
         ds = np.repeat(0.0, MaxItr + 2)
         ds[0] = np.inf
         qun = np.repeat(0.0, MaxItr + 1)
