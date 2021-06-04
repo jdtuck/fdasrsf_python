@@ -803,6 +803,204 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
 
     return(out)
 
+
+def pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts=None):
+    """
+    This function aligns two functions using Bayesian framework. It uses a 
+    hierarchical Bayesian framework assuming mearsurement error error It will 
+    align f2 to f1. It is based on mapping warping functions to a hypersphere, 
+    and a subsequent exponential mapping to a tangent space. In the tangent space,
+    the \infty-HMC algorithm is used to explore both local and global
+    structure in the posterior distribution.
+   
+    Usage:  out = pairwise_align_bayes_infHMC(f1i, f2i, time)
+            out = pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts)
+    
+    :param f1i: vector defining M samples of function 1
+    :param f2i: vector defining M samples of function 2
+    :param time: time vector of length M
+    :param mcmopts: dict of mcmc parameters
+    :type mcmcopts: dict
+  
+    default mcmc options:
+    mcmcopts = {"iter":1*(10**4), "nchains":1 , 
+                "burnin":np.minimum(5*(10**3),2*(10**4)//2),
+                "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
+                "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
+                "L1propvar":0.3, "L2propvar":0.3, "npoints":200,
+                "initcoef":np.repeat(0,20), "nbasis":10, "basis":'fourier', "extrainfo":True}
+    Basis can be 'fourier' or 'legendre'
+   
+    :rtype collection containing
+    :return f2_warped: aligned f2
+    :return gamma: warping function
+    :return v_coef: final v_coef
+    :return psi: final psi
+    :return sigma1: final sigma
+    
+    if extrainfo
+    :return theta_accept: accept of psi samples
+    :return f2_accept: accept of f2 samples
+    :return SSE: SSE
+    :return gamma_mat: posterior gammas
+    :return gamma_stats: posterior gamma stats
+    :return xdist: phase distance posterior
+    :return ydist: amplitude distance posterior)
+
+    J. D. Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.
+    """
+
+    if mcmcopts is None:
+        mcmcopts = {"iter":1*(10**4), "nchains":1 , 
+                    "burnin":np.minimum(5*(10**3),2*(10**4)//2),
+                    "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
+                    "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
+                    "L1propvar":0.3, "L2propvar":0.3, "npoints":200,
+                    "initcoef":np.repeat(0,20), "nbasis":10, "basis":'fourier', "extrainfo":True}
+
+    if f1i.shape[0] != f2i.shape[0]:
+        raise Exception('Length of f1 and f2 must be equal')
+
+    if f1i.shape[0] != time.shape[0]:
+        raise Exception('Length of f1 and time must be equal')
+
+    if np.mod(mcmcopts["initcoef"].shape[0], 2) != 0:
+        raise Exception('Length of mcmcopts.initcoef must be even')
+    
+    if np.mod(mcmcopts["nbasis"].shape[0], 2) != 0:
+        raise Exception('Length of mcmcopts.nbasis must be even')
+
+    # Number of sig figs to report in gamma_mat
+    SIG_GAM = 13
+    iter = mcmcopts["iter"]
+    
+    # parameter settings
+    pw_sim_global_burnin = mcmcopts["burnin"]
+    valid_index = np.arange(pw_sim_global_burnin-1,iter)
+    pw_sim_global_Mg = mcmcopts["initcoef"].shape[0]//2
+    g_coef_ini = mcmcopts["initcoef"]
+    numSimPoints = mcmcopts["npoints"]
+    pw_sim_global_domain_par = np.linspace(0,1,numSimPoints)
+    g_basis = uf.basis_fourier(pw_sim_global_domain_par, pw_sim_global_Mg, 1)
+    sigma1_ini = 1
+    zpcn = mcmcopts["zpcn"]
+    pw_sim_global_sigma_g = mcmcopts["propvar"] 
+
+    def propose_g_coef(g_coef_curr):
+        pCN_beta = zpcn["betas"]
+        pCN_prob = zpcn["probs"]
+        probm = np.insert(np.cumsum(pCN_prob),0,0)
+        z = np.random.rand()
+        result = {"prop":g_coef_curr,"ind":1}
+        for i in range (0,pCN_beta.shape[0]):
+            if z <= probm[i+1] and z > probm[i]:
+                g_coef_new = normal(0, pw_sim_global_sigma_g / np.repeat(np.arange(1,pw_sim_global_Mg+1),2))
+                result["prop"] = np.sqrt(1-pCN_beta[i]**2) * g_coef_curr + pCN_beta[i] * g_coef_new
+                result["ind"] = i
+
+        return result
+
+    # normalize time to [0,1]
+    time = (time - time.min())/(time.max()-time.min())
+    timet = np.linspace(0,1,numSimPoints)
+    f1 = uf.f_predictfunction(f1i,timet,0)
+    f2 = uf.f_predictfunction(f2i,timet,0)
+
+    # srsf transformation
+    q1 = uf.f_to_srsf(f1,timet)
+    q1i = uf.f_to_srsf(f1i,time)
+    q2 = uf.f_to_srsf(f2,timet)
+
+    tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis))
+
+    if tmp.min() < 0:
+        raise Exception("Invalid initial value of g")
+
+    # result vectors
+    g_coef = np.zeros((iter,g_coef_ini.shape[0]))
+    sigma1 = np.zeros(iter)
+    logl = np.zeros(iter)
+    SSE = np.zeros(iter)
+    accept = np.zeros(iter, dtype=bool)
+    accept_betas = np.zeros(iter)
+
+    # init
+    g_coef_curr = g_coef_ini
+    sigma1_curr = sigma1_ini
+    SSE_curr = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2)
+    logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2,sigma1_ini**2,SSE_curr)
+    
+    g_coef[0,:] = g_coef_ini
+    sigma1[0] = sigma1_ini
+    SSE[0] = SSE_curr
+    logl[0] = logl_curr
+
+    # update the chain for iter-1 times
+    for m in tqdm(range(1,iter)):
+        # update g
+        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
+        
+        # update sigma1
+        newshape = q1.shape[0]/2 + mcmcopts["alpha0"]
+        newscale = 1/2 * SSE_curr + mcmcopts["beta0"]
+        sigma1_curr = np.sqrt(1/np.random.gamma(newshape,1/newscale))
+        logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, sigma1_curr**2, SSE_curr)
+
+        # save updates to results
+        g_coef[m,:] = g_coef_curr
+        sigma1[m] = sigma1_curr
+        SSE[m] = SSE_curr
+        if mcmcopts["extrainfo"]:
+            logl[m] = logl_curr
+            accept[m] = accepti
+            accept_betas[m] = zpcnInd
+
+    # calculate posterior mean of psi
+    pw_sim_est_psi_matrix = np.zeros((numSimPoints,valid_index.shape[0]))
+    for k in range(0,valid_index.shape[0]):
+        g_temp = uf.f_basistofunction(g_basis["x"],0,g_coef[valid_index[k],:],g_basis)
+        psi_temp = uf.f_exp1(g_temp)
+        pw_sim_est_psi_matrix[:,k] = psi_temp
+
+    result_posterior_psi_simDomain = uf.f_psimean(pw_sim_global_domain_par, pw_sim_est_psi_matrix)
+
+    # resample to same number of points as the input f1 and f2
+    interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, fill_value="extrapolate")
+    result_posterior_psi = interp(np.linspace(0,1,f1i.shape[0]))
+
+    # transform posterior mean of psi to gamma
+    result_posterior_gamma = uf.f_phiinv(result_posterior_psi)
+    result_posterior_gamma = uf.norm_gam(result_posterior_gamma)
+
+    # warped f2
+    f2_warped = uf.warp_f_gamma(time, f2i, result_posterior_gamma)
+
+    if mcmcopts["extrainfo"]:
+        M,N = pw_sim_est_psi_matrix.shape
+        gamma_mat = np.zeros((time.shape[0],N))
+        one_v = np.ones(M)
+        Dx = np.zeros(N)
+        Dy = Dx
+        for ii in range(0,N):
+            interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), pw_sim_est_psi_matrix[:,ii], fill_value="extrapolate")
+            result_i = interp(time)
+            tmp = uf.f_phiinv(result_i)
+            gamma_mat[:,ii] = uf.norm_gam(tmp)
+            v, theta = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
+            Dx[ii] = np.sqrt(trapz(v**2,pw_sim_global_domain_par))
+            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2,gamma_mat[:,ii])
+            Dy[ii] = np.sqrt(trapz((q1i-q2warp)**2,time))
+
+        gamma_stats = uf.statsFun(gamma_mat)
+
+    
+    results_o = collections.namedtuple('align_bayes', ['f2_warped', 'gamma','g_coef', 'psi', 'sigma1', 'accept', 'betas_ind', 'logl', 'gamma_mat', 'gamma_stats', 'xdist', 'ydist'])
+
+    out = results_o(f2_warped, result_posterior_gamma, g_coef, result_posterior_psi, sigma1, accept[1:], accept_betas[1:], logl, gamma_mat, gamma_stats, Dx, Dy)
+
+    return(out)
+
+
 def f_SSEg_pw(g, q1, q2):
     obs_domain = np.linspace(0,1,g.shape[0])
     exp1g_temp = uf.f_predictfunction(uf.f_exp1(g), obs_domain, 0)
