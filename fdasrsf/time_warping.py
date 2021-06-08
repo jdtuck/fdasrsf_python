@@ -11,7 +11,9 @@ import fdasrsf.fPCA as fpca
 import fdasrsf.geometry as geo
 from scipy.integrate import trapz, cumtrapz
 from scipy.interpolate import interp1d
-from scipy.linalg import svd
+from scipy.linalg import svd, cholesky
+from scipy.cluster.hierarchy import linkage, fcluster
+from scipy.spatial.distance import squareform, pdist
 from numpy.linalg import norm
 from numpy.random import rand, normal
 from joblib import Parallel, delayed

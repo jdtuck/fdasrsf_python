@@ -9,6 +9,7 @@ from scipy.interpolate import UnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
 from scipy.linalg import norm, svd, cholesky, inv
 from scipy.stats.mstats import mquantiles
+from scipy import special as sp
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
 from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
@@ -930,6 +931,22 @@ def resamplefunction(x, n):
     xn = interp(arange(0, n)/double(n-1), arange(0, T)/double(T-1), x)
     return(xn)
 
+
+def basis_fourierd(f_domain, numBasis):
+    result = zeros((f_domain.shape[0], 2*numBasis))
+    for i in range(0,2*numBasis):
+        j = ceil(i/2)
+        if mod(i,2) == 1:
+            result[:,i] = 1/sqrt(pi) * sin(2*j*pi*f_domain)
+
+        if mod(i,2) == 0:
+            result[:,i] = 1/sqrt(pi) * cos(2*j*pi*f_domain)
+
+    out = {"x":f_domain, "matrix":result}
+
+    return(out)
+
+
 def basis_fourier(f_domain, numBasis, fourier_p):
     result = zeros((f_domain.shape[0], 2*numBasis))
     for i in range(0,2*numBasis):
@@ -943,6 +960,27 @@ def basis_fourier(f_domain, numBasis, fourier_p):
     out = {"x":f_domain, "matrix":result}
 
     return(out)
+
+
+def legendre(N,X) :
+    matrixReturn = zeros((N+1,X.shape[0]))
+    for i in enumerate(X) :
+        currValues = sp.lpmn(N,N,i[1])
+        matrixReturn[:,i[0]] = array([j[N] for j in currValues[0]])
+    return matrixReturn
+
+
+def basis_legendre(f_domain, numBasis, fourier_p):
+    result = zeros((f_domain.shape[0], 2*numBasis))
+    for i in range(0,2*numBasis):
+        f_domain_scaled = 2*(f_domain/fourier_p) - 1
+        tmp = legendre(i+1, f_domain_scaled)
+        result[:, i] = tmp[0, :]
+
+    out = {"x":f_domain, "matrix":result}
+
+    return(out)
+
 
 def statsFun(vec):
     a = quantile(vec,0.025,axis=1)
