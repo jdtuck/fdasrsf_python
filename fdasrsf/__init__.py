@@ -5,7 +5,7 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA"]
+__all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA"]
 
 __version__ = "2.2.10"
 
