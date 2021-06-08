@@ -7,6 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import matplotlib.pyplot as plt
 import fdasrsf.utility_functions as uf
+import fdasrsf.bayesian_functions as bf
 import fdasrsf.fPCA as fpca
 import fdasrsf.geometry as geo
 from scipy.integrate import trapz, cumtrapz
@@ -14,14 +15,14 @@ from scipy.interpolate import interp1d
 from scipy.linalg import svd, cholesky
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform, pdist
-from numpy.linalg import norm
-from numpy.random import rand, normal
+import GPy
+from numpy.linalg import norm, inv
+from numpy.random import rand, normal, gamma
 from joblib import Parallel, delayed
 from fdasrsf.fPLS import pls_svd
 from tqdm import tqdm
 import fdasrsf.plot_style as plot
 import fpls_warp as fpls
-import cbayesian as bay
 import collections
 
 
@@ -732,8 +733,8 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     # init
     g_coef_curr = g_coef_ini
     sigma1_curr = sigma1_ini
-    SSE_curr = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2)
-    logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2,sigma1_ini**2,SSE_curr)
+    SSE_curr = bf.f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2)
+    logl_curr = bf.f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2,sigma1_ini**2,SSE_curr)
     
     g_coef[0,:] = g_coef_ini
     sigma1[0] = sigma1_ini
@@ -743,13 +744,13 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     # update the chain for iter-1 times
     for m in tqdm(range(1,iter)):
         # update g
-        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
+        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = bf.f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
         
         # update sigma1
         newshape = q1.shape[0]/2 + mcmcopts["alpha0"]
         newscale = 1/2 * SSE_curr + mcmcopts["beta0"]
         sigma1_curr = np.sqrt(1/np.random.gamma(newshape,1/newscale))
-        logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, sigma1_curr**2, SSE_curr)
+        logl_curr = bf.f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, sigma1_curr**2, SSE_curr)
 
         # save updates to results
         g_coef[m,:] = g_coef_curr
@@ -806,7 +807,7 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     return(out)
 
 
-def pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts=None):
+def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     """
     This function aligns two functions using Bayesian framework. It uses a 
     hierarchical Bayesian framework assuming mearsurement error error It will 
@@ -818,8 +819,8 @@ def pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts=None):
     Usage:  out = pairwise_align_bayes_infHMC(f1i, f2i, time)
             out = pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts)
     
-    :param f1i: vector defining M samples of function 1
-    :param f2i: vector defining M samples of function 2
+    :param y1i: vector defining M samples of function 1
+    :param y2i: vector defining M samples of function 2
     :param time: time vector of length M
     :param mcmopts: dict of mcmc parameters
     :type mcmcopts: dict
@@ -829,7 +830,7 @@ def pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts=None):
                 "burnin":np.minimum(5*(10**3),2*(10**4)//2),
                 "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                 "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
-                "L1propvar":0.3, "L2propvar":0.3, "npoints":200,
+                "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
                 "initcoef":np.repeat(0,20), "nbasis":10, "basis":'fourier', "extrainfo":True}
     Basis can be 'fourier' or 'legendre'
    
@@ -857,13 +858,13 @@ def pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts=None):
                     "burnin":np.minimum(5*(10**3),2*(10**4)//2),
                     "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                     "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
-                    "L1propvar":0.3, "L2propvar":0.3, "npoints":200,
+                    "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
                     "initcoef":np.repeat(0,20), "nbasis":10, "basis":'fourier', "extrainfo":True}
 
-    if f1i.shape[0] != f2i.shape[0]:
+    if y1i.shape[0] != y2i.shape[0]:
         raise Exception('Length of f1 and f2 must be equal')
 
-    if f1i.shape[0] != time.shape[0]:
+    if y1i.shape[0] != time.shape[0]:
         raise Exception('Length of f1 and time must be equal')
 
     if np.mod(mcmcopts["initcoef"].shape[0], 2) != 0:
@@ -872,110 +873,404 @@ def pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts=None):
     if np.mod(mcmcopts["nbasis"].shape[0], 2) != 0:
         raise Exception('Length of mcmcopts.nbasis must be even')
 
+    # set up random start points for more than 1 chain
+    random_starts = np.zeros((mcmcopts["initcoef"].shape[0], mcmcopts["nchains"]))
+    if mcmcopts["chains"]:
+        for i in range(0, mcmcopts["nchains"]):
+            randcoef = -1 + (2)*rand(mcmcopts["initcoef"].shape[0])
+            random_starts[:, i] = randcoef
+    
+    isparallel = True
+    if mcmcopts["chains"] == 1:
+        isparallel = False
+    
+    if isparallel:
+        mcmcopts_p = []
+        for i in range(0, mcmcopts["nchains"]):
+            mcmcopts["initcoef"] = random_starts[:, i]
+            mcmcopts_p.append(mcmcopts)
+    
+    # run chains
+    if isparallel:
+        chains = Parallel(n_jobs=-1)(delayed(run_mcmc)(y1i, y2i, time, 
+                               mcmcopts_p[n]) for n in range(mcmcopts["nchains"]))
+
+    else:
+        chains = []
+        chains[0] = run_mcmc(y1i, y2i, time, mcmcopts)
+    
+    # combine outputs
+    Nsamples = chains[0]['f1'].shape[0]
+    M = chains[0]['f1'].shape[1]
+    f1 = np.zeros((Nsamples*mcmcopts["nchains"], M))
+    f2 = np.zeros((Nsamples*mcmcopts["nchains"], M))
+    gamma = np.zeros((M, Nsamples*mcmcopts["nchains"]))
+    v_coef = np.zeros((Nsamples*mcmcopts["nchains"], chains[0]['v_coef'].shape[1]))
+    psi = np.zeros((M, Nsamples*mcmcopts["nchains"]))
+    sigma = np.zeros(Nsamples*mcmcopts["nchains"])
+    sigma1 = np.zeros(Nsamples*mcmcopts["nchains"])
+    sigma2 = np.zeros(Nsamples*mcmcopts["nchains"])
+    s1 = np.zeros(Nsamples*mcmcopts["nchains"])
+    s2 = np.zeros(Nsamples*mcmcopts["nchains"])
+    L1 = np.zeros(Nsamples*mcmcopts["nchains"])
+    L2 = np.zeros(Nsamples*mcmcopts["nchains"])
+    f2_warped_mu = np.zeros((M, mcmcopts["nchains"]))
+
+    if mcmcopts["extrainfo"]:
+        Nsamplesa = chains[0]['theta_accept'].shape[0]
+        theta_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
+        f1_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
+        f2_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
+        L1_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
+        L2_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
+        gamma_mat = np.zeros((M,Nsamplesa*mcmcopts["nchains"]))
+        SSE = np.zeros((Nsamplesa+1)*mcmcopts["nchains"])
+        logl = np.zeros((Nsamplesa+1)*mcmcopts["nchains"])
+        f2_warped = np.zeros((Nsamples*mcmcopts["nchains"], M))
+        phasedist = np.zeros(Nsamples*mcmcopts["nchains"])
+        ampdist = np.zeros(Nsamples*mcmcopts["nchains"])
+
+    for i in range(0, mcmcopts["nchains"]):
+        a = (i)*Nsamples
+        b = (i+1)*Nsamples
+        f1[a:b, :] = chains[i]['f1']
+        f2[a:b, :] = chains[i]['f2']
+        gamma[:, i] = chains[i]['gamma']
+        v_coef[a:b, :] = chains[i]['v_coef']
+        psi[:, i] = chains[i]['psi']
+        sigma[a:b] = chains[i]['sigma']
+        sigma1[a:b] = chains[i]['sigma1']
+        sigma2[a:b] = chains[i]['sigma2']
+        s1[a:b] = chains[i]['s1']
+        s2[a:b] = chains[i]['s2']
+        L1[a:b] = chains[i]['L1']
+        L2[a:b] = chains[i]['L2']
+        f2_warped_mu[:, i] = chains[i]['f2_warped_mu']
+
+        if mcmcopts["extrainfo"]:
+            a1 = (i)*Nsamplesa
+            b1 = (i+1)*Nsamplesa
+            theta_accept[a1:b1] = chains[i]['theta_accept']
+            f1_accept[a1:b1] = chains[i]['f1_accept']
+            f2_accept[a1:b1] = chains[i]['f2_accept']
+            L1_accept[a1:b1] = chains[i]['L1_accept']
+            L2_accept[a1:b1] = chains[i]['L2_accept']
+            gamma_mat[:, a:b] = chains[i]['gamma_mat']
+            a1 = (i)*(Nsamplesa+1)
+            b1 = (i+1)*Nsamplesa
+            SSE[a1:b1] = chains[i]['SSE']
+            logl[a1:b1] = chains[i]['logl']
+            f2_warped[a:b, :] = chains[i]['f2_warped']
+            phasedist[a:b] = chains[i]['phasedist']
+            ampdist[a:b] = chains[i]['ampdist']
+    
+    # finding modes
+    if mcmcopts["chains"] > 1:
+        Dx = np.zeros((mcmcopts["nchains"], mcmcopts["nchains"]))
+        time1 = np.linspace(0,1,gamma.shape[0])
+        binsize = np.diff(time1)
+        binsize = binsize.mean()
+        for i in range(0, mcmcopts["nchains"]):
+            for j in range(i+1,mcmcopts["nchains"]):
+                psi1 = np.sqrt(np.gradient(gamma[:, i], binsize))
+                psi2 = np.sqrt(np.gradient(gamma[:, j], binsize))
+                q1dotq2 = trapz(psi1*psi2, time1)
+                if q1dotq2 > 1:
+                    q1dotq2 = 1
+                elif q1dotq2 < -1:
+                    q1dotq2 = -1
+
+                Dx[i,j] = np.real(np.arccos(q1dotq2))
+        
+        Dx = Dx + Dx.T
+
+        # cluster modes
+        y = squareform(Dx)
+        Z = linkage(y, method='complete')
+        cutoff = np.median(Dx)
+        T = fcluster(Z, cutoff, criterion='distance')
+        N = np.unique(T)
+
+        # find mean and confidence region of cluster
+        posterior_gamma_modes = np.zeros((M, N.shape[0]))
+        posterior_gamma_modes_cr = np.zeros((M, 2, N.shape[0]))
+        for i in range(1, N+1):
+            idx = np.where(T == i)
+            tmp = np.zeros((M, Nsamples*idx.shape[0]))
+            for j in range(0, idx.shape[0]):
+                a = (j)*Nsamples
+                b = (j+1)*Nsamples
+                tmp[:, a:b] = chains[idx[j]].gamma_mat
+            mu, gam_mu, psi, vec = uf.SqrtMean(tmp)
+            posterior_gamma_modes[:, i] = gam_mu
+            posterior_gamma_modes_cr[:, :, i] = uf.statsFun(tmp)
+        
+    # thining
+    f1 = f1[0::mcmcopts["thin"], :]
+    f2 = f2[0::mcmcopts["thin"], :]
+    v_coef = v_coef[0::mcmcopts["thin"], :]
+    sigma = sigma[0::mcmcopts["thin"]]
+    sigma1 = sigma1[0::mcmcopts["thin"]]
+    sigma2 = sigma2[0::mcmcopts["thin"]]
+    s1 = s1[0::mcmcopts["thin"]]
+    s2 = s2[0::mcmcopts["thin"]]
+    L1 = L1[0::mcmcopts["thin"]]
+    L2 = L2[0::mcmcopts["thin"]]
+
+    if mcmcopts["extrainfo"]:
+        theta_accept = theta_accept[0::mcmcopts["thin"]]
+        f1_accept = f1_accept[0::mcmcopts["thin"]]
+        f2_accept = f2_accept[0::mcmcopts["thin"]]
+        L1_accept = L1_accept[0::mcmcopts["thin"]]
+        L2_accept = L2_accept[0::mcmcopts["thin"]]
+        gamma_mat = gamma_mat[:, 0::mcmcopts["thin"]]
+        SSE = SSE[0::mcmcopts["thin"]]
+        logl = logl[0::mcmcopts["thin"]]
+        f2_warped = f2_warped[0::mcmcopts["thin"], :]
+        phasedist = phasedist[0::mcmcopts["thin"]]
+        ampdist = ampdist[0::mcmcopts["thin"]]
+
+
+    if mcmcopts["extrainfo"]:
+        results_o = collections.namedtuple('align_bayes_HMC', ['f1', 'f2', 'gamma', 'v_coef', 'psi', 'sigma', 'sigma1', 'sigma2', 's1', 's2', 'L1', 'L2', 'f2_warped_mu', 'theta_accept', 'f1_accept', 'f2_accept', 'L1_accept', 'L2_accept', 'gamma_mat', 'SSE', 'logl', 'f2_warped', 'phasedist', 'ampdist'])
+
+        out = results_o(f1, f2, gamma, v_coef, psi, sigma, sigma1, sigma2, s1, s2, L1, L2, f2_warped_mu,
+                        theta_accept, f1_accept, f2_accept, L1_accept, L2_accept, gamma_mat, SSE, logl,
+                        f2_warped, phasedist, ampdist)
+
+    else:
+        results_o = collections.namedtuple('align_bayes_HMC', ['f1', 'f2', 'gamma', 'v_coef', 'psi', 'sigma', 'sigma1', 'sigma2', 's1', 's2', 'L1', 'L2', 'f2_warped_mu'])
+
+        out = results_o(f1, f2, gamma, v_coef, psi, sigma, sigma1, sigma2, s1, s2, L1, L2, f2_warped_mu)
+
+    return(out)
+
+
+def run_mcmc(y1i, y2i, time, mcmcopts):
     # Number of sig figs to report in gamma_mat
     SIG_GAM = 13
     iter = mcmcopts["iter"]
-    
-    # parameter settings
-    pw_sim_global_burnin = mcmcopts["burnin"]
-    valid_index = np.arange(pw_sim_global_burnin-1,iter)
-    pw_sim_global_Mg = mcmcopts["initcoef"].shape[0]//2
-    g_coef_ini = mcmcopts["initcoef"]
-    numSimPoints = mcmcopts["npoints"]
-    pw_sim_global_domain_par = np.linspace(0,1,numSimPoints)
-    g_basis = uf.basis_fourier(pw_sim_global_domain_par, pw_sim_global_Mg, 1)
-    sigma1_ini = 1
-    zpcn = mcmcopts["zpcn"]
-    pw_sim_global_sigma_g = mcmcopts["propvar"] 
-
-    def propose_g_coef(g_coef_curr):
-        pCN_beta = zpcn["betas"]
-        pCN_prob = zpcn["probs"]
-        probm = np.insert(np.cumsum(pCN_prob),0,0)
-        z = np.random.rand()
-        result = {"prop":g_coef_curr,"ind":1}
-        for i in range (0,pCN_beta.shape[0]):
-            if z <= probm[i+1] and z > probm[i]:
-                g_coef_new = normal(0, pw_sim_global_sigma_g / np.repeat(np.arange(1,pw_sim_global_Mg+1),2))
-                result["prop"] = np.sqrt(1-pCN_beta[i]**2) * g_coef_curr + pCN_beta[i] * g_coef_new
-                result["ind"] = i
-
-        return result
+    T = time.shape[0]
 
     # normalize time to [0,1]
     time = (time - time.min())/(time.max()-time.min())
-    timet = np.linspace(0,1,numSimPoints)
-    f1 = uf.f_predictfunction(f1i,timet,0)
-    f2 = uf.f_predictfunction(f2i,timet,0)
 
-    # srsf transformation
-    q1 = uf.f_to_srsf(f1,timet)
-    q1i = uf.f_to_srsf(f1i,time)
-    q2 = uf.f_to_srsf(f2,timet)
+    # parameter settings
+    pw_sim_global_burnin = mcmcopts["burnin"]
+    valid_index = np.arange(pw_sim_global_burnin-1,iter)
+    ncoef = mcmcopts["initcoef"].shape[0]
+    nbasis = mcmcopts["nbasis"]
+    pw_sim_global_Mv = ncoef//2
+    numSimPoints = T
+    pw_sim_global_domain_par = np.linspace(0,1,numSimPoints)
+    d_basis = uf.basis_fourierd(pw_sim_global_domain_par, nbasis)
+    if mcmcopts["basis"] == 'fourier':
+        v_basis = uf.basis_fourier(pw_sim_global_domain_par, pw_sim_global_Mv, 1)
+    elif mcmcopts["basis"] == 'legendre':
+        v_basis = uf.basis_legendre(pw_sim_global_domain_par, pw_sim_global_Mv, 1)
+    else:
+        raise Exception('Incorrect Basis Specified')
+    sigma_ini = 1
+    v_priorvar = mcmcopts["vpriorvar"]
+    v_coef_ini = mcmcopts["initcoef"]
+    D = pdist(time.reshape((time.shape[0],1)))
+    Dmat = squareform(D)
+    C = v_priorvar / np.repeat(np.arange(1,pw_sim_global_Mv+1), 2)
+    cholC = cholesky(np.diag(C))
+    h = mcmcopts["h"]
+    L = mcmcopts["L"]
 
-    tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis))
+    def propose_v_coef(v_coef_curr):
+        v_coef_new = normal(v_coef_curr, C.T)
+        return v_coef_new
 
-    if tmp.min() < 0:
-        raise Exception("Invalid initial value of g")
+    # f1,f2 prior, propoposal params
+    sigma1_ini = 0.01
+    sigma2_ini = 0.01
+    f1_propvar = mcmcopts["f1propvar"]
+    f2_propvar = mcmcopts["f2propvar"]
+    y1itmp = y1i[0::mcmcopts["sampfreq"]]
+    timetmp = time[0::mcmcopts["sampfreq"]]
+    kernel1 = GPy.kern.RBF(input_dim=1, variance=y1itmp.std()/np.sqrt(2), lengthscale=np.mean(timetmp.std()))
+    y2itmp = y2i[0::mcmcopts["sampfreq"]]
+    kernel2 = GPy.kern.RBF(input_dim=1, variance=y2itmp.std()/np.sqrt(2), lengthscale=np.mean(timetmp.std()))
+    M1 = timetmp.shape[0]
+    model1 = GPy.models.GPRegression(timetmp.reshape((M1,1)),y1itmp.reshape((M1,1)),kernel1)
+    model1.optimize()
+    model2 = GPy.models.GPRegression(timetmp.reshape((M1,1)),y2itmp.reshape((M1,1)),kernel2)
+    model2.optimize()
+
+    s1_ini = model1.kern.param_array[0]
+    s2_ini = model2.kern.param_array[0]
+    L1_propvar = mcmcopts["L1propvar"]
+    L2_propvar = mcmcopts["L2propvar"]
+    L1_ini = model2.kern.param_array[1]
+    L2_ini = model2.kern.param_array[1]
+
+    K_f1_corr = uf.exp2corr2(L1_ini,Dmat)+0.1 * np.eye(y1i.shape[0])
+    K_f1 = s1_ini * K_f1_corr
+    K_f1 = inv(K_f1)
+    K_f2_corr = uf.exp2corr2(L2_ini,Dmat)+0.1 * np.eye(y2i.shape[0])
+    K_f2 = s2_ini * K_f2_corr
+    K_f2 = inv(K_f2)
+    K_f1prop= uf.exp2corr(f1_propvar,L1_ini,Dmat)
+    K_f2prop= uf.exp2corr(f2_propvar,L2_ini,Dmat)
 
     # result vectors
-    g_coef = np.zeros((iter,g_coef_ini.shape[0]))
+    v_coef = np.zeros((iter,v_coef_ini.shape[0]))
+    sigma = np.zeros(iter)
     sigma1 = np.zeros(iter)
+    sigma2 = np.zeros(iter)
+    f1 = np.zeros((iter,time.shape[0]))
+    f2 = np.zeros((iter,time.shape[0]))
+    f2_warped = np.zeros((iter,time.shape[0]))
+    s1 = np.zeros(iter)
+    s2 = np.zeros(iter)
+    L1 = np.zeros(iter)
+    L2 = np.zeros(iter)
     logl = np.zeros(iter)
     SSE = np.zeros(iter)
-    accept = np.zeros(iter, dtype=bool)
-    accept_betas = np.zeros(iter)
+    SSEprop = np.zeros(iter)
+    theta_accept = np.zeros(iter, dtype=bool)
+    f1_accept = np.zeros(iter, dtype=bool)
+    f2_accept = np.zeros(iter, dtype=bool)
+    L1_accept = np.zeros(iter, dtype=bool)
+    L2_accept = np.zeros(iter, dtype=bool)
 
     # init
-    g_coef_curr = g_coef_ini
+    v_coef_curr = v_coef_ini
+    v_curr = uf.f_basistofunction(v_basis["x"],0,v_coef_ini,v_basis)
+    sigma_curr = sigma_ini
     sigma1_curr = sigma1_ini
-    SSE_curr = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2)
-    logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2,sigma1_ini**2,SSE_curr)
-    
-    g_coef[0,:] = g_coef_ini
+    sigma2_curr = sigma2_ini
+    L1_curr = L1_ini
+    L2_curr = L2_ini
+
+    f1_curr, predvar = model1.predict(time.reshape((T,1)))
+    f1_curr = f1_curr.reshape(T)
+    f2_curr, predvar = model2.predict(time.reshape((T,1)))
+    f2_curr = f2_curr.reshape(T)
+
+    # srsf transformation
+    q1_curr = uf.f_to_srsf(f1_curr, time)
+    q2_curr = uf.f_to_srsf(f2_curr, time)
+
+    SSE_curr = bf.f_SSEv_pw(v_curr, q1_curr, q2_curr)
+    logl_curr = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
+
+    v_coef[0,:] = v_coef_ini
+    f1[0,:] = f1_curr
+    f2[0,:] = f2_curr
+    f2_warped[0,:] = f2_curr
+    sigma[0] = sigma_ini
     sigma1[0] = sigma1_ini
+    sigma2[0] = sigma2_ini
+    s1[0] = s1_ini
+    s2[0] = s2_ini
+    L1[0] = L1_ini
+    L2[0] = L2_ini
     SSE[0] = SSE_curr
+    SSEprop[0] = SSE_curr
     logl[0] = logl_curr
 
+    n = f1_curr.shape[0]*f1_curr.shape[1]
+
+    nll, g, SSE_curr = bf.f_dlogl_pw(v_coef_curr, v_basis, d_basis, sigma_curr, q1_curr, q2_curr)
+
     # update the chain for iter-1 times
-    for m in tqdm(range(1,iter)):
-        # update g
-        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
+    for m in range(1,iter):
+
+        # update f1
+        f1_curr, q1_curr, f1_accept1 = bf.f_updatef1_pw(f1_curr,q1_curr, y1,q2_curr,v_coef_curr, v_basis,
+                                                       SSE_curr,K_f1,K_f1prop,sigma_curr,np.sqrt(sigma1_curr))
+
+        # update f2
+        f2_curr, q2_curr, f2_accept1 = bf.f_updatef2_pw(f2_curr,q2_curr, y2,q1_curr,v_coef_curr, v_basis,
+                                                       SSE_curr,K_f2,K_f2prop,sigma_curr,np.sqrt(sigma2_curr))
+
+        # update v
+        v_coef_curr, nll, g, SSE_curr, theta_accept1 = bf.f_updatev_pw(v_coef_curr, v_basis, np.sqrt(sigma_curr),
+                                                                      q1_curr, q2_curr,nll, g,SSE_curr,
+                                                                      propose_v_coef,d_basis,cholC,h,L)
         
-        # update sigma1
-        newshape = q1.shape[0]/2 + mcmcopts["alpha0"]
-        newscale = 1/2 * SSE_curr + mcmcopts["beta0"]
-        sigma1_curr = np.sqrt(1/np.random.gamma(newshape,1/newscale))
-        logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, sigma1_curr**2, SSE_curr)
+        # update sigma^2
+        newshape = q1_curr.shape[0]/2 + mcmcopts["alpha"]
+        newscale = 1/2 * SSE_curr + mcmcopts["beta"]
+        sigma_curr = 1/gamma(newshape, 1/newscale)
+        
+        # update sigma1^2
+        newshape = n/2 + mcmcopts["alpha0"]
+        newscale = np.sum((y1-f1_curr)**2)/2 + mcmcopts["beta0"]
+        sigma1_curr = 1/gamma(newshape, 1/newscale)
+        
+        # update sigma^2
+        newshape = n/2 + mcmcopts["alpha0"]
+        newscale = np.sum((y2-f2_curr)**2)/2 + mcmcopts["beta0"]
+        sigma2_curr = 1/gamma(newshape, 1/newscale)
+
+        # update hyperparameters
+        # update s1^2
+        newshape = n/2 + mcmcopts["alpha0"]
+        newscale = (mrdivide(f1_curr,K_f1_corr) @ f1_curr.T)/2 + mcmcopts["beta0"]
+        s1_curr = 1/gamma(newshape, 1/newscale)
+
+        # update s2^2
+        newshape = n/2 + mcmcopts["alpha0"]
+        newscale = (mrdivide(f2_curr,K_f2_corr) @ f2_curr.T)/2 + mcmcopts["beta0"]
+        s2_curr = 1/gamma(newshape, 1/newscale)
+
+        # update L1
+        L1_curr, L1_accept1 = bf.f_updatephi_pw(f1_curr,K_f1,s1_curr, L1_curr, L1_propvar, Dmat)
+
+        # update L2
+        L2_curr, L2_accpet1 = bf.f_updatephi_pw(f2_curr,K_f2,s2_curr, L2_curr, L2_propvar, Dmat)
+
+        K_f1_corr = uf.exp2corr2(L1_curr,Dmat)+0.1 * np.eye(y1i.shape[0])
+        K_f1 = s1_curr * K_f1_corr
+        K_f1 = inv(K_f1)
+        K_f2_corr = uf.exp2corr2(L2_curr,Dmat)+0.1 * np.eye(y2i.shape[0])
+        K_f2 = s2_curr * K_f2_corr
+        K_f2 = inv(K_f2)
+
+        v_curr = uf.f_basistofunction(v_basis["x"], 0, v_coef_curr, v_basis)
+        logl_curr = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
 
         # save updates to results
-        g_coef[m,:] = g_coef_curr
+        v_coef[m,:] = v_coef_curr
+        f1[m,:] = f1_curr
+        f2[m,:] = f2_curr
+        sigma[m] = sigma_curr
         sigma1[m] = sigma1_curr
+        sigma2[m] = sigma2_curr
+        s1[m] = s1_curr
+        s2[m] = s2_curr
+        L1[m] = L1_curr
+        L2[m] = L2_curr
         SSE[m] = SSE_curr
+        logl[m] = logl_curr
         if mcmcopts["extrainfo"]:
-            logl[m] = logl_curr
-            accept[m] = accepti
-            accept_betas[m] = zpcnInd
+            theta_accept[m] = theta_accept1
+            f1_accept[m] = f1_accept1
+            f2_accept[m] = f2_accept1
+            L1_accept[m] = L1_accept1
+            L2_accept[m] = L2_accept1
 
     # calculate posterior mean of psi
-    pw_sim_est_psi_matrix = np.zeros((numSimPoints,valid_index.shape[0]))
+    pw_sim_est_psi_matrix = np.zeros((pw_sim_global_domain_par.shape[0],valid_index.shape[0]))
     for k in range(0,valid_index.shape[0]):
-        g_temp = uf.f_basistofunction(g_basis["x"],0,g_coef[valid_index[k],:],g_basis)
-        psi_temp = uf.f_exp1(g_temp)
+        v_temp = uf.f_basistofunction(g_basis["x"],0,v_coef[valid_index[k],:],v_basis)
+        psi_temp = uf.f_exp1(v_temp)
         pw_sim_est_psi_matrix[:,k] = psi_temp
 
     result_posterior_psi_simDomain = uf.f_psimean(pw_sim_global_domain_par, pw_sim_est_psi_matrix)
 
     # resample to same number of points as the input f1 and f2
     interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, fill_value="extrapolate")
-    result_posterior_psi = interp(np.linspace(0,1,f1i.shape[0]))
+    result_posterior_psi = interp(np.linspace(0,1,y1i.shape[0]))
 
     # transform posterior mean of psi to gamma
     result_posterior_gamma = uf.f_phiinv(result_posterior_psi)
     result_posterior_gamma = uf.norm_gam(result_posterior_gamma)
-
-    # warped f2
-    f2_warped = uf.warp_f_gamma(time, f2i, result_posterior_gamma)
 
     if mcmcopts["extrainfo"]:
         M,N = pw_sim_est_psi_matrix.shape
@@ -995,68 +1290,50 @@ def pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts=None):
 
         gamma_stats = uf.statsFun(gamma_mat)
 
+
+    f1 = f1[valid_index, :]
+    f2 = f2[valid_index, :]
+    gamma = result_posterior_gamma
+    v_coef = v_coef[valid_index, :]
+    psi = result_posterior_psi
+    sigma = sigma[valid_index]
+    sigma1 = sigma1[valid_index]
+    sigma2 = sigma2[valid_index]
+    s1 = s1[valid_index]
+    s2 = s2[valid_index]
+    L1 = L1[valid_index]
+    L2 = L2[valid_index]
+    f2_warped_mu = uf.warp_f_gamma(time, f2.mean(axis=0), gamma)
+
+    if mcmcopts["extrainfo"]:
+        theta_accept = theta_accept[1:]
+        f1_accept = f1_accept[1:]
+        f2_accept = f2_accept[1:]
+        L1_accept = L1_accept[1:]
+        L2_accept = L2_accept[1:]
+        phasedist = Dx
+        ampdist = Dy
+
+        f2_warped = np.zeros((valid_index.shape[0], result_poserior_gamma.shape[0]))
+        for ii in range(0, valid_index.shape[0]):
+            f2_warped[ii,:] = uf.warp_f_gamma(time, out.f2[ii,:], gamma_mat[:,ii])
+
+    if mcmcopts["extrainfo"]:
+        out_dict = {"v_coef":v_coef, "sigma":sigma, "sigma1":sigma1, "sigma2":sigma2, "f1":f1,   
+                    "f2_warped_mu":f2_warped_mu, "f2":f2, "s1":s1, "gamma":gamma, "psi":psi, "s2":s2, 
+                    "L1":L1, "L2":L2, "logl":logl, "SSE":SSE, "theta_accept":theta_accept,"f1_accept":f1_accept, 
+                    "f2_accept":f2_accept, "L1_accept":L1_accept, "L2_accept":L2_accept, "phasedist":phasedist, 
+                    "ampdist":ampdist, "f2_warped":f2_warped}
+    else:
+        out_dict = {"v_coef":v_coef, "sigma":sigma, "sigma1":sigma1, "sigma2":sigma2, "f1":f1, 
+                    "f2_warped_mu":f2_warped_mu, "f2":f2, "gamma":gamma, "psi":psi, "s1":s1, "s2":s2, 
+                    "L1":L1, "L2":L2, "logl":logl, "SSE":SSE}
     
-    results_o = collections.namedtuple('align_bayes', ['f2_warped', 'gamma','g_coef', 'psi', 'sigma1', 'accept', 'betas_ind', 'logl', 'gamma_mat', 'gamma_stats', 'xdist', 'ydist'])
-
-    out = results_o(f2_warped, result_posterior_gamma, g_coef, result_posterior_psi, sigma1, accept[1:], accept_betas[1:], logl, gamma_mat, gamma_stats, Dx, Dy)
-
-    return(out)
-
-
-def f_SSEg_pw(g, q1, q2):
-    obs_domain = np.linspace(0,1,g.shape[0])
-    exp1g_temp = uf.f_predictfunction(uf.f_exp1(g), obs_domain, 0)
-    pt = np.insert(bay.bcuL2norm2(obs_domain, exp1g_temp),0,0)
-    tmp = uf.f_predictfunction(q2,pt,0)
-    vec = (q1 - tmp * exp1g_temp)**2
-    out = vec.sum()
-    return(out)
-
-def f_logl_pw(g, q1, q2, var1, SSEg):
-    if SSEg == 0:
-        SSEg = f_SSEg_pw(g, q1, q2)
-
-    n = q1.shape[0]
-    out = n * np.log(1/np.sqrt(2*np.pi)) - n * np.log(np.sqrt(var1)) - SSEg / (2 * var1)
+    out = []
+    out.append(out_dict)
 
     return(out)
 
-def f_updateg_pw(g_coef_curr,g_basis,var1_curr,q1,q2,SSE_curr,propose_g_coef):
-    g_coef_prop = propose_g_coef(g_coef_curr)
-
-    tst = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis))
-
-    while tst.min() < 0:
-        g_coef_prop = propose_g_coef(g_coef_curr)
-        tst = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis))
-
-    if SSE_curr == 0:
-        SSE_curr = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2)
-
-    SSE_prop = f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis), q1, q2)
-
-    logl_curr = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, var1_curr, SSE_curr)
-    
-    logl_prop = f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_prop["prop"],g_basis), q1, q2, var1_curr, SSE_prop)
-
-    ratio = np.minimum(1, np.exp(logl_prop-logl_curr))
-
-    u = np.random.rand()
-    if u <= ratio:
-        g_coef = g_coef_prop["prop"]
-        logl = logl_prop
-        SSE = SSE_prop
-        accept = True
-        zpcnInd = g_coef_prop["ind"]
-
-    if u > ratio:
-        g_coef = g_coef_curr
-        logl = logl_curr
-        SSE = SSE_curr
-        accept = False
-        zpcnInd = g_coef_prop["ind"]
-
-    return g_coef, logl, SSE, accept, zpcnInd
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     """
