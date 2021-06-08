@@ -15,6 +15,7 @@ from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
 from numpy import gradient, column_stack, append, mean, hstack, median
 from numpy import insert, vectorize, ceil, mod, array, quantile, dot
+from numpy import exp
 from joblib import Parallel, delayed
 import numpy.random as rn
 import optimum_reparamN2 as orN2
@@ -982,15 +983,27 @@ def basis_legendre(f_domain, numBasis, fourier_p):
     return(out)
 
 
+def exp2corr(sigma2, phi, ds):
+    out = sigma2 * exp(-ds**2/(2*phi**2))
+    return(out)
+
+
+def exp2corr2(phi, ds):
+    out = exp(-ds**2/(2*phi**2))
+    return(out)
+
+
 def statsFun(vec):
     a = quantile(vec,0.025,axis=1)
     b = quantile(vec,0.975,axis=1)
     out = column_stack((a, b))
     return(out)
 
+
 def f_exp1(g):
     out = bay.bcalcY(f_L2norm(g), g)
     return(out)
+
 
 def f_L2norm(f):
     x = linspace(0,1,f.shape[0])
