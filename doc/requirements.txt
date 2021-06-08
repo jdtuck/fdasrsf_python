@@ -5,6 +5,6 @@ scipy
 matplotlib
 Cython
 joblib
-scikit-learn
+GPy
 patsy
 tqdm

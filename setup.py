@@ -114,7 +114,7 @@ setup(
         "tqdm",
         "six",
         "numba",
-        "scikit-learn>=0.20",
+        "GPy",
         "cffi>=1.0.0",
         "pyparsing",
     ],

@@ -12,5 +12,5 @@ pyparsing
 python-dateutil
 scipy
 six
-scikit-learn
+GPy
 tornado
