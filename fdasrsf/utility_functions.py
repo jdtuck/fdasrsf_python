@@ -763,15 +763,15 @@ def geigen(Amat, Bmat, Cmat):
     Cfacinv = inv(Cfac)
     Dmat = Bfacinvt.dot(Amat).dot(Cfacinv)
     if p >= q:
-        u, d, v = svd(Dmat)
+        u, d, vh = svd(Dmat)
         values = d
         Lmat = Bfacinv.dot(u)
-        Mmat = Cfacinv.dot(v.transpose())
+        Mmat = Cfacinv.dot(vh)
     else:
-        u, d, v = svd(Dmat.transpose())
+        u, d, vh = svd(Dmat.transpose())
         values = d
         Lmat = Bfacinv.dot(u)
-        Mmat = Cfacinv.dot(v.transpose())
+        Mmat = Cfacinv.dot(vh)
 
     return values, Lmat, Mmat
 

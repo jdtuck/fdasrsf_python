@@ -143,7 +143,7 @@ def find_rot(q1, q2):
     q2 = ascontiguousarray(q2)
     n = q1.shape[0]
     A = q1.dot(q2.T)
-    U, s, V = svd(A)
+    U, s, Vh = svd(A)
 
     tst = det(A)
     if tst > 0:
@@ -152,7 +152,7 @@ def find_rot(q1, q2):
         S = eye(n)
         S[:,-1] = -S[:,-1]
     
-    R = U.dot(S).dot(V.T)
+    R = U.dot(S).dot(Vh)
     return R
 
 @numba.njit()
