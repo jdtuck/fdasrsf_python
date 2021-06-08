@@ -1,4 +1,5 @@
-v2.2.9,  2021-06-93 -- bugfixes and add pairwise alignment function
+v2.2.10,  2021-06-08 -- bugfixes
+v2.2.9,  2021-06-03 -- bugfixes and add pairwise alignment function
 v2.2.8,  2021-04-23 -- bugfixes
 v2.2.7,  2021-04-07 -- bugfixes
 v2.2.6,  2021-03-24 -- bugfixes
