@@ -7,7 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 from scipy.interpolate import UnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
-from scipy.linalg import norm, svd, cholesky, inv
+from scipy.linalg import norm, svd, cholesky, inv, lstsq
 from scipy.stats.mstats import mquantiles
 from scipy import special as sp
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
@@ -1049,3 +1049,8 @@ def f_phiinv(psi):
 def norm_gam(gam):
     gam = (gam-gam[0])/(gam[-1]-gam[0])
     return(gam)
+
+
+def mrdivide(a, b):
+    c = lstsq(a.T, b.T)
+    return(c)

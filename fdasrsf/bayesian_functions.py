@@ -1,6 +1,6 @@
 import numpy as np
 from numpy.random import multivariate_normal, rand, normal
-from numpy.linalg import solve, lstsq, det
+from numpy.linalg import solve, det
 from scipy.integrate import trapz, cumtrapz
 from scipy.stats import truncnorm, norm
 import fdasrsf.utility_functions as uf
@@ -137,7 +137,7 @@ def f_updatephi_pw(f1_curr, K_f1, s1_curr, L1_curr, L1_propvar, Dmat):
     K_f1_tmp = s1_curr * (uf.exp2corr2(L1_prop,Dmat) +0.1 * np.eye(f1_curr.shape[0]))
 
     SSEf_curr = (f1_curr @ K_f1 @ f1_curr)/2
-    SSEf_prop = (mrdivide(f1_curr,K_f1_tmp) * f1_curr)/2
+    SSEf_prop = (uf.mrdivide(f1_curr,K_f1_tmp) * f1_curr)/2
 
     postlog_prop = -np.log(det(K_f1_tmp))/2 - SSEf_prop - np.log(1-norm.cdf(-L1_curr/L1_propvar))
     postlog_curr = np.log(det(K_f1))/2 - SSEf_curr - np.log(1-norm.cdf(-L1_prop/L1_propvar))
@@ -221,10 +221,6 @@ def f_updatev_pw(v_coef_curr, v_basis, sigma_curr, q1, q2, nll_cur, g_cur, SSE_c
 
     return v_coef_curr, nll, g, SSE_curr, theta_accept
 
-
-def mrdivide(a, b):
-    c = lstsq(a.T, b.T)
-    return(c)
 
 def f_SSEg_pw(g, q1, q2):
     obs_domain = np.linspace(0,1,g.shape[0])
