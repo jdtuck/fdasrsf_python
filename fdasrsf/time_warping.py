@@ -898,8 +898,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
                                mcmcopts_p[n]) for n in range(mcmcopts["nchains"]))
 
     else:
-        chains = []
-        chains[0] = run_mcmc(y1i, y2i, time, mcmcopts)
+        chains = run_mcmc(y1i, y2i, time, mcmcopts)
     
     # combine outputs
     Nsamples = chains[0]['f1'].shape[0]
@@ -967,7 +966,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
             ampdist[a:b] = chains[i]['ampdist']
     
     # finding modes
-    if mcmcopts["chains"] > 1:
+    if mcmcopts["nchains"] > 1:
         Dx = np.zeros((mcmcopts["nchains"], mcmcopts["nchains"]))
         time1 = np.linspace(0,1,gamma.shape[0])
         binsize = np.diff(time1)
@@ -1287,8 +1286,8 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
             gamma_mat[:,ii] = uf.norm_gam(tmp)
             v, theta = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
             Dx[ii] = np.sqrt(trapz(v**2,pw_sim_global_domain_par))
-            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2,gamma_mat[:,ii])
-            Dy[ii] = np.sqrt(trapz((q1i-q2warp)**2,time))
+            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2_curr,gamma_mat[:,ii])
+            Dy[ii] = np.sqrt(trapz((q1_curr-q2warp)**2,time))
 
         gamma_stats = uf.statsFun(gamma_mat)
 
@@ -1305,6 +1304,8 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     s2 = s2[valid_index]
     L1 = L1[valid_index]
     L2 = L2[valid_index]
+    SSE = SSE[1:]
+    logl = logl[1:]
     f2_warped_mu = uf.warp_f_gamma(time, f2.mean(axis=0), gamma)
 
     if mcmcopts["extrainfo"]:
@@ -1316,16 +1317,16 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
         phasedist = Dx
         ampdist = Dy
 
-        f2_warped = np.zeros((valid_index.shape[0], result_poserior_gamma.shape[0]))
+        f2_warped = np.zeros((valid_index.shape[0], result_posterior_gamma.shape[0]))
         for ii in range(0, valid_index.shape[0]):
-            f2_warped[ii,:] = uf.warp_f_gamma(time, out.f2[ii,:], gamma_mat[:,ii])
+            f2_warped[ii,:] = uf.warp_f_gamma(time, f2[ii,:], gamma_mat[:,ii])
 
     if mcmcopts["extrainfo"]:
         out_dict = {"v_coef":v_coef, "sigma":sigma, "sigma1":sigma1, "sigma2":sigma2, "f1":f1,   
                     "f2_warped_mu":f2_warped_mu, "f2":f2, "s1":s1, "gamma":gamma, "psi":psi, "s2":s2, 
                     "L1":L1, "L2":L2, "logl":logl, "SSE":SSE, "theta_accept":theta_accept,"f1_accept":f1_accept, 
                     "f2_accept":f2_accept, "L1_accept":L1_accept, "L2_accept":L2_accept, "phasedist":phasedist, 
-                    "ampdist":ampdist, "f2_warped":f2_warped}
+                    "ampdist":ampdist, "f2_warped":f2_warped, "gamma_mat":gamma_mat, "gamma_stats":gamma_stats}
     else:
         out_dict = {"v_coef":v_coef, "sigma":sigma, "sigma1":sigma1, "sigma2":sigma2, "f1":f1, 
                     "f2_warped_mu":f2_warped_mu, "f2":f2, "gamma":gamma, "psi":psi, "s1":s1, "s2":s2, 
