@@ -17,7 +17,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform, pdist
 import GPy
 from numpy.linalg import norm, inv
-from numpy.random import rand, normal, gamma
+from numpy.random import rand, normal
 from joblib import Parallel, delayed
 from fdasrsf.fPLS import pls_svd
 from tqdm import tqdm
@@ -826,12 +826,13 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     :type mcmcopts: dict
   
     default mcmc options:
-    mcmcopts = {"iter":1*(10**4), "nchains":1 , 
+    mcmcopts = {"iter":1*(10**4), "nchains":1, "vpriorvar":1, 
                 "burnin":np.minimum(5*(10**3),2*(10**4)//2),
                 "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                 "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
                 "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
-                "initcoef":np.repeat(0,20), "nbasis":10, "basis":'fourier', "extrainfo":True}
+                "sampfreq":5, "initcoef":np.repeat(0,20), "nbasis":10, 
+                "basis":'fourier', "extrainfo":True}
     Basis can be 'fourier' or 'legendre'
    
     :rtype collection containing
@@ -854,12 +855,13 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     """
 
     if mcmcopts is None:
-        mcmcopts = {"iter":1*(10**4), "nchains":1 , 
+        mcmcopts = {"iter":1*(10**4), "nchains":1, "vpriorvar":1, 
                     "burnin":np.minimum(5*(10**3),2*(10**4)//2),
                     "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                     "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
                     "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
-                    "initcoef":np.repeat(0,20), "nbasis":10, "basis":'fourier', "extrainfo":True}
+                    "sampfreq":5, "initcoef":np.repeat(0,20), "nbasis":10, 
+                    "basis":'fourier', "extrainfo":True}
 
     if y1i.shape[0] != y2i.shape[0]:
         raise Exception('Length of f1 and f2 must be equal')
@@ -870,18 +872,18 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     if np.mod(mcmcopts["initcoef"].shape[0], 2) != 0:
         raise Exception('Length of mcmcopts.initcoef must be even')
     
-    if np.mod(mcmcopts["nbasis"].shape[0], 2) != 0:
+    if np.mod(mcmcopts["nbasis"], 2) != 0:
         raise Exception('Length of mcmcopts.nbasis must be even')
 
     # set up random start points for more than 1 chain
     random_starts = np.zeros((mcmcopts["initcoef"].shape[0], mcmcopts["nchains"]))
-    if mcmcopts["chains"]:
+    if mcmcopts["nchains"] > 1:
         for i in range(0, mcmcopts["nchains"]):
             randcoef = -1 + (2)*rand(mcmcopts["initcoef"].shape[0])
             random_starts[:, i] = randcoef
     
     isparallel = True
-    if mcmcopts["chains"] == 1:
+    if mcmcopts["nchains"] == 1:
         isparallel = False
     
     if isparallel:
@@ -1156,7 +1158,7 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     q2_curr = uf.f_to_srsf(f2_curr, time)
 
     SSE_curr = bf.f_SSEv_pw(v_curr, q1_curr, q2_curr)
-    logl_curr = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
+    logl_curr, SSEv = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
 
     v_coef[0,:] = v_coef_ini
     f1[0,:] = f1_curr
@@ -1173,7 +1175,7 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     SSEprop[0] = SSE_curr
     logl[0] = logl_curr
 
-    n = f1_curr.shape[0]*f1_curr.shape[1]
+    n = f1_curr.shape[0]
 
     nll, g, SSE_curr = bf.f_dlogl_pw(v_coef_curr, v_basis, d_basis, sigma_curr, q1_curr, q2_curr)
 
@@ -1181,11 +1183,11 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     for m in range(1,iter):
 
         # update f1
-        f1_curr, q1_curr, f1_accept1 = bf.f_updatef1_pw(f1_curr,q1_curr, y1,q2_curr,v_coef_curr, v_basis,
+        f1_curr, q1_curr, f1_accept1 = bf.f_updatef1_pw(f1_curr,q1_curr, y1i, q2_curr,v_coef_curr, v_basis,
                                                        SSE_curr,K_f1,K_f1prop,sigma_curr,np.sqrt(sigma1_curr))
 
         # update f2
-        f2_curr, q2_curr, f2_accept1 = bf.f_updatef2_pw(f2_curr,q2_curr, y2,q1_curr,v_coef_curr, v_basis,
+        f2_curr, q2_curr, f2_accept1 = bf.f_updatef2_pw(f2_curr,q2_curr, y2i, q1_curr,v_coef_curr, v_basis,
                                                        SSE_curr,K_f2,K_f2prop,sigma_curr,np.sqrt(sigma2_curr))
 
         # update v
@@ -1196,34 +1198,34 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
         # update sigma^2
         newshape = q1_curr.shape[0]/2 + mcmcopts["alpha"]
         newscale = 1/2 * SSE_curr + mcmcopts["beta"]
-        sigma_curr = 1/gamma(newshape, 1/newscale)
+        sigma_curr = 1/np.random.gamma(newshape, 1/newscale)
         
         # update sigma1^2
         newshape = n/2 + mcmcopts["alpha0"]
-        newscale = np.sum((y1-f1_curr)**2)/2 + mcmcopts["beta0"]
-        sigma1_curr = 1/gamma(newshape, 1/newscale)
+        newscale = np.sum((y1i-f1_curr)**2)/2 + mcmcopts["beta0"]
+        sigma1_curr = 1/np.random.gamma(newshape, 1/newscale)
         
         # update sigma^2
         newshape = n/2 + mcmcopts["alpha0"]
-        newscale = np.sum((y2-f2_curr)**2)/2 + mcmcopts["beta0"]
-        sigma2_curr = 1/gamma(newshape, 1/newscale)
+        newscale = np.sum((y2i-f2_curr)**2)/2 + mcmcopts["beta0"]
+        sigma2_curr = 1/np.random.gamma(newshape, 1/newscale)
 
         # update hyperparameters
         # update s1^2
         newshape = n/2 + mcmcopts["alpha0"]
-        newscale = (mrdivide(f1_curr,K_f1_corr) @ f1_curr.T)/2 + mcmcopts["beta0"]
-        s1_curr = 1/gamma(newshape, 1/newscale)
+        newscale = (uf.mrdivide(f1_curr,K_f1_corr) @ f1_curr.T)/2 + mcmcopts["beta0"]
+        s1_curr = 1/np.random.gamma(newshape, 1/newscale)
 
         # update s2^2
         newshape = n/2 + mcmcopts["alpha0"]
-        newscale = (mrdivide(f2_curr,K_f2_corr) @ f2_curr.T)/2 + mcmcopts["beta0"]
-        s2_curr = 1/gamma(newshape, 1/newscale)
+        newscale = (uf.mrdivide(f2_curr,K_f2_corr) @ f2_curr.T)/2 + mcmcopts["beta0"]
+        s2_curr = 1/np.random.gamma(newshape, 1/newscale)
 
         # update L1
         L1_curr, L1_accept1 = bf.f_updatephi_pw(f1_curr,K_f1,s1_curr, L1_curr, L1_propvar, Dmat)
 
         # update L2
-        L2_curr, L2_accpet1 = bf.f_updatephi_pw(f2_curr,K_f2,s2_curr, L2_curr, L2_propvar, Dmat)
+        L2_curr, L2_accept1 = bf.f_updatephi_pw(f2_curr,K_f2,s2_curr, L2_curr, L2_propvar, Dmat)
 
         K_f1_corr = uf.exp2corr2(L1_curr,Dmat)+0.1 * np.eye(y1i.shape[0])
         K_f1 = s1_curr * K_f1_corr
@@ -1233,7 +1235,7 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
         K_f2 = inv(K_f2)
 
         v_curr = uf.f_basistofunction(v_basis["x"], 0, v_coef_curr, v_basis)
-        logl_curr = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
+        logl_curr, SSEv1 = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
 
         # save updates to results
         v_coef[m,:] = v_coef_curr
@@ -1258,7 +1260,7 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     # calculate posterior mean of psi
     pw_sim_est_psi_matrix = np.zeros((pw_sim_global_domain_par.shape[0],valid_index.shape[0]))
     for k in range(0,valid_index.shape[0]):
-        v_temp = uf.f_basistofunction(g_basis["x"],0,v_coef[valid_index[k],:],v_basis)
+        v_temp = uf.f_basistofunction(v_basis["x"],0,v_coef[valid_index[k],:],v_basis)
         psi_temp = uf.f_exp1(v_temp)
         pw_sim_est_psi_matrix[:,k] = psi_temp
 

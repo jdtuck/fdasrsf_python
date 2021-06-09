@@ -75,13 +75,13 @@ def f_dlogl_pw(v_coef, v_basis, d_basis, sigma_curr, q1, q2):
     out, SSEv = f_vpostlogl_pw(vec, q1, q2, sigma_curr, 0)
     
     nll = -1 * out
-    g_coef = v_basis["matrix"] @ g
+    g_coef = v_basis["matrix"].T @ g
 
     return nll, g_coef, SSEv
 
 
 def f_updatef1_pw(f1_curr, q1_curr, y1, q2, v_coef_curr, v_basis, SSE_curr, K_f1, K_f1prop, sigma_curr, sigma1_curr):
-    time = np.linspace(0,1,y1.shape[0])
+    time = np.linspace(0, 1, y1.shape[0])
     v = uf.f_basistofunction(v_basis["x"], 0, v_coef_curr, v_basis)
 
     f1_prop = multivariate_normal(f1_curr, K_f1prop)
@@ -106,7 +106,7 @@ def f_updatef1_pw(f1_curr, q1_curr, y1, q2, v_coef_curr, v_basis, SSE_curr, K_f1
 
 
 def f_updatef2_pw(f2_curr, q2_curr, y2, q1, v_coef_curr, v_basis, SSE_curr, K_f2, K_f2prop, sigma_curr, sigma2_curr):
-    time = np.linspace(0,1,y1.shape[0])
+    time = np.linspace(0, 1, y2.shape[0])
     v = uf.f_basistofunction(v_basis["x"], 0, v_coef_curr, v_basis)
 
     f2_prop = multivariate_normal(f2_curr, K_f2prop)
@@ -137,7 +137,7 @@ def f_updatephi_pw(f1_curr, K_f1, s1_curr, L1_curr, L1_propvar, Dmat):
     K_f1_tmp = s1_curr * (uf.exp2corr2(L1_prop,Dmat) +0.1 * np.eye(f1_curr.shape[0]))
 
     SSEf_curr = (f1_curr @ K_f1 @ f1_curr)/2
-    SSEf_prop = (uf.mrdivide(f1_curr,K_f1_tmp) * f1_curr)/2
+    SSEf_prop = (uf.mrdivide(f1_curr,K_f1_tmp) @ f1_curr.T)/2
 
     postlog_prop = -np.log(det(K_f1_tmp))/2 - SSEf_prop - np.log(1-norm.cdf(-L1_curr/L1_propvar))
     postlog_curr = np.log(det(K_f1))/2 - SSEf_curr - np.log(1-norm.cdf(-L1_prop/L1_propvar))
@@ -170,12 +170,12 @@ def f_updatev_pw(v_coef_curr, v_basis, sigma_curr, q1, q2, nll_cur, g_cur, SSE_c
     ng = cholC@halfng
 
     # accumulate the power of force
-    pow = rth/2*(g_cur.T@v)
+    pow = rth/2*(np.dot(g_cur,v))
 
     # calculate current energy
-    E_cur = nll_cur - h/8*(halfng.T@halfng)
+    E_cur = nll_cur - h/8*(np.dot(halfng,halfng))
 
-    randL = np.ceil(rand()*L)
+    randL = int(np.ceil(rand()*L))
     
     # Alternate full sth for position and velocity
     for l in range(0, randL):
@@ -197,19 +197,19 @@ def f_updatev_pw(v_coef_curr, v_basis, sigma_curr, q1, q2, nll_cur, g_cur, SSE_c
 
         # accumulate the power of force
         if l!=randL:
-            pow = pow + rth*(g.T@v)
+            pow = pow + rth*(np.dot(g,v))
     
     # accumulate the power of force
-    pow = pow + rth/2 * (g.T@v)
+    pow = pow + rth/2 * (np.dot(g,v))
 
     # evaluate energy at start and end of trajectory
-    E_prop = nll - h/8*(halfng.T@halfng)
+    E_prop = nll - h/8*(np.dot(halfng,halfng))
 
     # Accept or reject the state at end of trajectory, returning either
     # the position at the end of the trajectory or the initial position
     logRatio = -E_prop + E_cur - pow
 
-    if np.isinf(logRatio) and (np.log(rand()) < np.minimum(0, logRatio)):
+    if (not np.isinf(logRatio)) and (np.log(rand()) < np.minimum(0, logRatio)):
         v_coef_curr = q
         theta_accept = True
         SSE_curr = SSEv

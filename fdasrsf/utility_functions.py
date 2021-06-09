@@ -7,7 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 from scipy.interpolate import UnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
-from scipy.linalg import norm, svd, cholesky, inv, lstsq
+from scipy.linalg import norm, svd, cholesky, inv, pinv
 from scipy.stats.mstats import mquantiles
 from scipy import special as sp
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
@@ -1052,5 +1052,5 @@ def norm_gam(gam):
 
 
 def mrdivide(a, b):
-    c = lstsq(a.T, b.T)
+    c = dot(a, pinv(b))
     return(c)
