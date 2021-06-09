@@ -826,7 +826,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     :type mcmcopts: dict
   
     default mcmc options:
-    mcmcopts = {"iter":1*(10**4), "nchains":1, "vpriorvar":1, 
+    mcmcopts = {"iter":1*(10**4), "nchains":4, "vpriorvar":1, 
                 "burnin":np.minimum(5*(10**3),2*(10**4)//2),
                 "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                 "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
@@ -855,7 +855,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     """
 
     if mcmcopts is None:
-        mcmcopts = {"iter":1*(10**4), "nchains":1, "vpriorvar":1, 
+        mcmcopts = {"iter":1*(10**4), "nchains":2, "vpriorvar":1, 
                     "burnin":np.minimum(5*(10**3),2*(10**4)//2),
                     "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                     "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
@@ -898,7 +898,9 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
                                mcmcopts_p[n]) for n in range(mcmcopts["nchains"]))
 
     else:
-        chains = run_mcmc(y1i, y2i, time, mcmcopts)
+        chains = []
+        chains1 = run_mcmc(y1i, y2i, time, mcmcopts)
+        chains.append(chains1)
     
     # combine outputs
     Nsamples = chains[0]['f1'].shape[0]
@@ -957,7 +959,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
             L1_accept[a1:b1] = chains[i]['L1_accept']
             L2_accept[a1:b1] = chains[i]['L2_accept']
             gamma_mat[:, a:b] = chains[i]['gamma_mat']
-            a1 = (i)*(Nsamplesa+1)
+            a1 = (i)*(Nsamplesa)
             b1 = (i+1)*Nsamplesa
             SSE[a1:b1] = chains[i]['SSE']
             logl[a1:b1] = chains[i]['logl']
@@ -995,16 +997,16 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
         # find mean and confidence region of cluster
         posterior_gamma_modes = np.zeros((M, N.shape[0]))
         posterior_gamma_modes_cr = np.zeros((M, 2, N.shape[0]))
-        for i in range(1, N+1):
-            idx = np.where(T == i)
+        for i in range(1, N.shape[0]+1):
+            idx = np.where(T == i)[0]
             tmp = np.zeros((M, Nsamples*idx.shape[0]))
             for j in range(0, idx.shape[0]):
                 a = (j)*Nsamples
                 b = (j+1)*Nsamples
-                tmp[:, a:b] = chains[idx[j]].gamma_mat
+                tmp[:, a:b] = chains[idx[j]]['gamma_mat']
             mu, gam_mu, psi, vec = uf.SqrtMean(tmp)
-            posterior_gamma_modes[:, i] = gam_mu
-            posterior_gamma_modes_cr[:, :, i] = uf.statsFun(tmp)
+            posterior_gamma_modes[:, i-1] = gam_mu
+            posterior_gamma_modes_cr[:, :, i-1] = uf.statsFun(tmp)
         
     # thining
     f1 = f1[0::mcmcopts["thin"], :]
@@ -1331,11 +1333,8 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
         out_dict = {"v_coef":v_coef, "sigma":sigma, "sigma1":sigma1, "sigma2":sigma2, "f1":f1, 
                     "f2_warped_mu":f2_warped_mu, "f2":f2, "gamma":gamma, "psi":psi, "s1":s1, "s2":s2, 
                     "L1":L1, "L2":L2, "logl":logl, "SSE":SSE}
-    
-    out = []
-    out.append(out_dict)
 
-    return(out)
+    return(out_dict)
 
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
