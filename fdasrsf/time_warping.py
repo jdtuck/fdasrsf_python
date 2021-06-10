@@ -831,7 +831,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
                 "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                 "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
                 "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
-                "sampfreq":5, "initcoef":np.repeat(0,20), "nbasis":10, 
+                "sampfreq":1, "initcoef":np.repeat(0,20), "nbasis":10, 
                 "basis":'fourier', "extrainfo":True}
     Basis can be 'fourier' or 'legendre'
    
@@ -855,12 +855,12 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     """
 
     if mcmcopts is None:
-        mcmcopts = {"iter":1*(10**4), "nchains":2, "vpriorvar":1, 
+        mcmcopts = {"iter":1*(10**4), "nchains":4 , "vpriorvar":1, 
                     "burnin":np.minimum(5*(10**3),2*(10**4)//2),
                     "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
                     "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
                     "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
-                    "sampfreq":5, "initcoef":np.repeat(0,20), "nbasis":10, 
+                    "sampfreq":1, "initcoef":np.repeat(0,20), "nbasis":10, 
                     "basis":'fourier', "extrainfo":True}
 
     if y1i.shape[0] != y2i.shape[0]:
@@ -907,7 +907,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     M = chains[0]['f1'].shape[1]
     f1 = np.zeros((Nsamples*mcmcopts["nchains"], M))
     f2 = np.zeros((Nsamples*mcmcopts["nchains"], M))
-    gamma = np.zeros((M, Nsamples*mcmcopts["nchains"]))
+    gamma = np.zeros((M, mcmcopts["nchains"]))
     v_coef = np.zeros((Nsamples*mcmcopts["nchains"], chains[0]['v_coef'].shape[1]))
     psi = np.zeros((M, Nsamples*mcmcopts["nchains"]))
     sigma = np.zeros(Nsamples*mcmcopts["nchains"])
@@ -1306,16 +1306,17 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     s2 = s2[valid_index]
     L1 = L1[valid_index]
     L2 = L2[valid_index]
-    SSE = SSE[1:]
-    logl = logl[1:]
+    SSE = SSE[valid_index]
+    logl = logl[valid_index]
     f2_warped_mu = uf.warp_f_gamma(time, f2.mean(axis=0), gamma)
 
     if mcmcopts["extrainfo"]:
-        theta_accept = theta_accept[1:]
-        f1_accept = f1_accept[1:]
-        f2_accept = f2_accept[1:]
-        L1_accept = L1_accept[1:]
-        L2_accept = L2_accept[1:]
+        theta_accept = theta_accept[valid_index]
+        f1_accept = f1_accept[valid_index]
+        f2_accept = f2_accept[valid_index]
+        L1_accept = L1_accept[valid_index]
+        L2_accept = L2_accept[valid_index]
+
         phasedist = Dx
         ampdist = Dy
 
