@@ -50,7 +50,7 @@ double evalspline(double t, const double D[2], const double y[2]);
 
 void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) {
 	int i, j, k, l, M, Eidx, Fidx, Ftmp, Fmin, Num, *Path, *xy, x, y, cnt;
-	const int scl = 5;
+	const int scl = 1;
 	double *q1L, *q2L, *D1, *D2, *tmp1, *tmp2, *E, Etmp, Emin, t, a, b;
 
 	M = scl*(N-1)+1;
