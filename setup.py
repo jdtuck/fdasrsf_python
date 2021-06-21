@@ -114,6 +114,7 @@ setup(
         "tqdm",
         "six",
         "numba",
+        "GPy",
         "cffi>=1.0.0",
         "pyparsing",
     ],

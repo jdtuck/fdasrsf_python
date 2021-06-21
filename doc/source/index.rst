@@ -90,6 +90,8 @@ References
    T. Harris, J. D. Tucker, B. Li, and L. Shand, "Elastic depths for detecting shape 
    anomalies in functional data," Technometrics, 10.1080/00401706.2020.1811156, 2020.
 
+   J. D. Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.
+
 
 Indices and tables
 ==================

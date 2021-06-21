@@ -5,7 +5,7 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA"]
+__all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA"]
 
 __version__ = "2.2.10"
 
@@ -20,6 +20,7 @@ else:  # Python 3
 del sys
 
 from .time_warping import fdawarp, align_fPCA, align_fPLS, pairwise_align_bayes, pairwise_align_functions
+from .time_warping import pairwise_align_bayes_infHMC
 from .plot_style import f_plot, rstyle, plot_curve, plot_reg_open_curve, plot_geod_open_curve, plot_geod_close_curve
 from .utility_functions import smooth_data, optimum_reparam, f_to_srsf, gradient_spline, elastic_distance, invertGamma, srsf_to_f
 from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, outlier_detection, innerprod_q
