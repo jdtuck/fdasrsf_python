@@ -5,7 +5,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
-from numpy import tile, eye, arccos, zeros, sin, arange, linspace, empty
+from numpy import tile, eye, arccos, zeros, sin, arange, linspace, empty, isnan
 from numpy import sqrt
 from scipy.integrate import trapz
 from scipy.linalg import norm
@@ -35,9 +35,6 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     returnpath = 1
     n, T = beta1.shape
 
-    #beta1 = cf.resamplecurve(beta1, T)
-    #beta2 = cf.resamplecurve(beta2, T)
-
     if center:
         centroid1 = cf.calculatecentroid(beta1)
         beta1 = beta1 - tile(centroid1, [T, 1]).T
@@ -50,7 +47,25 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(beta1, beta2, rotation=rotation)
     
     # Forming geodesic between the registered curves
-    dist = arccos(cf.innerprod_q2(q1, q2n))
+    val = cf.innerprod_q2(q1, q2n)
+    if val > 1:
+        if val < 1.0001: # assume numerical error
+            import warnings
+            warnings.warn(f"Corrected a numerical error in geod_sphere: rounded {val} to 1")
+            val = 1
+        else:
+            raise Exception(f"innerpod_q2 computed an inner product of {val} which is much greater than 1")
+    elif val < -1:
+        if val > -1.0001: # assume numerical error
+            import warnings
+            warnings.warn(f"Corrected a numerical error in geod_sphere: rounded {val} to -1")
+            val = -1
+        else:
+            raise Exception(f"innerpod_q2 computed an inner product of {val} which is much less than -1")
+
+    dist = arccos(val)
+    if isnan(dist):
+        raise Exception("geod_sphere computed a dist value which is NaN")
 
     if returnpath:
         PsiQ = zeros((n, T, k))
@@ -62,7 +77,13 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
                 tau1 = tau / (k - 1.)
                 
             s = dist * tau1
-            PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
+            if dist > 0:
+                PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
+            elif dist == 0:
+                PsiQ[:, :, tau] = (1 - tau1)*q1 + (tau1)*q2n
+            else:
+                raise Exception("geod_sphere computed a negative distance")
+                
             if scale:
                 scl = len1**(1-tau1)*len2**(tau1)
             else:
