@@ -218,30 +218,57 @@ def innerprod_q2(q1, q2):
     return (val)
 
 
-def find_best_rotation(q1, q2):
+def find_best_rotation(q1, q2, allow_reflection = False, only_xy = False):
     """
     This function calculates the best rotation between two srvfs using
     procustes rigid alignment
 
     :param q1: numpy ndarray of shape (2,M) of M samples
     :param q2: numpy ndarray of shape (2,M) of M samples
+    :param allow_reflection: bool indicating if reflection is allowed 
+                             (i.e. if the determinant of the optimal 
+                             rotation can be -1)
+    :param only_xy: bool indicating if rotation should only be allowed 
+                    in the first two dimensions of the space
 
     :rtype: numpy ndarray
     :return q2new: optimal rotated q2 to q1
     :return R: rotation matrix
 
     """
+    if q1.ndim != 2 or q2.ndim != 2:
+        raise Exception("This only supports curves of shape (N,M) for N dimensions and M samples")
+
     n = q1.shape[0]
-    A = q1@q2.T
-    U, s, Vh = svd(A)
 
-    if (det(A) > 0):
-        S = eye(n)
+    # if only_xy, strip everything but the x and y coordinates of q1 and q2
+    if only_xy:
+        _q1 = q1[0:2, :]
+        _q2 = q2[0:2, :]
     else:
-        S = eye(n)
-        S[:, -1] = -S[:, -1]
+        _q1 = q1
+        _q2 = q2
 
-    R = U@S@Vh
+    _n = _q1.shape[0]
+    A = _q1@_q2.T
+    U, s, Vh = svd(A)
+    S = eye(_n)
+
+    # if reflections are not allowed and the determinant of A is negative,
+    # then the entry corresponding to the smallest singular value is negated
+    # as in the Kabsch algorithm
+    if det(A) < 0 and not allow_reflection:
+        S[-1, -1] = -1 # the last entry of the matrix becomes -1
+
+    _R = U@S@Vh # optimal
+    
+    # if only_xy, the top left block of the matrix is _R and the rest is identity matrix
+    if only_xy:
+        R = eye(n)
+        R[0:2, 0:2] = _R
+    else:
+        R = _R
+        
     q2new = R@q2
 
     return (q2new, R)
