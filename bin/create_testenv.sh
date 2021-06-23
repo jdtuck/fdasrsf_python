@@ -38,7 +38,7 @@ if [ -z ${GLOBAL} ]; then
 else
   conda config --add channels conda-forge
   conda update -n base conda --yes
-  conda install cython matplotlib GPy cffi numba numpy patsy scipy --yes
+  conda install cython matplotlib GPy cffi numba numpy patsy scipy patsy --yes
 fi
 
 #  Install editable using the setup.py
