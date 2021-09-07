@@ -294,8 +294,8 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
     q2 = f_to_srsf(f2, time)
 
     gam = optimum_reparam(q1, time, q2, method, lam)
-    fw = interp((time[-1] - time[0]) * gam + time[0], time, f2)
-    qw = f_to_srsf(fw, time)
+    fw = warp_f_gamma(time, f2, gam)
+    qw = warp_q_gamma(time, q2, gam)
 
     Dy = sqrt(trapz((qw - q1) ** 2, time))
     M = time.shape[0]
