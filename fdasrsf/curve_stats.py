@@ -38,6 +38,7 @@ class fdacurve:
     :param s:           pca singular values
     :param U:           pca singular vectors
     :param coef:        pca coefficients
+    :param pca          principal directions
     :param qun:         cost function
     :param samples:     random samples
     :param gamr:        random warping functions
@@ -88,9 +89,10 @@ class fdacurve:
         self.len_q = lenq1
 
 
-    def karcher_mean(self, parallel=False, cores=-1, method="DP"):
+    def karcher_mean(self, rotation=True, parallel=False, cores=-1, method="DP"):
         """
         This calculates the mean of a set of curves
+        :param rotation: compute optimal rotation (default = T)
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
         :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
@@ -138,7 +140,7 @@ class fdacurve:
             sumd[0] = inf
             sumd[itr+1] = 0
             out = Parallel(n_jobs=cores)(delayed(karcher_calc)(mu, self.q[:, :, n], self.basis, 
-                                                               mode, method) for n in range(N))
+                                                               mode, rotation, method) for n in range(N))
             v = zeros((n, T, N))
             gamma = zeros((T,N))
             for i in range(0, N):
@@ -187,9 +189,10 @@ class fdacurve:
         return
 
 
-    def srvf_align(self, parallel=False, cores=-1, method="DP"):
+    def srvf_align(self, rotation=True, parallel=False, cores=-1, method="DP"):
         """
         This aligns a set of curves to the mean and computes mean if not computed
+        :param rotation: compute optimal rotation (default = T)
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
         :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
@@ -215,7 +218,7 @@ class fdacurve:
 
         # align to mean
         out = Parallel(n_jobs=-1)(delayed(cf.find_rotation_and_seed_unique)(self.q_mean,
-                                          self.q[:, :, n], mode, method) for n in range(N))
+                                          self.q[:, :, n], mode, rotation, method) for n in range(N))
         for ii in range(0, N):
             self.gams[:,ii] = out[ii][2]
             self.qn[:, :, ii] = out[ii][0]
@@ -292,6 +295,24 @@ class fdacurve:
 
         self.coef = x
 
+        n1, T, N1 = self.beta.shape
+        p = zeros((n1,T,no,10))
+        for j in range(0,no):
+            for i in range(1,11):
+                tmp = VM + 0.5*(i-5)*sqrt(self.s[j])*self.U[:,j]
+                m,n = self.q_mean.shape
+                if (self.scale):
+                    tmp_scale = tmp[-1]
+                    tmp = tmp[0:-1]
+                else:
+                    tmp_scale = 1
+                v1 = tmp.reshape(m,n)
+                q2n = cf.elastic_shooting(self.q_mean,v1)
+
+                p[:,:,j,i] = cf.q_to_curve(q2n, tmp_scale)            
+
+        self.pca = p
+        
         return
 
 
@@ -424,9 +445,9 @@ class fdacurve:
         plt.show()
 
 
-def karcher_calc(mu, q, basis, closed, method):
+def karcher_calc(mu, q, basis, closed, rotation, method):
     # Compute shooting vector from mu to q_i
-    qn_t, R, gamI = cf.find_rotation_and_seed_unique(mu, q, closed, method)
+    qn_t, R, gamI = cf.find_rotation_and_seed_unique(mu, q, closed, rotation, method)
     qn_t = qn_t / sqrt(cf.innerprod_q2(qn_t,qn_t))
 
     q1dotq2 = cf.innerprod_q2(mu,qn_t)

@@ -9,7 +9,7 @@ from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
 from scipy.integrate import trapz, cumtrapz
 from numpy import zeros, ones, cumsum, linspace, gradient, sqrt, ascontiguousarray
 from numpy import finfo, double, eye, roll, tile, vstack, array, cos, sin
-from numpy import arccos, fabs, floor, fliplr, log
+from numpy import arccos, fabs, floor, fliplr, log, real, diff, mean
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparam_N as orN
 import fdasrsf.utility_functions as uf
@@ -418,7 +418,7 @@ def shift_f(f, tau):
     return (fn)
 
 
-def find_rotation_and_seed_unique(q1, q2, closed=0, method="DP"):
+def find_rotation_and_seed_unique(q1, q2, closed=0, rotation=True, method="DP"):
     """
     This function returns a candidate list of optimally oriented and
     registered (seed) shapes w.r.t. beta1
@@ -426,6 +426,7 @@ def find_rotation_and_seed_unique(q1, q2, closed=0, method="DP"):
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param closed: Open (0) or Closed (1)
+    :param rotation: find rotation (default=True)
     :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: numpy ndarray
@@ -434,7 +435,7 @@ def find_rotation_and_seed_unique(q1, q2, closed=0, method="DP"):
     :return tau: seed
     """
 
-    T = q1.shape[1]
+    n, T = q1.shape
 
     scl = 4.
     minE = 1000
@@ -450,7 +451,11 @@ def find_rotation_and_seed_unique(q1, q2, closed=0, method="DP"):
         else:
             q2n = q2.copy()
         
-        q2new, R = find_best_rotation(q1, q2n)
+        if rotation:
+            q2new, R = find_best_rotation(q1, q2n)
+        else:
+            q2new = q2n
+            R = eye(n)
 
         # Reparam
         if norm(q1-q2new,'fro') > 0.0001:
@@ -709,17 +714,19 @@ def pre_proc_curve(beta, T=100):
     return (betanew, qnew, A)
 
 
-def elastic_distance_curve(beta1, beta2, closed=0, scale=False, method="DP"):
+def elastic_distance_curve(beta1, beta2, closed=0, rotation=True, scale=False, method="DP"):
     """
     Calculates the two elastic distances between two curves
     :param beta1: numpy ndarray of shape (2,M) of M samples
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param closed: open (0) or closed (1) curve (default=0)
+    :param rotation: compute optimal rotation (default=True)
     :param scale: include scale (default=False)
     :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
-    :rtype: scalar
+    :rtype: tuple
     :return dist: shape distance
+    :return dx: phase distance
     """
 
     if (beta1 == beta2).all():
@@ -735,7 +742,7 @@ def elastic_distance_curve(beta1, beta2, closed=0, scale=False, method="DP"):
         q2, len2, lenq2 = curve_to_q(beta2)
 
         # compute shooting vector from q1 to q2
-        beta2best, qn_t, Rbest, gam = find_rotation_and_seed_coord(beta1, beta2, closed, method)
+        beta2best, qn_t, Rbest, gam = find_rotation_and_seed_coord(beta1, beta2, closed, rotation, method)
 
         q1dotq2 = innerprod_q2(q1, qn_t)
         if q1dotq2 > 1:
@@ -747,8 +754,19 @@ def elastic_distance_curve(beta1, beta2, closed=0, scale=False, method="DP"):
             d = sqrt(arccos(q1dotq2)**2+log(lenq1/lenq2)**2)
         else:
             d = arccos(q1dotq2)
+        
+        time1 = linspace(0,1,N)
+        binsize = mean(diff(time1))
+        psi = sqrt(gradient(gam,binsize))
+        q1dotq2 = trapz(psi, time1)
+        if q1dotq2 > 1:
+            q1dotq2 = 1
+        elif q1dotq2 < -1:
+            q1dotq2 = -1
 
-    return d
+        dx = real(arccos(q1dotq2))
+
+    return d, dx
     
 
 def inverse_exp_coord(beta1, beta2, closed=0, method="DP"):
