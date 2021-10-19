@@ -205,16 +205,10 @@ def MapC_to_y(n,c,B,t,f,parallel):
     y = np.zeros(n)
 
     if parallel:
-        with Parallel(n_jobs=-1) as parallel: 
-            for k in range(0,n):
-                bet = np.dot(B,c)
-                q1 = uf.f_to_srsf(bet, t)
-                q2 = uf.f_to_srsf(f[:,k], t)
-                gam = uf.optimum_reparam(q1,t,q2)
-                fn = uf.warp_f_gamma(t, f[:,k], gam)
-                tmp = bet*fn
-                y[k] = tmp.sum()*dt
-
+        bet = np.dot(B,c)
+        q1 = uf.f_to_srsf(bet, t)
+        y = Parallel(n_jobs=-1)(delayed(map_driver)(q1,
+                                            f[:,k], bet, t, dt) for k in range(n))
     else:
         for k in range(0,n):
             bet = np.dot(B,c)
@@ -226,3 +220,12 @@ def MapC_to_y(n,c,B,t,f,parallel):
             y[k] = tmp.sum()*dt
     
     return(y)
+
+def map_driver(q1, f, bet, t, dt):
+    q2 = uf.f_to_srsf(f, t)
+    gam = uf.optimum_reparam(q1,t,q2)
+    fn = uf.warp_f_gamma(t, f, gam)
+    tmp = bet*fn
+    y = tmp.sum()*dt
+
+    return y
