@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Curve Registration &#8212; fdasrsf 2.2.9 documentation</title>
+    <title>Curve Registration &#8212; fdasrsf 2.3.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Registration</a></li> 
       </ul>
     </div>  
@@ -73,6 +73,7 @@ in R^M
 :param s:           pca singular values
 :param U:           pca singular vectors
 :param coef:        pca coefficients
+:param pca          principal directions
 :param qun:         cost function
 :param samples:     random samples
 :param gamr:        random warping functions
@@ -93,8 +94,9 @@ Date   :  26-Aug-2020</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="curve_stats.fdacurve.karcher_mean">
-<span class="sig-name descname"><span class="pre">karcher_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_mean" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">karcher_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_mean" title="Permalink to this definition">¶</a></dt>
 <dd><p>This calculates the mean of a set of curves
+:param rotation: compute optimal rotation (default = T)
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = -1 (all))
 :param method: method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p>
@@ -134,8 +136,9 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="curve_stats.fdacurve.srvf_align">
-<span class="sig-name descname"><span class="pre">srvf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.srvf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.srvf_align" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">srvf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.srvf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.srvf_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>This aligns a set of curves to the mean and computes mean if not computed
+:param rotation: compute optimal rotation (default = T)
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = -1 (all))
 :param method: method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p>
@@ -218,7 +221,7 @@ Generator.standard_normal: which should be used for new code.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -243,13 +246,13 @@ Generator.standard_normal: which should be used for new code.</p>
         <li class="right" >
           <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Registration</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

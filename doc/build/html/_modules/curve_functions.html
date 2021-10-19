@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>curve_functions &#8212; fdasrsf 2.2.9 documentation</title>
+    <title>curve_functions &#8212; fdasrsf 2.3.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">curve_functions</a></li> 
       </ul>
@@ -49,7 +49,7 @@
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">cumtrapz</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ascontiguousarray</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">finfo</span><span class="p">,</span> <span class="n">double</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">fliplr</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">fliplr</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">mean</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span><span class="p">,</span> <span class="n">det</span><span class="p">,</span> <span class="n">solve</span>
 <span class="kn">import</span> <span class="nn">optimum_reparam_N</span> <span class="k">as</span> <span class="nn">orN</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
@@ -258,30 +258,57 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">val</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="find_best_rotation"><a class="viewcode-back" href="../curve_functions.html#curve_functions.find_best_rotation">[docs]</a><span class="k">def</span> <span class="nf">find_best_rotation</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
+<div class="viewcode-block" id="find_best_rotation"><a class="viewcode-back" href="../curve_functions.html#curve_functions.find_best_rotation">[docs]</a><span class="k">def</span> <span class="nf">find_best_rotation</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">allow_reflection</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">only_xy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function calculates the best rotation between two srvfs using</span>
 <span class="sd">    procustes rigid alignment</span>
 
 <span class="sd">    :param q1: numpy ndarray of shape (2,M) of M samples</span>
 <span class="sd">    :param q2: numpy ndarray of shape (2,M) of M samples</span>
+<span class="sd">    :param allow_reflection: bool indicating if reflection is allowed </span>
+<span class="sd">                             (i.e. if the determinant of the optimal </span>
+<span class="sd">                             rotation can be -1)</span>
+<span class="sd">    :param only_xy: bool indicating if rotation should only be allowed </span>
+<span class="sd">                    in the first two dimensions of the space</span>
 
 <span class="sd">    :rtype: numpy ndarray</span>
 <span class="sd">    :return q2new: optimal rotated q2 to q1</span>
 <span class="sd">    :return R: rotation matrix</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This only supports curves of shape (N,M) for N dimensions and M samples&quot;</span><span class="p">)</span>
+
     <span class="n">n</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">q1</span><span class="nd">@q2</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">S</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="c1"># if only_xy, strip everything but the x and y coordinates of q1 and q2</span>
+    <span class="k">if</span> <span class="n">only_xy</span><span class="p">:</span>
+        <span class="n">_q1</span> <span class="o">=</span> <span class="n">q1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">_q2</span> <span class="o">=</span> <span class="n">q2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">S</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-        <span class="n">S</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">S</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">_q1</span> <span class="o">=</span> <span class="n">q1</span>
+        <span class="n">_q2</span> <span class="o">=</span> <span class="n">q2</span>
 
-    <span class="n">R</span> <span class="o">=</span> <span class="n">U</span><span class="nd">@S@V</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">_n</span> <span class="o">=</span> <span class="n">_q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">_q1</span><span class="nd">@_q2</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">Vh</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">_n</span><span class="p">)</span>
+
+    <span class="c1"># if reflections are not allowed and the determinant of A is negative,</span>
+    <span class="c1"># then the entry corresponding to the smallest singular value is negated</span>
+    <span class="c1"># as in the Kabsch algorithm</span>
+    <span class="k">if</span> <span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_reflection</span><span class="p">:</span>
+        <span class="n">S</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># the last entry of the matrix becomes -1</span>
+
+    <span class="n">_R</span> <span class="o">=</span> <span class="n">U</span><span class="nd">@S@Vh</span> <span class="c1"># optimal</span>
+    
+    <span class="c1"># if only_xy, the top left block of the matrix is _R and the rest is identity matrix</span>
+    <span class="k">if</span> <span class="n">only_xy</span><span class="p">:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">_R</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">_R</span>
+        
     <span class="n">q2new</span> <span class="o">=</span> <span class="n">R</span><span class="nd">@q2</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">q2new</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span></div>
@@ -431,7 +458,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">fn</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="find_rotation_and_seed_unique"><a class="viewcode-back" href="../curve_functions.html#curve_functions.find_rotation_and_seed_unique">[docs]</a><span class="k">def</span> <span class="nf">find_rotation_and_seed_unique</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_rotation_and_seed_unique"><a class="viewcode-back" href="../curve_functions.html#curve_functions.find_rotation_and_seed_unique">[docs]</a><span class="k">def</span> <span class="nf">find_rotation_and_seed_unique</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function returns a candidate list of optimally oriented and</span>
 <span class="sd">    registered (seed) shapes w.r.t. beta1</span>
@@ -439,6 +466,7 @@
 <span class="sd">    :param beta1: numpy ndarray of shape (2,M) of M samples</span>
 <span class="sd">    :param beta2: numpy ndarray of shape (2,M) of M samples</span>
 <span class="sd">    :param closed: Open (0) or Closed (1)</span>
+<span class="sd">    :param rotation: find rotation (default=True)</span>
 <span class="sd">    :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot; or &quot;RBFGS&quot;</span>
 
 <span class="sd">    :rtype: numpy ndarray</span>
@@ -447,7 +475,7 @@
 <span class="sd">    :return tau: seed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">T</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="n">scl</span> <span class="o">=</span> <span class="mf">4.</span>
     <span class="n">minE</span> <span class="o">=</span> <span class="mi">1000</span>
@@ -463,7 +491,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">q2n</span> <span class="o">=</span> <span class="n">q2</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         
-        <span class="n">q2new</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">find_best_rotation</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rotation</span><span class="p">:</span>
+            <span class="n">q2new</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">find_best_rotation</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2n</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">q2new</span> <span class="o">=</span> <span class="n">q2n</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
         <span class="c1"># Reparam</span>
         <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">q1</span><span class="o">-</span><span class="n">q2new</span><span class="p">,</span><span class="s1">&#39;fro&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0001</span><span class="p">:</span>
@@ -722,17 +754,19 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">betanew</span><span class="p">,</span> <span class="n">qnew</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="elastic_distance_curve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.elastic_distance_curve">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance_curve</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="elastic_distance_curve"><a class="viewcode-back" href="../curve_functions.html#curve_functions.elastic_distance_curve">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance_curve</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the two elastic distances between two curves</span>
 <span class="sd">    :param beta1: numpy ndarray of shape (2,M) of M samples</span>
 <span class="sd">    :param beta2: numpy ndarray of shape (2,M) of M samples</span>
 <span class="sd">    :param closed: open (0) or closed (1) curve (default=0)</span>
+<span class="sd">    :param rotation: compute optimal rotation (default=True)</span>
 <span class="sd">    :param scale: include scale (default=False)</span>
 <span class="sd">    :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot; or &quot;RBFGS&quot;</span>
 
-<span class="sd">    :rtype: scalar</span>
+<span class="sd">    :rtype: tuple</span>
 <span class="sd">    :return dist: shape distance</span>
+<span class="sd">    :return dx: phase distance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">beta1</span> <span class="o">==</span> <span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
@@ -748,7 +782,7 @@
         <span class="n">q2</span><span class="p">,</span> <span class="n">len2</span><span class="p">,</span> <span class="n">lenq2</span> <span class="o">=</span> <span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span>
 
         <span class="c1"># compute shooting vector from q1 to q2</span>
-        <span class="n">beta2best</span><span class="p">,</span> <span class="n">qn_t</span><span class="p">,</span> <span class="n">Rbest</span><span class="p">,</span> <span class="n">gam</span> <span class="o">=</span> <span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+        <span class="n">beta2best</span><span class="p">,</span> <span class="n">qn_t</span><span class="p">,</span> <span class="n">Rbest</span><span class="p">,</span> <span class="n">gam</span> <span class="o">=</span> <span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
 
         <span class="n">q1dotq2</span> <span class="o">=</span> <span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">qn_t</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">q1dotq2</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -760,8 +794,19 @@
             <span class="n">d</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">arccos</span><span class="p">(</span><span class="n">q1dotq2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">log</span><span class="p">(</span><span class="n">lenq1</span><span class="o">/</span><span class="n">lenq2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">d</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">q1dotq2</span><span class="p">)</span>
+        
+        <span class="n">time1</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">binsize</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">time1</span><span class="p">))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">,</span><span class="n">binsize</span><span class="p">))</span>
+        <span class="n">q1dotq2</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">time1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">q1dotq2</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">q1dotq2</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">q1dotq2</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">q1dotq2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-    <span class="k">return</span> <span class="n">d</span></div>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">arccos</span><span class="p">(</span><span class="n">q1dotq2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">d</span><span class="p">,</span> <span class="n">dx</span></div>
     
 
 <div class="viewcode-block" id="inverse_exp_coord"><a class="viewcode-back" href="../curve_functions.html#curve_functions.inverse_exp_coord">[docs]</a><span class="k">def</span> <span class="nf">inverse_exp_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
@@ -1067,7 +1112,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -1086,14 +1131,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">curve_functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

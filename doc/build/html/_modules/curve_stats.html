@@ -5,15 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>curve_stats &#8212; fdasrsf 2.2.2 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <title>curve_stats &#8212; fdasrsf 2.3.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -27,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">curve_stats</a></li> 
       </ul>
@@ -79,6 +78,7 @@
 <span class="sd">    :param s:           pca singular values</span>
 <span class="sd">    :param U:           pca singular vectors</span>
 <span class="sd">    :param coef:        pca coefficients</span>
+<span class="sd">    :param pca          principal directions</span>
 <span class="sd">    :param qun:         cost function</span>
 <span class="sd">    :param samples:     random samples</span>
 <span class="sd">    :param gamr:        random warping functions</span>
@@ -129,9 +129,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">len_q</span> <span class="o">=</span> <span class="n">lenq1</span>
 
 
-<div class="viewcode-block" id="fdacurve.karcher_mean"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.karcher_mean">[docs]</a>    <span class="k">def</span> <span class="nf">karcher_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="fdacurve.karcher_mean"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.karcher_mean">[docs]</a>    <span class="k">def</span> <span class="nf">karcher_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This calculates the mean of a set of curves</span>
+<span class="sd">        :param rotation: compute optimal rotation (default = T)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot; or &quot;RBFGS&quot;</span>
@@ -179,7 +180,7 @@
             <span class="n">sumd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
             <span class="n">sumd</span><span class="p">[</span><span class="n">itr</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">karcher_calc</span><span class="p">)(</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> 
-                                                               <span class="n">mode</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+                                                               <span class="n">mode</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="n">gamma</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -228,9 +229,10 @@
         <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="fdacurve.srvf_align"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.srvf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srvf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="fdacurve.srvf_align"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.srvf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srvf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This aligns a set of curves to the mean and computes mean if not computed</span>
+<span class="sd">        :param rotation: compute optimal rotation (default = T)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot; or &quot;RBFGS&quot;</span>
@@ -256,7 +258,7 @@
 
         <span class="c1"># align to mean</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_unique</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_mean</span><span class="p">,</span>
-                                          <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">mode</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">mode</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gams</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">qn</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -332,6 +334,24 @@
             <span class="n">x</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utmp</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">tmpv1</span><span class="o">-</span> <span class="n">VM</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">x</span>
+
+        <span class="n">n1</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">N1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n1</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">no</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">no</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">VM</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">m</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_mean</span><span class="o">.</span><span class="n">shape</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">):</span>
+                    <span class="n">tmp_scale</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tmp_scale</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">v1</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+                <span class="n">q2n</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">elastic_shooting</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_mean</span><span class="p">,</span><span class="n">v1</span><span class="p">)</span>
+
+                <span class="n">p</span><span class="p">[:,:,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">q2n</span><span class="p">,</span> <span class="n">tmp_scale</span><span class="p">)</span>            
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pca</span> <span class="o">=</span> <span class="n">p</span>
 
         <span class="k">return</span></div>
 
@@ -465,9 +485,9 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<span class="k">def</span> <span class="nf">karcher_calc</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">karcher_calc</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
     <span class="c1"># Compute shooting vector from mu to q_i</span>
-    <span class="n">qn_t</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_unique</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="n">qn_t</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_unique</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
     <span class="n">qn_t</span> <span class="o">=</span> <span class="n">qn_t</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">qn_t</span><span class="p">,</span><span class="n">qn_t</span><span class="p">))</span>
 
     <span class="n">q1dotq2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">qn_t</span><span class="p">)</span>
@@ -503,7 +523,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -522,14 +542,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">curve_stats</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+        &#169; Copyright 2021, J. Derek Tucker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

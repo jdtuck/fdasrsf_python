@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geodesic &#8212; fdasrsf 2.2.9 documentation</title>
+    <title>geodesic &#8212; fdasrsf 2.3.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">geodesic</a></li> 
       </ul>
@@ -45,7 +45,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">tile</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">empty</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">tile</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">empty</span><span class="p">,</span> <span class="n">isnan</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sqrt</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapz</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
@@ -75,9 +75,6 @@
     <span class="n">returnpath</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">n</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">beta1</span><span class="o">.</span><span class="n">shape</span>
 
-    <span class="c1">#beta1 = cf.resamplecurve(beta1, T)</span>
-    <span class="c1">#beta2 = cf.resamplecurve(beta2, T)</span>
-
     <span class="k">if</span> <span class="n">center</span><span class="p">:</span>
         <span class="n">centroid1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span>
         <span class="n">beta1</span> <span class="o">=</span> <span class="n">beta1</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid1</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
@@ -90,7 +87,25 @@
     <span class="n">beta2</span><span class="p">,</span> <span class="n">q2n</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
     
     <span class="c1"># Forming geodesic between the registered curves</span>
-    <span class="n">dist</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2n</span><span class="p">))</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="mf">1.0001</span><span class="p">:</span> <span class="c1"># assume numerical error</span>
+            <span class="kn">import</span> <span class="nn">warnings</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corrected a numerical error in geod_sphere: rounded </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> to 1&quot;</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;innerpod_q2 computed an inner product of </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> which is much greater than 1&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1.0001</span><span class="p">:</span> <span class="c1"># assume numerical error</span>
+            <span class="kn">import</span> <span class="nn">warnings</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corrected a numerical error in geod_sphere: rounded </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> to -1&quot;</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;innerpod_q2 computed an inner product of </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> which is much less than -1&quot;</span><span class="p">)</span>
+
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">dist</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;geod_sphere computed a dist value which is NaN&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">returnpath</span><span class="p">:</span>
         <span class="n">PsiQ</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
@@ -102,7 +117,13 @@
                 <span class="n">tau1</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
                 
             <span class="n">s</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">tau1</span>
-            <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="o">-</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span><span class="p">)</span><span class="o">/</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="o">-</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span><span class="p">)</span><span class="o">/</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">dist</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span> <span class="o">+</span> <span class="p">(</span><span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;geod_sphere computed a negative distance&quot;</span><span class="p">)</span>
+                
             <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
                 <span class="n">scl</span> <span class="o">=</span> <span class="n">len1</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">len2</span><span class="o">**</span><span class="p">(</span><span class="n">tau1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -553,7 +574,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -572,14 +593,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">geodesic</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

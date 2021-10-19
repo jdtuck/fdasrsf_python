@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Functional Alignment &#8212; fdasrsf 2.2.9 documentation</title>
+    <title>Functional Alignment &#8212; fdasrsf 2.3.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>  
@@ -62,7 +62,7 @@ The functions are aligned to the principal components</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>num_comp</strong> – number of fPCA components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
@@ -125,7 +125,7 @@ principal least squares</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>comps</strong> – number of fPLS components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>delta</strong> – gradient step size</p></li>
 <li><p><strong>max_itr</strong> – maximum number of iterations</p></li>
 </ul>
@@ -195,7 +195,7 @@ extracted from the principal components of the srvfs</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
-<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – sort samples (default = T)</p></li>
+<li><p><strong>sort_samples</strong> (<em>bool</em>) – sort samples (default = T)</p></li>
 </ul>
 </dd>
 </dl>
@@ -231,7 +231,7 @@ slope (srsf) framework.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mu</strong> – vector of function to align to</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
-<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
@@ -259,7 +259,7 @@ square-root slope (srsf) framework.</p>
 <li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median 
 (options = “mean” or “median”) (default=”mean”)</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP2)</p></li>
-<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>MaxItr</strong> – Maximum number of iterations (default = 20)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
@@ -424,6 +424,62 @@ mcmcopts = {“iter”:2*(10**4) ,”burnin”:np.minimum(5*(10**3),2*(10**4)//2
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="time_warping.pairwise_align_bayes_infHMC">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_bayes_infHMC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mcmcopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes_infHMC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes_infHMC" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function aligns two functions using Bayesian framework. It uses a 
+hierarchical Bayesian framework assuming mearsurement error error It will 
+align f2 to f1. It is based on mapping warping functions to a hypersphere, 
+and a subsequent exponential mapping to a tangent space. In the tangent space,
+the infty-HMC algorithm is used to explore both local and global
+structure in the posterior distribution.</p>
+<dl class="simple">
+<dt>Usage:  out = pairwise_align_bayes_infHMC(f1i, f2i, time)</dt><dd><p>out = pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y1i</strong> – vector defining M samples of function 1</p></li>
+<li><p><strong>y2i</strong> – vector defining M samples of function 2</p></li>
+<li><p><strong>time</strong> – time vector of length M</p></li>
+<li><p><strong>mcmopts</strong> – dict of mcmc parameters</p></li>
+</ul>
+</dd>
+</dl>
+<p>default mcmc options:
+mcmcopts = {“iter”:1*(10**4), “nchains”:4, “vpriorvar”:1,</p>
+<blockquote>
+<div><p>“burnin”:np.minimum(5*(10**3),2*(10**4)//2),
+“alpha0”:0.1, “beta0”:0.1, “alpha”:1, “beta”:1,
+“h”:0.01, “L”:4, “f1propvar”:0.0001, “f2propvar”:0.0001,
+“L1propvar”:0.3, “L2propvar”:0.3, “npoints”:200, “thin”:1,
+“sampfreq”:1, “initcoef”:np.repeat(0,20), “nbasis”:10, 
+“basis”:’fourier’, “extrainfo”:True}</p>
+</div></blockquote>
+<p>Basis can be ‘fourier’ or ‘legendre’</p>
+<p>:rtype collection containing
+:return f2_warped: aligned f2
+:return gamma: warping function
+:return v_coef: final v_coef
+:return psi: final psi
+:return sigma1: final sigma</p>
+<p>if extrainfo
+:return theta_accept: accept of psi samples
+:return f2_accept: accept of f2 samples
+:return SSE: SSE
+:return gamma_mat: posterior gammas
+:return gamma_stats: posterior gamma stats
+:return xdist: phase distance posterior
+:return ydist: amplitude distance posterior)</p>
+<ol class="upperalpha simple" start="10">
+<li><ol class="upperalpha simple" start="4">
+<li><p>Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.</p></li>
+</ol>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="time_warping.pairwise_align_functions">
 <span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_functions" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
@@ -510,7 +566,7 @@ If no argument is given a single Python float is returned.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -535,13 +591,13 @@ If no argument is given a single Python float is returned.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

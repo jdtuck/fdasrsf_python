@@ -21,6 +21,7 @@ using functional component analysis and regression.
    fPLS
    regression
    pcr_regression
+   elastic_glm_regression
    tolerance
    curve_statistics
    geodesic
@@ -89,6 +90,11 @@ References
 
    T. Harris, J. D. Tucker, B. Li, and L. Shand, "Elastic depths for detecting shape 
    anomalies in functional data," Technometrics, 10.1080/00401706.2020.1811156, 2020.
+
+   M. K. Ahn, J. D. Tucker, W. Wu, and A. Srivastava. “Regression Models Using Shapes 
+   of Functions as Predictors” Computational Statistics and Data Analysis, 10.1016/j.csda.2020.107017, 2020. 
+
+   J. D. Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.
 
 
 Indices and tables

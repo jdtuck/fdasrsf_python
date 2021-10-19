@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Elastic Principal Component Regression &#8212; fdasrsf 2.2.9 documentation</title>
+    <title>Elastic Principal Component Regression &#8212; fdasrsf 2.3.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -17,7 +17,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Elastic Functional Tolerance Bounds" href="tolerance.html" />
+    <link rel="next" title="Elastic GLM Regression" href="elastic_glm_regression.html" />
     <link rel="prev" title="Elastic Regression" href="regression.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -30,12 +30,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
+          <a href="elastic_glm_regression.html" title="Elastic GLM Regression"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="regression.html" title="Elastic Regression"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Principal Component Regression</a></li> 
       </ul>
     </div>  
@@ -103,7 +103,7 @@ Usage:  obj.predict()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>newdata</strong> (<em>dict</em>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
 <li><p><strong>time</strong> – vector of time points</p></li>
 <li><p><strong>y</strong> – truth if available</p></li>
@@ -175,7 +175,7 @@ Usage:  obj.predict()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>newdata</strong> (<em>dict</em>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
 <li><p><strong>time</strong> – vector of time points</p></li>
 <li><p><strong>y</strong> – truth if available</p></li>
@@ -240,7 +240,7 @@ Usage:  obj.predict()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>newdata</strong> (<em>dict</em>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
 <li><p><strong>time</strong> – vector of time points</p></li>
 <li><p><strong>y</strong> – truth if available</p></li>
@@ -268,8 +268,8 @@ Usage:  obj.predict()</p>
   <p class="topless"><a href="regression.html"
                         title="previous chapter">Elastic Regression</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tolerance.html"
-                        title="next chapter">Elastic Functional Tolerance Bounds</a></p>
+  <p class="topless"><a href="elastic_glm_regression.html"
+                        title="next chapter">Elastic GLM Regression</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -281,7 +281,7 @@ Usage:  obj.predict()</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -301,18 +301,18 @@ Usage:  obj.predict()</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tolerance.html" title="Elastic Functional Tolerance Bounds"
+          <a href="elastic_glm_regression.html" title="Elastic GLM Regression"
              >next</a> |</li>
         <li class="right" >
           <a href="regression.html" title="Elastic Regression"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Principal Component Regression</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

@@ -1,8 +1,5 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "FDASRSF" "1" "Mar 18, 2021" "2.2" "fdasrsf"
-.SH NAME
-fdasrsf \- fdasrsf Documentation
 .
 .nr rst2man-indent-level 0
 .
@@ -30,6 +27,9 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
+.TH "FDASRSF" "1" "Oct 19, 2021" "2.2" "fdasrsf"
+.SH NAME
+fdasrsf \- fdasrsf Documentation
 .sp
 A python package for functional data analysis using the square root
 slope framework and curves using the square root velocity framework
@@ -286,7 +286,7 @@ Usage: obj.plot()
 .UNINDENT
 .INDENT 7.0
 .TP
-.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP2\(aq, smoothdata=False, parallel=False, lam=0.0, cores=\- 1, grid_dim=7)
+.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP2\(aq, smoothdata=False, MaxItr=20, parallel=False, lam=0.0, cores=\- 1, grid_dim=7)
 This function aligns a collection of functions using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -294,11 +294,14 @@ square\-root slope (srsf) framework.
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median (options = "mean" or "median") (default="mean")
+\fBmethod\fP \-\- (string) warp calculate Karcher Mean or Median 
+(options = "mean" or "median") (default="mean")
 .IP \(bu 2
 \fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP2)
 .IP \(bu 2
 \fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
+.IP \(bu 2
+\fBMaxItr\fP \-\- Maximum number of iterations (default = 20)
 .IP \(bu 2
 \fBparallel\fP \-\- run in parallel (default = F)
 .IP \(bu 2
@@ -512,6 +515,108 @@ if extrainfo
 .UNINDENT
 .INDENT 0.0
 .TP
+.B time_warping.pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None)
+This function aligns two functions using Bayesian framework. It uses a 
+hierarchical Bayesian framework assuming mearsurement error error It will 
+align f2 to f1. It is based on mapping warping functions to a hypersphere, 
+and a subsequent exponential mapping to a tangent space. In the tangent space,
+the infty\-HMC algorithm is used to explore both local and global
+structure in the posterior distribution.
+.INDENT 7.0
+.TP
+.B Usage:  out = pairwise_align_bayes_infHMC(f1i, f2i, time)
+out = pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBy1i\fP \-\- vector defining M samples of function 1
+.IP \(bu 2
+\fBy2i\fP \-\- vector defining M samples of function 2
+.IP \(bu 2
+\fBtime\fP \-\- time vector of length M
+.IP \(bu 2
+\fBmcmopts\fP \-\- dict of mcmc parameters
+.UNINDENT
+.UNINDENT
+.sp
+default mcmc options:
+mcmcopts = {"iter":1*(10**4), "nchains":4, "vpriorvar":1,
+.INDENT 7.0
+.INDENT 3.5
+"burnin":np.minimum(5*(10**3),2*(10**4)//2),
+"alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
+"h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
+"L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
+"sampfreq":1, "initcoef":np.repeat(0,20), "nbasis":10, 
+"basis":\(aqfourier\(aq, "extrainfo":True}
+.UNINDENT
+.UNINDENT
+.sp
+Basis can be \(aqfourier\(aq or \(aqlegendre\(aq
+.sp
+:rtype collection containing
+:return f2_warped: aligned f2
+:return gamma: warping function
+:return v_coef: final v_coef
+:return psi: final psi
+:return sigma1: final sigma
+.sp
+if extrainfo
+:return theta_accept: accept of psi samples
+:return f2_accept: accept of f2 samples
+:return SSE: SSE
+:return gamma_mat: posterior gammas
+:return gamma_stats: posterior gamma stats
+:return xdist: phase distance posterior
+:return ydist: amplitude distance posterior)
+.INDENT 7.0
+.IP J. 3
+.INDENT 3.0
+.IP D. 3
+Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B time_warping.pairwise_align_functions(f1, f2, time, omethod=\(aqDP2\(aq, lam=0, grid_dim=7)
+.INDENT 7.0
+.TP
+.B This function aligns f2 to f1 using the elastic square\-root
+slope (srsf) framework.
+.TP
+.B Usage:  out = pairwise_align_functions(f1, f2, time)
+out = pairwise_align_functions(f1, f2, time, omethod, lam, grid_dim)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf1\fP \-\- vector defining M samples of function 1
+.IP \(bu 2
+\fBf2\fP \-\- vector defining M samples of function 2
+.IP \(bu 2
+\fBtime\fP \-\- time vector of length M
+.IP \(bu 2
+\fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP)
+.IP \(bu 2
+\fBlam\fP \-\- controls the elasticity (default = 0)
+.IP \(bu 2
+\fBgrid_dim\fP \-\- size of the grid, for the DP2 method only (default = 7)
+.UNINDENT
+.UNINDENT
+.sp
+:rtype list containing
+:return f2n: aligned f2
+:return gam: warping function
+:return q2n: aligned q2 (srsf)
+.UNINDENT
+.INDENT 0.0
+.TP
 .B time_warping.rand(d0, d1, \&..., dn)
 Random values in a given shape.
 .sp
@@ -594,12 +699,17 @@ Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
 Date   :  15\-Mar\-2018
 .INDENT 7.0
 .TP
-.B calc_fpca(no=3)
+.B calc_fpca(no=3, stds=array([\- 1, 0, 1]))
 This function calculates horizontal functional principal component analysis on aligned data
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
 \fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
+.IP \(bu 2
+\fBstds\fP \-\- number of standard deviations along gedoesic to compute (default = \-1,0,1)
+.UNINDENT
 .TP
 .B Return type
 fdahpca object of numpy ndarray
@@ -670,7 +780,7 @@ Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
 Date   :  18\-Mar\-2018
 .INDENT 7.0
 .TP
-.B calc_fpca(no=3, id=None)
+.B calc_fpca(no=3, stds=array([\- 1., 0., 1.]), id=None, parallel=False, cores=\- 1)
 This function calculates joint functional principal component analysis
 on aligned data
 .INDENT 7.0
@@ -681,6 +791,12 @@ on aligned data
 \fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
 \fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
+.IP \(bu 2
+\fBstds\fP \-\- number of standard deviations along gedoesic to compute (default = \-1,0,1)
+.IP \(bu 2
+\fBparallel\fP (\fI\%bool\fP) \-\- run in parallel (default = F)
+.IP \(bu 2
+\fBcores\fP (\fI\%int\fP) \-\- number of cores for parallel (default = \-1 (all))
 .UNINDENT
 .TP
 .B Return type
@@ -746,7 +862,7 @@ Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
 Date   :  15\-Mar\-2018
 .INDENT 7.0
 .TP
-.B calc_fpca(no=3, id=None)
+.B calc_fpca(no=3, id=None, stds=array([\- 1, 0, 1]))
 This function calculates vertical functional principal component analysis
 on aligned data
 .INDENT 7.0
@@ -757,6 +873,8 @@ on aligned data
 \fBno\fP (\fI\%int\fP) \-\- number of components to extract (default = 3)
 .IP \(bu 2
 \fBid\fP (\fI\%int\fP) \-\- point to use for f(0) (default = midpoint)
+.IP \(bu 2
+\fBstds\fP \-\- number of standard deviations along gedoesic to compute (default = \-1,0,1)
 .UNINDENT
 .TP
 .B Return type
@@ -1630,6 +1748,141 @@ obj.predict(newdata)
 .UNINDENT
 .UNINDENT
 .UNINDENT
+.SH ELASTIC GLM REGRESSION
+.sp
+Warping Invariant GML Regression using SRSF
+.sp
+moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
+.INDENT 0.0
+.TP
+.B class elastic_glm_regression.elastic_glm_regression(f, y, time)
+This class provides elastic glm regression for functional data using the
+SRVF framework accounting for warping
+.sp
+Usage:  obj = elastic_glm_regression(f,y,time)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP \-\- (M,N) % matrix defining N functions of M samples
+.IP \(bu 2
+\fBy\fP \-\- response vector of length N
+.IP \(bu 2
+\fBtime\fP \-\- time vector of length M
+.UNINDENT
+.UNINDENT
+.sp
+:param information
+:param alpha: intercept
+:param b: coefficient vector
+:param B: basis matrix
+:param lambda: regularization parameter
+:param SSE: sum of squared errors
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  18\-Mar\-2018
+.INDENT 7.0
+.TP
+.B calc_model(link=\(aqlinear\(aq, B=None, lam=0, df=20, max_itr=20, smooth_data=False, sparam=25, parallel=False)
+This function identifies a regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBlink\fP \-\- string of link function (\(aqlinear\(aq, \(aqquadratic\(aq, \(aqcubic\(aq)
+.IP \(bu 2
+\fBB\fP \-\- optional matrix describing Basis elements
+.IP \(bu 2
+\fBlam\fP \-\- regularization parameter (default 0)
+.IP \(bu 2
+\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+.IP \(bu 2
+\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+.IP \(bu 2
+\fBsmooth_data\fP \-\- smooth data using box filter (default = F)
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to apply box filter (default = 25)
+.IP \(bu 2
+\fBparallel\fP \-\- run in parallel (default = F)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B predict(newdata=None, parallel=True)
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+.INDENT 7.0
+.INDENT 3.5
+obj.predict(newdata)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+.IP \(bu 2
+\fBf\fP \-\- (M,N) matrix of functions
+.IP \(bu 2
+\fBtime\fP \-\- vector of time points
+.IP \(bu 2
+\fBy\fP \-\- truth if available
+.IP \(bu 2
+\fBsmooth\fP \-\- smooth data if needed
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to run filter
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B elastic_glm_regression.rand(d0, d1, \&..., dn)
+Random values in a given shape.
+.sp
+\fBNOTE:\fP
+.INDENT 7.0
+.INDENT 3.5
+This is a convenience function for users porting code from Matlab,
+and wraps \fIrandom_sample\fP\&. That function takes a
+tuple to specify the size of the output, which is consistent with
+other NumPy functions like \fInumpy.zeros\fP and \fInumpy.ones\fP\&.
+.UNINDENT
+.UNINDENT
+.sp
+Create an array of the given shape and populate it with
+random samples from a uniform distribution
+over \fB[0, 1)\fP\&.
+.INDENT 7.0
+.TP
+.B d0, d1, ..., dn
+int, optional
+The dimensions of the returned array, must be non\-negative.
+If no argument is given a single Python float is returned.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B out
+ndarray, shape \fB(d0, d1, ..., dn)\fP
+Random values.
+.UNINDENT
+.sp
+random
+.sp
+.nf
+.ft C
+>>> np.random.rand(3,2)
+array([[ 0.14022471,  0.96360618],  #random
+       [ 0.37601032,  0.25528411],  #random
+       [ 0.49313049,  0.94909878]]) #random
+.ft P
+.fi
+.UNINDENT
 .SH ELASTIC FUNCTIONAL TOLERANCE BOUNDS
 .sp
 Functional Tolerance Bounds using SRSF
@@ -1796,6 +2049,7 @@ in R^M
 :param s:           pca singular values
 :param U:           pca singular vectors
 :param coef:        pca coefficients
+:param pca          principal directions
 :param qun:         cost function
 :param samples:     random samples
 :param gamr:        random warping functions
@@ -1816,8 +2070,9 @@ This calculates the mean of a set of curves
 .UNINDENT
 .INDENT 7.0
 .TP
-.B karcher_mean(parallel=False, cores=\- 1, method=\(aqDP\(aq)
+.B karcher_mean(rotation=True, parallel=False, cores=\- 1, method=\(aqDP\(aq)
 This calculates the mean of a set of curves
+:param rotation: compute optimal rotation (default = T)
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = \-1 (all))
 :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
@@ -1855,8 +2110,9 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence
 .UNINDENT
 .INDENT 7.0
 .TP
-.B srvf_align(parallel=False, cores=\- 1, method=\(aqDP\(aq)
+.B srvf_align(rotation=True, parallel=False, cores=\- 1, method=\(aqDP\(aq)
 This aligns a set of curves to the mean and computes mean if not computed
+:param rotation: compute optimal rotation (default = T)
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = \-1 (all))
 :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
@@ -2111,7 +2367,7 @@ geodesic distance
 .UNINDENT
 .INDENT 0.0
 .TP
-.B geodesic.geod_sphere(beta1, beta2, k=5, scale=False)
+.B geodesic.geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True)
 This function calculates the geodesics between open curves beta1 and
 beta2 with k steps along path
 .INDENT 7.0
@@ -2126,6 +2382,10 @@ beta2 with k steps along path
 \fBk\fP \-\- number of samples along path (Default = 5)
 .IP \(bu 2
 \fBscale\fP \-\- include length (Default = False)
+.IP \(bu 2
+\fBrotation\fP \-\- include rotation (Default = True)
+.IP \(bu 2
+\fBcenter\fP \-\- center curves at origin (Default = True)
 .UNINDENT
 .TP
 .B Return type
@@ -2290,13 +2550,20 @@ Utility functions for SRSF Manipulations
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B utility_functions.SqrtMean(gam)
+.B utility_functions.SqrtMean(gam, parallel=False, cores=\- 1)
 calculates the srsf of warping functions with corresponding shooting vectors
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
 \fBgam\fP \-\- numpy ndarray of shape (M,N) of M warping functions
 with N samples
+.IP \(bu 2
+\fBparallel\fP \-\- run in parallel (default = F)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel (default = \-1 (all))
+.UNINDENT
 .TP
 .B Return type
 2 numpy ndarray and vector
@@ -2980,20 +3247,24 @@ rotation matrix
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.elastic_distance_curve(beta1, beta2, closed=0, scale=False, method=\(aqDP\(aq)
+.B curve_functions.elastic_distance_curve(beta1, beta2, closed=0, rotation=True, scale=False, method=\(aqDP\(aq)
 Calculates the two elastic distances between two curves
 :param beta1: numpy ndarray of shape (2,M) of M samples
 :param beta2: numpy ndarray of shape (2,M) of M samples
 :param closed: open (0) or closed (1) curve (default=0)
+:param rotation: compute optimal rotation (default=True)
 :param scale: include scale (default=False)
 :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .INDENT 7.0
 .TP
 .B Return type
-scalar
+\fI\%tuple\fP
 .TP
 .B Return dist
 shape distance
+.TP
+.B Return dx
+phase distance
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -3032,7 +3303,7 @@ list containing basis vectors
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.find_best_rotation(q1, q2)
+.B curve_functions.find_best_rotation(q1, q2, allow_reflection=False, only_xy=False)
 This function calculates the best rotation between two srvfs using
 procustes rigid alignment
 .INDENT 7.0
@@ -3043,6 +3314,13 @@ procustes rigid alignment
 \fBq1\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBq2\fP \-\- numpy ndarray of shape (2,M) of M samples
+.IP \(bu 2
+\fBallow_reflection\fP \-\- bool indicating if reflection is allowed 
+(i.e. if the determinant of the optimal 
+rotation can be \-1)
+.IP \(bu 2
+\fBonly_xy\fP \-\- bool indicating if rotation should only be allowed 
+in the first two dimensions of the space
 .UNINDENT
 .TP
 .B Return type
@@ -3057,7 +3335,7 @@ rotation matrix
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.find_rotation_and_seed_coord(beta1, beta2, closed=0, method=\(aqDP\(aq)
+.B curve_functions.find_rotation_and_seed_coord(beta1, beta2, closed=0, rotation=True, method=\(aqDP\(aq)
 This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1
 .INDENT 7.0
@@ -3070,6 +3348,8 @@ registered (seed) shapes w.r.t. beta1
 \fBbeta2\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBclosed\fP \-\- Open (0) or Closed (1)
+.IP \(bu 2
+\fBrotation\fP \-\- find rotation (default=True)
 .IP \(bu 2
 \fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
@@ -3117,7 +3397,7 @@ seed
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.find_rotation_and_seed_unique(q1, q2, closed=0, method=\(aqDP\(aq)
+.B curve_functions.find_rotation_and_seed_unique(q1, q2, closed=0, rotation=True, method=\(aqDP\(aq)
 This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1
 .INDENT 7.0
@@ -3130,6 +3410,8 @@ registered (seed) shapes w.r.t. beta1
 \fBbeta2\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBclosed\fP \-\- Open (0) or Closed (1)
+.IP \(bu 2
+\fBrotation\fP \-\- find rotation (default=True)
 .IP \(bu 2
 \fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
@@ -3458,7 +3740,7 @@ parameterized curve
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.resamplecurve(x, N=100, mode=\(aqO\(aq)
+.B curve_functions.resamplecurve(x, N=100, time=None, mode=\(aqO\(aq)
 This function resamples a curve to have N samples
 .INDENT 7.0
 .TP
@@ -3468,6 +3750,8 @@ This function resamples a curve to have N samples
 \fBx\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBN\fP \-\- Number of samples for new curve (default = 100)
+.IP \(bu 2
+\fBtime\fP \-\- timing vector (Default=None)
 .IP \(bu 2
 \fBmode\fP \-\- Open (\(aqO\(aq) or closed curve (\(aqC\(aq) (default \(aqO\(aq)
 .UNINDENT
@@ -3639,6 +3923,16 @@ Tolerance Bounds for Elastic Functional Data,” Journal of Applied Statistics, 
 .sp
 T. Harris, J. D. Tucker, B. Li, and L. Shand, "Elastic depths for detecting shape
 anomalies in functional data," Technometrics, 10.1080/00401706.2020.1811156, 2020.
+.sp
+M. K. Ahn, J. D. Tucker, W. Wu, and A. Srivastava. “Regression Models Using Shapes
+of Functions as Predictors” Computational Statistics and Data Analysis, 10.1016/j.csda.2020.107017, 2020.
+.INDENT 0.0
+.IP J. 3
+.INDENT 3.0
+.IP D. 3
+Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -3652,6 +3946,6 @@ search
 .SH AUTHOR
 J. Derek Tucker
 .SH COPYRIGHT
-2020, J. Derek Tucker
+2021, J. Derek Tucker
 .\" Generated by docutils manpage writer.
 .

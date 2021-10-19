@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Curve Functions &#8212; fdasrsf 2.2.9 documentation</title>
+    <title>Curve Functions &#8212; fdasrsf 2.3.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>  
@@ -170,19 +170,23 @@ from elastic curve regression model</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="curve_functions.elastic_distance_curve">
-<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_distance_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#elastic_distance_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.elastic_distance_curve" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_distance_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#elastic_distance_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.elastic_distance_curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the two elastic distances between two curves
 :param beta1: numpy ndarray of shape (2,M) of M samples
 :param beta2: numpy ndarray of shape (2,M) of M samples
 :param closed: open (0) or closed (1) curve (default=0)
+:param rotation: compute optimal rotation (default=True)
 :param scale: include scale (default=False)
 :param method: method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>scalar</p>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 <dt class="field-even">Return dist</dt>
 <dd class="field-even"><p>shape distance</p>
+</dd>
+<dt class="field-odd">Return dx</dt>
+<dd class="field-odd"><p>phase distance</p>
 </dd>
 </dl>
 </dd></dl>
@@ -222,7 +226,7 @@ from elastic curve regression model</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="curve_functions.find_best_rotation">
-<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_best_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_best_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_best_rotation" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_best_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_reflection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_xy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_best_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_best_rotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates the best rotation between two srvfs using
 procustes rigid alignment</p>
 <dl class="field-list simple">
@@ -230,6 +234,11 @@ procustes rigid alignment</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>q2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>allow_reflection</strong> – bool indicating if reflection is allowed 
+(i.e. if the determinant of the optimal 
+rotation can be -1)</p></li>
+<li><p><strong>only_xy</strong> – bool indicating if rotation should only be allowed 
+in the first two dimensions of the space</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -303,7 +312,7 @@ registered (seed) shapes w.r.t. beta1</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="curve_functions.find_rotation_and_seed_unique">
-<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_rotation_and_seed_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_unique" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_rotation_and_seed_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_unique" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1</p>
 <dl class="field-list simple">
@@ -312,6 +321,7 @@ registered (seed) shapes w.r.t. beta1</p>
 <li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>closed</strong> – Open (0) or Closed (1)</p></li>
+<li><p><strong>rotation</strong> – find rotation (default=True)</p></li>
 <li><p><strong>method</strong> – method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p></li>
 </ul>
 </dd>
@@ -705,7 +715,7 @@ beta1 to beta2 in shape space of open curves</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -730,13 +740,13 @@ beta1 to beta2 in shape space of open curves</p>
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.2.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>
