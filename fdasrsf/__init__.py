@@ -5,7 +5,7 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA"]
+__all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA", "elastic_glm_regression"]
 
 __version__ = "2.3.3"
 
@@ -28,6 +28,7 @@ from .utility_functions import optimum_reparam_pair, warp_q_gamma, resamplefunct
 from .fPCA import fdavpca, fdahpca, fdajpca
 from .fPLS import pls_svd
 from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic
+from .elastic_glm_regression import elastic_glm_regression
 from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, elastic_mlpcr_regression
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB

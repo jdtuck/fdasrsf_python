@@ -11,9 +11,9 @@ beta = np.zeros((n,M,K))
 for i in range(0,K):
     beta[:,:,i] = Xdata[0,i]
 
-obj = fs.fdacurve(beta,N=M,scale=True)
-obj.karcher_mean()
-obj.srvf_align()
+obj = fs.fdacurve(beta,N=M)
+obj.karcher_mean(rotation=False)
+obj.srvf_align(rotation=False)
 obj.karcher_cov()
 obj.shape_pca()
 obj.plot_pca()
