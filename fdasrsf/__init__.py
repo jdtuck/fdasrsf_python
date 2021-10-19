@@ -27,7 +27,7 @@ from .utility_functions import SqrtMean, SqrtMeanInverse, cumtrapzmid, rgam, out
 from .utility_functions import optimum_reparam_pair, warp_q_gamma, resamplefunction, warp_f_gamma, elastic_depth
 from .fPCA import fdavpca, fdahpca, fdajpca
 from .fPLS import pls_svd
-from .regression import elastic_prediction, elastic_logistic, elastic_regression, elastic_mlogistic
+from .regression import elastic_logistic, elastic_regression, elastic_mlogistic
 from .elastic_glm_regression import elastic_glm_regression
 from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, elastic_mlpcr_regression
 from .boxplots import ampbox, phbox

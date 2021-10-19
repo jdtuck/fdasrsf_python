@@ -137,7 +137,7 @@ class elastic_glm_regression:
             yhat1 = self.alpha + MapC_to_y(n,self.b,self.B,time,f,parallel)
             yhat = np.polyval(self.h,yhat1)
 
-            if y == None:
+            if y is None:
                 self.SSE = np.nan
             else:
                 self.SSE = np.sum((y-yhat)**2)
