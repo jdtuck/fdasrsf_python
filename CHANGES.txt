@@ -1,3 +1,4 @@
+v2.3.4,  2021-10-19 -- refactor of regression code, bugfixes
 v2.3.3,  2021-09-08 -- bugfixes
 v2.3.1,  2021-06-23 -- bugfixes
 v2.3.0,  2021-06-21 -- add infHMC bayesian code

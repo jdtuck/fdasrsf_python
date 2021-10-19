@@ -1080,141 +1080,11 @@ Warping Invariant Regression using SRSF
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B regression.elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=\- 1, smooth=False)
-This function identifies a logistic regression model with
-phase\-variability using elastic methods
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
-.IP \(bu 2
-\fBy\fP \-\- numpy array of labels (1/\-1)
-.IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
-.IP \(bu 2
-\fBB\fP \-\- optional matrix describing Basis elements
-.IP \(bu 2
-\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
-.IP \(bu 2
-\fBmax_itr\fP \-\- maximum number of iterations (default 20)
-.IP \(bu 2
-\fBcores\fP \-\- number of cores for parallel processing (default all)
-.UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return alpha
-alpha parameter of model
-.TP
-.B Return beta
-beta(t) of model
-.TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of M
-.UNINDENT
+.B class regression.elastic_logistic(f, y, time)
+This class provides elastic logistic regression for functional data using the
+SRVF framework accounting for warping
 .sp
-functions with N samples
-:return qn: aligned srvfs \- similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return Loss: logistic loss
-.UNINDENT
-.INDENT 0.0
-.TP
-.B regression.elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=\- 1, delta=0.01, parallel=True, smooth=False)
-This function identifies a multinomial logistic regression model with
-phase\-variability using elastic methods
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
-.IP \(bu 2
-\fBy\fP \-\- numpy array of labels {1,2,...,m} for m classes
-.IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
-.IP \(bu 2
-\fBB\fP \-\- optional matrix describing Basis elements
-.IP \(bu 2
-\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
-.IP \(bu 2
-\fBmax_itr\fP \-\- maximum number of iterations (default 20)
-.IP \(bu 2
-\fBcores\fP \-\- number of cores for parallel processing (default all)
-.UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return alpha
-alpha parameter of model
-.TP
-.B Return beta
-beta(t) of model
-.TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of N
-.UNINDENT
-.sp
-functions with M samples
-:return qn: aligned srvfs \- similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return Loss: logistic loss
-.UNINDENT
-.INDENT 0.0
-.TP
-.B regression.elastic_prediction(f, time, model, y=None, smooth=False)
-This function performs prediction from an elastic regression model
-with phase\-variability
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBf\fP \-\- numpy ndarray of shape (M,N) of N functions with M samples
-.IP \(bu 2
-\fBtime\fP \-\- vector of size M describing the sample points
-.IP \(bu 2
-\fBmodel\fP \-\- identified model from elastic_regression
-.IP \(bu 2
-\fBy\fP \-\- truth, optional used to calculate SSE
-.UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return alpha
-alpha parameter of model
-.TP
-.B Return beta
-beta(t) of model
-.TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of N
-.UNINDENT
-.sp
-functions with M samples
-:return qn: aligned srvfs \- similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return SSE: sum of squared error
-.UNINDENT
-.INDENT 0.0
-.TP
-.B regression.elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20, cores=\- 1, smooth=False)
-This function identifies a regression model with phase\-variability
-using elastic methods
+Usage:  obj = elastic_logistic(f,y,time)
 .INDENT 7.0
 .TP
 .B Parameters
@@ -1236,27 +1106,229 @@ using elastic methods
 .IP \(bu 2
 \fBcores\fP \-\- number of cores for parallel processing (default all)
 .UNINDENT
-.TP
-.B Return type
-tuple of numpy array
-.TP
-.B Return alpha
-alpha parameter of model
-.TP
-.B Return beta
-beta(t) of model
-.TP
-.B Return fn
-aligned functions \- numpy ndarray of shape (M,N) of M
 .UNINDENT
 .sp
-functions with N samples
-:return qn: aligned srvfs \- similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return SSE: sum of squared error
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  29\-Oct\-2021
+.INDENT 7.0
+.TP
+.B calc_model(B=None, lam=0, df=20, max_itr=20, cores=\- 1, smooth=False)
+This function identifies a regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBB\fP \-\- optional matrix describing Basis elements
+.IP \(bu 2
+\fBlam\fP \-\- regularization parameter (default 0)
+.IP \(bu 2
+\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+.IP \(bu 2
+\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel processing (default all)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B predict(newdata=None)
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+.INDENT 7.0
+.INDENT 3.5
+obj.predict(newdata)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+.IP \(bu 2
+\fBf\fP \-\- (M,N) matrix of functions
+.IP \(bu 2
+\fBtime\fP \-\- vector of time points
+.IP \(bu 2
+\fBy\fP \-\- truth if available
+.IP \(bu 2
+\fBsmooth\fP \-\- smooth data if needed
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to run filter
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class regression.elastic_mlogistic(f, y, time)
+This class provides elastic multinomial logistic regression for functional data using the
+SRVF framework accounting for warping
+.sp
+Usage:  obj = elastic_mlogistic(f,y,time)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBy\fP \-\- numpy array of N responses
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBB\fP \-\- optional matrix describing Basis elements
+.IP \(bu 2
+\fBlam\fP \-\- regularization parameter (default 0)
+.IP \(bu 2
+\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+.IP \(bu 2
+\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel processing (default all)
+.UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  29\-Oct\-2021
+.INDENT 7.0
+.TP
+.B calc_model(B=None, lam=0, df=20, max_itr=20, delta=0.01, cores=\- 1, smooth=False)
+This function identifies a regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBB\fP \-\- optional matrix describing Basis elements
+.IP \(bu 2
+\fBlam\fP \-\- regularization parameter (default 0)
+.IP \(bu 2
+\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+.IP \(bu 2
+\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel processing (default all)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B predict(newdata=None)
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+.INDENT 7.0
+.INDENT 3.5
+obj.predict(newdata)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+.IP \(bu 2
+\fBf\fP \-\- (M,N) matrix of functions
+.IP \(bu 2
+\fBtime\fP \-\- vector of time points
+.IP \(bu 2
+\fBy\fP \-\- truth if available
+.IP \(bu 2
+\fBsmooth\fP \-\- smooth data if needed
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to run filter
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class regression.elastic_regression(f, y, time)
+This class provides elastic regression for functional data using the
+SRVF framework accounting for warping
+.sp
+Usage:  obj = elastic_regression(f,y,time)
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+.IP \(bu 2
+\fBy\fP \-\- numpy array of N responses
+.IP \(bu 2
+\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+.IP \(bu 2
+\fBB\fP \-\- optional matrix describing Basis elements
+.IP \(bu 2
+\fBlam\fP \-\- regularization parameter (default 0)
+.IP \(bu 2
+\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+.IP \(bu 2
+\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel processing (default all)
+.UNINDENT
+.UNINDENT
+.sp
+Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+Date   :  29\-Oct\-2021
+.INDENT 7.0
+.TP
+.B calc_model(B=None, lam=0, df=20, max_itr=20, cores=\- 1, smooth=False)
+This function identifies a regression model with phase\-variability
+using elastic pca
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBB\fP \-\- optional matrix describing Basis elements
+.IP \(bu 2
+\fBlam\fP \-\- regularization parameter (default 0)
+.IP \(bu 2
+\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+.IP \(bu 2
+\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+.IP \(bu 2
+\fBcores\fP \-\- number of cores for parallel processing (default all)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B predict(newdata=None)
+This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()
+.INDENT 7.0
+.INDENT 3.5
+obj.predict(newdata)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnewdata\fP (\fI\%dict\fP) \-\- dict containing new data for prediction (needs the keys below, if None predicts on training data)
+.IP \(bu 2
+\fBf\fP \-\- (M,N) matrix of functions
+.IP \(bu 2
+\fBtime\fP \-\- vector of time points
+.IP \(bu 2
+\fBy\fP \-\- truth if available
+.IP \(bu 2
+\fBsmooth\fP \-\- smooth data if needed
+.IP \(bu 2
+\fBsparam\fP \-\- number of times to run filter
+.UNINDENT
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP

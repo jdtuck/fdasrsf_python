@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Elastic Regression &#8212; fdasrsf 2.3.3 documentation</title>
+    <title>Elastic Regression &#8212; fdasrsf 2.3.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Regression</a></li> 
       </ul>
     </div>  
@@ -49,125 +49,12 @@
 <span id="elastic-regression"></span><h1>Elastic Regression<a class="headerlink" href="#module-regression" title="Permalink to this headline">¶</a></h1>
 <p>Warping Invariant Regression using SRSF</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
-<dl class="py function">
+<dl class="py class">
 <dt class="sig sig-object py" id="regression.elastic_logistic">
-<span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">elastic_logistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_logistic" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function identifies a logistic regression model with
-phase-variability using elastic methods</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>y</strong> – numpy array of labels (1/-1)</p></li>
-<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
-<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
-<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
-<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
-<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of numpy array</p>
-</dd>
-<dt class="field-odd">Return alpha</dt>
-<dd class="field-odd"><p>alpha parameter of model</p>
-</dd>
-<dt class="field-even">Return beta</dt>
-<dd class="field-even"><p>beta(t) of model</p>
-</dd>
-<dt class="field-odd">Return fn</dt>
-<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of M</p>
-</dd>
-</dl>
-<p>functions with N samples
-:return qn: aligned srvfs - similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return Loss: logistic loss</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="regression.elastic_mlogistic">
-<span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">elastic_mlogistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_mlogistic" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function identifies a multinomial logistic regression model with
-phase-variability using elastic methods</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>y</strong> – numpy array of labels {1,2,…,m} for m classes</p></li>
-<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
-<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
-<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
-<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
-<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of numpy array</p>
-</dd>
-<dt class="field-odd">Return alpha</dt>
-<dd class="field-odd"><p>alpha parameter of model</p>
-</dd>
-<dt class="field-even">Return beta</dt>
-<dd class="field-even"><p>beta(t) of model</p>
-</dd>
-<dt class="field-odd">Return fn</dt>
-<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
-</dd>
-</dl>
-<p>functions with M samples
-:return qn: aligned srvfs - similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return Loss: logistic loss</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="regression.elastic_prediction">
-<span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">elastic_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_prediction" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function performs prediction from an elastic regression model
-with phase-variability</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
-<li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
-<li><p><strong>model</strong> – identified model from elastic_regression</p></li>
-<li><p><strong>y</strong> – truth, optional used to calculate SSE</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of numpy array</p>
-</dd>
-<dt class="field-odd">Return alpha</dt>
-<dd class="field-odd"><p>alpha parameter of model</p>
-</dd>
-<dt class="field-even">Return beta</dt>
-<dd class="field-even"><p>beta(t) of model</p>
-</dd>
-<dt class="field-odd">Return fn</dt>
-<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
-</dd>
-</dl>
-<p>functions with M samples
-:return qn: aligned srvfs - similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return SSE: sum of squared error</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="regression.elastic_regression">
-<span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">elastic_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_regression" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function identifies a regression model with phase-variability
-using elastic methods</p>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">elastic_logistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_logistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides elastic logistic regression for functional data using the
+SRVF framework accounting for warping</p>
+<p>Usage:  obj = elastic_logistic(f,y,time)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -181,26 +68,177 @@ using elastic methods</p>
 <li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of numpy array</p>
-</dd>
-<dt class="field-odd">Return alpha</dt>
-<dd class="field-odd"><p>alpha parameter of model</p>
-</dd>
-<dt class="field-even">Return beta</dt>
-<dd class="field-even"><p>beta(t) of model</p>
-</dd>
-<dt class="field-odd">Return fn</dt>
-<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of M</p>
+</dl>
+<p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
+Date   :  29-Oct-2021</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="regression.elastic_logistic.calc_model">
+<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_logistic.calc_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a regression model with phase-variability
+using elastic pca</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+</ul>
 </dd>
 </dl>
-<p>functions with N samples
-:return qn: aligned srvfs - similar structure to fn
-:return gamma: calculated warping functions
-:return q: original training SRSFs
-:return B: basis matrix
-:return b: basis coefficients
-:return SSE: sum of squared error</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="regression.elastic_logistic.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_logistic.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_logistic.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()</p>
+<blockquote>
+<div><p>obj.predict(newdata)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
+<li><p><strong>time</strong> – vector of time points</p></li>
+<li><p><strong>y</strong> – truth if available</p></li>
+<li><p><strong>smooth</strong> – smooth data if needed</p></li>
+<li><p><strong>sparam</strong> – number of times to run filter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="regression.elastic_mlogistic">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">elastic_mlogistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_mlogistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides elastic multinomial logistic regression for functional data using the
+SRVF framework accounting for warping</p>
+<p>Usage:  obj = elastic_mlogistic(f,y,time)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of N responses</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
+Date   :  29-Oct-2021</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="regression.elastic_mlogistic.calc_model">
+<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_mlogistic.calc_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a regression model with phase-variability
+using elastic pca</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="regression.elastic_mlogistic.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_mlogistic.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_mlogistic.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()</p>
+<blockquote>
+<div><p>obj.predict(newdata)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
+<li><p><strong>time</strong> – vector of time points</p></li>
+<li><p><strong>y</strong> – truth if available</p></li>
+<li><p><strong>smooth</strong> – smooth data if needed</p></li>
+<li><p><strong>sparam</strong> – number of times to run filter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="regression.elastic_regression">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">elastic_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides elastic regression for functional data using the
+SRVF framework accounting for warping</p>
+<p>Usage:  obj = elastic_regression(f,y,time)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>y</strong> – numpy array of N responses</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
+Date   :  29-Oct-2021</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="regression.elastic_regression.calc_model">
+<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_regression.calc_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function identifies a regression model with phase-variability
+using elastic pca</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
+<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
+<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="regression.elastic_regression.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#elastic_regression.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.elastic_regression.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs prediction on regression model on new data if available or current stored data in object
+Usage:  obj.predict()</p>
+<blockquote>
+<div><p>obj.predict(newdata)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
+<li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
+<li><p><strong>time</strong> – vector of time points</p></li>
+<li><p><strong>y</strong> – truth if available</p></li>
+<li><p><strong>smooth</strong> – smooth data if needed</p></li>
+<li><p><strong>sparam</strong> – number of times to run filter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py function">
@@ -454,7 +492,7 @@ using elastic methods</p>
         <li class="right" >
           <a href="fPLS.html" title="Functional Principal Least Squares"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Elastic Regression</a></li> 
       </ul>
     </div>
