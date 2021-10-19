@@ -14,14 +14,14 @@ from scipy.linalg import inv, norm
 from patsy import bs
 from joblib import Parallel, delayed
 import mlogit_warp as mw
-import collections
 
 
-def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20,
-                       cores=-1, smooth=False):
+class elastic_regression:
     """
-    This function identifies a regression model with phase-variability
-    using elastic methods
+    This class provides elastic regression for functional data using the
+    SRVF framework accounting for warping
+    
+    Usage:  obj = elastic_regression(f,y,time)
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
     :param y: numpy array of N responses
@@ -34,126 +34,204 @@ def elastic_regression(f, y, time, B=None, lam=0, df=20, max_itr=20,
     :type f: np.ndarray
     :type time: np.ndarray
 
-    :rtype: tuple of numpy array
-    :return alpha: alpha parameter of model
-    :return beta: beta(t) of model
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
-    :return qn: aligned srvfs - similar structure to fn
-    :return gamma: calculated warping functions
-    :return q: original training SRSFs
-    :return B: basis matrix
-    :return b: basis coefficients
-    :return SSE: sum of squared error
-
+    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
+    Date   :  29-Oct-2021
     """
+
+    def __init__(self, f, y, time):
+        """
+        Construct an instance of the elastic_regression class
+        :param f: numpy ndarray of shape (M,N) of N functions with M samples
+        :param y: response vector
+        :param time: vector of size M describing the sample points
+        """
+        a = time.shape[0]
+
+        if f.shape[0] != a:
+            raise Exception('Columns of f and time must be equal')
+
+        self.f = f
+        self.y = y
+        self.time = time
+
+    def calc_model(self, B=None, lam=0, df=20, max_itr=20, cores=-1, smooth=False):
+        """
+        This function identifies a regression model with phase-variability
+        using elastic pca
+
+        :param B: optional matrix describing Basis elements
+        :param lam: regularization parameter (default 0)
+        :param df: number of degrees of freedom B-spline (default 20)
+        :param max_itr: maximum number of iterations (default 20)
+        :param cores: number of cores for parallel processing (default all)
+        """
     
-    M = f.shape[0]
-    N = f.shape[1]
+        M = self.f.shape[0]
+        N = self.f.shape[1]
 
-    if M > 500:
-        parallel = True
-    elif N > 100:
-        parallel = True
-    else:
-        parallel = False
-
-    binsize = np.diff(time)
-    binsize = binsize.mean()
-
-    # Create B-Spline Basis if none provided
-    if B is None:
-        B = bs(time, df=df, degree=4, include_intercept=True)
-    Nb = B.shape[1]
-
-    # second derivative for regularization
-    Bdiff = np.zeros((M, Nb))
-    for ii in range(0, Nb):
-        Bdiff[:, ii] = np.gradient(np.gradient(B[:, ii], binsize), binsize)
-
-    q = uf.f_to_srsf(f, time, smooth)
-
-    gamma = np.tile(np.linspace(0, 1, M), (N, 1))
-    gamma = gamma.transpose()
-
-    itr = 1
-    SSE = np.zeros(max_itr)
-    while itr <= max_itr:
-        print("Iteration: %d" % itr)
-        # align data
-        fn = np.zeros((M, N))
-        qn = np.zeros((M, N))
-        for ii in range(0, N):
-            fn[:, ii] = np.interp((time[-1] - time[0]) * gamma[:, ii] +
-                                  time[0], time, f[:, ii])
-            qn[:, ii] = uf.warp_q_gamma(time, q[:, ii], gamma[:, ii])
-
-        # OLS using basis
-        Phi = np.ones((N, Nb+1))
-        for ii in range(0, N):
-            for jj in range(1, Nb+1):
-                Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], time)
-
-        R = np.zeros((Nb+1, Nb+1))
-        for ii in range(1, Nb+1):
-            for jj in range(1, Nb+1):
-                R[ii, jj] = trapz(Bdiff[:, ii-1] * Bdiff[:, jj-1], time)
-
-        xx = dot(Phi.T, Phi)
-        inv_xx = inv(xx + lam * R)
-        xy = dot(Phi.T, y)
-        b = dot(inv_xx, xy)
-
-        alpha = b[0]
-        beta = B.dot(b[1:Nb+1])
-        beta = beta.reshape(M)
-
-        # compute the SSE
-        int_X = np.zeros(N)
-        for ii in range(0, N):
-            int_X[ii] = trapz(qn[:, ii] * beta, time)
-
-        SSE[itr - 1] = sum((y.reshape(N) - alpha - int_X) ** 2)
-
-        # find gamma
-        gamma_new = np.zeros((M, N))
-        if parallel:
-            out = Parallel(n_jobs=cores)(delayed(regression_warp)(beta,
-                                         time, q[:, n], y[n], alpha) for n in range(N))
-            gamma_new = np.array(out)
-            gamma_new = gamma_new.transpose()
+        if M > 500:
+            parallel = True
+        elif N > 100:
+            parallel = True
         else:
+            parallel = False
+
+        binsize = np.diff(self.time)
+        binsize = binsize.mean()
+
+        # Create B-Spline Basis if none provided
+        if B is None:
+            B = bs(self.time, df=df, degree=4, include_intercept=True)
+        Nb = B.shape[1]
+
+        self.B = B
+
+        # second derivative for regularization
+        Bdiff = np.zeros((M, Nb))
+        for ii in range(0, Nb):
+            Bdiff[:, ii] = np.gradient(np.gradient(B[:, ii], binsize), binsize)
+        
+        self.Bdiff = Bdiff
+
+        self.q = uf.f_to_srsf(self.f, self.time, smooth)
+        
+        gamma = np.tile(np.linspace(0, 1, M), (N, 1))
+        gamma = gamma.transpose()
+
+        itr = 1
+        self.SSE = np.zeros(max_itr)
+        while itr <= max_itr:
+            print("Iteration: %d" % itr)
+            # align data
+            fn = np.zeros((M, N))
+            qn = np.zeros((M, N))
             for ii in range(0, N):
-                gamma_new[:, ii] = regression_warp(beta, time, q[:, ii],
-                                                   y[ii], alpha)
+                fn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamma[:, ii] +
+                                    self.time[0], self.time, self.f[:, ii])
+                qn[:, ii] = uf.warp_q_gamma(self.time, self.q[:, ii], gamma[:, ii])
 
-        if norm(gamma - gamma_new) < 1e-5:
-            break
+            # OLS using basis
+            Phi = np.ones((N, Nb+1))
+            for ii in range(0, N):
+                for jj in range(1, Nb+1):
+                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], self.time)
+
+            R = np.zeros((Nb+1, Nb+1))
+            for ii in range(1, Nb+1):
+                for jj in range(1, Nb+1):
+                    R[ii, jj] = trapz(Bdiff[:, ii-1] * Bdiff[:, jj-1], self.time)
+
+            xx = dot(Phi.T, Phi)
+            inv_xx = inv(xx + lam * R)
+            xy = dot(Phi.T, self.y)
+            b = dot(inv_xx, xy)
+
+            alpha = b[0]
+            beta = B.dot(b[1:Nb+1])
+            beta = beta.reshape(M)
+
+            # compute the SSE
+            int_X = np.zeros(N)
+            for ii in range(0, N):
+                int_X[ii] = trapz(qn[:, ii] * beta, self.time)
+
+            SSE[itr - 1] = sum((self.y.reshape(N) - alpha - int_X) ** 2)
+
+            # find gamma
+            gamma_new = np.zeros((M, N))
+            if parallel:
+                out = Parallel(n_jobs=cores)(delayed(regression_warp)(beta,
+                                            self.time, self.q[:, n], self.y[n], alpha) for n in range(N))
+                gamma_new = np.array(out)
+                gamma_new = gamma_new.transpose()
+            else:
+                for ii in range(0, N):
+                    gamma_new[:, ii] = regression_warp(beta, self.time, self.q[:, ii],
+                                                       self.y[ii], alpha)
+
+            if norm(gamma - gamma_new) < 1e-5:
+                break
+            else:
+                gamma = gamma_new
+
+            itr += 1
+
+        # Last Step with centering of gam
+        gamI = uf.SqrtMeanInverse(gamma_new)
+        gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+        beta = np.interp((self.time[-1] - self.time[0]) * gamI + time[0], self.time,
+                        beta) * np.sqrt(gamI_dev)
+
+        for ii in range(0, N):
+            qn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0],
+                                self.time, qn[:, ii]) * np.sqrt(gamI_dev)
+            fn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0],
+                                self.time, fn[:, ii])
+            gamma[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0],
+                                    self.time, gamma_new[:, ii])
+
+        self.qn = qn
+        self.fn = fn
+        self.gamma = gamma
+        self.alpha = alpha
+        self.beta = beta
+        self.b = b[1:-1]
+        self.SSE = self.SSE[0:itr]
+
+        return
+
+        def predict(self, newdata=None):
+        """
+        This function performs prediction on regression model on new data if available or current stored data in object
+        Usage:  obj.predict()
+                obj.predict(newdata)
+
+        :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
+        :type newdata: dict
+        :param f: (M,N) matrix of functions
+        :param time: vector of time points
+        :param y: truth if available
+        :param smooth: smooth data if needed
+        :param sparam: number of times to run filter
+        """
+
+        if newdata != None:
+            f = newdata['f']
+            time = newdata['time']
+            y = newdata['y']
+            
+            q = uf.f_to_srsf(f, time, newdata['smooth'])
+
+            n = f.shape[1]
+            yhat = np.zeros(n)
+            for ii in range(0, n):
+                diff = self.q - q[:, ii][:, np.newaxis]
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
+                q_tmp = uf.warp_q_gamma(time, q[:, ii],
+                                        self.gamma[:, dist.argmin()])
+                yhat[ii] = self.alpha + trapz(q_tmp * self.beta, time)
+
+            if y == None:
+                self.SSE = np.nan
+            else:
+                self.SSE = np.sum((y-yhat)**2)
+            
+            self.y_pred = yhat
+
         else:
-            gamma = gamma_new
+            n = self.f.shape[1]
+            yhat = np.zeros(n)
+            for ii in range(0, n):
+                diff = self.q - self.q[:, ii][:, np.newaxis]
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
+                q_tmp = uf.warp_q_gamma(self.time, self.q[:, ii],
+                                        self.gamma[:, dist.argmin()])
+                yhat[ii] = self.alpha + trapz(q_tmp * self.beta, self.time)
 
-        itr += 1
+            self.SSE = np.sum((self.y-yhat)**2)
+            self.y_pred = yhat
 
-    # Last Step with centering of gam
-    gamI = uf.SqrtMeanInverse(gamma_new)
-    gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
-                     beta) * np.sqrt(gamI_dev)
-
-    for ii in range(0, N):
-        qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-                              time, qn[:, ii]) * np.sqrt(gamI_dev)
-        fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-                              time, fn[:, ii])
-        gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-                                 time, gamma_new[:, ii])
-
-    model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
-                                   'qn', 'gamma', 'q', 'B', 'b',
-                                   'SSE', 'type'])
-    out = model(alpha, beta, fn, qn, gamma, q, B, b[1:-1], SSE[0:itr],
-                'linear')
-    return out
+        return
 
 
 def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
@@ -256,20 +334,7 @@ def elastic_logistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
 
         itr += 1
 
-    # Last Step with centering of gam
     gamma = gamma_new
-    # gamI = uf.SqrtMeanInverse(gamma)
-    # gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    # beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
-    #                  beta) * np.sqrt(gamI_dev)
-
-    # for ii in range(0, N):
-    #     qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                           time, qn[:, ii]) * np.sqrt(gamI_dev)
-    #     fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                           time, fn[:, ii])
-    #     gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                              time, gamma[:, ii])
 
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
                                    'qn', 'gamma', 'q', 'B', 'b',
@@ -380,20 +445,7 @@ def elastic_mlogistic(f, y, time, B=None, df=20, max_itr=20, cores=-1,
 
         itr += 1
 
-    # Last Step with centering of gam
     gamma = gamma_new
-    # gamI = uf.SqrtMeanInverse(gamma)
-    # gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-    # beta = np.interp((time[-1] - time[0]) * gamI + time[0], time,
-    #                  beta) * np.sqrt(gamI_dev)
-
-    # for ii in range(0, N):
-    #     qn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                           time, qn[:, ii]) * np.sqrt(gamI_dev)
-    #     fn[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                           time, fn[:, ii])
-    #     gamma[:, ii] = np.interp((time[-1] - time[0]) * gamI + time[0],
-    #                              time, gamma[:, ii])
 
     model = collections.namedtuple('model', ['alpha', 'beta', 'fn',
                                    'qn', 'gamma', 'q', 'B', 'b',
