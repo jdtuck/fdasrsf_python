@@ -309,10 +309,10 @@ class fdacurve:
                 v1 = tmp.reshape(m,n)
                 q2n = cf.elastic_shooting(self.q_mean,v1)
 
-                p[:,:,j,i] = cf.q_to_curve(q2n, tmp_scale)            
+                p[:,:,j,i-1] = cf.q_to_curve(q2n, tmp_scale)            
 
         self.pca = p
-        
+
         return
 
 
