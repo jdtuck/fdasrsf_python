@@ -33,7 +33,7 @@ from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, ela
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB
 from .curve_functions import resamplecurve, calculatecentroid, curve_to_q, optimum_reparam_curve, find_best_rotation, elastic_distance_curve
-from .curve_functions import q_to_curve
+from .curve_functions import q_to_curve, find_rotation_and_seed_coord
 from .curve_stats import fdacurve
 from .curve_regression import oc_elastic_logistic, oc_elastic_prediction, preproc_open_curve, oc_elastic_mlogistic
 from .geometry import inv_exp_map, exp_map
