@@ -23,7 +23,6 @@ class elastic_glm_regression:
     :param f: (M,N) % matrix defining N functions of M samples
     :param y: response vector of length N
     :param time: time vector of length M
-    :param information
     :param alpha: intercept
     :param b: coefficient vector
     :param B: basis matrix

@@ -35,7 +35,7 @@ from .tolerance import bootTB, pcaTB
 from .curve_functions import resamplecurve, calculatecentroid, curve_to_q, optimum_reparam_curve, find_best_rotation, elastic_distance_curve
 from .curve_functions import q_to_curve, find_rotation_and_seed_coord
 from .curve_stats import fdacurve
-from .curve_regression import oc_elastic_logistic, oc_elastic_prediction, preproc_open_curve, oc_elastic_mlogistic
+from .curve_regression import oc_elastic_regression, oc_elastic_logistic, preproc_open_curve, oc_elastic_mlogistic
 from .geometry import inv_exp_map, exp_map
 from .geodesic import geod_sphere, path_straightening
 from .umap_metric import efda_distance, efda_distance_curve

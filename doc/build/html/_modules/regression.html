@@ -67,12 +67,14 @@
 <span class="sd">    :param y: numpy array of N responses</span>
 <span class="sd">    :param time: vector of size M describing the sample points</span>
 <span class="sd">    :param B: optional matrix describing Basis elements</span>
-<span class="sd">    :param lam: regularization parameter (default 0)</span>
-<span class="sd">    :param df: number of degrees of freedom B-spline (default 20)</span>
-<span class="sd">    :param max_itr: maximum number of iterations (default 20)</span>
-<span class="sd">    :param cores: number of cores for parallel processing (default all)</span>
-<span class="sd">    :type f: np.ndarray</span>
-<span class="sd">    :type time: np.ndarray</span>
+<span class="sd">    :param alpha: alpha parameter of model</span>
+<span class="sd">    :param beta: beta(t) of model</span>
+<span class="sd">    :param fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</span>
+<span class="sd">    :param qn: aligned srvfs - similar structure to fn</span>
+<span class="sd">    :param gamma: calculated warping functions</span>
+<span class="sd">    :param q: original training SRSFs</span>
+<span class="sd">    :param b: basis coefficients</span>
+<span class="sd">    :param SSE: sum of squared error</span>
 
 <span class="sd">    Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;</span>
 <span class="sd">    Date   :  29-Oct-2021</span>
@@ -285,10 +287,14 @@
 <span class="sd">    :param y: numpy array of N responses</span>
 <span class="sd">    :param time: vector of size M describing the sample points</span>
 <span class="sd">    :param B: optional matrix describing Basis elements</span>
-<span class="sd">    :param lam: regularization parameter (default 0)</span>
-<span class="sd">    :param df: number of degrees of freedom B-spline (default 20)</span>
-<span class="sd">    :param max_itr: maximum number of iterations (default 20)</span>
-<span class="sd">    :param cores: number of cores for parallel processing (default all)</span>
+<span class="sd">    :param alpha: alpha parameter of model</span>
+<span class="sd">    :param beta: beta(t) of model</span>
+<span class="sd">    :param fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</span>
+<span class="sd">    :param qn: aligned srvfs - similar structure to fn</span>
+<span class="sd">    :param gamma: calculated warping functions</span>
+<span class="sd">    :param q: original training SRSFs</span>
+<span class="sd">    :param b: basis coefficients</span>
+<span class="sd">    :param Loss: logistic loss</span>
 <span class="sd">    :type f: np.ndarray</span>
 <span class="sd">    :type time: np.ndarray</span>
 
@@ -454,6 +460,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="o">+</span><span class="n">FN</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
             
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -474,6 +481,7 @@
             <span class="n">FN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="o">+</span><span class="n">FN</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
 
         <span class="k">return</span></div></div>
 
@@ -489,10 +497,14 @@
 <span class="sd">    :param y: numpy array of N responses</span>
 <span class="sd">    :param time: vector of size M describing the sample points</span>
 <span class="sd">    :param B: optional matrix describing Basis elements</span>
-<span class="sd">    :param lam: regularization parameter (default 0)</span>
-<span class="sd">    :param df: number of degrees of freedom B-spline (default 20)</span>
-<span class="sd">    :param max_itr: maximum number of iterations (default 20)</span>
-<span class="sd">    :param cores: number of cores for parallel processing (default all)</span>
+<span class="sd">    :param alpha: alpha parameter of model</span>
+<span class="sd">    :param beta: beta(t) of model</span>
+<span class="sd">    :param fn: aligned functions - numpy ndarray of shape (M,N) of N functions with M samples</span>
+<span class="sd">    :param qn: aligned srvfs - similar structure to fn</span>
+<span class="sd">    :param gamma: calculated warping functions</span>
+<span class="sd">    :param q: original training SRSFs</span>
+<span class="sd">    :param b: basis coefficients</span>
+<span class="sd">    :param Loss: logistic loss</span>
 <span class="sd">    :type f: np.ndarray</span>
 <span class="sd">    :type time: np.ndarray</span>
 
@@ -682,6 +694,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">y_labels</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">y_labels</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
             
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -711,6 +724,7 @@
             
             <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">y_labels</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">y_labels</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
 
         <span class="k">return</span></div></div>
 
@@ -723,8 +737,7 @@
 <span class="sd">    :param beta: numpy ndarray of shape (M,N) of M functions with N samples</span>
 <span class="sd">    :param time: vector of size N describing the sample points</span>
 <span class="sd">    :param q: numpy ndarray of shape (M,N) of M functions with N samples</span>
-<span class="sd">    :param y: numpy ndarray of shape (1,N) of M functions with N samples</span>
-<span class="sd">    responses</span>
+<span class="sd">    :param y: numpy ndarray of shape (1,N) of M functions with N samples responses</span>
 <span class="sd">    :param alpha: numpy scalar</span>
 
 <span class="sd">    :rtype: numpy array</span>

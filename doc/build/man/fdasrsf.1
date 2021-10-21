@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "FDASRSF" "1" "Oct 19, 2021" "2.2" "fdasrsf"
+.TH "FDASRSF" "1" "Oct 21, 2021" "2.2" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .sp
@@ -1098,13 +1098,21 @@ Usage:  obj = elastic_logistic(f,y,time)
 .IP \(bu 2
 \fBB\fP \-\- optional matrix describing Basis elements
 .IP \(bu 2
-\fBlam\fP \-\- regularization parameter (default 0)
+\fBalpha\fP \-\- alpha parameter of model
 .IP \(bu 2
-\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+\fBbeta\fP \-\- beta(t) of model
 .IP \(bu 2
-\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+\fBfn\fP \-\- aligned functions \- numpy ndarray of shape (M,N) of M functions with N samples
 .IP \(bu 2
-\fBcores\fP \-\- number of cores for parallel processing (default all)
+\fBqn\fP \-\- aligned srvfs \- similar structure to fn
+.IP \(bu 2
+\fBgamma\fP \-\- calculated warping functions
+.IP \(bu 2
+\fBq\fP \-\- original training SRSFs
+.IP \(bu 2
+\fBb\fP \-\- basis coefficients
+.IP \(bu 2
+\fBLoss\fP \-\- logistic loss
 .UNINDENT
 .UNINDENT
 .sp
@@ -1182,13 +1190,21 @@ Usage:  obj = elastic_mlogistic(f,y,time)
 .IP \(bu 2
 \fBB\fP \-\- optional matrix describing Basis elements
 .IP \(bu 2
-\fBlam\fP \-\- regularization parameter (default 0)
+\fBalpha\fP \-\- alpha parameter of model
 .IP \(bu 2
-\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+\fBbeta\fP \-\- beta(t) of model
 .IP \(bu 2
-\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+\fBfn\fP \-\- aligned functions \- numpy ndarray of shape (M,N) of N functions with M samples
 .IP \(bu 2
-\fBcores\fP \-\- number of cores for parallel processing (default all)
+\fBqn\fP \-\- aligned srvfs \- similar structure to fn
+.IP \(bu 2
+\fBgamma\fP \-\- calculated warping functions
+.IP \(bu 2
+\fBq\fP \-\- original training SRSFs
+.IP \(bu 2
+\fBb\fP \-\- basis coefficients
+.IP \(bu 2
+\fBLoss\fP \-\- logistic loss
 .UNINDENT
 .UNINDENT
 .sp
@@ -1258,21 +1274,29 @@ Usage:  obj = elastic_regression(f,y,time)
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBf\fP (\fInp.ndarray\fP) \-\- numpy ndarray of shape (M,N) of N functions with M samples
+\fBf\fP \-\- numpy ndarray of shape (M,N) of N functions with M samples
 .IP \(bu 2
 \fBy\fP \-\- numpy array of N responses
 .IP \(bu 2
-\fBtime\fP (\fInp.ndarray\fP) \-\- vector of size M describing the sample points
+\fBtime\fP \-\- vector of size M describing the sample points
 .IP \(bu 2
 \fBB\fP \-\- optional matrix describing Basis elements
 .IP \(bu 2
-\fBlam\fP \-\- regularization parameter (default 0)
+\fBalpha\fP \-\- alpha parameter of model
 .IP \(bu 2
-\fBdf\fP \-\- number of degrees of freedom B\-spline (default 20)
+\fBbeta\fP \-\- beta(t) of model
 .IP \(bu 2
-\fBmax_itr\fP \-\- maximum number of iterations (default 20)
+\fBfn\fP \-\- aligned functions \- numpy ndarray of shape (M,N) of M functions with N samples
 .IP \(bu 2
-\fBcores\fP \-\- number of cores for parallel processing (default all)
+\fBqn\fP \-\- aligned srvfs \- similar structure to fn
+.IP \(bu 2
+\fBgamma\fP \-\- calculated warping functions
+.IP \(bu 2
+\fBq\fP \-\- original training SRSFs
+.IP \(bu 2
+\fBb\fP \-\- basis coefficients
+.IP \(bu 2
+\fBSSE\fP \-\- sum of squared error
 .UNINDENT
 .UNINDENT
 .sp
@@ -1538,13 +1562,10 @@ calculates optimal warping for function linear regression
 .IP \(bu 2
 \fBq\fP \-\- numpy ndarray of shape (M,N) of M functions with N samples
 .IP \(bu 2
-\fBy\fP \-\- numpy ndarray of shape (1,N) of M functions with N samples
+\fBy\fP \-\- numpy ndarray of shape (1,N) of M functions with N samples responses
+.IP \(bu 2
+\fBalpha\fP \-\- numpy scalar
 .UNINDENT
-.UNINDENT
-.sp
-responses
-:param alpha: numpy scalar
-.INDENT 7.0
 .TP
 .B Return type
 numpy array
@@ -1842,15 +1863,18 @@ Usage:  obj = elastic_glm_regression(f,y,time)
 \fBy\fP \-\- response vector of length N
 .IP \(bu 2
 \fBtime\fP \-\- time vector of length M
+.IP \(bu 2
+\fBalpha\fP \-\- intercept
+.IP \(bu 2
+\fBb\fP \-\- coefficient vector
+.IP \(bu 2
+\fBB\fP \-\- basis matrix
+.IP \(bu 2
+\fBlambda\fP \-\- regularization parameter
+.IP \(bu 2
+\fBSSE\fP \-\- sum of squared errors
 .UNINDENT
 .UNINDENT
-.sp
-:param information
-:param alpha: intercept
-:param b: coefficient vector
-:param B: basis matrix
-:param lambda: regularization parameter
-:param SSE: sum of squared errors
 .sp
 Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
 Date   :  18\-Mar\-2018

@@ -29,8 +29,7 @@ class elastic_regression:
     :param B: optional matrix describing Basis elements
     :param alpha: alpha parameter of model
     :param beta: beta(t) of model
-    :param fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
+    :param fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
     :param qn: aligned srvfs - similar structure to fn
     :param gamma: calculated warping functions
     :param q: original training SRSFs
@@ -250,8 +249,7 @@ class elastic_logistic:
     :param B: optional matrix describing Basis elements
     :param alpha: alpha parameter of model
     :param beta: beta(t) of model
-    :param fn: aligned functions - numpy ndarray of shape (M,N) of M
-    functions with N samples
+    :param fn: aligned functions - numpy ndarray of shape (M,N) of M functions with N samples
     :param qn: aligned srvfs - similar structure to fn
     :param gamma: calculated warping functions
     :param q: original training SRSFs
@@ -461,8 +459,7 @@ class elastic_mlogistic:
     :param B: optional matrix describing Basis elements
     :param alpha: alpha parameter of model
     :param beta: beta(t) of model
-    :param fn: aligned functions - numpy ndarray of shape (M,N) of N
-    functions with M samples
+    :param fn: aligned functions - numpy ndarray of shape (M,N) of N functions with M samples
     :param qn: aligned srvfs - similar structure to fn
     :param gamma: calculated warping functions
     :param q: original training SRSFs
@@ -607,8 +604,7 @@ class elastic_mlogistic:
         Usage:  obj.predict()
                 obj.predict(newdata)
 
-        :param newdata: dict c
-        ontaining new data for prediction (needs the keys below, if None predicts on training data)
+        :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
         :param f: (M,N) matrix of functions
         :param time: vector of time points
@@ -701,8 +697,7 @@ def regression_warp(beta, time, q, y, alpha):
     :param beta: numpy ndarray of shape (M,N) of M functions with N samples
     :param time: vector of size N describing the sample points
     :param q: numpy ndarray of shape (M,N) of M functions with N samples
-    :param y: numpy ndarray of shape (1,N) of M functions with N samples
-    responses
+    :param y: numpy ndarray of shape (1,N) of M functions with N samples responses
     :param alpha: numpy scalar
 
     :rtype: numpy array

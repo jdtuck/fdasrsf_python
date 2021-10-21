@@ -62,10 +62,14 @@ SRVF framework accounting for warping</p>
 <li><p><strong>y</strong> – numpy array of N responses</p></li>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
-<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
-<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
-<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
-<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+<li><p><strong>alpha</strong> – alpha parameter of model</p></li>
+<li><p><strong>beta</strong> – beta(t) of model</p></li>
+<li><p><strong>fn</strong> – aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</p></li>
+<li><p><strong>qn</strong> – aligned srvfs - similar structure to fn</p></li>
+<li><p><strong>gamma</strong> – calculated warping functions</p></li>
+<li><p><strong>q</strong> – original training SRSFs</p></li>
+<li><p><strong>b</strong> – basis coefficients</p></li>
+<li><p><strong>Loss</strong> – logistic loss</p></li>
 </ul>
 </dd>
 </dl>
@@ -126,10 +130,14 @@ SRVF framework accounting for warping</p>
 <li><p><strong>y</strong> – numpy array of N responses</p></li>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
-<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
-<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
-<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
-<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+<li><p><strong>alpha</strong> – alpha parameter of model</p></li>
+<li><p><strong>beta</strong> – beta(t) of model</p></li>
+<li><p><strong>fn</strong> – aligned functions - numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>qn</strong> – aligned srvfs - similar structure to fn</p></li>
+<li><p><strong>gamma</strong> – calculated warping functions</p></li>
+<li><p><strong>q</strong> – original training SRSFs</p></li>
+<li><p><strong>b</strong> – basis coefficients</p></li>
+<li><p><strong>Loss</strong> – logistic loss</p></li>
 </ul>
 </dd>
 </dl>
@@ -186,14 +194,18 @@ SRVF framework accounting for warping</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>f</strong> – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
 <li><p><strong>y</strong> – numpy array of N responses</p></li>
-<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
 <li><p><strong>B</strong> – optional matrix describing Basis elements</p></li>
-<li><p><strong>lam</strong> – regularization parameter (default 0)</p></li>
-<li><p><strong>df</strong> – number of degrees of freedom B-spline (default 20)</p></li>
-<li><p><strong>max_itr</strong> – maximum number of iterations (default 20)</p></li>
-<li><p><strong>cores</strong> – number of cores for parallel processing (default all)</p></li>
+<li><p><strong>alpha</strong> – alpha parameter of model</p></li>
+<li><p><strong>beta</strong> – beta(t) of model</p></li>
+<li><p><strong>fn</strong> – aligned functions - numpy ndarray of shape (M,N) of M functions with N samples</p></li>
+<li><p><strong>qn</strong> – aligned srvfs - similar structure to fn</p></li>
+<li><p><strong>gamma</strong> – calculated warping functions</p></li>
+<li><p><strong>q</strong> – original training SRSFs</p></li>
+<li><p><strong>b</strong> – basis coefficients</p></li>
+<li><p><strong>SSE</strong> – sum of squared error</p></li>
 </ul>
 </dd>
 </dl>
@@ -423,18 +435,15 @@ Usage:  obj.predict()</p>
 <li><p><strong>beta</strong> – numpy ndarray of shape (M,N) of M functions with N samples</p></li>
 <li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
 <li><p><strong>q</strong> – numpy ndarray of shape (M,N) of M functions with N samples</p></li>
-<li><p><strong>y</strong> – numpy ndarray of shape (1,N) of M functions with N samples</p></li>
+<li><p><strong>y</strong> – numpy ndarray of shape (1,N) of M functions with N samples responses</p></li>
+<li><p><strong>alpha</strong> – numpy scalar</p></li>
 </ul>
 </dd>
-</dl>
-<p>responses
-:param alpha: numpy scalar</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy array</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
 </dd>
-<dt class="field-even">Return gamma_new</dt>
-<dd class="field-even"><p>warping function</p>
+<dt class="field-odd">Return gamma_new</dt>
+<dd class="field-odd"><p>warping function</p>
 </dd>
 </dl>
 </dd></dl>
