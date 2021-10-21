@@ -422,6 +422,7 @@ class elastic_logistic:
                 self.PC = (TP+TN)/float(TP+FP+FN+TN)
             
             self.y_pred = yhat
+            self.y_labels = y_labels
 
         else:
             n = self.f.shape[1]
@@ -442,6 +443,7 @@ class elastic_logistic:
             FN = sum(self.y[y_labels == 1] == -1)
             self.PC = (TP+TN)/float(TP+FP+FN+TN)
             self.y_pred = yhat
+            self.y_labels = y_labels
 
         return
 
@@ -605,7 +607,8 @@ class elastic_mlogistic:
         Usage:  obj.predict()
                 obj.predict(newdata)
 
-        :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
+        :param newdata: dict c
+        ontaining new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
         :param f: (M,N) matrix of functions
         :param time: vector of time points
@@ -655,6 +658,7 @@ class elastic_mlogistic:
                 self.PC = sum(y == y_labels) / float(y_labels.size)
             
             self.y_pred = yhat
+            self.y_labels = y_labels
 
         else:
             n = self.f.shape[1]
@@ -684,6 +688,7 @@ class elastic_mlogistic:
             
             self.PC = sum(self.y == y_labels) / float(y_labels.size)
             self.y_pred = yhat
+            self.y_labels = y_labels
 
         return
 
