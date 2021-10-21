@@ -87,7 +87,7 @@ class oc_elastic_regression:
         Nb = B.shape[1]
 
         # second derivative for regularization
-        Bdiff = np.zeros((M, Nb))
+        Bdiff = np.zeros((T, Nb))
         for ii in range(0, Nb):
             Bdiff[:, ii] = np.gradient(np.gradient(B[:, ii], binsize), binsize)
 
