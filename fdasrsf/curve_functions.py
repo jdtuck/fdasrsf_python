@@ -494,9 +494,10 @@ def find_rotation_and_seed_coord(beta1, beta2, closed=0, rotation=True, method="
     :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: numpy ndarray
-    :return beta2new: optimal rotated beta2 to beta1
-    :return O: rotation matrix
-    :return tau: seed
+    :return beta2new: optimal aligned beta2 to beta1
+    :return q2best: optimal aligned q2 to q1 
+    :return Rbest: rotation matrix
+    :return gamIbest: warping function
     """
 
     n, T = beta1.shape
@@ -1008,12 +1009,12 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
         y2 = mrn
         a[ii] = (x1 * y2 - x2 * y1) / float(y2 - y1)
 
-        beta1, O_hat, tau = find_rotation_and_seed_coord(betanu, beta)
+        beta1, O_hat = find_best_rotation(betanu, beta)
 
         gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
         beta1 = group_action_by_gamma_coord(beta1, gamma)
-        beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
+        beta1, O_hat1 = find_best_rotation(betanu, beta1)
         q1 = curve_to_q(beta1)[0]
         f[ii] = innerprod_q2(q1, bt) - Y
 
@@ -1028,12 +1029,12 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
 
     gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
-    beta1, O_hat, tau = find_rotation_and_seed_coord(betanu, beta)
+    beta1, O_hat = find_best_rotation(betanu, beta)
     beta1 = group_action_by_gamma_coord(beta1, gamma)
-    beta1, O_hat1, tau = find_rotation_and_seed_coord(betanu, beta1)
+    beta1, O_hat1 = find_best_rotation(betanu, beta1)
     O_hat = O_hat @ O_hat1
 
-    return (gamma, O_hat, tau)
+    return (gamma, O_hat)
 
 
 def elastic_shooting(q1,v):

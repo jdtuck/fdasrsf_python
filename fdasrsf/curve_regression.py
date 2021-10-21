@@ -145,16 +145,16 @@ class oc_elastic_regression:
                     beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = out[ii][1]
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
+                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
             else:
                 for ii in range(0, N):
                     beta1 = beta0[:, :, ii]
-                    gammatmp, Otmp, tau = regression_warp(nu, beta1, self.y[ii], alpha)
+                    gammatmp, Otmp = regression_warp(nu, beta1, self.y[ii], alpha)
                     gamma_new[:, ii] = gammatmp
                     beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = Otmp
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
+                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
 
 
             if np.abs(self.SSE[itr - 1] - self.SSE[itr - 2]) < 1e-15:
@@ -211,7 +211,7 @@ class oc_elastic_regression:
                 beta1 = self.O[:, :, dist.argmin()].dot(beta1)
                 beta1 = cf.group_action_by_gamma_coord(beta1,
                                                        self.gamma[:, dist.argmin()])
-                q_tmp = cf.curve_to_q(beta1)
+                q_tmp = cf.curve_to_q(beta1)[0]
 
                 y_pred[ii] = self.alpha + cf.innerprod_q2(q_tmp, self.nu)
             
@@ -236,7 +236,7 @@ class oc_elastic_regression:
                 beta1 = self.O[:, :, dist.argmin()].dot(beta1)
                 beta1 = cf.group_action_by_gamma_coord(beta1,
                                                        self.gamma[:, dist.argmin()])
-                q_tmp = cf.curve_to_q(beta1)
+                q_tmp = cf.curve_to_q(beta1)[0]
 
                 y_pred[ii] = self.alpha + cf.innerprod_q2(q_tmp, self.nu)
             
@@ -354,7 +354,7 @@ class oc_elastic_logistic:
                     beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = out[ii][1]
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
+                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
             else:
                 for ii in range(0, N):
                     q1 = q[:, :, ii]
@@ -364,7 +364,7 @@ class oc_elastic_logistic:
                     beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = Otmp
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
+                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
 
             if norm(gamma - gamma_new) < 1e-5:
                 break
@@ -421,7 +421,7 @@ class oc_elastic_logistic:
                 beta1 = self.O[:, :, dist.argmin()].dot(beta1)
                 beta1 = cf.group_action_by_gamma_coord(beta1,
                                                        self.gamma[:, dist.argmin()])
-                q_tmp = cf.curve_to_q(beta1)
+                q_tmp = cf.curve_to_q(beta1)[0]
 
                 y_pred[ii] = self.alpha + cf.innerprod_q2(q_tmp, self.nu)
             
@@ -456,7 +456,7 @@ class oc_elastic_logistic:
                 beta1 = self.O[:, :, dist.argmin()].dot(beta1)
                 beta1 = cf.group_action_by_gamma_coord(beta1,
                                                        self.gamma[:, dist.argmin()])
-                q_tmp = cf.curve_to_q(beta1)
+                q_tmp = cf.curve_to_q(beta1)[0]
 
                 y_pred[ii] = self.alpha + cf.innerprod_q2(q_tmp, self.nu)
 
@@ -595,7 +595,7 @@ class oc_elastic_mlogistic:
                     beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = out[ii][1]
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
+                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
             else:
                 for ii in range(0, N):
                     gammatmp, Otmp = mlogit_warp_grad(alpha, nu, q[:, :, ii], self.Y[ii, :], deltaO=deltaO, deltag=deltag)
@@ -603,7 +603,7 @@ class oc_elastic_mlogistic:
                     beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = Otmp
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])
+                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
 
             if norm(gamma - gamma_new) < 1e-5:
                 break
@@ -661,7 +661,7 @@ class oc_elastic_mlogistic:
                 beta1 = self.O[:, :, dist.argmin()].dot(beta1)
                 beta1 = cf.group_action_by_gamma_coord(beta1,
                                                        self.gamma[:, dist.argmin()])
-                q_tmp = cf.curve_to_q(beta1)
+                q_tmp = cf.curve_to_q(beta1)[0]
 
                 for jj in range(0, m):
                     y_pred[ii, jj] = self.alpha[jj] + cf.innerprod_q2(q_tmp, self.nu[:, :, jj])
@@ -705,7 +705,7 @@ class oc_elastic_mlogistic:
                 beta1 = self.O[:, :, dist.argmin()].dot(beta1)
                 beta1 = cf.group_action_by_gamma_coord(beta1,
                                                        self.gamma[:, dist.argmin()])
-                q_tmp = cf.curve_to_q(beta1)
+                q_tmp = cf.curve_to_q(beta1)[0]
 
                 for jj in range(0, m):
                     y_pred[ii, jj] = self.alpha[jj] + cf.innerprod_q2(q_tmp, self.nu[:, :, jj])
@@ -746,7 +746,7 @@ def preproc_open_curve(beta, T=100):
         centroid1 = cf.calculatecentroid(beta1)
         beta1 = beta1 - np.tile(centroid1, [T, 1]).T
         beta2[:, :, i] = beta1
-        q[:, :, i] = cf.curve_to_q(beta1)
+        q[:, :, i] = cf.curve_to_q(beta1)[0]
 
     return (q, beta2)
 
@@ -769,33 +769,23 @@ def regression_warp(nu, beta, y, alpha):
     T = beta.shape[1]
     betanu = cf.q_to_curve(nu)
 
-    betaM, O_M, tauM = cf.find_rotation_and_seed_coord(betanu, beta)
-    q = cf.curve_to_q(betaM)
-    gam_M = cf.optimum_reparam_curve(nu, q)
-    betaM = cf.group_action_by_gamma_coord(betaM, gam_M)
-    qM = cf.curve_to_q(betaM)
+    betaM, qM, O_M, gam_M = cf.find_rotation_and_seed_coord(betanu, beta)
     y_M = cf.innerprod_q2(qM, nu)
 
-    betam, O_m, taum = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
-    q = cf.curve_to_q(betam)
-    gam_m = cf.optimum_reparam_curve(-1 * nu, q)
-    betam = cf.group_action_by_gamma_coord(betam, gam_m)
-    qm = cf.curve_to_q(betam)
+    betam, qm, O_m, gam_m = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
     y_m = cf.innerprod_q2(qm, nu)
 
     if y > alpha + y_M:
         O_hat = O_M
         gamma_new = gam_M
-        tau = tauM
     elif y < alpha + y_m:
         O_hat = O_m
         gamma_new = gam_m
-        tau = taum
     else:
-        gamma_new, O_hat, tau = cf.curve_zero_crossing(y - alpha, beta, nu, y_M, y_m, gam_M,
-                                                               gam_m)
+        gamma_new, O_hat = cf.curve_zero_crossing(y - alpha, beta, nu, y_M, y_m, gam_M,
+                                                  gam_m)
 
-    return(gamma_new, O_hat, tau)
+    return(gamma_new, O_hat)
 
 
 # helper functions for logistic regression
@@ -832,11 +822,11 @@ def logistic_warp(alpha, nu, q, y, deltaO=.1, deltag=.05, max_itr=8000,
         T = beta.shape[1]
         if y == 1:
             beta1, O_old, tau = cf.find_rotation_and_seed_coord(betanu, beta)
-            q = cf.curve_to_q(beta1)
+            q = cf.curve_to_q(beta1)[0]
             gam_old = cf.optimum_reparam_curve(nu, q)
         elif y == -1:
             beta1, O_old, tau = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
-            q = cf.curve_to_q(beta1)
+            q = cf.curve_to_q(beta1)[0]
             gam_old = cf.optimum_reparam_curve(-1 * nu, q)
 
 
