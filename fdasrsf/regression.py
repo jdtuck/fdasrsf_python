@@ -27,12 +27,15 @@ class elastic_regression:
     :param y: numpy array of N responses
     :param time: vector of size M describing the sample points
     :param B: optional matrix describing Basis elements
-    :param lam: regularization parameter (default 0)
-    :param df: number of degrees of freedom B-spline (default 20)
-    :param max_itr: maximum number of iterations (default 20)
-    :param cores: number of cores for parallel processing (default all)
-    :type f: np.ndarray
-    :type time: np.ndarray
+    :param alpha: alpha parameter of model
+    :param beta: beta(t) of model
+    :param fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
+    :param qn: aligned srvfs - similar structure to fn
+    :param gamma: calculated warping functions
+    :param q: original training SRSFs
+    :param b: basis coefficients
+    :param SSE: sum of squared error
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  29-Oct-2021
@@ -245,10 +248,15 @@ class elastic_logistic:
     :param y: numpy array of N responses
     :param time: vector of size M describing the sample points
     :param B: optional matrix describing Basis elements
-    :param lam: regularization parameter (default 0)
-    :param df: number of degrees of freedom B-spline (default 20)
-    :param max_itr: maximum number of iterations (default 20)
-    :param cores: number of cores for parallel processing (default all)
+    :param alpha: alpha parameter of model
+    :param beta: beta(t) of model
+    :param fn: aligned functions - numpy ndarray of shape (M,N) of M
+    functions with N samples
+    :param qn: aligned srvfs - similar structure to fn
+    :param gamma: calculated warping functions
+    :param q: original training SRSFs
+    :param b: basis coefficients
+    :param Loss: logistic loss
     :type f: np.ndarray
     :type time: np.ndarray
 
@@ -449,10 +457,15 @@ class elastic_mlogistic:
     :param y: numpy array of N responses
     :param time: vector of size M describing the sample points
     :param B: optional matrix describing Basis elements
-    :param lam: regularization parameter (default 0)
-    :param df: number of degrees of freedom B-spline (default 20)
-    :param max_itr: maximum number of iterations (default 20)
-    :param cores: number of cores for parallel processing (default all)
+    :param alpha: alpha parameter of model
+    :param beta: beta(t) of model
+    :param fn: aligned functions - numpy ndarray of shape (M,N) of N
+    functions with M samples
+    :param qn: aligned srvfs - similar structure to fn
+    :param gamma: calculated warping functions
+    :param q: original training SRSFs
+    :param b: basis coefficients
+    :param Loss: logistic loss
     :type f: np.ndarray
     :type time: np.ndarray
 
