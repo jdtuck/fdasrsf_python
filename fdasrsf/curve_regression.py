@@ -78,7 +78,7 @@ class oc_elastic_regression:
         else:
             parallel = False
 
-        binsize = np.diff(self.time)
+        binsize = np.diff(time)
         binsize = binsize.mean()
 
         # Create B-Spline Basis if none provided
