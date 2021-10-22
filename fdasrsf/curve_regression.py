@@ -20,13 +20,12 @@ import oclogit_warp as lw
 
 class oc_elastic_regression:
     """
-    This class provides elastic regression for ffor open curves
+    This class provides elastic regression for for open curves
     using elastic methods
     
     Usage:  obj = oc_elastic_regression(beta,y)
 
-    :param beta: numpy ndarray of shape (n, M, N) describing N curves
-    in R^M
+    :param beta: numpy ndarray of shape (n, M, N) describing N curves in R^M
     :param B: optional matrix describing Basis elements
     :param y: numpy array of N responses
     :param alpha: alpha parameter of model

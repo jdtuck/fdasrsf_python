@@ -5,7 +5,9 @@ alignment as well as modeling using functional component
 analysis
 
 """
-__all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA", "elastic_glm_regression"]
+__all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", 
+           "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA", 
+           "elastic_glm_regression", "curve_pcr_regression"]
 
 __version__ = "2.3.4"
 
@@ -30,6 +32,7 @@ from .fPLS import pls_svd
 from .regression import elastic_logistic, elastic_regression, elastic_mlogistic
 from .elastic_glm_regression import elastic_glm_regression
 from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, elastic_mlpcr_regression
+from .curve_pcr_regression import elastic_curve_pcr_regression
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB
 from .curve_functions import resamplecurve, calculatecentroid, curve_to_q, optimum_reparam_curve, find_best_rotation, elastic_distance_curve

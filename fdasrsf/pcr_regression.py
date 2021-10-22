@@ -15,7 +15,6 @@ from scipy import dot
 from scipy.linalg import inv, norm
 from scipy.integrate import trapz, cumtrapz
 from scipy.optimize import fmin_l_bfgs_b
-import collections
 
 class elastic_pcr_regression:
     """
@@ -223,7 +222,7 @@ class elastic_pcr_regression:
             
             self.SSE = np.sum((self.y-self.y_pred)**2)
 
-            return
+        return
 
 class elastic_lpcr_regression:
     """
@@ -450,7 +449,7 @@ class elastic_lpcr_regression:
             FN = np.sum(self.y[self.y_labels == 1] == -1)
             self.PC = (TP+TN)/(TP+FP+FN+TN)
 
-            return
+        return
         
 
 class elastic_mlpcr_regression:
@@ -708,4 +707,4 @@ class elastic_mlpcr_regression:
             
             self.PCo = np.sum(y == self.y_labels)/self.y_labels.shape[0]
 
-            return
+        return
