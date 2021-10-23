@@ -1037,12 +1037,13 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
     return (gamma, O_hat)
 
 
-def elastic_shooting(q1,v):
+def elastic_shooting(q1,v, mode=0):
     """
     Calculates shooting vector from v to q1
 
     :param q1: vector of srvf
     :param v: shooting vector
+    :param mode: closed or open (1/0)
 
     :rtype numpy ndarray
     :return q2n: vector of srvf
@@ -1052,7 +1053,8 @@ def elastic_shooting(q1,v):
         q2n = q1
     else:
         q2n = cos(d)*q1 + (sin(d)/d)*v
-        q2n = project_curve(q2n)
+        if mode == 1:
+            q2n = project_curve(q2n)
     
     return (q2n)
 

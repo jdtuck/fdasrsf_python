@@ -295,6 +295,13 @@ class fdacurve:
 
         self.coef = x
 
+        modes = ['O', 'C']
+        mode = [i for i, x in enumerate(modes) if x == self.mode]
+        if len(mode) == 0:
+            mode = 0
+        else:
+            mode = mode[0]
+
         n1, T, N1 = self.beta.shape
         p = zeros((n1,T,no,10))
         for j in range(0,no):
@@ -307,7 +314,7 @@ class fdacurve:
                 else:
                     tmp_scale = 1
                 v1 = tmp.reshape(m,n)
-                q2n = cf.elastic_shooting(self.q_mean,v1)
+                q2n = cf.elastic_shooting(self.q_mean, v1, smode)
 
                 p[:,:,j,i-1] = cf.q_to_curve(q2n, tmp_scale)            
 
@@ -414,6 +421,13 @@ class fdacurve:
         if (self.scale):
             VM = append(VM, self.mean_scale)
 
+        modes = ['O', 'C']
+        mode = [i for i, x in enumerate(modes) if x == self.mode]
+        if len(mode) == 0:
+            mode = 0
+        else:
+            mode = mode[0]
+
         for j in range(0,4):
             fig, ax = plt.subplots()
             for i in range(1,11):
@@ -425,7 +439,7 @@ class fdacurve:
                 else:
                     tmp_scale = 1
                 v1 = tmp.reshape(m,n)
-                q2n = cf.elastic_shooting(self.q_mean,v1)
+                q2n = cf.elastic_shooting(self.q_mean,v1,mode)
 
                 p = cf.q_to_curve(q2n, tmp_scale)
 
