@@ -138,22 +138,22 @@ class oc_elastic_regression:
             # find gamma
             gamma_new = np.zeros((T, N))
             if parallel:
-                out = Parallel(n_jobs=cores)(delayed(regression_warp)(nu, beta0[:, :, n], self.y[n], alpha) for n in range(N))
+                out = Parallel(n_jobs=cores)(delayed(regression_warp)(nu, q[:, :, n], self.y[n], alpha) for n in range(N))
                 for ii in range(0, N):
                     gamma_new[:, ii] = out[ii][0]
                     beta1n = cf.group_action_by_gamma_coord(out[ii][1].dot(beta0[:, :, ii]), out[ii][0])
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = out[ii][1]
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
+                    qn[:, :, ii] = cf.curve_to_q(beta1n)[0]
             else:
                 for ii in range(0, N):
-                    beta1 = beta0[:, :, ii]
-                    gammatmp, Otmp = regression_warp(nu, beta1, self.y[ii], alpha)
+                    q1 = q[:, :, ii]
+                    gammatmp, Otmp = regression_warp(nu, q1, self.y[ii], alpha)
                     gamma_new[:, ii] = gammatmp
                     beta1n = cf.group_action_by_gamma_coord(Otmp.dot(beta0[:, :, ii]), gammatmp)
                     beta[:, :, ii] = beta1n
                     O_hat[:, :, ii] = Otmp
-                    qn[:, :, ii] = cf.curve_to_q(beta[:, :, ii])[0]
+                    qn[:, :, ii] = cf.curve_to_q(beta1n)[0]
 
 
             if np.abs(self.SSE[itr - 1] - self.SSE[itr - 2]) < 1e-15:
@@ -751,12 +751,12 @@ def preproc_open_curve(beta, T=100):
 
 
 # helper functions for linear regression
-def regression_warp(nu, beta, y, alpha):
+def regression_warp(nu, q, y, alpha):
     """
     calculates optimal warping for function linear regression
 
-    :param nu: numpy ndarray of shape (M,N) of M functions with N samples
-    :param beta: numpy ndarray of shape (M,N) of M functions with N samples
+    :param nu: numpy ndarray of srvf (M,N) of M functions with N samples
+    :param q: numpy ndarray of srvf (M,N) of M functions with N samples
     :param y: numpy ndarray of shape (1,N) of M functions with N samples
     responses
     :param alpha: numpy scalar
@@ -765,13 +765,12 @@ def regression_warp(nu, beta, y, alpha):
     :return gamma_new: warping function
 
     """
-    T = beta.shape[1]
-    betanu = cf.q_to_curve(nu)
+    T = q.shape[1]
 
-    betaM, qM, O_M, gam_M = cf.find_rotation_and_seed_coord(betanu, beta)
+    qM, O_M, gam_M = cf.find_rotation_and_seed_q(nu, q)
     y_M = cf.innerprod_q2(qM, nu)
 
-    betam, qm, O_m, gam_m = cf.find_rotation_and_seed_coord(-1 * betanu, beta)
+    qm, O_m, gam_m = cf.find_rotation_and_seed_q(-1 * nu, q)
     y_m = cf.innerprod_q2(qm, nu)
 
     if y > alpha + y_M:
@@ -781,7 +780,7 @@ def regression_warp(nu, beta, y, alpha):
         O_hat = O_m
         gamma_new = gam_m
     else:
-        gamma_new, O_hat = cf.curve_zero_crossing(y - alpha, beta, nu, y_M, y_m, gam_M,
+        gamma_new, O_hat = cf.curve_zero_crossing(y - alpha, q, nu, y_M, y_m, gam_M,
                                                   gam_m)
 
     return(gamma_new, O_hat)

@@ -548,35 +548,65 @@ def find_rotation_and_seed_coord(beta1, beta2, closed=0, rotation=True, method="
     return (beta2best, q2best, Rbest, gamIbest)
 
 
-def find_rotation_and_seed_q(q1, q2):
+def find_rotation_and_seed_q(q1, q2, closed=0, rotation=True, method="DP"):
     """
     This function returns a candidate list of optimally oriented and
-    registered (seed) shapes w.r.t. beta1
+    registered (seed) srvs w.r.t. q1
 
     :param q1: numpy ndarray of shape (2,M) of M samples
     :param q2: numpy ndarray of shape (2,M) of M samples
+    :param closed: Open (0) or Closed (1)
+    :param rotation: find rotation (default=True)
+    :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: numpy ndarray
-    :return beta2new: optimal rotated beta2 to beta1
-    :return O: rotation matrix
-    :return tau: seed
-
+    :return q2best: optimal aligned q2 to q1 
+    :return Rbest: rotation matrix
+    :return gamIbest: warping function
     """
+
     n, T = q1.shape
-    Ltwo = zeros(T)
-    Rlist = zeros((n, n, T))
-    for ctr in range(0, T):
-        q2n = shift_f(q2, ctr)
-        q2new, R = find_best_rotation(q1, q2n)
-        Ltwo[ctr] = innerprod_q2(q1 - q2new, q1 - q2new)
-        Rlist[:, :, ctr] = R
+    scl = 4.
+    minE = 1000
+    if closed == 1:
+        end_idx = int(floor(T/scl))
+        scl = 4
+    else:
+        end_idx = 0
+    
+    for ctr in range(0, end_idx+1):
+        if closed == 1:
+            q2n = shift_f(q2, scl*ctr)
+        else:
+            q2n = q2
+        
+        if rotation:
+            q2new, R = find_best_rotation(q1, q2n)
+        else:
+            q2new = q2n
+            R = eye(n)
 
-    tau = Ltwo.argmin()
-    O_hat = Rlist[:, :, tau]
-    q2new = shift_f(q2, tau)
-    q2new = O_hat @ q2new
+        # Reparam
+        if norm(q1-q2new,'fro') > 0.0001:
+            gam = optimum_reparam_curve(q2new, q1, 0.0, method)
+            gamI = uf.invertGamma(gam)
+            q2new = group_action_by_gamma(q2new,gamI)
+            if closed == 1:
+                q2new = project_curve(q2new)
+        else:
+            gamI = linspace(0,1,T)
+        
+        tmp = innerprod_q2(q1,q2new)
+        if tmp > 1:
+            tmp = 1
+        Ec = arccos(tmp)
+        if Ec < minE:
+            Rbest = R
+            q2best = q2new
+            gamIbest = gamI
+            minE = Ec
 
-    return (q2new, O_hat, tau)
+    return (q2best, Rbest, gamIbest)
 
 
 def group_action_by_gamma_coord(f, gamma):
@@ -837,18 +867,11 @@ def inverse_exp(q1, q2, beta2):
     beta2 = beta2 - tile(centroid1, [T, 1]).T
 
     # Optimize over SO(n)
-    q2, O_hat, tau = find_rotation_and_seed_q(q1, q2)
-
-    # Optimize over Gamma
-    gam = optimum_reparam_curve(q2, q1, 0.0)
-    gamI = uf.invertGamma(gam)
+    q2, O_hat, gamI = find_rotation_and_seed_q(q1, q2)
 
     # Applying optimal re-parameterization to the second curve
     beta2 = group_action_by_gamma_coord(beta2, gamI)
-    q2 = curve_to_q(beta2)[0]
-
-    # Optimize over SO(n)
-    q2, O2, tau = find_rotation_and_seed_q(q1, q2)
+    q2 = curve_to_q(beta2)
 
     # Compute geodesic distance
     q1dotq2 = innerprod_q2(q1, q2)
@@ -970,7 +993,7 @@ def parallel_translate(w, q1, q2, basis, mode=0):
     return (wbar)
 
 
-def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
+def curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin):
     """
     finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
     from elastic curve regression model
@@ -989,8 +1012,7 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
 
     """
     # simple iterative method based on intermediate theorem
-    T = beta.shape[1]
-    betanu = q_to_curve(bt)
+    T = q.shape[1]
     max_itr = 100
     a = zeros(max_itr)
     a[0] = 1
@@ -1009,13 +1031,10 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
         y2 = mrn
         a[ii] = (x1 * y2 - x2 * y1) / float(y2 - y1)
 
-        beta1, O_hat = find_best_rotation(betanu, beta)
-
         gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
-        beta1 = group_action_by_gamma_coord(beta1, gamma)
-        beta1, O_hat1 = find_best_rotation(betanu, beta1)
-        q1 = curve_to_q(beta1)[0]
+        q1 = group_action_by_gamma(q, gamma)
+        q1, O_hat1 = find_best_rotation(bt, q1)
         f[ii] = innerprod_q2(q1, bt) - Y
 
         if fabs(f[ii]) < 1e-5:
@@ -1029,10 +1048,8 @@ def curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin):
 
     gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
-    beta1, O_hat = find_best_rotation(betanu, beta)
-    beta1 = group_action_by_gamma_coord(beta1, gamma)
-    beta1, O_hat1 = find_best_rotation(betanu, beta1)
-    O_hat = O_hat @ O_hat1
+    q1 = group_action_by_gamma(q, gamma)
+    q1, O_hat = find_best_rotation(bt, q1)
 
     return (gamma, O_hat)
 
