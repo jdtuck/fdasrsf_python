@@ -1034,7 +1034,7 @@ def curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin):
         gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
         q1 = group_action_by_gamma(q, gamma)
-        q1, O_hat1 = find_best_rotation(bt, q1)
+        #q1, O_hat1 = find_best_rotation(bt, q1)
         f[ii] = innerprod_q2(q1, bt) - Y
 
         if fabs(f[ii]) < 1e-5:
@@ -1048,8 +1048,8 @@ def curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin):
 
     gamma = a[ii] * gmax + (1 - a[ii]) * gmin
 
-    q1 = group_action_by_gamma(q, gamma)
-    q1, O_hat = find_best_rotation(bt, q1)
+    #q1 = group_action_by_gamma(q, gamma)
+    #q1, O_hat = find_best_rotation(bt, q1)
 
     return (gamma, O_hat)
 

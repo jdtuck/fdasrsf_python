@@ -767,10 +767,10 @@ def regression_warp(nu, q, y, alpha):
     """
     T = q.shape[1]
 
-    qM, O_M, gam_M = cf.find_rotation_and_seed_q(nu, q)
+    qM, O_M, gam_M = cf.find_rotation_and_seed_q(nu, q, rotation=False)
     y_M = cf.innerprod_q2(qM, nu)
 
-    qm, O_m, gam_m = cf.find_rotation_and_seed_q(-1 * nu, q)
+    qm, O_m, gam_m = cf.find_rotation_and_seed_q(-1 * nu, q, rotation=False)
     y_m = cf.innerprod_q2(qm, nu)
 
     if y > alpha + y_M:
