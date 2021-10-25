@@ -567,7 +567,7 @@ def find_rotation_and_seed_q(q1, q2, closed=0, rotation=True, method="DP"):
 
     n, T = q1.shape
     scl = 4.
-    minE = 1000
+    minE = 4000
     if closed == 1:
         end_idx = int(floor(T/scl))
         scl = 4
@@ -583,7 +583,7 @@ def find_rotation_and_seed_q(q1, q2, closed=0, rotation=True, method="DP"):
         if rotation:
             q2new, R = find_best_rotation(q1, q2n)
         else:
-            q2new = q2n
+            q2new = q2n.copy()
             R = eye(n)
 
         # Reparam
