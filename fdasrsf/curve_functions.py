@@ -1018,6 +1018,7 @@ def curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin):
 
     """
     # simple iterative method based on intermediate theorem
+    n = q.shape[0]
     T = q.shape[1]
     max_itr = 100
     a = zeros(max_itr)
@@ -1056,7 +1057,7 @@ def curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin):
 
     #q1 = group_action_by_gamma(q, gamma)
     #q1, O_hat = find_best_rotation(bt, q1)
-    O_hat = eye(2)
+    O_hat = eye(n)
 
     return (gamma, O_hat)
 
