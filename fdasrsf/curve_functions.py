@@ -1050,6 +1050,7 @@ def curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin):
 
     #q1 = group_action_by_gamma(q, gamma)
     #q1, O_hat = find_best_rotation(bt, q1)
+    O_hat = eye(2)
 
     return (gamma, O_hat)
 
