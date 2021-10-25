@@ -472,6 +472,8 @@ def find_rotation_and_seed_unique(q1, q2, closed=0, rotation=True, method="DP"):
         tmp = innerprod_q2(q1,q2new)
         if tmp > 1:
             tmp = 1
+        if tmp < -1:
+            tmp = -1
         Ec = arccos(tmp)
         if Ec < minE:
             Rbest = R
@@ -537,6 +539,8 @@ def find_rotation_and_seed_coord(beta1, beta2, closed=0, rotation=True, method="
         tmp = innerprod_q2(q1,q2new)
         if tmp > 1:
             tmp = 1
+        if tmp < -1:
+            tmp = -1
         Ec = arccos(tmp)
         if Ec < minE:
             Rbest = R
@@ -599,6 +603,8 @@ def find_rotation_and_seed_q(q1, q2, closed=0, rotation=True, method="DP"):
         tmp = innerprod_q2(q1,q2new)
         if tmp > 1:
             tmp = 1
+        if tmp < -1:
+            tmp = -1
         Ec = arccos(tmp)
         if Ec < minE:
             Rbest = R
