@@ -751,7 +751,7 @@ def pre_proc_curve(beta, T=100):
     return (betanew, qnew, A)
 
 
-def __distance_curve(beta1, beta2, closed=0, rotation=True, scale=False, method="DP"):
+def elastic_distance_curve(beta1, beta2, closed=0, rotation=True, scale=False, method="DP"):
     """
     Calculates the two elastic distances between two curves
     :param beta1: numpy ndarray of shape (2,M) of M samples
