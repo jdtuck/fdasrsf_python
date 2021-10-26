@@ -1084,7 +1084,7 @@ def elastic_shooting(q1,v, mode=0):
     return (q2n)
 
 
-def elastic_shooting(q1,q2, mode=0):
+def elastic_shooting_vector(q1,q2, mode=0):
     """
     Calculates shooting between two srvfs
 
