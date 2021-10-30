@@ -74,7 +74,7 @@ class fdacurve:
         lenq1 = zeros(K)
         for ii in range(0,K):
             if (beta.shape[1] != N):
-                beta1[:,:,ii] = cf.resamplecurve(beta[:,:,ii],N,mode)
+                beta1[:,:,ii] = cf.resamplecurve(beta[:,:,ii],N,mode=mode)
             else:
                 beta1[:,:,ii] = beta[:,:,ii]
             a = -cf.calculatecentroid(beta1[:,:,ii])

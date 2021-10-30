@@ -1085,6 +1085,36 @@ def elastic_shooting(q1,v, mode=0):
     return (q2n)
 
 
+def elastic_shooting_vector(q1,q2, mode=0):
+    """
+    Calculates shooting between two srvfs
+
+    :param q1: vector of srvf
+    :param q2: vector of srvf
+    :param mode: closed or open (1/0)
+
+    :rtype numpy ndarray
+    :return v: shooting vector
+    :return d: distance
+    :return q2n: aligned srvf
+    """
+    
+    (q2n, Rbest, gamIbest) = find_rotation_and_seed_unique(q1, q2, closed=mode)   
+    lenq = sqrt(innerprod_q2(q2n,q2n))
+    q2n = q2n / lenq
+    
+    d = sqrt(innerprod_q2(q1,q2n))
+    if d < 0.00001:
+        v = np.zeros(q1.shape)
+    else:
+        v = (d/sin(d))*(q2n-cos(d)*q1)
+        q2n = cos(d)*q1 + (sin(d)/d)*v
+        if mode == 1:
+            q2n = project_curve(q2n)
+    
+    return (v,d,q2n)
+
+
 def rot_mat(theta):
     O = array([(cos(theta), -1*sin(theta)), (sin(theta), cos(theta))])
 
