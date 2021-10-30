@@ -768,6 +768,7 @@ def elastic_distance_curve(beta1, beta2, closed=0, rotation=True, scale=False, m
 
     if (beta1 == beta2).all():
         d = 0.0
+        dx = 0.0
     else:
         N = beta1.shape[1]
         a = -calculatecentroid(beta1)
