@@ -74,8 +74,9 @@ class fdawarp:
         self.rsamps = False
     
 
-    def srsf_align(self, method="mean", omethod="DP2", smoothdata=False, MaxItr=20,
-                   parallel=False, lam=0.0, cores=-1, grid_dim=7):
+    def srsf_align(self, method="mean", omethod="DP2", center=True, 
+                   smoothdata=False, MaxItr=20, parallel=False, lam=0.0, 
+                   cores=-1, grid_dim=7):
         """
         This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
@@ -83,6 +84,7 @@ class fdawarp:
         :param method: (string) warp calculate Karcher Mean or Median 
                        (options = "mean" or "median") (default="mean")
         :param omethod: optimization method (DP, DP2, RBFGS) (default = DP2)
+        :param center: center warping functions (default = T)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param MaxItr: Maximum number of iterations (default = 20)
         :param parallel: run in parallel (default = F)
@@ -246,30 +248,35 @@ class fdawarp:
                 break
 
         # Last Step with centering of gam
-        r += 1
-        if parallel:
-            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
-                q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
-            gam = np.array(out)
-            gam = gam.transpose()
+
+        if center:
+            r += 1
+            if parallel:
+                out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
+                    q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
+                gam = np.array(out)
+                gam = gam.transpose()
+            else:
+                for k in range(0,N):
+                    gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
+                            lam, grid_dim)
+
+            gam_dev = np.zeros((M, N))
+            for k in range(0, N):
+                gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
+
+            gamI = uf.SqrtMeanInverse(gam)
+            gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+            time0 = (self.time[-1] - self.time[0]) * gamI + self.time[0]
+            mq[:, r + 1] = np.interp(time0, self.time, mq[:, r]) * np.sqrt(gamI_dev)
+
+            for k in range(0, N):
+                q[:, k, r + 1] = np.interp(time0, self.time, q[:, k, r]) * np.sqrt(gamI_dev)
+                f[:, k, r + 1] = np.interp(time0, self.time, f[:, k, r])
+                gam[:, k] = np.interp(time0, self.time, gam[:, k])
         else:
-            for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
-                        lam, grid_dim)
-
-        gam_dev = np.zeros((M, N))
-        for k in range(0, N):
-            gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
-
-        gamI = uf.SqrtMeanInverse(gam)
-        gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-        time0 = (self.time[-1] - self.time[0]) * gamI + self.time[0]
-        mq[:, r + 1] = np.interp(time0, self.time, mq[:, r]) * np.sqrt(gamI_dev)
-
-        for k in range(0, N):
-            q[:, k, r + 1] = np.interp(time0, self.time, q[:, k, r]) * np.sqrt(gamI_dev)
-            f[:, k, r + 1] = np.interp(time0, self.time, f[:, k, r])
-            gam[:, k] = np.interp(time0, self.time, gam[:, k])
+            gamI = uf.SqrtMeanInverse(gam)
+            gamI_dev = np.gradient(gamI, 1 / float(M - 1))
 
         # Aligned data & stats
         self.fn = f[:, :, r + 1]
