@@ -610,7 +610,7 @@ def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
     q1 = uf.f_to_srsf(f1, time)
     q2 = uf.f_to_srsf(f2, time)
 
-    gam = uf.optimum_reparam(q1, time, q1, omethod, lam, grid_dim)
+    gam = uf.optimum_reparam(q1, time, q2, omethod, lam, grid_dim)
 
     f2n = uf.warp_f_gamma(time, f2 , gam)
     q2n = uf.f_to_srsf(f2n, time)
