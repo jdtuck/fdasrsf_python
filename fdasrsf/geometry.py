@@ -5,8 +5,9 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
-from numpy import arccos, sin, cos, linspace, zeros, sqrt
-from scipy.integrate import trapz
+from numpy import arccos, sin, cos, linspace, zeros, sqrt, finfo, double
+from numpy import ones, diff, gradient
+from scipy.integrate import trapz, cumtrapz
 
 
 def inv_exp_map(Psi, psi):
@@ -48,3 +49,38 @@ def L2norm(psi):
     l2norm = sqrt(trapz(psi*psi,t))
     return l2norm
 
+
+def gam_to_v(gam):
+    TT = gam.shape[0]
+    n = gam.shape[1]
+    eps = finfo(double).eps
+    time = linspace(0,1,TT)
+
+    psi = zeros((TT,n))
+    binsize = diff(time)
+    binsize = binsize.mean()
+    for i in range(0,n):
+        psi[:,i] = sqrt(gradient(gam[:, i],binsize))
+    
+    mu = ones(TT)
+    vec = zeros((TT,n))
+    for i in range(0,n):
+        out, theta = inv_exp_map(mu,psi[:,i])
+        vec[:,i] = out
+    
+    return vec
+
+
+def v_to_gam(v):
+    TT = v.shape[0]
+    n = v.shape[1]
+    time = linspace(0,1,TT)
+
+    mu = ones(TT)
+    gam = zeros((TT,n))
+    for i in range(0,n):
+        psi = exp_map(mu,v[:,i])
+        gam0 = cumtrapz(psi*psi, time, initial=0)
+        gam[:,i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
+    
+    return(gam)
