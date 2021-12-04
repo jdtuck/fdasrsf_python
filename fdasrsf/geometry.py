@@ -58,7 +58,7 @@ def gam_to_v(gam):
     mu = ones(TT)
     if gam.ndim == 1:
         psi = sqrt(gradient(gam,binsize))
-        vec, theta = inv_exp_map(mu,psi[:,i])
+        vec, theta = inv_exp_map(mu,psi)
     else:
         n = gam.shape[1]
 
