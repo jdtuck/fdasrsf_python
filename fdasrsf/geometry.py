@@ -52,35 +52,43 @@ def L2norm(psi):
 
 def gam_to_v(gam):
     TT = gam.shape[0]
-    n = gam.shape[1]
-    eps = finfo(double).eps
     time = linspace(0,1,TT)
-
-    psi = zeros((TT,n))
     binsize = diff(time)
     binsize = binsize.mean()
-    for i in range(0,n):
-        psi[:,i] = sqrt(gradient(gam[:, i],binsize))
-    
     mu = ones(TT)
-    vec = zeros((TT,n))
-    for i in range(0,n):
-        out, theta = inv_exp_map(mu,psi[:,i])
-        vec[:,i] = out
+    if gam.ndim == 1:
+        psi = sqrt(gradient(gam,binsize))
+        vec, theta = inv_exp_map(mu,psi[:,i])
+    else:
+        n = gam.shape[1]
+
+        psi = zeros((TT,n))
+        for i in range(0,n):
+            psi[:,i] = sqrt(gradient(gam[:, i],binsize))
+        
+        vec = zeros((TT,n))
+        for i in range(0,n):
+            out, theta = inv_exp_map(mu,psi[:,i])
+            vec[:,i] = out
     
     return vec
 
 
 def v_to_gam(v):
     TT = v.shape[0]
-    n = v.shape[1]
     time = linspace(0,1,TT)
-
     mu = ones(TT)
-    gam = zeros((TT,n))
-    for i in range(0,n):
-        psi = exp_map(mu,v[:,i])
+    if v.ndim == 1:
+        psi = exp_map(mu,v)
         gam0 = cumtrapz(psi*psi, time, initial=0)
-        gam[:,i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
+        gam = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
+    else:
+        n = v.shape[1]
+
+        gam = zeros((TT,n))
+        for i in range(0,n):
+            psi = exp_map(mu,v[:,i])
+            gam0 = cumtrapz(psi*psi, time, initial=0)
+            gam[:,i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
     
     return(gam)
