@@ -43,8 +43,8 @@ def smooth_data(f, sparam):
     fo = f.copy()
     for k in range(1, sparam):
         for r in range(0, N):
-            fo[1:(M - 2), r] = (f[0:(M - 3), r] + 2 * f[1:(M - 2), r] +
-                               f[2:(M - 1), r]) / 4
+            fo[1:(M - 2), r] = (fo[0:(M - 3), r] + 2 * fo[1:(M - 2), r] +
+                               fo[2:(M - 1), r]) / 4
     return fo
 
 
