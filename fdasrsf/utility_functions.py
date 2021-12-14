@@ -26,7 +26,7 @@ from fdasrsf.rbfgs import rlbfgs
 import sys
 
 
-def smooth_data(f, sparam):
+def smooth_data(f, sparam=1):
     """
     This function smooths a collection of functions using a box filter
 
@@ -41,7 +41,7 @@ def smooth_data(f, sparam):
     N = f.shape[1]
 
     fo = f.copy()
-    for k in range(1, sparam):
+    for k in range(0, sparam):
         for r in range(0, N):
             fo[1:(M - 2), r] = (fo[0:(M - 3), r] + 2 * fo[1:(M - 2), r] +
                                fo[2:(M - 1), r]) / 4
