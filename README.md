@@ -5,7 +5,7 @@
 [![PyPI version](https://badge.fury.io/py/fdasrsf.svg)](https://badge.fury.io/py/fdasrsf)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jdtuck/fdasrsf_python/master?filepath=%2Fnotebooks)
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/tetonedge/fdasrsf)](https://hub.docker.com/r/tetonedge/fdasrsf)
-[![Anaconda-Server Badge](https://anaconda.org/conda-forge/fdasrsf/badges/version.svg)](https://anaconda.org/conda-forge/fdasrsf)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/fdasrsf/badges/version.svg)](https://anaconda.org/conda-forge/fdasrsf) [![Join the chat at https://gitter.im/fdasrsf_python/community](https://badges.gitter.im/fdasrsf_python/community.svg)](https://gitter.im/fdasrsf_python/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 fdasrsf
 =======
