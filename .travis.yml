@@ -11,6 +11,14 @@ addons:
 stages:
   - test
 
+notifications:
+  email:
+    recipients:
+      - jdtuck@sandia.gov
+      - dtucker1@illinois.edu
+    on_success: never # default: change
+    on_failure: always # default: always
+
 jobs:
   include:
   - name: Test
