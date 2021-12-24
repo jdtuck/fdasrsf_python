@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.abspath('../../fdasrsf'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.intersphinx', 'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode']
+extensions = ['nbsphinx', 'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.intersphinx', 'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -43,8 +43,26 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'fdasrsf'
-copyright = u'2021, J. Derek Tucker'
+author = 'J. Derek Tucker'
+copyright = u'2022, J. Derek Tucker'
 
+
+nbsphinx_prolog = """
+ .. raw:: html
+    <style>
+        .nbinput .prompt, .nboutput .prompt { display: none; }
+    </style>
+ .. image:: ../artwork/logo.png
+    :width: 200px
+    :align: right
+"""
+
+intersphinx_mapping = {
+    "numpy": ("https://docs.scipy.org/doc/numpy-1.17.0", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy-1.7.0", None),
+    "python": ("http://docs.python.org/3.6", None),
+    }
+  
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
@@ -93,7 +111,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -250,7 +268,7 @@ texinfo_documents = [
 epub_title = u'fdasrsf'
 epub_author = u'J. Derek Tucker'
 epub_publisher = u'J. Derek Tucker'
-epub_copyright = u'2021, J. Derek Tucker'
+epub_copyright = u'2022, J. Derek Tucker'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
@@ -285,7 +303,3 @@ epub_copyright = u'2021, J. Derek Tucker'
 
 # Allow duplicate toc entries.
 #epub_tocdup = True
-
-
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}

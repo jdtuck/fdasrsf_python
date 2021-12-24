@@ -1,8 +1,0 @@
-Elastic Regression
-==================
-
-.. automodule:: regression
-   :members:
-
-.. toctree::
-   :maxdepth: 1

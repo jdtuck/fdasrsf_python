@@ -1,57 +1,121 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Elastic Functional Tolerance Bounds &#8212; fdasrsf 2.3.6 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
-    
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elastic Functional Tolerance Bounds &mdash; fdasrsf 2.3.6 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Curve Registration" href="curve_statistics.html" />
     <link rel="prev" title="Elastic GLM Regression" href="elastic_glm_regression.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="curve_statistics.html" title="Curve Registration"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="elastic_glm_regression.html" title="Elastic GLM Regression"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.6 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Elastic Functional Tolerance Bounds</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="module-tolerance">
-<span id="elastic-functional-tolerance-bounds"></span><h1>Elastic Functional Tolerance Bounds<a class="headerlink" href="#module-tolerance" title="Permalink to this headline">¶</a></h1>
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fdasrsf
+          </a>
+              <div class="version">
+                2.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time_warping.html">Functional Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fPCA.html">Functional Principal Component Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boxplots.html">Elastic Functional Boxplots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fPLS.html">Functional Principal Least Squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regression.html">Elastic Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pcr_regression.html">Elastic Principal Component Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elastic_glm_regression.html">Elastic GLM Regression</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Elastic Functional Tolerance Bounds</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="curve_statistics.html">Curve Registration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geodesic.html">SRVF Geodesic Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utility_functions.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="curve_functions.html">Curve Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="umap_metric.html">UMAP EFDA Metrics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fdasrsf</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Elastic Functional Tolerance Bounds</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tolerance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<a class="reference internal image-reference" href="_images/logo.png"><img alt="_images/logo.png" class="align-right" src="_images/logo.png" style="width: 200px;" /></a>
+<section id="module-tolerance">
+<span id="elastic-functional-tolerance-bounds"></span><h1>Elastic Functional Tolerance Bounds<a class="headerlink" href="#module-tolerance" title="Permalink to this headline"></a></h1>
 <p>Functional Tolerance Bounds using SRSF</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tolerance.bootTB">
-<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">bootTB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#bootTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.bootTB" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">bootTB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#bootTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.bootTB" title="Permalink to this definition"></a></dt>
 <dd><p>This function computes tolerance bounds for functional data containing
 phase and amplitude variation using bootstrap sampling</p>
 <dl class="field-list simple">
@@ -92,7 +156,7 @@ phase and amplitude variation using bootstrap sampling</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tolerance.mvtol_region">
-<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">mvtol_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#mvtol_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.mvtol_region" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">mvtol_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#mvtol_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.mvtol_region" title="Permalink to this definition"></a></dt>
 <dd><p>Computes tolerance factor for multivariate normal</p>
 <p>Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
 Distributions, Communications in Statistics - Simulation and Computation, 35, 461–478.</p>
@@ -116,7 +180,7 @@ Distributions, Communications in Statistics - Simulation and Computation, 35, 46
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tolerance.pcaTB">
-<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">pcaTB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#pcaTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.pcaTB" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">pcaTB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#pcaTB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.pcaTB" title="Permalink to this definition"></a></dt>
 <dd><p>This function computes tolerance bounds for functional data containing
 phase and amplitude variation using fPCA</p>
 <dl class="field-list simple">
@@ -147,7 +211,7 @@ phase and amplitude variation using fPCA</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tolerance.rwishart">
-<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">rwishart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#rwishart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.rwishart" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tolerance.</span></span><span class="sig-name descname"><span class="pre">rwishart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tolerance.html#rwishart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tolerance.rwishart" title="Permalink to this definition"></a></dt>
 <dd><p>Computes a random wishart matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -170,61 +234,34 @@ phase and amplitude variation using fPCA</p>
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="elastic_glm_regression.html" class="btn btn-neutral float-left" title="Elastic GLM Regression" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="curve_statistics.html" class="btn btn-neutral float-right" title="Curve Registration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Derek Tucker.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="elastic_glm_regression.html"
-                        title="previous chapter">Elastic GLM Regression</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="curve_statistics.html"
-                        title="next chapter">Curve Registration</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/tolerance.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="curve_statistics.html" title="Curve Registration"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="elastic_glm_regression.html" title="Elastic GLM Regression"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.6 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Elastic Functional Tolerance Bounds</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

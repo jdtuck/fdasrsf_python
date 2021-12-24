@@ -840,6 +840,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
                 "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
                 "sampfreq":1, "initcoef":np.repeat(0,20), "nbasis":10, 
                 "basis":'fourier', "extrainfo":True}
+    
     Basis can be 'fourier' or 'legendre'
    
     :rtype collection containing

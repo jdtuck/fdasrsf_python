@@ -3,6 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. image:: ../artwork/logo.png
+  :width: 200px
+  :align: right
+
 Welcome to fdasrsf's documentation!
 ===================================
 A python package for functional data analysis using the square root
@@ -14,20 +18,21 @@ using functional component analysis and regression.
 .. toctree::
    :maxdepth: 3
    :glob:
-
-   time_warping
-   fPCA
-   boxplots
-   fPLS
-   regression
-   pcr_regression
-   elastic_glm_regression
-   tolerance
-   curve_statistics
-   geodesic
-   utility_functions
-   curve_functions
-   umap_metric
+   
+   user_guide.rst
+   time_warping.rst
+   fPCA.rst
+   boxplots.rst
+   fPLS.rst
+   regression.rst
+   pcr_regression.rst
+   elastic_glm_regression.rst
+   tolerance.rst
+   curve_statistics.rst
+   geodesic.rst
+   utility_functions.rst
+   curve_functions.rst
+   umap_metric.rst
 
 References
 ==========

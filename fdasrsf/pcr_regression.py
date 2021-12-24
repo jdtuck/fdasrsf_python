@@ -470,7 +470,6 @@ class elastic_mlpcr_regression:
     :param Loss: logistic loss
     :param PC: probability of classification
     :param ylabels: predicted labels
-    :param 
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  18-Mar-2018
