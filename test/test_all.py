@@ -19,13 +19,6 @@ class TestFDASRSF(unittest.TestCase):
         gam = fs.optimum_reparam(q1, timet, q1, method="RBFGS")       
         self.assertAlmostEqual(sum(gam-timet),0)
     
-    def test_smooth(self):
-        M = 101
-        q1 = np.zeros((M,1))
-        q1[:,0] = np.sin(np.linspace(0,2*np.pi,M)).T
-        q1a = fs.smooth_data(q1,1)
-        self.assertAlmostEqual(sum(q1.flatten()-q1a.flatten()),0)
-    
     def test_f_to_srvf(self):
         M = 101
         f1 = np.sin(np.linspace(0,2*np.pi,M))
