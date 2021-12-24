@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "FDASRSF" "1" "Oct 21, 2021" "2.2" "fdasrsf"
+.TH "FDASRSF" "1" "Dec 24, 2021" "2.2" "fdasrsf"
 .SH NAME
 fdasrsf \- fdasrsf Documentation
 .sp
@@ -157,7 +157,7 @@ functions with M samples
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class time_warping.fdawarp(f, time)
+.B class  time_warping.fdawarp(f, time)
 This class provides alignment methods for functional data using the SRVF framework
 .sp
 Usage:  obj = fdawarp(f,t)
@@ -286,7 +286,7 @@ Usage: obj.plot()
 .UNINDENT
 .INDENT 7.0
 .TP
-.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP2\(aq, smoothdata=False, MaxItr=20, parallel=False, lam=0.0, cores=\- 1, grid_dim=7)
+.B srsf_align(method=\(aqmean\(aq, omethod=\(aqDP2\(aq, center=True, smoothdata=False, MaxItr=20, parallel=False, lam=0.0, cores=\- 1, grid_dim=7)
 This function aligns a collection of functions using the elastic
 square\-root slope (srsf) framework.
 .INDENT 7.0
@@ -298,6 +298,8 @@ square\-root slope (srsf) framework.
 (options = "mean" or "median") (default="mean")
 .IP \(bu 2
 \fBomethod\fP \-\- optimization method (DP, DP2, RBFGS) (default = DP2)
+.IP \(bu 2
+\fBcenter\fP \-\- center warping functions (default = T)
 .IP \(bu 2
 \fBsmoothdata\fP (\fI\%bool\fP) \-\- Smooth the data using a box filter (default = F)
 .IP \(bu 2
@@ -665,7 +667,7 @@ Vertical and Horizontal Functional Principal Component Analysis using SRSF
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B class fPCA.fdahpca(fdawarp)
+.B class  fPCA.fdahpca(fdawarp)
 This class provides horizontal fPCA using the
 SRVF framework
 .sp
@@ -740,7 +742,7 @@ Usage: obj.plot()
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class fPCA.fdajpca(fdawarp)
+.B class  fPCA.fdajpca(fdawarp)
 This class provides joint fPCA using the
 SRVF framework
 .sp
@@ -828,7 +830,7 @@ Usage: obj.plot()
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class fPCA.fdavpca(fdawarp)
+.B class  fPCA.fdavpca(fdawarp)
 This class provides vertical fPCA using the
 SRVF framework
 .sp
@@ -910,7 +912,7 @@ Elastic Functional Boxplots
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B class boxplots.ampbox(fdawarp)
+.B class  boxplots.ampbox(fdawarp)
 This class provides amplitude boxplot for functional data using the
 SRVF framework
 .sp
@@ -972,7 +974,7 @@ Usage: obj.plot()
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class boxplots.phbox(fdawarp)
+.B class  boxplots.phbox(fdawarp)
 This class provides phase boxplot for functional data using the
 SRVF framework
 .sp
@@ -1080,7 +1082,7 @@ Warping Invariant Regression using SRSF
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B class regression.elastic_logistic(f, y, time)
+.B class  regression.elastic_logistic(f, y, time)
 This class provides elastic logistic regression for functional data using the
 SRVF framework accounting for warping
 .sp
@@ -1172,7 +1174,7 @@ obj.predict(newdata)
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class regression.elastic_mlogistic(f, y, time)
+.B class  regression.elastic_mlogistic(f, y, time)
 This class provides elastic multinomial logistic regression for functional data using the
 SRVF framework accounting for warping
 .sp
@@ -1264,7 +1266,7 @@ obj.predict(newdata)
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class regression.elastic_regression(f, y, time)
+.B class  regression.elastic_regression(f, y, time)
 This class provides elastic regression for functional data using the
 SRVF framework accounting for warping
 .sp
@@ -1581,7 +1583,7 @@ Warping Invariant PCR Regression using SRSF
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B class pcr_regression.elastic_lpcr_regression(f, y, time)
+.B class  pcr_regression.elastic_lpcr_regression(f, y, time)
 This class provides elastic logistic pcr regression for functional 
 data using the SRVF framework accounting for warping
 .sp
@@ -1665,7 +1667,7 @@ obj.predict(newdata)
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class pcr_regression.elastic_mlpcr_regression(f, y, time)
+.B class  pcr_regression.elastic_mlpcr_regression(f, y, time)
 This class provides elastic multinomial logistic pcr regression for functional
 data using the SRVF framework accounting for warping
 .sp
@@ -1758,7 +1760,7 @@ obj.predict(newdata)
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class pcr_regression.elastic_pcr_regression(f, y, time)
+.B class  pcr_regression.elastic_pcr_regression(f, y, time)
 This class provides elastic pcr regression for functional data using the
 SRVF framework accounting for warping
 .sp
@@ -1848,7 +1850,7 @@ Warping Invariant GML Regression using SRSF
 moduleauthor:: Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B class elastic_glm_regression.elastic_glm_regression(f, y, time)
+.B class  elastic_glm_regression.elastic_glm_regression(f, y, time)
 This class provides elastic glm regression for functional data using the
 SRVF framework accounting for warping
 .sp
@@ -2124,7 +2126,7 @@ Mean and Variance
 moduleauthor:: J. Derek Tucker <\fI\%jdtuck@sandia.gov\fP>
 .INDENT 0.0
 .TP
-.B class curve_stats.fdacurve(beta, mode=\(aqO\(aq, N=200, scale=False)
+.B class  curve_stats.fdacurve(beta, mode=\(aqO\(aq, N=200, scale=False)
 This class provides alignment methods for open and closed curves using the SRVF framework
 .sp
 Usage: obj = fdacurve(beta, mode, N, scale)
@@ -3093,7 +3095,7 @@ gam: numpy ndarray of warping functions
 .UNINDENT
 .INDENT 0.0
 .TP
-.B utility_functions.smooth_data(f, sparam)
+.B utility_functions.smooth_data(f, sparam=1)
 This function smooths a collection of functions using a box filter
 .INDENT 7.0
 .TP
@@ -3308,7 +3310,7 @@ length of srvf
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.curve_zero_crossing(Y, beta, bt, y_max, y_min, gmax, gmin)
+.B curve_functions.curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin)
 finds zero\-crossing of optimal gamma, gam = s*gmax + (1\-s)*gmin
 from elastic curve regression model
 .INDENT 7.0
@@ -3365,7 +3367,7 @@ phase distance
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.elastic_shooting(q1, v)
+.B curve_functions.elastic_shooting(q1, v, mode=0)
 Calculates shooting vector from v to q1
 .INDENT 7.0
 .TP
@@ -3375,11 +3377,35 @@ Calculates shooting vector from v to q1
 \fBq1\fP \-\- vector of srvf
 .IP \(bu 2
 \fBv\fP \-\- shooting vector
+.IP \(bu 2
+\fBmode\fP \-\- closed or open (1/0)
 .UNINDENT
 .UNINDENT
 .sp
 :rtype numpy ndarray
 :return q2n: vector of srvf
+.UNINDENT
+.INDENT 0.0
+.TP
+.B curve_functions.elastic_shooting_vector(q1, q2, mode=0)
+Calculates shooting between two srvfs
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBq1\fP \-\- vector of srvf
+.IP \(bu 2
+\fBq2\fP \-\- vector of srvf
+.IP \(bu 2
+\fBmode\fP \-\- closed or open (1/0)
+.UNINDENT
+.UNINDENT
+.sp
+:rtype numpy ndarray
+:return v: shooting vector
+:return d: distance
+:return q2n: aligned srvf
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -3454,20 +3480,23 @@ registered (seed) shapes w.r.t. beta1
 numpy ndarray
 .TP
 .B Return beta2new
-optimal rotated beta2 to beta1
+optimal aligned beta2 to beta1
 .TP
-.B Return O
+.B Return q2best
+optimal aligned q2 to q1
+.TP
+.B Return Rbest
 rotation matrix
 .TP
-.B Return tau
-seed
+.B Return gamIbest
+warping function
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B curve_functions.find_rotation_and_seed_q(q1, q2)
+.B curve_functions.find_rotation_and_seed_q(q1, q2, closed=0, rotation=True, method=\(aqDP\(aq)
 This function returns a candidate list of optimally oriented and
-registered (seed) shapes w.r.t. beta1
+registered (seed) srvs w.r.t. q1
 .INDENT 7.0
 .TP
 .B Parameters
@@ -3476,19 +3505,25 @@ registered (seed) shapes w.r.t. beta1
 \fBq1\fP \-\- numpy ndarray of shape (2,M) of M samples
 .IP \(bu 2
 \fBq2\fP \-\- numpy ndarray of shape (2,M) of M samples
+.IP \(bu 2
+\fBclosed\fP \-\- Open (0) or Closed (1)
+.IP \(bu 2
+\fBrotation\fP \-\- find rotation (default=True)
+.IP \(bu 2
+\fBmethod\fP \-\- method to apply optimization (default="DP") options are "DP" or "RBFGS"
 .UNINDENT
 .TP
 .B Return type
 numpy ndarray
 .TP
-.B Return beta2new
-optimal rotated beta2 to beta1
+.B Return q2best
+optimal aligned q2 to q1
 .TP
-.B Return O
+.B Return Rbest
 rotation matrix
 .TP
-.B Return tau
-seed
+.B Return gamIbest
+warping function
 .UNINDENT
 .UNINDENT
 .INDENT 0.0

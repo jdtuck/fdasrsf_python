@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Functional Alignment &#8212; fdasrsf 2.3.4 documentation</title>
+    <title>Functional Alignment &#8212; fdasrsf 2.3.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>  
@@ -154,7 +154,7 @@ functions with M samples
 
 <dl class="py class">
 <dt class="sig sig-object py" id="time_warping.fdawarp">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">fdawarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">fdawarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides alignment methods for functional data using the SRVF framework</p>
 <p>Usage:  obj = fdawarp(f,t)</p>
 <dl class="field-list simple">
@@ -250,7 +250,7 @@ slope (srsf) framework.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="time_warping.fdawarp.srsf_align">
-<span class="sig-name descname"><span class="pre">srsf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MaxItr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">srsf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MaxItr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic
 square-root slope (srsf) framework.</p>
 <dl class="field-list simple">
@@ -259,6 +259,7 @@ square-root slope (srsf) framework.</p>
 <li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median 
 (options = “mean” or “median”) (default=”mean”)</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP2)</p></li>
+<li><p><strong>center</strong> – center warping functions (default = T)</p></li>
 <li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>MaxItr</strong> – Maximum number of iterations (default = 20)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
@@ -508,7 +509,7 @@ mcmcopts = {“iter”:1*(10**4), “nchains”:4, “vpriorvar”:1,</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.rand">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">d0</span></em>, <em class="sig-param"><span class="pre">d1</span></em>, <em class="sig-param"><span class="pre">...</span></em>, <em class="sig-param"><span class="pre">dn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.rand" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.rand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Random values in a given shape.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -591,13 +592,13 @@ If no argument is given a single Python float is returned.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to fdasrsf’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Functional Alignment</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>
 </html>

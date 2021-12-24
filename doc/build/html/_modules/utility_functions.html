@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>utility_functions &#8212; fdasrsf 2.3.3 documentation</title>
+    <title>utility_functions &#8212; fdasrsf 2.3.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>
@@ -66,7 +66,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 
 
-<div class="viewcode-block" id="smooth_data"><a class="viewcode-back" href="../utility_functions.html#utility_functions.smooth_data">[docs]</a><span class="k">def</span> <span class="nf">smooth_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">sparam</span><span class="p">):</span>
+<div class="viewcode-block" id="smooth_data"><a class="viewcode-back" href="../utility_functions.html#utility_functions.smooth_data">[docs]</a><span class="k">def</span> <span class="nf">smooth_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">sparam</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function smooths a collection of functions using a box filter</span>
 
@@ -81,10 +81,10 @@
     <span class="n">N</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="n">fo</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sparam</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparam</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-            <span class="n">fo</span><span class="p">[</span><span class="mi">1</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span> <span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">3</span><span class="p">),</span> <span class="n">r</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span> <span class="n">r</span><span class="p">]</span> <span class="o">+</span>
-                               <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">r</span><span class="p">])</span> <span class="o">/</span> <span class="mi">4</span>
+            <span class="n">fo</span><span class="p">[</span><span class="mi">1</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span> <span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">fo</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">3</span><span class="p">),</span> <span class="n">r</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">fo</span><span class="p">[</span><span class="mi">1</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span> <span class="n">r</span><span class="p">]</span> <span class="o">+</span>
+                               <span class="n">fo</span><span class="p">[</span><span class="mi">2</span><span class="p">:(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">r</span><span class="p">])</span> <span class="o">/</span> <span class="mi">4</span>
     <span class="k">return</span> <span class="n">fo</span></div>
 
 
@@ -1125,14 +1125,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">fdasrsf 2.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">utility_functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>
 </html>

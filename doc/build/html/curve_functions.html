@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Curve Functions &#8212; fdasrsf 2.3.4 documentation</title>
+    <title>Curve Functions &#8212; fdasrsf 2.3.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>  
@@ -141,7 +141,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="curve_functions.curve_zero_crossing">
-<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">curve_zero_crossing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_zero_crossing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.curve_zero_crossing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">curve_zero_crossing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#curve_zero_crossing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.curve_zero_crossing" title="Permalink to this definition">¶</a></dt>
 <dd><p>finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
 from elastic curve regression model</p>
 <dl class="field-list simple">
@@ -193,18 +193,38 @@ from elastic curve regression model</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="curve_functions.elastic_shooting">
-<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_shooting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#elastic_shooting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.elastic_shooting" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_shooting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#elastic_shooting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.elastic_shooting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates shooting vector from v to q1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>q1</strong> – vector of srvf</p></li>
 <li><p><strong>v</strong> – shooting vector</p></li>
+<li><p><strong>mode</strong> – closed or open (1/0)</p></li>
 </ul>
 </dd>
 </dl>
 <p>:rtype numpy ndarray
 :return q2n: vector of srvf</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="curve_functions.elastic_shooting_vector">
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_shooting_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#elastic_shooting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.elastic_shooting_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates shooting between two srvfs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q1</strong> – vector of srvf</p></li>
+<li><p><strong>q2</strong> – vector of srvf</p></li>
+<li><p><strong>mode</strong> – closed or open (1/0)</p></li>
+</ul>
+</dd>
+</dl>
+<p>:rtype numpy ndarray
+:return v: shooting vector
+:return d: distance
+:return q2n: aligned srvf</p>
 </dd></dl>
 
 <dl class="py function">
@@ -272,40 +292,46 @@ registered (seed) shapes w.r.t. beta1</p>
 <dd class="field-even"><p>numpy ndarray</p>
 </dd>
 <dt class="field-odd">Return beta2new</dt>
-<dd class="field-odd"><p>optimal rotated beta2 to beta1</p>
+<dd class="field-odd"><p>optimal aligned beta2 to beta1</p>
 </dd>
-<dt class="field-even">Return O</dt>
-<dd class="field-even"><p>rotation matrix</p>
+<dt class="field-even">Return q2best</dt>
+<dd class="field-even"><p>optimal aligned q2 to q1</p>
 </dd>
-<dt class="field-odd">Return tau</dt>
-<dd class="field-odd"><p>seed</p>
+<dt class="field-odd">Return Rbest</dt>
+<dd class="field-odd"><p>rotation matrix</p>
+</dd>
+<dt class="field-even">Return gamIbest</dt>
+<dd class="field-even"><p>warping function</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="curve_functions.find_rotation_and_seed_q">
-<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_rotation_and_seed_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_q" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_rotation_and_seed_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_q" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns a candidate list of optimally oriented and
-registered (seed) shapes w.r.t. beta1</p>
+registered (seed) srvs w.r.t. q1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>q1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>q2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
+<li><p><strong>closed</strong> – Open (0) or Closed (1)</p></li>
+<li><p><strong>rotation</strong> – find rotation (default=True)</p></li>
+<li><p><strong>method</strong> – method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>numpy ndarray</p>
 </dd>
-<dt class="field-odd">Return beta2new</dt>
-<dd class="field-odd"><p>optimal rotated beta2 to beta1</p>
+<dt class="field-odd">Return q2best</dt>
+<dd class="field-odd"><p>optimal aligned q2 to q1</p>
 </dd>
-<dt class="field-even">Return O</dt>
+<dt class="field-even">Return Rbest</dt>
 <dd class="field-even"><p>rotation matrix</p>
 </dd>
-<dt class="field-odd">Return tau</dt>
-<dd class="field-odd"><p>seed</p>
+<dt class="field-odd">Return gamIbest</dt>
+<dd class="field-odd"><p>warping function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -740,13 +766,13 @@ beta1 to beta2 in shape space of open curves</p>
         <li class="right" >
           <a href="utility_functions.html" title="Utility Functions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fdasrsf 2.3.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Curve Functions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, J. Derek Tucker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>
 </html>
