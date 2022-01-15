@@ -4,12 +4,12 @@ image:
   - Visual Studio 2019
 environment:
   matrix:
-    - PYTHON_VERSION: 3.6
-      MINICONDA: C:\Miniconda36
     - PYTHON_VERSION: 3.7
       MINICONDA: C:\Miniconda37
     - PYTHON_VERSION: 3.8
       MINICONDA: C:\Miniconda38
+    - PYTHON_VERSION: 3.9
+      MINICONDA: C:\Miniconda39
   password:
     secure: UhR8G1TzKJP0CBHTq7e65g==
 
