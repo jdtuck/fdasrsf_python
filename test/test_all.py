@@ -71,7 +71,7 @@ class TestFDASRSF(unittest.TestCase):
         q1 = np.sin(np.linspace(0,2*np.pi,M))
         timet = np.linspace(0,1,M)
         dy, dx = fs.elastic_distance(q1, q1, timet)
-        self.assertAlmostEqual(sum(dy+dx),0)
+        self.assertAlmostEqual(dy+dx,0)
     
     def test_invgamma(self):
         M = 101
@@ -79,7 +79,31 @@ class TestFDASRSF(unittest.TestCase):
         gami = fs.invertGamma(gam)
         self.assertAlmostEqual(sum(gam-gami),0)
     
-
+    def test_invexpmap(self):
+        M = 101
+        gam = np.linspace(0,1,M)
+        binsize = np.mean(np.diff(gam))
+        psi = np.sqrt(np.gradient(gam,binsize))
+        out, theta = fs.inv_exp_map(psi,psi)
+        self.assertAlmostEqual(sum(out),0)
+    
+    def test_l2norm(self):
+        M = 101
+        gam = np.linspace(0,1,M)
+        binsize = np.mean(np.diff(gam))
+        psi = np.sqrt(np.gradient(gam,binsize))
+        out, theta = fs.exp_map(psi,psi)
+        out1 = fs.geometry.L2norm(out)
+        self.assertAlmostEqual(out1,0)
+    
+    def test_expmap(self):
+        M = 101
+        gam = np.linspace(0,1,M)
+        binsize = np.mean(np.diff(gam))
+        psi = np.sqrt(np.gradient(gam,binsize))
+        out, theta = fs.inv_exp_map(psi,psi)
+        out1 = fs.exp_map(psi,out)
+        self.assertAlmostEqual(sum(out),M)
   
 if __name__ == '__main__': 
     unittest.main() 
