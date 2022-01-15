@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.com/jdtuck/fdasrsf_python)
+[![Build Status](https://travis-ci.com/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.com/github/jdtuck/fdasrsf_python)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
 [![Build status](https://img.shields.io/appveyor/ci/jdtuck/fdasrsf-python.svg?style=flat-square&label=windows)](https://ci.appveyor.com/project/jdtuck/fdasrsf-python/branch/master)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
