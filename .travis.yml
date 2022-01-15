@@ -52,6 +52,7 @@ script:
   - . ./bin/test.sh
   - coverage run -m unittest discover
 after_success:
+  - python setup.py bdist_wheel
   - codecov
 
 deploy:
