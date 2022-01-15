@@ -9,7 +9,9 @@ environment:
     - PYTHON_VERSION: 3.8
       MINICONDA: C:\Miniconda38
     - PYTHON_VERSION: 3.9
-      MINICONDA: C:\Miniconda39
+      MINICONDA: C:\Miniconda38
+    - PYTHON_VERSION: 3.10
+      MINICONDA: C:\Miniconda38
   password:
     secure: UhR8G1TzKJP0CBHTq7e65g==
 
@@ -32,7 +34,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels conda-forge
   - conda update -q conda
-  - conda install conda-build anaconda-client numpy-devel cython scipy joblib matplotlib patsy tqdm cffi numba GPy
+  - conda install conda-build python=%PYTHON_VERSION% anaconda-client numpy-devel cython scipy joblib matplotlib patsy tqdm cffi numba GPy
   # Show conda info for debugging
   - conda info -a
   - python setup.py install
