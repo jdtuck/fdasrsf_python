@@ -92,7 +92,7 @@ class TestFDASRSF(unittest.TestCase):
         gam = np.linspace(0,1,M)
         binsize = np.mean(np.diff(gam))
         psi = np.sqrt(np.gradient(gam,binsize))
-        out, theta = fs.exp_map(psi,psi)
+        out, theta = fs.inv_exp_map(psi,psi)
         out1 = fs.geometry.L2norm(out)
         self.assertAlmostEqual(out1,0)
     
@@ -103,7 +103,7 @@ class TestFDASRSF(unittest.TestCase):
         psi = np.sqrt(np.gradient(gam,binsize))
         out, theta = fs.inv_exp_map(psi,psi)
         out1 = fs.exp_map(psi,out)
-        self.assertAlmostEqual(sum(out),M)
+        self.assertAlmostEqual(sum(out1),M)
   
 if __name__ == '__main__': 
     unittest.main() 
