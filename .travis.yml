@@ -43,7 +43,7 @@ jobs:
       script:
         - docker build -t tetonedge/fdasrsf -f bin/Dockerfile .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker push $DOCKER_USERNAME/fdasrsf:latest
+        - docker push tetonedge/fdasrsf:latest
       after_success: skip
 
   allow_failures:
