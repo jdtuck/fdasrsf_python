@@ -38,7 +38,7 @@ if [ -z ${GLOBAL} ]; then
 else
   conda config --add channels conda-forge
   conda update -n base conda --yes
-  conda install gcc-compiler gxx-compiler cython matplotlib GPy cffi numba numpy joblib patsy scipy patsy --yes
+  conda install gcc gxx cython matplotlib GPy cffi numba numpy joblib patsy scipy patsy --yes
 fi
 
 #  Install editable using the setup.py
