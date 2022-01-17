@@ -110,7 +110,7 @@ class TestFDASRSF(unittest.TestCase):
         time = data['arr_1']
         f = data['arr_0']
         obj = fs.fdawarp(f,time)
-        obj.srsf_align(parallel=True)
+        obj.srsf_align()
         obj.plot()
         vpca = fs.fdavpca(obj)
         vpca.calc_fpca()
@@ -135,8 +135,8 @@ class TestFDASRSF(unittest.TestCase):
             beta[:,:,i] = Xdata[0,i]
 
         obj = fs.fdacurve(beta,N=M)
-        obj.karcher_mean(rotation=False)
-        obj.srvf_align(rotation=False)
+        obj.karcher_mean()
+        obj.srvf_align()
         obj.karcher_cov()
         obj.shape_pca()
         obj.plot_pca()
