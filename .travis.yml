@@ -39,7 +39,7 @@ jobs:
       name: "Docker Hub"
       install: skip
       script:
-        - docker build -t latest -f bin/Dockerfile .
+        - docker build -f bin/Dockerfile .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push tetonedge/fdasrsf:latest
       after_success: skip
