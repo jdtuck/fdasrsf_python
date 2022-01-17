@@ -36,9 +36,8 @@ jobs:
     - name: "Python 3.10"
       python: 3.10
     - stage: Docker
+      if: tag IS present
       name: "Docker Hub"
-      on:
-        tags: true
       install: skip
       script:
         - docker build -t tetonedge/fdasrsf -f bin/Dockerfile .
