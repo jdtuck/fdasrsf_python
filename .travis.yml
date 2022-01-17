@@ -34,7 +34,7 @@ jobs:
     - name: "Python 3.9"
       python: 3.9
     - name: "Python 3.10"
-      python: 3.10-dev
+      python: 3.10
     - stage: Docker
       name: "Docker Hub"
       install: skip
