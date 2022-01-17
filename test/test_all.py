@@ -121,7 +121,7 @@ class TestFDASRSF(unittest.TestCase):
         vpca = fs.fdahpca(obj)
         vpca.calc_fpca()
         vpca.plot()
-        self.assertTrue()
+        self.assertAlmostEqual(obj.amp_var, 0.018998691036349585)
     
     def test_srvf(self):
         data = np.load('bin/MPEG7.npz',allow_pickle=True)
@@ -140,7 +140,7 @@ class TestFDASRSF(unittest.TestCase):
         obj.karcher_cov()
         obj.shape_pca()
         obj.plot_pca()
-        self.assertTrue()
+        self.assertAlmostEqual(obj.E[-1], 0.02064047921136309)
   
 if __name__ == '__main__': 
     unittest.main() 
