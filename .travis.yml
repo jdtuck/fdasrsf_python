@@ -2,11 +2,8 @@ dist: focal
 
 language: python
 
-python:
-  # We don't actually use the Travis Python, but this keeps it organized.
-  - "3.7"
-  - "3.8"
-  - "3.9"
+services:
+  - docker
 
 cache:
   directories:
@@ -24,8 +21,22 @@ notifications:
     recipients:
       - jdtuck@sandia.gov
       - dtucker1@illinois.edu
-    on_success: never # default: change
+    on_success: change # default: change
     on_failure: always # default: always
+  
+
+jobs:
+  include:
+    - name: "Python 3.7"
+      python: 3.7
+    - name: "Python 3.8"
+      python: 3.8
+    - name: "Python 3.8"
+      python: 3.9
+    - name: "Python 3.10"
+      python: 3.10
+  allow_failures:
+    - python: 3.10
 
 install:
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
