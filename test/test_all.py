@@ -104,6 +104,43 @@ class TestFDASRSF(unittest.TestCase):
         out, theta = fs.inv_exp_map(psi,psi)
         out1 = fs.exp_map(psi,out)
         self.assertAlmostEqual(sum(out1),M)
+    
+    def test_srsf(self):
+        data = np.load('bin/simu_data.npz')
+        time = data['arr_1']
+        f = data['arr_0']
+        obj = fs.fdawarp(f,time)
+        obj.srsf_align(parallel=True)
+        obj.plot()
+        vpca = fs.fdavpca(obj)
+        vpca.calc_fpca()
+        vpca.plot()
+        vpca = fs.fdajpca(obj)
+        vpca.calc_fpca()
+        vpca.plot()
+        vpca = fs.fdahpca(obj)
+        vpca.calc_fpca()
+        vpca.plot()
+        self.assertTrue()
+    
+    def test_srvf(self):
+        data = np.load('bin/MPEG7.npz',allow_pickle=True)
+        Xdata = data['Xdata']
+        curve = Xdata[0,1]
+        n,M = curve.shape
+        K = Xdata.shape[1]
+
+        beta = np.zeros((n,M,K))
+        for i in range(0,K):
+            beta[:,:,i] = Xdata[0,i]
+
+        obj = fs.fdacurve(beta,N=M)
+        obj.karcher_mean(rotation=False)
+        obj.srvf_align(rotation=False)
+        obj.karcher_cov()
+        obj.shape_pca()
+        obj.plot_pca()
+        self.assertTrue()
   
 if __name__ == '__main__': 
     unittest.main() 
