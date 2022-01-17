@@ -140,7 +140,7 @@ class TestFDASRSF(unittest.TestCase):
         obj.karcher_cov()
         obj.shape_pca()
         obj.plot_pca()
-        self.assertAlmostEqual(obj.E[-1], 0.02064047921136309)
+        self.assertAlmostEqual(obj.E[-1], 0.022668183569717584)
   
 if __name__ == '__main__': 
     unittest.main() 
