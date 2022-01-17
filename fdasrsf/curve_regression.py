@@ -8,7 +8,6 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
-from scipy import dot
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.integrate import trapz, cumtrapz
@@ -118,10 +117,10 @@ class oc_elastic_regression:
                     for jj in range(1, Nb+1):
                         R[kk * Nb + ii, kk * Nb + jj] = trapz(Bdiff[:, ii-1] * Bdiff[:, jj-1], time)
 
-            xx = dot(Phi.T, Phi)
+            xx = np.dot(Phi.T, Phi)
             inv_xx = inv(xx + lam * R)
-            xy = dot(Phi.T, self.y)
-            b = dot(inv_xx, xy)
+            xy = np.dot(Phi.T, self.y)
+            b = np.dot(inv_xx, xy)
 
             alpha = b[0]
             nu = np.zeros((n, T))

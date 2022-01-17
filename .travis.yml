@@ -31,19 +31,18 @@ jobs:
       python: 3.7
     - name: "Python 3.8"
       python: 3.8
-    - name: "Python 3.8"
+    - name: "Python 3.9"
       python: 3.9
     - name: "Python 3.10"
-      python: 3.10
+      python: 3.10-dev
     - stage: Docker
       name: "Docker Hub"
       install: skip
       script:
-        - docker build -f bin/Dockerfile
+        - docker build -f bin/Dockerfile .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push tetonedge/fdasrsf
       after_success: skip
-      deploy: skip
 
   allow_failures:
     - python: 3.10

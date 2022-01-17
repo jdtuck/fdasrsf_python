@@ -11,7 +11,6 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 import fdasrsf.regression as rg
 import fdasrsf.geometry as geo
-from scipy import dot
 from scipy.linalg import inv, norm
 from scipy.integrate import trapz, cumtrapz
 
@@ -73,10 +72,10 @@ class elastic_curve_pcr_regression:
         N1 = self.warp_data.coef.shape[1]
         Phi = np.ones((N1, no+1))
         Phi[:,1:(no+1)] = self.warp_data.coef.T
-        xx = dot(Phi.T, Phi)
+        xx = np.dot(Phi.T, Phi)
         inv_xx = inv(xx + lam * R)
-        xy = dot(Phi.T, self.y)
-        b = dot(inv_xx, xy)
+        xy = np.dot(Phi.T, self.y)
+        b = np.dot(inv_xx, xy)
         alpha = b[0]
         b = b[1:no+1]
 
