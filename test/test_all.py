@@ -111,16 +111,12 @@ class TestFDASRSF(unittest.TestCase):
         f = data['arr_0']
         obj = fs.fdawarp(f,time)
         obj.srsf_align()
-        obj.plot()
         vpca = fs.fdavpca(obj)
         vpca.calc_fpca()
-        vpca.plot()
         vpca = fs.fdajpca(obj)
         vpca.calc_fpca()
-        vpca.plot()
         vpca = fs.fdahpca(obj)
         vpca.calc_fpca()
-        vpca.plot()
         self.assertAlmostEqual(obj.amp_var, 0.018998691036349585)
     
     def test_srvf(self):
@@ -139,7 +135,6 @@ class TestFDASRSF(unittest.TestCase):
         obj.srvf_align()
         obj.karcher_cov()
         obj.shape_pca()
-        obj.plot_pca()
         self.assertAlmostEqual(obj.E[-1], 0.022668183569717584)
   
 if __name__ == '__main__': 
