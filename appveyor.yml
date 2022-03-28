@@ -50,8 +50,8 @@ install:
 
 build: false
 
-test_script:
-  - python -m unittest discover
+#test_script:
+#  - python -m unittest discover
 
 after_test:
   - python setup.py bdist_wheel
