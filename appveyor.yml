@@ -23,7 +23,7 @@ environment:
     - PYTHON_VERSION: 3.10
       MINICONDA: C:\Miniconda38
   password:
-    secure: UhR8G1TzKJP0CBHTq7e65g==
+    secure: CbIMf2FJQKL3/LyfbnEgBnyfM4yIqpaMH3zkQLSF1E0/bmoafe5880sFb2zFqWkt3x3m3OZj2iYT4y98HAjETn5CO4USnkOIAOdZNxP7NF/drv/Xqj/nTCPiYAJDWYt/p5HXS2ZoLFASoSfcEbuqc8ynvAcvmxDw4Fez15k0BA9a4luH1vRxmZV2MWK3O8yUI9mLgm10rWFNk5rV1MYnoHGbNhQ7qFdYahum92hrothmY7R8unVGLfyxkR6cPO2uR18VUXiXhOsw83C8r4+Eag==
 
 platform:
   - x64
@@ -67,7 +67,7 @@ deploy_script:
       if($env:APPVEYOR_REPO_TAG -eq 'true') {
         Write-Output ("Deploying " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
         python -m pip install twine
-        python -m twine upload -u tetonedge -p ${Env:password} --skip-existing dist/*.whl
+        python -m twine upload -u __token__ -p ${Env:password} --skip-existing dist/*.whl
       } else {
         Write-Output "No tag for deployment"
       }
