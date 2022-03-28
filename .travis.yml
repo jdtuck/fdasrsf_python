@@ -75,11 +75,18 @@ after_success:
   - codecov
 
 deploy:
-  provider: pypi
-  username: "__token__"
-  password:
-    secure: k2BJYlPDGAPspTL2U+BGhFevpxFz78JNJut3tGAJjC6/iQohCGy2hqzSpHn4SDlKDGtPROcj500NHC4b3Mfv5WE8XL1rxHc9ovH/5EQC+nXKaT9SrbNCQsKaNSadKY3PKpHp1jse2CKOEZ7I0zMm79m9s2wONQe4vlHTbxxs70QKOYHjK7dgP0FOqxVpElMWm19QXf6SJVjpUmXuj1N0l6b4c/csa41uWXE2ycAAAxLynlJ5gqpZGPCL6j0Dxin6kcyULHUTqGXE/arhmEd9Jz2O7RCK7qOGHE+SArngnrFNh2UGBzt+KOOoewtuvqu0+7QW0ZuoKjNLO9LfxjXgdt5mRYImlmql+Nso8HQwuMT1opasCd8GJQiFxIUYaiHy7J8ZvvWp6jVHNVg7EEGEgfddMH5qN7eQK6Dxv3F6yAHIjnnaxcPXTfdA7V/VUJbZz4hQ00RHnpRQmUDzxJEp5/9s1K1/z9w8y4V8l9/0kmsZMgBJlutW95va1Owjt6l9HTt21/CSkk12v7+RrgyxW6OMPX4uOr2TfVd3KquDqmwY2zLDUKtnq79FezdFFDLzjZSCYE5XE9Lfcmoz8Mitp0hBW4JKsQpq7ZH+FicM5yRtJc8QHbyeQlA9S/bbsOPHE3Z9qmUC/DydPKWWy98njO1HhAy1C5jXUZfwWTy2A90=
-  distributions: sdist
-  skip_existing: true
-  on:
-    tags: true
+  - provider: pypi
+    username: "__token__"
+    password:
+      secure: k2BJYlPDGAPspTL2U+BGhFevpxFz78JNJut3tGAJjC6/iQohCGy2hqzSpHn4SDlKDGtPROcj500NHC4b3Mfv5WE8XL1rxHc9ovH/5EQC+nXKaT9SrbNCQsKaNSadKY3PKpHp1jse2CKOEZ7I0zMm79m9s2wONQe4vlHTbxxs70QKOYHjK7dgP0FOqxVpElMWm19QXf6SJVjpUmXuj1N0l6b4c/csa41uWXE2ycAAAxLynlJ5gqpZGPCL6j0Dxin6kcyULHUTqGXE/arhmEd9Jz2O7RCK7qOGHE+SArngnrFNh2UGBzt+KOOoewtuvqu0+7QW0ZuoKjNLO9LfxjXgdt5mRYImlmql+Nso8HQwuMT1opasCd8GJQiFxIUYaiHy7J8ZvvWp6jVHNVg7EEGEgfddMH5qN7eQK6Dxv3F6yAHIjnnaxcPXTfdA7V/VUJbZz4hQ00RHnpRQmUDzxJEp5/9s1K1/z9w8y4V8l9/0kmsZMgBJlutW95va1Owjt6l9HTt21/CSkk12v7+RrgyxW6OMPX4uOr2TfVd3KquDqmwY2zLDUKtnq79FezdFFDLzjZSCYE5XE9Lfcmoz8Mitp0hBW4JKsQpq7ZH+FicM5yRtJc8QHbyeQlA9S/bbsOPHE3Z9qmUC/DydPKWWy98njO1HhAy1C5jXUZfwWTy2A90=
+    distributions: sdist
+    skip_existing: true
+    on:
+      tags: true
+  - provider: releases
+    api_key:
+      secure:  "R8XzpdHEBzQrALFyGbWZUkFd4D9CNK2OZyjzat+Y0qceI0H5O3yanRmUnXtEsiKItO7v6+ykCffI1htxaHiH9S5FvfiQTLihhGjL6XwLPLSGrhSGv/khj4uzFnW2vKoOkqn1nxaYKpUipqvgUHglvroYp6s6oHRsjJ+vy1RiOweeO+4J/lxMg8KjclJ1aXKJ5vdAfQTT8ozeExC4C7312W9gE/XnFHaWDiuH2Fgown56FNpN4Blf12DMk9NvawLOQbg+DPkLr4XOOcp0f4a+fNoK/8oBVJjICpZ/imH9fsQMX9JpzjwR6G0Kr3DOeuZfJg8fBb9IOMPuLj5Y0cxM5WH0NXBuaZ4fsSwJSQCgXjzoJ32/TrvHItfIyyjy+nMEd0K0PE1C17jvvnZHtLEZBGgNj144+KewNeJM6rQ8eSNXM8lg99YjpgzfuTGbT4k3bnE+xWI1ieKaMCRVCI2fYx4ugXECYCZ3w0a9C4QYz1ISGEAkfo/tOBTnhfX3VYtrrKmv7GWPGg4rIAA4kmgJXQJMkF9jsKcCi8D/4P3BxCBjdxP5V/qty7zhBwDEYKolvLAXvibhxQAiak6GikSHsVJGl4o5GV/ViWwrcQ13ZlPR1QDc0oeLzpMNMz0Y15gENgMIG+yStgV/qoulDX6Qp6tkBihsIx4D0FsoLoY4jpI="
+    distributions: sdist
+    skip_existing: true
+    on:
+      tags: true
