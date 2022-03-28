@@ -27,8 +27,6 @@ notifications:
 
 jobs:
   include:
-    - name: "Python 3.7"
-      python: 3.7
     - name: "Python 3.8"
       python: 3.8
     - name: "Python 3.9"
@@ -62,11 +60,11 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a  
   - # Replace dep1 dep2 ... with your dependencies
-  - conda create -c conda-forge -q -n test-environment python=$TRAVIS_PYTHON_VERSION cython matplotlib GPy cffi numba numpy patsy scipy patsy tqdm joblib
+  - conda create -c conda-forge -q -n test-environment python=$TRAVIS_PYTHON_VERSION
   - conda activate test-environment
   - pip install codecov
   - conda list && pip freeze
-  - python setup.py install
+  - pip install -e .
   
 script:
   - coverage run -m unittest discover
@@ -86,7 +84,6 @@ deploy:
   - provider: releases
     api_key:
       secure:  "R8XzpdHEBzQrALFyGbWZUkFd4D9CNK2OZyjzat+Y0qceI0H5O3yanRmUnXtEsiKItO7v6+ykCffI1htxaHiH9S5FvfiQTLihhGjL6XwLPLSGrhSGv/khj4uzFnW2vKoOkqn1nxaYKpUipqvgUHglvroYp6s6oHRsjJ+vy1RiOweeO+4J/lxMg8KjclJ1aXKJ5vdAfQTT8ozeExC4C7312W9gE/XnFHaWDiuH2Fgown56FNpN4Blf12DMk9NvawLOQbg+DPkLr4XOOcp0f4a+fNoK/8oBVJjICpZ/imH9fsQMX9JpzjwR6G0Kr3DOeuZfJg8fBb9IOMPuLj5Y0cxM5WH0NXBuaZ4fsSwJSQCgXjzoJ32/TrvHItfIyyjy+nMEd0K0PE1C17jvvnZHtLEZBGgNj144+KewNeJM6rQ8eSNXM8lg99YjpgzfuTGbT4k3bnE+xWI1ieKaMCRVCI2fYx4ugXECYCZ3w0a9C4QYz1ISGEAkfo/tOBTnhfX3VYtrrKmv7GWPGg4rIAA4kmgJXQJMkF9jsKcCi8D/4P3BxCBjdxP5V/qty7zhBwDEYKolvLAXvibhxQAiak6GikSHsVJGl4o5GV/ViWwrcQ13ZlPR1QDc0oeLzpMNMz0Y15gENgMIG+yStgV/qoulDX6Qp6tkBihsIx4D0FsoLoY4jpI="
-    distributions: sdist
-    skip_existing: true
+    file: dist/*
     on:
       tags: true
