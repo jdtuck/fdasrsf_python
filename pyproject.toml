@@ -14,7 +14,7 @@ keywords = ["functional data analysis"]
 dependencies=[
         "Cython",
         "matplotlib",
-        "oldest-supported-numpy",
+        "numpy",
         "scipy",
         "joblib",
         "patsy",
