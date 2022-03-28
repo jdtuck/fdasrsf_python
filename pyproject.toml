@@ -42,5 +42,5 @@ repository = "https://github.com/jdtuck/fdasrsf_python"
 documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
 
 [build-system]
-requires = ["setuptools>=46.0", "wheel", "cffi>=1.0.0", "Cython", "numpy"]  # PEP 518 - what is required to build
+requires = ["setuptools>=46.0", "wheel", "cffi>=1.0.0", "Cython", "oldest-supported-numpy"]  # PEP 518 - what is required to build
 build-backend = "setuptools.build_meta"
