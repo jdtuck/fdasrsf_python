@@ -62,7 +62,7 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a  
   - # Replace dep1 dep2 ... with your dependencies
-  - conda create -c conda-forge -q -n test-environment python=$TRAVIS_PYTHON_VERSION cython matplotlib GPy cffi numba oldest-supported-numpy patsy scipy patsy tqdm joblib
+  - conda create -c conda-forge -q -n test-environment python=$TRAVIS_PYTHON_VERSION
   - conda activate test-environment
   - pip install codecov
   - conda list && pip freeze
