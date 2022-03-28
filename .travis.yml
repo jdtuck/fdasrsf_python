@@ -66,12 +66,11 @@ install:
   - conda activate test-environment
   - pip install codecov
   - conda list && pip freeze
-  - python setup.py install
+  - python setup.py bdist_wheel
   
 script:
   - coverage run -m unittest discover
 after_success:
-  - python setup.py bdist_wheel
   - codecov
 
 deploy:
