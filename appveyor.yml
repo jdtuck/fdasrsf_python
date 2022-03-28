@@ -42,7 +42,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels conda-forge
   - conda update -q conda
-  - conda create -q -n test-environment python=%PYTHON_VERSION% cython matplotlib GPy cffi numba oldest-supported-numpy patsy scipy patsy tqdm joblib
+  - conda create -q -n test-environment python=%PYTHON_VERSION%
   - conda activate test-environment
   # Show conda info for debugging
   - conda info -a
