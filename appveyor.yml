@@ -14,8 +14,6 @@ notifications:
   
 environment:
   matrix:
-    - PYTHON_VERSION: 3.7
-      MINICONDA: C:\Miniconda37
     - PYTHON_VERSION: 3.8
       MINICONDA: C:\Miniconda38
     - PYTHON_VERSION: 3.9
@@ -48,7 +46,7 @@ install:
   - conda activate test-environment
   # Show conda info for debugging
   - conda info -a
-  - python setup.py install
+  - pip install -e .
 
 build: false
 
