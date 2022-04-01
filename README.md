@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.com/jdtuck/fdasrsf_python)
+[![Build Status](https://travis-ci.com/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.com/github/jdtuck/fdasrsf_python)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
 [![Build status](https://img.shields.io/appveyor/ci/jdtuck/fdasrsf-python.svg?style=flat-square&label=windows)](https://ci.appveyor.com/project/jdtuck/fdasrsf-python/branch/master)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
@@ -17,7 +17,7 @@ using functional component analysis and regression.
 
 ### Installation
 ------------------------------------------------------------------------------
-v2.3.6 is on pip and can be installed using
+v2.3.10 is on pip and can be installed using
 > `pip install fdasrsf`
 
 or conda
@@ -25,7 +25,7 @@ or conda
 > `conda install -c conda-forge fdasrsf`
 
 To install the most up to date version on github
-> `python setup.py install`
+> `pip install -e .`
 
 please see [requirements](requirements.txt) for a list of packages `fdasrsf`
 depends on

@@ -7,7 +7,6 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import fdasrsf.utility_functions as uf
 import fdasrsf.geometry as geo
-from scipy import dot
 from scipy.linalg import norm, svd
 from scipy.integrate import trapz, cumtrapz
 from scipy.optimize import fminbound
@@ -263,7 +262,7 @@ class fdahpca:
         c = np.zeros((N2,no))
         for k in range(0,no):
             for i in range(0,N2):
-                c[i,k] = np.sum(dot(vec[:,i]-vm,U[:,k]))
+                c[i,k] = np.sum(np.dot(vec[:,i]-vm,U[:,k]))
 
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
@@ -419,8 +418,8 @@ class fdajpca:
 
         for k in range(0, no):
             for l in range(0, Nstd):
-                qhat = mqn + dot(U[0:(M+1),k],stds[l]*np.sqrt(s[k]))
-                vechat = dot(U[(M+1):,k],(stds[l]*np.sqrt(s[k]))/C)
+                qhat = mqn + np.dot(U[0:(M+1),k],stds[l]*np.sqrt(s[k]))
+                vechat = np.dot(U[(M+1):,k],(stds[l]*np.sqrt(s[k]))/C)
                 psihat = geo.exp_map(mu_psi,vechat)
                 gamhat = cumtrapz(psihat*psihat,np.linspace(0,1,M),initial=0)
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
@@ -519,13 +518,13 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     for i in range(0,N):
         for j in range(0,m):
             tmp = (g[:,i]-mu_g)
-            a[i,j] = dot(tmp.T, U[:,j])
+            a[i,j] = np.dot(tmp.T, U[:,j])
 
     qhat = np.tile(mu_q, (N,1))
     qhat = qhat.T
-    qhat = qhat + dot(U[0:M,0:m],a.T)
+    qhat = qhat + np.dot(U[0:M,0:m],a.T)
 
-    vechat = dot(U[M:,0:m], a.T/C)
+    vechat = np.dot(U[M:,0:m], a.T/C)
     psihat = np.zeros((M-1,N))
     gamhat = np.zeros((M-1,N))
     if parallel:

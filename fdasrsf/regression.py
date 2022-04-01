@@ -7,7 +7,6 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 import numpy as np
 import fdasrsf.utility_functions as uf
-from scipy import dot
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.integrate import trapz
 from scipy.linalg import inv, norm
@@ -123,10 +122,10 @@ class elastic_regression:
                 for jj in range(1, Nb+1):
                     R[ii, jj] = trapz(Bdiff[:, ii-1] * Bdiff[:, jj-1], self.time)
 
-            xx = dot(Phi.T, Phi)
+            xx = np.dot(Phi.T, Phi)
             inv_xx = inv(xx + lam * R)
-            xy = dot(Phi.T, self.y)
-            b = dot(inv_xx, xy)
+            xy = np.dot(Phi.T, self.y)
+            b = np.dot(inv_xx, xy)
 
             alpha = b[0]
             beta = B.dot(b[1:Nb+1])

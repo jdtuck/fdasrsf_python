@@ -11,7 +11,6 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.fPCA as fpca
 import fdasrsf.regression as rg
 import fdasrsf.geometry as geo
-from scipy import dot
 from scipy.linalg import inv, norm
 from scipy.integrate import trapz, cumtrapz
 from scipy.optimize import fmin_l_bfgs_b
@@ -92,10 +91,10 @@ class elastic_pcr_regression:
         R = 0
         Phi = np.ones((N1, no+1))
         Phi[:,1:(no+1)] = self.pca.coef
-        xx = dot(Phi.T, Phi)
+        xx = np.dot(Phi.T, Phi)
         inv_xx = inv(xx + lam * R)
-        xy = dot(Phi.T, self.y)
-        b = dot(inv_xx, xy)
+        xy = np.dot(Phi.T, self.y)
+        b = np.dot(inv_xx, xy)
         alpha = b[0]
         b = b[1:no+1]
 
@@ -176,7 +175,7 @@ class elastic_pcr_regression:
                 for i in range(0,n):
                     for j in range(0,no):
                         tmp = (g[:,i]-mu_g)
-                        a[i,j] = dot(tmp.T, U[:,j])
+                        a[i,j] = np.dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdavpca':
                 m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
@@ -185,7 +184,7 @@ class elastic_pcr_regression:
                 for i in range(0,n):
                     for j in range(0,no):
                         tmp = (qn1[:,i]-self.pca.mqn)
-                        a[i,j] = dot(tmp.T, U[:,j])
+                        a[i,j] = np.dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdahpca':
                 a = np.zeros((n,no))
@@ -203,7 +202,7 @@ class elastic_pcr_regression:
 
                 for i in range(0,n):
                     for j in range(0,no):
-                        a[i,j] = np.sum(dot(vec[:,i]-vm,U[:,j]))
+                        a[i,j] = np.sum(np.dot(vec[:,i]-vm,U[:,j]))
             else: 
                 raise Exception('Invalid fPCA Method')
 
@@ -386,7 +385,7 @@ class elastic_lpcr_regression:
                 for i in range(0,n):
                     for j in range(0,no):
                         tmp = (g[:,i]-mu_g)
-                        a[i,j] = dot(tmp.T, U[:,j])
+                        a[i,j] = np.dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdavpca':
                 m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
@@ -395,7 +394,7 @@ class elastic_lpcr_regression:
                 for i in range(0,n):
                     for j in range(0,no):
                         tmp = (qn1[:,i]-self.pca.mqn)
-                        a[i,j] = dot(tmp.T, U[:,j])
+                        a[i,j] = np.dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdahpca':
                 a = np.zeros((n,no))
@@ -413,7 +412,7 @@ class elastic_lpcr_regression:
 
                 for i in range(0,n):
                     for j in range(0,no):
-                        a[i,j] = np.sum(dot(vec[:,i]-vm,U[:,j]))
+                        a[i,j] = np.sum(np.dot(vec[:,i]-vm,U[:,j]))
             else: 
                 raise Exception('Invalid fPCA Method')
 
@@ -628,7 +627,7 @@ class elastic_mlpcr_regression:
                 for i in range(0,n):
                     for j in range(0,no):
                         tmp = (g[:,i]-mu_g)
-                        a[i,j] = dot(tmp.T, U[:,j])
+                        a[i,j] = np.dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdavpca':
                 m_new = np.sign(fn[self.pca.id,:])*np.sqrt(np.abs(fn[self.pca.id,:]))
@@ -637,7 +636,7 @@ class elastic_mlpcr_regression:
                 for i in range(0,n):
                     for j in range(0,no):
                         tmp = (qn1[:,i]-self.pca.mqn)
-                        a[i,j] = dot(tmp.T, U[:,j])
+                        a[i,j] = np.dot(tmp.T, U[:,j])
 
             elif self.pca.__class__.__name__ == 'fdahpca':
                 a = np.zeros((n,no))
@@ -655,7 +654,7 @@ class elastic_mlpcr_regression:
 
                 for i in range(0,n):
                     for j in range(0,no):
-                        a[i,j] = np.sum(dot(vec[:,i]-vm,U[:,j]))
+                        a[i,j] = np.sum(np.dot(vec[:,i]-vm,U[:,j]))
             else: 
                 raise Exception('Invalid fPCA Method')
 

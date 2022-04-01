@@ -279,6 +279,7 @@ class fdawarp:
             gamI_dev = np.gradient(gamI, 1 / float(M - 1))
 
         # Aligned data & stats
+        self.center = center
         self.fn = f[:, :, r + 1]
         self.qn = q[:, :, r + 1]
         self.q0 = q[:, :, 0]

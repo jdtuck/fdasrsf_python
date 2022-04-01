@@ -92,7 +92,7 @@ setup(
     cmdclass={'build_ext': build_ext, 'build_docs': build_docs},
 	ext_modules=extensions,
     name='fdasrsf',
-    version='2.3.6',
+    version='2.3.10',
     packages=['fdasrsf'],
     url='http://research.tetonedge.net',
     license='LICENSE.txt',
@@ -103,21 +103,6 @@ setup(
     description='functional data analysis using the square root slope framework',
     long_description=open('README.md', encoding="utf8").read(),
     data_files=[('share/man/man1', ['doc/build/man/fdasrsf.1'])],
-    setup_requires=['Cython','numpy',"cffi>=1.0.0"],
-    install_requires=[
-        "Cython",
-        "matplotlib",
-        "numpy",
-        "scipy",
-        "joblib",
-        "patsy",
-        "tqdm",
-        "six",
-        "numba",
-        "GPy",
-        "cffi>=1.0.0",
-        "pyparsing",
-    ],
     classifiers=[
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
@@ -125,6 +110,6 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Mathematics',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.8',
     ]
 )

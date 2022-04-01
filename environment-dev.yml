@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.7
+  - python=3.9
   - arviz>=0.9
   - Cython
   - joblib
@@ -44,6 +44,7 @@ dependencies:
   - sphinx-autobuild>=0.7
   - sphinx>=1.5
   - watermark
+  - toyplot
   - parameterized
   - black
   - ipywidgets
