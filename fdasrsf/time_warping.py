@@ -248,23 +248,22 @@ class fdawarp:
                 break
 
         # Last Step with centering of gam
+        r += 1
+        if parallel:
+            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
+                q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
+            gam = np.array(out)
+            gam = gam.transpose()
+        else:
+            for k in range(0,N):
+                gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
+                        lam, grid_dim)
+
+        gam_dev = np.zeros((M, N))
+        for k in range(0, N):
+            gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
 
         if center:
-            r += 1
-            if parallel:
-                out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
-                    q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
-                gam = np.array(out)
-                gam = gam.transpose()
-            else:
-                for k in range(0,N):
-                    gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
-                            lam, grid_dim)
-
-            gam_dev = np.zeros((M, N))
-            for k in range(0, N):
-                gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
-
             gamI = uf.SqrtMeanInverse(gam)
             gamI_dev = np.gradient(gamI, 1 / float(M - 1))
             time0 = (self.time[-1] - self.time[0]) * gamI + self.time[0]
@@ -283,6 +282,7 @@ class fdawarp:
         self.fn = f[:, :, r + 1]
         self.qn = q[:, :, r + 1]
         self.q0 = q[:, :, 0]
+        self.gamI = gamI
         mean_f0 = f0.mean(axis=1)
         std_f0 = f0.std(axis=1)
         mean_fn = self.fn.mean(axis=1)
