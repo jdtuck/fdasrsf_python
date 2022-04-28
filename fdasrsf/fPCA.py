@@ -262,7 +262,7 @@ class fdahpca:
         c = np.zeros((N2,no))
         for k in range(0,no):
             for i in range(0,N2):
-                c[i,k] = np.sum(np.dot(vec[:,i]-vm,U[:,k]))
+                c[i,k] = np.dot(vec[:,i]-vm,U[:,k])
 
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
