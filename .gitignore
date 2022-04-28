@@ -21,3 +21,4 @@ src/optimum_reparam_N.c
 src/optimum_reparamN2.c
 src/ocmlogit_warp.c
 fdasrsf_python.code-workspace
+*.so
