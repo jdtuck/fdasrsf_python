@@ -577,13 +577,13 @@ def rgam(N, sigma, num):
     TT = N - 1
     time = linspace(0, 1, TT)
     mu = sqrt(ones(N - 1) * TT / double(N - 1))
-    omega = (2 * pi) / double(TT)
+    omega = (2 * pi)
     for k in range(0, num):
-        alpha_i = rn.normal(scale=sqrt(sigma))
+        alpha_i = rn.normal(scale=sigma)
         v = alpha_i * ones(TT)
         cnt = 1
         for l in range(2, 11):
-            alpha_i = rn.normal(scale=sqrt(sigma))
+            alpha_i = rn.normal(scale=sigma)
             #odd
             if l % 2 != 0:
                 v = v + alpha_i * sqrt(2) * cos(cnt * omega * time)
@@ -595,10 +595,10 @@ def rgam(N, sigma, num):
         v = v.reshape((TT, 1))
         mu = mu.reshape((TT, 1))
         tmp = mu.dot(v.transpose())
-        v = v - tmp.dot(mu) / double(TT)
+        v = v - tmp.dot(mu) / TT
         vn = norm(v) / sqrt(TT)
         psi = cos(vn) * mu + sin(vn) * v / vn
-        gam[1:, k] = cumsum(psi * psi) / double(TT)
+        gam[1:, k] = cumsum(psi * psi) / N
         gam[:, k] = (gam[:, k] - gam[0, k]) / (gam[-1, k] - gam[0, k])
 
     return gam
