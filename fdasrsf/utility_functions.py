@@ -582,7 +582,7 @@ def rgam(N, sigma, num):
         alpha_i = rn.normal(scale=sigma)
         v = alpha_i * ones(TT)
         cnt = 1
-        for l in range(2, 11):
+        for l in range(2, 4):
             alpha_i = rn.normal(scale=sigma)
             #odd
             if l % 2 != 0:
