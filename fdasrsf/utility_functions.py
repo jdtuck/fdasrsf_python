@@ -576,7 +576,7 @@ def rgam(N, sigma, num):
 
     TT = N - 1
     time = linspace(0, 1, TT)
-    mu = sqrt(ones(N - 1) * TT / double(N - 1))
+    mu = sqrt(ones(N - 1) * TT / (N - 1))
     omega = (2 * pi)
     for k in range(0, num):
         alpha_i = rn.normal(scale=sigma)
@@ -591,7 +591,7 @@ def rgam(N, sigma, num):
 
             #even
             if l % 2 == 0:
-                v = v + alpha_i * sqrt(2) * cos(cnt * omega * time)
+                v = v + alpha_i * sqrt(2) * sin(cnt * omega * time)
         v = v.reshape((TT, 1))
         mu = mu.reshape((TT, 1))
         tmp = mu.dot(v.transpose())
