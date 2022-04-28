@@ -562,28 +562,35 @@ def cumtrapzmid(x, y, c, mid):
     return fa
 
 
-def rgam(N, sigma, num):
+def rgam(N, sigma, num, mu_gam=None):
     """
     Generates random warping functions
 
     :param N: length of warping function
     :param sigma: variance of warping functions
     :param num: number of warping functions
+    :param mu_gam mean warping function (default identity)
     :return: gam: numpy ndarray of warping functions
 
     """
     gam = zeros((N, num))
 
-    TT = N - 1
-    time = linspace(0, 1, TT)
-    mu = sqrt(ones(N - 1) * TT / (N - 1))
+    time = linspace(0, 1, N)
+    binsize = diff(time)
+    binsize = binsize.mean()
+    if mu_gam is None:
+        mu = sqrt(gradient(time,binsize))
+    else:
+        mu = sqrt(gradient(mu_gam,binsize))
+
     omega = (2 * pi)
     for k in range(0, num):
         alpha_i = rn.normal(scale=sigma)
-        v = alpha_i * ones(TT)
+        v = alpha_i * ones(N)
         cnt = 1
         for l in range(2, 4):
             alpha_i = rn.normal(scale=sigma)
+            
             #odd
             if l % 2 != 0:
                 v = v + alpha_i * sqrt(2) * cos(cnt * omega * time)
@@ -592,14 +599,10 @@ def rgam(N, sigma, num):
             #even
             if l % 2 == 0:
                 v = v + alpha_i * sqrt(2) * sin(cnt * omega * time)
-        v = v.reshape((TT, 1))
-        mu = mu.reshape((TT, 1))
-        tmp = mu.dot(v.transpose())
-        v = v - tmp.dot(mu) / TT
-        vn = norm(v) / sqrt(TT)
-        psi = cos(vn) * mu + sin(vn) * v / vn
-        gam[1:, k] = cumsum(psi * psi) / N
-        gam[:, k] = (gam[:, k] - gam[0, k]) / (gam[-1, k] - gam[0, k])
+
+        psi = geo.exp_map(mu.ravel(),v.ravel())
+        gam0 = cumtrapz(psi*psi, time, initial=0)
+        gam[:, k] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam
 
