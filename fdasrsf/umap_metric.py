@@ -96,8 +96,8 @@ def warp_curve(q1, q2):
     q2i = ascontiguousarray(q2i)
 
     gam = ascontiguousarray(gam)
-    q2ptr = ffi.from_buffer(q1i)
-    q1ptr = ffi.from_buffer(q2i)
+    q1ptr = ffi.from_buffer(q1i)
+    q2ptr = ffi.from_buffer(q2i)
     gami = ffi.from_buffer(gam)
     DP(q2ptr,q1ptr,n1,M,lam,disp,gami)
        
@@ -246,7 +246,7 @@ def find_seed_rot(beta1, beta2, closed):
         beta2new = R.dot(beta2n)
         q2new = c_to_q(beta2new, closed)
 
-        gam = warp_curve(q1, q2new)
+        gam = warp_curve(q2new, q1)
         gamI = interp(x,gam,x)
 
         # apply warp
@@ -254,7 +254,7 @@ def find_seed_rot(beta1, beta2, closed):
         for j in range(0,n):
             beta_warp[j,:] = interp(gamI, x, beta2new[j,:])
         
-        q2new = c_to_q(beta2new, closed)
+        q2new = c_to_q(beta_warp, closed)
 
         if closed == 1:
             q2new = proj_c(q2new)
