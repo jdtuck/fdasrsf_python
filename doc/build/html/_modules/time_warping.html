@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>time_warping &mdash; fdasrsf 2.3.8 documentation</title>
+  <title>time_warping &mdash; fdasrsf 2.3.11 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -330,23 +331,22 @@
                 <span class="k">break</span>
 
         <span class="c1"># Last Step with centering of gam</span>
+        <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">gam</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">gam</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span>
+                        <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span>
+
+        <span class="n">gam_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">gam_dev</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">center</span><span class="p">:</span>
-            <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">)(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                    <span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-                <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-                <span class="n">gam</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
-                    <span class="n">gam</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">omethod</span><span class="p">,</span>
-                            <span class="n">lam</span><span class="p">,</span> <span class="n">grid_dim</span><span class="p">)</span>
-
-            <span class="n">gam_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                <span class="n">gam_dev</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-
             <span class="n">gamI</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMeanInverse</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
             <span class="n">gamI_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gamI</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
             <span class="n">time0</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -365,6 +365,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">f</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qn</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q0</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamI</span> <span class="o">=</span> <span class="n">gamI</span>
         <span class="n">mean_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">std_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">mean_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

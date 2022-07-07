@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Functional Alignment &mdash; fdasrsf 2.3.8 documentation</title>
+  <title>Functional Alignment &mdash; fdasrsf 2.3.11 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +13,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -111,8 +111,8 @@
 }
 </style>
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="_images/logo.png" class="align-right" src="_images/logo.png" style="width: 200px;" /></a>
-<section id="module-time_warping">
-<span id="functional-alignment"></span><h1>Functional Alignment<a class="headerlink" href="#module-time_warping" title="Permalink to this headline"></a></h1>
+<div class="section" id="module-time_warping">
+<span id="functional-alignment"></span><h1>Functional Alignment<a class="headerlink" href="#module-time_warping" title="Permalink to this heading"></a></h1>
 <p>Group-wise function alignment using SRSF framework and Dynamic Programming</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
@@ -127,7 +127,7 @@ The functions are aligned to the principal components</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>num_comp</strong> – number of fPCA components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
@@ -190,7 +190,7 @@ principal least squares</p>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
 <li><p><strong>comps</strong> – number of fPLS components</p></li>
 <li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
-<li><p><strong>smooth_data</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>delta</strong> – gradient step size</p></li>
 <li><p><strong>max_itr</strong> – maximum number of iterations</p></li>
 </ul>
@@ -260,7 +260,7 @@ extracted from the principal components of the srvfs</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
-<li><p><strong>sort_samples</strong> (<em>bool</em>) – sort samples (default = T)</p></li>
+<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – sort samples (default = T)</p></li>
 </ul>
 </dd>
 </dl>
@@ -296,7 +296,7 @@ slope (srsf) framework.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mu</strong> – vector of function to align to</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
-<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
@@ -325,7 +325,7 @@ square-root slope (srsf) framework.</p>
 (options = “mean” or “median”) (default=”mean”)</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP2)</p></li>
 <li><p><strong>center</strong> – center warping functions (default = T)</p></li>
-<li><p><strong>smoothdata</strong> (<em>bool</em>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
 <li><p><strong>MaxItr</strong> – Maximum number of iterations (default = 20)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
@@ -606,7 +606,7 @@ If no argument is given a single Python float is returned.</p>
 
 <div class="toctree-wrapper compound">
 </div>
-</section>
+</div>
 
 
            </div>
