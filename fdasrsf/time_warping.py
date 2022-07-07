@@ -37,7 +37,7 @@ class fdawarp:
     :param fn: aligned functions
     :param qn: aligned srvfs
     :param q0: initial srvfs
-    :param fmean: function mean
+    :param fmean: Karcher mean
     :param mqn: mean srvf
     :param gam: warping functions
     :param psi: srvf of warping functions
