@@ -76,7 +76,7 @@ class fdawarp:
 
     def srsf_align(self, method="mean", omethod="DP2", center=True, 
                    smoothdata=False, MaxItr=20, parallel=False, lam=0.0, 
-                   cores=-1, grid_dim=7):
+                   cores=-1, grid_dim=7, verbose=True):
         """
         This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
@@ -91,6 +91,7 @@ class fdawarp:
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only (default = 7)
+        :param verbose: print status output (default = T)
         :type lam: double
         :type smoothdata: bool
 
@@ -156,10 +157,11 @@ class fdawarp:
         mq = uf.f_to_srsf(mf, self.time)
 
         # Compute Karcher Mean
-        if method == 0:
-            print("Compute Karcher Mean of %d function in SRSF space..." % N)
-        if method == 1:
-            print("Compute Karcher Median of %d function in SRSF space..." % N)
+        if verbose:
+            if method == 0:
+                print("Compute Karcher Mean of %d function in SRSF space..." % N)
+            if method == 1:
+                print("Compute Karcher Median of %d function in SRSF space..." % N)
 
         ds = np.repeat(0.0, MaxItr + 2)
         ds[0] = np.inf
@@ -178,9 +180,10 @@ class fdawarp:
         q = tmp
 
         for r in range(0, MaxItr):
-            print("updating step: r=%d" % (r + 1))
-            if r == (MaxItr - 1):
-                print("maximal number of iterations is reached")
+            if verbose:
+                print("updating step: r=%d" % (r + 1))
+                if r == (MaxItr - 1):
+                    print("maximal number of iterations is reached")
 
             # Matching Step
             if parallel:
