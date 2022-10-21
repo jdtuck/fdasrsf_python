@@ -301,7 +301,7 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
     M = time.shape[0]
 
     time1 = linspace(0,1,M)
-    binsize = mean(diff(time))
+    binsize = mean(diff(time1))
     psi = sqrt(gradient(gam,binsize))
     q1dotq2 = trapz(psi, time1)
     if q1dotq2 > 1:
