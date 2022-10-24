@@ -282,7 +282,7 @@ class rlbfgs:
         if penalty == "roughness":
             time1 = np.linspace(0,1,h.shape[0])
             binsize = np.mean(np.diff(time1))
-            pen = trapz(np.gradient(h**2,binsize), time1)
+            pen = trapz(np.gradient(h**2,binsize)**2, time1)
         elif penalty == "l2gam":
             pen = self.normL2(h**2-np.ones(h.shape[0]))**2
         elif penalty == "l2psi":
@@ -294,7 +294,7 @@ class rlbfgs:
                 q1dotq2 = 1
             elif q1dotq2 < -1:
                 q1dotq2 = -1
-            pen = np.real(np.arccos(q1dotq2))
+            pen = np.real(np.arccos(q1dotq2))**2
         else:
             raise Exception('penalty not implemented')
 
@@ -313,7 +313,7 @@ class rlbfgs:
         if penalty == "roughness":
             time1 = np.linspace(0,1,h.shape[0])
             binsize = np.mean(np.diff(time1))
-            pen = trapz(np.gradient(h**2,binsize), time1)
+            pen = -1*trapz(np.gradient(h**2,binsize)**2, time1)
         elif penalty == "l2gam":
             pen = self.normL2(h**2-np.ones(h.shape[0]))**2
         elif penalty == "l2psi":
@@ -325,7 +325,7 @@ class rlbfgs:
                 q1dotq2 = 1
             elif q1dotq2 < -1:
                 q1dotq2 = -1
-            pen = np.real(np.arccos(q1dotq2))
+            pen = np.real(np.arccos(q1dotq2))**2
         else:
             raise Exception('penalty not implemented')
 
