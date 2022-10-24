@@ -58,12 +58,14 @@ class rlbfgs:
             self.q1 = q1/norm(q1)
             self.q2 = q2/norm(q2)
     
-    def solve(self, maxiter=30, verb=0):
+    def solve(self, maxiter=30, verb=0, lam=0, penalty="roughness"):
         """
         Run solver
 
         :param maxiter: maximum number of interations
         :param verb: integer used to tune the amount of output
+        :param lam: amount of penalty
+        :param penalty: penalty, "roughness", "l2gam", "l2psi", "geodesic"
         """
         
         # @todo add options to parameters if needed
@@ -121,7 +123,7 @@ class rlbfgs:
         accepted = True
 
         # compute cost function and its gradient
-        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde)
+        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde, htilde, lam, penalty)
         hCurGradNorm = self.norm(hCurGradient)
 
         # line-search statistics for recording in info
@@ -171,7 +173,7 @@ class rlbfgs:
 
             # execute line-search
             in_prod = self.inner(hCurGradient,p)
-            stepsize, hNext, lsstats = self.linesearch_hint(p, hCurCost, in_prod, q2tilde, options)
+            stepsize, hNext, lsstats = self.linesearch_hint(p, hCurCost, in_prod, q2tilde, lam, penalty)
 
             # Iterative update of optimal diffeomorphism and q2 via group action
             htilde = self.group_action_SRVF(htilde,hNext)
@@ -183,7 +185,7 @@ class rlbfgs:
             step = alpha*p
 
             # query cost and gradient at the candidate new point
-            hNextCost, hNextGradient = self.alignment_costgrad(q2tilde)
+            hNextCost, hNextGradient = self.alignment_costgrad(q2tilde, hNext, lam, penalty)
 
             # compute sk and yk
             sk = step
@@ -377,7 +379,7 @@ class rlbfgs:
 
         return direction
     
-    def linesearch_hint(self, d, f0, df0, q2k, options):
+    def linesearch_hint(self, d, f0, df0, q2k, lam=0, penalty="roughness"):
         """
         Armijo line-search based on the line-search hint in the problem structure.
         
@@ -409,7 +411,7 @@ class rlbfgs:
 
         # Make the chosen step and compute cost there
         newh = self.exp(hid, d, alpha)
-        newf = self.alignment_cost(newh, q2k)
+        newf = self.alignment_cost(newh, q2k, lam, penalty)
         cost_evaluations = 1
 
         # backtrack while the Armijo criterion is not satisfied
@@ -421,7 +423,7 @@ class rlbfgs:
 
             # look closer down the line
             newh = self.exp(hid, d, alpha)
-            newf = self.alignment_cost(newh, q2k)
+            newf = self.alignment_cost(newh, q2k, lam, penalty)
             cost_evaluations += 1
             tst = newh<=0
 
