@@ -14,7 +14,7 @@ from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
 from numpy import arccos, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
 from numpy import gradient, column_stack, append, mean, hstack, median
-from numpy import insert, vectorize, ceil, mod, array, quantile, dot
+from numpy import insert, vectorize, ceil, mod, array, percentile, dot
 from numpy import exp
 from joblib import Parallel, delayed
 import numpy.random as rn
@@ -997,8 +997,8 @@ def exp2corr2(phi, ds):
 
 
 def statsFun(vec):
-    a = quantile(vec,0.025,axis=1)
-    b = quantile(vec,0.975,axis=1)
+    a = percentile(vec,100*0.025,axis=1)
+    b = percentile(vec,100*0.975,axis=1)
     out = column_stack((a, b))
     return(out)
 
