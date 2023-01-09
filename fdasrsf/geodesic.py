@@ -47,7 +47,7 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     :rtype: numpy ndarray
     :return dist: geodesic distance
     :return path: geodesic path
-    :return O: rotation matrix
+    :return PsiQ: geodesic path in SRVF
 
     """
     lam = 0.0
