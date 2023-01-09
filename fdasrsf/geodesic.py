@@ -7,10 +7,29 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 from numpy import tile, eye, arccos, zeros, sin, arange, linspace, empty, isnan
 from numpy import sqrt
+import matplotlib.pyplot as plt
 from scipy.integrate import trapz
 from scipy.linalg import norm
 import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
+
+
+def plot_geod(path):
+    r"""
+    Plots the geodesic path as a sequence of curves
+
+    :param path: numpy ndarray of shape (2,M,K) of M sample points of K samples along path
+
+    """
+    fig, ax = plt.subplots()
+    mv = 0.2
+    for i in range(0,path.shape[2]):
+        ax.plot(mv*i + path[0,:,i],path[1,:,i], linewidth=2)
+    ax.set_aspect('equal')
+    plt.axis('off')
+    plt.show()
+
+    return
 
 
 def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
