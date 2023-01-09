@@ -101,7 +101,7 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     return(dist, path, PsiQ)
 
 
-def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
+def path_straightening(beta1, beta2, betamid=None, init="rand", T=100, k=5):
     """
     Perform path straightening to find geodesic between two shapes in either
     the space of closed curves or the space of affine standardized curves.
@@ -111,7 +111,7 @@ def path_straightening(beta1, beta2, betamid, init="rand", T=100, k=5):
     :param beta1: numpy ndarray of shape (2,M) of M samples (first curve)
     :param beta2: numpy ndarray of shape (2,M) of M samples (end curve)
     :param betamid: numpy ndarray of shape (2,M) of M samples (mid curve
-     Default = NULL, only needed for init "rand")
+     Default = None, only needed for init "geod")
     :param init: initialize path geodesic or random (Default = "rand")
     :param T: Number of samples of curve (Default = 100)
     :param k: number of samples along path (Default = 5)
@@ -233,7 +233,7 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
     q_mid = cf.curve_to_q(beta_mid)[0]
 
     # find optimal rotation of q2
-    beta2, O1, tau1 = cf.find_rotation_and_seed_coord(beta1, beta2)
+    beta2, q2best, O1, gamIbest = cf.find_rotation_and_seed_coord(beta1, beta2)
     q2 = cf.curve_to_q(beta2)[0]
 
     # find the optimal coorespondence
@@ -244,7 +244,7 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
     beta2n = cf.group_action_by_gamma_coord(beta2, gamI)
 
     # find optimal rotation of q2
-    beta2n, O2, tau1 = cf.find_rotation_and_seed_coord(beta1, beta2n)
+    beta2n, q2n1, O2, gamIbest1 = cf.find_rotation_and_seed_coord(beta1, beta2n)
     centroid2 = cf.calculatecentroid(beta2n)
     beta2n = beta2n - tile(centroid2, [T, 1]).T
     q2n = cf.curve_to_q(beta2n)[0]
