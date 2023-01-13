@@ -132,7 +132,8 @@ class fdawarp:
         f, g, g2 = uf.gradient_spline(self.time, self.f, smoothdata)
         q = g / np.sqrt(abs(g) + eps)
 
-        print("Initializing...")
+        if verbose:
+            print("Initializing...")
         mnq = q.mean(axis=1)
         a = mnq.repeat(N)
         d1 = a.reshape(M, N)
