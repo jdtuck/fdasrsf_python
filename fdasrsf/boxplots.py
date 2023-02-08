@@ -149,7 +149,7 @@ class ampbox:
         outlier_index = np.array([])
         for i in range(0,N):
             if dy[dy_ordering[N-i-1]] > whisker_dis:
-                outlier_index = np.append(outlier_index,dy[dy_ordering[N+1-i]])
+                outlier_index = np.append(outlier_index,dy[dy_ordering[N-i-1]])
         
         # identify amplitude extremes
         distance_to_upper = np.full(N, np.inf)
@@ -382,7 +382,7 @@ class phbox:
         outlier_index = np.array([])
         for i in range(0,N):
             if dx[dx_ordering[N-1-i]] > whisker_dis:
-                outlier_index = np.append(outlier_index,dx_ordering[N+1-i])
+                outlier_index = np.append(outlier_index,dx_ordering[N-i-1])
         
         # identify phase extremes
         distance_to_upper = np.full(N, np.inf)

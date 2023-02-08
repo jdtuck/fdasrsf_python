@@ -14,7 +14,7 @@ from numpy.linalg import eig
 from fdasrsf.boxplots import ampbox, phbox
 
 
-def bootTB(f, time, a=0.5, p=.99, B=500, no=5, parallel=True):
+def bootTB(f, time, a=0.05, p=.99, B=500, no=5, parallel=True):
     """
     This function computes tolerance bounds for functional data containing
     phase and amplitude variation using bootstrap sampling
