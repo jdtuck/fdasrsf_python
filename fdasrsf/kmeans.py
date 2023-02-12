@@ -123,7 +123,38 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
             gamI = uf.SqrtMeanInverse(gamtmp)
             N1 = idx.shape[0]
 
-            
+            gamt = np.zeros((M,N1))
+            f_temp = np.zeros((M,N1))
+            q_temp = np.zeros((M,N1))
+            if parallel:
+                out = Parallel(n_jobs=cores)(delayed(norm_sub)(ftmp[:, i],
+                                            time, gamtmp[:,i], gamI) for i in range(N1))
+                for i in range(0, fns):
+                    f_temp[:,i] = out[i][0]
+                    q_temp[:, i] = out[i][1]
+                    gamt[:, i] = out[i][2]
+            else:
+                for i in range(N1):
+                    f_temp[:,i], q_temp[:, i], gamt[:, i] = norm_sub(ftmp[:, i], time, gamtmp[:,i], gamI)
+
+            qn[k][:,idx] = q_temp
+            fn[k][:,idx] = f_temp
+            gam[k][:,idx] = gamt
+        
+        # Template Identification
+
+
+
+
     
 
     return
+
+
+def norm_sub(f,time,gam,gamI):
+    fw = uf.warp_f_gamma(time, f, gamI)
+    qw = uf.f_to_srsf(fw, time)
+    time0 = (time[-1] - time[0]) * gamI + time[0]
+    gamw = np.interp(time0, time, gam)
+
+    return(fw, qw, gamw)
