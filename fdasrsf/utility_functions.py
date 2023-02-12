@@ -336,8 +336,8 @@ def SqrtMeanInverse(gam):
     """
     finds the inverse of the mean of the set of the diffeomorphisms gamma
 
-    :param gam: numpy ndarray of shape (M,N) of M warping functions
-                with N samples
+    :param gam: numpy ndarray of shape (M,N) of N warping functions
+                with M samples
 
     :rtype: vector
     :return gamI: inverse of gam
