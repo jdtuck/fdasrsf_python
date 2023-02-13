@@ -1,91 +1,49 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>time_warping &mdash; fdasrsf 2.3.12 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> fdasrsf
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            fdasrsf
           </a>
-
-          
-            
-            
               <div class="version">
                 2.2
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../time_warping.html">Functional Alignment</a></li>
@@ -96,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kmeans.html">Elastic Functional Clustering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
@@ -103,66 +62,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../umap_metric.html">UMAP EFDA Metrics</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">fdasrsf</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="index.html">Module code</a> &raquo;</li>
-        
-      <li>time_warping</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">time_warping</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for time_warping</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Group-wise function alignment using SRSF framework and Dynamic Programming</span>
@@ -193,7 +116,7 @@
 
 
 <div class="viewcode-block" id="fdawarp"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp">[docs]</a><span class="k">class</span> <span class="nc">fdawarp</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides alignment methods for functional data using the SRVF framework</span>
 
 <span class="sd">    Usage:  obj = fdawarp(f,t)</span>
@@ -225,7 +148,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdawarp class</span>
 <span class="sd">        :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
 <span class="sd">        :param time: vector of size M describing the sample points</span>
@@ -243,7 +166,7 @@
 <div class="viewcode-block" id="fdawarp.srsf_align"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.srsf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srsf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                    <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">MaxItr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> 
                    <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function aligns a collection of functions using the elastic</span>
 <span class="sd">        square-root slope (srsf) framework.</span>
 
@@ -298,7 +221,8 @@
         <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">gradient_spline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">smoothdata</span><span class="p">)</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initializing...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initializing...&quot;</span><span class="p">)</span>
         <span class="n">mnq</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">mnq</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="n">d1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
@@ -476,7 +400,7 @@
 
 
 <div class="viewcode-block" id="fdawarp.plot"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot plot functional alignment results</span>
 <span class="sd">        </span>
 <span class="sd">        Usage: obj.plot()</span>
@@ -509,7 +433,7 @@
         <span class="k">return</span></div>
     
 <div class="viewcode-block" id="fdawarp.gauss_model"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.gauss_model">[docs]</a>    <span class="k">def</span> <span class="nf">gauss_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort_samples</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function models the functional data using a Gaussian model</span>
 <span class="sd">        extracted from the principal components of the srvfs</span>
 
@@ -608,7 +532,7 @@
 
 
 <div class="viewcode-block" id="fdawarp.joint_gauss_model"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.joint_gauss_model">[docs]</a>    <span class="k">def</span> <span class="nf">joint_gauss_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function models the functional data using a joint Gaussian model</span>
 <span class="sd">        extracted from the principal components of the srsfs</span>
 
@@ -671,7 +595,7 @@
 
 <div class="viewcode-block" id="fdawarp.multiple_align_functions"><a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.multiple_align_functions">[docs]</a>    <span class="k">def</span> <span class="nf">multiple_align_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                  <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function aligns a collection of functions using the elastic square-root</span>
 <span class="sd">        slope (srsf) framework.</span>
 
@@ -756,7 +680,7 @@
 
 
 <div class="viewcode-block" id="pairwise_align_functions"><a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_functions">[docs]</a><span class="k">def</span> <span class="nf">pairwise_align_functions</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function aligns f2 to f1 using the elastic square-root</span>
 <span class="sd">        slope (srsf) framework.</span>
 
@@ -790,7 +714,7 @@
 
 
 <div class="viewcode-block" id="pairwise_align_bayes"><a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_bayes">[docs]</a><span class="k">def</span> <span class="nf">pairwise_align_bayes</span><span class="p">(</span><span class="n">f1i</span><span class="p">,</span> <span class="n">f2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function aligns two functions using Bayesian framework. It will align</span>
 <span class="sd">    f2 to f1. It is based on mapping warping functions to a hypersphere, and a</span>
 <span class="sd">    subsequent exponential mapping to a tangent space. In the tangent space,</span>
@@ -985,7 +909,7 @@
 
 
 <div class="viewcode-block" id="pairwise_align_bayes_infHMC"><a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_bayes_infHMC">[docs]</a><span class="k">def</span> <span class="nf">pairwise_align_bayes_infHMC</span><span class="p">(</span><span class="n">y1i</span><span class="p">,</span> <span class="n">y2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function aligns two functions using Bayesian framework. It uses a </span>
 <span class="sd">    hierarchical Bayesian framework assuming mearsurement error error It will </span>
 <span class="sd">    align f2 to f1. It is based on mapping warping functions to a hypersphere, </span>
@@ -1517,7 +1441,7 @@
 
 
 <div class="viewcode-block" id="align_fPCA"><a class="viewcode-back" href="../time_warping.html#time_warping.align_fPCA">[docs]</a><span class="k">def</span> <span class="nf">align_fPCA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">num_comp</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    aligns a collection of functions while extracting principal components.</span>
 <span class="sd">    The functions are aligned to the principal components</span>
 
@@ -1795,7 +1719,7 @@
 
 <div class="viewcode-block" id="align_fPLS"><a class="viewcode-back" href="../time_warping.html#time_warping.align_fPLS">[docs]</a><span class="k">def</span> <span class="nf">align_fPLS</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">comps</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">delta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function aligns a collection of functions while performing</span>
 <span class="sd">    principal least squares</span>
 
@@ -1962,42 +1886,30 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2022, J. Derek Tucker
-
-    </p>
+    <p>&#169; Copyright 2022, J. Derek Tucker.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

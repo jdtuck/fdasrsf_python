@@ -214,7 +214,7 @@
     <span class="k">return</span> <span class="n">f</span></div>
 
 
-<div class="viewcode-block" id="optimum_reparam"><a class="viewcode-back" href="../utility_functions.html#utility_functions.optimum_reparam">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<div class="viewcode-block" id="optimum_reparam"><a class="viewcode-back" href="../utility_functions.html#utility_functions.optimum_reparam">[docs]</a><span class="k">def</span> <span class="nf">optimum_reparam</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="s2">&quot;roughness&quot;</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates the warping to align srsf q2 to q1</span>
 
@@ -223,6 +223,9 @@
 <span class="sd">    :param q2: vector of size N or array of NxM samples samples of second SRSF</span>
 <span class="sd">    :param method: method to apply optimization (default=&quot;DP2&quot;) options are &quot;DP&quot;,&quot;DP2&quot;,&quot;RBFGS&quot;</span>
 <span class="sd">    :param lam: controls the amount of elasticity (default = 0.0)</span>
+<span class="sd">    :param penalty: penalty type (default=&quot;roughness&quot;) options are &quot;roughness&quot;, &quot;l2gam&quot;, </span>
+<span class="sd">                    &quot;l2psi&quot;, &quot;geodesic&quot;. Only roughness implemented in all methods. To use</span>
+<span class="sd">                    others method needs to be &quot;RBFGS&quot;</span>
 <span class="sd">    :param grid_dim: size of the grid, for the DP2 method only (default = 7)</span>
 
 <span class="sd">    :rtype: vector</span>
@@ -230,6 +233,13 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="k">if</span> <span class="n">penalty</span> <span class="o">==</span> <span class="s2">&quot;l2gam&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP&quot;</span> <span class="ow">or</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP2&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;penalty not implemented&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">penalty</span> <span class="o">==</span> <span class="s2">&quot;l2psi&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP&quot;</span> <span class="ow">or</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP2&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;penalty not implemented&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">penalty</span> <span class="o">==</span> <span class="s2">&quot;geodesic&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP&quot;</span> <span class="ow">or</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP2&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;penalty not implemented&#39;</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DP&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">orN</span><span class="o">.</span><span class="n">coptimum_reparam</span><span class="p">(</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span>
@@ -258,7 +268,7 @@
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">rlbfgs</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">lam</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="n">penalty</span><span class="p">)</span>
             <span class="n">gam</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">gammaOpt</span>
 
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -266,7 +276,7 @@
             <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">q2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                 <span class="n">obj</span> <span class="o">=</span> <span class="n">rlbfgs</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">time</span><span class="p">)</span>
-                <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">lam</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="n">penalty</span><span class="p">)</span>
                 <span class="n">gam</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">gammaOpt</span>
     
         <span class="k">if</span> <span class="n">q1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -274,7 +284,7 @@
             <span class="n">time</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">q2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                 <span class="n">obj</span> <span class="o">=</span> <span class="n">rlbfgs</span><span class="p">(</span><span class="n">q1</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">q2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">time</span><span class="p">)</span>
-                <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">lam</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="n">penalty</span><span class="p">)</span>
                 <span class="n">gam</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">gammaOpt</span>
            
     <span class="k">else</span><span class="p">:</span>
