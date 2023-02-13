@@ -7,7 +7,7 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", 
            "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA", 
-           "elastic_glm_regression", "curve_pcr_regression"]
+           "elastic_glm_regression", "curve_pcr_regression", "image"]
 
 __version__ = "2.3.12"
 
@@ -35,6 +35,7 @@ from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, ela
 from .curve_pcr_regression import elastic_curve_pcr_regression
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB
+from .image import reparam_image
 from .curve_functions import resamplecurve, calculatecentroid, curve_to_q, optimum_reparam_curve, find_best_rotation, elastic_distance_curve
 from .curve_functions import q_to_curve, find_rotation_and_seed_coord
 from .curve_stats import fdacurve
