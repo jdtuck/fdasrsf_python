@@ -108,3 +108,8 @@ T. Harris, J. D. Tucker, B. Li, and L. Shand, "Elastic depths for detecting shap
 M. K. Ahn, J. D. Tucker, W. Wu, and A. Srivastava. “Regression Models Using Shapes of Functions as Predictors” Computational Statistics and Data Analysis, 10.1016/j.csda.2020.107017, 2020. 
 
 J. D. Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.
+
+X. Zhang, S. Kurtek, O. Chkrebtii, and J. D. Tucker, “Elastic k-means clustering of functional data 
+   for posterior exploration, with an application to inference on acute respiratory infection dynamics”, 
+   arXiv:2011.12397 [stat.ME], 2020.
+
