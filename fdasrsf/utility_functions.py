@@ -125,7 +125,7 @@ def srsf_to_f(q, time, f0=0.0):
     return f
 
 
-def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
+def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, penalty="roughness", grid_dim=7):
     """
     calculates the warping to align srsf q2 to q1
 
@@ -134,6 +134,9 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
     :param q2: vector of size N or array of NxM samples samples of second SRSF
     :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
+    :param penalty: penalty type (default="roughness") options are "roughness", "l2gam", 
+                    "l2psi", "geodesic". Only roughness implemented in all methods. To use
+                    others method needs to be "RBFGS"
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype: vector
@@ -141,6 +144,13 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
 
     """
 
+    if penalty == "l2gam" and (method == "DP" or method == "DP2"):
+        raise Exception('penalty not implemented')
+    if penalty == "l2psi" and (method == "DP" or method == "DP2"):
+        raise Exception('penalty not implemented')
+    if penalty == "geodesic" and (method == "DP" or method == "DP2"):
+        raise Exception('penalty not implemented')
+    
     if method == "DP":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN.coptimum_reparam(ascontiguousarray(q1), time,
@@ -169,7 +179,7 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
         if q1.ndim == 1 and q2.ndim == 1:
             time = linspace(0,1,q1.shape[0])
             obj = rlbfgs(q1,q2,time)
-            obj.solve()
+            obj.solve(lam=lam, penalty=penalty)
             gam = obj.gammaOpt
 
         if q1.ndim == 1 and q2.ndim == 2:
@@ -177,7 +187,7 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
             time = linspace(0,1,q1.shape[0])
             for i in range(0,q2.shape[1]):
                 obj = rlbfgs(q1,q2[:,i],time)
-                obj.solve()
+                obj.solve(lam=lam, penalty=penalty)
                 gam[:,i] = obj.gammaOpt
     
         if q1.ndim == 2 and q2.ndim == 2:
@@ -185,7 +195,7 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, grid_dim=7):
             time = linspace(0,1,q1.shape[0])
             for i in range(0,q2.shape[1]):
                 obj = rlbfgs(q1[:,i],q2[:,i],time)
-                obj.solve()
+                obj.solve(lam=lam, penalty=penalty)
                 gam[:,i] = obj.gammaOpt
            
     else:

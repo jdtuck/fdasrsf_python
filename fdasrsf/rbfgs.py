@@ -58,12 +58,14 @@ class rlbfgs:
             self.q1 = q1/norm(q1)
             self.q2 = q2/norm(q2)
     
-    def solve(self, maxiter=30, verb=0):
+    def solve(self, maxiter=30, verb=0, lam=0, penalty="roughness"):
         """
         Run solver
 
         :param maxiter: maximum number of interations
         :param verb: integer used to tune the amount of output
+        :param lam: amount of penalty
+        :param penalty: penalty, "roughness", "l2gam", "l2psi", "geodesic"
         """
         
         # @todo add options to parameters if needed
@@ -121,7 +123,7 @@ class rlbfgs:
         accepted = True
 
         # compute cost function and its gradient
-        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde)
+        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde, htilde, lam, penalty)
         hCurGradNorm = self.norm(hCurGradient)
 
         # line-search statistics for recording in info
@@ -171,7 +173,7 @@ class rlbfgs:
 
             # execute line-search
             in_prod = self.inner(hCurGradient,p)
-            stepsize, hNext, lsstats = self.linesearch_hint(p, hCurCost, in_prod, q2tilde, options)
+            stepsize, hNext, lsstats = self.linesearch_hint(p, hCurCost, in_prod, q2tilde, lam, penalty)
 
             # Iterative update of optimal diffeomorphism and q2 via group action
             htilde = self.group_action_SRVF(htilde,hNext)
@@ -183,7 +185,7 @@ class rlbfgs:
             step = alpha*p
 
             # query cost and gradient at the candidate new point
-            hNextCost, hNextGradient = self.alignment_costgrad(q2tilde)
+            hNextCost, hNextGradient = self.alignment_costgrad(q2tilde, hNext, lam, penalty)
 
             # compute sk and yk
             sk = step
@@ -270,29 +272,69 @@ class rlbfgs:
         
         return
 
-    def alignment_cost(self, h, q2k):
+    def alignment_cost(self, h, q2k, lam=0, penalty="roughness"):
         r"""
         Evaluate the cost function :math:`f = ||q1 - ((q2,hk),h)||^2`.
         :math:`h=sqrt{\dot{\gamma}}` is a sequential update of cumulative warping hk
         """
         q2new = self.group_action_SRVF(q2k,h)
-        f = self.normL2(self.q1-q2new)**2
+
+        if penalty == "roughness":
+            time1 = np.linspace(0,1,h.shape[0])
+            binsize = np.mean(np.diff(time1))
+            pen = trapz(np.gradient(h**2,binsize)**2, time1)
+        elif penalty == "l2gam":
+            pen = self.normL2(h**2-np.ones(h.shape[0]))**2
+        elif penalty == "l2psi":
+            pen = self.normL2(h-np.ones(h.shape[0]))**2
+        elif penalty == "geodesic":
+            time1 = np.linspace(0,1,h.shape[0])
+            q1dotq2 = trapz(h, time1)
+            if q1dotq2 > 1:
+                q1dotq2 = 1
+            elif q1dotq2 < -1:
+                q1dotq2 = -1
+            pen = np.real(np.arccos(q1dotq2))**2
+        else:
+            raise Exception('penalty not implemented')
+
+        f = self.normL2(self.q1-q2new)**2 + lam * pen
 
         return f
 
-    def alignment_costgrad(self, q2k):
+    def alignment_costgrad(self, q2k, h, lam=0, penalty="roughness"):
         r"""
         Evaluate the cost function :math:`f = ||q1 - (q2,hk)||^2`, and
         evaluate the gradient g = grad f in the tangent space of identity.
         :math:`hk=sqrt{\dot{\gamma_k}}` is the cumulative warping of q2 produced by an
         iterative sequential optimization algorithm.
         """
+
+        if penalty == "roughness":
+            time1 = np.linspace(0,1,h.shape[0])
+            binsize = np.mean(np.diff(time1))
+            pen = trapz(np.gradient(h**2,binsize)**2, time1)
+        elif penalty == "l2gam":
+            pen = self.normL2(h**2-np.ones(h.shape[0]))**2
+        elif penalty == "l2psi":
+            pen = self.normL2(h-np.ones(h.shape[0]))**2
+        elif penalty == "geodesic":
+            time1 = np.linspace(0,1,h.shape[0])
+            q1dotq2 = trapz(h, time1)
+            if q1dotq2 > 1:
+                q1dotq2 = 1
+            elif q1dotq2 < -1:
+                q1dotq2 = -1
+            pen = np.real(np.arccos(q1dotq2))**2
+        else:
+            raise Exception('penalty not implemented')
+
         t = self.t
         T = self.T
         q1 = self.q1
 
         # compute cost
-        f = self.normL2(q1-q2k)**2
+        f = self.normL2(q1-q2k)**2 + lam * pen
 
         # compute cost gradient
         q2kdot = np.gradient(q2k, 1/(T-1))
@@ -337,7 +379,7 @@ class rlbfgs:
 
         return direction
     
-    def linesearch_hint(self, d, f0, df0, q2k, options):
+    def linesearch_hint(self, d, f0, df0, q2k, lam=0, penalty="roughness"):
         """
         Armijo line-search based on the line-search hint in the problem structure.
         
@@ -369,7 +411,7 @@ class rlbfgs:
 
         # Make the chosen step and compute cost there
         newh = self.exp(hid, d, alpha)
-        newf = self.alignment_cost(newh, q2k)
+        newf = self.alignment_cost(newh, q2k, lam, penalty)
         cost_evaluations = 1
 
         # backtrack while the Armijo criterion is not satisfied
@@ -381,7 +423,7 @@ class rlbfgs:
 
             # look closer down the line
             newh = self.exp(hid, d, alpha)
-            newf = self.alignment_cost(newh, q2k)
+            newf = self.alignment_cost(newh, q2k, lam, penalty)
             cost_evaluations += 1
             tst = newh<=0
 
