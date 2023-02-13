@@ -1,6 +1,3 @@
-#ifndef MYVECTOR_H
-#define MYVECTOR_H
-
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -16,5 +13,3 @@ void GramSchmitd(double *x, int &n, int d);
 
 double innerSquare(const double *u, const double *v, int n, int t, int d);
 void GramSchmitdSquare(double *x, int &n, int n1, int n2, int d);
-
-#endif

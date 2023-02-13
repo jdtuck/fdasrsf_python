@@ -6,48 +6,6 @@
 #include "ImageRegister.h"
 
 using namespace std;
-using namespace Rcpp;
-
-RcppExport SEXP find_grad_2D(SEXP dfdui, SEXP dfdvi, SEXP fi, SEXP ni, SEXP ti, SEXP di){
-    int n = as<int>(ni);
-    int t = as<int>(ti);
-    int d = as<int>(di);
-    NumericVector f(fi);
-    NumericVector dfdu(dfdui);
-    NumericVector dfdv(dfdvi);
-
-    findgrad2D(dfdu.begin(), dfdv.begin(), f.begin(), n, t, d);
-    List ret;
-    ret["dfdu"] = dfdu;
-    ret["dfdv"] = dfdv;
-    return(ret);
-}
-
-RcppExport SEXP check_cross(SEXP fi, SEXP ni, SEXP ti, SEXP Di){
-    int temp;
-    int n = as<int>(ni);
-    int t = as<int>(ti);
-    int D = as<int>(Di);
-    NumericVector f(fi);
-
-    temp = check_crossing(f.begin(), n, t, D);
-
-    return wrap(temp);
-}
-
-RcppExport SEXP find_phistar(SEXP wi, SEXP qi, SEXP bi, SEXP ni, SEXP ti, SEXP di, SEXP Ki){
-    int n = as<int>(ni);
-    int t = as<int>(ti);
-    int d = as<int>(di);
-    int K = as<int>(Ki);
-    NumericVector w(wi);
-    NumericVector q(qi);
-    NumericVector b(bi);
-
-    findphistar(w.begin(), q.begin(), b.begin(), n, t, d, K);
-
-    return(w);
-}
 
 void findgrad(double *dfdu, double *dfdv, const double *f, int n, int t) {
     int i, j, k, N = n*t;
@@ -533,7 +491,6 @@ int ReparamSurf(double *Fnew, double *gamnew, double *H,
     // compute initial energy
     Hdiff = 100;
     Calculate_Distance(H+iter,qt,qm,n,t,d);
-    Rprintf("iter %d, energy %f \n", iter, *(H+iter));
 
     // main iteration
     for (iter = 1; iter < itermax && Hdiff > tol; ++iter) {
@@ -566,8 +523,6 @@ update:
 
         Calculate_Distance(H+iter,qt,qm,n,t,d);
         Hdiff = (H[iter-1]-H[iter])/H[iter-1];
-
-        Rprintf("iter %d, energy %f \n", iter, *(H+iter));
 
         // update iteration or break out
         if (H[iter] <= H[iter-1]) {

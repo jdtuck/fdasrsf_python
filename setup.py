@@ -84,6 +84,11 @@ extensions = [
         include_dirs=[numpy.get_include()],
         language="c++"
     ),
+    Extension(name="cimage",
+        sources=["src/imagecpp.pyx", "src/UnitSquareImage.cpp"],
+        include_dirs=[numpy.get_include()],
+        language="c++"
+    ),
     dp_build.ffibuilder.distutils_extension(),
 ]
 
