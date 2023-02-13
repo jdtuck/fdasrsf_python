@@ -1,91 +1,49 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tolerance &mdash; fdasrsf 2.3.12 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> fdasrsf
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            fdasrsf
           </a>
-
-          
-            
-            
               <div class="version">
                 2.2
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../time_warping.html">Functional Alignment</a></li>
@@ -96,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kmeans.html">Elastic Functional Clustering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
@@ -103,66 +62,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../umap_metric.html">UMAP EFDA Metrics</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">fdasrsf</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="index.html">Module code</a> &raquo;</li>
-        
-      <li>tolerance</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tolerance</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for tolerance</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Functional Tolerance Bounds using SRSF</span>
@@ -180,8 +103,8 @@
 <span class="kn">from</span> <span class="nn">fdasrsf.boxplots</span> <span class="kn">import</span> <span class="n">ampbox</span><span class="p">,</span> <span class="n">phbox</span>
 
 
-<div class="viewcode-block" id="bootTB"><a class="viewcode-back" href="../tolerance.html#tolerance.bootTB">[docs]</a><span class="k">def</span> <span class="nf">bootTB</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">.99</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="bootTB"><a class="viewcode-back" href="../tolerance.html#tolerance.bootTB">[docs]</a><span class="k">def</span> <span class="nf">bootTB</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">.99</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function computes tolerance bounds for functional data containing</span>
 <span class="sd">    phase and amplitude variation using bootstrap sampling</span>
 
@@ -252,7 +175,7 @@
 
 
 <div class="viewcode-block" id="pcaTB"><a class="viewcode-back" href="../tolerance.html#tolerance.pcaTB">[docs]</a><span class="k">def</span> <span class="nf">pcaTB</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">.99</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function computes tolerance bounds for functional data containing</span>
 <span class="sd">    phase and amplitude variation using fPCA</span>
 
@@ -287,7 +210,7 @@
 
 
 <div class="viewcode-block" id="mvtol_region"><a class="viewcode-back" href="../tolerance.html#tolerance.mvtol_region">[docs]</a><span class="k">def</span> <span class="nf">mvtol_region</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes tolerance factor for multivariate normal</span>
 
 <span class="sd">    Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal</span>
@@ -323,7 +246,7 @@
 
 
 <div class="viewcode-block" id="rwishart"><a class="viewcode-back" href="../tolerance.html#tolerance.rwishart">[docs]</a><span class="k">def</span> <span class="nf">rwishart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a random wishart matrix</span>
 <span class="sd">    </span>
 <span class="sd">    :param df: degree of freedom</span>
@@ -348,42 +271,30 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2022, J. Derek Tucker
-
-    </p>
+    <p>&#169; Copyright 2022, J. Derek Tucker.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

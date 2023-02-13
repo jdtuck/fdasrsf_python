@@ -1,94 +1,51 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elastic Principal Component Regression &mdash; fdasrsf 2.3.12 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Elastic GLM Regression" href="elastic_glm_regression.html" />
     <link rel="prev" title="Elastic Regression" href="regression.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> fdasrsf
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            fdasrsf
           </a>
-
-          
-            
-            
               <div class="version">
                 2.2
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time_warping.html">Functional Alignment</a></li>
@@ -96,11 +53,27 @@
 <li class="toctree-l1"><a class="reference internal" href="boxplots.html">Elastic Functional Boxplots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fPLS.html">Functional Principal Least Squares</a></li>
 <li class="toctree-l1"><a class="reference internal" href="regression.html">Elastic Regression</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Elastic Principal Component Regression</a><ul class="simple">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Elastic Principal Component Regression</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pcr_regression.elastic_lpcr_regression"><code class="docutils literal notranslate"><span class="pre">elastic_lpcr_regression</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcr_regression.elastic_lpcr_regression.calc_model"><code class="docutils literal notranslate"><span class="pre">elastic_lpcr_regression.calc_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pcr_regression.elastic_lpcr_regression.predict"><code class="docutils literal notranslate"><span class="pre">elastic_lpcr_regression.predict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pcr_regression.elastic_mlpcr_regression"><code class="docutils literal notranslate"><span class="pre">elastic_mlpcr_regression</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcr_regression.elastic_mlpcr_regression.calc_model"><code class="docutils literal notranslate"><span class="pre">elastic_mlpcr_regression.calc_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pcr_regression.elastic_mlpcr_regression.predict"><code class="docutils literal notranslate"><span class="pre">elastic_mlpcr_regression.predict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pcr_regression.elastic_pcr_regression"><code class="docutils literal notranslate"><span class="pre">elastic_pcr_regression</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcr_regression.elastic_pcr_regression.calc_model"><code class="docutils literal notranslate"><span class="pre">elastic_pcr_regression.calc_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pcr_regression.elastic_pcr_regression.predict"><code class="docutils literal notranslate"><span class="pre">elastic_pcr_regression.predict()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tolerance.html">Elastic Functional Tolerance Bounds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kmeans.html">Elastic Functional Clustering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility_functions.html">Utility Functions</a></li>
@@ -108,68 +81,30 @@
 <li class="toctree-l1"><a class="reference internal" href="umap_metric.html">UMAP EFDA Metrics</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fdasrsf</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>Elastic Principal Component Regression</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Elastic Principal Component Regression</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/pcr_regression.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
@@ -195,18 +130,18 @@
 }
 </style>
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="_images/logo.png" class="align-right" src="_images/logo.png" style="width: 200px;" /></a>
-<section id="module-pcr_regression">
-<span id="elastic-principal-component-regression"></span><h1>Elastic Principal Component Regression<a class="headerlink" href="#module-pcr_regression" title="Permalink to this heading">¶</a></h1>
+<div class="section" id="module-pcr_regression">
+<span id="elastic-principal-component-regression"></span><h1>Elastic Principal Component Regression<a class="headerlink" href="#module-pcr_regression" title="Permalink to this heading"></a></h1>
 <p>Warping Invariant PCR Regression using SRSF</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pcr_regression.elastic_lpcr_regression">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcr_regression.</span></span><span class="sig-name descname"><span class="pre">elastic_lpcr_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_lpcr_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_lpcr_regression" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcr_regression.</span></span><span class="sig-name descname"><span class="pre">elastic_lpcr_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_lpcr_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_lpcr_regression" title="Permalink to this definition"></a></dt>
 <dd><p>This class provides elastic logistic pcr regression for functional 
 data using the SRVF framework accounting for warping</p>
 <p>Usage:  obj = elastic_lpcr_regression(f,y,time)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – (M,N) % matrix defining N functions of M samples</p></li>
 <li><p><strong>y</strong> – response vector of length N (-1/1)</p></li>
@@ -225,11 +160,11 @@ data using the SRVF framework accounting for warping</p>
 Date   :  18-Mar-2018</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pcr_regression.elastic_lpcr_regression.calc_model">
-<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_lpcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_lpcr_regression.calc_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_lpcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_lpcr_regression.calc_model" title="Permalink to this definition"></a></dt>
 <dd><p>This function identifies a logistic regression model with phase-variability
 using elastic pca</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pca_method</strong> – string specifing pca method (options = “combined”,
 “vert”, or “horiz”, default = “combined”)</p></li>
@@ -244,14 +179,14 @@ using elastic pca</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pcr_regression.elastic_lpcr_regression.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_lpcr_regression.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_lpcr_regression.predict" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_lpcr_regression.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_lpcr_regression.predict" title="Permalink to this definition"></a></dt>
 <dd><p>This function performs prediction on regression model on new data if available or current stored data in object
 Usage:  obj.predict()</p>
 <blockquote>
 <div><p>obj.predict(newdata)</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
@@ -268,12 +203,12 @@ Usage:  obj.predict()</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pcr_regression.elastic_mlpcr_regression">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcr_regression.</span></span><span class="sig-name descname"><span class="pre">elastic_mlpcr_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_mlpcr_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_mlpcr_regression" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcr_regression.</span></span><span class="sig-name descname"><span class="pre">elastic_mlpcr_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_mlpcr_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_mlpcr_regression" title="Permalink to this definition"></a></dt>
 <dd><p>This class provides elastic multinomial logistic pcr regression for functional
 data using the SRVF framework accounting for warping</p>
 <p>Usage:  obj = elastic_mlpcr_regression(f,y,time)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – (M,N) % matrix defining N functions of M samples</p></li>
 <li><p><strong>y</strong> – response vector of length N</p></li>
@@ -293,11 +228,11 @@ data using the SRVF framework accounting for warping</p>
 Date   :  18-Mar-2018</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pcr_regression.elastic_mlpcr_regression.calc_model">
-<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_mlpcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_mlpcr_regression.calc_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_mlpcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_mlpcr_regression.calc_model" title="Permalink to this definition"></a></dt>
 <dd><p>This function identifies a logistic regression model with phase-variability
 using elastic pca</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
 <li><p><strong>y</strong> – numpy array of N responses</p></li>
@@ -315,14 +250,14 @@ using elastic pca</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pcr_regression.elastic_mlpcr_regression.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_mlpcr_regression.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_mlpcr_regression.predict" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_mlpcr_regression.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_mlpcr_regression.predict" title="Permalink to this definition"></a></dt>
 <dd><p>This function performs prediction on regression model on new data if available or current stored data in object
 Usage:  obj.predict()</p>
 <blockquote>
 <div><p>obj.predict(newdata)</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
@@ -339,12 +274,12 @@ Usage:  obj.predict()</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pcr_regression.elastic_pcr_regression">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcr_regression.</span></span><span class="sig-name descname"><span class="pre">elastic_pcr_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcr_regression.</span></span><span class="sig-name descname"><span class="pre">elastic_pcr_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression" title="Permalink to this definition"></a></dt>
 <dd><p>This class provides elastic pcr regression for functional data using the
 SRVF framework accounting for warping</p>
 <p>Usage:  obj = elastic_pcr_regression(f,y,time)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – (M,N) % matrix defining N functions of M samples</p></li>
 <li><p><strong>y</strong> – response vector of length N</p></li>
@@ -360,11 +295,11 @@ SRVF framework accounting for warping</p>
 Date   :  18-Mar-2018</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pcr_regression.elastic_pcr_regression.calc_model">
-<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression.calc_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression.calc_model" title="Permalink to this definition"></a></dt>
 <dd><p>This function identifies a regression model with phase-variability
 using elastic pca</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pca_method</strong> – string specifing pca method (options = “combined”,
 “vert”, or “horiz”, default = “combined”)</p></li>
@@ -380,14 +315,14 @@ using elastic pca</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pcr_regression.elastic_pcr_regression.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression.predict" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression.predict" title="Permalink to this definition"></a></dt>
 <dd><p>This function performs prediction on regression model on new data if available or current stored data in object
 Usage:  obj.predict()</p>
 <blockquote>
 <div><p>obj.predict(newdata)</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>newdata</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – dict containing new data for prediction (needs the keys below, if None predicts on training data)</p></li>
 <li><p><strong>f</strong> – (M,N) matrix of functions</p></li>
@@ -404,55 +339,37 @@ Usage:  obj.predict()</p>
 
 <div class="toctree-wrapper compound">
 </div>
-</section>
+</div>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="elastic_glm_regression.html" class="btn btn-neutral float-right" title="Elastic GLM Regression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="regression.html" class="btn btn-neutral float-left" title="Elastic Regression" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="regression.html" class="btn btn-neutral float-left" title="Elastic Regression" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="elastic_glm_regression.html" class="btn btn-neutral float-right" title="Elastic GLM Regression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2022, J. Derek Tucker
-
-    </p>
+    <p>&#169; Copyright 2022, J. Derek Tucker.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
