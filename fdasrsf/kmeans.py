@@ -96,7 +96,7 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
                     gam_tmp = gam.transpose()
                 else:
                     for n in range(0,N):
-                        gam_tmp[:,k] = uf.optimum_reparam(templates_q[:, k], time, q[:, n],
+                        gam_tmp[:,n] = uf.optimum_reparam(templates_q[:, k], time, q[:, n],
                                 omethod, lam)
             else:
                 for n in range(0,N):
@@ -107,8 +107,8 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
             dist = np.zeros(N)
             for i in range(0, N):
                 fw[:, i] = uf.warp_f_gamma(time, f[:,i], gam_tmp[:,i])
-                qw[:, k] = uf.f_to_srsf(fw[:, i], time)
-                dist[i] = np.sqrt(trapz((qw - templates_q[:, k]) ** 2, time))
+                qw[:, i] = uf.f_to_srsf(fw[:, i], time)
+                dist[i] = np.sqrt(trapz((qw[:, i] - templates_q[:, k]) ** 2, time))
             
             Dy[k,:] = dist
             qn[k] = qw
@@ -120,9 +120,9 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
 
         # Normalization
         for k in range(K):
-            idx = np.where(cluster_id == k)
-            ftmp = fn[i][:,idx]
-            gamtmp = gam[i][:,idx]
+            idx = np.where(cluster_id == k)[0]
+            ftmp = fn[k][:,idx]
+            gamtmp = gam[k][:,idx]
             gamI = uf.SqrtMeanInverse(gamtmp)
             N1 = idx.shape[0]
 
@@ -132,7 +132,7 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
             if parallel:
                 out = Parallel(n_jobs=cores)(delayed(norm_sub)(ftmp[:, i],
                                             time, gamtmp[:,i], gamI) for i in range(N1))
-                for i in range(0, fns):
+                for i in range(0, N1):
                     f_temp[:,i] = out[i][0]
                     q_temp[:, i] = out[i][1]
                     gamt[:, i] = out[i][2]
@@ -148,9 +148,9 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
         qun_t = np.zeros(K)
         old_templates_q = templates_q.copy()
         for k in range(K):
-            idx = np.where(cluster_id == k)
-            templates_q[:,k] = qn[k][:,id].mean(axis=1)
-            templates[:,k] = fn[k][:,id].mean(axis=1)
+            idx = np.where(cluster_id == k)[0]
+            templates_q[:,k] = qn[k][:,idx].mean(axis=1)
+            templates[:,k] = fn[k][:,idx].mean(axis=1)
 
             qun_t[k] = norm(templates_q[:,k] - old_templates_q[:,k])/norm(old_templates_q[:,k])
         
@@ -162,8 +162,9 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
     # Output
     ftmp = {}
     qtmp = {}
+    gamtmp = {}
     for k in range(K):
-        idx = np.where(cluster_id == k)
+        idx = np.where(cluster_id == k)[0]
         ftmp[k] = fn[k][:,idx]
         qtmp[k] = qn[k][:,idx]
         gamtmp[k] = gam[k][:,idx]
@@ -183,7 +184,7 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
     out['qun'] = qun[0:itr]
 
     if showplot:
-        num_plot = np.ceil(K/6)
+        num_plot = int(np.ceil(K/6))
         a = mcolors.TABLEAU_COLORS
         colors = list(a.keys())
         plt.figure()
@@ -197,20 +198,24 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
         for k in range(num_plot):
             cnt = 1
             plt.figure()
-            for n in np.arange((k-1)*6,min(K,k*6)+1,dtype=int):
+            for n in np.arange(k*6,min(K,(k+1)*6),dtype=int):
                 ax = plt.subplot(2, 3, cnt)
                 ax.plot(time, ftmp[n], color='lightgrey')
                 ax.plot(time, templates[:, n], color=colors[cnt-1])
                 ax.set_title('Cluster f: %d' % n)
+                cnt += 1
             
         for k in range(num_plot):
             cnt = 1
             plt.figure()
-            for n in np.arange((k-1)*6,min(K,k*6)+1,dtype=int):
+            for n in np.arange(k*6,min(K,(k+1)*6),dtype=int):
                 ax = plt.subplot(2, 3, cnt)
                 ax.plot(time, qtmp[n], color='lightgrey')
                 ax.plot(time, templates_q[:, n], color=colors[cnt-1])
                 ax.set_title('Cluster q: %d' % n)
+                cnt += 1
+            
+        plt.show()
 
     return out
 
