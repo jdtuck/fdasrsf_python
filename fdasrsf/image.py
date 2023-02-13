@@ -7,7 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 import numpy as np
 import fdasrsf.image_functions as fif
-import imagecpp as im
+import cimage as im
 
 
 def reparam_image(It, Im, gam=None, b=None, stepsize=1e-4, itermax=20):

@@ -7,7 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 import numpy as np
 from scipy.interpolate import griddata
-import imagecpp as im
+import cimage as im
 
 
 def apply_gam_imag(F, gam):
