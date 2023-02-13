@@ -2,7 +2,6 @@
 #include <cmath>
 #include <iostream>
 #include <stdio.h>
-#include <Rcpp.h>
 #include "UnitSquareImage.h"
 #include "ImageRegister.h"
 
