@@ -8,7 +8,10 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import fdasrsf.utility_functions as uf
 from scipy.integrate import trapz
+from numpy.linalg import norm
 from joblib import Parallel, delayed
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 
 def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False,
@@ -142,13 +145,74 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
             gam[k][:,idx] = gamt
         
         # Template Identification
+        qun_t = np.zeros(K)
+        old_templates_q = templates_q.copy()
+        for k in range(K):
+            idx = np.where(cluster_id == k)
+            templates_q[:,k] = qn[k][:,id].mean(axis=1)
+            templates[:,k] = fn[k][:,id].mean(axis=1)
 
+            qun_t[k] = norm(templates_q[:,k] - old_templates_q[:,k])/norm(old_templates_q[:,k])
+        
+        qun[itr] = qun_t.mean()
 
+        if qun[itr] < thresh:
+            break
 
-
+    # Output
+    ftmp = {}
+    qtmp = {}
+    for k in range(K):
+        idx = np.where(cluster_id == k)
+        ftmp[k] = fn[k][:,idx]
+        qtmp[k] = qn[k][:,idx]
+        gamtmp[k] = gam[k][:,idx]
     
+    out = {}
+    out['f0'] = f
+    out['q0'] = q
+    out['time'] = time
+    out['fn'] = ftmp
+    out['qn'] = qtmp
+    out['gam'] = gamtmp
+    out['labels'] = cluster_id
+    out['templates'] = templates
+    out['templates_q'] = templates_q
+    out['lambda'] = lam
+    out['omethod'] = omethod
+    out['qun'] = qun[0:itr]
 
-    return
+    if showplot:
+        num_plot = np.ceil(K/6)
+        a = mcolors.TABLEAU_COLORS
+        colors = list(a.keys())
+        plt.figure()
+        plt.plot(time, f)
+        plt.title('Original Data')
+
+        plt.figure()
+        plt.plot(time, templates)
+        plt.title('Cluster Mean Functions')
+
+        for k in range(num_plot):
+            cnt = 1
+            plt.figure()
+            for n in np.arange((k-1)*6,min(K,k*6)+1,dtype=int):
+                ax = plt.subplot(2, 3, cnt)
+                ax.plot(time, ftmp[n], color='lightgrey')
+                ax.plot(time, templates[:, n], color=colors[cnt-1])
+                ax.set_title('Cluster f: %d' % n)
+            
+        for k in range(num_plot):
+            cnt = 1
+            plt.figure()
+            for n in np.arange((k-1)*6,min(K,k*6)+1,dtype=int):
+                ax = plt.subplot(2, 3, cnt)
+                ax.plot(time, qtmp[n], color='lightgrey')
+                ax.plot(time, templates_q[:, n], color=colors[cnt-1])
+                ax.set_title('Cluster q: %d' % n)
+
+    return out
 
 
 def norm_sub(f,time,gam,gamI):
