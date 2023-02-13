@@ -93,7 +93,7 @@ def kmeans_align(f, time, K, seeds=None, lam=0, showplot=True, smooth_data=False
                     out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(templates_q[:, k],
                                             time, q[:, n], omethod, lam) for n in range(N))
                     gam_tmp = np.array(out)
-                    gam_tmp = gam.transpose()
+                    gam_tmp = gam_tmp.transpose()
                 else:
                     for n in range(0,N):
                         gam_tmp[:,n] = uf.optimum_reparam(templates_q[:, k], time, q[:, n],
