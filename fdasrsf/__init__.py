@@ -9,7 +9,7 @@ __all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_sta
            "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA", 
            "elastic_glm_regression", "curve_pcr_regression", "kmeans", "image", "image_functions"]
 
-__version__ = "2.3.12"
+__version__ = "2.4.0"
 
 import sys
 
