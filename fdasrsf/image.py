@@ -54,7 +54,7 @@ def reparam_image(It, Im, gam=None, b=None, stepsize=1e-4, itermax=20):
     iter = 0
     H[iter] = fif.compEnergy(qt,qm)
 
-    print('Iteration %d, energy %f\n'% (iter-1,H(iter)))
+    print('Iteration %d, energy %f\n'% (iter-1,H[iter]))
 
     gamupdate = fif.updateGam(qt,qm,b)
 
@@ -80,7 +80,7 @@ def reparam_image(It, Im, gam=None, b=None, stepsize=1e-4, itermax=20):
         Inew /= Inew.max()
         qm = fif.image_to_q(Inew)
         H[iter] = fif.compEnergy(qt,qm)
-        print('Iteration %d, energy %f\n'% (iter-1,H(iter)))
+        print('Iteration %d, energy %f\n'% (iter-1,H[iter]))
 
         if (iter > 4):
             hstop = 1

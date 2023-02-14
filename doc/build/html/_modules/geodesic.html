@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image.html">Elastic Image Warping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
@@ -173,10 +174,29 @@
 
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">tile</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">empty</span><span class="p">,</span> <span class="n">isnan</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapz</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.curve_functions</span> <span class="k">as</span> <span class="nn">cf</span>
+
+
+<div class="viewcode-block" id="plot_geod"><a class="viewcode-back" href="../geodesic.html#geodesic.plot_geod">[docs]</a><span class="k">def</span> <span class="nf">plot_geod</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots the geodesic path as a sequence of curves</span>
+
+<span class="sd">    :param path: numpy ndarray of shape (2,M,K) of M sample points of K samples along path</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">mv</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">path</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mv</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">i</span><span class="p">],</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="n">i</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">return</span></div>
 
 
 <div class="viewcode-block" id="geod_sphere"><a class="viewcode-back" href="../geodesic.html#geodesic.geod_sphere">[docs]</a><span class="k">def</span> <span class="nf">geod_sphere</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -194,7 +214,7 @@
 <span class="sd">    :rtype: numpy ndarray</span>
 <span class="sd">    :return dist: geodesic distance</span>
 <span class="sd">    :return path: geodesic path</span>
-<span class="sd">    :return O: rotation matrix</span>
+<span class="sd">    :return PsiQ: geodesic path in SRVF</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lam</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -267,7 +287,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">PsiQ</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="path_straightening"><a class="viewcode-back" href="../geodesic.html#geodesic.path_straightening">[docs]</a><span class="k">def</span> <span class="nf">path_straightening</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">betamid</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">&quot;rand&quot;</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<div class="viewcode-block" id="path_straightening"><a class="viewcode-back" href="../geodesic.html#geodesic.path_straightening">[docs]</a><span class="k">def</span> <span class="nf">path_straightening</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">betamid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">&quot;rand&quot;</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform path straightening to find geodesic between two shapes in either</span>
 <span class="sd">    the space of closed curves or the space of affine standardized curves.</span>
@@ -277,7 +297,7 @@
 <span class="sd">    :param beta1: numpy ndarray of shape (2,M) of M samples (first curve)</span>
 <span class="sd">    :param beta2: numpy ndarray of shape (2,M) of M samples (end curve)</span>
 <span class="sd">    :param betamid: numpy ndarray of shape (2,M) of M samples (mid curve</span>
-<span class="sd">     Default = NULL, only needed for init &quot;rand&quot;)</span>
+<span class="sd">     Default = None, only needed for init &quot;geod&quot;)</span>
 <span class="sd">    :param init: initialize path geodesic or random (Default = &quot;rand&quot;)</span>
 <span class="sd">    :param T: Number of samples of curve (Default = 100)</span>
 <span class="sd">    :param k: number of samples along path (Default = 5)</span>
@@ -399,7 +419,7 @@
     <span class="n">q_mid</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta_mid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># find optimal rotation of q2</span>
-    <span class="n">beta2</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">tau1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">)</span>
+    <span class="n">beta2</span><span class="p">,</span> <span class="n">q2best</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">gamIbest</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">)</span>
     <span class="n">q2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># find the optimal coorespondence</span>
@@ -410,7 +430,7 @@
     <span class="n">beta2n</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">group_action_by_gamma_coord</span><span class="p">(</span><span class="n">beta2</span><span class="p">,</span> <span class="n">gamI</span><span class="p">)</span>
 
     <span class="c1"># find optimal rotation of q2</span>
-    <span class="n">beta2n</span><span class="p">,</span> <span class="n">O2</span><span class="p">,</span> <span class="n">tau1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2n</span><span class="p">)</span>
+    <span class="n">beta2n</span><span class="p">,</span> <span class="n">q2n1</span><span class="p">,</span> <span class="n">O2</span><span class="p">,</span> <span class="n">gamIbest1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2n</span><span class="p">)</span>
     <span class="n">centroid2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta2n</span><span class="p">)</span>
     <span class="n">beta2n</span> <span class="o">=</span> <span class="n">beta2n</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid2</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
     <span class="n">q2n</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2n</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>

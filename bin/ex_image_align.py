@@ -36,3 +36,7 @@ plt.imshow(I2)
 plt.title('I2')
 # %%
 M = 10
+b = fs.formbasisTid(M, m, n, 't')
+
+out = fs.reparam_image(F1,F2,None,b)
+# %%

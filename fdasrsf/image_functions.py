@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 import numpy as np
-from scipy.interpolate import griddata
+from scipy.interpolate import RegularGridInterpolator
 import cimage as im
 
 
@@ -19,7 +19,8 @@ def apply_gam_imag(F, gam):
     V = np.linspace(0,1,n)
 
     for j in range(d):
-        Fnew[:,:,j] = griddata((U,V), F[:,:,j], (gam[:,:,0], gam[:,:,1]), method='cubic')
+        interp = RegularGridInterpolator((U, V), F[:,:,j], method="linear")
+        Fnew[:,:,j] = interp((gam[:,:,0], gam[:,:,1]))
     
     return Fnew
 
@@ -142,7 +143,8 @@ def apply_gam_gamid(gamid, gaminc):
 
     gamcum = np.zeros((m,n,d))
     for j in range(d):
-        gamcum[:,:,j] = griddata((U,V), gamid[:,:,j], (gaminc[:,:,0], gaminc[:,:,1]), method='cubic')
+        interp = RegularGridInterpolator((U, V), gamid[:,:,j], method="linear")
+        gamcum[:,:,j] = interp((gaminc[:,:,0], gaminc[:,:,1]))
     
     return gamcum
 
@@ -164,7 +166,7 @@ def formbasisTid(M, m, n, base_type):
 
     if base_type == 't':
         b = np.zeros((m,n,2,2*M))
-        for s in range(M):
+        for s in range(1,M+1):
             const = np.sqrt(2)*np.pi*s
             sPI2 = 2*np.pi*s
 

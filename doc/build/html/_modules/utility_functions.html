@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image.html">Elastic Image Warping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
@@ -180,7 +181,7 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">ascontiguousarray</span><span class="p">,</span> <span class="nb">round</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ones</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">diagflat</span><span class="p">,</span> <span class="n">inner</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">column_stack</span><span class="p">,</span> <span class="n">append</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">median</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">quantile</span><span class="p">,</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">insert</span><span class="p">,</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">percentile</span><span class="p">,</span> <span class="n">dot</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span>
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
@@ -1163,8 +1164,8 @@
 
 
 <span class="k">def</span> <span class="nf">statsFun</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">quantile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="mf">0.025</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">quantile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="mf">0.975</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="mf">0.025</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="mf">0.975</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">column_stack</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
     <span class="k">return</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 

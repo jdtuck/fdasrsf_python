@@ -28,6 +28,7 @@ using functional component analysis and regression.
    pcr_regression.rst
    elastic_glm_regression.rst
    tolerance.rst
+   image.rst
    curve_statistics.rst
    geodesic.rst
    utility_functions.rst
@@ -100,6 +101,8 @@ References
    of Functions as Predictors” Computational Statistics and Data Analysis, 10.1016/j.csda.2020.107017, 2020. 
 
    J. D. Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.
+
+   Q. Xie, S. Kurtek, E. Klassen, G. E. Christensen and A. Srivastava. Metric-based pairwise and multiple image registration. IEEE European Conference on Computer Vision (ECCV), September, 2014
 
 
 Indices and tables
