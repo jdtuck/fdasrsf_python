@@ -28,7 +28,11 @@ using functional component analysis and regression.
    pcr_regression.rst
    elastic_glm_regression.rst
    tolerance.rst
+<<<<<<< HEAD
    kmeans.rst
+=======
+   image.rst
+>>>>>>> image
    curve_statistics.rst
    geodesic.rst
    utility_functions.rst
@@ -106,6 +110,8 @@ References
    X. Zhang, S. Kurtek, O. Chkrebtii, and J. D. Tucker, “Elastic k-means clustering of functional data 
    for posterior exploration, with an application to inference on acute respiratory infection dynamics”, 
    arXiv:2011.12397 [stat.ME], 2020.
+
+   Q. Xie, S. Kurtek, E. Klassen, G. E. Christensen and A. Srivastava. Metric-based pairwise and multiple image registration. IEEE European Conference on Computer Vision (ECCV), September, 2014
 
 
 Indices and tables
