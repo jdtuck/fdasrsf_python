@@ -36,7 +36,7 @@ from .curve_pcr_regression import elastic_curve_pcr_regression
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB
 from .image import reparam_image
-from .image_functions import formbasisTid, apply_gam_imag
+from .image_functions import formbasisTid, apply_gam_imag, makediffeoid
 from .curve_functions import resamplecurve, calculatecentroid, curve_to_q, optimum_reparam_curve, find_best_rotation, elastic_distance_curve
 from .curve_functions import q_to_curve, find_rotation_and_seed_coord
 from .curve_stats import fdacurve

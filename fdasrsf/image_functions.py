@@ -12,6 +12,11 @@ import cimage as im
 
 def apply_gam_imag(F, gam):
     ndim = F.ndim
+
+    x2 = gam[:,:,1].ravel(order='F')
+    gamtmp = gam[:,:,0].T
+    y2 = np.sort(gamtmp.ravel(order='F'))
+
     if ndim == 3:
         (m,n,d) = F.shape
         Fnew = np.zeros((m,n,d))
@@ -21,7 +26,8 @@ def apply_gam_imag(F, gam):
 
         for j in range(d):
             interp = RegularGridInterpolator((U, V), F[:,:,j], method="linear")
-            Fnew[:,:,j] = interp((gam[:,:,0], gam[:,:,1]))
+            tmp = interp((x2,y2))
+            Fnew[:,:,j] = tmp.reshape((m,n),order='F')
     elif ndim == 2:
         (m,n) = F.shape
 
@@ -29,7 +35,8 @@ def apply_gam_imag(F, gam):
         V = np.linspace(0,1,n)
 
         interp = RegularGridInterpolator((U, V), F, method="linear")
-        Fnew = interp((gam[:,:,0], gam[:,:,1]))
+        tmp = interp((x2,y2))
+        Fnew = tmp.reshape((m,n),order='F')
     
     return Fnew
 
@@ -75,10 +82,10 @@ def Jacob_imag(F):
     multFactor = np.zeros((m,n))
 
     if d==2:
-        multFactor = dfdu[:,:,0]@dfdv[:,:,1] - dfdu[:,:,1]@dfdv[:,:,0]
+        multFactor = dfdu[:,:,0]*dfdv[:,:,1] - dfdu[:,:,1]*dfdv[:,:,0]
         multFactor = np.abs(multFactor)
     elif d==3:
-        multFactor = (dfdu[:,:,1]@dfdv[:,:,2] - dfdu[:,:,2]@dfdv[:,:,1])**2 + (dfdu[:,:,0]@dfdv[:,:,2] - dfdu[:,:,2]@dfdv[:,:,0])**2 + (dfdu[:,:,0]@dfdv[:,:,1] - dfdu[:,:,1]@dfdv[:,:,0])**2
+        multFactor = (dfdu[:,:,1]*dfdv[:,:,2] - dfdu[:,:,2]*dfdv[:,:,1])**2 + (dfdu[:,:,0]*dfdv[:,:,2] - dfdu[:,:,2]*dfdv[:,:,0])**2 + (dfdu[:,:,0]*dfdv[:,:,1] - dfdu[:,:,1]*dfdv[:,:,0])**2
         multFactor = np.sqrt(multFactor)
     
     return multFactor
@@ -162,9 +169,13 @@ def apply_gam_gamid(gamid, gaminc):
     V = np.linspace(0,1,n)
 
     gamcum = np.zeros((m,n,d))
+    x2 = gaminc[:,:,1].ravel(order='F')
+    gamtmp = gaminc[:,:,0].T
+    y2 = np.sort(gamtmp.ravel(order='F'))
     for j in range(d):
         interp = RegularGridInterpolator((U, V), gamid[:,:,j], method="linear")
-        gamcum[:,:,j] = interp((gaminc[:,:,0], gaminc[:,:,1]))
+        tmp = interp((x2,y2))
+        gamcum[:,:,j] = tmp.reshape((m,n),order='F')
     
     return gamcum
 
