@@ -28,11 +28,8 @@ using functional component analysis and regression.
    pcr_regression.rst
    elastic_glm_regression.rst
    tolerance.rst
-<<<<<<< HEAD
    kmeans.rst
-=======
    image.rst
->>>>>>> image
    curve_statistics.rst
    geodesic.rst
    utility_functions.rst

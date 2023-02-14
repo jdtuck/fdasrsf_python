@@ -1,71 +1,99 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Functional Alignment &mdash; fdasrsf 2.3.12 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <title>Functional Alignment &mdash; fdasrsf 2.3.12 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Functional Principal Component Analysis" href="fPCA.html" />
     <link rel="prev" title="Elastic Curve Alignment" href="curve_example.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
 
           
+            <a href="index.html" class="icon icon-home"> fdasrsf
           
-          <a href="index.html" class="icon icon-home">
-            fdasrsf
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 2.2
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Functional Alignment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.align_fPCA"><code class="docutils literal notranslate"><span class="pre">align_fPCA()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.align_fPLS"><code class="docutils literal notranslate"><span class="pre">align_fPLS()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.fdawarp"><code class="docutils literal notranslate"><span class="pre">fdawarp</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#time_warping.fdawarp.gauss_model"><code class="docutils literal notranslate"><span class="pre">fdawarp.gauss_model()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#time_warping.fdawarp.joint_gauss_model"><code class="docutils literal notranslate"><span class="pre">fdawarp.joint_gauss_model()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#time_warping.fdawarp.multiple_align_functions"><code class="docutils literal notranslate"><span class="pre">fdawarp.multiple_align_functions()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#time_warping.fdawarp.plot"><code class="docutils literal notranslate"><span class="pre">fdawarp.plot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#time_warping.fdawarp.srsf_align"><code class="docutils literal notranslate"><span class="pre">fdawarp.srsf_align()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.normal"><code class="docutils literal notranslate"><span class="pre">normal()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.pairwise_align_bayes"><code class="docutils literal notranslate"><span class="pre">pairwise_align_bayes()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.pairwise_align_bayes_infHMC"><code class="docutils literal notranslate"><span class="pre">pairwise_align_bayes_infHMC()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.pairwise_align_functions"><code class="docutils literal notranslate"><span class="pre">pairwise_align_functions()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#time_warping.rand"><code class="docutils literal notranslate"><span class="pre">rand()</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functional Alignment</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fPCA.html">Functional Principal Component Analysis</a></li>
@@ -75,42 +103,70 @@
 <li class="toctree-l1"><a class="reference internal" href="pcr_regression.html">Elastic Principal Component Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tolerance.html">Elastic Functional Tolerance Bounds</a></li>
-<<<<<<< HEAD
-<li class="toctree-l1"><a class="reference internal" href="kmeans.html">Elastic Functional Clustering</a></li>
-=======
-<li class="toctree-l1"><a class="reference internal" href="image.html">Elastic Image Warping</a></li>
->>>>>>> image
-<li class="toctree-l1"><a class="reference internal" href="curve_statistics.html">Curve Registration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="geodesic.html">SRVF Geodesic Computation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utility_functions.html">Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="curve_functions.html">Curve Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="umap_metric.html">UMAP EFDA Metrics</a></li>
 </ul>
 
+            
+          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fdasrsf</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Functional Alignment</li>
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Functional Alignment</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+            
             <a href="_sources/time_warping.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
@@ -136,17 +192,17 @@
 }
 </style>
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="_images/logo.png" class="align-right" src="_images/logo.png" style="width: 200px;" /></a>
-<div class="section" id="module-time_warping">
-<span id="functional-alignment"></span><h1>Functional Alignment<a class="headerlink" href="#module-time_warping" title="Permalink to this heading"></a></h1>
+<section id="module-time_warping">
+<span id="functional-alignment"></span><h1>Functional Alignment<a class="headerlink" href="#module-time_warping" title="Permalink to this heading">¶</a></h1>
 <p>Group-wise function alignment using SRSF framework and Dynamic Programming</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.align_fPCA">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">align_fPCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPCA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.align_fPCA" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">align_fPCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPCA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.align_fPCA" title="Permalink to this definition">¶</a></dt>
 <dd><p>aligns a collection of functions while extracting principal components.
 The functions are aligned to the principal components</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
 <li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
@@ -156,47 +212,47 @@ The functions are aligned to the principal components</p>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#tuple" title="(in Python v3.6)">tuple</a> of numpy array</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of numpy array</p>
 </dd>
-<dt class="field-odd">Return fn</dt>
+<dt class="field-odd">Return fn<span class="colon">:</span></dt>
 <dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N
 functions with M samples</p>
 </dd>
-<dt class="field-even">Return qn</dt>
+<dt class="field-even">Return qn<span class="colon">:</span></dt>
 <dd class="field-even"><p>aligned srvfs - similar structure to fn</p>
 </dd>
-<dt class="field-odd">Return q0</dt>
+<dt class="field-odd">Return q0<span class="colon">:</span></dt>
 <dd class="field-odd"><p>original srvf - similar structure to fn</p>
 </dd>
-<dt class="field-even">Return mqn</dt>
+<dt class="field-even">Return mqn<span class="colon">:</span></dt>
 <dd class="field-even"><p>srvf mean or median - vector of length M</p>
 </dd>
-<dt class="field-odd">Return gam</dt>
+<dt class="field-odd">Return gam<span class="colon">:</span></dt>
 <dd class="field-odd"><p>warping functions - similar structure to fn</p>
 </dd>
-<dt class="field-even">Return q_pca</dt>
+<dt class="field-even">Return q_pca<span class="colon">:</span></dt>
 <dd class="field-even"><p>srsf principal directions</p>
 </dd>
-<dt class="field-odd">Return f_pca</dt>
+<dt class="field-odd">Return f_pca<span class="colon">:</span></dt>
 <dd class="field-odd"><p>functional principal directions</p>
 </dd>
-<dt class="field-even">Return latent</dt>
+<dt class="field-even">Return latent<span class="colon">:</span></dt>
 <dd class="field-even"><p>latent values</p>
 </dd>
-<dt class="field-odd">Return coef</dt>
+<dt class="field-odd">Return coef<span class="colon">:</span></dt>
 <dd class="field-odd"><p>coefficients</p>
 </dd>
-<dt class="field-even">Return U</dt>
+<dt class="field-even">Return U<span class="colon">:</span></dt>
 <dd class="field-even"><p>eigenvectors</p>
 </dd>
-<dt class="field-odd">Return orig_var</dt>
+<dt class="field-odd">Return orig_var<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Original Variance of Functions</p>
 </dd>
-<dt class="field-even">Return amp_var</dt>
+<dt class="field-even">Return amp_var<span class="colon">:</span></dt>
 <dd class="field-even"><p>Amplitude Variance</p>
 </dd>
-<dt class="field-odd">Return phase_var</dt>
+<dt class="field-odd">Return phase_var<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Phase Variance</p>
 </dd>
 </dl>
@@ -204,11 +260,11 @@ functions with M samples</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.align_fPLS">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">align_fPLS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPLS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.align_fPLS" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">align_fPLS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPLS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.align_fPLS" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions while performing
 principal least squares</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
 <li><p><strong>g</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
@@ -220,10 +276,10 @@ principal least squares</p>
 <li><p><strong>max_itr</strong> – maximum number of iterations</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#tuple" title="(in Python v3.6)">tuple</a> of numpy array</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of numpy array</p>
 </dd>
-<dt class="field-odd">Return fn</dt>
+<dt class="field-odd">Return fn<span class="colon">:</span></dt>
 <dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
 </dd>
 </dl>
@@ -244,11 +300,11 @@ functions with M samples
 
 <dl class="py class">
 <dt class="sig sig-object py" id="time_warping.fdawarp">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">fdawarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">fdawarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides alignment methods for functional data using the SRVF framework</p>
 <p>Usage:  obj = fdawarp(f,t)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – (M,N): matrix defining N functions of M samples</p></li>
 <li><p><strong>time</strong> – time vector of length M</p></li>
@@ -278,11 +334,11 @@ functions with M samples
 Date   :  15-Mar-2018</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="time_warping.fdawarp.gauss_model">
-<span class="sig-name descname"><span class="pre">gauss_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.gauss_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.gauss_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gauss_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.gauss_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.gauss_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function models the functional data using a Gaussian model
 extracted from the principal components of the srvfs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
 <li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – sort samples (default = T)</p></li>
@@ -293,11 +349,11 @@ extracted from the principal components of the srvfs</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="time_warping.fdawarp.joint_gauss_model">
-<span class="sig-name descname"><span class="pre">joint_gauss_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.joint_gauss_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.joint_gauss_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">joint_gauss_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.joint_gauss_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.joint_gauss_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function models the functional data using a joint Gaussian model
 extracted from the principal components of the srsfs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
 <li><p><strong>no</strong> (<em>integer</em>) – number of principal components (default = 3)</p></li>
@@ -308,7 +364,7 @@ extracted from the principal components of the srsfs</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="time_warping.fdawarp.multiple_align_functions">
-<span class="sig-name descname"><span class="pre">multiple_align_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.multiple_align_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.multiple_align_functions" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">multiple_align_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.multiple_align_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.multiple_align_functions" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic square-root
 slope (srsf) framework.</p>
 <dl class="simple">
@@ -317,7 +373,7 @@ slope (srsf) framework.</p>
 </dl>
 <p>obj.multiple_align_functions(lambda, …)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mu</strong> – vector of function to align to</p></li>
 <li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS) (default = DP)</p></li>
@@ -333,18 +389,18 @@ slope (srsf) framework.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="time_warping.fdawarp.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot plot functional alignment results</p>
 <p>Usage: obj.plot()</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="time_warping.fdawarp.srsf_align">
-<span class="sig-name descname"><span class="pre">srsf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MaxItr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">srsf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MaxItr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns a collection of functions using the elastic
 square-root slope (srsf) framework.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median 
 (options = “mean” or “median”) (default=”mean”)</p></li>
@@ -374,23 +430,21 @@ square-root slope (srsf) framework.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.normal">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.normal" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.normal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw random samples from a normal (Gaussian) distribution.</p>
 <p>The probability density function of the normal distribution, first
 derived by De Moivre and 200 years later by both Gauss and Laplace
-independently <a class="footnote-reference brackets" href="#id5" id="id1">2</a>, is often called the bell curve because of
+independently <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, is often called the bell curve because of
 its characteristic shape (see the example below).</p>
 <p>The normal distributions occurs often in nature.  For example, it
 describes the commonly occurring distribution of samples influenced
 by a large number of tiny, random disturbances, each with its own
-unique distribution <a class="footnote-reference brackets" href="#id5" id="id2">2</a>.</p>
+unique distribution <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>New code should use the <code class="docutils literal notranslate"><span class="pre">normal</span></code> method of a <code class="docutils literal notranslate"><span class="pre">default_rng()</span></code>
 instance instead; please see the <span class="xref std std-ref">random-quick-start</span>.</p>
 </div>
-<div class="section" id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>loc<span class="classifier">float or array_like of floats</span></dt><dd><p>Mean (“centre”) of the distribution.</p>
 </dd>
@@ -403,24 +457,15 @@ a single value is returned if <code class="docutils literal notranslate"><span c
 Otherwise, <code class="docutils literal notranslate"><span class="pre">np.broadcast(loc,</span> <span class="pre">scale).size</span></code> samples are drawn.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="returns">
-<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>out<span class="classifier">ndarray or scalar</span></dt><dd><p>Drawn samples from the parameterized normal distribution.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>scipy.stats.norm<span class="classifier">probability density function, distribution or</span></dt><dd><p>cumulative density function, etc.</p>
 </dd>
 </dl>
 <p>Generator.normal: which should be used for new code.</p>
-</div>
-<div class="section" id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading"></a></h2>
 <p>The probability density for the Gaussian distribution is</p>
 <div class="math notranslate nohighlight">
 \[p(x) = \frac{1}{\sqrt{ 2 \pi \sigma^2 }}
@@ -430,26 +475,21 @@ deviation. The square of the standard deviation, <span class="math notranslate n
 is called the variance.</p>
 <p>The function has its peak at the mean, and its “spread” increases with
 the standard deviation (the function reaches 0.607 times its maximum at
-<span class="math notranslate nohighlight">\(x + \sigma\)</span> and <span class="math notranslate nohighlight">\(x - \sigma\)</span> <a class="footnote-reference brackets" href="#id5" id="id3">2</a>).  This implies that
+<span class="math notranslate nohighlight">\(x + \sigma\)</span> and <span class="math notranslate nohighlight">\(x - \sigma\)</span> <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>).  This implies that
 normal is more likely to return samples lying close to the mean, rather
 than those far away.</p>
-</div>
-<div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
-<dl class="footnote brackets">
-<dt class="label" id="id4"><span class="brackets">1</span></dt>
-<dd><p>Wikipedia, “Normal distribution”,
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Wikipedia, “Normal distribution”,
 <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution">https://en.wikipedia.org/wiki/Normal_distribution</a></p>
-</dd>
-<dt class="label" id="id5"><span class="brackets">2</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>,<a href="#id3">3</a>)</span></dt>
-<dd><p>P. R. Peebles Jr., “Central Limit Theorem” in “Probability,
+</aside>
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>)</span>
+<p>P. R. Peebles Jr., “Central Limit Theorem” in “Probability,
 Random Variables and Random Signal Principles”, 4th ed., 2001,
 pp. 51, 51, 125.</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+</aside>
 <p>Draw samples from the distribution:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span> <span class="c1"># mean and standard deviation</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
@@ -480,12 +520,11 @@ the probability density function:</p>
 <span class="go">       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]])  # random</span>
 </pre></div>
 </div>
-</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.pairwise_align_bayes">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_bayes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mcmcopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_bayes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mcmcopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns two functions using Bayesian framework. It will align
 f2 to f1. It is based on mapping warping functions to a hypersphere, and a
 subsequent exponential mapping to a tangent space. In the tangent space,
@@ -501,7 +540,7 @@ zpcn[“probs”] give the probability of each shift size.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f1i</strong> – vector defining M samples of function 1</p></li>
 <li><p><strong>f2i</strong> – vector defining M samples of function 2</p></li>
@@ -535,7 +574,7 @@ mcmcopts = {“iter”:2*(10**4) ,”burnin”:np.minimum(5*(10**3),2*(10**4)//2
 
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.pairwise_align_bayes_infHMC">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_bayes_infHMC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mcmcopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes_infHMC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes_infHMC" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_bayes_infHMC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mcmcopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes_infHMC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes_infHMC" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function aligns two functions using Bayesian framework. It uses a 
 hierarchical Bayesian framework assuming mearsurement error error It will 
 align f2 to f1. It is based on mapping warping functions to a hypersphere, 
@@ -547,7 +586,7 @@ structure in the posterior distribution.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y1i</strong> – vector defining M samples of function 1</p></li>
 <li><p><strong>y2i</strong> – vector defining M samples of function 2</p></li>
@@ -591,7 +630,7 @@ mcmcopts = {“iter”:1*(10**4), “nchains”:4, “vpriorvar”:1,</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.pairwise_align_functions">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_functions" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_functions" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>This function aligns f2 to f1 using the elastic square-root</dt><dd><p>slope (srsf) framework.</p>
 </dd>
@@ -599,7 +638,7 @@ mcmcopts = {“iter”:1*(10**4), “nchains”:4, “vpriorvar”:1,</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f1</strong> – vector defining M samples of function 1</p></li>
 <li><p><strong>f2</strong> – vector defining M samples of function 2</p></li>
@@ -618,7 +657,7 @@ mcmcopts = {“iter”:1*(10**4), “nchains”:4, “vpriorvar”:1,</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="time_warping.rand">
-<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.rand" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.rand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Random values in a given shape.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -630,69 +669,75 @@ other NumPy functions like <cite>numpy.zeros</cite> and <cite>numpy.ones</cite>.
 <p>Create an array of the given shape and populate it with
 random samples from a uniform distribution
 over <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1)</span></code>.</p>
-<div class="section" id="id6">
-<h2>Parameters<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>d0, d1, …, dn<span class="classifier">int, optional</span></dt><dd><p>The dimensions of the returned array, must be non-negative.
 If no argument is given a single Python float is returned.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id7">
-<h2>Returns<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
 <dl>
 <dt>out<span class="classifier">ndarray, shape <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></code></span></dt><dd><p>Random values.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id8">
-<h2>See Also<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
 <p>random</p>
-</div>
-<div class="section" id="id9">
-<h2>Examples<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">array([[ 0.14022471,  0.96360618],  #random</span>
 <span class="go">       [ 0.37601032,  0.25528411],  #random</span>
 <span class="go">       [ 0.49313049,  0.94909878]]) #random</span>
 </pre></div>
 </div>
-</div>
 </dd></dl>
 
 <div class="toctree-wrapper compound">
 </div>
-</div>
+</section>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="curve_example.html" class="btn btn-neutral float-left" title="Elastic Curve Alignment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fPCA.html" class="btn btn-neutral float-right" title="Functional Principal Component Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="fPCA.html" class="btn btn-neutral float-right" title="Functional Principal Component Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="curve_example.html" class="btn btn-neutral float-left" title="Elastic Curve Alignment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Derek Tucker.</p>
-  </div>
+    <p>
+        &copy; Copyright 2022, J. Derek Tucker
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
