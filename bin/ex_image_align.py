@@ -38,5 +38,7 @@ plt.title('I2')
 M = 10
 b = fs.formbasisTid(M, m, n, 't')
 
-out = fs.reparam_image(F1,F2,None,b)
+gamnew,Inew,H,stepsize = fs.reparam_image(F1,F2,None,b,stepsize=1e-2)
+
+I2_new = fs.apply_gam_imag(I2,gamnew)
 # %%

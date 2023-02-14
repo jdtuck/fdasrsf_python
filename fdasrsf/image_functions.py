@@ -11,16 +11,25 @@ import cimage as im
 
 
 def apply_gam_imag(F, gam):
-    (m,n,d) = F.shape
+    ndim = F.ndim
+    if ndim == 3:
+        (m,n,d) = F.shape
+        Fnew = np.zeros((m,n,d))
 
-    Fnew = np.zeros((m,n,d))
+        U = np.linspace(0,1,m)
+        V = np.linspace(0,1,n)
 
-    U = np.linspace(0,1,m)
-    V = np.linspace(0,1,n)
+        for j in range(d):
+            interp = RegularGridInterpolator((U, V), F[:,:,j], method="linear")
+            Fnew[:,:,j] = interp((gam[:,:,0], gam[:,:,1]))
+    elif ndim == 2:
+        (m,n) = F.shape
 
-    for j in range(d):
-        interp = RegularGridInterpolator((U, V), F[:,:,j], method="linear")
-        Fnew[:,:,j] = interp((gam[:,:,0], gam[:,:,1]))
+        U = np.linspace(0,1,m)
+        V = np.linspace(0,1,n)
+
+        interp = RegularGridInterpolator((U, V), F, method="linear")
+        Fnew = interp((gam[:,:,0], gam[:,:,1]))
     
     return Fnew
 
@@ -58,7 +67,10 @@ def Jacob_imag(F):
     if d < 2:
         raise NameError('Data dimension is wrong!')
     
-    dfdu, dfdv = im.compgrad2D(F)
+    F = np.ascontiguousarray(F)
+    dfdu, dfdv = im.compgrad3D(F)
+    dfdu = dfdu.reshape((m,n,d), order='F')
+    dfdv = dfdv.reshape((m,n,d), order='F')
 
     multFactor = np.zeros((m,n))
 
@@ -101,12 +113,20 @@ def findphistar(q,b):
     expr2 = np.zeros((m,n,d,K))
 
     for k in range(K):
-        dbxdu[:,:,k], tmp = im.compgrad2D(b[:,:,0,k])
-        tmp, dbydv[:,:,k] = im.compgrad2D(b[:,:,1,k])
+        btmp = b[:,:,0,k]
+        btmp = np.ascontiguousarray(btmp)
+        dbxdui, tmp = im.compgrad2D(btmp)
+        dbxdu[:,:,k] = dbxdui.reshape((m,n), order='F')
+        btmp = b[:,:,1,k]
+        btmp = np.ascontiguousarray(btmp)
+        tmp, dbydvi = im.compgrad2D(btmp)
+        dbydv[:,:,k] = dbydvi.reshape((m,n), order='F')
     
     divb = dbxdu + dbydv
 
-    dqdu, dqdv = im.compgrad2D(q)
+    dqdu, dqdv = im.compgrad3D(q)
+    dqdu = dqdu.reshape(q.shape, order='F')
+    dqdv = dqdv.reshape(q.shape, order='F')
 
     for k in range(K):
         for j in range(d):
@@ -190,16 +210,28 @@ def GramSchmidt(b):
     G = np.zeros((m,n,D,N))
     G[:,:,:,cnt] = b[:,:,:,cnt]
 
-    dvx, dvy = im.compgrad2D(G[:,:,:,cnt])
+    Gtmp = G[:,:,:,cnt]
+    Gtmp = np.ascontiguousarray(Gtmp)
+    dvx, dvy = im.compgrad3D(Gtmp)
+    dvx = dvx.reshape(Gtmp.shape, order='F')
+    dvy = dvy.reshape(Gtmp.shape, order='F')
     l = np.dot(dvx.ravel(),dvx.ravel())*ds + np.dot(dvy.ravel(),dvy.ravel())*ds
     G[:,:,:,cnt] = G[:,:,:,cnt]/np.sqrt(l)
 
     for i in range(1,N):
         G[:,:,:,i] = b[:,:,:,i]
-        dv1x, dv1y = im.compgrad2D(G[:,:,:,i])
+        Gtmp = G[:,:,:,i]
+        Gtmp = np.ascontiguousarray(Gtmp)
+        dv1x, dv1y = im.compgrad3D(Gtmp)
+        dv1x = dv1x.reshape(Gtmp.shape, order='F')
+        dv1y = dv1y.reshape(Gtmp.shape, order='F')
 
         for j in range(0,i-1):
-            dv2x, dv2y = im.compgrad2D(G[:,:,:,j])
+            Gtmp = G[:,:,:,j]
+            Gtmp = np.ascontiguousarray(Gtmp)
+            dv2x, dv2y = im.compgrad3D(Gtmp)
+            dv2x = dv2x.reshape(Gtmp.shape, order='F')
+            dv2y = dv2y.reshape(Gtmp.shape, order='F')
             t = np.dot(dv1x.ravel(),dv2x.ravel())*ds + np.dot(dv1y.ravel(),dv2y.ravel())*ds
             G[:,:,:,i] = G[:,:,:,i]-t*G[:,:,:,j]
         
