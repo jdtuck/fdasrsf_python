@@ -11,6 +11,16 @@ import cimage as im
 
 
 def apply_gam_imag(F, gam):
+    """
+    apply diffeomorphism to image
+
+    :param F: numpy array of image
+    :param gam: numpy array of diffeomorphism
+
+    :rtype: np.array
+    :return Fnew: warped image
+
+    """
     ndim = F.ndim
 
     x2 = gam[:,:,1].ravel(order='F')
@@ -42,6 +52,16 @@ def apply_gam_imag(F, gam):
 
 
 def makediffeoid(nrow,ncol):
+    """
+    computes a 2-D identity diffeomorphism
+
+    :param nrow: number of rows
+    :param ncol: number of columns
+
+    :rtype: np.array
+    :return gamid: amplitude depth
+
+    """
     D = 2
     gamid = np.zeros((nrow,ncol,D))
 
@@ -191,6 +211,18 @@ def gen_basis(m, n, M=10, N=10, baseType = 't', ortho=False):
 
 
 def formbasisTid(M, m, n, base_type):
+    """
+    Generate Basis on tangent space at identity
+
+    :param M: number of basis functions
+    :param m: number of rows
+    :param n: number of colunns
+    :param base_type: basis type ('t' only implemented)
+
+    :rtype: np.array
+    :return b: basis functions
+
+    """
     U, V = np.meshgrid(np.linspace(0,1,n), np.linspace(0,1,m), indexing='xy')
 
     idx = 0
