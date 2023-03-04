@@ -555,23 +555,14 @@ class fdawarp:
             for k in range(0,N):
                 gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,grid_dim)
 
+        self.gamI = uf.SqrtMeanInverse(gam)
+
         fn = np.zeros((M,N))
         qn = np.zeros((M,N))
         for k in range(0, N):
             fn[:, k] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
                                     + self.time[0], self.time, f[:, k])
             qn[:, k] = uf.f_to_srsf(f[:, k], self.time)
-        
-        # Centering
-        self.gamI = uf.SqrtMeanInverse(gam)
-        gamI_dev = np.gradient(self.gamI, 1 / float(M - 1))
-        time0 = (self.time[-1] - self.time[0]) * self.gamI + self.time[0]
-        mq = np.interp(time0, self.time, mq) * np.sqrt(gamI_dev)
-        mu = np.interp(time0, self.time, mu)
-        for k in range(0, N):
-            qn[:, k] = np.interp(time0, self.time, qn[:, k]) * np.sqrt(gamI_dev)
-            fn[:, k] = np.interp(time0, self.time, fn[:, k])
-            gam[:,k] = np.interp(time0, self.time, gam[:,k])
 
 
         # Aligned data & stats
