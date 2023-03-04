@@ -185,9 +185,10 @@ int xycompare(const void *x1, const void *x2) {
 }
 
 double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j, int n, int scl, double lam) {
-	double m = (j-l)/(double)(i-k), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp;
+	double m = (j-l)/(double)(i-k), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp, tmp_pen;
 	int x, idx, d, iL=i*scl, kL=k*scl, lL=l*scl;
 
+	tmp_pen = (1-sqrtm)*(1-sqrtm);
 	for (x = kL; x <= iL; ++x) {
 		y = (x-kL)*m + lL;
 		fp = modf(y, &ip);
@@ -195,7 +196,7 @@ double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j,
 
 		for (d = 0; d < n; ++d) {
 			tmp = q1L[n*x + d] - sqrtm*q2L[n*idx + d];
-			E += tmp*tmp;
+			E += (tmp*tmp + lam*tmp_pen);
 		}
 	}
 
