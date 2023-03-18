@@ -12,7 +12,7 @@ from _DP import ffi, lib
 import _DP
 from numpy import linspace, interp, zeros, diff, double, sqrt, arange, float64, int32, int64, trapz, ones
 from numpy import zeros, frombuffer, ascontiguousarray, empty, load, roll, dot, eye, arccos, reshape, float32
-from numpy import kron, floor
+from numpy import kron, floor, mean
 from numpy.linalg import norm, svd, det, solve
 
 
@@ -289,7 +289,7 @@ def curve_center(beta):
     return centroid
 
 @numba.njit()
-def efda_distance(q1, q2):
+def efda_distance(q1, q2, alpha=0):
     """"
     calculates the distances between two curves, where 
     q2 is aligned to q1. In other words calculates the elastic distances/
@@ -297,6 +297,7 @@ def efda_distance(q1, q2):
 
     :param q1: vector of size N
     :param q2: vector of size N
+    :param alpha: weight between phase and amplitude (default = 0, returns amplitude)
 
     :rtype: scalar
     :return dist: amplitude distance
@@ -318,7 +319,18 @@ def efda_distance(q1, q2):
 
         y = (qw - q1) ** 2
         tmp = diff(time)*(y[0:-1]+y[1:])/2
-        dist = sqrt(tmp.sum())
+        da = sqrt(tmp.sum())
+
+        binsize = mean(diff(time))
+        psi = sqrt(grad(gam,binsize))
+        q1dotq2 = trapz(psi, time)
+        if q1dotq2 > 1:
+            q1dotq2 = 1
+        elif q1dotq2 < -1:
+            q1dotq2 = -1
+        dp = arccos(q1dotq2)
+
+        dist = (1-alpha) * da + alpha * dp
        
     return dist
 
