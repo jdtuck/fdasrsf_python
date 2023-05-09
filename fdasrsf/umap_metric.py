@@ -19,7 +19,7 @@ from numpy.linalg import norm, svd, det, solve
 DP = lib.DP
 cffi_utils.register_module(_DP)
 
-@numba.jit()
+@numba.njit()
 def grad(f, binsize):
     n = f.shape[0]
     g = zeros(n)
@@ -51,7 +51,7 @@ def warp(q1, q2):
        
     return gam
 
-@numba.jit()
+@numba.njit()
 def basis(q):
     n,T = q.shape
     e = eye(n)
@@ -73,7 +73,7 @@ def basis(q):
     
     return delG
 
-@numba.jit()
+@numba.njit()
 def freshape(f):
     n,M = f.shape
     out1 = f.reshape(M*n)
@@ -103,7 +103,7 @@ def warp_curve(q1, q2):
        
     return gam
 
-@numba.jit()
+@numba.njit()
 def shift_curve(f, tau):
     n, T = f.shape
     fn = zeros((n, T))
@@ -112,7 +112,7 @@ def shift_curve(f, tau):
         fn[i, T - 1] = fn[i, 0]
     return (fn)
 
-@numba.jit()
+@numba.njit()
 def c_to_q(beta, closed):
     n, T = beta.shape
     v = zeros((n,T))
@@ -137,7 +137,7 @@ def c_to_q(beta, closed):
 
     return(q)
 
-@numba.jit()
+@numba.njit()
 def find_rot(q1, q2):
     q1 = ascontiguousarray(q1)
     q2 = ascontiguousarray(q2)
@@ -219,7 +219,7 @@ def proj_c(q):
 
     return q
 
-@numba.jit()
+@numba.njit()
 def find_seed_rot(beta1, beta2, closed):
     beta1 = ascontiguousarray(beta1)
     beta2 = ascontiguousarray(beta2)
