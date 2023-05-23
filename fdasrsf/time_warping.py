@@ -280,6 +280,7 @@ class fdawarp:
         else:
             gamI = uf.SqrtMeanInverse(gam)
             gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+            r -= 1
 
         # Aligned data & stats
         self.center = center
