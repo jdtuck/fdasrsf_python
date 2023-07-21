@@ -7,7 +7,7 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", 
            "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA", 
-           "elastic_glm_regression", "curve_pcr_regression", "kmeans", "image", "image_functions"]
+           "elastic_glm_regression", "curve_pcr_regression", "kmeans", "image", "image_functions", "gp"]
 
 __version__ = "2.4.1"
 

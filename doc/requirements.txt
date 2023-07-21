@@ -5,7 +5,6 @@ scipy
 matplotlib
 Cython
 joblib
-GPy
 patsy
 tqdm
 nbsphinx
