@@ -12,11 +12,20 @@
 # serve to show the default.
 
 import sys, os
+from glob import glob
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('../../fdasrsf'))
+sys.path.append(os.path.abspath('../../fdasrsf'))
+sys.path.append(os.path.abspath('../../src'))
+paths = glob("../../build/lib*/", recursive = True)
+for i in paths:
+    sys.path.append(os.path.abspath(i))
+sys.path.append(os.path.abspath('../..'))
+
+
+
 
 # -- General configuration -----------------------------------------------------
 
@@ -30,7 +39,8 @@ extensions = ['nbsphinx', 'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ex
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-autodoc_mock_imports = ["optimum_reparam_N","optimum_reparam_Ng","IPython"]
+autodoc_mock_imports = ["optimum_reparamN2","optimum_reparam_N","optimum_reparam_Ng","IPython","cbayesian","fpls_warp","mlogit_warp","cimage",
+                        "ocmlogit_warp","oclogit_warp"]
 
 # The suffix of source filenames.
 source_suffix = '.rst'
