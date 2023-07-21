@@ -10,12 +10,12 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.bayesian_functions as bf
 import fdasrsf.fPCA as fpca
 import fdasrsf.geometry as geo
+from fdasrsf.gp import gp_posterior
 from scipy.integrate import trapz, cumtrapz
 from scipy.interpolate import interp1d
 from scipy.linalg import svd, cholesky
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform, pdist
-import GPy
 from numpy.linalg import norm, inv
 from numpy.random import rand, normal
 from joblib import Parallel, delayed
@@ -1108,21 +1108,20 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     f2_propvar = mcmcopts["f2propvar"]
     y1itmp = y1i[0::mcmcopts["sampfreq"]]
     timetmp = time[0::mcmcopts["sampfreq"]]
-    kernel1 = GPy.kern.RBF(input_dim=1, variance=y1itmp.std()/np.sqrt(2), lengthscale=np.mean(timetmp.std()))
     y2itmp = y2i[0::mcmcopts["sampfreq"]]
-    kernel2 = GPy.kern.RBF(input_dim=1, variance=y2itmp.std()/np.sqrt(2), lengthscale=np.mean(timetmp.std()))
     M1 = timetmp.shape[0]
-    model1 = GPy.models.GPRegression(timetmp.reshape((M1,1)),y1itmp.reshape((M1,1)),kernel1)
-    model1.optimize()
-    model2 = GPy.models.GPRegression(timetmp.reshape((M1,1)),y2itmp.reshape((M1,1)),kernel2)
-    model2.optimize()
 
-    s1_ini = model1.kern.param_array[0]
-    s2_ini = model2.kern.param_array[0]
+    f1_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y1itmp.reshape((M1,1)), timetmp.reshape((M1,1)), 
+                                    l2=np.mean(timetmp.std()), noise_var=y1itmp.std()/np.sqrt(2))
+    f2_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y2itmp.reshape((M1,1)), timetmp.reshape((M1,1)), 
+                                    l2=np.mean(timetmp.std()), noise_var=y2itmp.std()/np.sqrt(2))
+
+    s1_ini = y1itmp.std()/np.sqrt(2)
+    s2_ini = y2itmp.std()/np.sqrt(2)
     L1_propvar = mcmcopts["L1propvar"]
     L2_propvar = mcmcopts["L2propvar"]
-    L1_ini = model2.kern.param_array[1]
-    L2_ini = model2.kern.param_array[1]
+    L1_ini = np.mean(timetmp.std())
+    L2_ini = np.mean(timetmp.std())
 
     K_f1_corr = uf.exp2corr2(L1_ini,Dmat)+0.1 * np.eye(y1i.shape[0])
     K_f1 = s1_ini * K_f1_corr
@@ -1163,9 +1162,12 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     L1_curr = L1_ini
     L2_curr = L2_ini
 
-    f1_curr, predvar = model1.predict(time.reshape((T,1)))
+    f1_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y1itmp.reshape((M1,1)), time.reshape((T,1)), 
+                                    l2=np.mean(timetmp.std()), noise_var=y1itmp.std()/np.sqrt(2))
+    f2_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y2itmp.reshape((M1,1)), time.reshape((T,1)), 
+                                    l2=np.mean(timetmp.std()), noise_var=y2itmp.std()/np.sqrt(2))
+    
     f1_curr = f1_curr.reshape(T)
-    f2_curr, predvar = model2.predict(time.reshape((T,1)))
     f2_curr = f2_curr.reshape(T)
 
     # srsf transformation

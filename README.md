@@ -17,7 +17,7 @@ using functional component analysis and regression.
 
 ### Installation
 ------------------------------------------------------------------------------
-v2.4.1 is on pip and can be installed using
+v2.4.2 is on pip and can be installed using
 > `pip install fdasrsf`
 
 or conda

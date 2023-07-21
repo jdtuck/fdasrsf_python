@@ -1,6 +1,6 @@
 [project]
 name = "fdasrsf"
-version = "2.4.1"
+version = "2.4.2"
 description = "functional data analysis using the square root slope framework"
 authors = [
 	{name = "J. Derek Tucker", email = "jdtuck@sandia.gov"}
@@ -21,7 +21,6 @@ dependencies=[
         "tqdm",
         "six",
         "numba",
-        "GPy",
         "cffi>=1.0.0",
         "pyparsing",
     ]

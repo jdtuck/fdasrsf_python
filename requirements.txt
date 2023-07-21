@@ -12,5 +12,4 @@ pyparsing
 python-dateutil
 scipy
 six
-GPy
 tornado

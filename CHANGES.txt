@@ -1,3 +1,4 @@
+v2.4.2,  2023-07-21 -- bugfixes and remove GPy dependency
 v2.4.1,  2023-05-24 -- bugfixes
 v2.4.0,  2023-02-13 -- add of kmeans, image warping, and bugfixes
 v2.3.12,  2022-10-24 -- bugfixes
