@@ -418,7 +418,7 @@ def shift_f(f, tau):
     return (fn)
 
 
-def find_rotation_and_seed_unique(q1, q2, closed=0, rotation=True, method="DP"):
+def find_rotation_and_seed_unique(q1, q2, closed=0, lam=0.0, rotation=True, method="DP"):
     """
     This function returns a candidate list of optimally oriented and
     registered (seed) shapes w.r.t. beta1
@@ -427,6 +427,7 @@ def find_rotation_and_seed_unique(q1, q2, closed=0, rotation=True, method="DP"):
     :param beta2: numpy ndarray of shape (2,M) of M samples
     :param closed: Open (0) or Closed (1)
     :param rotation: find rotation (default=True)
+    :param lam: controls the elasticity (default = 0)
     :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
 
     :rtype: numpy ndarray
@@ -459,7 +460,7 @@ def find_rotation_and_seed_unique(q1, q2, closed=0, rotation=True, method="DP"):
 
         # Reparam
         if norm(q1-q2new,'fro') > 0.0001:
-            gam = optimum_reparam_curve(q2new, q1, 0.0, method)
+            gam = optimum_reparam_curve(q2new, q1, lam, method)
             gamI = uf.invertGamma(gam)
             p2n = q_to_curve(q2n)
             p2n = group_action_by_gamma_coord(p2n,gamI)

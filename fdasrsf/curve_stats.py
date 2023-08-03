@@ -40,6 +40,7 @@ class fdacurve:
     :param coef:        pca coefficients
     :param pca          principal directions
     :param qun:         cost function
+    :param lambda: lambda
     :param samples:     random samples
     :param gamr:        random warping functions
     :param cent:        center
@@ -189,10 +190,11 @@ class fdacurve:
         return
 
 
-    def srvf_align(self, rotation=True, parallel=False, cores=-1, method="DP"):
+    def srvf_align(self, rotation=True, lam=0.0, parallel=False, cores=-1, method="DP"):
         """
         This aligns a set of curves to the mean and computes mean if not computed
         :param rotation: compute optimal rotation (default = T)
+        :param lam: controls the elasticity (default = 0)
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
         :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
