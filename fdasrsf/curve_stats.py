@@ -220,7 +220,7 @@ class fdacurve:
 
         # align to mean
         out = Parallel(n_jobs=-1)(delayed(cf.find_rotation_and_seed_unique)(self.q_mean,
-                                          self.q[:, :, n], mode, rotation, method) for n in range(N))
+                                          self.q[:, :, n], mode, lam, rotation, method) for n in range(N))
         for ii in range(0, N):
             self.gams[:,ii] = out[ii][2]
             self.qn[:, :, ii] = out[ii][0]
