@@ -90,11 +90,12 @@ class fdacurve:
         self.len_q = lenq1
 
 
-    def karcher_mean(self, rotation=True, parallel=False, cores=-1, method="DP"):
+    def karcher_mean(self, rotation=True, parallel=False, lam=0.0, cores=-1, method="DP"):
         """
         This calculates the mean of a set of curves
         :param rotation: compute optimal rotation (default = T)
         :param parallel: run in parallel (default = F)
+        :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
         :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
         """
@@ -124,7 +125,7 @@ class fdacurve:
         tolv = 1e-4
         told = 5*1e-3
 
-        print("Computing Karcher Mean of %d curves in SRVF space.." % N)
+        print("Computing Karcher Mean of %d curves in SRVF space with lam=%d" % (N,lam))
         while itr < maxit:
             print("updating step: %d" % (itr+1))
 
@@ -141,7 +142,7 @@ class fdacurve:
             sumd[0] = inf
             sumd[itr+1] = 0
             out = Parallel(n_jobs=cores)(delayed(karcher_calc)(mu, self.q[:, :, n], self.basis, 
-                                                               mode, rotation, method) for n in range(N))
+                                                               mode, lam, rotation, method) for n in range(N))
             v = zeros((n, T, N))
             gamma = zeros((T,N))
             for i in range(0, N):
@@ -210,7 +211,7 @@ class fdacurve:
 
         # find mean
         if not hasattr(self, 'beta_mean'):
-            self.karcher_mean()
+            self.karcher_mean(rotation=rotation, lam=lam, parallel=parallel, cores=cores, method=method)
 
         self.qn = zeros((n, T, N))
         self.betan = zeros((n, T, N))
@@ -461,9 +462,9 @@ class fdacurve:
         plt.show()
 
 
-def karcher_calc(mu, q, basis, closed, rotation, method):
+def karcher_calc(mu, q, basis, closed, lam, rotation, method):
     # Compute shooting vector from mu to q_i
-    qn_t, R, gamI = cf.find_rotation_and_seed_unique(mu, q, closed, rotation, method)
+    qn_t, R, gamI = cf.find_rotation_and_seed_unique(mu, q, closed, lam, rotation, method)
     qn_t = qn_t / sqrt(cf.innerprod_q2(qn_t,qn_t))
 
     q1dotq2 = cf.innerprod_q2(mu,qn_t)
