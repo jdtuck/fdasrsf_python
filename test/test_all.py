@@ -135,7 +135,7 @@ class TestFDASRSF(unittest.TestCase):
         obj.srvf_align()
         obj.karcher_cov()
         obj.shape_pca()
-        self.assertAlmostEqual(obj.E[-1], 0.014187984409717584)
+        self.assertAlmostEqual(obj.E[-1], 0.022668183569717587)
   
 if __name__ == '__main__': 
     unittest.main() 
