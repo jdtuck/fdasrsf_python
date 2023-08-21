@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Curve Registration &mdash; fdasrsf 2.4.2 documentation</title>
+  <title>Curve Registration &mdash; fdasrsf 2.4.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -119,6 +119,7 @@ in R^M
 :param coef:        pca coefficients
 :param pca          principal directions
 :param qun:         cost function
+:param lambda: lambda
 :param samples:     random samples
 :param gamr:        random warping functions
 :param cent:        center
@@ -138,18 +139,24 @@ Date   :  26-Aug-2020</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="curve_stats.fdacurve.karcher_mean">
-<span class="sig-name descname"><span class="pre">karcher_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_mean" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">karcher_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.karcher_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.karcher_mean" title="Permalink to this definition"></a></dt>
 <dd><p>This calculates the mean of a set of curves
 :param rotation: compute optimal rotation (default = T)
 :param parallel: run in parallel (default = F)
+:param lam: controls the elasticity (default = 0)
 :param cores: number of cores for parallel (default = -1 (all))
 :param method: method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="curve_stats.fdacurve.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multivariate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.plot" title="Permalink to this definition"></a></dt>
 <dd><p>plot curve mean results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>multivariate</strong> – plot as multivariate functions instead of curves (default=False)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -180,9 +187,10 @@ Number of shapes away from mean. Creates 2*N+1 shape sequence</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="curve_stats.fdacurve.srvf_align">
-<span class="sig-name descname"><span class="pre">srvf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.srvf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.srvf_align" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">srvf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_stats.html#fdacurve.srvf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_stats.fdacurve.srvf_align" title="Permalink to this definition"></a></dt>
 <dd><p>This aligns a set of curves to the mean and computes mean if not computed
 :param rotation: compute optimal rotation (default = T)
+:param lam: controls the elasticity (default = 0)
 :param parallel: run in parallel (default = F)
 :param cores: number of cores for parallel (default = -1 (all))
 :param method: method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p>

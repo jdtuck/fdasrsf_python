@@ -1,91 +1,48 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>curve_stats &mdash; fdasrsf 2.4.3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>curve_stats &mdash; fdasrsf 2.3.12 documentation</title>
-  
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> fdasrsf
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            fdasrsf
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                2.4
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../time_warping.html">Functional Alignment</a></li>
@@ -96,6 +53,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kmeans.html">Elastic Functional Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image.html">Elastic Image Warping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
@@ -103,66 +62,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../umap_metric.html">UMAP EFDA Metrics</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">fdasrsf</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="index.html">Module code</a> &raquo;</li>
-        
-      <li>curve_stats</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">curve_stats</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for curve_stats</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">statistic calculation for SRVF (curves) open and closed using Karcher</span>
@@ -172,7 +95,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">empty</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">prod</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">append</span><span class="p">,</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="nb">sum</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">append</span><span class="p">,</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">linspace</span>
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">svd</span>
 <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">randn</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.curve_functions</span> <span class="k">as</span> <span class="nn">cf</span>
@@ -183,7 +106,7 @@
 <span class="kn">import</span> <span class="nn">collections</span>
 
 <div class="viewcode-block" id="fdacurve"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve">[docs]</a><span class="k">class</span> <span class="nc">fdacurve</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides alignment methods for open and closed curves using the SRVF framework</span>
 
 <span class="sd">    Usage: obj = fdacurve(beta, mode, N, scale)</span>
@@ -206,6 +129,7 @@
 <span class="sd">    :param coef:        pca coefficients</span>
 <span class="sd">    :param pca          principal directions</span>
 <span class="sd">    :param qun:         cost function</span>
+<span class="sd">    :param lambda: lambda</span>
 <span class="sd">    :param samples:     random samples</span>
 <span class="sd">    :param gamr:        random warping functions</span>
 <span class="sd">    :param cent:        center</span>
@@ -221,7 +145,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        fdacurve Construct an instance of this class</span>
 <span class="sd">        :param beta: (n,T,K) matrix defining n dimensional curve on T samples with K curves</span>
 <span class="sd">        :param mode:  Open (&#39;O&#39;) or closed curve (&#39;C&#39;) (default &#39;O&#39;)</span>
@@ -255,11 +179,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">len_q</span> <span class="o">=</span> <span class="n">lenq1</span>
 
 
-<div class="viewcode-block" id="fdacurve.karcher_mean"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.karcher_mean">[docs]</a>    <span class="k">def</span> <span class="nf">karcher_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="fdacurve.karcher_mean"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.karcher_mean">[docs]</a>    <span class="k">def</span> <span class="nf">karcher_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This calculates the mean of a set of curves</span>
 <span class="sd">        :param rotation: compute optimal rotation (default = T)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
+<span class="sd">        :param lam: controls the elasticity (default = 0)</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot; or &quot;RBFGS&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -289,7 +214,7 @@
         <span class="n">tolv</span> <span class="o">=</span> <span class="mf">1e-4</span>
         <span class="n">told</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="mf">1e-3</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Computing Karcher Mean of </span><span class="si">%d</span><span class="s2"> curves in SRVF space..&quot;</span> <span class="o">%</span> <span class="n">N</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Computing Karcher Mean of </span><span class="si">%d</span><span class="s2"> curves in SRVF space with lam=</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">lam</span><span class="p">))</span>
         <span class="k">while</span> <span class="n">itr</span> <span class="o">&lt;</span> <span class="n">maxit</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;updating step: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itr</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 
@@ -306,7 +231,7 @@
             <span class="n">sumd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
             <span class="n">sumd</span><span class="p">[</span><span class="n">itr</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">karcher_calc</span><span class="p">)(</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> 
-                                                               <span class="n">mode</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+                                                               <span class="n">mode</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="n">gamma</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -355,10 +280,11 @@
         <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="fdacurve.srvf_align"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.srvf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srvf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="fdacurve.srvf_align"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.srvf_align">[docs]</a>    <span class="k">def</span> <span class="nf">srvf_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This aligns a set of curves to the mean and computes mean if not computed</span>
 <span class="sd">        :param rotation: compute optimal rotation (default = T)</span>
+<span class="sd">        :param lam: controls the elasticity (default = 0)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :param method: method to apply optimization (default=&quot;DP&quot;) options are &quot;DP&quot; or &quot;RBFGS&quot;</span>
@@ -374,7 +300,7 @@
 
         <span class="c1"># find mean</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;beta_mean&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">karcher_mean</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">karcher_mean</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">qn</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">betan</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
@@ -384,7 +310,7 @@
 
         <span class="c1"># align to mean</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_unique</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_mean</span><span class="p">,</span>
-                                          <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">mode</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">mode</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gams</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">qn</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -395,7 +321,7 @@
 
 
 <div class="viewcode-block" id="fdacurve.karcher_cov"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.karcher_cov">[docs]</a>    <span class="k">def</span> <span class="nf">karcher_cov</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This calculates the mean of a set of curves</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -430,7 +356,7 @@
 
 
 <div class="viewcode-block" id="fdacurve.shape_pca"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.shape_pca">[docs]</a>    <span class="k">def</span> <span class="nf">shape_pca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes principal direction of variation specified by no. N is</span>
 <span class="sd">        Number of shapes away from mean. Creates 2*N+1 shape sequence</span>
 
@@ -490,7 +416,7 @@
 
 
 <div class="viewcode-block" id="fdacurve.sample_shapes"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.sample_shapes">[docs]</a>    <span class="k">def</span> <span class="nf">sample_shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">numSamp</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes sample shapes from mean and covariance</span>
 
 <span class="sd">        :param no: number of direction (default 3)</span>
@@ -542,18 +468,29 @@
         <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="fdacurve.plot"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="fdacurve.plot"><a class="viewcode-back" href="../curve_statistics.html#curve_stats.fdacurve.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">multivariate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot curve mean results</span>
+
+<span class="sd">        :param multivariate: plot as multivariate functions instead of curves (default=False)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-        <span class="n">n</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">shape</span>
-        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">K</span><span class="p">):</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">ii</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="n">ii</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Curves&#39;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">multivariate</span><span class="p">:</span>
+            <span class="n">n</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">shape</span>
+            <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">K</span><span class="p">):</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="n">jj</span><span class="p">,:,</span><span class="n">ii</span><span class="p">])</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Function: </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">jj</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+            <span class="n">n</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">shape</span>
+            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">K</span><span class="p">):</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">ii</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="n">ii</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Curves&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;gams&#39;</span><span class="p">):</span>
             <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gams</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -561,12 +498,29 @@
                                     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Warping Functions&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;beta_mean&#39;</span><span class="p">):</span>
-            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_mean</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_mean</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Karcher Mean&#39;</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">multivariate</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_mean</span><span class="p">[</span><span class="n">jj</span><span class="p">,:])</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Karcher Mean: </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">jj</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_mean</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_mean</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Karcher Mean&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">multivariate</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;betan&#39;</span><span class="p">):</span>
+                <span class="n">n</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">shape</span>
+                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">K</span><span class="p">):</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">betan</span><span class="p">[</span><span class="n">jj</span><span class="p">,:,</span><span class="n">ii</span><span class="p">])</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Aligned Function: </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">jj</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+
 
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
@@ -625,9 +579,9 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<span class="k">def</span> <span class="nf">karcher_calc</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">karcher_calc</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
     <span class="c1"># Compute shooting vector from mu to q_i</span>
-    <span class="n">qn_t</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_unique</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="n">qn_t</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_unique</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">closed</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
     <span class="n">qn_t</span> <span class="o">=</span> <span class="n">qn_t</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">qn_t</span><span class="p">,</span><span class="n">qn_t</span><span class="p">))</span>
 
     <span class="n">q1dotq2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">qn_t</span><span class="p">)</span>
@@ -654,42 +608,30 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2022, J. Derek Tucker
-
-    </p>
+    <p>&#169; Copyright 2023, J. Derek Tucker.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

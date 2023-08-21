@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>time_warping &mdash; fdasrsf 2.3.12 documentation</title>
+  <title>time_warping &mdash; fdasrsf 2.4.3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -15,7 +15,6 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -34,7 +33,7 @@
             fdasrsf
           </a>
               <div class="version">
-                2.2
+                2.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -54,11 +53,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
-<<<<<<< HEAD
 <li class="toctree-l1"><a class="reference internal" href="../kmeans.html">Elastic Functional Clustering</a></li>
-=======
 <li class="toctree-l1"><a class="reference internal" href="../image.html">Elastic Image Warping</a></li>
->>>>>>> image
 <li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
@@ -103,12 +99,12 @@
 <span class="kn">import</span> <span class="nn">fdasrsf.bayesian_functions</span> <span class="k">as</span> <span class="nn">bf</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.fPCA</span> <span class="k">as</span> <span class="nn">fpca</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
+<span class="kn">from</span> <span class="nn">fdasrsf.gp</span> <span class="kn">import</span> <span class="n">gp_posterior</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapz</span><span class="p">,</span> <span class="n">cumtrapz</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">svd</span><span class="p">,</span> <span class="n">cholesky</span>
 <span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="kn">import</span> <span class="n">linkage</span><span class="p">,</span> <span class="n">fcluster</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">squareform</span><span class="p">,</span> <span class="n">pdist</span>
-<span class="kn">import</span> <span class="nn">GPy</span>
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">inv</span>
 <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">rand</span><span class="p">,</span> <span class="n">normal</span>
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
@@ -253,9 +249,9 @@
         <span class="c1"># Compute Karcher Mean</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute Karcher Mean of </span><span class="si">%d</span><span class="s2"> function in SRSF space...&quot;</span> <span class="o">%</span> <span class="n">N</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute Karcher Mean of </span><span class="si">%d</span><span class="s2"> function in SRSF space with lam=</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">lam</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute Karcher Median of </span><span class="si">%d</span><span class="s2"> function in SRSF space...&quot;</span> <span class="o">%</span> <span class="n">N</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute Karcher Median of </span><span class="si">%d</span><span class="s2"> function in SRSF space with lam=</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">lam</span><span class="p">))</span>
 
         <span class="n">ds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">MaxItr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
@@ -373,6 +369,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">gamI</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMeanInverse</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
             <span class="n">gamI_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gamI</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">r</span> <span class="o">-=</span> <span class="mi">1</span>
 
         <span class="c1"># Aligned data &amp; stats</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
@@ -1200,21 +1197,20 @@
     <span class="n">f2_propvar</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;f2propvar&quot;</span><span class="p">]</span>
     <span class="n">y1itmp</span> <span class="o">=</span> <span class="n">y1i</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;sampfreq&quot;</span><span class="p">]]</span>
     <span class="n">timetmp</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;sampfreq&quot;</span><span class="p">]]</span>
-    <span class="n">kernel1</span> <span class="o">=</span> <span class="n">GPy</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">RBF</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variance</span><span class="o">=</span><span class="n">y1itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">lengthscale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">()))</span>
     <span class="n">y2itmp</span> <span class="o">=</span> <span class="n">y2i</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;sampfreq&quot;</span><span class="p">]]</span>
-    <span class="n">kernel2</span> <span class="o">=</span> <span class="n">GPy</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">RBF</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variance</span><span class="o">=</span><span class="n">y2itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">lengthscale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">()))</span>
     <span class="n">M1</span> <span class="o">=</span> <span class="n">timetmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">model1</span> <span class="o">=</span> <span class="n">GPy</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">GPRegression</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span><span class="n">y1itmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span><span class="n">kernel1</span><span class="p">)</span>
-    <span class="n">model1</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
-    <span class="n">model2</span> <span class="o">=</span> <span class="n">GPy</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">GPRegression</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span><span class="n">y2itmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span><span class="n">kernel2</span><span class="p">)</span>
-    <span class="n">model2</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
 
-    <span class="n">s1_ini</span> <span class="o">=</span> <span class="n">model1</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">param_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">s2_ini</span> <span class="o">=</span> <span class="n">model2</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">param_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">f1_curr</span><span class="p">,</span> <span class="n">predvar</span> <span class="o">=</span> <span class="n">gp_posterior</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">y1itmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> 
+                                    <span class="n">l2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">()),</span> <span class="n">noise_var</span><span class="o">=</span><span class="n">y1itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">f2_curr</span><span class="p">,</span> <span class="n">predvar</span> <span class="o">=</span> <span class="n">gp_posterior</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">y2itmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> 
+                                    <span class="n">l2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">()),</span> <span class="n">noise_var</span><span class="o">=</span><span class="n">y2itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">s1_ini</span> <span class="o">=</span> <span class="n">y1itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">s2_ini</span> <span class="o">=</span> <span class="n">y2itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">L1_propvar</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;L1propvar&quot;</span><span class="p">]</span>
     <span class="n">L2_propvar</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;L2propvar&quot;</span><span class="p">]</span>
-    <span class="n">L1_ini</span> <span class="o">=</span> <span class="n">model2</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">param_array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">L2_ini</span> <span class="o">=</span> <span class="n">model2</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">param_array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">L1_ini</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+    <span class="n">L2_ini</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
 
     <span class="n">K_f1_corr</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">exp2corr2</span><span class="p">(</span><span class="n">L1_ini</span><span class="p">,</span><span class="n">Dmat</span><span class="p">)</span><span class="o">+</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">y1i</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">K_f1</span> <span class="o">=</span> <span class="n">s1_ini</span> <span class="o">*</span> <span class="n">K_f1_corr</span>
@@ -1255,9 +1251,12 @@
     <span class="n">L1_curr</span> <span class="o">=</span> <span class="n">L1_ini</span>
     <span class="n">L2_curr</span> <span class="o">=</span> <span class="n">L2_ini</span>
 
-    <span class="n">f1_curr</span><span class="p">,</span> <span class="n">predvar</span> <span class="o">=</span> <span class="n">model1</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="n">f1_curr</span><span class="p">,</span> <span class="n">predvar</span> <span class="o">=</span> <span class="n">gp_posterior</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">y1itmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">time</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> 
+                                    <span class="n">l2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">()),</span> <span class="n">noise_var</span><span class="o">=</span><span class="n">y1itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">f2_curr</span><span class="p">,</span> <span class="n">predvar</span> <span class="o">=</span> <span class="n">gp_posterior</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">y2itmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">time</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> 
+                                    <span class="n">l2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timetmp</span><span class="o">.</span><span class="n">std</span><span class="p">()),</span> <span class="n">noise_var</span><span class="o">=</span><span class="n">y2itmp</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    
     <span class="n">f1_curr</span> <span class="o">=</span> <span class="n">f1_curr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
-    <span class="n">f2_curr</span><span class="p">,</span> <span class="n">predvar</span> <span class="o">=</span> <span class="n">model2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
     <span class="n">f2_curr</span> <span class="o">=</span> <span class="n">f2_curr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
 
     <span class="c1"># srsf transformation</span>
@@ -1896,7 +1895,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Derek Tucker.</p>
+    <p>&#169; Copyright 2023, J. Derek Tucker.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

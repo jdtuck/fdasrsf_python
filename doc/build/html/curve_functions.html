@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Curve Functions &mdash; fdasrsf 2.4.2 documentation</title>
+  <title>Curve Functions &mdash; fdasrsf 2.4.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -383,7 +383,7 @@ registered (seed) srvs w.r.t. q1</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="curve_functions.find_rotation_and_seed_unique">
-<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_rotation_and_seed_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_unique" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">curve_functions.</span></span><span class="sig-name descname"><span class="pre">find_rotation_and_seed_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/curve_functions.html#find_rotation_and_seed_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#curve_functions.find_rotation_and_seed_unique" title="Permalink to this definition"></a></dt>
 <dd><p>This function returns a candidate list of optimally oriented and
 registered (seed) shapes w.r.t. beta1</p>
 <dl class="field-list simple">
@@ -393,6 +393,7 @@ registered (seed) shapes w.r.t. beta1</p>
 <li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
 <li><p><strong>closed</strong> – Open (0) or Closed (1)</p></li>
 <li><p><strong>rotation</strong> – find rotation (default=True)</p></li>
+<li><p><strong>lam</strong> – controls the elasticity (default = 0)</p></li>
 <li><p><strong>method</strong> – method to apply optimization (default=”DP”) options are “DP” or “RBFGS”</p></li>
 </ul>
 </dd>
