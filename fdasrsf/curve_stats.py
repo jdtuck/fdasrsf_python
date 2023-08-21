@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 from numpy import zeros, sqrt, fabs, cos, sin, tile, vstack, empty, cov, inf, mean, arange, prod
-from numpy import append, arccos, cumsum, sum
+from numpy import append, arccos, cumsum, sum, linspace
 from numpy.linalg import svd
 from numpy.random import randn
 import fdasrsf.curve_functions as cf
@@ -379,18 +379,29 @@ class fdacurve:
         return
 
 
-    def plot(self):
+    def plot(self,multivariate=False):
         """
         plot curve mean results
+
+        :param multivariate: plot as multivariate functions instead of curves (default=False)
         """
-        fig, ax = plt.subplots()
-        n,T,K = self.beta.shape
-        for ii in range(0,K):
-            ax.plot(self.beta[0,:,ii],self.beta[1,:,ii])
-        plt.title('Curves')
-        ax.set_aspect('equal')
-        plt.axis('off')
-        plt.gca().invert_yaxis()
+        if multivariate:
+            n,T,K = self.beta.shape
+            for jj in range(n):
+                fig, ax = plt.subplots()
+                for ii in range(0,K):
+                    ax.plot(linspace(0,1,T), self.beta[jj,:,ii])
+                plt.title('Original Function: %d' % (jj+1))
+
+        else: 
+            fig, ax = plt.subplots()
+            n,T,K = self.beta.shape
+            for ii in range(0,K):
+                ax.plot(self.beta[0,:,ii],self.beta[1,:,ii])
+            plt.title('Curves')
+            ax.set_aspect('equal')
+            plt.axis('off')
+            plt.gca().invert_yaxis()
 
         if hasattr(self,'gams'):
             M = self.gams.shape[0]
@@ -398,12 +409,29 @@ class fdacurve:
                                     title="Warping Functions")
 
         if hasattr(self,'beta_mean'):
-            fig, ax = plt.subplots()
-            ax.plot(self.beta_mean[0,:],self.beta_mean[1,:])
-            plt.title('Karcher Mean')
-            ax.set_aspect('equal')
-            plt.axis('off')
-            plt.gca().invert_yaxis()
+            if multivariate:
+                for jj in range(n):
+                    fig, ax = plt.subplots()
+                    ax.plot(linspace(0,1,T), self.beta_mean[0,:])
+                    plt.title('Karcher Mean: %d' % (jj+1))
+            else:
+                fig, ax = plt.subplots()
+                ax.plot(self.beta_mean[0,:],self.beta_mean[1,:])
+                plt.title('Karcher Mean')
+                ax.set_aspect('equal')
+                plt.axis('off')
+                plt.gca().invert_yaxis()
+
+        if multivariate:
+            if hasattr(self, 'betan'):
+                n,T,K = self.beta.shape
+                for jj in range(n):
+                    fig, ax = plt.subplots()
+                    for ii in range(0,K):
+                        ax.plot(linspace(0,1,T), self.betan[jj,:,ii])
+                    plt.title('Aligned Function: %d' % (jj+1))
+
+
 
         plt.show()
 
