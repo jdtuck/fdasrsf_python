@@ -1,6 +1,7 @@
 .DS_Store
 /build
 /fdasrsf/__pycache__
+.ipynb_checkpoints
 *.fdb_latexmk
 *.fls
 *.aux
