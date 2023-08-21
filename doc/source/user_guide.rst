@@ -12,4 +12,5 @@ Contents:
 
   time_warping_example.ipynb
   fpca_example.ipynb
+  example_mvwarping.ipynb
   curve_example.ipynb
