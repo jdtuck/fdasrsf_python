@@ -412,7 +412,7 @@ class fdacurve:
             if multivariate:
                 for jj in range(n):
                     fig, ax = plt.subplots()
-                    ax.plot(linspace(0,1,T), self.beta_mean[0,:])
+                    ax.plot(linspace(0,1,T), self.beta_mean[jj,:])
                     plt.title('Karcher Mean: %d' % (jj+1))
             else:
                 fig, ax = plt.subplots()
