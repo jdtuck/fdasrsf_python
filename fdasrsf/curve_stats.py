@@ -125,7 +125,7 @@ class fdacurve:
         tolv = 1e-4
         told = 5*1e-3
 
-        print("Computing Karcher Mean of %d curves in SRVF space with lam=%d" % (N,lam))
+        print("Computing Karcher Mean of %d curves in SRVF space with lam=%02f" % (N,lam))
         while itr < maxit:
             print("updating step: %d" % (itr+1))
 

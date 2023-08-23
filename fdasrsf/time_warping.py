@@ -160,9 +160,9 @@ class fdawarp:
         # Compute Karcher Mean
         if verbose:
             if method == 0:
-                print("Compute Karcher Mean of %d function in SRSF space with lam=%d" % (N,lam))
+                print("Compute Karcher Mean of %d function in SRSF space with lam=%02f" % (N,lam))
             if method == 1:
-                print("Compute Karcher Median of %d function in SRSF space with lam=%d" % (N,lam))
+                print("Compute Karcher Median of %d function in SRSF space with lam=%02f" % (N,lam))
 
         ds = np.repeat(0.0, MaxItr + 2)
         ds[0] = np.inf
