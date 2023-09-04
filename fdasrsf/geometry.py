@@ -7,6 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 from numpy import arccos, sin, cos, linspace, zeros, sqrt, finfo, double
 from numpy import ones, diff, gradient
+from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapz, cumtrapz
 
 
@@ -50,21 +51,31 @@ def L2norm(psi):
     return l2norm
 
 
-def gam_to_v(gam):
+def gam_to_v(gam,smooth=True):
     TT = gam.shape[0]
     time = linspace(0,1,TT)
     binsize = diff(time)
     binsize = binsize.mean()
     mu = ones(TT)
     if gam.ndim == 1:
-        psi = sqrt(gradient(gam,binsize))
+        if smooth:
+            tmp_spline = UnivariateSpline(time, gam, s=1e-4)
+            g = tmp_spline(time, 1)
+            psi = sqrt(g)
+        else:
+            psi = sqrt(gradient(gam,binsize))
         vec, theta = inv_exp_map(mu,psi)
     else:
         n = gam.shape[1]
 
         psi = zeros((TT,n))
         for i in range(0,n):
-            psi[:,i] = sqrt(gradient(gam[:, i],binsize))
+            if smooth:
+                tmp_spline = UnivariateSpline(time, gam[:,i], s=1e-4)
+                g = tmp_spline(time, 1)
+                psi[:,i] = sqrt(g)
+            else:
+                psi[:,i] = sqrt(gradient(gam[:, i],binsize))
         
         vec = zeros((TT,n))
         for i in range(0,n):
