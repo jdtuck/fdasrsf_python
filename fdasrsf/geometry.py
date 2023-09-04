@@ -61,6 +61,8 @@ def gam_to_v(gam,smooth=True):
         if smooth:
             tmp_spline = UnivariateSpline(time, gam, s=1e-4)
             g = tmp_spline(time, 1)
+            idx = g<=0
+            g[idx] = 0
             psi = sqrt(g)
         else:
             psi = sqrt(gradient(gam,binsize))
@@ -73,6 +75,8 @@ def gam_to_v(gam,smooth=True):
             if smooth:
                 tmp_spline = UnivariateSpline(time, gam[:,i], s=1e-4)
                 g = tmp_spline(time, 1)
+                idx = g<=0
+                g[idx] = 0
                 psi[:,i] = sqrt(g)
             else:
                 psi[:,i] = sqrt(gradient(gam[:, i],binsize))
