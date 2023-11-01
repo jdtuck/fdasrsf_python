@@ -8,3 +8,4 @@ joblib
 patsy
 tqdm
 nbsphinx
+sphinx-rtd-theme

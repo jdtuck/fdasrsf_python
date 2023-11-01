@@ -754,9 +754,9 @@ def pre_proc_curve(beta, T=100):
 
 def elastic_distance_curve(beta1, beta2, closed=0, rotation=True, scale=False, method="DP"):
     """
-    Calculates the two elastic distances between two curves
-    :param beta1: numpy ndarray of shape (2,M) of M samples
-    :param beta2: numpy ndarray of shape (2,M) of M samples
+    Calculates the two elastic distances between two curves in R^M
+    :param beta1: numpy ndarray of shape (M,N) of N samples
+    :param beta2: numpy ndarray of shape (M,N) of N samples
     :param closed: open (0) or closed (1) curve (default=0)
     :param rotation: compute optimal rotation (default=True)
     :param scale: include scale (default=False)

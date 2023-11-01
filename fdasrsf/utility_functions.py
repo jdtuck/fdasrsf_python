@@ -540,6 +540,7 @@ def SqrtMedian(gam):
 
     vec = v
     gam_median = cumtrapz(psi_median**2,time,initial=0.0)
+    gam_median = (gam_median - gam_median.min()) / (gam_median.max() - gam_median.min())
 
     return gam_median, psi_median, psi, vec
 
