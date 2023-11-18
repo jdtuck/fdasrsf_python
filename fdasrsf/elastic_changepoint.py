@@ -507,8 +507,8 @@ class elastic_amp_change_ff:
         self.pca_coef =   self.pca_coef.real
 
         def asymp(N):
-            BridgeLam = np.zeros((M_approx,N))
-            for j in range(M_approx):
+            BridgeLam = np.zeros((M,N))
+            for j in range(M):
                 BridgeLam[j,:]=self.lambda_vals[j]*(BBridge(0,0,0,1,N-1)**2)
             return max(BridgeLam.sum(axis=0))
 
@@ -801,8 +801,8 @@ class elastic_ph_change_ff:
         self.pca_coef =   self.pca_coef.real * M
 
         def asymp(N):
-            BridgeLam = np.zeros((M_approx,N))
-            for j in range(M_approx):
+            BridgeLam = np.zeros((M,N))
+            for j in range(M):
                 BridgeLam[j,:]=self.lambda_vals[j]*(BBridge(0,0,0,1,N-1)**2)
             return max(BridgeLam.sum(axis=0))
 
