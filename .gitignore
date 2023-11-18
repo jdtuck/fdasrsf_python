@@ -24,3 +24,4 @@ src/ocmlogit_warp.c
 src/imagecpp.cpp
 fdasrsf_python.code-workspace
 *.so
+.coverage
