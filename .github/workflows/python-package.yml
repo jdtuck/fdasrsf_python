@@ -44,7 +44,7 @@ jobs:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     env:
-      CIBW_SKIP: cp36-* cp37-* cp312-*
+      CIBW_SKIP: cp36-* cp37-* cp312-* pp*
     strategy:
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-11]
