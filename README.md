@@ -1,4 +1,4 @@
-[![Build](https://github.com/jdtuck/fdasrsf_python/actions/workflows/CI/badge.svg)](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yaml)
+[![Build](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yml/badge.svg)](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yml)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
 [![Build status](https://img.shields.io/appveyor/ci/jdtuck/fdasrsf-python.svg?style=flat-square&label=windows)](https://ci.appveyor.com/project/jdtuck/fdasrsf-python/branch/master)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
