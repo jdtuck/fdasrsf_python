@@ -52,14 +52,9 @@ jobs:
         uses: codecov/codecov-action@v3
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          name: Release ${{ github.ref_name }}
   
   deploy:
 
@@ -74,9 +69,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build
+        pip install build twine cibuildwheel  
     - name: Build package
-      run: python -m build
+      run: |
+        python -m build --sdist
+        python -m cibuildwheel --output-dir dist
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
