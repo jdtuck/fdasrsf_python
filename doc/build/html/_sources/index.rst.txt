@@ -26,6 +26,7 @@ using functional component analysis and regression.
    fPLS.rst
    regression.rst
    pcr_regression.rst
+   elastic_changepoint.rst
    elastic_glm_regression.rst
    tolerance.rst
    kmeans.rst
@@ -109,6 +110,8 @@ References
    arXiv:2011.12397 [stat.ME], 2020.
 
    Q. Xie, S. Kurtek, E. Klassen, G. E. Christensen and A. Srivastava. Metric-based pairwise and multiple image registration. IEEE European Conference on Computer Vision (ECCV), September, 2014
+
+   J. D. Tucker and D. Yarger, “Elastic Functional Changepoint Detection of Climate Impacts from Localized Sources”, Envirometrics, 10.1002/env.2826, 2023.
 
 
 Indices and tables

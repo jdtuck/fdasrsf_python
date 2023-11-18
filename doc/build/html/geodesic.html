@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SRVF Geodesic Computation &mdash; fdasrsf 2.4.3 documentation</title>
+  <title>SRVF Geodesic Computation &mdash; fdasrsf 2.5.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,8 +17,6 @@
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,7 +36,7 @@
             fdasrsf
           </a>
               <div class="version">
-                2.4
+                2.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -56,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="fPLS.html">Functional Principal Least Squares</a></li>
 <li class="toctree-l1"><a class="reference internal" href="regression.html">Elastic Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pcr_regression.html">Elastic Principal Component Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elastic_changepoint.html">Elastic Functional Changepoint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tolerance.html">Elastic Functional Tolerance Bounds</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kmeans.html">Elastic Functional Clustering</a></li>
@@ -92,332 +91,8 @@
            <div itemprop="articleBody">
              
   <a class="reference internal image-reference" href="_images/logo.png"><img alt="_images/logo.png" class="align-right" src="_images/logo.png" style="width: 200px;" /></a>
-<section id="module-geodesic">
-<span id="srvf-geodesic-computation"></span><h1>SRVF Geodesic Computation<a class="headerlink" href="#module-geodesic" title="Permalink to this heading"></a></h1>
-<p>geodesic calculation for SRVF (curves) open and closed</p>
-<p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.back_parallel_transport">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">back_parallel_transport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#back_parallel_transport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.back_parallel_transport" title="Permalink to this definition"></a></dt>
-<dd><p>backwards parallel translates q1 and q2 along manifold</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>u1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>basis</strong> – list numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return utilde<span class="colon">:</span></dt>
-<dd class="field-odd"><p>translated vector</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.calc_alphadot">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">calc_alphadot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calc_alphadot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.calc_alphadot" title="Permalink to this definition"></a></dt>
-<dd><p>calculates derivative along the path alpha</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>basis</strong> – list of numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return alphadot<span class="colon">:</span></dt>
-<dd class="field-odd"><p>derivative of alpha</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.calculate_energy">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">calculate_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alphadot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.calculate_energy" title="Permalink to this definition"></a></dt>
-<dd><p>calculates energy along path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>alphadot</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy scalar</p>
-</dd>
-<dt class="field-odd">Return E<span class="colon">:</span></dt>
-<dd class="field-odd"><p>energy</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.calculate_gradE">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">calculate_gradE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">utilde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#calculate_gradE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.calculate_gradE" title="Permalink to this definition"></a></dt>
-<dd><p>calculates gradient of energy along path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>utilde</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy scalar</p>
-</dd>
-<dt class="field-odd">Return gradE<span class="colon">:</span></dt>
-<dd class="field-odd"><p>gradient of energy</p>
-</dd>
-<dt class="field-even">Return normgradE<span class="colon">:</span></dt>
-<dd class="field-even"><p>norm of gradient of energy</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.cov_integral">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">cov_integral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#cov_integral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.cov_integral" title="Permalink to this definition"></a></dt>
-<dd><p>Calculates covariance along path alpha</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
-<li><p><strong>alphadot</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>basis</strong> – list numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return u<span class="colon">:</span></dt>
-<dd class="field-odd"><p>covariance</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.find_basis_normal_path">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">find_basis_normal_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#find_basis_normal_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.find_basis_normal_path" title="Permalink to this definition"></a></dt>
-<dd><p>computes orthonormalized basis vectors to the normal space at each of the
-k points (q-functions) of the path alpha</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples (path)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return basis<span class="colon">:</span></dt>
-<dd class="field-odd"><p>basis vectors along the path</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.geod_dist_path_strt">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">geod_dist_path_strt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_dist_path_strt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.geod_dist_path_strt" title="Permalink to this definition"></a></dt>
-<dd><p>calculate geodisc distance for path straightening</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy scalar</p>
-</dd>
-<dt class="field-odd">Return dist<span class="colon">:</span></dt>
-<dd class="field-odd"><p>geodesic distance</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.geod_sphere">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">geod_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#geod_sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.geod_sphere" title="Permalink to this definition"></a></dt>
-<dd><p>This function calculates the geodesics between open curves beta1 and
-beta2 with k steps along path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-<li><p><strong>scale</strong> – include length (Default = False)</p></li>
-<li><p><strong>rotation</strong> – include rotation (Default = True)</p></li>
-<li><p><strong>center</strong> – center curves at origin (Default = True)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return dist<span class="colon">:</span></dt>
-<dd class="field-odd"><p>geodesic distance</p>
-</dd>
-<dt class="field-even">Return path<span class="colon">:</span></dt>
-<dd class="field-even"><p>geodesic path</p>
-</dd>
-<dt class="field-odd">Return PsiQ<span class="colon">:</span></dt>
-<dd class="field-odd"><p>geodesic path in SRVF</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.init_path_geod">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">init_path_geod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_geod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.init_path_geod" title="Permalink to this definition"></a></dt>
-<dd><p>Initializes a path in <span class="math notranslate nohighlight">\(\cal{C}\)</span>. beta1, beta2 are already
-standardized curves. Creates a path from beta1 to beta2 in
-shape space, then projects to the closed shape manifold.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
-<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples (end curve)</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return alpha<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a path between two q-functions</p>
-</dd>
-<dt class="field-even">Return beta<span class="colon">:</span></dt>
-<dd class="field-even"><p>a path between two curves</p>
-</dd>
-<dt class="field-odd">Return O<span class="colon">:</span></dt>
-<dd class="field-odd"><p>rotation matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.init_path_rand">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">init_path_rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_mid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#init_path_rand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.init_path_rand" title="Permalink to this definition"></a></dt>
-<dd><p>Initializes a path in <span class="math notranslate nohighlight">\(\cal{C}\)</span>. beta1, beta_mid beta2 are already
-standardized curves. Creates a path from beta1 to beta_mid to beta2 in
-shape space, then projects to the closed shape manifold.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
-<li><p><strong>betamid</strong> – numpy ndarray of shape (2,M) of M samples (mid curve)</p></li>
-<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples (end curve)</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return alpha<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a path between two q-functions</p>
-</dd>
-<dt class="field-even">Return beta<span class="colon">:</span></dt>
-<dd class="field-even"><p>a path between two curves</p>
-</dd>
-<dt class="field-odd">Return O<span class="colon">:</span></dt>
-<dd class="field-odd"><p>rotation matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.path_straightening">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">path_straightening</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">betamid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rand'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#path_straightening"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.path_straightening" title="Permalink to this definition"></a></dt>
-<dd><p>Perform path straightening to find geodesic between two shapes in either
-the space of closed curves or the space of affine standardized curves.
-This algorithm follows the steps outlined in section 4.6 of the
-manuscript.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>beta1</strong> – numpy ndarray of shape (2,M) of M samples (first curve)</p></li>
-<li><p><strong>beta2</strong> – numpy ndarray of shape (2,M) of M samples (end curve)</p></li>
-<li><p><strong>betamid</strong> – numpy ndarray of shape (2,M) of M samples (mid curve
-Default = None, only needed for init “geod”)</p></li>
-<li><p><strong>init</strong> – initialize path geodesic or random (Default = “rand”)</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy ndarray</p>
-</dd>
-<dt class="field-odd">Return dist<span class="colon">:</span></dt>
-<dd class="field-odd"><p>geodesic distance</p>
-</dd>
-<dt class="field-even">Return path<span class="colon">:</span></dt>
-<dd class="field-even"><p>geodesic path</p>
-</dd>
-<dt class="field-odd">Return pathsqnc<span class="colon">:</span></dt>
-<dd class="field-odd"><p>geodesic path sequence</p>
-</dd>
-<dt class="field-even">Return E<span class="colon">:</span></dt>
-<dd class="field-even"><p>energy</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.plot_geod">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">plot_geod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#plot_geod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.plot_geod" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the geodesic path as a sequence of curves</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> – numpy ndarray of shape (2,M,K) of M sample points of K samples along path</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geodesic.update_path">
-<span class="sig-prename descclassname"><span class="pre">geodesic.</span></span><span class="sig-name descname"><span class="pre">update_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geodesic.html#update_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geodesic.update_path" title="Permalink to this definition"></a></dt>
-<dd><p>Update the path along the direction -gradE</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>alpha</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>beta</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>gradE</strong> – numpy ndarray of shape (2,M) of M samples</p></li>
-<li><p><strong>delta</strong> – gradient paramenter</p></li>
-<li><p><strong>T</strong> – Number of samples of curve (Default = 100)</p></li>
-<li><p><strong>k</strong> – number of samples along path (Default = 5)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy scalar</p>
-</dd>
-<dt class="field-odd">Return alpha<span class="colon">:</span></dt>
-<dd class="field-odd"><p>updated path of srvfs</p>
-</dd>
-<dt class="field-even">Return beta<span class="colon">:</span></dt>
-<dd class="field-even"><p>updated path of curves</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="srvf-geodesic-computation">
+<h1>SRVF Geodesic Computation<a class="headerlink" href="#srvf-geodesic-computation" title="Permalink to this heading"></a></h1>
 </section>
 
 

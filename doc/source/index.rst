@@ -26,6 +26,7 @@ using functional component analysis and regression.
    fPLS.rst
    regression.rst
    pcr_regression.rst
+   elastic_changepoint.rst
    elastic_glm_regression.rst
    tolerance.rst
    kmeans.rst
