@@ -14,7 +14,7 @@ from numpy.linalg import eig
 from fdasrsf.boxplots import ampbox, phbox
 
 
-def bootTB(f, time, a=0.05, p=.99, B=500, no=5, parallel=True):
+def bootTB(f, time, a=0.05, p=0.99, B=500, no=5, parallel=True):
     """
     This function computes tolerance bounds for functional data containing
     phase and amplitude variation using bootstrap sampling
@@ -52,40 +52,40 @@ def bootTB(f, time, a=0.05, p=.99, B=500, no=5, parallel=True):
     gam = out_med.gam
     q0 = out_med.q0
     print("Bootstrap Sampling")
-    bootlwr_amp = np.zeros((M,B))
-    bootupr_amp = np.zeros((M,B))
-    bootlwr_ph =  np.zeros((M,B))
-    bootupr_ph =  np.zeros((M,B))
+    bootlwr_amp = np.zeros((M, B))
+    bootupr_amp = np.zeros((M, B))
+    bootlwr_ph = np.zeros((M, B))
+    bootupr_ph = np.zeros((M, B))
     for k in range(B):
         out_med.joint_gauss_model(n=100, no=no)
         obja = ampbox(out_med)
-        obja.construct_boxplot(1-p,.3)
+        obja.construct_boxplot(1 - p, 0.3)
         objp = phbox(out_med)
-        objp.construct_boxplot(1-p,.3)
-        bootlwr_amp[:,k] = obja.Q1a
-        bootupr_amp[:,k] = obja.Q3a
-        bootlwr_ph[:,k] = objp.Q1a
-        bootupr_ph[:,k] = objp.Q3a
-    
+        objp.construct_boxplot(1 - p, 0.3)
+        bootlwr_amp[:, k] = obja.Q1a
+        bootupr_amp[:, k] = obja.Q3a
+        bootlwr_ph[:, k] = objp.Q1a
+        bootupr_ph[:, k] = objp.Q3a
+
     # tolerance bounds
     boot_amp = np.hstack((bootlwr_amp, bootupr_amp))
     f, g, g2 = uf.gradient_spline(time, boot_amp, False)
     boot_amp_q = g / np.sqrt(abs(g) + eps)
-    boot_ph = np.hstack((bootlwr_ph,bootupr_ph))
+    boot_ph = np.hstack((bootlwr_ph, bootupr_ph))
     boot_out = out_med
     boot_out.fn = boot_amp
     boot_out.qn = boot_amp_q
     boot_out.gam = boot_ph
     boot_out.rsamps = False
     amp = ampbox(boot_out)
-    amp.construct_boxplot(a, .3)
+    amp.construct_boxplot(a, 0.3)
     ph = phbox(boot_out)
-    ph.construct_boxplot(a, .3)
+    ph.construct_boxplot(a, 0.3)
 
     return amp, ph, out_med
 
 
-def pcaTB(f, time, a=0.5, p=.99, no=5, parallel=True):
+def pcaTB(f, time, a=0.5, p=0.99, no=5, parallel=True):
     """
     This function computes tolerance bounds for functional data containing
     phase and amplitude variation using fPCA
@@ -108,7 +108,7 @@ def pcaTB(f, time, a=0.5, p=.99, no=5, parallel=True):
 
     # Align Data
     out_warp = fs.fdawarp(f, time)
-    out_warp.srsf_align( method="median", parallel=parallel)
+    out_warp.srsf_align(method="median", parallel=parallel)
 
     # Calculate pca
     out_pca = fpca.fdajpca(out_warp)
@@ -117,7 +117,7 @@ def pcaTB(f, time, a=0.5, p=.99, no=5, parallel=True):
     # Calculate TB
     tol = mvtol_region(out_pca.coef, a, p, 100000)
 
-    return warp, pca, tol
+    return out_warp, out_pca, tol
 
 
 def mvtol_region(x, alpha, P, B):
@@ -126,7 +126,7 @@ def mvtol_region(x, alpha, P, B):
 
     Krishnamoorthy, K. and Mondal, S. (2006), Improved Tolerance Factors for Multivariate Normal
     Distributions, Communications in Statistics - Simulation and Computation, 35, 461–478.
-    
+
     :param x: (M,N) matrix defining N variables of M samples
     :param alpha: confidence level
     :param P: coverage level
@@ -136,30 +136,30 @@ def mvtol_region(x, alpha, P, B):
     :return tol: tolerance factor
 
     """
-    n,p = x.shape
+    n, p = x.shape
 
-    q_squared = chi2.rvs(1, size=(p,B))/n
-    L = np.zeros((p,B))
+    q_squared = chi2.rvs(1, size=(p, B)) / n
+    L = np.zeros((p, B))
     for k in range(B):
-        L[:,k] = eig(rwishart(n-1,p))[0]
-    
-    c1 = (1+q_squared)/L
+        L[:, k] = eig(rwishart(n - 1, p))[0]
+
+    c1 = (1 + q_squared) / L
     c1 = c1.sum()
-    c2 = (1+2*q_squared)/(L**2)
+    c2 = (1 + 2 * q_squared) / (L**2)
     c2 = c2.sum()
-    c3 = (1+3*q_squared)/(L**3)
+    c3 = (1 + 3 * q_squared) / (L**3)
     c3 = c3.sum()
-    a = (c2**3)/(c3**2)
-    T = (n-1)*(np.sqrt(c2/a) * (chi2.ppf(P,a)-a) + c1)
-    tol = np.quantile(T,1-alpha)
+    a = (c2**3) / (c3**2)
+    T = (n - 1) * (np.sqrt(c2 / a) * (chi2.ppf(P, a) - a) + c1)
+    tol = np.quantile(T, 1 - alpha)
 
     return tol
 
 
-def rwishart(df,p):
+def rwishart(df, p):
     """
     Computes a random wishart matrix
-    
+
     :param df: degree of freedom
     :param p: number of dimensions
 
@@ -167,15 +167,17 @@ def rwishart(df,p):
     :return R: matrix
 
     """
-    R = np.zeros((p,p))
+    R = np.zeros((p, p))
     R = R.flatten()
-    R[::p+1] = np.sqrt(chi2.rvs(np.arange(df,df-p,-1),size=p))
-    if p>1:
-        pseq = np.arange(0,p)
-        tmp = [np.arange(0,x+1) for x in np.arange(0,p-1)]
-        R[np.repeat(p*pseq,pseq)+np.concatenate(tmp).ravel()] = np.random.randn(int(p*(p-1)/2))
+    R[:: p + 1] = np.sqrt(chi2.rvs(np.arange(df, df - p, -1), size=p))
+    if p > 1:
+        pseq = np.arange(0, p)
+        tmp = [np.arange(0, x + 1) for x in np.arange(0, p - 1)]
+        R[np.repeat(p * pseq, pseq) + np.concatenate(tmp).ravel()] = np.random.randn(
+            int(p * (p - 1) / 2)
+        )
 
-    R = R.reshape((p,p))
-    R = np.matmul(R.T,R)
+    R = R.reshape((p, p))
+    R = np.matmul(R.T, R)
 
     return R
