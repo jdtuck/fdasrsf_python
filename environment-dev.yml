@@ -3,7 +3,6 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9
   - arviz>=0.9
   - Cython
   - joblib
