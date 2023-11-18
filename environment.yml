@@ -1,0 +1,22 @@
+name: testenv
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - certifi
+  - cycler
+  - Cython
+  - cffi
+  - numba
+  - joblib
+  - kiwisolver
+  - matplotlib
+  - numpy
+  - patsy
+  - pyparsing
+  - python-dateutil
+  - scipy
+  - six
+  - tornado
+
+  
