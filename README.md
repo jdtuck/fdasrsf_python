@@ -17,7 +17,7 @@ using functional component analysis and regression.
 
 ### Installation
 ------------------------------------------------------------------------------
-v2.4.3 is on pip and can be installed using
+v2.5.0 is on pip and can be installed using
 > `pip install fdasrsf`
 
 or conda
@@ -115,3 +115,4 @@ X. Zhang, S. Kurtek, O. Chkrebtii, and J. D. Tucker, “Elastic k-means clusteri
    for posterior exploration, with an application to inference on acute respiratory infection dynamics”, 
    arXiv:2011.12397 [stat.ME], 2020.
 
+J. D. Tucker and D. Yarger, “Elastic Functional Changepoint Detection of Climate Impacts from Localized Sources”, Envirometrics, 10.1002/env.2826, 2023.

@@ -7,7 +7,8 @@ analysis
 """
 __all__ = ["time_warping", "utility_functions", "bayesian_functions", "curve_stats", "geodesic", "curve_functions", 
            "geometry", "pcr_regression", "tolerance", "boxplots", "curve_regression", "regression", "fPCA", 
-           "elastic_glm_regression", "curve_pcr_regression", "kmeans", "image", "image_functions", "gp"]
+           "elastic_changepoint", "elastic_glm_regression", "curve_pcr_regression", "kmeans", "image", 
+           "image_functions", "gp"]
 
 __version__ = "2.4.2"
 
@@ -33,6 +34,7 @@ from .regression import elastic_logistic, elastic_regression, elastic_mlogistic
 from .elastic_glm_regression import elastic_glm_regression
 from .pcr_regression import elastic_pcr_regression, elastic_lpcr_regression, elastic_mlpcr_regression
 from .curve_pcr_regression import elastic_curve_pcr_regression
+from .elastic_changepoint import elastic_amp_change_ff, elastic_change, elastic_ph_change_ff
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB
 from .kmeans import kmeans_align
