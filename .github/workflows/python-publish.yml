@@ -50,11 +50,6 @@ jobs:
           coverage run -m unittest
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
-      - name: Create Release
-        id: create_release
-        uses: ncipollo/release-action@v1
-        with:
-          name: Release ${{ github.ref_name }}
   
   deploy:
 
