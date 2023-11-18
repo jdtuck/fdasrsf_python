@@ -1,10 +1,8 @@
-[![Build Status](https://travis-ci.com/jdtuck/fdasrsf_python.svg?branch=master)](https://travis-ci.com/github/jdtuck/fdasrsf_python)
+[![Build](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yaml/badge.svg)](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yaml)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
 [![Build status](https://img.shields.io/appveyor/ci/jdtuck/fdasrsf-python.svg?style=flat-square&label=windows)](https://ci.appveyor.com/project/jdtuck/fdasrsf-python/branch/master)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/fdasrsf.svg)](https://badge.fury.io/py/fdasrsf)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jdtuck/fdasrsf_python/master?filepath=%2Fnotebooks)
-[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/tetonedge/fdasrsf)](https://hub.docker.com/r/tetonedge/fdasrsf)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/fdasrsf/badges/version.svg)](https://anaconda.org/conda-forge/fdasrsf) [![Join the chat at https://gitter.im/fdasrsf_python/community](https://badges.gitter.im/fdasrsf_python/community.svg)](https://gitter.im/fdasrsf_python/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 fdasrsf
