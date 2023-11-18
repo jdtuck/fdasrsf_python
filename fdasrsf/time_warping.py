@@ -313,7 +313,7 @@ class fdawarp:
 
     def plot(self):
         """
-        plot plot functional alignment results
+        plot functional alignment results
         
         Usage: obj.plot()
         """

@@ -57,7 +57,7 @@ class elastic_pcr_regression:
         This function identifies a regression model with phase-variability
         using elastic pca
 
-        :param pca_method: string specifing pca method (options = "combined",
+        :param pca_method: string specifying pca method (options = "combined",
                         "vert", or "horiz", default = "combined")
         :param no: scalar specify number of principal components (default=5)
         :param smooth_data: smooth data using box filter (default = F)
@@ -267,7 +267,7 @@ class elastic_lpcr_regression:
         This function identifies a logistic regression model with phase-variability
         using elastic pca
 
-        :param pca_method: string specifing pca method (options = "combined",
+        :param pca_method: string specifying pca method (options = "combined",
                         "vert", or "horiz", default = "combined")
         :param no: scalar specify number of principal components (default=5)
         :param smooth_data: smooth data using box filter (default = F)
@@ -507,7 +507,7 @@ class elastic_mlpcr_regression:
         :param f: numpy ndarray of shape (M,N) of N functions with M samples
         :param y: numpy array of N responses
         :param time: vector of size M describing the sample points
-        :param pca_method: string specifing pca method (options = "combined",
+        :param pca_method: string specifying pca method (options = "combined",
                         "vert", or "horiz", default = "combined")
         :param no: scalar specify number of principal components (default=5)
         :param smooth_data: smooth data using box filter (default = F)
