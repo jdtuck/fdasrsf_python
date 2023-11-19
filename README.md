@@ -1,6 +1,5 @@
 [![Build](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yml/badge.svg)](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yml)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
-[![Build status](https://img.shields.io/appveyor/ci/jdtuck/fdasrsf-python.svg?style=flat-square&label=windows)](https://ci.appveyor.com/project/jdtuck/fdasrsf-python/branch/master)
 [![Documentation Status](https://readthedocs.org/projects/fdasrsf-python/badge/?version=latest)](https://fdasrsf-python.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/fdasrsf.svg)](https://badge.fury.io/py/fdasrsf)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/fdasrsf/badges/version.svg)](https://anaconda.org/conda-forge/fdasrsf) [![Join the chat at https://gitter.im/fdasrsf_python/community](https://badges.gitter.im/fdasrsf_python/community.svg)](https://gitter.im/fdasrsf_python/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
