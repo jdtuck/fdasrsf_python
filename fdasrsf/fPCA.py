@@ -42,12 +42,12 @@ class fdavpca:
         Construct an instance of the fdavpca class
         :param fdawarp: fdawarp class
         """
-        if fdawarp.fn.size==0:
-            raise Exception('Please align fdawarp class using srsf_align!')
+        if fdawarp.fn.size == 0:
+            raise Exception("Please align fdawarp class using srsf_align!")
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, id=None, stds = np.arange(-1, 2)):
+    def calc_fpca(self, no=3, id=None, stds=np.arange(-1, 2)):
         """
         This function calculates vertical functional principal component analysis
         on aligned data
@@ -99,12 +99,15 @@ class fdavpca:
         f_pca = np.ndarray(shape=(N, Nstd, no), dtype=float)
         for k in range(0, no):
             for l in range(0, Nstd):
-                f_pca[:, l, k] = uf.cumtrapzmid(time, q_pca[0:N, l, k] * np.abs(q_pca[0:N, l, k]),
-                                                np.sign(q_pca[N, l, k]) * (q_pca[N, l, k] ** 2),
-                                                mididx)
+                f_pca[:, l, k] = uf.cumtrapzmid(
+                    time,
+                    q_pca[0:N, l, k] * np.abs(q_pca[0:N, l, k]),
+                    np.sign(q_pca[N, l, k]) * (q_pca[N, l, k] ** 2),
+                    mididx,
+                )
             fbar = fn.mean(axis=1)
             fsbar = f_pca[:, :, k].mean(axis=1)
-            err = np.transpose(np.tile(fbar-fsbar, (Nstd,1)))
+            err = np.transpose(np.tile(fbar - fsbar, (Nstd, 1)))
             f_pca[:, :, k] += err
 
         N2 = qn.shape[1]
@@ -117,7 +120,7 @@ class fdavpca:
         self.f_pca = f_pca
         self.latent = s[0:no]
         self.coef = c
-        self.U = U[:,0:no]
+        self.U = U[:, 0:no]
         self.id = mididx
         self.mqn = mqn
         self.time = time
@@ -135,42 +138,41 @@ class fdavpca:
         no = self.no
         Nstd = self.stds.shape[0]
         N = self.time.shape[0]
-        num_plot = int(np.ceil(no/3))
+        num_plot = int(np.ceil(no / 3))
         CBcdict = {
-            'Bl': (0, 0, 0),
-            'Or': (.9, .6, 0),
-            'SB': (.35, .7, .9),
-            'bG': (0, .6, .5),
-            'Ye': (.95, .9, .25),
-            'Bu': (0, .45, .7),
-            'Ve': (.8, .4, 0),
-            'rP': (.8, .6, .7),
+            "Bl": (0, 0, 0),
+            "Or": (0.9, 0.6, 0),
+            "SB": (0.35, 0.7, 0.9),
+            "bG": (0, 0.6, 0.5),
+            "Ye": (0.95, 0.9, 0.25),
+            "Bu": (0, 0.45, 0.7),
+            "Ve": (0.8, 0.4, 0),
+            "rP": (0.8, 0.6, 0.7),
         }
         cl = sorted(CBcdict.keys())
         k = 0
         for ii in range(0, num_plot):
-
-            if k > (no-1):
+            if k > (no - 1):
                 break
 
             fig, ax = plt.subplots(2, 3)
-            
-            for k1 in range(0,3):
-                k = k1+(ii)*3
+
+            for k1 in range(0, 3):
+                k = k1 + (ii) * 3
                 axt = ax[0, k1]
-                if k > (no-1):
+                if k > (no - 1):
                     break
 
                 for l in range(0, Nstd):
                     axt.plot(self.time, self.q_pca[0:N, l, k], color=CBcdict[cl[l]])
 
-                axt.set_title('q domain: PD %d' % (k + 1))
+                axt.set_title("q domain: PD %d" % (k + 1))
 
                 axt = ax[1, k1]
                 for l in range(0, Nstd):
                     axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
 
-                axt.set_title('f domain: PD %d' % (k + 1))
+                axt.set_title("f domain: PD %d" % (k + 1))
 
             fig.set_tight_layout(True)
 
@@ -183,6 +185,7 @@ class fdavpca:
         plt.show()
 
         return
+
 
 class fdahpca:
     """
@@ -210,12 +213,12 @@ class fdahpca:
         Construct an instance of the fdavpca class
         :param fdawarp: fdawarp class
         """
-        if fdawarp.fn.size==0:
-            raise Exception('Please align fdawarp class using srsf_align!')
+        if fdawarp.fn.size == 0:
+            raise Exception("Please align fdawarp class using srsf_align!")
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, stds = np.arange(-1, 2)):
+    def calc_fpca(self, no=3, stds=np.arange(-1, 2)):
         """
         This function calculates horizontal functional principal component analysis on aligned data
 
@@ -254,19 +257,23 @@ class fdahpca:
                 else:
                     psi_pca[cnt, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
 
-                tmp = cumtrapz(psi_pca[cnt, :, j] * psi_pca[cnt, :, j], np.linspace(0,1,TT), initial=0)
+                tmp = cumtrapz(
+                    psi_pca[cnt, :, j] * psi_pca[cnt, :, j],
+                    np.linspace(0, 1, TT),
+                    initial=0,
+                )
                 gam_pca[cnt, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
                 cnt += 1
 
         N2 = gam.shape[1]
-        c = np.zeros((N2,no))
-        for k in range(0,no):
-            for i in range(0,N2):
-                c[i,k] = np.dot(vec[:,i]-vm,U[:,k])
+        c = np.zeros((N2, no))
+        for k in range(0, no):
+            for i in range(0, N2):
+                c[i, k] = np.dot(vec[:, i] - vm, U[:, k])
 
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
-        self.U = U[:,0:no]
+        self.U = U[:, 0:no]
         self.coef = c
         self.latent = s[0:no]
         self.gam_mu = gam_mu
@@ -286,35 +293,34 @@ class fdahpca:
 
         no = self.no
         TT = self.warp_data.time.shape[0]
-        num_plot = int(np.ceil(no/3))
+        num_plot = int(np.ceil(no / 3))
         CBcdict = {
-            'Bl': (0, 0, 0),
-            'Or': (.9, .6, 0),
-            'SB': (.35, .7, .9),
-            'bG': (0, .6, .5),
-            'Ye': (.95, .9, .25),
-            'Bu': (0, .45, .7),
-            'Ve': (.8, .4, 0),
-            'rP': (.8, .6, .7),
+            "Bl": (0, 0, 0),
+            "Or": (0.9, 0.6, 0),
+            "SB": (0.35, 0.7, 0.9),
+            "bG": (0, 0.6, 0.5),
+            "Ye": (0.95, 0.9, 0.25),
+            "Bu": (0, 0.45, 0.7),
+            "Ve": (0.8, 0.4, 0),
+            "rP": (0.8, 0.6, 0.7),
         }
         k = 0
         for ii in range(0, num_plot):
-
-            if k > (no-1):
+            if k > (no - 1):
                 break
 
             fig, ax = plt.subplots(1, 3)
-            
-            for k1 in range(0,3):
-                k = k1+(ii)*3
+
+            for k1 in range(0, 3):
+                k = k1 + (ii) * 3
                 axt = ax[k1]
-                if k > (no-1):
+                if k > (no - 1):
                     break
 
                 tmp = self.gam_pca[:, :, k]
                 axt.plot(np.linspace(0, 1, TT), tmp.transpose())
-                axt.set_title('PD %d' % (k + 1))
-                axt.set_aspect('equal')
+                axt.set_title("PD %d" % (k + 1))
+                axt.set_aspect("equal")
 
             fig.set_tight_layout(True)
 
@@ -326,6 +332,7 @@ class fdahpca:
         plt.show()
 
         return
+
 
 class fdajpca:
     """
@@ -356,13 +363,14 @@ class fdajpca:
         Construct an instance of the fdavpca class
         :param fdawarp: fdawarp class
         """
-        if fdawarp.fn.size==0:
-            raise Exception('Please align fdawarp class using srsf_align!')
+        if fdawarp.fn.size == 0:
+            raise Exception("Please align fdawarp class using srsf_align!")
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, stds = np.arange(-1., 2.), 
-                  id=None, parallel=False, cores=-1):
+    def calc_fpca(
+        self, no=3, stds=np.arange(-1.0, 2.0), id=None, parallel=False, cores=-1
+    ):
         """
         This function calculates joint functional principal component analysis
         on aligned data
@@ -409,8 +417,10 @@ class fdajpca:
         mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam, parallel, cores)
 
         # joint fPCA
-        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0,no, mu_psi, parallel, cores))
-        qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(qn2, vec, C, no, mu_psi, parallel, cores)
+        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0, no, mu_psi, parallel, cores))
+        qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(
+            qn2, vec, C, no, mu_psi, parallel, cores
+        )
 
         # geodesic paths
         q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
@@ -418,23 +428,30 @@ class fdajpca:
 
         for k in range(0, no):
             for l in range(0, Nstd):
-                qhat = mqn + np.dot(U[0:(M+1),k],stds[l]*np.sqrt(s[k]))
-                vechat = np.dot(U[(M+1):,k],(stds[l]*np.sqrt(s[k]))/C)
-                psihat = geo.exp_map(mu_psi,vechat)
-                gamhat = cumtrapz(psihat*psihat,np.linspace(0,1,M),initial=0)
+                qhat = mqn + np.dot(U[0 : (M + 1), k], stds[l] * np.sqrt(s[k]))
+                vechat = np.dot(U[(M + 1) :, k], (stds[l] * np.sqrt(s[k])) / C)
+                psihat = geo.exp_map(mu_psi, vechat)
+                gamhat = cumtrapz(psihat * psihat, np.linspace(0, 1, M), initial=0)
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
-                if (sum(vechat)==0):
-                    gamhat = np.linspace(0,1,M)
+                if sum(vechat) == 0:
+                    gamhat = np.linspace(0, 1, M)
 
-                fhat = uf.cumtrapzmid(time, qhat[0:M]*np.fabs(qhat[0:M]), np.sign(qhat[M])*(qhat[M]*qhat[M]), mididx)
-                f_pca[:,l,k] = uf.warp_f_gamma(np.linspace(0,1,M), fhat, gamhat)
-                q_pca[:,l,k] = uf.warp_q_gamma(np.linspace(0,1,M), qhat[0:M], gamhat)
+                fhat = uf.cumtrapzmid(
+                    time,
+                    qhat[0:M] * np.fabs(qhat[0:M]),
+                    np.sign(qhat[M]) * (qhat[M] * qhat[M]),
+                    mididx,
+                )
+                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat, gamhat)
+                q_pca[:, l, k] = uf.warp_q_gamma(
+                    np.linspace(0, 1, M), qhat[0:M], gamhat
+                )
 
         self.q_pca = q_pca
         self.f_pca = f_pca
         self.latent = s[0:no]
         self.coef = a
-        self.U = U[:,0:no]
+        self.U = U[:, 0:no]
         self.mu_psi = mu_psi
         self.mu_g = mu_g
         self.id = mididx
@@ -456,42 +473,41 @@ class fdajpca:
         no = self.no
         M = self.time.shape[0]
         Nstd = self.stds.shape[0]
-        num_plot = int(np.ceil(no/3))
+        num_plot = int(np.ceil(no / 3))
         CBcdict = {
-            'Bl': (0, 0, 0),
-            'Or': (.9, .6, 0),
-            'SB': (.35, .7, .9),
-            'bG': (0, .6, .5),
-            'Ye': (.95, .9, .25),
-            'Bu': (0, .45, .7),
-            'Ve': (.8, .4, 0),
-            'rP': (.8, .6, .7),
+            "Bl": (0, 0, 0),
+            "Or": (0.9, 0.6, 0),
+            "SB": (0.35, 0.7, 0.9),
+            "bG": (0, 0.6, 0.5),
+            "Ye": (0.95, 0.9, 0.25),
+            "Bu": (0, 0.45, 0.7),
+            "Ve": (0.8, 0.4, 0),
+            "rP": (0.8, 0.6, 0.7),
         }
         cl = sorted(CBcdict.keys())
         k = 0
         for ii in range(0, num_plot):
-
-            if k > (no-1):
+            if k > (no - 1):
                 break
 
             fig, ax = plt.subplots(2, 3)
-            
-            for k1 in range(0,3):
-                k = k1+(ii)*3
+
+            for k1 in range(0, 3):
+                k = k1 + (ii) * 3
                 axt = ax[0, k1]
-                if k > (no-1):
+                if k > (no - 1):
                     break
 
                 for l in range(0, Nstd):
                     axt.plot(self.time, self.q_pca[0:M, l, k], color=CBcdict[cl[l]])
 
-                axt.set_title('q domain: PD %d' % (k + 1))
+                axt.set_title("q domain: PD %d" % (k + 1))
 
                 axt = ax[1, k1]
                 for l in range(0, Nstd):
                     axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
 
-                axt.set_title('f domain: PD %d' % (k + 1))
+                axt.set_title("f domain: PD %d" % (k + 1))
 
             fig.set_tight_layout(True)
 
@@ -504,9 +520,10 @@ class fdajpca:
 
         return
 
+
 def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
-    (M,N) = qn.shape
-    g = np.vstack((qn, C*vec))
+    (M, N) = qn.shape
+    g = np.vstack((qn, C * vec))
 
     mu_q = qn.mean(axis=1)
     mu_g = g.mean(axis=1)
@@ -514,62 +531,76 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     K = np.cov(g)
     U, s, V = svd(K)
 
-    a = np.zeros((N,m))
-    for i in range(0,N):
-        for j in range(0,m):
-            tmp = (g[:,i]-mu_g)
-            a[i,j] = np.dot(tmp.T, U[:,j])
+    a = np.zeros((N, m))
+    for i in range(0, N):
+        for j in range(0, m):
+            tmp = g[:, i] - mu_g
+            a[i, j] = np.dot(tmp.T, U[:, j])
 
-    qhat = np.tile(mu_q, (N,1))
+    qhat = np.tile(mu_q, (N, 1))
     qhat = qhat.T
-    qhat = qhat + np.dot(U[0:M,0:m],a.T)
+    qhat = qhat + np.dot(U[0:M, 0:m], a.T)
 
-    vechat = np.dot(U[M:,0:m], a.T/C)
-    psihat = np.zeros((M-1,N))
-    gamhat = np.zeros((M-1,N))
+    vechat = np.dot(U[M:, 0:m], a.T / C)
+    psihat = np.zeros((M - 1, N))
+    gamhat = np.zeros((M - 1, N))
     if parallel:
-        out = Parallel(n_jobs=cores)(delayed(jfpca_sub)(mu_psi, vechat[:,n]) for n in range(N))
+        out = Parallel(n_jobs=cores)(
+            delayed(jfpca_sub)(mu_psi, vechat[:, n]) for n in range(N)
+        )
         gamhat = np.array(out)
         gamhat = gamhat.transpose()
     else:
-        for ii in range(0,N):
-            psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
-            gam_tmp = cumtrapz(psihat[:,ii]*psihat[:,ii], np.linspace(0,1,M-1), initial=0)
-            gamhat[:,ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
+        for ii in range(0, N):
+            psihat[:, ii] = geo.exp_map(mu_psi, vechat[:, ii])
+            gam_tmp = cumtrapz(
+                psihat[:, ii] * psihat[:, ii], np.linspace(0, 1, M - 1), initial=0
+            )
+            gamhat[:, ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
-    U = U[:,0:m]
+    U = U[:, 0:m]
     s = s[0:m]
 
     return qhat, gamhat, a, U, s, mu_g, g, K
 
+
 def jfpca_sub(mu_psi, vechat):
     M = mu_psi.shape[0]
     psihat = geo.exp_map(mu_psi, vechat)
-    gam_tmp = cumtrapz(psihat*psihat, np.linspace(0,1,M), initial=0)
+    gam_tmp = cumtrapz(psihat * psihat, np.linspace(0, 1, M), initial=0)
     gamhat = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
     return gamhat
 
+
 def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
-    qhat, gamhat, a, U, s, mu_g, g, K = jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores)
-    (M,N) = qn.shape
-    time = np.linspace(0,1,M-1)
+    qhat, gamhat, a, U, s, mu_g, g, K = jointfPCAd(
+        qn, vec, C, m, mu_psi, parallel, cores
+    )
+    (M, N) = qn.shape
+    time = np.linspace(0, 1, M - 1)
 
     d = np.zeros(N)
     if parallel:
-        out = Parallel(n_jobs=cores)(delayed(find_C_sub)(time, qhat[0:(M-1),n], gamhat[:,n], q0[:,n]) for n in range(N))
+        out = Parallel(n_jobs=cores)(
+            delayed(find_C_sub)(time, qhat[0 : (M - 1), n], gamhat[:, n], q0[:, n])
+            for n in range(N)
+        )
         d = np.array(out)
     else:
-        for i in range(0,N):
-            tmp = uf.warp_q_gamma(time, qhat[0:(M-1),i], uf.invertGamma(gamhat[:,i]))
-            d[i] = trapz((tmp-q0[:,i])*(tmp-q0[:,i]), time)
+        for i in range(0, N):
+            tmp = uf.warp_q_gamma(
+                time, qhat[0 : (M - 1), i], uf.invertGamma(gamhat[:, i])
+            )
+            d[i] = trapz((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 
-    out = sum(d*d)/N
+    out = sum(d * d) / N
 
     return out
 
+
 def find_C_sub(time, qhat, gamhat, q0):
     tmp = uf.warp_q_gamma(time, qhat, uf.invertGamma(gamhat))
-    d = trapz((tmp-q0)*(tmp-q0), time)
+    d = trapz((tmp - q0) * (tmp - q0), time)
 
     return d
