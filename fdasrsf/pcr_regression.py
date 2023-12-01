@@ -225,7 +225,7 @@ class elastic_pcr_regression:
 
             self.y_int = np.zeros((n, 2))
             X = (self.pca.coef.T@self.pca.coef)
-            df = self.Ntr - a.shape[1] - 1
+            df = self.Ntr - self.pca.coef.shape[1] - 1
             for ii in range(0, n):
                 self.y_pred[ii] = self.alpha + np.dot(a[ii, :], self.b)
                 interval = t.ppf(alpha/2, df)*self.stdev*np.sqrt(1+a[ii, :]@X@a[ii, :])
@@ -241,7 +241,7 @@ class elastic_pcr_regression:
             self.y_pred = np.zeros(n)
             self.y_int = np.zeros((n, 2))
             X = (self.pca.coef.T@self.pca.coef)
-            df = self.Ntr - a.shape[1] - 1
+            df = self.Ntr - self.pca.coef.shape[1] - 1
             for ii in range(0, n):
                 self.y_pred[ii] = self.alpha + np.dot(self.pca.coef[ii, :], self.b)
                 interval = t.ppf(alpha/2, df)*self.stdev*np.sqrt(1+self.pca.coef[ii, :]@X@self.pca.coef[ii, :])
