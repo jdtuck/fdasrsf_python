@@ -49,14 +49,17 @@ class fdavpca:
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, id=None, stds=np.arange(-1, 2)):
+    def calc_fpca(self, no=3, var_exp=None, id=None, stds=np.arange(-1, 2)):
         """
-        This function calculates vertical functional principal component analysis
-        on aligned data
+        This function calculates vertical functional principal component 
+        analysis on aligned data
 
         :param no: number of components to extract (default = 3)
+        :param var_exp: compute no based on value percent variance explained
+                        (example: 0.95)
         :param id: point to use for f(0) (default = midpoint)
-        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)
+        :param stds: number of standard deviations along geodesic to compute
+                     (default = -1,0,1)
         :type no: int
         :type id: int
 
@@ -117,6 +120,12 @@ class fdavpca:
         for k in range(0, no):
             for l in range(0, N2):
                 c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
+
+        if var_exp is not None:
+            if var_exp > 1:
+                raise Exception("var_exp is greater than 1")
+            cumm_coef = np.cumsum(self.latent) / sum(self.latent)
+            no = np.argwhere(cumm_coef <= var_exp)[-1]
 
         self.q_pca = q_pca
         self.f_pca = f_pca
@@ -220,12 +229,16 @@ class fdahpca:
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, stds=np.arange(-1, 2)):
+    def calc_fpca(self, no=3, var_exp = None, stds=np.arange(-1, 2)):
         """
-        This function calculates horizontal functional principal component analysis on aligned data
+        This function calculates horizontal functional principal component 
+        analysis on aligned data
 
         :param no: number of components to extract (default = 3)
-        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)
+        :param var_exp: compute no based on value percent variance explained
+                        (example: 0.95)
+        :param stds: number of standard deviations along geodesic to compute 
+                     (default = -1,0,1)
         :type no: int
 
         :rtype: fdahpca object of numpy ndarray
@@ -272,6 +285,12 @@ class fdahpca:
         for k in range(0, no):
             for i in range(0, N2):
                 c[i, k] = np.dot(vec[:, i] - vm, U[:, k])
+
+        if var_exp is not None:
+            if var_exp > 1:
+                raise Exception("var_exp is greater than 1")
+            cumm_coef = np.cumsum(self.latent) / sum(self.latent)
+            no = np.argwhere(cumm_coef <= var_exp)[-1]
 
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
@@ -371,15 +390,19 @@ class fdajpca:
         self.warp_data = fdawarp
 
     def calc_fpca(
-        self, no=3, stds=np.arange(-1.0, 2.0), id=None, parallel=False, cores=-1
+        self, no=3, var_exp=None, stds=np.arange(-1.0, 2.0), id=None, 
+        parallel=False, cores=-1
     ):
         """
         This function calculates joint functional principal component analysis
         on aligned data
 
         :param no: number of components to extract (default = 3)
+        :param var_exp: compute no based on value percent variance explained
+                        (example: 0.95)
         :param id: point to use for f(0) (default = midpoint)
-        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)
+        :param stds: number of standard deviations along gedoesic to compute
+                     (default = -1,0,1)
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
         :type no: int
@@ -419,7 +442,8 @@ class fdajpca:
         mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam, parallel, cores)
 
         # joint fPCA
-        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0, no, mu_psi, parallel, cores))
+        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0, no, mu_psi, parallel, 
+                                       cores))
         qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(
             qn2, vec, C, no, mu_psi, parallel, cores
         )
@@ -430,10 +454,11 @@ class fdajpca:
 
         for k in range(0, no):
             for l in range(0, Nstd):
-                qhat = mqn + np.dot(U[0 : (M + 1), k], stds[l] * np.sqrt(s[k]))
-                vechat = np.dot(U[(M + 1) :, k], (stds[l] * np.sqrt(s[k])) / C)
+                qhat = mqn + np.dot(U[0: (M + 1), k], stds[l] * np.sqrt(s[k]))
+                vechat = np.dot(U[(M + 1):, k], (stds[l] * np.sqrt(s[k])) / C)
                 psihat = geo.exp_map(mu_psi, vechat)
-                gamhat = cumtrapz(psihat * psihat, np.linspace(0, 1, M), initial=0)
+                gamhat = cumtrapz(psihat * psihat, np.linspace(0, 1, M), 
+                                  initial=0)
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
                 if sum(vechat) == 0:
                     gamhat = np.linspace(0, 1, M)
@@ -444,10 +469,17 @@ class fdajpca:
                     np.sign(qhat[M]) * (qhat[M] * qhat[M]),
                     mididx,
                 )
-                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat, gamhat)
+                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat, 
+                                                 gamhat)
                 q_pca[:, l, k] = uf.warp_q_gamma(
                     np.linspace(0, 1, M), qhat[0:M], gamhat
                 )
+
+        if var_exp is not None:
+            if var_exp > 1:
+                raise Exception("var_exp is greater than 1")
+            cumm_coef = np.cumsum(self.latent) / sum(self.latent)
+            no = np.argwhere(cumm_coef <= var_exp)[-1]
 
         self.q_pca = q_pca
         self.f_pca = f_pca
