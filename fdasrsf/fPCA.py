@@ -88,6 +88,7 @@ class fdavpca:
         N = mq_new.shape[0]
         m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
         mqn = np.append(mq_new, m_new.mean())
+        self.mqn2 = mqn
         qn2 = np.vstack((qn, m_new))
         K = np.cov(qn2)
 
@@ -137,6 +138,43 @@ class fdavpca:
         self.time = time
         self.stds = stds
         self.no = no
+
+        return
+    
+    def project(self, f):
+        """
+        project new data onto fPCA basis
+
+        Usage: obj.project(f)
+
+        :param f: numpy array (MxN) of N functions on M time
+
+        """
+
+        q1 = fs.f_to_srsf(f, self.time)
+        M = self.time.shape[0]
+        n = q1.shape[1]
+        mq = self.warp_data.mqn
+        fn = np.zeros((M, n))
+        qn = np.zeros((M, n))
+        gam = np.zeros((M, n))
+        for ii in range(0, n):
+            gam[:, ii] = fs.optimum_reparam(mq, self.time, q1[:, ii])
+            fn[:, ii] = fs.warp_f_gamma(self.time, f[:, ii], gam[:, ii])
+            qn[:, ii] = fs.f_to_srsf(fn[:, ii], self.time)
+
+        U = self.U
+        no = U.shape[1]
+
+        m_new = np.sign(fn[self.id, :])*np.sqrt(np.abs(fn[self.id, :]))
+        qn1 = np.vstack((qn, m_new))
+
+        a = np.zeros((n, no))
+        for i in range(0, n):
+            for j in range(0, no):
+                a[i, j] = sum((qn1[:, i] - self.mqn2) * U[:, j])
+        
+        self.new_coef = a
 
         return
 
@@ -259,6 +297,8 @@ class fdahpca:
 
         U, s, V = svd(K)
         vm = vec.mean(axis=1)
+        self.vm = vm
+        self.mu_psi = mu
 
         gam_pca = np.ndarray(shape=(stds.shape[0], mu.shape[0], no), dtype=float)
         psi_pca = np.ndarray(shape=(stds.shape[0], mu.shape[0], no), dtype=float)
@@ -302,6 +342,45 @@ class fdahpca:
         self.vec = vec
         self.no = no
         self.stds = stds
+
+        return
+    
+    def project(self, f):
+        """
+        project new data onto fPCA basis
+
+        Usage: obj.project(f)
+
+        :param f: numpy array (MxN) of N functions on M time
+
+        """
+
+        q1 = fs.f_to_srsf(f, self.time)
+        M = self.time.shape[0]
+        n = q1.shape[1]
+        mq = self.warp_data.mqn
+        gam = np.zeros((M, n))
+        for ii in range(0, n):
+            gam[:, ii] = fs.optimum_reparam(mq, self.time, q1[:, ii])
+
+        U = self.U
+        no = U.shape[1]
+
+        mu_psi = self.mu_psi
+        vec = np.zeros((M, n))
+        psi = np.zeros((M, n))
+        binsize = np.mean(np.diff(self.time))
+        for i in range(0, n):
+            psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
+            out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
+            vec[:, i] = out
+
+        a = np.zeros((n, no))
+        for i in range(0, n):
+            for j in range(0, no):
+                a[i, j] = np.dot(vec[:, i] - self.vm, U[:, j])
+        
+        self.new_coef = a
 
         return
 
