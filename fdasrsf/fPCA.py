@@ -5,6 +5,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 import numpy as np
+import fdasrsf as fs
 import fdasrsf.utility_functions as uf
 import fdasrsf.geometry as geo
 from scipy.linalg import norm, svd
@@ -32,6 +33,7 @@ class fdavpca:
     :param mqn: mean srvf
     :param U: eigenvectors
     :param stds: geodesic directions
+    :param new_coef: principal coefficients of new data
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
@@ -463,10 +465,60 @@ class fdajpca:
         self.stds = stds
 
         return
+    
+    def project(self, f):
+        """
+        project new data onto fPCA basis
 
+        Usage: obj.project(f)
+
+        :param f: numpy array (MxN) of N functions on M time
+
+        """
+
+        q1 = fs.f_to_srsf(f, self.time)
+        M = self.time.shape[0]
+        n = q1.shape[1]
+        mq = self.warp_data.mqn
+        fn = np.zeros((M, n))
+        qn = np.zeros((M, n))
+        gam = np.zeros((M, n))
+        for ii in range(0, n):
+            gam[:, ii] = fs.optimum_reparam(mq, self.time, q1[:, ii])
+            fn[:, ii] = fs.warp_f_gamma(self.time, f[:, ii], gam[:, ii])
+            qn[:, ii] = fs.f_to_srsf(fn[:, ii], self.time)
+
+        U = self.U
+        no = U.shape[1]
+
+        m_new = np.sign(fn[self.id, :])*np.sqrt(np.abs(fn[self.id, :]))
+        qn1 = np.vstack((qn, m_new))
+        C = self.C
+        TT = self.time.shape[0]
+        mu_g = self.mu_g
+        mu_psi = self.mu_psi
+        vec = np.zeros((M, n))
+        psi = np.zeros((TT, n))
+        binsize = np.mean(np.diff(self.time))
+        for i in range(0, n):
+            psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
+            out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
+            vec[:, i] = out
+
+        g = np.vstack((qn1, C*vec))
+        a = np.zeros((n, no))
+        for i in range(0, n):
+            for j in range(0, no):
+                tmp = (g[:, i]-mu_g)
+                a[i, j] = np.dot(tmp.T, U[:, j])
+        
+        self.new_coef = a
+
+        return
+        
     def plot(self):
         """
-        plot plot elastic vertical fPCA result
+        plot plot elastic joint fPCA result
 
         Usage: obj.plot()
         """
@@ -590,7 +642,7 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
     else:
         for i in range(0, N):
             tmp = uf.warp_q_gamma(
-                time, qhat[0 : (M - 1), i], uf.invertGamma(gamhat[:, i])
+                time, qhat[0: (M - 1), i], uf.invertGamma(gamhat[:, i])
             )
             d[i] = trapz((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 
