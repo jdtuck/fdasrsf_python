@@ -134,7 +134,7 @@ class fdavpca:
         self.q_pca = q_pca
         self.f_pca = f_pca
         self.latent = s[0:no]
-        self.coef = c
+        self.coef = c[:, 0:no]
         self.U = U[:, 0:no]
         self.id = mididx
         self.mqn = mqn
@@ -341,7 +341,7 @@ class fdahpca:
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
         self.U = U[:, 0:no]
-        self.coef = c
+        self.coef = c[:, 0:no]
         self.latent = s[0:no]
         self.gam_mu = gam_mu
         self.psi_mu = mu
@@ -573,7 +573,7 @@ class fdajpca:
         self.q_pca = q_pca
         self.f_pca = f_pca
         self.latent = s[0:no]
-        self.coef = a
+        self.coef = a[:, 0:no]
         self.U = U[:, 0:no]
         self.mu_psi = mu_psi
         self.mu_g = mu_g
