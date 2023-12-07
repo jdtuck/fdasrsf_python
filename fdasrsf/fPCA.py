@@ -125,7 +125,7 @@ class fdavpca:
         if var_exp is not None:
             if var_exp > 1:
                 raise Exception("var_exp is greater than 1")
-            cumm_coef = np.cumsum(self.latent) / sum(self.latent)
+            cumm_coef = np.cumsum(s) / sum(s)
             no = np.argwhere(cumm_coef <= var_exp)[-1]
 
         self.q_pca = q_pca
@@ -329,7 +329,7 @@ class fdahpca:
         if var_exp is not None:
             if var_exp > 1:
                 raise Exception("var_exp is greater than 1")
-            cumm_coef = np.cumsum(self.latent) / sum(self.latent)
+            cumm_coef = np.cumsum(s) / sum(s)
             no = np.argwhere(cumm_coef <= var_exp)[-1]
 
         self.gam_pca = gam_pca
@@ -557,7 +557,7 @@ class fdajpca:
         if var_exp is not None:
             if var_exp > 1:
                 raise Exception("var_exp is greater than 1")
-            cumm_coef = np.cumsum(self.latent) / sum(self.latent)
+            cumm_coef = np.cumsum(s) / sum(s)
             no = np.argwhere(cumm_coef <= var_exp)[-1]
 
         self.q_pca = q_pca
