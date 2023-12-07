@@ -76,6 +76,11 @@ class fdavpca:
         qn = self.warp_data.qn
 
         M = time.shape[0]
+        if var_exp is not None:
+            if var_exp > 1:
+                raise Exception("var_exp is greater than 1")
+            no = M
+        
         if id is None:
             mididx = int(np.round(M / 2))
         else:
@@ -123,8 +128,6 @@ class fdavpca:
                 c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
 
         if var_exp is not None:
-            if var_exp > 1:
-                raise Exception("var_exp is greater than 1")
             cumm_coef = np.cumsum(s) / sum(s)
             no = np.argwhere(cumm_coef <= var_exp)[-1]
 
@@ -267,7 +270,7 @@ class fdahpca:
 
         self.warp_data = fdawarp
 
-    def calc_fpca(self, no=3, var_exp = None, stds=np.arange(-1, 2)):
+    def calc_fpca(self, no=3, var_exp=None, stds=np.arange(-1, 2)):
         """
         This function calculates horizontal functional principal component 
         analysis on aligned data
@@ -291,6 +294,11 @@ class fdahpca:
         gam = self.warp_data.gam
         mu, gam_mu, psi, vec = uf.SqrtMean(gam)
         TT = self.warp_data.time.shape[0]
+
+        if var_exp is not None:
+            if var_exp > 1:
+                raise Exception("var_exp is greater than 1")
+            no = TT
 
         # TFPCA
         K = np.cov(vec)
@@ -327,8 +335,6 @@ class fdahpca:
                 c[i, k] = np.dot(vec[:, i] - vm, U[:, k])
 
         if var_exp is not None:
-            if var_exp > 1:
-                raise Exception("var_exp is greater than 1")
             cumm_coef = np.cumsum(s) / sum(s)
             no = np.argwhere(cumm_coef <= var_exp)[-1]
 
@@ -470,7 +476,7 @@ class fdajpca:
         self.M = fdawarp.time.shape[0]
 
     def calc_fpca(
-        self, no=self.M, var_exp=None, stds=np.arange(-1.0, 2.0), id=None, 
+        self, no=3, var_exp=None, stds=np.arange(-1.0, 2.0), id=None, 
         parallel=False, cores=-1
     ):
         """
@@ -505,6 +511,11 @@ class fdajpca:
         gam = self.warp_data.gam
 
         M = time.shape[0]
+        if var_exp is not None:
+            if var_exp > 1:
+                raise Exception("var_exp is greater than 1")
+            no = M
+        
         if id is None:
             mididx = int(np.round(M / 2))
         else:
@@ -556,12 +567,9 @@ class fdajpca:
                 )
 
         if var_exp is not None:
-            if var_exp > 1:
-                raise Exception("var_exp is greater than 1")
             cumm_coef = np.cumsum(s) / s.sum()
             no = np.argwhere(cumm_coef >= var_exp)[0][0]
 
-        print(no)
         self.q_pca = q_pca
         self.f_pca = f_pca
         self.latent = s[0:no]
