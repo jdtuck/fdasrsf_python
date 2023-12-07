@@ -467,9 +467,10 @@ class fdajpca:
             raise Exception("Please align fdawarp class using srsf_align!")
 
         self.warp_data = fdawarp
+        self.M = fdawarp.time.shape[0]
 
     def calc_fpca(
-        self, no=3, var_exp=None, stds=np.arange(-1.0, 2.0), id=None, 
+        self, no=self.M, var_exp=None, stds=np.arange(-1.0, 2.0), id=None, 
         parallel=False, cores=-1
     ):
         """
@@ -557,9 +558,10 @@ class fdajpca:
         if var_exp is not None:
             if var_exp > 1:
                 raise Exception("var_exp is greater than 1")
-            cumm_coef = np.cumsum(s) / sum(s)
-            no = np.argwhere(cumm_coef <= var_exp)[-1]
+            cumm_coef = np.cumsum(s) / s.sum()
+            no = np.argwhere(cumm_coef >= var_exp)[0][0]
 
+        print(no)
         self.q_pca = q_pca
         self.f_pca = f_pca
         self.latent = s[0:no]
