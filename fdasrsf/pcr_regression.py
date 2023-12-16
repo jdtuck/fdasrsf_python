@@ -97,13 +97,13 @@ class elastic_pcr_regression:
         lam = 0
         R = 0
         Phi = np.ones((N1, no + 1))
-        Phi[:, 1: (no + 1)] = self.pca.coef
+        Phi[:, 1 : (no + 1)] = self.pca.coef
         xx = np.dot(Phi.T, Phi)
         inv_xx = inv(xx + lam * R)
         xy = np.dot(Phi.T, self.y)
         b = np.dot(inv_xx, xy)
         alpha = b[0]
-        b = b[1: no + 1]
+        b = b[1 : no + 1]
 
         # compute the SSE
         int_X = np.zeros(N1)
@@ -114,7 +114,7 @@ class elastic_pcr_regression:
         SSE = np.sum((self.y - y_pred) ** 2)
 
         self.Ntr = len(self.y)
-        stdev = np.sqrt(sum((y_pred - self.y)**2) / (self.Ntr - 2))
+        stdev = np.sqrt(sum((y_pred - self.y) ** 2) / (self.Ntr - 2))
 
         self.alpha = alpha
         self.b = b
@@ -124,14 +124,14 @@ class elastic_pcr_regression:
 
         return
 
-    def predict(self, newdata=None, alpha=.05):
+    def predict(self, newdata=None, alpha=0.05):
         """
-        This function performs prediction on regression model on new 
+        This function performs prediction on regression model on new
         data if available or current stored data in object
         Usage:  obj.predict()
                 obj.predict(newdata)
 
-        :param newdata: dict containing new data for prediction (needs 
+        :param newdata: dict containing new data for prediction (needs
                         the keys below, if None predicts on training data)
         :type newdata: dict
         :param f: (M,N) matrix of functions
@@ -224,11 +224,15 @@ class elastic_pcr_regression:
                 raise Exception("Invalid fPCA Method")
 
             self.y_int = np.zeros((n, 2))
-            X = inv(self.pca.coef.T@self.pca.coef)
+            X = inv(self.pca.coef.T @ self.pca.coef)
             df = self.Ntr - self.pca.coef.shape[1] - 1
             for ii in range(0, n):
                 self.y_pred[ii] = self.alpha + np.dot(a[ii, :], self.b)
-                interval = t.ppf(alpha/2, df)*self.stdev*np.sqrt(1+a[ii, :]@X@a[ii, :])
+                interval = (
+                    t.ppf(alpha / 2, df)
+                    * self.stdev
+                    * np.sqrt(1 + a[ii, :] @ X @ a[ii, :])
+                )
                 self.y_int[ii, 0] = interval
                 self.y_int[ii, 1] = -interval
 
@@ -240,11 +244,15 @@ class elastic_pcr_regression:
             n = self.pca.coef.shape[0]
             self.y_pred = np.zeros(n)
             self.y_int = np.zeros((n, 2))
-            X = inv(self.pca.coef.T@self.pca.coef)
+            X = inv(self.pca.coef.T @ self.pca.coef)
             df = self.Ntr - self.pca.coef.shape[1] - 1
             for ii in range(0, n):
                 self.y_pred[ii] = self.alpha + np.dot(self.pca.coef[ii, :], self.b)
-                interval = t.ppf(alpha/2, df)*self.stdev*np.sqrt(1+self.pca.coef[ii, :]@X@self.pca.coef[ii, :])
+                interval = (
+                    t.ppf(alpha / 2, df)
+                    * self.stdev
+                    * np.sqrt(1 + self.pca.coef[ii, :] @ X @ self.pca.coef[ii, :])
+                )
                 self.y_int[ii, 0] = interval
                 self.y_int[ii, 1] = -interval
 
