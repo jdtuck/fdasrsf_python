@@ -299,7 +299,7 @@ def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
     return amp, phase
 
 
-def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
+def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None):
     """ "
     calculates the distances between function, where f1 is aligned to
     f2. In other words
@@ -310,10 +310,12 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
     :param time: vector of size N describing the sample points
     :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the elasticity (default = 0.0)
+    :param alpha: makes alpha * dx + (1-alpha) * dy
 
     :rtype: scalar
     :return Dy: amplitude distance
     :return Dx: phase distance
+    :return Dt: combined distance
 
     """
     q1 = f_to_srsf(f1, time)
@@ -336,7 +338,12 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
 
     Dx = real(arccos(q1dotq2))
 
-    return Dy, Dx
+    if alpha is not None:
+        Dt = alpha * Dx + (1-alpha) * Dy
+    else:
+        Dt = None
+
+    return Dy, Dx, Dt
 
 
 def invertGamma(gam):
