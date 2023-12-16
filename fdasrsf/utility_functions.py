@@ -340,10 +340,9 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None):
 
     if alpha is not None:
         Dt = alpha * Dx + (1-alpha) * Dy
+        return Dy, Dx, Dt
     else:
-        Dt = None
-
-    return Dy, Dx, Dt
+        return Dy, Dx
 
 
 def invertGamma(gam):
