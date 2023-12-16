@@ -130,7 +130,8 @@ class rlbfgs:
         accepted = True
 
         # compute cost function and its gradient
-        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde, htilde, lam, penalty)
+        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde, htilde, lam,
+                                                         penalty)
         hCurGradNorm = self.norm(hCurGradient)
 
         # line-search statistics for recording in info
@@ -301,7 +302,7 @@ class rlbfgs:
             }
             info.append(stats)
 
-        self.info = info[0 : (k + 1)]
+        self.info = info[0: (k + 1)]
         self.gammaOpt = np.zeros(self.T)
         self.gammaOpt[1:] = cumtrapz(htilde**2, self.t)
         self.q2Opt = q2tilde
