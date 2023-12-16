@@ -51,7 +51,7 @@ class fdavpca:
 
     def calc_fpca(self, no=3, var_exp=None, id=None, stds=np.arange(-1, 2)):
         """
-        This function calculates vertical functional principal component 
+        This function calculates vertical functional principal component
         analysis on aligned data
 
         :param no: number of components to extract (default = 3)
@@ -80,7 +80,7 @@ class fdavpca:
             if var_exp > 1:
                 raise Exception("var_exp is greater than 1")
             no = M
-        
+
         if id is None:
             mididx = int(np.round(M / 2))
         else:
@@ -143,7 +143,7 @@ class fdavpca:
         self.no = no
 
         return
-    
+
     def project(self, f):
         """
         project new data onto fPCA basis
@@ -169,14 +169,14 @@ class fdavpca:
         U = self.U
         no = U.shape[1]
 
-        m_new = np.sign(fn[self.id, :])*np.sqrt(np.abs(fn[self.id, :]))
+        m_new = np.sign(fn[self.id, :]) * np.sqrt(np.abs(fn[self.id, :]))
         qn1 = np.vstack((qn, m_new))
 
         a = np.zeros((n, no))
         for i in range(0, n):
             for j in range(0, no):
                 a[i, j] = sum((qn1[:, i] - self.mqn2) * U[:, j])
-        
+
         self.new_coef = a
 
         return
@@ -272,13 +272,13 @@ class fdahpca:
 
     def calc_fpca(self, no=3, var_exp=None, stds=np.arange(-1, 2)):
         """
-        This function calculates horizontal functional principal component 
+        This function calculates horizontal functional principal component
         analysis on aligned data
 
         :param no: number of components to extract (default = 3)
         :param var_exp: compute no based on value percent variance explained
                         (example: 0.95)
-        :param stds: number of standard deviations along geodesic to compute 
+        :param stds: number of standard deviations along geodesic to compute
                      (default = -1,0,1)
         :type no: int
 
@@ -350,7 +350,7 @@ class fdahpca:
         self.stds = stds
 
         return
-    
+
     def project(self, f):
         """
         project new data onto fPCA basis
@@ -385,7 +385,7 @@ class fdahpca:
         for i in range(0, n):
             for j in range(0, no):
                 a[i, j] = np.dot(vec[:, i] - self.vm, U[:, j])
-        
+
         self.new_coef = a
 
         return
@@ -476,8 +476,13 @@ class fdajpca:
         self.M = fdawarp.time.shape[0]
 
     def calc_fpca(
-        self, no=3, var_exp=None, stds=np.arange(-1.0, 2.0), id=None, 
-        parallel=False, cores=-1
+        self,
+        no=3,
+        var_exp=None,
+        stds=np.arange(-1.0, 2.0),
+        id=None,
+        parallel=False,
+        cores=-1,
     ):
         """
         This function calculates joint functional principal component analysis
@@ -515,7 +520,7 @@ class fdajpca:
             if var_exp > 1:
                 raise Exception("var_exp is greater than 1")
             no = M
-        
+
         if id is None:
             mididx = int(np.round(M / 2))
         else:
@@ -533,8 +538,7 @@ class fdajpca:
         mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam, parallel, cores)
 
         # joint fPCA
-        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0, no, mu_psi, parallel, 
-                                       cores))
+        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0, no, mu_psi, parallel, cores))
         qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(
             qn2, vec, C, no, mu_psi, parallel, cores
         )
@@ -545,11 +549,10 @@ class fdajpca:
 
         for k in range(0, no):
             for l in range(0, Nstd):
-                qhat = mqn + np.dot(U[0: (M + 1), k], stds[l] * np.sqrt(s[k]))
-                vechat = np.dot(U[(M + 1):, k], (stds[l] * np.sqrt(s[k])) / C)
+                qhat = mqn + np.dot(U[0 : (M + 1), k], stds[l] * np.sqrt(s[k]))
+                vechat = np.dot(U[(M + 1) :, k], (stds[l] * np.sqrt(s[k])) / C)
                 psihat = geo.exp_map(mu_psi, vechat)
-                gamhat = cumtrapz(psihat * psihat, np.linspace(0, 1, M), 
-                                  initial=0)
+                gamhat = cumtrapz(psihat * psihat, np.linspace(0, 1, M), initial=0)
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
                 if sum(vechat) == 0:
                     gamhat = np.linspace(0, 1, M)
@@ -560,8 +563,7 @@ class fdajpca:
                     np.sign(qhat[M]) * (qhat[M] * qhat[M]),
                     mididx,
                 )
-                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat, 
-                                                 gamhat)
+                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat, gamhat)
                 q_pca[:, l, k] = uf.warp_q_gamma(
                     np.linspace(0, 1, M), qhat[0:M], gamhat
                 )
@@ -586,7 +588,7 @@ class fdajpca:
         self.stds = stds
 
         return
-    
+
     def project(self, f):
         """
         project new data onto fPCA basis
@@ -612,7 +614,7 @@ class fdajpca:
         U = self.U
         no = U.shape[1]
 
-        m_new = np.sign(fn[self.id, :])*np.sqrt(np.abs(fn[self.id, :]))
+        m_new = np.sign(fn[self.id, :]) * np.sqrt(np.abs(fn[self.id, :]))
         qn1 = np.vstack((qn, m_new))
         C = self.C
         TT = self.time.shape[0]
@@ -626,17 +628,17 @@ class fdajpca:
             out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
             vec[:, i] = out
 
-        g = np.vstack((qn1, C*vec))
+        g = np.vstack((qn1, C * vec))
         a = np.zeros((n, no))
         for i in range(0, n):
             for j in range(0, no):
-                tmp = (g[:, i]-mu_g)
+                tmp = g[:, i] - mu_g
                 a[i, j] = np.dot(tmp.T, U[:, j])
-        
+
         self.new_coef = a
 
         return
-        
+
     def plot(self):
         """
         plot plot elastic joint fPCA result
@@ -763,7 +765,7 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
     else:
         for i in range(0, N):
             tmp = uf.warp_q_gamma(
-                time, qhat[0: (M - 1), i], uf.invertGamma(gamhat[:, i])
+                time, qhat[0 : (M - 1), i], uf.invertGamma(gamhat[:, i])
             )
             d[i] = trapz((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 
