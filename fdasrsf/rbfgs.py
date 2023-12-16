@@ -7,7 +7,6 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import time
 from scipy.integrate import trapz, cumtrapz
-from scipy.interpolate import UnivariateSpline
 from numpy.linalg import norm
 
 
