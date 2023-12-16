@@ -179,10 +179,10 @@ def optimum_reparam_curve(q1, q2, lam=0.0, method="DP"):
 
     :param q1: matrix of size nxN or array of NxM samples of first SRVF
     :param time: vector of size N describing the sample points
-    :param q2: matrix of size nxN or array of NxM samples samples of second 
+    :param q2: matrix of size nxN or array of NxM samples samples of second
                SRVF
     :param lam: controls the amount of elasticity (default = 0.0)
-    :param method: method to apply optimization (default="DP") options are 
+    :param method: method to apply optimization (default="DP") options are
                    "DP" or "RBFGS"
 
     :rtype: vector
@@ -267,7 +267,8 @@ def find_best_rotation(q1, q2, allow_reflection=False, only_xy=False):
 
     _R = U @ S @ Vh  # optimal
 
-    # if only_xy, the top left block of the matrix is _R and the rest is identity matrix
+    # if only_xy, the top left block of the matrix is _R and the rest is
+    # identity matrix
     if only_xy:
         R = eye(n)
         R[0:2, 0:2] = _R

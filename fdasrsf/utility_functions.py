@@ -43,8 +43,9 @@ def smooth_data(f, sparam=1):
     fo = f.copy()
     for k in range(0, sparam):
         for r in range(0, N):
-            fo[1:(M - 2), r] = (fo[0:(M - 3), r] + 2 * fo[1:(M - 2), r] +
-                               fo[2:(M - 1), r]) / 4
+            fo[1 : (M - 2), r] = (
+                fo[0 : (M - 3), r] + 2 * fo[1 : (M - 2), r] + fo[2 : (M - 1), r]
+            ) / 4
     return fo
 
 
@@ -71,7 +72,7 @@ def gradient_spline(time, f, smooth=False):
         g2 = zeros((M, N))
         for k in range(0, N):
             if smooth:
-                spar = time.shape[0] * (.025 * fabs(f[:, k]).max()) ** 2
+                spar = time.shape[0] * (0.025 * fabs(f[:, k]).max()) ** 2
             else:
                 spar = 0
             tmp_spline = UnivariateSpline(time, f[:, k], s=spar)
@@ -80,7 +81,7 @@ def gradient_spline(time, f, smooth=False):
             g2[:, k] = tmp_spline(time, 2)
     else:
         if smooth:
-            spar = time.shape[0] * (.025 * fabs(f).max()) ** 2
+            spar = time.shape[0] * (0.025 * fabs(f).max()) ** 2
         else:
             spar = 0
         tmp_spline = UnivariateSpline(time, f, s=spar)
@@ -120,12 +121,14 @@ def srsf_to_f(q, time, f0=0.0):
     :return f: function
 
     """
-    integrand = q*fabs(q)
-    f = f0 + cumtrapz(integrand,time,initial=0)
+    integrand = q * fabs(q)
+    f = f0 + cumtrapz(integrand, time, initial=0)
     return f
 
 
-def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, penalty="roughness", grid_dim=7):
+def optimum_reparam(
+    q1, time, q2, method="DP2", lam=0.0, penalty="roughness", grid_dim=7
+):
     """
     calculates the warping to align srsf q2 to q1
 
@@ -134,7 +137,7 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, penalty="roughness", gr
     :param q2: vector of size N or array of NxM samples samples of second SRSF
     :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
-    :param penalty: penalty type (default="roughness") options are "roughness", "l2gam", 
+    :param penalty: penalty type (default="roughness") options are "roughness", "l2gam",
                     "l2psi", "geodesic". Only roughness implemented in all methods. To use
                     others method needs to be "RBFGS"
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
@@ -145,61 +148,67 @@ def optimum_reparam(q1, time, q2, method="DP2", lam=0.0, penalty="roughness", gr
     """
 
     if penalty == "l2gam" and (method == "DP" or method == "DP2"):
-        raise Exception('penalty not implemented')
+        raise Exception("penalty not implemented")
     if penalty == "l2psi" and (method == "DP" or method == "DP2"):
-        raise Exception('penalty not implemented')
+        raise Exception("penalty not implemented")
     if penalty == "geodesic" and (method == "DP" or method == "DP2"):
-        raise Exception('penalty not implemented')
-    
+        raise Exception("penalty not implemented")
+
     if method == "DP":
         if q1.ndim == 1 and q2.ndim == 1:
-            gam = orN.coptimum_reparam(ascontiguousarray(q1), time,
-                                       ascontiguousarray(q2), lam)
+            gam = orN.coptimum_reparam(
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam
+            )
 
         if q1.ndim == 1 and q2.ndim == 2:
-            gam = orN.coptimum_reparam_N(ascontiguousarray(q1), time,
-                                         ascontiguousarray(q2), lam)
+            gam = orN.coptimum_reparam_N(
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam
+            )
 
         if q1.ndim == 2 and q2.ndim == 2:
-            gam = orN.coptimum_reparam_N2(ascontiguousarray(q1), time,
-                                          ascontiguousarray(q2), lam)
+            gam = orN.coptimum_reparam_N2(
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam
+            )
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
-            gam = orN2.coptimum_reparam(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam, grid_dim)
+            gam = orN2.coptimum_reparam(
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
+            )
 
         if q1.ndim == 1 and q2.ndim == 2:
-            gam = orN2.coptimum_reparamN(ascontiguousarray(q1), time,
-                                        ascontiguousarray(q2), lam, grid_dim)
+            gam = orN2.coptimum_reparamN(
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
+            )
 
         if q1.ndim == 2 and q2.ndim == 2:
-            gam = orN2.coptimum_reparamN2(ascontiguousarray(q1), time,
-                                          ascontiguousarray(q2), lam, grid_dim)
+            gam = orN2.coptimum_reparamN2(
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
+            )
     elif method == "RBFGS":
         if q1.ndim == 1 and q2.ndim == 1:
-            time = linspace(0,1,q1.shape[0])
-            obj = rlbfgs(q1,q2,time)
+            time = linspace(0, 1, q1.shape[0])
+            obj = rlbfgs(q1, q2, time)
             obj.solve(lam=lam, penalty=penalty)
             gam = obj.gammaOpt
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = zeros(q2.shape)
-            time = linspace(0,1,q1.shape[0])
-            for i in range(0,q2.shape[1]):
-                obj = rlbfgs(q1,q2[:,i],time)
+            time = linspace(0, 1, q1.shape[0])
+            for i in range(0, q2.shape[1]):
+                obj = rlbfgs(q1, q2[:, i], time)
                 obj.solve(lam=lam, penalty=penalty)
-                gam[:,i] = obj.gammaOpt
-    
+                gam[:, i] = obj.gammaOpt
+
         if q1.ndim == 2 and q2.ndim == 2:
             gam = zeros(q2.shape)
-            time = linspace(0,1,q1.shape[0])
-            for i in range(0,q2.shape[1]):
-                obj = rlbfgs(q1[:,i],q2[:,i],time)
+            time = linspace(0, 1, q1.shape[0])
+            for i in range(0, q2.shape[1]):
+                obj = rlbfgs(q1[:, i], q2[:, i], time)
                 obj.solve(lam=lam, penalty=penalty)
-                gam[:,i] = obj.gammaOpt
-           
+                gam[:, i] = obj.gammaOpt
+
     else:
-        raise Exception('Invalid Optimization Method')
+        raise Exception("Invalid Optimization Method")
 
     return gam
 
@@ -220,28 +229,33 @@ def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
     """
     if q1.ndim == 1 and q2.ndim == 1:
         q_c = column_stack((q1, q2))
-        gam = orN.coptimum_reparam_pair(ascontiguousarray(q), time,
-                                        ascontiguousarray(q_c), lam)
+        gam = orN.coptimum_reparam_pair(
+            ascontiguousarray(q), time, ascontiguousarray(q_c), lam
+        )
 
     if q1.ndim == 2 and q2.ndim == 2:
-        gam = orN.coptimum_reparamN2_pair(ascontiguousarray(q), time,
-                                          ascontiguousarray(q1),
-                                          ascontiguousarray(q2), lam)
+        gam = orN.coptimum_reparamN2_pair(
+            ascontiguousarray(q),
+            time,
+            ascontiguousarray(q1),
+            ascontiguousarray(q2),
+            lam,
+        )
 
     return gam
 
 
-def distmat(f,f1,time,idx,method):
+def distmat(f, f1, time, idx, method):
     N = f.shape[1]
     dp = zeros(N)
     da = zeros(N)
     for jj in range(N):
-        Dy,Dx = elastic_distance(f[:,jj], f1, time, method)
+        Dy, Dx = elastic_distance(f[:, jj], f1, time, method)
 
         da[jj] = Dy
         dp[jj] = Dx
-    
-    return(da, dp)
+
+    return (da, dp)
 
 
 def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
@@ -261,30 +275,32 @@ def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
 
     obs, fns = f.shape
 
-    amp_dist = zeros((fns,fns))
-    phs_dist = zeros((fns,fns))
+    amp_dist = zeros((fns, fns))
+    phs_dist = zeros((fns, fns))
 
     if parallel:
-        out = Parallel(n_jobs=-1)(delayed(distmat)(f, f[:, n], time, n, method) for n in range(fns))
+        out = Parallel(n_jobs=-1)(
+            delayed(distmat)(f, f[:, n], time, n, method) for n in range(fns)
+        )
         for i in range(0, fns):
             amp_dist[i, :] = out[i][0]
             phs_dist[i, :] = out[i][1]
     else:
         for i in range(0, fns):
             amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i, method)
-    
+
     amp_dist = amp_dist + amp_dist.T
     phs_dist = phs_dist + phs_dist.T
 
-    amp = 1 / (1 + median(amp_dist,axis=0))
-    phase = 1 / (1 + median(phs_dist,axis=0))
-    phase = ((2+pi)/pi) * (phase - 2/(2+pi))
+    amp = 1 / (1 + median(amp_dist, axis=0))
+    phase = 1 / (1 + median(phs_dist, axis=0))
+    phase = ((2 + pi) / pi) * (phase - 2 / (2 + pi))
 
     return amp, phase
 
 
 def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
-    """"
+    """ "
     calculates the distances between function, where f1 is aligned to
     f2. In other words
     calculates the elastic distances
@@ -304,15 +320,14 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0):
     q2 = f_to_srsf(f2, time)
 
     gam = optimum_reparam(q1, time, q2, method, lam)
-    fw = warp_f_gamma(time, f2, gam)
     qw = warp_q_gamma(time, q2, gam)
 
     Dy = sqrt(trapz((qw - q1) ** 2, time))
     M = time.shape[0]
 
-    time1 = linspace(0,1,M)
+    time1 = linspace(0, 1, M)
     binsize = mean(diff(time1))
-    psi = sqrt(gradient(gam,binsize))
+    psi = sqrt(gradient(gam, binsize))
     q1dotq2 = trapz(psi, time1)
     if q1dotq2 > 1:
         q1dotq2 = 1
@@ -335,7 +350,7 @@ def invertGamma(gam):
 
     """
     N = gam.size
-    x = linspace(0,1,N)
+    x = linspace(0, 1, N)
     s = interp1d(gam, x)
     gamI = s(x)
     gamI = (gamI - gamI[0]) / (gamI[-1] - gamI[0])
@@ -354,12 +369,12 @@ def SqrtMeanInverse(gam):
 
 
     """
-    (T,n) = gam.shape
-    time = linspace(0,1,T)
+    (T, n) = gam.shape
+    time = linspace(0, 1, T)
     binsize = mean(diff(time))
     psi = zeros((T, n))
     for k in range(0, n):
-        psi[:, k] = sqrt(gradient(gam[:, k],binsize))
+        psi[:, k] = sqrt(gradient(gam[:, k], binsize))
 
     # Find Direction
     mnpsi = psi.mean(axis=1)
@@ -373,28 +388,27 @@ def SqrtMeanInverse(gam):
     tt = 1
     lvm = zeros(maxiter)
     vec = zeros((T, n))
-    stp = .3
+    stp = 0.3
     itr = 0
 
-    for i in range(0,n):
-        out, theta = geo.inv_exp_map(mu,psi[:,i])
-        vec[:,i] = out
+    for i in range(0, n):
+        out, theta = geo.inv_exp_map(mu, psi[:, i])
+        vec[:, i] = out
 
     vbar = vec.mean(axis=1)
     lvm[itr] = geo.L2norm(vbar)
 
-    while (lvm[itr] > 0.00000001) and (itr<maxiter):
-        mu = geo.exp_map(mu, stp*vbar)
+    while (lvm[itr] > 0.00000001) and (itr < maxiter):
+        mu = geo.exp_map(mu, stp * vbar)
         itr += 1
-        for i in range(0,n):
-            out, theta = geo.inv_exp_map(mu,psi[:,i])
-            vec[:,i] = out
+        for i in range(0, n):
+            out, theta = geo.inv_exp_map(mu, psi[:, i])
+            vec[:, i] = out
 
         vbar = vec.mean(axis=1)
         lvm[itr] = geo.L2norm(vbar)
 
-
-    gam_mu = cumtrapz(mu*mu, time, initial=0)
+    gam_mu = cumtrapz(mu * mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
     gamI = invertGamma(gam_mu)
     return gamI
@@ -417,18 +431,20 @@ def SqrtMean(gam, parallel=False, cores=-1):
 
     """
 
-    (T,n) = gam.shape
-    time = linspace(0,1,T)
+    (T, n) = gam.shape
+    time = linspace(0, 1, T)
     binsize = mean(diff(time))
     psi = zeros((T, n))
     if parallel:
-        out = Parallel(n_jobs=cores)(delayed(gradient)(gam[:,k], binsize) for k in range(n))
+        out = Parallel(n_jobs=cores)(
+            delayed(gradient)(gam[:, k], binsize) for k in range(n)
+        )
         psi = array(out)
         psi = psi.transpose()
         psi = sqrt(psi)
     else:
         for k in range(0, n):
-            psi[:, k] = sqrt(gradient(gam[:, k],binsize))
+            psi[:, k] = sqrt(gradient(gam[:, k], binsize))
 
     # Find Direction
     mnpsi = psi.mean(axis=1)
@@ -442,38 +458,41 @@ def SqrtMean(gam, parallel=False, cores=-1):
     tt = 1
     lvm = zeros(maxiter)
     vec = zeros((T, n))
-    stp = .3
+    stp = 0.3
     itr = 0
 
     if parallel:
-        out = Parallel(n_jobs=cores)(delayed(inv_exp_map_sub)(mu, psi[:,i]) for i in range(n))
+        out = Parallel(n_jobs=cores)(
+            delayed(inv_exp_map_sub)(mu, psi[:, i]) for i in range(n)
+        )
         vec = array(out)
         vec = vec.transpose()
     else:
-        for i in range(0,n):
-            out, theta = geo.inv_exp_map(mu,psi[:,i])
-            vec[:,i] = out
+        for i in range(0, n):
+            out, theta = geo.inv_exp_map(mu, psi[:, i])
+            vec[:, i] = out
 
     vbar = vec.mean(axis=1)
     lvm[itr] = geo.L2norm(vbar)
 
-    while (lvm[itr] > 0.00000001) and (itr<maxiter):
-        mu = geo.exp_map(mu, stp*vbar)
+    while (lvm[itr] > 0.00000001) and (itr < maxiter):
+        mu = geo.exp_map(mu, stp * vbar)
         itr += 1
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(inv_exp_map_sub)(mu, psi[:,i]) for i in range(n))
+            out = Parallel(n_jobs=cores)(
+                delayed(inv_exp_map_sub)(mu, psi[:, i]) for i in range(n)
+            )
             vec = array(out)
             vec = vec.transpose()
         else:
-            for i in range(0,n):
-                out, theta = geo.inv_exp_map(mu,psi[:,i])
-                vec[:,i] = out
+            for i in range(0, n):
+                out, theta = geo.inv_exp_map(mu, psi[:, i])
+                vec[:, i] = out
 
         vbar = vec.mean(axis=1)
         lvm[itr] = geo.L2norm(vbar)
 
-
-    gam_mu = cumtrapz(mu*mu, time, initial=0)
+    gam_mu = cumtrapz(mu * mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
 
     return mu, gam_mu, psi, vec
@@ -499,47 +518,47 @@ def SqrtMedian(gam):
 
     """
 
-    (T,n) = gam.shape
-    time = linspace(0,1,T)
+    (T, n) = gam.shape
+    time = linspace(0, 1, T)
 
     # Initialization
     psi_median = ones(T)
     r = 1
     stp = 0.3
     maxiter = 501
-    vbar_norm = zeros(maxiter+1)
+    vbar_norm = zeros(maxiter + 1)
 
     # compute psi function
     binsize = mean(diff(time))
     psi = zeros((T, n))
-    v = zeros((T,n))
-    vtil = zeros((T,n))
+    v = zeros((T, n))
+    vtil = zeros((T, n))
     d = zeros(n)
     dtil = zeros(n)
     for k in range(0, n):
-        psi[:, k] = sqrt(gradient(gam[:, k],binsize))
-        v[:,k], d[k] = geo.inv_exp_map(psi_median,psi[:,k])
-        vtil[:,k] = v[:,k]/d[k]
-        dtil[k] = 1/d[k]
+        psi[:, k] = sqrt(gradient(gam[:, k], binsize))
+        v[:, k], d[k] = geo.inv_exp_map(psi_median, psi[:, k])
+        vtil[:, k] = v[:, k] / d[k]
+        dtil[k] = 1 / d[k]
 
-    vbar = vtil.sum(axis=1)*dtil.sum()**(-1)
+    vbar = vtil.sum(axis=1) * dtil.sum() ** (-1)
     vbar_norm[r] = geo.L2norm(vbar)
 
     # compute phase median by iterative algorithm
-    while (vbar_norm[r] > 0.00000001) and (r<maxiter):
-        psi_median = geo.exp_map(psi_median, stp*vbar)
+    while (vbar_norm[r] > 0.00000001) and (r < maxiter):
+        psi_median = geo.exp_map(psi_median, stp * vbar)
         r += 1
-        for k in range(0,n):
-            v[:,k], tmp = geo.inv_exp_map(psi_median,psi[:,k])
-            d[k] = arccos(geo.inner_product(psi_median,psi[:,k]))
-            vtil[:,k] = v[:,k]/d[k]
-            dtil[k] = 1/d[k]
+        for k in range(0, n):
+            v[:, k], tmp = geo.inv_exp_map(psi_median, psi[:, k])
+            d[k] = arccos(geo.inner_product(psi_median, psi[:, k]))
+            vtil[:, k] = v[:, k] / d[k]
+            dtil[k] = 1 / d[k]
 
-        vbar = vtil.sum(axis=1)*dtil.sum()**(-1)
+        vbar = vtil.sum(axis=1) * dtil.sum() ** (-1)
         vbar_norm[r] = geo.L2norm(vbar)
 
     vec = v
-    gam_median = cumtrapz(psi_median**2,time,initial=0.0)
+    gam_median = cumtrapz(psi_median**2, time, initial=0.0)
     gam_median = (gam_median - gam_median.min()) / (gam_median.max() - gam_median.min())
 
     return gam_median, psi_median, psi, vec
@@ -568,7 +587,7 @@ def cumtrapzmid(x, y, c, mid):
     fa[0:mid] = tmp[::-1]
 
     # case >= mid
-    fa[mid:a] = c + cumtrapz(y[mid - 1:a - 1], x[mid - 1:a - 1], initial=0)
+    fa[mid:a] = c + cumtrapz(y[mid - 1 : a - 1], x[mid - 1 : a - 1], initial=0)
 
     return fa
 
@@ -590,29 +609,29 @@ def rgam(N, sigma, num, mu_gam=None):
     binsize = diff(time)
     binsize = binsize.mean()
     if mu_gam is None:
-        mu = sqrt(gradient(time,binsize))
+        mu = sqrt(gradient(time, binsize))
     else:
-        mu = sqrt(gradient(mu_gam,binsize))
+        mu = sqrt(gradient(mu_gam, binsize))
 
-    omega = (2 * pi)
+    omega = 2 * pi
     for k in range(0, num):
         alpha_i = rn.normal(scale=sigma)
         v = alpha_i * ones(N)
         cnt = 1
         for l in range(2, 4):
             alpha_i = rn.normal(scale=sigma)
-            
-            #odd
+
+            # odd
             if l % 2 != 0:
                 v = v + alpha_i * sqrt(2) * cos(cnt * omega * time)
                 cnt += 1
 
-            #even
+            # even
             if l % 2 == 0:
                 v = v + alpha_i * sqrt(2) * sin(cnt * omega * time)
 
-        psi = geo.exp_map(mu.ravel(),v.ravel())
-        gam0 = cumtrapz(psi*psi, time, initial=0)
+        psi = geo.exp_map(mu.ravel(), v.ravel())
+        gam0 = cumtrapz(psi * psi, time, initial=0)
         gam[:, k] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam
@@ -702,9 +721,9 @@ def update_progress(progress):
         progress = 1
         status = "Done...\r\n"
     block = int(round(barLength * progress))
-    text = "\rPercent: [{0}] {1}% {2}".format("#" * block + "-" *
-                                              (barLength - block),
-                                              progress * 100, status)
+    text = "\rPercent: [{0}] {1}% {2}".format(
+        "#" * block + "-" * (barLength - block), progress * 100, status
+    )
     sys.stdout.write(text)
     sys.stdout.flush()
 
@@ -724,7 +743,7 @@ def diffop(n, binsize=1):
     m = inner(m.transpose(), m)
     m[0, 0] = 6
     m[-1, -1] = 6
-    m /= (binsize ** 4.)
+    m /= binsize**4.0
 
     return m
 
@@ -769,8 +788,8 @@ def geigen(Amat, Bmat, Cmat):
         print("CMAT not symmetric..\n")
         sys.exit(1)
 
-    Bmat = (Bmat + Bmat.transpose()) / 2.
-    Cmat = (Cmat + Cmat.transpose()) / 2.
+    Bmat = (Bmat + Bmat.transpose()) / 2.0
+    Cmat = (Cmat + Cmat.transpose()) / 2.0
     Bfac = cholesky(Bmat)
     Cfac = cholesky(Cmat)
     Bfacinv = inv(Bfac)
@@ -827,6 +846,7 @@ def warp_q_gamma(time, q, gam):
 
     return q_temp
 
+
 def warp_f_gamma(time, f, gam):
     """
     warps a function f by gam
@@ -868,8 +888,7 @@ def f_K_fold(Nobs, K=5):
     train = zeros((Nobs * (K - 1) / K, K))
     test = zeros((Nobs * 1 / K, K))
     for ii in range(0, K):
-        tf = vectorize(lambda x: x in arange(k[ii, 0],
-                       k[ii, 1] + 1))(arange(0, Nobs))
+        tf = vectorize(lambda x: x in arange(k[ii, 0], k[ii, 1] + 1))(arange(0, Nobs))
         train[:, ii] = ids[not tf]
         test[:, ii] = ids[tf]
 
@@ -943,128 +962,133 @@ def resamplefunction(x, n):
 
     """
     T = x.shape[0]
-    xn = interp(arange(0, n)/double(n-1), arange(0, T)/double(T-1), x)
-    return(xn)
+    xn = interp(arange(0, n) / double(n - 1), arange(0, T) / double(T - 1), x)
+    return xn
 
 
 def basis_fourierd(f_domain, numBasis):
-    result = zeros((f_domain.shape[0], 2*numBasis))
-    for i in range(0,2*numBasis):
-        j = ceil(i/2)
-        if mod(i,2) == 1:
-            result[:,i] = 1/sqrt(pi) * sin(2*j*pi*f_domain)
+    result = zeros((f_domain.shape[0], 2 * numBasis))
+    for i in range(0, 2 * numBasis):
+        j = ceil(i / 2)
+        if mod(i, 2) == 1:
+            result[:, i] = 1 / sqrt(pi) * sin(2 * j * pi * f_domain)
 
-        if mod(i,2) == 0:
-            result[:,i] = 1/sqrt(pi) * cos(2*j*pi*f_domain)
+        if mod(i, 2) == 0:
+            result[:, i] = 1 / sqrt(pi) * cos(2 * j * pi * f_domain)
 
-    out = {"x":f_domain, "matrix":result}
+    out = {"x": f_domain, "matrix": result}
 
-    return(out)
+    return out
 
 
 def basis_fourier(f_domain, numBasis, fourier_p):
-    result = zeros((f_domain.shape[0], 2*numBasis))
-    for i in range(0,2*numBasis):
-        j = ceil(i/2)
-        if mod(i,2) == 1:
-            result[:,i] = sqrt(2) * sin(2*j*pi*f_domain/fourier_p)
+    result = zeros((f_domain.shape[0], 2 * numBasis))
+    for i in range(0, 2 * numBasis):
+        j = ceil(i / 2)
+        if mod(i, 2) == 1:
+            result[:, i] = sqrt(2) * sin(2 * j * pi * f_domain / fourier_p)
 
-        if mod(i,2) == 0:
-            result[:,i] = sqrt(2) * cos(2*j*pi*f_domain/fourier_p)
+        if mod(i, 2) == 0:
+            result[:, i] = sqrt(2) * cos(2 * j * pi * f_domain / fourier_p)
 
-    out = {"x":f_domain, "matrix":result}
+    out = {"x": f_domain, "matrix": result}
 
-    return(out)
+    return out
 
 
-def legendre(N,X) :
-    matrixReturn = zeros((N+1,X.shape[0]))
-    for i in enumerate(X) :
-        currValues = sp.lpmn(N,N,i[1])
-        matrixReturn[:,i[0]] = array([j[N] for j in currValues[0]])
+def legendre(N, X):
+    matrixReturn = zeros((N + 1, X.shape[0]))
+    for i in enumerate(X):
+        currValues = sp.lpmn(N, N, i[1])
+        matrixReturn[:, i[0]] = array([j[N] for j in currValues[0]])
     return matrixReturn
 
 
 def basis_legendre(f_domain, numBasis, fourier_p):
-    result = zeros((f_domain.shape[0], 2*numBasis))
-    for i in range(0,2*numBasis):
-        f_domain_scaled = 2*(f_domain/fourier_p) - 1
-        tmp = legendre(i+1, f_domain_scaled)
+    result = zeros((f_domain.shape[0], 2 * numBasis))
+    for i in range(0, 2 * numBasis):
+        f_domain_scaled = 2 * (f_domain / fourier_p) - 1
+        tmp = legendre(i + 1, f_domain_scaled)
         result[:, i] = tmp[0, :]
 
-    out = {"x":f_domain, "matrix":result}
+    out = {"x": f_domain, "matrix": result}
 
-    return(out)
+    return out
 
 
 def exp2corr(sigma2, phi, ds):
-    out = sigma2 * exp(-ds**2/(2*phi**2))
-    return(out)
+    out = sigma2 * exp(-(ds**2) / (2 * phi**2))
+    return out
 
 
 def exp2corr2(phi, ds):
-    out = exp(-ds**2/(2*phi**2))
-    return(out)
+    out = exp(-(ds**2) / (2 * phi**2))
+    return out
 
 
 def statsFun(vec):
-    a = percentile(vec,100*0.025,axis=1)
-    b = percentile(vec,100*0.975,axis=1)
+    a = percentile(vec, 100 * 0.025, axis=1)
+    b = percentile(vec, 100 * 0.975, axis=1)
     out = column_stack((a, b))
-    return(out)
+    return out
 
 
 def f_exp1(g):
     out = bay.bcalcY(f_L2norm(g), g)
-    return(out)
+    return out
 
 
 def f_L2norm(f):
-    x = linspace(0,1,f.shape[0])
-    out = bay.border_l2norm(x,f)
-    return(out)
+    x = linspace(0, 1, f.shape[0])
+    out = bay.border_l2norm(x, f)
+    return out
+
 
 def f_basistofunction(f_domain, coefconst, coef, basis):
     if basis["matrix"].shape[1] < coef.shape[0]:
         raise Exception("In f_basistofunction, #coefficients exceeds # basis functions")
 
-    result = dot(basis["matrix"],coef)+coefconst
+    result = dot(basis["matrix"], coef) + coefconst
     result = f_predictfunction(result, f_domain, 0)
-    return(result)
+    return result
+
 
 def f_predictfunction(f, at, deriv):
-    x = linspace(0,1,f.shape[0])
+    x = linspace(0, 1, f.shape[0])
     if deriv == 0:
-        interp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
+        interp = interp1d(x, f, bounds_error=False, fill_value="extrapolate")
         result = interp(at)
 
     if deriv == 1:
-        iterp = interp1d(x,f,bounds_error=False,fill_value="extrapolate")
+        iterp = interp1d(x, f, bounds_error=False, fill_value="extrapolate")
         fmod = iterp(at)
         diffy1 = hstack((0, diff(fmod)))
-        diffy2 = hstack((diff(fmod),0))
+        diffy2 = hstack((diff(fmod), 0))
         diffx1 = hstack((0, diff(at)))
         diffx2 = hstack((diff(at), 0))
 
         result = (diffy2 + diffy1) / (diffx2 + diffx1)
 
-    return(result)
+    return result
 
-def f_psimean(x,y):
+
+def f_psimean(x, y):
     rmy = y.mean(axis=1)
     result = rmy / f_L2norm(rmy)
-    return(result)
+    return result
+
 
 def f_phiinv(psi):
-    f_domain = linspace(0,1,psi.shape[0])
-    result = insert(bay.bcuL2norm2(f_domain,psi),0,0)
-    return(result)
+    f_domain = linspace(0, 1, psi.shape[0])
+    result = insert(bay.bcuL2norm2(f_domain, psi), 0, 0)
+    return result
+
 
 def norm_gam(gam):
-    gam = (gam-gam[0])/(gam[-1]-gam[0])
-    return(gam)
+    gam = (gam - gam[0]) / (gam[-1] - gam[0])
+    return gam
 
 
 def mrdivide(a, b):
     c = dot(a, pinv(b))
-    return(c)
+    return c
