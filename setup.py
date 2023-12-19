@@ -82,7 +82,8 @@ extensions = [
     Extension(name="cbayesian",
         sources=["src/cbayesian.pyx", "src/bayesian.cpp"],
         include_dirs=[numpy.get_include()],
-        language="c++"
+        language="c++",
+        extra_compile_args=['-std=c++11'],
     ),
     Extension(name="cimage",
         sources=["src/imagecpp.pyx", "src/UnitSquareImage.cpp"],
