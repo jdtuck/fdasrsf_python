@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -27,9 +29,9 @@ class SpRow : public SpMat<eT>
   typedef eT                                elem_type;
   typedef typename get_pod_type<eT>::result pod_type;
   
-  static const bool is_row  = true;
-  static const bool is_col  = false;
-  static const bool is_xvec = false;
+  static constexpr bool is_row  = true;
+  static constexpr bool is_col  = false;
+  static constexpr bool is_xvec = false;
   
   
   inline          SpRow();
@@ -54,6 +56,10 @@ class SpRow : public SpMat<eT>
   template<typename T1, typename T2>
   inline explicit SpRow(const SpBase<pod_type,T1>& A, const SpBase<pod_type,T2>& B);
   
+  arma_warn_unused inline const SpOp<SpRow<eT>,spop_htrans>  t() const;
+  arma_warn_unused inline const SpOp<SpRow<eT>,spop_htrans> ht() const;
+  arma_warn_unused inline const SpOp<SpRow<eT>,spop_strans> st() const;
+  
   inline void shed_col (const uword col_num);
   inline void shed_cols(const uword in_col1, const uword in_col2);
   
@@ -69,7 +75,7 @@ class SpRow : public SpMat<eT>
   inline       row_iterator end_row(const uword row_num = 0);
   inline const_row_iterator end_row(const uword row_num = 0) const;
   
-  #ifdef ARMA_EXTRA_SPROW_PROTO
+  #if defined(ARMA_EXTRA_SPROW_PROTO)
     #include ARMA_INCFILE_WRAP(ARMA_EXTRA_SPROW_PROTO)
   #endif
   };

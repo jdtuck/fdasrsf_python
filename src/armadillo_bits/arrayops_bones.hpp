@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -23,48 +25,47 @@ class arrayops
   public:
   
   template<typename eT>
-  arma_hot arma_inline static void
+  arma_inline static void
   copy(eT* dest, const eT* src, const uword n_elem);
   
-  
   template<typename eT>
-  arma_cold inline static void
-  copy_small(eT* dest, const eT* src, const uword n_elem);
-  
-  
-  template<typename eT>
-  arma_hot inline static void
+  inline static void
   fill_zeros(eT* dest, const uword n_elem);
-  
   
   template<typename eT>
   arma_hot inline static void
   replace(eT* mem, const uword n_elem, const eT old_val, const eT new_val);
   
-  
   template<typename eT>
   arma_hot inline static void
-  clean(eT* mem, const uword n_elem, const eT abs_limit, const typename arma_not_cx<eT>::result* junk = 0);
-  
+  clean(eT* mem, const uword n_elem, const eT abs_limit, const typename arma_not_cx<eT>::result* junk = nullptr);
   
   template<typename T>
   arma_hot inline static void
   clean(std::complex<T>* mem, const uword n_elem, const T abs_limit);
+  
+  template<typename eT>
+  inline static void
+  clamp(eT* mem, const uword n_elem, const eT min_val, const eT max_val, const typename arma_not_cx<eT>::result* junk = nullptr);
+  
+  template<typename T>
+  inline static void
+  clamp(std::complex<T>* mem, const uword n_elem, const std::complex<T>& min_val, const std::complex<T>& max_val);
   
   
   // 
   // array = convert(array)
   
   template<typename out_eT, typename in_eT>
-  arma_hot arma_inline static void
-  convert_cx_scalar(out_eT& out, const in_eT&  in, const typename arma_not_cx<out_eT>::result* junk1 = 0, const typename arma_not_cx< in_eT>::result* junk2 = 0);
+  arma_inline static void
+  convert_cx_scalar(out_eT& out, const in_eT&  in, const typename arma_not_cx<out_eT>::result* junk1 = nullptr, const typename arma_not_cx< in_eT>::result* junk2 = nullptr);
   
   template<typename out_eT, typename in_T>
-  arma_hot arma_inline static void
-  convert_cx_scalar(out_eT& out, const std::complex<in_T>& in, const typename arma_not_cx<out_eT>::result* junk = 0);
+  arma_inline static void
+  convert_cx_scalar(out_eT& out, const std::complex<in_T>& in, const typename arma_not_cx<out_eT>::result* junk = nullptr);
   
   template<typename out_T, typename in_T>
-  arma_hot arma_inline static void
+  arma_inline static void
   convert_cx_scalar(std::complex<out_T>& out, const std::complex< in_T>& in);
   
   template<typename out_eT, typename in_eT>
@@ -132,12 +133,12 @@ class arrayops
   template<typename eT>
   arma_hot inline static
   void
-  inplace_set_base(eT* dest, const eT val, const uword n_elem);
+  inplace_set_simple(eT* dest, const eT val, const uword n_elem);
   
   template<typename eT>
-  arma_cold inline static
+  arma_hot inline static
   void
-  inplace_set_small(eT* dest, const eT val, const uword n_elem);
+  inplace_set_base(eT* dest, const eT val, const uword n_elem);
   
   template<typename eT, const uword n_elem>
   arma_hot inline static
@@ -196,6 +197,16 @@ class arrayops
   arma_hot inline static
   eT
   product(const eT* src, const uword n_elem);
+  
+  template<typename eT>
+  arma_hot inline static
+  bool
+  is_zero(const eT* mem, const uword n_elem, const eT abs_limit, const typename arma_not_cx<eT>::result* junk = nullptr);
+  
+  template<typename T>
+  arma_hot inline static
+  bool
+  is_zero(const std::complex<T>* mem, const uword n_elem, const T abs_limit);
   
   template<typename eT>
   arma_hot inline static

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -149,9 +151,9 @@ gmm_full<eT>::set_params(const Base<eT,T1>& in_means_expr, const BaseCube<eT,T2>
     "gmm_full::set_params(): given parameters have inconsistent and/or wrong sizes"
     );
   
-  arma_debug_check( (in_means.is_finite() == false), "gmm_full::set_params(): given means have non-finite values" );
-  arma_debug_check( (in_fcovs.is_finite() == false), "gmm_full::set_params(): given fcovs have non-finite values" );
-  arma_debug_check( (in_hefts.is_finite() == false), "gmm_full::set_params(): given hefts have non-finite values" );
+  arma_debug_check( (in_means.internal_has_nonfinite()), "gmm_full::set_params(): given means have non-finite values" );
+  arma_debug_check( (in_fcovs.internal_has_nonfinite()), "gmm_full::set_params(): given fcovs have non-finite values" );
+  arma_debug_check( (in_hefts.internal_has_nonfinite()), "gmm_full::set_params(): given hefts have non-finite values" );
   
   for(uword g=0; g < in_fcovs.n_slices; ++g)
     {
@@ -186,7 +188,7 @@ gmm_full<eT>::set_means(const Base<eT,T1>& in_means_expr)
   const Mat<eT>& in_means = tmp.M;
   
   arma_debug_check( (arma::size(in_means) != arma::size(means)), "gmm_full::set_means(): given means have incompatible size" );
-  arma_debug_check( (in_means.is_finite() == false),             "gmm_full::set_means(): given means have non-finite values" );
+  arma_debug_check( (in_means.internal_has_nonfinite()),         "gmm_full::set_means(): given means have non-finite values" );
   
   access::rw(means) = in_means;
   }
@@ -206,7 +208,7 @@ gmm_full<eT>::set_fcovs(const BaseCube<eT,T1>& in_fcovs_expr)
   const Cube<eT>& in_fcovs = tmp.M;
   
   arma_debug_check( (arma::size(in_fcovs) != arma::size(fcovs)), "gmm_full::set_fcovs(): given fcovs have incompatible size" );
-  arma_debug_check( (in_fcovs.is_finite() == false),             "gmm_full::set_fcovs(): given fcovs have non-finite values" );
+  arma_debug_check( (in_fcovs.internal_has_nonfinite()),         "gmm_full::set_fcovs(): given fcovs have non-finite values" );
   
   for(uword i=0; i < in_fcovs.n_slices; ++i)
     {
@@ -233,7 +235,7 @@ gmm_full<eT>::set_hefts(const Base<eT,T1>& in_hefts_expr)
   const Mat<eT>& in_hefts = tmp.M;
   
   arma_debug_check( (arma::size(in_hefts) != arma::size(hefts)), "gmm_full::set_hefts(): given hefts have incompatible size" );
-  arma_debug_check( (in_hefts.is_finite() == false),             "gmm_full::set_hefts(): given hefts have non-finite values" );
+  arma_debug_check( (in_hefts.internal_has_nonfinite()),         "gmm_full::set_hefts(): given hefts have non-finite values" );
   arma_debug_check( (any(vectorise(in_hefts) <  eT(0))),         "gmm_full::set_hefts(): given hefts have negative values"   );
   
   const eT s = accu(in_hefts);
@@ -291,7 +293,7 @@ gmm_full<eT>::load(const std::string name)
   if( (status == false) || (storage.n_elem < 2) )
     {
     reset();
-    arma_debug_warn("gmm_full::load(): problem with loading or incompatible format");
+    arma_debug_warn_level(3, "gmm_full::load(): problem with loading or incompatible format");
     return false;
     }
   
@@ -306,7 +308,7 @@ gmm_full<eT>::load(const std::string name)
   if( (storage.n_elem != (N_gaus + 2)) || (storage_hefts.n_rows != 1) || (storage_hefts.n_cols != N_gaus) )
     {
     reset();
-    arma_debug_warn("gmm_full::load(): incompatible format");
+    arma_debug_warn_level(3, "gmm_full::load(): incompatible format");
     return false;
     }
   
@@ -322,7 +324,7 @@ gmm_full<eT>::load(const std::string name)
     if( (storage_fcov.n_rows != N_dims) || (storage_fcov.n_cols != N_dims) )
       {
       reset();
-      arma_debug_warn("gmm_full::load(): incompatible format");
+      arma_debug_warn_level(3, "gmm_full::load(): incompatible format");
       return false;
       }
     
@@ -374,8 +376,8 @@ gmm_full<eT>::generate() const
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  Col<eT> out( (N_gaus > 0) ? N_dims : uword(0)              );
-  Col<eT> tmp( (N_gaus > 0) ? N_dims : uword(0), fill::randn );
+  Col<eT> out( (N_gaus > 0) ? N_dims : uword(0), arma_nozeros_indicator() );
+  Col<eT> tmp( (N_gaus > 0) ? N_dims : uword(0), fill::randn              );
   
   if(N_gaus > 0)
     {
@@ -410,8 +412,8 @@ gmm_full<eT>::generate(const uword N_vec) const
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  Mat<eT> out( ( (N_gaus > 0) ? N_dims : uword(0) ), N_vec              );
-  Mat<eT> tmp( ( (N_gaus > 0) ? N_dims : uword(0) ), N_vec, fill::randn );
+  Mat<eT> out( ( (N_gaus > 0) ? N_dims : uword(0) ), N_vec, arma_nozeros_indicator() );
+  Mat<eT> tmp( ( (N_gaus > 0) ? N_dims : uword(0) ), N_vec, fill::randn              );
   
   if(N_gaus > 0)
     {
@@ -682,7 +684,7 @@ gmm_full<eT>::norm_hist(const Base<eT,T1>& expr, const gmm_dist_mode& dist_mode)
   
   if(acc == eT(0))  { acc = eT(1); }
   
-  Row<eT> out(hist_n_elem);
+  Row<eT> out(hist_n_elem, arma_nozeros_indicator());
   
   eT* out_mem = out.memptr();
   
@@ -727,8 +729,8 @@ gmm_full<eT>::learn
   const unwrap<T1>   tmp_X(data.get_ref());
   const Mat<eT>& X = tmp_X.M;
   
-  if(X.is_empty()          )  { arma_debug_warn("gmm_full::learn(): given matrix is empty"             ); return false; }
-  if(X.is_finite() == false)  { arma_debug_warn("gmm_full::learn(): given matrix has non-finite values"); return false; }
+  if(X.is_empty()              )  { arma_debug_warn_level(3, "gmm_full::learn(): given matrix is empty"             ); return false; }
+  if(X.internal_has_nonfinite())  { arma_debug_warn_level(3, "gmm_full::learn(): given matrix has non-finite values"); return false; }
   
   if(N_gaus == 0)  { reset(); return true; }
   
@@ -757,14 +759,14 @@ gmm_full<eT>::learn
   
   if(seed_mode == keep_existing)
     {
-    if(means.is_empty()        )  { arma_debug_warn("gmm_full::learn(): no existing means"      ); return false; }
-    if(X.n_rows != means.n_rows)  { arma_debug_warn("gmm_full::learn(): dimensionality mismatch"); return false; }
+    if(means.is_empty()        )  { arma_debug_warn_level(3, "gmm_full::learn(): no existing means"      ); return false; }
+    if(X.n_rows != means.n_rows)  { arma_debug_warn_level(3, "gmm_full::learn(): dimensionality mismatch"); return false; }
     
     // TODO: also check for number of vectors?
     }
   else
     {
-    if(X.n_cols < N_gaus)  { arma_debug_warn("gmm_full::learn(): number of vectors is less than number of gaussians"); return false; }
+    if(X.n_cols < N_gaus)  { arma_debug_warn_level(3, "gmm_full::learn(): number of vectors is less than number of gaussians"); return false; }
     
     reset(X.n_rows, N_gaus);
     
@@ -788,7 +790,7 @@ gmm_full<eT>::learn
     
     stream_state.restore(get_cout_stream());
     
-    if(status == false)  { arma_debug_warn("gmm_full::learn(): k-means algorithm failed; not enough data, or too many gaussians requested"); init(orig); return false; }
+    if(status == false)  { arma_debug_warn_level(3, "gmm_full::learn(): k-means algorithm failed; not enough data, or too many gaussians requested"); init(orig); return false; }
     }
   
   
@@ -815,7 +817,7 @@ gmm_full<eT>::learn
     
     stream_state.restore(get_cout_stream());
     
-    if(status == false)  { arma_debug_warn("gmm_full::learn(): EM algorithm failed"); init(orig); return false; }
+    if(status == false)  { arma_debug_warn_level(3, "gmm_full::learn(): EM algorithm failed"); init(orig); return false; }
     }
   
   mah_aux.reset();
@@ -920,7 +922,7 @@ gmm_full<eT>::init_constants(const bool calc_chol)
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  const eT tmp = (eT(N_dims)/eT(2)) * std::log(eT(2) * Datum<eT>::pi);
+  const eT tmp = (eT(N_dims)/eT(2)) * std::log(Datum<eT>::tau);
   
   //
   
@@ -940,9 +942,9 @@ gmm_full<eT>::init_constants(const bool calc_chol)
     eT log_det_val  = eT(0);
     eT log_det_sign = eT(0);
     
-    log_det(log_det_val, log_det_sign, fcov);
+    const bool log_det_status = log_det(log_det_val, log_det_sign, fcov);
     
-    const bool log_det_ok = ( (arma_isfinite(log_det_val)) && (log_det_sign > eT(0)) );
+    const bool log_det_ok = ( log_det_status && (arma_isfinite(log_det_val)) && (log_det_sign > eT(0)) );
     
     if(inv_ok && log_det_ok)
       {
@@ -1030,12 +1032,12 @@ gmm_full<eT>::internal_gen_boundaries(const uword N) const
     const uword n_threads_avail = uword(omp_get_max_threads());
     const uword n_threads       = (n_threads_avail > 0) ? ( (n_threads_avail <= N) ? n_threads_avail : 1 ) : 1;
   #else
-    static const uword n_threads = 1;
+    static constexpr uword n_threads = 1;
   #endif
   
   // get_cout_stream() << "gmm_full::internal_gen_boundaries(): n_threads: " << n_threads << '\n';
   
-  umat boundaries(2, n_threads);
+  umat boundaries(2, n_threads, arma_nozeros_indicator());
   
   if(N > 0)
     {
@@ -1143,7 +1145,7 @@ gmm_full<eT>::internal_vec_log_p(const Mat<eT>& X) const
   
   arma_debug_check( (X.n_rows != N_dims), "gmm_full::log_p(): incompatible dimensions" );
   
-  Row<eT> out(N_samples);
+  Row<eT> out(N_samples, arma_nozeros_indicator());
   
   if(N_samples > 0)
     {
@@ -1197,7 +1199,7 @@ gmm_full<eT>::internal_vec_log_p(const Mat<eT>& X, const uword gaus_id) const
   arma_debug_check( (X.n_rows != N_dims),       "gmm_full::log_p(): incompatible dimensions"            );
   arma_debug_check( (gaus_id  >= means.n_cols), "gmm_full::log_p(): specified gaussian is out of range" );
   
-  Row<eT> out(N_samples);
+  Row<eT> out(N_samples, arma_nozeros_indicator());
   
   if(N_samples > 0)
     {
@@ -1258,7 +1260,7 @@ gmm_full<eT>::internal_sum_log_p(const Mat<eT>& X) const
     
     const uword n_threads = boundaries.n_cols;
     
-    Col<eT> t_accs(n_threads, fill::zeros);
+    Col<eT> t_accs(n_threads, arma_zeros_indicator());
     
     #pragma omp parallel for schedule(static)
     for(uword t=0; t < n_threads; ++t)
@@ -1315,7 +1317,7 @@ gmm_full<eT>::internal_sum_log_p(const Mat<eT>& X, const uword gaus_id) const
     
     const uword n_threads = boundaries.n_cols;
     
-    Col<eT> t_accs(n_threads, fill::zeros);
+    Col<eT> t_accs(n_threads, arma_zeros_indicator());
     
     #pragma omp parallel for schedule(static)
     for(uword t=0; t < n_threads; ++t)
@@ -1938,10 +1940,10 @@ gmm_full<eT>::generate_initial_params(const Mat<eT>& X, const eT var_floor)
   // as the covariances are calculated via accumulators,
   // the means also need to be calculated via accumulators to ensure numerical consistency
   
-  Mat<eT> acc_means(N_dims, N_gaus, fill::zeros);
-  Mat<eT> acc_dcovs(N_dims, N_gaus, fill::zeros);
+  Mat<eT> acc_means(N_dims, N_gaus);
+  Mat<eT> acc_dcovs(N_dims, N_gaus);
   
-  Row<uword> acc_hefts(N_gaus, fill::zeros);
+  Row<uword> acc_hefts(N_gaus, arma_zeros_indicator());
   
   uword* acc_hefts_mem = acc_hefts.memptr();
   
@@ -2101,9 +2103,9 @@ gmm_full<eT>::km_iterate(const Mat<eT>& X, const uword max_iter, const bool verb
   
   const eT* mah_aux_mem = mah_aux.memptr();
   
-  Mat<eT>    acc_means(N_dims, N_gaus, fill::zeros);
-  Row<uword> acc_hefts(N_gaus, fill::zeros);
-  Row<uword> last_indx(N_gaus, fill::zeros);
+  Mat<eT>    acc_means(N_dims, N_gaus, arma_zeros_indicator());
+  Row<uword> acc_hefts(        N_gaus, arma_zeros_indicator());
+  Row<uword> last_indx(        N_gaus, arma_zeros_indicator());
   
   Mat<eT> new_means = means;
   Mat<eT> old_means = means;
@@ -2186,6 +2188,10 @@ gmm_full<eT>::km_iterate(const Mat<eT>& X, const uword max_iter, const bool verb
       }
     #else
       {
+      acc_hefts.zeros();
+      acc_means.zeros();
+      last_indx.zeros();
+      
       uword* acc_hefts_mem = acc_hefts.memptr();
       uword* last_indx_mem = last_indx.memptr();
       
@@ -2302,7 +2308,7 @@ gmm_full<eT>::km_iterate(const Mat<eT>& X, const uword max_iter, const bool verb
   
   access::rw(means) = old_means;
   
-  if(means.is_finite() == false)  { return false; }
+  if(means.internal_has_nonfinite())  { return false; }
   
   return true;
   }
@@ -2341,7 +2347,7 @@ gmm_full<eT>::em_iterate(const Mat<eT>& X, const uword max_iter, const eT var_fl
   field< Col<eT> > t_acc_norm_lhoods(n_threads);
   field< Col<eT> > t_gaus_log_lhoods(n_threads);
   
-  Col<eT>          t_progress_log_lhood(n_threads);
+  Col<eT>          t_progress_log_lhood(n_threads, arma_nozeros_indicator());
   
   for(uword t=0; t<n_threads; t++)
     {
@@ -2402,9 +2408,9 @@ gmm_full<eT>::em_iterate(const Mat<eT>& X, const uword max_iter, const eT var_fl
     if(any(vectorise(fcov.diag()) <= eT(0)))  { return false; }
     }
   
-  if(means.is_finite() == false)  { return false; }
-  if(fcovs.is_finite() == false)  { return false; }
-  if(hefts.is_finite() == false)  { return false; }
+  if(means.internal_has_nonfinite())  { return false; }
+  if(fcovs.internal_has_nonfinite())  { return false; }
+  if(hefts.internal_has_nonfinite())  { return false; }
   
   return true;
   }
@@ -2476,7 +2482,7 @@ gmm_full<eT>::em_update_params
   
   eT* hefts_mem = access::rw(hefts).memptr();
   
-  Mat<eT> mean_outer(N_dims, N_dims);
+  Mat<eT> mean_outer(N_dims, N_dims, arma_nozeros_indicator());
   
   
   //// update each component without sanity checking
@@ -2535,14 +2541,14 @@ gmm_full<eT>::em_update_params
       if(val < var_floor)  { val = var_floor; }
       }
     
-    if(acc_fcov.is_finite() == false)  { continue; }
+    if(acc_fcov.internal_has_nonfinite())  { continue; }
     
     eT log_det_val  = eT(0);
     eT log_det_sign = eT(0);
     
-    log_det(log_det_val, log_det_sign, acc_fcov);
+    const bool log_det_status = log_det(log_det_val, log_det_sign, acc_fcov);
     
-    const bool log_det_ok = ( (arma_isfinite(log_det_val)) && (log_det_sign > eT(0)) );
+    const bool log_det_ok = ( log_det_status && (arma_isfinite(log_det_val)) && (log_det_sign > eT(0)) );
     
     const bool inv_ok = (log_det_ok) ? bool(auxlib::inv_sympd(mean_outer, acc_fcov)) : bool(false);  // mean_outer is used as a junk matrix
     

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -21,19 +23,18 @@
 
 //! analog of the Glue class, intended for Cube objects
 template<typename T1, typename T2, typename glue_type>
-class GlueCube : public BaseCube<typename T1::elem_type, GlueCube<T1, T2, glue_type> >
+class GlueCube : public BaseCube< typename T1::elem_type, GlueCube<T1, T2, glue_type> >
   {
   public:
   
   typedef typename T1::elem_type                   elem_type;
   typedef typename get_pod_type<elem_type>::result pod_type;
-
-  arma_inline  GlueCube(const BaseCube<typename T1::elem_type, T1>& in_A, const BaseCube<typename T1::elem_type, T2>& in_B);
-  arma_inline ~GlueCube();
+  
+  inline  GlueCube(const BaseCube<typename T1::elem_type, T1>& in_A, const BaseCube<typename T1::elem_type, T2>& in_B);
+  inline ~GlueCube();
   
   const T1& A;  //!< first operand;  must be derived from BaseCube
   const T2& B;  //!< second operand; must be derived from BaseCube
-  
   };
 
 

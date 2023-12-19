@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -40,6 +42,7 @@ op_wishrnd::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_wishrnd>& exp
   
   if(status == false)
     {
+    out.soft_reset();
     arma_stop_runtime_error("wishrnd(): given matrix is not symmetric positive definite");
     }
   }
@@ -74,8 +77,6 @@ op_wishrnd::apply_direct(Mat<typename T1::elem_type>& out, const Base<typename T
     if(mode == 2)  { status = op_wishrnd::apply_noalias_mode2(out, U.M, df); }
     }
   
-  if(status == false)  { out.soft_reset(); }
-  
   return status;
   }
 
@@ -91,6 +92,8 @@ op_wishrnd::apply_noalias_mode1(Mat<eT>& out, const Mat<eT>& S, const eT df)
   arma_debug_check( (S.is_square() == false), "wishrnd(): given matrix must be square sized" );
   
   if(S.is_empty())  { out.reset(); return true; }
+  
+  if(auxlib::rudimentary_sym_check(S) == false)  { return false; }
   
   Mat<eT> D;
   
@@ -110,62 +113,49 @@ op_wishrnd::apply_noalias_mode2(Mat<eT>& out, const Mat<eT>& D, const eT df)
   {
   arma_extra_debug_sigprint();
   
-  #if defined(ARMA_USE_CXX11)
+  arma_debug_check( (df <= eT(0)),            "df must be greater than zero"                 );
+  arma_debug_check( (D.is_square() == false), "wishrnd(): given matrix must be square sized" );
+  
+  if(D.is_empty())  { out.reset(); return true; }
+  
+  const uword N = D.n_rows;
+  
+  if(df < eT(N))
     {
-    arma_debug_check( (df <= eT(0)),            "df must be greater than zero"                 );
-    arma_debug_check( (D.is_square() == false), "wishrnd(): given matrix must be square sized" );
+    arma_extra_debug_print("simple generator");
     
-    if(D.is_empty())  { out.reset(); return true; }
+    const uword df_floor = uword(std::floor(df));
     
-    const uword N = D.n_rows;
+    const Mat<eT> tmp = (randn< Mat<eT> >(df_floor, N)) * D;
     
-    if(df < eT(N))
+    out = tmp.t() * tmp;
+    }
+  else
+    {
+    arma_extra_debug_print("standard generator");
+    
+    op_chi2rnd_varying_df<eT> chi2rnd_generator;
+    
+    Mat<eT> A(N, N, arma_zeros_indicator());
+    
+    for(uword i=0; i<N; ++i)
       {
-      arma_extra_debug_print("simple generator");
-      
-      const uword df_floor = uword(std::floor(df));
-      
-      const Mat<eT> tmp = (randn< Mat<eT> >(df_floor, N)) * D;
-      
-      out = tmp.t() * tmp;
-      }
-    else
-      {
-      arma_extra_debug_print("standard generator");
-      
-      op_chi2rnd_varying_df<eT> chi2rnd_generator;
-      
-      Mat<eT> A(N, N, fill::zeros);
-      
-      for(uword i=0; i<N; ++i)
-        {
-        A.at(i,i) = std::sqrt( chi2rnd_generator(df - eT(i)) );
-        }
-      
-      for(uword i=1; i < N; ++i)
-        {
-        arma_rng::randn<eT>::fill( A.colptr(i), i );
-        }
-      
-      const Mat<eT> tmp = A * D;
-      
-      A.reset();
-      
-      out = tmp.t() * tmp;
+      A.at(i,i) = std::sqrt( chi2rnd_generator(df - eT(i)) );
       }
     
-    return true;
-    }
-  #else
-    {
-    arma_ignore(out);
-    arma_ignore(D);
-    arma_ignore(df);
-    arma_stop_logic_error("wishrnd(): C++11 compiler required");
+    for(uword i=1; i < N; ++i)
+      {
+      arma_rng::randn<eT>::fill( A.colptr(i), i );
+      }
     
-    return false;
+    const Mat<eT> tmp = A * D;
+    
+    A.reset();
+    
+    out = tmp.t() * tmp;
     }
-  #endif
+  
+  return true;
   }
 
 
@@ -190,6 +180,7 @@ op_iwishrnd::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_iwishrnd>& e
   
   if(status == false)
     {
+    out.soft_reset();
     arma_stop_runtime_error("iwishrnd(): given matrix is not symmetric positive definite and/or df is too low");
     }
   }
@@ -224,8 +215,6 @@ op_iwishrnd::apply_direct(Mat<typename T1::elem_type>& out, const Base<typename 
     if(mode == 2)  { status = op_iwishrnd::apply_noalias_mode2(out, U.M, df); }
     }
   
-  if(status == false)  { out.soft_reset(); }
-  
   return status;
   }
 
@@ -241,6 +230,8 @@ op_iwishrnd::apply_noalias_mode1(Mat<eT>& out, const Mat<eT>& T, const eT df)
   arma_debug_check( (T.is_square() == false), "iwishrnd(): given matrix must be square sized" );
   
   if(T.is_empty())  { out.reset(); return true; }
+  
+  if(auxlib::rudimentary_sym_check(T) == false)  { return false; }
   
   Mat<eT> Tinv;
   Mat<eT> Dinv;
@@ -265,37 +256,24 @@ op_iwishrnd::apply_noalias_mode2(Mat<eT>& out, const Mat<eT>& Dinv, const eT df)
   {
   arma_extra_debug_sigprint();
   
-  #if defined(ARMA_USE_CXX11)
-    {
-    arma_debug_check( (df <= eT(0)),               "df must be greater than zero"                  );
-    arma_debug_check( (Dinv.is_square() == false), "iwishrnd(): given matrix must be square sized" );
-    
-    if(Dinv.is_empty())  { out.reset(); return true; }
-    
-    Mat<eT> tmp;
-    
-    const bool wishrnd_status = op_wishrnd::apply_noalias_mode2(tmp, Dinv, df);
-    
-    if(wishrnd_status == false)  { return false; }
-    
-    const bool inv_status1 = auxlib::inv_sympd(out, tmp);
-    
-    const bool inv_status2 = (inv_status1) ? bool(true) : bool(auxlib::inv(out, tmp));
-    
-    if(inv_status2 == false)  { return false; }
-    
-    return true;
-    }
-  #else
-    {
-    arma_ignore(out);
-    arma_ignore(Dinv);
-    arma_ignore(df);
-    arma_stop_logic_error("iwishrnd(): C++11 compiler required");
-    
-    return false;
-    }
-  #endif
+  arma_debug_check( (df <= eT(0)),               "df must be greater than zero"                  );
+  arma_debug_check( (Dinv.is_square() == false), "iwishrnd(): given matrix must be square sized" );
+  
+  if(Dinv.is_empty())  { out.reset(); return true; }
+  
+  Mat<eT> tmp;
+  
+  const bool wishrnd_status = op_wishrnd::apply_noalias_mode2(tmp, Dinv, df);
+  
+  if(wishrnd_status == false)  { return false; }
+  
+  const bool inv_status1 = auxlib::inv_sympd(out, tmp);
+  
+  const bool inv_status2 = (inv_status1) ? bool(true) : bool(auxlib::inv(out, tmp));
+  
+  if(inv_status2 == false)  { return false; }
+  
+  return true;
   }
 
 

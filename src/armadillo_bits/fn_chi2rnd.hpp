@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -26,19 +28,9 @@ chi2rnd(const double df)
   {
   arma_extra_debug_sigprint();
   
-  #if defined(ARMA_USE_CXX11)
-    {
-    op_chi2rnd_varying_df<double> generator;
-    
-    return generator(df);
-    }
-  #else
-    {
-    arma_stop_logic_error("chi2rnd(): C++11 compiler required");
-    
-    return double(0);
-    }
-  #endif
+  op_chi2rnd_varying_df<double> generator;
+  
+  return generator(df);
   }
 
 
@@ -51,19 +43,9 @@ chi2rnd(const eT df)
   {
   arma_extra_debug_sigprint();
   
-  #if defined(ARMA_USE_CXX11)
-    {
-    op_chi2rnd_varying_df<eT> generator;
-    
-    return generator(df);
-    }
-  #else
-    {
-    arma_stop_logic_error("chi2rnd(): C++11 compiler required");
-    
-    return eT(0);
-    }
-  #endif
+  op_chi2rnd_varying_df<eT> generator;
+  
+  return generator(df);
   }
 
 
@@ -109,7 +91,7 @@ chi2rnd(const typename obj_type::elem_type df, const uword n_rows, const uword n
     arma_debug_check( (n_rows != 1), "chi2rnd(): incompatible size" );
     }
   
-  obj_type out(n_rows, n_cols);
+  obj_type out(n_rows, n_cols, arma_nozeros_indicator());
   
   op_chi2rnd::fill_constant_df(out, df);
   

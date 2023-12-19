@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -25,7 +27,7 @@ const Op<T1, op_htrans>
 trans
   (
   const T1& X,
-  const typename enable_if< is_arma_type<T1>::value == true >::result* junk = 0
+  const typename enable_if< is_arma_type<T1>::value >::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -43,7 +45,7 @@ const Op<T1, op_htrans>
 htrans
   (
   const T1& X,
-  const typename enable_if< is_arma_type<T1>::value == true >::result* junk = 0
+  const typename enable_if< is_arma_type<T1>::value >::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -65,7 +67,7 @@ const SpOp<T1, spop_htrans>
 trans
   (
   const T1& X,
-  const typename enable_if< is_arma_sparse_type<T1>::value == true >::result* junk = 0
+  const typename enable_if< is_arma_sparse_type<T1>::value >::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -83,7 +85,7 @@ const SpOp<T1, spop_htrans>
 htrans
   (
   const T1& X,
-  const typename enable_if< is_arma_sparse_type<T1>::value == true >::result* junk = 0
+  const typename enable_if< is_arma_sparse_type<T1>::value >::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();

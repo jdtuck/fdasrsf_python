@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -23,156 +25,45 @@ template<typename T1>
 arma_warn_unused
 inline
 typename enable_if2< is_supported_blas_type<typename T1::elem_type>::value, typename T1::elem_type >::result
-det
-  (
-  const Base<typename T1::elem_type,T1>& X
-  )
-  {
-  arma_extra_debug_sigprint();
-  
-  return auxlib::det(X.get_ref());
-  }
-
-
-
-template<typename T1>
-arma_warn_unused
-inline
-typename T1::elem_type
-det
-  (
-  const Op<T1, op_diagmat>& X
-  )
+det(const Base<typename T1::elem_type,T1>& X)
   {
   arma_extra_debug_sigprint();
   
   typedef typename T1::elem_type eT;
   
-  const diagmat_proxy<T1> A(X.m);
+  eT out_val = eT(0);
   
-  arma_debug_check( (A.n_rows != A.n_cols), "det(): given matrix must be square sized" );
+  const bool status = op_det::apply_direct(out_val, X.get_ref());
   
-  const uword N = (std::min)(A.n_rows, A.n_cols);
-  
-  eT val1 = eT(1);
-  eT val2 = eT(1);
-  
-  uword i,j;
-  for(i=0, j=1; j<N; i+=2, j+=2)
+  if(status == false)
     {
-    val1 *= A[i];
-    val2 *= A[j];
+    out_val = eT(0);
+    arma_stop_runtime_error("det(): failed to find determinant");
     }
   
-  
-  if(i < N)
-    {
-    val1 *= A[i];
-    }
-  
-  return val1 * val2;
+  return out_val;
   }
 
 
 
 template<typename T1>
-arma_warn_unused
 inline
-typename T1::elem_type
-det
-  (
-  const Op<T1, op_trimat>& X
-  )
+typename enable_if2< is_supported_blas_type<typename T1::elem_type>::value, bool >::result
+det(typename T1::elem_type& out_val, const Base<typename T1::elem_type,T1>& X)
   {
   arma_extra_debug_sigprint();
   
   typedef typename T1::elem_type eT;
   
-  const Proxy<T1> P(X.m);
+  const bool status = op_det::apply_direct(out_val, X.get_ref());
   
-  const uword N = P.get_n_rows();
-  
-  arma_debug_check( (N != P.get_n_cols()), "det(): given matrix must be square sized" );
-  
-  eT val1 = eT(1);
-  eT val2 = eT(1);
-  
-  uword i,j;
-  for(i=0, j=1; j<N; i+=2, j+=2)
+  if(status == false)
     {
-    val1 *= P.at(i,i);
-    val2 *= P.at(j,j);
+    out_val = eT(0);
+    arma_debug_warn_level(3, "det(): failed to find determinant");
     }
   
-  if(i < N)
-    {
-    val1 *= P.at(i,i);
-    }
-  
-  return val1 * val2;
-  }
-
-
-
-//! determinant of inv(A), without doing the inverse operation
-template<typename T1>
-arma_warn_unused
-inline
-typename enable_if2< is_supported_blas_type<typename T1::elem_type>::value, typename T1::elem_type >::result
-det
-  (
-  const Op<T1,op_inv>& X
-  )
-  {
-  arma_extra_debug_sigprint();
-  
-  typedef typename T1::elem_type eT;
-  
-  const eT tmp = det(X.m);
-  
-  if(tmp == eT(0))  { arma_debug_warn("det(): denominator is zero" ); }
-  
-  return eT(1) / tmp;
-  }
-
-
-
-//! NOTE: don't use this form: it will be removed
-template<typename T1>
-arma_deprecated
-inline
-typename enable_if2< is_supported_blas_type<typename T1::elem_type>::value, typename T1::elem_type >::result
-det
-  (
-  const Base<typename T1::elem_type,T1>& X,
-  const bool   // argument kept only for compatibility with old user code
-  )
-  {
-  arma_extra_debug_sigprint();
-  
-  // arma_debug_warn("det(X,bool) is deprecated and will be removed; change to det(X)");
-  
-  return det(X.get_ref());
-  }
-
-
-
-//! NOTE: don't use this form: it will be removed
-template<typename T1>
-arma_deprecated
-inline
-typename enable_if2< is_supported_blas_type<typename T1::elem_type>::value, typename T1::elem_type >::result
-det
-  (
-  const Base<typename T1::elem_type,T1>& X,
-  const char*   // argument kept only for compatibility with old user code
-  )
-  {
-  arma_extra_debug_sigprint();
-  
-  // arma_debug_warn("det(X,char*) is deprecated and will be removed; change to det(X)");
-  
-  return det(X.get_ref());
+  return status;
   }
 
 

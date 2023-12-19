@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -273,7 +275,7 @@ TridiagQR<eT>::matrix_RQ()
   arma_debug_check( (this->computed == false), "newarp::TridiagQR::matrix_RQ(): need to call compute() first" );
 
   // Make a copy of the R matrix
-  Mat<eT> RQ(this->n, this->n, fill::zeros);
+  Mat<eT> RQ(this->n, this->n, arma_zeros_indicator());
   RQ.diag() = this->mat_T.diag();
   RQ.diag(1) = this->mat_T.diag(1);
 

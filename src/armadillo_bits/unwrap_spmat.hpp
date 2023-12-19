@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -36,7 +38,7 @@ struct unwrap_spmat
   const SpMat<eT> M;
   
   template<typename eT2>
-  arma_inline bool is_alias(const SpMat<eT2>&) const { return false; }
+  constexpr bool is_alias(const SpMat<eT2>&) const { return false; }
   };
 
 
@@ -124,7 +126,7 @@ struct unwrap_spmat< SpOp<T1, spop_type> >
   const SpMat<eT> M;
   
   template<typename eT2>
-  arma_inline bool is_alias(const SpMat<eT2>&) const { return false; }
+  constexpr bool is_alias(const SpMat<eT2>&) const { return false; }
   };
 
 
@@ -146,7 +148,7 @@ struct unwrap_spmat< SpGlue<T1, T2, spglue_type> >
   const SpMat<eT> M;
   
   template<typename eT2>
-  arma_inline bool is_alias(const SpMat<eT2>&) const { return false; }
+  constexpr bool is_alias(const SpMat<eT2>&) const { return false; }
   };
 
 
@@ -166,7 +168,7 @@ struct unwrap_spmat< mtSpOp<out_eT, T1, spop_type> >
   const SpMat<out_eT> M;
   
   template<typename eT2>
-  arma_inline bool is_alias(const SpMat<eT2>&) const { return false; }
+  constexpr bool is_alias(const SpMat<eT2>&) const { return false; }
   };
 
 
@@ -186,7 +188,7 @@ struct unwrap_spmat< mtSpGlue<out_eT, T1, T2, spglue_type> >
   const SpMat<out_eT> M;
   
   template<typename eT2>
-  arma_inline bool is_alias(const SpMat<eT2>&) const { return false; }
+  constexpr bool is_alias(const SpMat<eT2>&) const { return false; }
   };
 
 

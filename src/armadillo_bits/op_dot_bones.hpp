@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -26,7 +28,7 @@ class op_dot
   public:
   
   template<typename eT>
-  arma_hot arma_inline static
+  arma_inline static
   typename arma_not_cx<eT>::result
   direct_dot_arma(const uword n_elem, const eT* const A, const eT* const B);
   

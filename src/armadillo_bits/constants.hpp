@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -27,25 +29,18 @@ namespace priv
     template<typename eT>
     static
     typename arma_real_only<eT>::result
-    nan(typename arma_real_only<eT>::result* junk = 0)
+    nan(typename arma_real_only<eT>::result* junk = nullptr)
       {
       arma_ignore(junk);
       
-      if(std::numeric_limits<eT>::has_quiet_NaN)
-        {
-        return std::numeric_limits<eT>::quiet_NaN();
-        }
-      else
-        {
-        return eT(0);
-        }
+      return (std::numeric_limits<eT>::has_quiet_NaN) ? eT(std::numeric_limits<eT>::quiet_NaN()) : eT(0);
       }
     
     
     template<typename eT>
     static
     typename arma_cx_only<eT>::result
-    nan(typename arma_cx_only<eT>::result* junk = 0)
+    nan(typename arma_cx_only<eT>::result* junk = nullptr)
       {
       arma_ignore(junk);
       
@@ -58,7 +53,7 @@ namespace priv
     template<typename eT>
     static
     typename arma_integral_only<eT>::result
-    nan(typename arma_integral_only<eT>::result* junk = 0)
+    nan(typename arma_integral_only<eT>::result* junk = nullptr)
       {
       arma_ignore(junk);
       
@@ -69,25 +64,18 @@ namespace priv
     template<typename eT>
     static
     typename arma_real_only<eT>::result
-    inf(typename arma_real_only<eT>::result* junk = 0)
+    inf(typename arma_real_only<eT>::result* junk = nullptr)
       {
       arma_ignore(junk);
       
-      if(std::numeric_limits<eT>::has_infinity)
-        {
-        return std::numeric_limits<eT>::infinity();
-        }
-      else
-        {
-        return std::numeric_limits<eT>::max();
-        }
+      return (std::numeric_limits<eT>::has_infinity) ? eT(std::numeric_limits<eT>::infinity()) : eT(std::numeric_limits<eT>::max());
       }
     
     
     template<typename eT>
     static
     typename arma_cx_only<eT>::result
-    inf(typename arma_cx_only<eT>::result* junk = 0)
+    inf(typename arma_cx_only<eT>::result* junk = nullptr)
       {
       arma_ignore(junk);
       
@@ -96,24 +84,23 @@ namespace priv
       return eT( Datum_helper::inf<T>(), Datum_helper::inf<T>() );
       }
     
-
+    
     template<typename eT>
     static
     typename arma_integral_only<eT>::result
-    inf(typename arma_integral_only<eT>::result* junk = 0)
+    inf(typename arma_integral_only<eT>::result* junk = nullptr)
       {
       arma_ignore(junk);
       
       return std::numeric_limits<eT>::max();
       }
-    
     };
   }
 
 
 
 //! various constants.
-//! Physical constants taken from NIST 2014 CODATA values, and some from WolframAlpha (values provided as of 2009-06-23)
+//! Physical constants taken from NIST 2018 CODATA values, and some from WolframAlpha (values provided as of 2009-06-23)
 //! http://physics.nist.gov/cuu/Constants
 //! http://www.wolframalpha.com
 //! See also http://en.wikipedia.org/wiki/Physical_constant
@@ -124,17 +111,19 @@ class Datum
   {
   public:
   
-  static const eT pi;       //!< ratio of any circle's circumference to its diameter
-  static const eT e;        //!< base of the natural logarithm
-  static const eT euler;    //!< Euler's constant, aka Euler-Mascheroni constant
-  static const eT gratio;   //!< golden ratio
-  static const eT sqrt2;    //!< square root of 2
-  static const eT sqrt2pi;  //!< square root of 2*pi
-  static const eT eps;      //!< the difference between 1 and the least value greater than 1 that is representable
-  static const eT log_min;  //!< log of the minimum representable value
-  static const eT log_max;  //!< log of the maximum representable value
-  static const eT nan;      //!< "not a number"
-  static const eT inf;      //!< infinity 
+  static const eT pi;           //!< ratio of any circle's circumference to its diameter
+  static const eT tau;          //!< ratio of any circle's circumference to its radius (replacement of 2*pi)
+  static const eT e;            //!< base of the natural logarithm
+  static const eT euler;        //!< Euler's constant, aka Euler-Mascheroni constant
+  static const eT gratio;       //!< golden ratio
+  static const eT sqrt2;        //!< square root of 2
+  static const eT sqrt2pi;      //!< square root of 2*pi
+  static const eT log_sqrt2pi;  //!< log of square root of 2*pi
+  static const eT eps;          //!< the difference between 1 and the least value greater than 1 that is representable
+  static const eT log_min;      //!< log of the minimum representable value
+  static const eT log_max;      //!< log of the maximum representable value
+  static const eT nan;          //!< "not a number"
+  static const eT inf;          //!< infinity 
 
   // 
   
@@ -173,52 +162,54 @@ class Datum
 // the long lengths of the constants are for future support of "long double"
 // and any smart compiler that does high-precision computation at compile-time
   
-template<typename eT> const eT Datum<eT>::pi        = eT(3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679);
-template<typename eT> const eT Datum<eT>::e         = eT(2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274);
-template<typename eT> const eT Datum<eT>::euler     = eT(0.5772156649015328606065120900824024310421593359399235988057672348848677267776646709369470632917467495);
-template<typename eT> const eT Datum<eT>::gratio    = eT(1.6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374);
-template<typename eT> const eT Datum<eT>::sqrt2     = eT(1.4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727);
-template<typename eT> const eT Datum<eT>::sqrt2pi   = eT(2.5066282746310005024157652848110452530069867406099383166299235763422936546078419749465958383780572661);
-template<typename eT> const eT Datum<eT>::eps       = std::numeric_limits<eT>::epsilon();
-template<typename eT> const eT Datum<eT>::log_min   = std::log(std::numeric_limits<eT>::min());
-template<typename eT> const eT Datum<eT>::log_max   = std::log(std::numeric_limits<eT>::max());
-template<typename eT> const eT Datum<eT>::nan       = priv::Datum_helper::nan<eT>();
-template<typename eT> const eT Datum<eT>::inf       = priv::Datum_helper::inf<eT>();
+template<typename eT> const eT Datum<eT>::pi          = eT(3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679);
+template<typename eT> const eT Datum<eT>::tau         = eT(6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359);
+template<typename eT> const eT Datum<eT>::e           = eT(2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274);
+template<typename eT> const eT Datum<eT>::euler       = eT(0.5772156649015328606065120900824024310421593359399235988057672348848677267776646709369470632917467495);
+template<typename eT> const eT Datum<eT>::gratio      = eT(1.6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374);
+template<typename eT> const eT Datum<eT>::sqrt2       = eT(1.4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727);
+template<typename eT> const eT Datum<eT>::sqrt2pi     = eT(2.5066282746310005024157652848110452530069867406099383166299235763422936546078419749465958383780572661);
+template<typename eT> const eT Datum<eT>::log_sqrt2pi = eT(0.9189385332046727417803297364056176398613974736377834128171515404827656959272603976947432986359541976);
+template<typename eT> const eT Datum<eT>::eps         = std::numeric_limits<eT>::epsilon();
+template<typename eT> const eT Datum<eT>::log_min     = std::log(std::numeric_limits<eT>::min());
+template<typename eT> const eT Datum<eT>::log_max     = std::log(std::numeric_limits<eT>::max());
+template<typename eT> const eT Datum<eT>::nan         = priv::Datum_helper::nan<eT>();
+template<typename eT> const eT Datum<eT>::inf         = priv::Datum_helper::inf<eT>();
 
-template<typename eT> const eT Datum<eT>::m_u       = eT(1.660539040e-27);
-template<typename eT> const eT Datum<eT>::N_A       = eT(6.022140857e23);
-template<typename eT> const eT Datum<eT>::k         = eT(1.38064852e-23);
-template<typename eT> const eT Datum<eT>::k_evk     = eT(8.6173303e-5);
-template<typename eT> const eT Datum<eT>::a_0       = eT(0.52917721067e-10);
-template<typename eT> const eT Datum<eT>::mu_B      = eT(927.4009994e-26);
-template<typename eT> const eT Datum<eT>::Z_0       = eT(376.730313461771);
-template<typename eT> const eT Datum<eT>::G_0       = eT(7.7480917310e-5);
-template<typename eT> const eT Datum<eT>::k_e       = eT(8.9875517873681764e9);
-template<typename eT> const eT Datum<eT>::eps_0     = eT(8.85418781762039e-12);
-template<typename eT> const eT Datum<eT>::m_e       = eT(9.10938356e-31);
-template<typename eT> const eT Datum<eT>::eV        = eT(1.6021766208e-19);
-template<typename eT> const eT Datum<eT>::ec        = eT(1.6021766208e-19);
-template<typename eT> const eT Datum<eT>::F         = eT(96485.33289);
-template<typename eT> const eT Datum<eT>::alpha     = eT(7.2973525664e-3);
-template<typename eT> const eT Datum<eT>::alpha_inv = eT(137.035999139);
-template<typename eT> const eT Datum<eT>::K_J       = eT(483597.8525e9);
-template<typename eT> const eT Datum<eT>::mu_0      = eT(1.25663706143592e-06);
-template<typename eT> const eT Datum<eT>::phi_0     = eT(2.067833667e-15);
-template<typename eT> const eT Datum<eT>::R         = eT(8.3144598);
-template<typename eT> const eT Datum<eT>::G         = eT(6.67408e-11);
-template<typename eT> const eT Datum<eT>::h         = eT(6.626070040e-34);
-template<typename eT> const eT Datum<eT>::h_bar     = eT(1.054571800e-34);
-template<typename eT> const eT Datum<eT>::m_p       = eT(1.672621898e-27);
-template<typename eT> const eT Datum<eT>::R_inf     = eT(10973731.568508);
+template<typename eT> const eT Datum<eT>::m_u       = eT(1.66053906660e-27);
+template<typename eT> const eT Datum<eT>::N_A       = eT(6.02214076e23);
+template<typename eT> const eT Datum<eT>::k         = eT(1.380649e-23);
+template<typename eT> const eT Datum<eT>::k_evk     = eT(8.617333262e-5);
+template<typename eT> const eT Datum<eT>::a_0       = eT(5.29177210903e-11);
+template<typename eT> const eT Datum<eT>::mu_B      = eT(9.2740100783e-24);
+template<typename eT> const eT Datum<eT>::Z_0       = eT(376.730313668);
+template<typename eT> const eT Datum<eT>::G_0       = eT(7.748091729e-5);
+template<typename eT> const eT Datum<eT>::k_e       = eT(8.9875517923e9);
+template<typename eT> const eT Datum<eT>::eps_0     = eT(8.8541878128e-12);
+template<typename eT> const eT Datum<eT>::m_e       = eT(9.1093837015e-31);
+template<typename eT> const eT Datum<eT>::eV        = eT(1.602176634e-19);
+template<typename eT> const eT Datum<eT>::ec        = eT(1.602176634e-19);
+template<typename eT> const eT Datum<eT>::F         = eT(96485.33212);
+template<typename eT> const eT Datum<eT>::alpha     = eT(7.2973525693e-3);
+template<typename eT> const eT Datum<eT>::alpha_inv = eT(137.035999084);
+template<typename eT> const eT Datum<eT>::K_J       = eT(483597.8484e9);
+template<typename eT> const eT Datum<eT>::mu_0      = eT(1.25663706212e-6);
+template<typename eT> const eT Datum<eT>::phi_0     = eT(2.067833848e-15);
+template<typename eT> const eT Datum<eT>::R         = eT(8.314462618);
+template<typename eT> const eT Datum<eT>::G         = eT(6.67430e-11);
+template<typename eT> const eT Datum<eT>::h         = eT(6.62607015e-34);
+template<typename eT> const eT Datum<eT>::h_bar     = eT(1.054571817e-34);
+template<typename eT> const eT Datum<eT>::m_p       = eT(1.67262192369e-27);
+template<typename eT> const eT Datum<eT>::R_inf     = eT(10973731.568160);
 template<typename eT> const eT Datum<eT>::c_0       = eT(299792458.0);
-template<typename eT> const eT Datum<eT>::sigma     = eT(5.670367e-8);
-template<typename eT> const eT Datum<eT>::R_k       = eT(25812.8074555);
-template<typename eT> const eT Datum<eT>::b         = eT(2.8977729e-3);
+template<typename eT> const eT Datum<eT>::sigma     = eT(5.670374419e-8);
+template<typename eT> const eT Datum<eT>::R_k       = eT(25812.80745);
+template<typename eT> const eT Datum<eT>::b         = eT(2.897771955e-3);
 
 
 
-typedef Datum<float>  fdatum;
-typedef Datum<double> datum;
+typedef Datum<float >  fdatum;
+typedef Datum<double>   datum;
 
 
 
@@ -228,62 +219,40 @@ namespace priv
   
   template<typename eT>
   static
-  arma_inline
+  constexpr
   typename arma_real_only<eT>::result
-  most_neg(typename arma_real_only<eT>::result* junk = 0)
+  most_neg()
     {
-    arma_ignore(junk);
-    
-    if(std::numeric_limits<eT>::has_infinity)
-      {
-      return -(std::numeric_limits<eT>::infinity());
-      }
-    else
-      {
-      return -(std::numeric_limits<eT>::max());
-      }
+    return (std::numeric_limits<eT>::has_infinity) ? -(std::numeric_limits<eT>::infinity()) : std::numeric_limits<eT>::lowest();
     }
   
   
   template<typename eT>
   static
-  arma_inline
+  constexpr
   typename arma_integral_only<eT>::result
-  most_neg(typename arma_integral_only<eT>::result* junk = 0)
+  most_neg()
     {
-    arma_ignore(junk);
-    
-    return std::numeric_limits<eT>::min();
+    return std::numeric_limits<eT>::lowest();
     }
   
   
   template<typename eT>
   static
-  arma_inline
+  constexpr
   typename arma_real_only<eT>::result
-  most_pos(typename arma_real_only<eT>::result* junk = 0)
+  most_pos()
     {
-    arma_ignore(junk);
-    
-    if(std::numeric_limits<eT>::has_infinity)
-      {
-      return std::numeric_limits<eT>::infinity();
-      }
-    else
-      {
-      return std::numeric_limits<eT>::max();
-      }
+    return (std::numeric_limits<eT>::has_infinity) ? std::numeric_limits<eT>::infinity() : std::numeric_limits<eT>::max();
     }
   
   
   template<typename eT>
   static
-  arma_inline
+  constexpr
   typename arma_integral_only<eT>::result
-  most_pos(typename arma_integral_only<eT>::result* junk = 0)
+  most_pos()
     {
-    arma_ignore(junk);
-    
     return std::numeric_limits<eT>::max();
     }
 

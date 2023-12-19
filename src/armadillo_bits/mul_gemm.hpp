@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -189,7 +191,7 @@ class gemm_emul
     const TB&      B,
     const eT       alpha = eT(1),
     const eT       beta  = eT(0),
-    const typename arma_not_cx<eT>::result* junk = 0
+    const typename arma_not_cx<eT>::result* junk = nullptr
     )
     {
     arma_extra_debug_sigprint();
@@ -212,7 +214,7 @@ class gemm_emul
     const Mat<eT>& B,
     const eT       alpha = eT(1),
     const eT       beta  = eT(0),
-    const typename arma_cx_only<eT>::result* junk = 0
+    const typename arma_cx_only<eT>::result* junk = nullptr
     )
     {
     arma_extra_debug_sigprint();
@@ -237,8 +239,8 @@ class gemm_emul
 
 
 //! \brief
-//! Wrapper for ATLAS/BLAS dgemm function, using template arguments to control the arguments passed to dgemm.
-//! Matrix 'C' is assumed to have been set to the correct size (i.e. taking into account transposes)
+//! Wrapper for BLAS dgemm function, using template arguments to control the arguments passed to dgemm.
+//! Matrix 'C' is assumed to have been set to the correct size (ie. taking into account transposes)
 
 template<const bool do_trans_A=false, const bool do_trans_B=false, const bool use_alpha=false, const bool use_beta=false>
 class gemm
@@ -261,7 +263,7 @@ class gemm
         }
       else
         {
-        Mat<eT> BB(B.n_rows, B.n_rows);
+        Mat<eT> BB(B.n_rows, B.n_rows, arma_nozeros_indicator());
         
         op_strans::apply_mat_noalias_tinysq(BB, B);
         
@@ -278,9 +280,9 @@ class gemm
         
         atlas::cblas_gemm<eT>
           (
-          atlas::CblasColMajor,
-          (do_trans_A) ? ( is_cx<eT>::yes ? CblasConjTrans : atlas::CblasTrans ) : atlas::CblasNoTrans,
-          (do_trans_B) ? ( is_cx<eT>::yes ? CblasConjTrans : atlas::CblasTrans ) : atlas::CblasNoTrans,
+          atlas_CblasColMajor,
+          (do_trans_A) ? ( is_cx<eT>::yes ? atlas_CblasConjTrans : atlas_CblasTrans ) : atlas_CblasNoTrans,
+          (do_trans_B) ? ( is_cx<eT>::yes ? atlas_CblasConjTrans : atlas_CblasTrans ) : atlas_CblasNoTrans,
           C.n_rows,
           C.n_cols,
           (do_trans_A) ? A.n_rows : A.n_cols,

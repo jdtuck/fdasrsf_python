@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -34,7 +36,7 @@ conv(const T1& A, const T2& B, const char* shape = "full")
   {
   arma_extra_debug_sigprint();
   
-  const char sig = (shape != NULL) ? shape[0] : char(0);
+  const char sig = (shape != nullptr) ? shape[0] : char(0);
   
   arma_debug_check( ((sig != 'f') && (sig != 's')), "conv(): unsupported value of 'shape' parameter" );
   
@@ -58,7 +60,7 @@ conv2(const T1& A, const T2& B, const char* shape = "full")
   {
   arma_extra_debug_sigprint();
   
-  const char sig = (shape != NULL) ? shape[0] : char(0);
+  const char sig = (shape != nullptr) ? shape[0] : char(0);
   
   arma_debug_check( ((sig != 'f') && (sig != 's')), "conv2(): unsupported value of 'shape' parameter" );
   

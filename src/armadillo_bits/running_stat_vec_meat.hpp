@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -82,7 +84,6 @@ running_stat_vec<obj_type>::operator=(const running_stat_vec<obj_type>& in_rsv)
 //! update statistics to reflect new sample
 template<typename obj_type>
 template<typename T1>
-arma_hot
 inline
 void
 running_stat_vec<obj_type>::operator() (const Base<typename running_stat_vec<obj_type>::T, T1>& X)
@@ -97,9 +98,9 @@ running_stat_vec<obj_type>::operator() (const Base<typename running_stat_vec<obj
     return;
     }
   
-  if( sample.is_finite() == false )
+  if( sample.internal_has_nonfinite() )
     {
-    arma_debug_warn("running_stat_vec: sample ignored as it has non-finite elements");
+    arma_debug_warn_level(3, "running_stat_vec: sample ignored as it has non-finite elements");
     return;
     }
   
@@ -110,7 +111,6 @@ running_stat_vec<obj_type>::operator() (const Base<typename running_stat_vec<obj
 
 template<typename obj_type>
 template<typename T1>
-arma_hot
 inline
 void
 running_stat_vec<obj_type>::operator() (const Base< std::complex<typename running_stat_vec<obj_type>::T>, T1>& X)
@@ -126,9 +126,9 @@ running_stat_vec<obj_type>::operator() (const Base< std::complex<typename runnin
     return;
     }
   
-  if( sample.is_finite() == false )
+  if( sample.internal_has_nonfinite() )
     {
-    arma_debug_warn("running_stat_vec: sample ignored as it has non-finite elements");
+    arma_debug_warn_level(3, "running_stat_vec: sample ignored as it has non-finite elements");
     return;
     }
   
@@ -427,7 +427,7 @@ running_stat_vec_aux::update_stats
     }
   else
     {
-    arma_debug_check( (sample.is_vec() == false), "running_stat_vec(): given sample is not a vector");
+    arma_debug_check( (sample.is_vec() == false), "running_stat_vec(): given sample must be a vector" );
     
     x.r_mean.set_size(sample.n_rows, sample.n_cols);
     
@@ -588,7 +588,7 @@ running_stat_vec_aux::update_stats
     }
   else
     {
-    arma_debug_check( (sample.is_vec() == false), "running_stat_vec(): given sample is not a vector");
+    arma_debug_check( (sample.is_vec() == false), "running_stat_vec(): given sample must be a vector" );
     
     x.r_mean.set_size(sample.n_rows, sample.n_cols);
     

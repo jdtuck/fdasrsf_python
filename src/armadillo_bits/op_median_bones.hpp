@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -32,31 +34,33 @@ arma_inline
 bool
 operator< (const arma_cx_median_packet<T>& A, const arma_cx_median_packet<T>& B)
   {
-  return A.val < B.val;
+  return (A.val < B.val);
   }
 
 
 
-//! Class for finding median values of a matrix
 class op_median
   : public traits_op_xvec
   {
   public:
   
   template<typename T1>
-  inline static void apply(Mat<typename T1::elem_type>& out, const Op<T1,op_median>& in);
+  inline static void apply(Mat<typename T1::elem_type>& out, const Op<T1,op_median>& expr);
   
-  template<typename T, typename T1>
-  inline static void apply(Mat< std::complex<T> >& out, const Op<T1,op_median>& in);
+  template<typename eT>
+  inline static void apply_noalias(Mat<eT>& out, const Mat<eT>& X, const uword dim, const typename arma_not_cx<eT>::result* junk = nullptr);
+  
+  template<typename eT>
+  inline static void apply_noalias(Mat<eT>& out, const Mat<eT>& X, const uword dim, const typename arma_cx_only<eT>::result* junk = nullptr);
   
   //
   //
   
   template<typename T1>
-  inline static typename T1::elem_type median_vec(const T1& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = 0);
+  inline static typename T1::elem_type median_vec(const T1& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = nullptr);
   
   template<typename T1>
-  inline static typename T1::elem_type median_vec(const T1& X, const typename arma_cx_only<typename T1::elem_type>::result* junk = 0);
+  inline static typename T1::elem_type median_vec(const T1& X, const typename arma_cx_only<typename T1::elem_type>::result* junk = nullptr);
   
   //
   //

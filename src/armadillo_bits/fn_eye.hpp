@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -47,20 +49,13 @@ template<typename obj_type>
 arma_warn_unused
 arma_inline
 const Gen<obj_type, gen_eye>
-eye(const uword n_rows, const uword n_cols, const typename arma_Mat_Col_Row_only<obj_type>::result* junk = 0)
+eye(const uword n_rows, const uword n_cols, const typename arma_Mat_Col_Row_only<obj_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  if(is_Col<obj_type>::value)
-    {
-    arma_debug_check( (n_cols != 1), "eye(): incompatible size" );
-    }
-  else
-  if(is_Row<obj_type>::value)
-    {
-    arma_debug_check( (n_rows != 1), "eye(): incompatible size" );
-    }
+  if(is_Col<obj_type>::value)  { arma_debug_check( (n_cols != 1), "eye(): incompatible size" ); }
+  if(is_Row<obj_type>::value)  { arma_debug_check( (n_rows != 1), "eye(): incompatible size" ); }
   
   return Gen<obj_type, gen_eye>(n_rows, n_cols);
   }
@@ -71,7 +66,7 @@ template<typename obj_type>
 arma_warn_unused
 arma_inline
 const Gen<obj_type, gen_eye>
-eye(const SizeMat& s, const typename arma_Mat_Col_Row_only<obj_type>::result* junk = 0)
+eye(const SizeMat& s, const typename arma_Mat_Col_Row_only<obj_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
@@ -85,20 +80,13 @@ template<typename obj_type>
 arma_warn_unused
 inline
 obj_type
-eye(const uword n_rows, const uword n_cols, const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = NULL)
+eye(const uword n_rows, const uword n_cols, const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  if(is_SpCol<obj_type>::value)
-    {
-    arma_debug_check( (n_cols != 1), "eye(): incompatible size" );
-    }
-  else
-  if(is_SpRow<obj_type>::value)
-    {
-    arma_debug_check( (n_rows != 1), "eye(): incompatible size" );
-    }
+  if(is_SpCol<obj_type>::value)  { arma_debug_check( (n_cols != 1), "eye(): incompatible size" ); }
+  if(is_SpRow<obj_type>::value)  { arma_debug_check( (n_rows != 1), "eye(): incompatible size" ); }
   
   obj_type out;
   
@@ -113,7 +101,7 @@ template<typename obj_type>
 arma_warn_unused
 inline
 obj_type
-eye(const SizeMat& s, const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = NULL)
+eye(const SizeMat& s, const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -15,7 +17,7 @@
 
 
 
-#ifdef ARMA_USE_ARPACK
+#if defined(ARMA_USE_ARPACK)
 
 //! \namespace arpack namespace for ARPACK functions
 namespace arpack
@@ -33,12 +35,12 @@ namespace arpack
     #if defined(ARMA_USE_FORTRAN_HIDDEN_ARGS)
            if(    is_float<eT>::value)  { typedef float     T; arma_ignore(rwork); arma_fortran(arma_snaupd)(ido, bmat, n, which, nev,  (T*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl,              info, 1, 1); }
       else if(   is_double<eT>::value)  { typedef double    T; arma_ignore(rwork); arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev,  (T*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl,              info, 1, 1); }
-      else if (is_cx_float<eT>::value)  { typedef cx_float  T; typedef float  xT;  arma_fortran(arma_cnaupd)(ido, bmat, n, which, nev, (xT*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl, (xT*) rwork, info, 1, 1); }
+      else if( is_cx_float<eT>::value)  { typedef cx_float  T; typedef float  xT;  arma_fortran(arma_cnaupd)(ido, bmat, n, which, nev, (xT*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl, (xT*) rwork, info, 1, 1); }
       else if(is_cx_double<eT>::value)  { typedef cx_double T; typedef double xT;  arma_fortran(arma_znaupd)(ido, bmat, n, which, nev, (xT*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl, (xT*) rwork, info, 1, 1); }
     #else
            if(    is_float<eT>::value)  { typedef float     T; arma_ignore(rwork); arma_fortran(arma_snaupd)(ido, bmat, n, which, nev,  (T*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl,              info); }
       else if(   is_double<eT>::value)  { typedef double    T; arma_ignore(rwork); arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev,  (T*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl,              info); }
-      else if (is_cx_float<eT>::value)  { typedef cx_float  T; typedef float  xT;  arma_fortran(arma_cnaupd)(ido, bmat, n, which, nev, (xT*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl, (xT*) rwork, info); }
+      else if( is_cx_float<eT>::value)  { typedef cx_float  T; typedef float  xT;  arma_fortran(arma_cnaupd)(ido, bmat, n, which, nev, (xT*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl, (xT*) rwork, info); }
       else if(is_cx_double<eT>::value)  { typedef cx_double T; typedef double xT;  arma_fortran(arma_znaupd)(ido, bmat, n, which, nev, (xT*) tol, (T*) resid, ncv, (T*) v, ldv, iparam, ipntr, (T*) workd, (T*) workl, lworkl, (xT*) rwork, info); }
     #endif
     }

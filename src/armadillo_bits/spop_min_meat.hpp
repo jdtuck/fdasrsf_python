@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -71,8 +73,8 @@ spop_min::apply_proxy
   
   if(dim == 0) // find the minimum in each column
     {
-    Row<eT> value(p_n_cols, fill::zeros);
-    urowvec count(p_n_cols, fill::zeros);
+    Row<eT> value(p_n_cols, arma_zeros_indicator());
+    urowvec count(p_n_cols, arma_zeros_indicator());
     
     while(it != it_end)
       {
@@ -93,8 +95,8 @@ spop_min::apply_proxy
   else
   if(dim == 1)  // find the minimum in each row
     {
-    Col<eT> value(p_n_rows, fill::zeros);
-    ucolvec count(p_n_rows, fill::zeros);
+    Col<eT> value(p_n_rows, arma_zeros_indicator());
+    ucolvec count(p_n_rows, arma_zeros_indicator());
     
     while(it != it_end)
       {
@@ -150,7 +152,7 @@ spop_min::vector_min
       }
     else
       {
-      return std::min(eT(0), op_min::direct_min(p.get_values(), p.get_n_nonzero()));
+      return (std::min)(eT(0), op_min::direct_min(p.get_values(), p.get_n_nonzero()));
       }
     }
   else
@@ -175,7 +177,7 @@ spop_min::vector_min
       }
     else
       {
-      return std::min(eT(0), result);
+      return (std::min)(eT(0), result);
       }
     }
   }
@@ -213,9 +215,9 @@ spop_min::min(const SpBase<typename T1::elem_type, T1>& X)
     it_type it     = P.begin();
     it_type it_end = P.end();
 
-    while (it != it_end)
+    while(it != it_end)
       {
-      if ((*it) < min_val)  { min_val = *it; }
+      if((*it) < min_val)  { min_val = *it; }
       
       ++it;
       }
@@ -234,7 +236,7 @@ spop_min::min(const SpBase<typename T1::elem_type, T1>& X)
     }
   else
     {
-    return std::min(eT(0), min_val);
+    return (std::min)(eT(0), min_val);
     }
   }
 
@@ -272,9 +274,9 @@ spop_min::min_with_index(const SpProxy<T1>& P, uword& index_of_min_val)
     it_type it     = P.begin();
     it_type it_end = P.end();
     
-    while (it != it_end)
+    while(it != it_end)
       {
-      if ((*it) < min_val)
+      if((*it) < min_val)
         {
         min_val = *it;
         index_of_min_val = it.row() + it.col() * n_rows;
@@ -291,14 +293,14 @@ spop_min::min_with_index(const SpProxy<T1>& P, uword& index_of_min_val)
     // Convert to actual position in matrix.
     const uword row = P.get_row_indices()[index_of_min_val];
     uword col = 0;
-    while (P.get_col_ptrs()[++col] < index_of_min_val + 1) { }
+    while(P.get_col_ptrs()[++col] < index_of_min_val + 1) { }
     index_of_min_val = (col - 1) * n_rows + row;
     }
   
   
   if(n_elem != n_nonzero)
     {
-    min_val = std::min(eT(0), min_val);
+    min_val = (std::min)(eT(0), min_val);
 
     // If the min_val is a nonzero element, we need its actual position in the matrix.
     if(min_val == eT(0))
@@ -312,25 +314,25 @@ spop_min::min_with_index(const SpProxy<T1>& P, uword& index_of_min_val)
       it_type it     = P.begin();
       it_type it_end = P.end();
       
-      while (it != it_end)
+      while(it != it_end)
         {
         // Have we moved more than one position from the last place?
-        if ((it.col() == last_col) && (it.row() - last_row > 1))
+        if((it.col() == last_col) && (it.row() - last_row > 1))
           {
           index_of_min_val = it.col() * n_rows + last_row + 1;
           break;
           }
-        else if ((it.col() >= last_col + 1) && (last_row < n_rows - 1))
+        else if((it.col() >= last_col + 1) && (last_row < n_rows - 1))
           {
           index_of_min_val = last_col * n_rows + last_row + 1;
           break;
           }
-        else if ((it.col() == last_col + 1) && (it.row() > 0))
+        else if((it.col() == last_col + 1) && (it.row() > 0))
           {
           index_of_min_val = it.col() * n_rows;
           break;
           }
-        else if (it.col() > last_col + 1)
+        else if(it.col() > last_col + 1)
           {
           index_of_min_val = (last_col + 1) * n_rows;
           break;
@@ -373,9 +375,9 @@ spop_min::apply_proxy
   
   if(dim == 0) // find the minimum in each column
     {
-    Row<eT> rawval(p_n_cols, fill::zeros);
-    Row< T> absval(p_n_cols, fill::zeros);
-    urowvec  count(p_n_cols, fill::zeros);
+    Row<eT> rawval(p_n_cols, arma_zeros_indicator());
+    Row< T> absval(p_n_cols, arma_zeros_indicator());
+    urowvec  count(p_n_cols, arma_zeros_indicator());
     
     while(it != it_end)
       {
@@ -415,9 +417,9 @@ spop_min::apply_proxy
   else
   if(dim == 1)  // find the minimum in each row
     {
-    Col<eT> rawval(p_n_rows, fill::zeros);
-    Col< T> absval(p_n_rows, fill::zeros);
-    ucolvec  count(p_n_rows, fill::zeros);
+    Col<eT> rawval(p_n_rows, arma_zeros_indicator());
+    Col< T> absval(p_n_rows, arma_zeros_indicator());
+    ucolvec  count(p_n_rows, arma_zeros_indicator());
     
     while(it != it_end)
       {
@@ -572,11 +574,11 @@ spop_min::min(const SpBase<typename T1::elem_type, T1>& X)
     it_type it     = P.begin();
     it_type it_end = P.end();
     
-    while (it != it_end)
+    while(it != it_end)
       {
       const T tmp_val = std::abs(*it);
       
-      if (tmp_val < min_val)
+      if(tmp_val < min_val)
         {
         min_val = tmp_val;
         ret_val = *it;
@@ -639,11 +641,11 @@ spop_min::min_with_index(const SpProxy<T1>& P, uword& index_of_min_val)
     it_type it     = P.begin();
     it_type it_end = P.end();
     
-    while (it != it_end)
+    while(it != it_end)
       {
       const T tmp_val = std::abs(*it);
       
-      if (tmp_val < min_val)
+      if(tmp_val < min_val)
         {
                  min_val = tmp_val;
         index_of_min_val = it.row() + it.col() * n_rows;
@@ -660,14 +662,14 @@ spop_min::min_with_index(const SpProxy<T1>& P, uword& index_of_min_val)
     // Convert to actual position in matrix.
     const uword row = P.get_row_indices()[index_of_min_val];
     uword col = 0;
-    while (P.get_col_ptrs()[++col] < index_of_min_val + 1) { }
+    while(P.get_col_ptrs()[++col] < index_of_min_val + 1) { }
     index_of_min_val = (col - 1) * n_rows + row;
     }
   
   
   if(n_elem != n_nonzero)
     {
-    min_val = std::min(T(0), min_val);
+    min_val = (std::min)(T(0), min_val);
 
     // If the min_val is a nonzero element, we need its actual position in the matrix.
     if(min_val == T(0))
@@ -681,25 +683,25 @@ spop_min::min_with_index(const SpProxy<T1>& P, uword& index_of_min_val)
       it_type it     = P.begin();
       it_type it_end = P.end();
       
-      while (it != it_end)
+      while(it != it_end)
         {
         // Have we moved more than one position from the last place?
-        if ((it.col() == last_col) && (it.row() - last_row > 1))
+        if((it.col() == last_col) && (it.row() - last_row > 1))
           {
           index_of_min_val = it.col() * n_rows + last_row + 1;
           break;
           }
-        else if ((it.col() >= last_col + 1) && (last_row < n_rows - 1))
+        else if((it.col() >= last_col + 1) && (last_row < n_rows - 1))
           {
           index_of_min_val = last_col * n_rows + last_row + 1;
           break;
           }
-        else if ((it.col() == last_col + 1) && (it.row() > 0))
+        else if((it.col() == last_col + 1) && (it.row() > 0))
           {
           index_of_min_val = it.col() * n_rows;
           break;
           }
-        else if (it.col() > last_col + 1)
+        else if(it.col() > last_col + 1)
           {
           index_of_min_val = (last_col + 1) * n_rows;
           break;

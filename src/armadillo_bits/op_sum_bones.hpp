@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -37,9 +39,6 @@ class op_sum
   template<typename T1>
   arma_hot inline static void apply_noalias_proxy(Mat<typename T1::elem_type>& out, const Proxy<T1>& P, const uword dim);
   
-  template<typename T1>
-  arma_hot inline static void apply_noalias_proxy_mp(Mat<typename T1::elem_type>& out, const Proxy<T1>& P, const uword dim);
-  
   
   // cubes
   
@@ -54,9 +53,6 @@ class op_sum
   
   template<typename T1>
   arma_hot inline static void apply_noalias_proxy(Cube<typename T1::elem_type>& out, const ProxyCube<T1>& P, const uword dim);
-  
-  template<typename T1>
-  arma_hot inline static void apply_noalias_proxy_mp(Cube<typename T1::elem_type>& out, const ProxyCube<T1>& P, const uword dim);
   };
 
 

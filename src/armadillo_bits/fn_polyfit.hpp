@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -36,7 +38,7 @@ polyfit(Mat<typename T1::elem_type>& out, const Base<typename T1::elem_type, T1>
   if(status == false)
     {
     out.soft_reset();
-    arma_debug_warn("polyfit(): failed");
+    arma_debug_warn_level(3, "polyfit(): failed");
     }
   
   return status;

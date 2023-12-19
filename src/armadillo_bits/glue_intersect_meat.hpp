@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -76,7 +78,7 @@ glue_intersect::apply(Mat<typename T1::elem_type>& out, uvec& iA, uvec& iB, cons
   
   const uword C_n_elem = A_uniq.n_elem + B_uniq.n_elem;
   
-  Col<eT> C(C_n_elem);
+  Col<eT> C(C_n_elem, arma_nozeros_indicator());
   
   arrayops::copy(C.memptr(),                 A_uniq.memptr(), A_uniq.n_elem);
   arrayops::copy(C.memptr() + A_uniq.n_elem, B_uniq.memptr(), B_uniq.n_elem);
@@ -96,7 +98,7 @@ glue_intersect::apply(Mat<typename T1::elem_type>& out, uvec& iA, uvec& iB, cons
   
   const eT* C_sorted_mem = C_sorted.memptr();
   
-  uvec   jj(C_n_elem);  // worst case length
+  uvec   jj(C_n_elem, arma_nozeros_indicator());  // worst case length
   
   uword* jj_mem   = jj.memptr();  
   uword  jj_count = 0;

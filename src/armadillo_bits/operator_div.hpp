@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -23,7 +25,7 @@
 template<typename T1>
 arma_inline
 typename
-enable_if2< is_arma_type<T1>::value, const eOp<T1, eop_scalar_div_post> >::result
+enable_if2< is_arma_type<T1>::value, const eOp< T1, eop_scalar_div_post> >::result
 operator/
   (
   const T1&                    X,
@@ -41,7 +43,7 @@ operator/
 template<typename T1>
 arma_inline
 typename
-enable_if2< is_arma_type<T1>::value, const eOp<T1, eop_scalar_div_pre> >::result
+enable_if2< is_arma_type<T1>::value, const eOp< T1, eop_scalar_div_pre> >::result
 operator/
   (
   const typename T1::elem_type k,
@@ -154,7 +156,7 @@ operator/
 template<typename T1>
 inline
 typename
-enable_if2<is_arma_sparse_type<T1>::value, SpMat<typename T1::elem_type> >::result
+enable_if2< is_arma_sparse_type<T1>::value, SpMat<typename T1::elem_type> >::result
 operator/
   (
   const T1&                    X,
@@ -300,7 +302,7 @@ operator/
   
   arma_debug_assert_same_size(n_rows, n_cols, pb.get_n_rows(), pb.get_n_cols(), "element-wise division");
   
-  Mat<eT> result(n_rows, n_cols);
+  Mat<eT> result(n_rows, n_cols, arma_nozeros_indicator());
   
   for(uword col=0; col < n_cols; ++col)
   for(uword row=0; row < n_rows; ++row)

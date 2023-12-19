@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -163,7 +165,7 @@
 
 
 
-#if (defined(ARMA_USE_OPENMP) && defined(ARMA_USE_CXX11))
+#if defined(ARMA_USE_OPENMP)
   
   #define arma_applier_1_mp(operatorA) \
     {\
@@ -239,7 +241,6 @@
 
 template<typename eop_type>
 template<typename outT, typename T1>
-arma_hot
 inline
 void
 eop_core<eop_type>::apply(outT& out, const eOp<T1, eop_type>& x)
@@ -254,7 +255,7 @@ eop_core<eop_type>::apply(outT& out, const eOp<T1, eop_type>& x)
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(Proxy<T1>::use_at == false)
     {
@@ -315,7 +316,6 @@ eop_core<eop_type>::apply(outT& out, const eOp<T1, eop_type>& x)
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
 inline
 void
 eop_core<eop_type>::apply_inplace_plus(Mat<typename T1::elem_type>& out, const eOp<T1, eop_type>& x)
@@ -332,7 +332,7 @@ eop_core<eop_type>::apply_inplace_plus(Mat<typename T1::elem_type>& out, const e
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(Proxy<T1>::use_at == false)
     {
@@ -390,7 +390,7 @@ eop_core<eop_type>::apply_inplace_plus(Mat<typename T1::elem_type>& out, const e
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply_inplace_minus(Mat<typename T1::elem_type>& out, const eOp<T1, eop_type>& x)
@@ -407,7 +407,7 @@ eop_core<eop_type>::apply_inplace_minus(Mat<typename T1::elem_type>& out, const 
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(Proxy<T1>::use_at == false)
     {
@@ -465,7 +465,7 @@ eop_core<eop_type>::apply_inplace_minus(Mat<typename T1::elem_type>& out, const 
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply_inplace_schur(Mat<typename T1::elem_type>& out, const eOp<T1, eop_type>& x)
@@ -482,7 +482,7 @@ eop_core<eop_type>::apply_inplace_schur(Mat<typename T1::elem_type>& out, const 
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(Proxy<T1>::use_at == false)
     {
@@ -540,7 +540,7 @@ eop_core<eop_type>::apply_inplace_schur(Mat<typename T1::elem_type>& out, const 
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply_inplace_div(Mat<typename T1::elem_type>& out, const eOp<T1, eop_type>& x)
@@ -557,7 +557,7 @@ eop_core<eop_type>::apply_inplace_div(Mat<typename T1::elem_type>& out, const eO
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOp<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(Proxy<T1>::use_at == false)
     {
@@ -620,7 +620,7 @@ eop_core<eop_type>::apply_inplace_div(Mat<typename T1::elem_type>& out, const eO
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply(Cube<typename T1::elem_type>& out, const eOpCube<T1, eop_type>& x)
@@ -635,7 +635,7 @@ eop_core<eop_type>::apply(Cube<typename T1::elem_type>& out, const eOpCube<T1, e
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(ProxyCube<T1>::use_at == false)
     {
@@ -697,7 +697,7 @@ eop_core<eop_type>::apply(Cube<typename T1::elem_type>& out, const eOpCube<T1, e
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply_inplace_plus(Cube<typename T1::elem_type>& out, const eOpCube<T1, eop_type>& x)
@@ -715,7 +715,7 @@ eop_core<eop_type>::apply_inplace_plus(Cube<typename T1::elem_type>& out, const 
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(ProxyCube<T1>::use_at == false)
     {
@@ -773,7 +773,7 @@ eop_core<eop_type>::apply_inplace_plus(Cube<typename T1::elem_type>& out, const 
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply_inplace_minus(Cube<typename T1::elem_type>& out, const eOpCube<T1, eop_type>& x)
@@ -791,7 +791,7 @@ eop_core<eop_type>::apply_inplace_minus(Cube<typename T1::elem_type>& out, const
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(ProxyCube<T1>::use_at == false)
     {
@@ -849,7 +849,7 @@ eop_core<eop_type>::apply_inplace_minus(Cube<typename T1::elem_type>& out, const
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply_inplace_schur(Cube<typename T1::elem_type>& out, const eOpCube<T1, eop_type>& x)
@@ -867,7 +867,7 @@ eop_core<eop_type>::apply_inplace_schur(Cube<typename T1::elem_type>& out, const
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(ProxyCube<T1>::use_at == false)
     {
@@ -925,7 +925,7 @@ eop_core<eop_type>::apply_inplace_schur(Cube<typename T1::elem_type>& out, const
 
 template<typename eop_type>
 template<typename T1>
-arma_hot
+
 inline
 void
 eop_core<eop_type>::apply_inplace_div(Cube<typename T1::elem_type>& out, const eOpCube<T1, eop_type>& x)
@@ -943,7 +943,7 @@ eop_core<eop_type>::apply_inplace_div(Cube<typename T1::elem_type>& out, const e
   const eT  k       = x.aux;
         eT* out_mem = out.memptr();
   
-  const bool use_mp = (arma_config::cxx11 && arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
+  const bool use_mp = (arma_config::openmp) && (eOpCube<T1, eop_type>::use_mp || (is_same_type<eop_type, eop_pow>::value && (is_cx<eT>::yes || x.aux != eT(2))));
   
   if(ProxyCube<T1>::use_at == false)
     {
@@ -1006,7 +1006,6 @@ eop_core<eop_type>::apply_inplace_div(Cube<typename T1::elem_type>& out, const e
 
 template<typename eop_type>
 template<typename eT>
-arma_hot
 arma_inline
 eT
 eop_core<eop_type>::process(const eT, const eT)
@@ -1017,140 +1016,143 @@ eop_core<eop_type>::process(const eT, const eT)
 
 
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_scalar_plus      >::process(const eT val, const eT k) { return val + k;                  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_scalar_minus_pre >::process(const eT val, const eT k) { return k - val;                  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_scalar_minus_post>::process(const eT val, const eT k) { return val - k;                  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_scalar_times     >::process(const eT val, const eT k) { return val * k;                  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_scalar_div_pre   >::process(const eT val, const eT k) { return k / val;                  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_scalar_div_post  >::process(const eT val, const eT k) { return val / k;                  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_square           >::process(const eT val, const eT  ) { return val*val;                  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_neg              >::process(const eT val, const eT  ) { return eop_aux::neg(val);        }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_sqrt             >::process(const eT val, const eT  ) { return eop_aux::sqrt(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_log              >::process(const eT val, const eT  ) { return eop_aux::log(val);        }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_log2             >::process(const eT val, const eT  ) { return eop_aux::log2(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_log10            >::process(const eT val, const eT  ) { return eop_aux::log10(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_trunc_log        >::process(const eT val, const eT  ) { return    arma::trunc_log(val);  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_log1p            >::process(const eT val, const eT  ) { return eop_aux::log1p(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_exp              >::process(const eT val, const eT  ) { return eop_aux::exp(val);        }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_exp2             >::process(const eT val, const eT  ) { return eop_aux::exp2(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_exp10            >::process(const eT val, const eT  ) { return eop_aux::exp10(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_trunc_exp        >::process(const eT val, const eT  ) { return    arma::trunc_exp(val);  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_expm1            >::process(const eT val, const eT  ) { return eop_aux::expm1(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_cos              >::process(const eT val, const eT  ) { return eop_aux::cos(val);        }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_sin              >::process(const eT val, const eT  ) { return eop_aux::sin(val);        }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_tan              >::process(const eT val, const eT  ) { return eop_aux::tan(val);        }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_acos             >::process(const eT val, const eT  ) { return eop_aux::acos(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_asin             >::process(const eT val, const eT  ) { return eop_aux::asin(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_atan             >::process(const eT val, const eT  ) { return eop_aux::atan(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_cosh             >::process(const eT val, const eT  ) { return eop_aux::cosh(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_sinh             >::process(const eT val, const eT  ) { return eop_aux::sinh(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_tanh             >::process(const eT val, const eT  ) { return eop_aux::tanh(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_acosh            >::process(const eT val, const eT  ) { return eop_aux::acosh(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_asinh            >::process(const eT val, const eT  ) { return eop_aux::asinh(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_atanh            >::process(const eT val, const eT  ) { return eop_aux::atanh(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_sinc             >::process(const eT val, const eT  ) { return arma_sinc(val);           }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_eps              >::process(const eT val, const eT  ) { return eop_aux::direct_eps(val); }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_abs              >::process(const eT val, const eT  ) { return eop_aux::arma_abs(val);   }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_arg              >::process(const eT val, const eT  ) { return arma_arg<eT>::eval(val);  }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_conj             >::process(const eT val, const eT  ) { return eop_aux::conj(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_pow              >::process(const eT val, const eT k) { return eop_aux::pow(val, k);     }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_floor            >::process(const eT val, const eT  ) { return eop_aux::floor(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_ceil             >::process(const eT val, const eT  ) { return eop_aux::ceil(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_round            >::process(const eT val, const eT  ) { return eop_aux::round(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_trunc            >::process(const eT val, const eT  ) { return eop_aux::trunc(val);      }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_sign             >::process(const eT val, const eT  ) { return arma_sign(val);           }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_erf              >::process(const eT val, const eT  ) { return eop_aux::erf(val);        }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_erfc             >::process(const eT val, const eT  ) { return eop_aux::erfc(val);       }
 
-template<> template<typename eT> arma_hot arma_inline eT
+template<> template<typename eT> arma_inline eT
 eop_core<eop_lgamma           >::process(const eT val, const eT  ) { return eop_aux::lgamma(val);     }
+
+template<> template<typename eT> arma_inline eT
+eop_core<eop_tgamma           >::process(const eT val, const eT  ) { return eop_aux::tgamma(val);     }
 
 
 #undef arma_applier_1u

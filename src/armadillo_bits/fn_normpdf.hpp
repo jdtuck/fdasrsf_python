@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -55,7 +57,7 @@ normpdf_helper(Mat<typename T1::elem_type>& out, const Base<typename T1::elem_ty
   typename Proxy<T2>::ea_type M_ea = PM.get_ea();
   typename Proxy<T3>::ea_type S_ea = PS.get_ea();
   
-  const bool use_mp = arma_config::cxx11 && arma_config::openmp && mp_gate<eT,true>::eval(N);
+  const bool use_mp = arma_config::openmp && mp_gate<eT,true>::eval(N);
   
   if(use_mp)
     {
@@ -69,7 +71,7 @@ normpdf_helper(Mat<typename T1::elem_type>& out, const Base<typename T1::elem_ty
         
         const eT tmp = (X_ea[i] - M_ea[i]) / sigma;
         
-        out_mem[i] = std::exp(-0.5 * (tmp*tmp)) / (sigma * Datum<eT>::sqrt2pi);
+        out_mem[i] = std::exp(eT(-0.5) * (tmp*tmp)) / (sigma * Datum<eT>::sqrt2pi);
         }
       }
     #endif
@@ -82,7 +84,7 @@ normpdf_helper(Mat<typename T1::elem_type>& out, const Base<typename T1::elem_ty
       
       const eT tmp = (X_ea[i] - M_ea[i]) / sigma;
       
-      out_mem[i] = std::exp(-0.5 * (tmp*tmp)) / (sigma * Datum<eT>::sqrt2pi);
+      out_mem[i] = std::exp(eT(-0.5) * (tmp*tmp)) / (sigma * Datum<eT>::sqrt2pi);
       }
     }
   }
@@ -90,11 +92,12 @@ normpdf_helper(Mat<typename T1::elem_type>& out, const Base<typename T1::elem_ty
 
 
 template<typename eT>
-arma_inline
+arma_warn_unused
+inline
 typename enable_if2< (is_real<eT>::value), eT >::result
 normpdf(const eT x)
   {
-  const eT out = std::exp(-0.5 * (x*x)) / Datum<eT>::sqrt2pi;
+  const eT out = std::exp(eT(-0.5) * (x*x)) / Datum<eT>::sqrt2pi;
   
   return out;
   }
@@ -102,13 +105,14 @@ normpdf(const eT x)
 
 
 template<typename eT>
+arma_warn_unused
 inline
 typename enable_if2< (is_real<eT>::value), eT >::result
 normpdf(const eT x, const eT mu, const eT sigma)
   {
   const eT tmp = (x - mu) / sigma;
   
-  const eT out = std::exp(-0.5 * (tmp*tmp)) / (sigma * Datum<eT>::sqrt2pi);
+  const eT out = std::exp(eT(-0.5) * (tmp*tmp)) / (sigma * Datum<eT>::sqrt2pi);
   
   return out;
   }
@@ -116,6 +120,7 @@ normpdf(const eT x, const eT mu, const eT sigma)
 
 
 template<typename eT, typename T2, typename T3>
+arma_warn_unused
 inline
 typename enable_if2< (is_real<eT>::value), Mat<eT> >::result
 normpdf(const eT x, const Base<eT, T2>& M_expr, const Base<eT, T3>& S_expr)
@@ -135,6 +140,7 @@ normpdf(const eT x, const Base<eT, T2>& M_expr, const Base<eT, T3>& S_expr)
 
 
 template<typename T1>
+arma_warn_unused
 inline
 typename enable_if2< (is_real<typename T1::elem_type>::value), Mat<typename T1::elem_type> >::result
 normpdf(const Base<typename T1::elem_type, T1>& X_expr)
@@ -156,6 +162,7 @@ normpdf(const Base<typename T1::elem_type, T1>& X_expr)
 
 
 template<typename T1>
+arma_warn_unused
 inline
 typename enable_if2< (is_real<typename T1::elem_type>::value), Mat<typename T1::elem_type> >::result
 normpdf(const Base<typename T1::elem_type, T1>& X_expr, const typename T1::elem_type mu, const typename T1::elem_type sigma)
@@ -177,6 +184,7 @@ normpdf(const Base<typename T1::elem_type, T1>& X_expr, const typename T1::elem_
 
 
 template<typename T1, typename T2, typename T3>
+arma_warn_unused
 inline
 typename enable_if2< (is_real<typename T1::elem_type>::value), Mat<typename T1::elem_type> >::result
 normpdf(const Base<typename T1::elem_type, T1>& X_expr, const Base<typename T1::elem_type, T2>& M_expr, const Base<typename T1::elem_type, T3>& S_expr)

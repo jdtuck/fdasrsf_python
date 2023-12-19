@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -264,7 +266,7 @@ operator-
   
   Mat<typename T1::elem_type> result(x);
   
-  const SpProxy<T2> pb(y.get_ref());
+  const SpProxy<T2> pb(y);
   
   arma_debug_assert_same_size( result.n_rows, result.n_cols, pb.get_n_rows(), pb.get_n_cols(), "subtraction" );
   

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -33,9 +35,8 @@
   #endif
 #endif
 
-// NOTE:
-// "char" is not guaranteed to be the same as "signed char" 
-// https://en.wikipedia.org/wiki/C_data_types
+// NOTE: "char" can be either "signed char" or "unsigned char"
+// NOTE: https://en.wikipedia.org/wiki/C_data_types
 
 
 #if   USHRT_MAX >= 0xffff
@@ -60,28 +61,18 @@
 #endif
 
 
-#if defined(ARMA_USE_U64S64)
-  #if   ULLONG_MAX >= 0xffffffffffffffff
-    typedef unsigned long long u64;
-    typedef          long long s64;
-  #elif ULONG_MAX  >= 0xffffffffffffffff
-    typedef unsigned long      u64;
-    typedef          long      s64;
-    #define ARMA_U64_IS_LONG
-  #elif defined(UINT64_MAX)
-    typedef          uint64_t  u64;
-    typedef           int64_t  s64;
-  #else
-      #error "don't know how to typedef 'u64' on this system; please disable ARMA_64BIT_WORD"
-  #endif
+#if   ULLONG_MAX >= 0xffffffffffffffff
+  typedef unsigned long long u64;
+  typedef          long long s64;
+#elif defined(UINT64_MAX)
+  typedef          uint64_t  u64;
+  typedef           int64_t  s64;
+#else
+    #error "don't know how to typedef 'u64' on this system"
 #endif
 
 
-#if !defined(ARMA_USE_U64S64) || (defined(ARMA_USE_U64S64) && !defined(ARMA_U64_IS_LONG))
-  #define ARMA_ALLOW_LONG
-#endif
-
-
+// for compatibility with earlier versions of Armadillo
 typedef unsigned long ulng_t;
 typedef          long slng_t;
 
@@ -131,7 +122,7 @@ typedef void* void_ptr;
 //
 
 
-#ifdef ARMA_USE_MKL_TYPES
+#if defined(ARMA_USE_MKL_TYPES)
   // for compatibility with MKL
   typedef MKL_Complex8  blas_cxf;
   typedef MKL_Complex16 blas_cxd;

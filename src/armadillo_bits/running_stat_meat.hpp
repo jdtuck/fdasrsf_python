@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -162,7 +164,7 @@ running_stat<eT>::operator() (const typename running_stat<eT>::T sample)
   
   if( arma_isfinite(sample) == false )
     {
-    arma_debug_warn("running_stat: sample ignored as it is non-finite" );
+    arma_debug_warn_level(3, "running_stat: sample ignored as it is non-finite" );
     return;
     }
   
@@ -181,7 +183,7 @@ running_stat<eT>::operator() (const std::complex< typename running_stat<eT>::T >
   
   if( arma_isfinite(sample) == false )
     {
-    arma_debug_warn("running_stat: sample ignored as it is non-finite" );
+    arma_debug_warn_level(3, "running_stat: sample ignored as it is non-finite" );
     return;
     }
   

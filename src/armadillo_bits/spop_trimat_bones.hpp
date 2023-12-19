@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -29,6 +31,34 @@ class spop_trimat
   
   template<typename T1>
   inline static void apply(SpMat<typename T1::elem_type>& out, const SpOp<T1,spop_trimat>& in);
+  };
+
+
+
+class spop_trimatu_ext
+  : public traits_op_default
+  {
+  public:
+  
+  template<typename eT>
+  inline static void apply_noalias(SpMat<eT>& out, const SpMat<eT>& A, const uword row_offset, const uword col_offset);
+  
+  template<typename T1>
+  inline static void apply(SpMat<typename T1::elem_type>& out, const SpOp<T1,spop_trimatu_ext>& in);
+  };
+
+
+
+class spop_trimatl_ext
+  : public traits_op_default
+  {
+  public:
+  
+  template<typename eT>
+  inline static void apply_noalias(SpMat<eT>& out, const SpMat<eT>& A, const uword row_offset, const uword col_offset);
+  
+  template<typename T1>
+  inline static void apply(SpMat<typename T1::elem_type>& out, const SpOp<T1,spop_trimatl_ext>& in);
   };
 
 

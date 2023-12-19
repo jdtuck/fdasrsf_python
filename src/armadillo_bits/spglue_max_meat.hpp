@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -56,13 +58,9 @@ spglue_max::apply_noalias(SpMat<eT>& out, const SpProxy<T1>& pa, const SpProxy<T
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_assert_same_size(pa.get_n_rows(), pa.get_n_cols(), pb.get_n_rows(), pb.get_n_cols(), "element-wise max");
+  arma_debug_assert_same_size(pa.get_n_rows(), pa.get_n_cols(), pb.get_n_rows(), pb.get_n_cols(), "element-wise max()");
   
-  if(pa.get_n_nonzero() == 0)  { out = pb.Q; return; }
-  if(pb.get_n_nonzero() == 0)  { out = pa.Q; return; }
-  
-  // The plus helper works here also to get an upper bound on n_nonzero.
-  const uword max_n_nonzero = spglue_elem_helper::max_n_nonzero_plus(pa, pb);
+  const uword max_n_nonzero = pa.get_n_nonzero() + pb.get_n_nonzero();
   
   // Resize memory to upper bound
   out.reserve(pa.get_n_rows(), pa.get_n_cols(), max_n_nonzero);
@@ -124,6 +122,8 @@ spglue_max::apply_noalias(SpMat<eT>& out, const SpProxy<T1>& pa, const SpProxy<T
       access::rw(out.col_ptrs[out_col + 1])++;
       ++count;
       }
+    
+    arma_check( (count > max_n_nonzero), "internal error: spglue_max::apply_noalias(): count > max_n_nonzero" );
     }
   
   const uword out_n_cols = out.n_cols;
@@ -184,7 +184,7 @@ spglue_max::dense_sparse_max(Mat<eT>& out, const Base<eT,T1>& X, const SpBase<eT
   const uword n_rows = pa.get_n_rows();
   const uword n_cols = pa.get_n_cols();
   
-  arma_debug_assert_same_size( n_rows, n_cols, pb.get_n_rows(), pb.get_n_cols(), "element-wise maximum" );
+  arma_debug_assert_same_size( n_rows, n_cols, pb.get_n_rows(), pb.get_n_cols(), "element-wise max()" );
   
   out.set_size(n_rows, n_cols);
   

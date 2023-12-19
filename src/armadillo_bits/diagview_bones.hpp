@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -20,7 +22,7 @@
 
 //! Class for storing data required to extract and set the diagonals of a matrix
 template<typename eT>
-class diagview : public Base<eT, diagview<eT> >
+class diagview : public Base< eT, diagview<eT> >
   {
   public:
   
@@ -29,9 +31,9 @@ class diagview : public Base<eT, diagview<eT> >
   
   arma_aligned const Mat<eT>& m;
   
-  static const bool is_row  = false;
-  static const bool is_col  = true;
-  static const bool is_xvec = false;
+  static constexpr bool is_row  = false;
+  static constexpr bool is_col  = true;
+  static constexpr bool is_xvec = false;
   
   const uword row_offset;
   const uword col_offset;
@@ -39,17 +41,21 @@ class diagview : public Base<eT, diagview<eT> >
   const uword n_rows;     // equal to n_elem
   const uword n_elem;
   
-  static const uword n_cols = 1;
+  static constexpr uword n_cols = 1;
   
   
   protected:
   
   arma_inline diagview(const Mat<eT>& in_m, const uword in_row_offset, const uword in_col_offset, const uword len);
-  
+
   
   public:
   
   inline ~diagview();
+  inline  diagview() = delete;
+  
+  inline  diagview(const diagview&  in);
+  inline  diagview(      diagview&& in);
   
   inline void operator=(const diagview& x);
   
@@ -83,11 +89,11 @@ class diagview : public Base<eT, diagview<eT> >
   arma_inline eT  operator()(const uword in_n_row, const uword in_n_col) const;
   
   
-  arma_inline const Op<diagview<eT>,op_htrans>  t() const;
-  arma_inline const Op<diagview<eT>,op_htrans> ht() const;
-  arma_inline const Op<diagview<eT>,op_strans> st() const;
-  
   inline void replace(const eT old_val, const eT new_val);
+  
+  inline void clean(const pod_type threshold);
+  
+  inline void clamp(const eT min_val, const eT max_val);
   
   inline void fill(const eT val);
   inline void zeros();
@@ -103,13 +109,8 @@ class diagview : public Base<eT, diagview<eT> >
   inline static void   div_inplace(Mat<eT>& out, const diagview& in);
   
   
-  private:
-  
   friend class Mat<eT>;
   friend class subview<eT>;
-  
-  diagview();
-  //diagview(const diagview&);  // making this private causes an error under gcc 4.1/4.2, but not 4.3
   };
 
 

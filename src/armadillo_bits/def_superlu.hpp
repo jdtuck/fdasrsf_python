@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -27,12 +29,37 @@ extern "C"
   extern void arma_wrapper(cgssvx)(superlu::superlu_options_t*, superlu::SuperMatrix*, int*, int*, int*, char*,  float*,  float*, superlu::SuperMatrix*, superlu::SuperMatrix*, void*, int, superlu::SuperMatrix*, superlu::SuperMatrix*,  float*,  float*,  float*,  float*, superlu::GlobalLU_t*, superlu::mem_usage_t*, superlu::SuperLUStat_t*, int*);
   extern void arma_wrapper(zgssvx)(superlu::superlu_options_t*, superlu::SuperMatrix*, int*, int*, int*, char*, double*, double*, superlu::SuperMatrix*, superlu::SuperMatrix*, void*, int, superlu::SuperMatrix*, superlu::SuperMatrix*, double*, double*, double*, double*, superlu::GlobalLU_t*, superlu::mem_usage_t*, superlu::SuperLUStat_t*, int*);
   
+  extern void arma_wrapper(sgstrf)(superlu::superlu_options_t*, superlu::SuperMatrix*, int, int, int*, void*, int, int*, int*, superlu::SuperMatrix*, superlu::SuperMatrix*, superlu::GlobalLU_t*, superlu::SuperLUStat_t*, int*);
+  extern void arma_wrapper(dgstrf)(superlu::superlu_options_t*, superlu::SuperMatrix*, int, int, int*, void*, int, int*, int*, superlu::SuperMatrix*, superlu::SuperMatrix*, superlu::GlobalLU_t*, superlu::SuperLUStat_t*, int*);
+  extern void arma_wrapper(cgstrf)(superlu::superlu_options_t*, superlu::SuperMatrix*, int, int, int*, void*, int, int*, int*, superlu::SuperMatrix*, superlu::SuperMatrix*, superlu::GlobalLU_t*, superlu::SuperLUStat_t*, int*);
+  extern void arma_wrapper(zgstrf)(superlu::superlu_options_t*, superlu::SuperMatrix*, int, int, int*, void*, int, int*, int*, superlu::SuperMatrix*, superlu::SuperMatrix*, superlu::GlobalLU_t*, superlu::SuperLUStat_t*, int*);
+  
+  extern void arma_wrapper(sgstrs)(superlu::trans_t, superlu::SuperMatrix*, superlu::SuperMatrix*, int*, int*, superlu::SuperMatrix*, superlu::SuperLUStat_t*, int*);
+  extern void arma_wrapper(dgstrs)(superlu::trans_t, superlu::SuperMatrix*, superlu::SuperMatrix*, int*, int*, superlu::SuperMatrix*, superlu::SuperLUStat_t*, int*);
+  extern void arma_wrapper(cgstrs)(superlu::trans_t, superlu::SuperMatrix*, superlu::SuperMatrix*, int*, int*, superlu::SuperMatrix*, superlu::SuperLUStat_t*, int*);
+  extern void arma_wrapper(zgstrs)(superlu::trans_t, superlu::SuperMatrix*, superlu::SuperMatrix*, int*, int*, superlu::SuperMatrix*, superlu::SuperLUStat_t*, int*);
+  
+  extern float  arma_wrapper(slangs)(char* norm, superlu::SuperMatrix* A);
+  extern double arma_wrapper(dlangs)(char* norm, superlu::SuperMatrix* A);
+  extern float  arma_wrapper(clangs)(char* norm, superlu::SuperMatrix* A);
+  extern double arma_wrapper(zlangs)(char* norm, superlu::SuperMatrix* A);
+  
+  extern void arma_wrapper(sgscon)(char* norm, superlu::SuperMatrix* L, superlu::SuperMatrix* U,  float anorm,  float* rcond, superlu::SuperLUStat_t* stat, int* info);
+  extern void arma_wrapper(dgscon)(char* norm, superlu::SuperMatrix* L, superlu::SuperMatrix* U, double anorm, double* rcond, superlu::SuperLUStat_t* stat, int* info);
+  extern void arma_wrapper(cgscon)(char* norm, superlu::SuperMatrix* L, superlu::SuperMatrix* U,  float anorm,  float* rcond, superlu::SuperLUStat_t* stat, int* info);
+  extern void arma_wrapper(zgscon)(char* norm, superlu::SuperMatrix* L, superlu::SuperMatrix* U, double anorm, double* rcond, superlu::SuperLUStat_t* stat, int* info);
+  
   extern void arma_wrapper(StatInit)(superlu::SuperLUStat_t*);
   extern void arma_wrapper(StatFree)(superlu::SuperLUStat_t*);
   extern void arma_wrapper(set_default_options)(superlu::superlu_options_t*);
   
+  extern void arma_wrapper(get_perm_c)(int, superlu::SuperMatrix*, int*);
+  extern  int arma_wrapper(sp_ienv)(int);
+  extern void arma_wrapper(sp_preorder)(superlu::superlu_options_t*, superlu::SuperMatrix*, int*, int*, superlu::SuperMatrix*);
+  
   extern void arma_wrapper(Destroy_SuperNode_Matrix)(superlu::SuperMatrix*);
   extern void arma_wrapper(Destroy_CompCol_Matrix)(superlu::SuperMatrix*);
+  extern void arma_wrapper(Destroy_CompCol_Permuted)(superlu::SuperMatrix*);
   extern void arma_wrapper(Destroy_SuperMatrix_Store)(superlu::SuperMatrix*);
   
   // We also need superlu_malloc() and superlu_free().

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -53,16 +55,9 @@ as_scalar_redirect<N>::apply(const T1& X)
   {
   arma_extra_debug_sigprint();
   
-  typedef typename T1::elem_type eT;
-  
   const Proxy<T1> P(X);
   
-  if(P.get_n_elem() != 1)
-    {
-    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-    
-    return Datum<eT>::nan;
-    }
+  arma_debug_check( (P.get_n_elem() != 1), "as_scalar(): expression must evaluate to exactly one element" );
   
   return (Proxy<T1>::use_at) ? P.at(0,0) : P[0];
   }
@@ -145,19 +140,14 @@ as_scalar_redirect<3>::apply(const Glue< Glue<T1, T2, glue_times>, T3, glue_time
   const strip_inv    <T2>            strip1(X.A.B);
   const strip_diagmat<T2_stripped_1> strip2(strip1.M);
   
-  const bool tmp2_do_inv     = strip1.do_inv;
+  const bool tmp2_do_inv_gen = strip1.do_inv_gen && arma_config::optimise_invexpr;
   const bool tmp2_do_diagmat = strip2.do_diagmat;
   
   if(tmp2_do_diagmat == false)
     {
     const Mat<eT> tmp(X);
     
-    if(tmp.n_elem != 1)
-      {
-      arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-      
-      return Datum<eT>::nan;
-      }
+    arma_debug_check( (tmp.n_elem != 1), "as_scalar(): expression must evaluate to exactly one element" );
     
     return tmp[0];
     }
@@ -197,7 +187,7 @@ as_scalar_redirect<3>::apply(const Glue< Glue<T1, T2, glue_times>, T3, glue_time
     
     if(B_is_vec)
       {
-      if(tmp2_do_inv)
+      if(tmp2_do_inv_gen)
         {
         return val * op_dotext::direct_rowvec_invdiagvec_colvec(A.mem, B, C.mem);
         }
@@ -208,7 +198,7 @@ as_scalar_redirect<3>::apply(const Glue< Glue<T1, T2, glue_times>, T3, glue_time
       }
     else
       {
-      if(tmp2_do_inv)
+      if(tmp2_do_inv_gen)
         {
         return val * op_dotext::direct_rowvec_invdiagmat_colvec(A.mem, B, C.mem);
         }
@@ -234,12 +224,7 @@ as_scalar_diag(const Base<typename T1::elem_type,T1>& X)
   const unwrap<T1>   tmp(X.get_ref());
   const Mat<eT>& A = tmp.M;
   
-  if(A.n_elem != 1)
-    {
-    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-    
-    return Datum<eT>::nan;
-    }
+  arma_debug_check( (A.n_elem != 1), "as_scalar(): expression must evaluate to exactly one element" );
   
   return A.mem[0];
   }
@@ -309,25 +294,20 @@ as_scalar_diag(const Glue< Glue<T1, T2, glue_times_diag>, T3, glue_times >& X)
 
 template<typename T1, typename T2>
 arma_warn_unused
-arma_inline
+inline
 typename T1::elem_type
-as_scalar(const Glue<T1, T2, glue_times>& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = 0)
+as_scalar(const Glue<T1, T2, glue_times>& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  if(is_glue_times_diag<T1>::value == false)
-    {
-    const sword N_mat = 1 + depth_lhs< glue_times, Glue<T1,T2,glue_times> >::num;
-    
-    arma_extra_debug_print(arma_str::format("N_mat = %d") % N_mat);
-    
-    return as_scalar_redirect<N_mat>::apply(X);
-    }
-  else
-    {
-    return as_scalar_diag(X);
-    }
+  if(is_glue_times_diag<T1>::value)  { return as_scalar_diag(X); }
+  
+  constexpr uword N_mat = 1 + depth_lhs< glue_times, Glue<T1,T2,glue_times> >::num;
+  
+  arma_extra_debug_print(arma_str::format("N_mat = %u") % N_mat);
+  
+  return as_scalar_redirect<N_mat>::apply(X);
   }
 
 
@@ -340,63 +320,12 @@ as_scalar(const Base<typename T1::elem_type,T1>& X)
   {
   arma_extra_debug_sigprint();
   
-  typedef typename T1::elem_type eT;
-  
   const Proxy<T1> P(X.get_ref());
   
-  if(P.get_n_elem() != 1)
-    {
-    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-    
-    return Datum<eT>::nan;
-    }
+  arma_debug_check( (P.get_n_elem() != 1), "as_scalar(): expression must evaluate to exactly one element" );
   
   return (Proxy<T1>::use_at) ? P.at(0,0) : P[0];
   }
-
-
-template<typename T1>
-arma_warn_unused
-inline
-typename T1::elem_type
-as_scalar(const Gen<T1, gen_randu>& X)
-  {
-  arma_extra_debug_sigprint();
-  
-  typedef typename T1::elem_type eT;
-  
-  if( (X.n_rows != 1) || (X.n_cols != 1) )
-    {
-    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-    
-    return Datum<eT>::nan;
-    }
-  
-  return eT(arma_rng::randu<eT>());
-  }
-
-
-
-template<typename T1>
-arma_warn_unused
-inline
-typename T1::elem_type
-as_scalar(const Gen<T1, gen_randn>& X)
-  {
-  arma_extra_debug_sigprint();
-  
-  typedef typename T1::elem_type eT;
-  
-  if( (X.n_rows != 1) || (X.n_cols != 1) )
-    {
-    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-    
-    return Datum<eT>::nan;
-    }
-  
-  return eT(arma_rng::randn<eT>());
-  }
-
 
 
 template<typename T1>
@@ -407,16 +336,9 @@ as_scalar(const BaseCube<typename T1::elem_type,T1>& X)
   {
   arma_extra_debug_sigprint();
   
-  typedef typename T1::elem_type eT;
-  
   const ProxyCube<T1> P(X.get_ref());
   
-  if(P.get_n_elem() != 1)
-    {
-    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-    
-    return Datum<eT>::nan;
-    }
+  arma_debug_check( (P.get_n_elem() != 1), "as_scalar(): expression must evaluate to exactly one element" );
   
   return (ProxyCube<T1>::use_at) ? P.at(0,0,0) : P[0];
   }
@@ -440,17 +362,14 @@ inline
 typename T1::elem_type
 as_scalar(const SpBase<typename T1::elem_type, T1>& X)
   {
+  arma_extra_debug_sigprint();
+  
   typedef typename T1::elem_type eT;
   
   const unwrap_spmat<T1>  tmp(X.get_ref());
   const SpMat<eT>& A    = tmp.M;
   
-  if(A.n_elem != 1)
-    {
-    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
-    
-    return Datum<eT>::nan;
-    }
+  arma_debug_check( (A.n_elem != 1), "as_scalar(): expression must evaluate to exactly one element" );
   
   return A.at(0,0);
   }

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -39,8 +41,8 @@ class op_find
     (
     Mat<uword>& indices,
     const mtOp<uword, T1, op_type>& X,
-    const typename arma_op_rel_only<op_type>::result junk1 = 0,
-    const typename arma_not_cx<typename T1::elem_type>::result junk2 = 0
+    const typename arma_op_rel_only<op_type>::result* junk1 = nullptr,
+    const typename arma_not_cx<typename T1::elem_type>::result* junk2 = nullptr
     );
   
   template<typename T1, typename op_type>
@@ -49,8 +51,8 @@ class op_find
     (
     Mat<uword>& indices,
     const mtOp<uword, T1, op_type>& X,
-    const typename arma_op_rel_only<op_type>::result junk1 = 0,
-    const typename arma_cx_only<typename T1::elem_type>::result junk2 = 0
+    const typename arma_op_rel_only<op_type>::result* junk1 = nullptr,
+    const typename arma_cx_only<typename T1::elem_type>::result* junk2 = nullptr
     );
   
   template<typename T1, typename T2, typename glue_type>
@@ -59,9 +61,9 @@ class op_find
     (
     Mat<uword>& indices,
     const mtGlue<uword, T1, T2, glue_type>& X,
-    const typename arma_glue_rel_only<glue_type>::result junk1 = 0,
-    const typename arma_not_cx<typename T1::elem_type>::result junk2 = 0,
-    const typename arma_not_cx<typename T2::elem_type>::result junk3 = 0
+    const typename arma_glue_rel_only<glue_type>::result* junk1 = nullptr,
+    const typename arma_not_cx<typename T1::elem_type>::result* junk2 = nullptr,
+    const typename arma_not_cx<typename T2::elem_type>::result* junk3 = nullptr
     );
   
   template<typename T1, typename T2, typename glue_type>
@@ -70,9 +72,9 @@ class op_find
     (
     Mat<uword>& indices,
     const mtGlue<uword, T1, T2, glue_type>& X,
-    const typename arma_glue_rel_only<glue_type>::result junk1 = 0,
-    const typename arma_cx_only<typename T1::elem_type>::result junk2 = 0,
-    const typename arma_cx_only<typename T2::elem_type>::result junk3 = 0
+    const typename arma_glue_rel_only<glue_type>::result* junk1 = nullptr,
+    const typename arma_cx_only<typename T1::elem_type>::result* junk2 = nullptr,
+    const typename arma_cx_only<typename T2::elem_type>::result* junk3 = nullptr
     );
   
   template<typename T1>
@@ -110,6 +112,17 @@ class op_find_nonfinite
   
   template<typename T1>
   inline static void apply(Mat<uword>& out, const mtOp<uword, T1, op_find_nonfinite>& X);
+  };
+
+
+
+class op_find_nan
+  : public traits_op_col
+  {
+  public:
+  
+  template<typename T1>
+  inline static void apply(Mat<uword>& out, const mtOp<uword, T1, op_find_nan>& X);
   };
 
 

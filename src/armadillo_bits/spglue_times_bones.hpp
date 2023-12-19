@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -26,9 +28,9 @@ class spglue_times
   template<typename T1, typename T2>
   struct traits
     {
-    static const bool is_row  = T1::is_row;
-    static const bool is_col  = T2::is_col;
-    static const bool is_xvec = false;
+    static constexpr bool is_row  = T1::is_row;
+    static constexpr bool is_col  = T2::is_col;
+    static constexpr bool is_xvec = false;
     };
   
   template<typename T1, typename T2>
@@ -38,28 +40,7 @@ class spglue_times
   inline static void apply(SpMat<typename T1::elem_type>& out, const SpGlue<SpOp<T1,spop_scalar_times>,T2,spglue_times>& X);
   
   template<typename eT>
-  arma_hot inline static void apply_noalias(SpMat<eT>& c, const SpMat<eT>& x, const SpMat<eT>& y);
-  };
-
-
-
-class spglue_times_misc
-  {
-  public:
-  
-  template<typename T1, typename T2>
-  struct traits
-    {
-    static const bool is_row  = T1::is_row;
-    static const bool is_col  = T2::is_col;
-    static const bool is_xvec = false;
-    };
-  
-  template<typename T1, typename T2>
-  inline static void sparse_times_dense(Mat<typename T1::elem_type>& out, const T1& x, const T2& y);
-  
-  template<typename T1, typename T2>
-  inline static void dense_times_sparse(Mat<typename T1::elem_type>& out, const T1& x, const T2& y);
+  inline static void apply_noalias(SpMat<eT>& c, const SpMat<eT>& x, const SpMat<eT>& y);
   };
 
 
@@ -71,19 +52,13 @@ class spglue_times_mixed
   template<typename T1, typename T2>
   struct traits
     {
-    static const bool is_row  = T1::is_row;
-    static const bool is_col  = T2::is_col;
-    static const bool is_xvec = false;
+    static constexpr bool is_row  = T1::is_row;
+    static constexpr bool is_col  = T2::is_col;
+    static constexpr bool is_xvec = false;
     };
   
   template<typename T1, typename T2>
   inline static void apply(SpMat<typename eT_promoter<T1,T2>::eT>& out, const mtSpGlue<typename eT_promoter<T1,T2>::eT, T1, T2, spglue_times_mixed>& expr);
-  
-  template<typename T1, typename T2>
-  inline static void sparse_times_dense(Mat< typename promote_type<typename T1::elem_type, typename T2::elem_type>::result >& out, const T1& X, const T2& Y);
-
-  template<typename T1, typename T2>
-  inline static void dense_times_sparse(Mat< typename promote_type<typename T1::elem_type, typename T2::elem_type>::result >& out, const T1& X, const T2& Y);
   };
 
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -19,18 +21,18 @@
 
 
 
-#define ARMA_VERSION_MAJOR 9
-#define ARMA_VERSION_MINOR 800
-#define ARMA_VERSION_PATCH 1
-#define ARMA_VERSION_NAME  "Horizon Scraper"
+#define ARMA_VERSION_MAJOR 12
+#define ARMA_VERSION_MINOR 6
+#define ARMA_VERSION_PATCH 7
+#define ARMA_VERSION_NAME  "Cortisol Retox"
 
 
 
 struct arma_version
   {
-  static const unsigned int major = ARMA_VERSION_MAJOR;
-  static const unsigned int minor = ARMA_VERSION_MINOR;
-  static const unsigned int patch = ARMA_VERSION_PATCH;
+  static constexpr unsigned int major = ARMA_VERSION_MAJOR;
+  static constexpr unsigned int minor = ARMA_VERSION_MINOR;
+  static constexpr unsigned int patch = ARMA_VERSION_PATCH;
   
   static
   inline

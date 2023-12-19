@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -240,7 +242,7 @@ glue_affmul::apply_noalias_square(Mat<typename T1::elem_type>& out, const T1& A,
       {
       if(B_n_cols == 1)
         {
-        Col<eT> tmp(N);
+        Col<eT> tmp(N, arma_nozeros_indicator());
         eT*     tmp_mem = tmp.memptr();
         
         arrayops::copy(tmp_mem, B.memptr(), N-1);
@@ -251,7 +253,7 @@ glue_affmul::apply_noalias_square(Mat<typename T1::elem_type>& out, const T1& A,
         }
       else
         {
-        Mat<eT> tmp(N, B_n_cols);
+        Mat<eT> tmp(N, B_n_cols, arma_nozeros_indicator());
         
         for(uword col=0; col < B_n_cols; ++col)
           {
@@ -423,7 +425,7 @@ glue_affmul::apply_noalias_rectangle(Mat<typename T1::elem_type>& out, const T1&
       
       if(B_n_cols == 1)
         {
-        Col<eT> tmp(A_n_cols);
+        Col<eT> tmp(A_n_cols, arma_nozeros_indicator());
         eT*     tmp_mem = tmp.memptr();
         
         arrayops::copy(tmp_mem, B.memptr(), A_n_cols-1);
@@ -434,7 +436,7 @@ glue_affmul::apply_noalias_rectangle(Mat<typename T1::elem_type>& out, const T1&
         }
       else
         {
-        Mat<eT> tmp(A_n_cols, B_n_cols);
+        Mat<eT> tmp(A_n_cols, B_n_cols, arma_nozeros_indicator());
         
         for(uword col=0; col < B_n_cols; ++col)
           {
@@ -468,7 +470,7 @@ glue_affmul::apply_noalias_generic(Mat<typename T1::elem_type>& out, const T1& A
   const uword B_n_rows = B.n_rows;
   const uword B_n_cols = B.n_cols;
   
-  Mat<eT> tmp(B_n_rows+1, B_n_cols);
+  Mat<eT> tmp(B_n_rows+1, B_n_cols, arma_nozeros_indicator());
   
   for(uword col=0; col < B_n_cols; ++col)
     {

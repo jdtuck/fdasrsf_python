@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -77,7 +79,7 @@ spop_mean::apply_noalias_fast
   
   if(dim == 0) // find the mean in each column
     {
-    Row<eT> acc(p_n_cols, fill::zeros);
+    Row<eT> acc(p_n_cols, arma_zeros_indicator());
     
     eT* acc_mem = acc.memptr();
     
@@ -108,7 +110,7 @@ spop_mean::apply_noalias_fast
   else
   if(dim == 1)  // find the mean in each row
     {
-    Col<eT> acc(p_n_rows, fill::zeros);
+    Col<eT> acc(p_n_rows, arma_zeros_indicator());
     
     eT* acc_mem = acc.memptr();
     
@@ -123,7 +125,7 @@ spop_mean::apply_noalias_fast
     out = acc;
     }
   
-  if(out.is_finite() == false)
+  if(out.internal_has_nonfinite())
     {
     spop_mean::apply_noalias_slow(out, p, dim);
     }
@@ -331,7 +333,7 @@ spop_mean::iterator_mean(T1& it, const T1& end, const uword n_zero, const eT jun
   
   const uword it_begin_pos = it.pos();
   
-  while (it != end)
+  while(it != end)
     {
     acc += (*it);
     ++it;
@@ -360,7 +362,7 @@ spop_mean::iterator_mean_robust(T1& it, const T1& end, const uword n_zero, const
 
   const uword it_begin_pos = it.pos();
 
-  while (it != end)
+  while(it != end)
     {
     r_mean += ((*it - r_mean) / T(n_zero + (it.pos() - it_begin_pos) + 1));
     ++it;

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -26,17 +28,32 @@ op_flipud::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_flipud>& in)
   {
   arma_extra_debug_sigprint();
   
-  const Proxy<T1> P(in.m);
+  typedef typename T1::elem_type eT;
   
-  if(is_Mat<typename Proxy<T1>::stored_type>::value || P.is_alias(out))
+  if(is_Mat<T1>::value)
     {
-    const unwrap<typename Proxy<T1>::stored_type> U(P.Q);
+    // allow detection of in-place operation
+    
+    const unwrap<T1> U(in.m);
     
     op_flipud::apply_direct(out, U.M);
     }
   else
     {
-    op_flipud::apply_proxy_noalias(out, P);
+    const Proxy<T1> P(in.m);
+    
+    if(P.is_alias(out))
+      {
+      Mat<eT> tmp;
+      
+      op_flipud::apply_proxy_noalias(tmp, P);
+      
+      out.steal_mem(tmp);
+      }
+    else
+      {
+      op_flipud::apply_proxy_noalias(out, P);
+      }
     }
   }
 
@@ -121,6 +138,17 @@ op_flipud::apply_proxy_noalias(Mat<typename T1::elem_type>& out, const Proxy<T1>
   
   typedef typename T1::elem_type eT;
   
+  typedef typename Proxy<T1>::stored_type P_stored_type;
+  
+  if(is_Mat<P_stored_type>::value)
+    {
+    const unwrap<P_stored_type> U(P.Q);
+    
+    op_flipud::apply_direct(out, U.M);
+    
+    return;
+    }
+  
   const uword P_n_rows = P.get_n_rows();
   const uword P_n_cols = P.get_n_cols();
   
@@ -166,17 +194,32 @@ op_fliplr::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_fliplr>& in)
   {
   arma_extra_debug_sigprint();
   
-  const Proxy<T1> P(in.m);
+  typedef typename T1::elem_type eT;
   
-  if(is_Mat<typename Proxy<T1>::stored_type>::value || P.is_alias(out))
+  if(is_Mat<T1>::value)
     {
-    const unwrap<typename Proxy<T1>::stored_type> U(P.Q);
+    // allow detection of in-place operation
+    
+    const unwrap<T1> U(in.m);
     
     op_fliplr::apply_direct(out, U.M);
     }
   else
     {
-    op_fliplr::apply_proxy_noalias(out, P);
+    const Proxy<T1> P(in.m);
+    
+    if(P.is_alias(out))
+      {
+      Mat<eT> tmp;
+      
+      op_fliplr::apply_proxy_noalias(tmp, P);
+      
+      out.steal_mem(tmp);
+      }
+    else
+      {
+      op_fliplr::apply_proxy_noalias(out, P);
+      }
     }
   }
 
@@ -249,6 +292,17 @@ op_fliplr::apply_proxy_noalias(Mat<typename T1::elem_type>& out, const Proxy<T1>
   arma_extra_debug_sigprint();
   
   typedef typename T1::elem_type eT;
+  
+  typedef typename Proxy<T1>::stored_type P_stored_type;
+  
+  if(is_Mat<P_stored_type>::value)
+    {
+    const unwrap<P_stored_type> U(P.Q);
+    
+    op_fliplr::apply_direct(out, U.M);
+    
+    return;
+    }
   
   const uword P_n_rows = P.get_n_rows();
   const uword P_n_cols = P.get_n_cols();

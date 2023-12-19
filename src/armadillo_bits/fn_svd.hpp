@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -26,20 +28,22 @@ svd
   (
          Col<typename T1::pod_type>&     S,
   const Base<typename T1::elem_type,T1>& X,
-  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  // it doesn't matter if X is an alias of S, as auxlib::svd() makes a copy of X
+  typedef typename T1::elem_type eT;
   
-  const bool status = auxlib::svd_dc(S, X);
+  Mat<eT> A(X.get_ref());
+  
+  const bool status = auxlib::svd_dc(S, A);
   
   if(status == false)
     {
     S.soft_reset();
-    arma_debug_warn("svd(): decomposition failed");
+    arma_debug_warn_level(3, "svd(): decomposition failed");
     }
   
   return status;
@@ -54,15 +58,20 @@ Col<typename T1::pod_type>
 svd
   (
   const Base<typename T1::elem_type,T1>& X,
-  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  Col<typename T1::pod_type> out;
+  typedef typename T1::elem_type eT;
+  typedef typename T1::pod_type   T;
   
-  const bool status = auxlib::svd_dc(out, X);
+  Col<T> out;
+  
+  Mat<eT> A(X.get_ref());
+  
+  const bool status = auxlib::svd_dc(out, A);
   
   if(status == false)
     {
@@ -85,11 +94,13 @@ svd
          Mat<typename T1::elem_type>&    V,
   const Base<typename T1::elem_type,T1>& X,
   const char*                            method = "dc",
-  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
+  
+  typedef typename T1::elem_type eT;
   
   arma_debug_check
     (
@@ -97,19 +108,20 @@ svd
     "svd(): two or more output objects are the same object"
     );
   
-  const char sig = (method != NULL) ? method[0] : char(0);
+  const char sig = (method != nullptr) ? method[0] : char(0);
   
   arma_debug_check( ((sig != 's') && (sig != 'd')), "svd(): unknown method specified" );
   
-  // auxlib::svd() makes an internal copy of X
-  const bool status = (sig == 'd') ? auxlib::svd_dc(U, S, V, X) : auxlib::svd(U, S, V, X);
+  Mat<eT> A(X.get_ref());
+  
+  const bool status = (sig == 'd') ? auxlib::svd_dc(U, S, V, A) : auxlib::svd(U, S, V, A);
   
   if(status == false)
     {
     U.soft_reset();
     S.soft_reset();
     V.soft_reset();
-    arma_debug_warn("svd(): decomposition failed");
+    arma_debug_warn_level(3, "svd(): decomposition failed");
     }
   
   return status;
@@ -128,11 +140,13 @@ svd_econ
   const Base<typename T1::elem_type,T1>& X,
   const char                             mode,
   const char*                            method = "dc",
-  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
+  
+  typedef typename T1::elem_type eT;
   
   arma_debug_check
     (
@@ -146,18 +160,20 @@ svd_econ
     "svd_econ(): parameter 'mode' is incorrect"
     );
   
-  const char sig = (method != NULL) ? method[0] : char(0);
+  const char sig = (method != nullptr) ? method[0] : char(0);
   
   arma_debug_check( ((sig != 's') && (sig != 'd')), "svd_econ(): unknown method specified" );
   
-  const bool status = ((mode == 'b') && (sig == 'd')) ? auxlib::svd_dc_econ(U, S, V, X) : auxlib::svd_econ(U, S, V, X, mode);
+  Mat<eT> A(X.get_ref());
+  
+  const bool status = ((mode == 'b') && (sig == 'd')) ? auxlib::svd_dc_econ(U, S, V, A) : auxlib::svd_econ(U, S, V, A, mode);
   
   if(status == false)
     {
     U.soft_reset();
     S.soft_reset();
     V.soft_reset();
-    arma_debug_warn("svd(): decomposition failed");
+    arma_debug_warn_level(3, "svd_econ(): decomposition failed");
     }
   
   return status;
@@ -176,13 +192,13 @@ svd_econ
   const Base<typename T1::elem_type,T1>& X,
   const char*                            mode   = "both",
   const char*                            method = "dc",
-  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_blas_type_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  return svd_econ(U, S, V, X, ((mode != NULL) ? mode[0] : char(0)), method);
+  return svd_econ(U, S, V, X, ((mode != nullptr) ? mode[0] : char(0)), method);
   }
 
 

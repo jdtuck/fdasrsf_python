@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -15,7 +17,7 @@
 
 
 
-#ifdef ARMA_USE_BLAS
+#if defined(ARMA_USE_BLAS)
 
 
 //! \namespace blas namespace for BLAS functions
@@ -128,7 +130,7 @@ namespace blas
     
     if(is_float<eT>::value)
       {
-      #if defined(ARMA_BLAS_SDOT_BUG)
+      #if defined(ARMA_BLAS_FLOAT_BUG)
         {
         if(n_elem == 0)  { return eT(0); }
         

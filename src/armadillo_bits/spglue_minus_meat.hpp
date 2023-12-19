@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -20,7 +22,6 @@
 
 
 template<typename T1, typename T2>
-arma_hot
 inline
 void
 spglue_minus::apply(SpMat<typename T1::elem_type>& out, const SpGlue<T1,T2,spglue_minus>& X)
@@ -51,7 +52,6 @@ spglue_minus::apply(SpMat<typename T1::elem_type>& out, const SpGlue<T1,T2,spglu
 
 
 template<typename eT, typename T1, typename T2>
-arma_hot
 inline
 void
 spglue_minus::apply_noalias(SpMat<eT>& out, const SpProxy<T1>& pa, const SpProxy<T2>& pb)
@@ -63,7 +63,7 @@ spglue_minus::apply_noalias(SpMat<eT>& out, const SpProxy<T1>& pa, const SpProxy
   if(pa.get_n_nonzero() == 0)  { out = pb.Q; out *= eT(-1); return; }
   if(pb.get_n_nonzero() == 0)  { out = pa.Q;                return; }
   
-  const uword max_n_nonzero = spglue_elem_helper::max_n_nonzero_plus(pa, pb);
+  const uword max_n_nonzero = pa.get_n_nonzero() + pb.get_n_nonzero();
   
   // Resize memory to upper bound
   out.reserve(pa.get_n_rows(), pa.get_n_cols(), max_n_nonzero);
@@ -125,6 +125,8 @@ spglue_minus::apply_noalias(SpMat<eT>& out, const SpProxy<T1>& pa, const SpProxy
       access::rw(out.col_ptrs[out_col + 1])++;
       ++count;
       }
+    
+    arma_check( (count > max_n_nonzero), "internal error: spglue_minus::apply_noalias(): count > max_n_nonzero" );
     }
   
   const uword out_n_cols = out.n_cols;
@@ -156,7 +158,6 @@ spglue_minus::apply_noalias(SpMat<eT>& out, const SpProxy<T1>& pa, const SpProxy
 
 
 template<typename eT>
-arma_hot
 inline
 void
 spglue_minus::apply_noalias(SpMat<eT>& out, const SpMat<eT>& A, const SpMat<eT>& B)

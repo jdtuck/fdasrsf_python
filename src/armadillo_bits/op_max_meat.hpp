@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -29,7 +31,7 @@ op_max::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_max>& in)
   typedef typename T1::elem_type eT;
   
   const uword dim = in.aux_uword_a;
-  arma_debug_check( (dim > 1), "max(): parameter 'dim' must be 0 or 1");
+  arma_debug_check( (dim > 1), "max(): parameter 'dim' must be 0 or 1" );
   
   const quasi_unwrap<T1> U(in.m);
   const Mat<eT>& X = U.M;
@@ -359,7 +361,8 @@ op_max::direct_max(const eT* const X, const uword n_elem)
   {
   arma_extra_debug_sigprint();
   
-  eT max_val = priv::most_neg<eT>();
+  eT max_val_i = priv::most_neg<eT>();
+  eT max_val_j = priv::most_neg<eT>();
   
   uword i,j;
   for(i=0, j=1; j<n_elem; i+=2, j+=2)
@@ -367,18 +370,18 @@ op_max::direct_max(const eT* const X, const uword n_elem)
     const eT X_i = X[i];
     const eT X_j = X[j];
     
-    if(X_i > max_val) { max_val = X_i; }
-    if(X_j > max_val) { max_val = X_j; }
+    if(X_i > max_val_i) { max_val_i = X_i; }
+    if(X_j > max_val_j) { max_val_j = X_j; }
     }
   
   if(i < n_elem)
     {
     const eT X_i = X[i];
     
-    if(X_i > max_val) { max_val = X_i; }
+    if(X_i > max_val_i) { max_val_i = X_i; }
     }
   
-  return max_val;
+  return (max_val_i > max_val_j) ? max_val_i : max_val_j;
   }
 
 
@@ -390,9 +393,11 @@ op_max::direct_max(const eT* const X, const uword n_elem, uword& index_of_max_va
   {
   arma_extra_debug_sigprint();
   
-  eT max_val = priv::most_neg<eT>();
+  eT max_val_i = priv::most_neg<eT>();
+  eT max_val_j = priv::most_neg<eT>();
   
-  uword best_index = 0;
+  uword best_index_i = 0;
+  uword best_index_j = 0;
   
   uword i,j;
   for(i=0, j=1; j<n_elem; i+=2, j+=2)
@@ -400,33 +405,20 @@ op_max::direct_max(const eT* const X, const uword n_elem, uword& index_of_max_va
     const eT X_i = X[i];
     const eT X_j = X[j];
     
-    if(X_i > max_val)
-      {
-      max_val    = X_i;
-      best_index = i;
-      }
-    
-    if(X_j > max_val)
-      {
-      max_val    = X_j;
-      best_index = j;
-      }
+    if(X_i > max_val_i)  { max_val_i = X_i; best_index_i = i; }
+    if(X_j > max_val_j)  { max_val_j = X_j; best_index_j = j; }
     }
   
   if(i < n_elem)
     {
     const eT X_i = X[i];
     
-    if(X_i > max_val)
-      {
-      max_val    = X_i;
-      best_index = i;
-      }
+    if(X_i > max_val_i)  { max_val_i = X_i; best_index_i = i; }
     }
   
-  index_of_max_val = best_index;
+  index_of_max_val = (max_val_i > max_val_j) ? best_index_i : best_index_j;
   
-  return max_val;
+  return (max_val_i > max_val_j) ? max_val_i : max_val_j;
   }
 
 
@@ -440,7 +432,8 @@ op_max::direct_max(const Mat<eT>& X, const uword row)
   
   const uword X_n_cols = X.n_cols;
   
-  eT max_val = priv::most_neg<eT>();
+  eT max_val_i = priv::most_neg<eT>();
+  eT max_val_j = priv::most_neg<eT>();
   
   uword i,j;
   for(i=0, j=1; j < X_n_cols; i+=2, j+=2)
@@ -448,18 +441,18 @@ op_max::direct_max(const Mat<eT>& X, const uword row)
     const eT tmp_i = X.at(row,i);
     const eT tmp_j = X.at(row,j);
     
-    if(tmp_i > max_val) { max_val = tmp_i; }
-    if(tmp_j > max_val) { max_val = tmp_j; }
+    if(tmp_i > max_val_i) { max_val_i = tmp_i; }
+    if(tmp_j > max_val_j) { max_val_j = tmp_j; }
     }
   
   if(i < X_n_cols)
     {
     const eT tmp_i = X.at(row,i);
     
-    if(tmp_i > max_val) { max_val = tmp_i; }
+    if(tmp_i > max_val_i) { max_val_i = tmp_i; }
     }
   
-  return max_val;
+  return (max_val_i > max_val_j) ? max_val_i : max_val_j;
   }
 
 
@@ -481,10 +474,11 @@ op_max::max(const subview<eT>& X)
   const uword X_n_rows = X.n_rows;
   const uword X_n_cols = X.n_cols;
   
-  eT max_val = priv::most_neg<eT>();
-  
   if(X_n_rows == 1)
     {
+    eT max_val_i = priv::most_neg<eT>();
+    eT max_val_j = priv::most_neg<eT>();
+    
     const Mat<eT>& A = X.m;
     
     const uword start_row = X.aux_row1;
@@ -498,23 +492,25 @@ op_max::max(const subview<eT>& X)
       const eT tmp_i = A.at(start_row, i);
       const eT tmp_j = A.at(start_row, j);
       
-      if(tmp_i > max_val) { max_val = tmp_i; }
-      if(tmp_j > max_val) { max_val = tmp_j; }
+      if(tmp_i > max_val_i) { max_val_i = tmp_i; }
+      if(tmp_j > max_val_j) { max_val_j = tmp_j; }
       }
     
     if(i < end_col_p1)
       {
       const eT tmp_i = A.at(start_row, i);
       
-      if(tmp_i > max_val) { max_val = tmp_i; }
+      if(tmp_i > max_val_i) { max_val_i = tmp_i; }
       }
+    
+    return (max_val_i > max_val_j) ? max_val_i : max_val_j;
     }
-  else
+  
+  eT max_val = priv::most_neg<eT>();
+  
+  for(uword col=0; col < X_n_cols; ++col)
     {
-    for(uword col=0; col < X_n_cols; ++col)
-      {
-      max_val = (std::max)(max_val, op_max::direct_max(X.colptr(col), X_n_rows));
-      }
+    max_val = (std::max)(max_val, op_max::direct_max(X.colptr(col), X_n_rows));
     }
   
   return max_val;
@@ -542,7 +538,8 @@ op_max::max(const Base<typename T1::elem_type,T1>& X)
     return Datum<eT>::nan;
     }
   
-  eT max_val = priv::most_neg<eT>();
+  eT max_val_i = priv::most_neg<eT>();
+  eT max_val_j = priv::most_neg<eT>();
   
   if(Proxy<T1>::use_at == false)
     {
@@ -557,15 +554,15 @@ op_max::max(const Base<typename T1::elem_type,T1>& X)
       const eT tmp_i = A[i];
       const eT tmp_j = A[j];
       
-      if(tmp_i > max_val) { max_val = tmp_i; }
-      if(tmp_j > max_val) { max_val = tmp_j; }
+      if(tmp_i > max_val_i) { max_val_i = tmp_i; }
+      if(tmp_j > max_val_j) { max_val_j = tmp_j; }
       }
     
     if(i < n_elem)
       {
       const eT tmp_i = A[i];
       
-      if(tmp_i > max_val) { max_val = tmp_i; }
+      if(tmp_i > max_val_i) { max_val_i = tmp_i; }
       }
     }
   else
@@ -581,15 +578,15 @@ op_max::max(const Base<typename T1::elem_type,T1>& X)
         const eT tmp_i = P.at(0,i);
         const eT tmp_j = P.at(0,j);
         
-        if(tmp_i > max_val) { max_val = tmp_i; }
-        if(tmp_j > max_val) { max_val = tmp_j; }
+        if(tmp_i > max_val_i) { max_val_i = tmp_i; }
+        if(tmp_j > max_val_j) { max_val_j = tmp_j; }
         }
       
       if(i < n_cols)
         {
         const eT tmp_i = P.at(0,i);
         
-        if(tmp_i > max_val) { max_val = tmp_i; }
+        if(tmp_i > max_val_i) { max_val_i = tmp_i; }
         }
       }
     else
@@ -602,21 +599,21 @@ op_max::max(const Base<typename T1::elem_type,T1>& X)
           const eT tmp_i = P.at(i,col);
           const eT tmp_j = P.at(j,col);
           
-          if(tmp_i > max_val) { max_val = tmp_i; }
-          if(tmp_j > max_val) { max_val = tmp_j; }
+          if(tmp_i > max_val_i) { max_val_i = tmp_i; }
+          if(tmp_j > max_val_j) { max_val_j = tmp_j; }
           }
           
         if(i < n_rows)
           {
           const eT tmp_i = P.at(i,col);
           
-          if(tmp_i > max_val) { max_val = tmp_i; }
+          if(tmp_i > max_val_i) { max_val_i = tmp_i; }
           }
         }
       }
     }
   
-  return max_val;
+  return (max_val_i > max_val_j) ? max_val_i : max_val_j;
   }
 
 
@@ -645,6 +642,9 @@ op_max::max(const BaseCube<typename T1::elem_type,T1>& X)
   
   if(ProxyCube<T1>::use_at == false)
     {
+    eT max_val_i = priv::most_neg<eT>();
+    eT max_val_j = priv::most_neg<eT>();
+    
     typedef typename ProxyCube<T1>::ea_type ea_type;
     
     ea_type A = P.get_ea();
@@ -656,16 +656,18 @@ op_max::max(const BaseCube<typename T1::elem_type,T1>& X)
       const eT tmp_i = A[i];
       const eT tmp_j = A[j];
       
-      if(tmp_i > max_val) { max_val = tmp_i; }
-      if(tmp_j > max_val) { max_val = tmp_j; }
+      if(tmp_i > max_val_i) { max_val_i = tmp_i; }
+      if(tmp_j > max_val_j) { max_val_j = tmp_j; }
       }
     
     if(i < n_elem)
       {
       const eT tmp_i = A[i];
       
-      if(tmp_i > max_val) { max_val = tmp_i; }
+      if(tmp_i > max_val_i) { max_val_i = tmp_i; }
       }
+    
+    max_val = (max_val_i > max_val_j) ? max_val_i : max_val_j;
     }
   else
     {

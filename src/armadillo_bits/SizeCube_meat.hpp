@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -51,7 +53,7 @@ SizeCube::operator()(const uword dim) const
   if(dim == 1)  { return n_cols;   }
   if(dim == 2)  { return n_slices; }
   
-  arma_debug_check(true, "size(): index out of bounds");
+  arma_debug_check_bounds(true, "size(): index out of bounds");
   
   return uword(1);
   }

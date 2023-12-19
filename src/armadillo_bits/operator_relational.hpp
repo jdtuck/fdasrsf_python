@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -434,6 +436,46 @@ operator>
   // TODO: ensure T1::elem_type and T2::elem_type are the same
   
   return mtSpGlue<uword, T1, T2, spglue_rel_gt>( X, Y );
+  }
+
+
+
+template<typename T1, typename T2>
+inline
+typename
+enable_if2
+  <
+  (is_arma_sparse_type<T1>::value && is_arma_sparse_type<T2>::value && (is_cx<typename T1::elem_type>::no) && (is_cx<typename T2::elem_type>::no)),
+  const mtSpGlue<uword, T1, T2, spglue_rel_and>
+  >::result
+operator&&
+(const T1& X, const T2& Y)
+  {
+  arma_extra_debug_sigprint();
+  
+  // TODO: ensure T1::elem_type and T2::elem_type are the same
+  
+  return mtSpGlue<uword, T1, T2, spglue_rel_and>( X, Y );
+  }
+
+
+
+template<typename T1, typename T2>
+inline
+typename
+enable_if2
+  <
+  (is_arma_sparse_type<T1>::value && is_arma_sparse_type<T2>::value && (is_cx<typename T1::elem_type>::no) && (is_cx<typename T2::elem_type>::no)),
+  const mtSpGlue<uword, T1, T2, spglue_rel_or>
+  >::result
+operator||
+(const T1& X, const T2& Y)
+  {
+  arma_extra_debug_sigprint();
+  
+  // TODO: ensure T1::elem_type and T2::elem_type are the same
+  
+  return mtSpGlue<uword, T1, T2, spglue_rel_or>( X, Y );
   }
 
 

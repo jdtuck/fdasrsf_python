@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -20,15 +22,14 @@
 
 
 template<typename eT, typename T1>
-class subview_cube_slices : public BaseCube<eT, subview_cube_slices<eT,T1> >
+class subview_cube_slices : public BaseCube< eT, subview_cube_slices<eT,T1> >
   {
   public:
   
   typedef eT                                       elem_type;
   typedef typename get_pod_type<elem_type>::result pod_type;
   
-  arma_aligned const Cube<eT>& m;
-  
+  arma_aligned const Cube<eT>&       m;
   arma_aligned const Base<uword,T1>& base_si;
   
   
@@ -40,6 +41,7 @@ class subview_cube_slices : public BaseCube<eT, subview_cube_slices<eT,T1> >
   public:
   
   inline ~subview_cube_slices();
+  inline  subview_cube_slices() = delete;
   
   inline void inplace_rand(const uword rand_mode);
   
@@ -82,11 +84,7 @@ class subview_cube_slices : public BaseCube<eT, subview_cube_slices<eT,T1> >
   inline static void   div_inplace(Cube<eT>& out, const subview_cube_slices& in);
   
   
-  
-  private:
-  
   friend class Cube<eT>;
-  subview_cube_slices();
   };
 
 
