@@ -210,6 +210,7 @@ def optimum_reparam(
     else:
         raise Exception("Invalid Optimization Method")
 
+    gam = (gam - gam.min()) / (gam.max() - gam.min())
     return gam
 
 
