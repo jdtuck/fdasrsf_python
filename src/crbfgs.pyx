@@ -8,8 +8,8 @@ include "cyarma.pyx"
 
 from libcpp cimport bool
 
-def rlbfs(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] q2, 
-          np.ndarray[double, ndim=1, mode="c"] time, maxiter=30, lam=0.0, penalty=0):
+def rlbfgs(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] q2, 
+           np.ndarray[double, ndim=1, mode="c"] time, maxiter=30, lam=0.0, penalty=0):
     q1 = np.ascontiguousarray(q1)
     q2 = np.ascontiguousarray(q2)
     time = np.ascontiguousarray(time)

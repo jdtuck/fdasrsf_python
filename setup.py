@@ -110,7 +110,7 @@ extensions = [
         sources=["src/crbfgs.pyx", "src/rbfgs.cpp"],
         include_dirs=[numpy.get_include()],
         language="c++",
-        extra_compile_args=["-std=c++11"],
+        extra_compile_args=["-std=c++11", "-lblas", "-llapack"],
     ),
     Extension(
         name="cimage",
