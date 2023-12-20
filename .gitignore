@@ -25,3 +25,5 @@ src/imagecpp.cpp
 fdasrsf_python.code-workspace
 *.so
 .coverage
+src/*.dSYM/
+src/rbfgs
