@@ -73,7 +73,6 @@ class fdawarp:
         self.time = time
         self.rsamps = False
     
-
     def srsf_align(self, method="mean", omethod="DP2", center=True, 
                    smoothdata=False, MaxItr=20, parallel=False, lam=0.0, 
                    cores=-1, grid_dim=7, verbose=True):
@@ -83,14 +82,16 @@ class fdawarp:
 
         :param method: (string) warp calculate Karcher Mean or Median 
                        (options = "mean" or "median") (default="mean")
-        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP2)
+        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) 
+                        (default = DP2)
         :param center: center warping functions (default = T)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param MaxItr: Maximum number of iterations (default = 20)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
-        :param grid_dim: size of the grid, for the DP2 method only (default = 7)
+        :param grid_dim: size of the grid, for the DP2 method only 
+                         (default = 7)
         :param verbose: print status output (default = T)
         :type lam: double
         :type smoothdata: bool
@@ -149,12 +150,14 @@ class fdawarp:
             gam = np.array(out)
             gam = gam.transpose()
         else:
-            gam = np.zeros((M,N))
-            for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,grid_dim)
+            gam = np.zeros((M, N))
+            for k in range(0, N):
+                gam[:,  k] = uf.optimum_reparam(mq, self.time, q[:, k],
+                                                omethod, lam, grid_dim)
 
         gamI = uf.SqrtMeanInverse(gam)
-        mf = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], self.time, mf)
+        mf = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], 
+                       self.time, mf)
         mq = uf.f_to_srsf(mf, self.time)
 
         # Compute Karcher Mean
@@ -189,13 +192,14 @@ class fdawarp:
             # Matching Step
             if parallel:
                 out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r],
-                                        self.time, q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
+                                             self.time, q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
                 gam = np.array(out)
                 gam = gam.transpose()
             else:
-                for k in range(0,N):
-                    gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0],
-                            omethod, lam, grid_dim)
+                for k in range(0 ,N):
+                    gam[:, k] = uf.optimum_reparam(mq[:, r], self.time, 
+                                                   q[:, k, 0], omethod, lam, 
+                                                   grid_dim)
 
             gam_dev = np.zeros((M, N))
             vtil = np.zeros((M,N))
@@ -205,9 +209,9 @@ class fdawarp:
                                         + self.time[0], self.time, f[:, k, 0])
                 q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], self.time)
                 gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
-                v = q[:, k, r + 1] - mq[:,r]
+                v = q[:, k, r + 1] - mq[:, r]
                 d = np.sqrt(trapz(v*v, self.time))
-                vtil[:,k] = v/d
+                vtil[:, k] = v/d
                 dtil[k] = 1.0/d
 
             mqt = mq[:, r]
@@ -259,8 +263,8 @@ class fdawarp:
             gam = np.array(out)
             gam = gam.transpose()
         else:
-            for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
+            for k in range(0, N):
+                gam[:, k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
                         lam, grid_dim)
 
         gam_dev = np.zeros((M, N))
@@ -310,7 +314,6 @@ class fdawarp:
 
         return
 
-
     def plot(self):
         """
         plot functional alignment results
@@ -322,7 +325,7 @@ class fdawarp:
         plot.f_plot(self.time, self.f, title="f Original Data")
 
         fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), self.gam,
-                                title="Warping Functions")
+                              title="Warping Functions")
         ax.set_aspect('equal')
 
         plot.f_plot(self.time, self.fn, title="Warped Data")
@@ -380,12 +383,12 @@ class fdawarp:
         fs = np.zeros((M, n))
         for k in range(0, n):
             fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]),
-                                    np.sign(q_s[M, k]) * (q_s[M, k] ** 2),
-                                    mididx)
+                                      np.sign(q_s[M, k]) * (q_s[M, k] ** 2),
+                                      mididx)
         fbar = fn.mean(axis=1)
 
         fsbar = fs.mean(axis=1)
-        err = np.transpose(np.tile(fbar-fsbar, (n,1)))
+        err = np.transpose(np.tile(fbar-fsbar, (n, 1)))
         fs += err
 
         # random warping generation
@@ -415,7 +418,7 @@ class fdawarp:
             ft = np.zeros((M, n))
             for k in range(0, n):
                 ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) /
-                                    np.double(M - 1), fs[:, seq1[k]])
+                                     np.double(M - 1), fs[:, seq1[k]])
                 tmp = np.isnan(ft[:, k])
                 while tmp.any():
                     rgam2 = uf.randomGamma(gam, 1)
@@ -426,22 +429,20 @@ class fdawarp:
             ft = np.zeros((M, n))
             for k in range(0, n):
                 ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
-                                    np.double(M - 1), fs[:, k])
+                                     np.double(M - 1), fs[:, k])
                 tmp = np.isnan(ft[:, k])
                 while tmp.any():
                     rgam2 = uf.randomGamma(gam, 1)
                     ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
-                                        np.double(M - 1), uf.invertGamma(rgam2))
-
-        
+                                         np.double(M - 1), uf.invertGamma(rgam2))
+     
         self.rsamps = True
         self.fs = fs
         self.gams = rgam
         self.ft = ft
-        self.qs = q_s[0:M,:]
+        self.qs = q_s[0:M, :]
 
         return
-
 
     def joint_gauss_model(self, n=1, no=3):
         """
@@ -458,7 +459,6 @@ class fdawarp:
         fn = self.fn
         time = self.time
         qn = self.qn
-        gam = self.gam
 
         M = time.size
 
@@ -480,22 +480,21 @@ class fdawarp:
         vals = np.random.multivariate_normal(np.zeros(s.shape), np.diag(s), n)
         
         tmp = np.matmul(U, np.transpose(vals))
-        qhat = np.tile(mqn.T,(n,1)).T + tmp[0:M+1,:]
+        qhat = np.tile(mqn.T, (n, 1)).T + tmp[0:M+1, :]
         tmp = np.matmul(U, np.transpose(vals)/C)
-        vechat = tmp[(M+1):,:]
-        psihat = np.zeros((M,n))
-        gamhat = np.zeros((M,n))
+        vechat = tmp[(M+1):, :]
+        psihat = np.zeros((M, n))
+        gamhat = np.zeros((M, n))
         for ii in range(n):
-            psihat[:,ii] = geo.exp_map(mu_psi,vechat[:,ii])
-            gam_tmp = cumtrapz(psihat[:,ii]**2,np.linspace(0,1,M),initial=0.0)
-            gamhat[:,ii] = (gam_tmp - gam_tmp.min())/(gam_tmp.max()-gam_tmp.min())
+            psihat[:, ii] = geo.exp_map(mu_psi, vechat[:, ii])
+            gam_tmp = cumtrapz(psihat[:, ii]**2, np.linspace(0, 1, M), initial=0.0)
+            gamhat[:, ii] = (gam_tmp - gam_tmp.min())/(gam_tmp.max()-gam_tmp.min())
         
-        ft = np.zeros((M,n))
-        fhat = np.zeros((M,n))
+        ft = np.zeros((M, n))
+        fhat = np.zeros((M, n))
         for ii in range(n):
-            fhat[:,ii] = uf.cumtrapzmid(time, qhat[0:M,ii]*np.fabs(qhat[0:M,ii]), np.sign(qhat[M,ii])*(qhat[M,ii]*qhat[M,ii]), mididx)
-            ft[:,ii] = uf.warp_f_gamma(np.linspace(0,1,M),fhat[:,ii],gamhat[:,ii])
-
+            fhat[:, ii] = uf.cumtrapzmid(time, qhat[0:M, ii]*np.fabs(qhat[0:M, ii]), np.sign(qhat[M,ii])*(qhat[M,ii]*qhat[M,ii]), mididx)
+            ft[:, ii] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat[:, ii], gamhat[:,ii])
 
         self.rsamps = True
         self.fs = fhat
@@ -506,22 +505,25 @@ class fdawarp:
         return
 
     def multiple_align_functions(self, mu, omethod="DP2", smoothdata=False,
-                                 parallel=False, lam=0.0, cores=-1, grid_dim=7):
+                                 parallel=False, lam=0.0, cores=-1, 
+                                 grid_dim=7):
         """
-        This function aligns a collection of functions using the elastic square-root
-        slope (srsf) framework.
+        This function aligns a collection of functions using the elastic 
+        square-root slope (srsf) framework.
 
         Usage:  obj.multiple_align_functions(mu)
                 obj.multiple_align_functions(lambda)
         obj.multiple_align_functions(lambda, ...)
     
         :param mu: vector of function to align to
-        :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) 
+                        (default = DP2)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
-        :param grid_dim: size of the grid, for the DP2 method only (default = 7)
+        :param grid_dim: size of the grid, for the DP2 method only 
+                         (default = 7)
         :type lam: double
         :type smoothdata: bool
 
@@ -548,31 +550,29 @@ class fdawarp:
 
         if parallel:
             out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
-                                    q[:, n], omethod, lam, grid_dim) for n in range(N))
+                                         q[:, n], omethod, lam, grid_dim) for n in range(N))
             gam = np.array(out)
             gam = gam.transpose()
         else:
-            gam = np.zeros((M,N))
-            for k in range(0,N):
-                gam[:,k] = uf.optimum_reparam(mq,self.time,q[:,k],omethod,lam,grid_dim)
+            gam = np.zeros((M, N))
+            for k in range(0, N):
+                gam[:, k] = uf.optimum_reparam(mq, self.time, q[:, k], omethod, 
+                                               lam, grid_dim)
 
         self.gamI = uf.SqrtMeanInverse(gam)
 
-        fn = np.zeros((M,N))
-        qn = np.zeros((M,N))
+        fn = np.zeros((M, N))
+        qn = np.zeros((M, N))
         for k in range(0, N):
             fn[:, k] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
-                                    + self.time[0], self.time, f[:, k])
+                                 + self.time[0], self.time, f[:, k])
             qn[:, k] = uf.f_to_srsf(f[:, k], self.time)
-
 
         # Aligned data & stats
         self.fn = fn
         self.qn = qn
         self.q0 = q
-        mean_f0 = f.mean(axis=1)
         std_f0 = f.std(axis=1)
-        mean_fn = self.fn.mean(axis=1)
         std_fn = self.fn.std(axis=1)
         self.gam = gam
         self.mqn = mq
@@ -597,12 +597,13 @@ def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
         slope (srsf) framework.
 
     Usage:  out = pairwise_align_functions(f1, f2, time)
-            out = pairwise_align_functions(f1, f2, time, omethod, lam, grid_dim)
+            out = pairwise_align_functions(f1, f2, time, omethod, lam, 
+                                           grid_dim)
     
     :param f1: vector defining M samples of function 1
     :param f2: vector defining M samples of function 2
     :param time: time vector of length M
-    :param omethod: optimization method (DP, DP2, RBFGS) (default = DP)
+    :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) (default = DP)
     :param lam: controls the elasticity (default = 0)
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
@@ -618,9 +619,8 @@ def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
 
     gam = uf.optimum_reparam(q1, time, q2, omethod, lam, grid_dim)
 
-    f2n = uf.warp_f_gamma(time, f2 , gam)
+    f2n = uf.warp_f_gamma(time, f2, gam)
     q2n = uf.f_to_srsf(f2n, time)
-
 
     return (f2n, gam, q2n)
 
@@ -690,7 +690,6 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
         raise Exception('Length of mcmcopts.initcoef must be even')
 
     # Number of sig figs to report in gamma_mat
-    SIG_GAM = 13
     iter = mcmcopts["iter"]
     
     # parameter settings
@@ -721,22 +720,23 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
 
     # normalize time to [0,1]
     time = (time - time.min())/(time.max()-time.min())
-    timet = np.linspace(0,1,numSimPoints)
-    f1 = uf.f_predictfunction(f1i,timet,0)
-    f2 = uf.f_predictfunction(f2i,timet,0)
+    timet = np.linspace(0, 1, numSimPoints)
+    f1 = uf.f_predictfunction(f1i, timet, 0)
+    f2 = uf.f_predictfunction(f2i, timet, 0)
 
     # srsf transformation
-    q1 = uf.f_to_srsf(f1,timet)
-    q1i = uf.f_to_srsf(f1i,time)
-    q2 = uf.f_to_srsf(f2,timet)
+    q1 = uf.f_to_srsf(f1, timet)
+    q1i = uf.f_to_srsf(f1i, time)
+    q2 = uf.f_to_srsf(f2, timet)
 
-    tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis))
+    tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"], 0, 
+                                         g_coef_ini, g_basis))
 
     if tmp.min() < 0:
         raise Exception("Invalid initial value of g")
 
     # result vectors
-    g_coef = np.zeros((iter,g_coef_ini.shape[0]))
+    g_coef = np.zeros((iter, g_coef_ini.shape[0]))
     sigma1 = np.zeros(iter)
     logl = np.zeros(iter)
     SSE = np.zeros(iter)
@@ -746,16 +746,21 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     # init
     g_coef_curr = g_coef_ini
     sigma1_curr = sigma1_ini
-    SSE_curr = bf.f_SSEg_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2)
-    logl_curr = bf.f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_ini,g_basis),q1,q2,sigma1_ini**2,SSE_curr)
+    SSE_curr = bf.f_SSEg_pw(uf.f_basistofunction(g_basis["x"], 0, 
+                                                 g_coef_ini, g_basis),
+                                                 q1, q2)
+    logl_curr = bf.f_logl_pw(uf.f_basistofunction(g_basis["x"], 0,
+                                                  g_coef_ini, g_basis),
+                                                  q1, q2, sigma1_ini**2,
+                                                  SSE_curr)
     
-    g_coef[0,:] = g_coef_ini
+    g_coef[0, :] = g_coef_ini
     sigma1[0] = sigma1_ini
     SSE[0] = SSE_curr
     logl[0] = logl_curr
 
     # update the chain for iter-1 times
-    for m in tqdm(range(1,iter)):
+    for m in tqdm(range(1, iter)):
         # update g
         g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = bf.f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
         
@@ -825,8 +830,8 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     This function aligns two functions using Bayesian framework. It uses a 
     hierarchical Bayesian framework assuming mearsurement error error It will 
     align f2 to f1. It is based on mapping warping functions to a hypersphere, 
-    and a subsequent exponential mapping to a tangent space. In the tangent space,
-    the \infty-HMC algorithm is used to explore both local and global
+    and a subsequent exponential mapping to a tangent space. In the tangent 
+    space, the \infty-HMC algorithm is used to explore both local and global
     structure in the posterior distribution.
    
     Usage:  out = pairwise_align_bayes_infHMC(f1i, f2i, time)
@@ -1065,7 +1070,6 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
 
 def run_mcmc(y1i, y2i, time, mcmcopts):
     # Number of sig figs to report in gamma_mat
-    SIG_GAM = 13
     iter = mcmcopts["iter"]
     T = time.shape[0]
 
@@ -1197,7 +1201,7 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     nll, g, SSE_curr = bf.f_dlogl_pw(v_coef_curr, v_basis, d_basis, sigma_curr, q1_curr, q2_curr)
 
     # update the chain for iter-1 times
-    for m in range(1,iter):
+    for m in range(1, iter):
 
         # update f1
         f1_curr, q1_curr, f1_accept1 = bf.f_updatef1_pw(f1_curr,q1_curr, y1i, q2_curr,v_coef_curr, v_basis,
