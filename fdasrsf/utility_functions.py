@@ -21,6 +21,7 @@ import numpy.random as rn
 import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
 import cbayesian as bay
+import crbfgs as cr
 import fdasrsf.geometry as geo
 from fdasrsf.rbfgs import rlbfgs
 import sys
@@ -135,11 +136,13 @@ def optimum_reparam(
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
-    :param method: method to apply optimization (default="DP2") options are "DP","DP2","RBFGS"
+    :param method: method to apply optimization (default="DP2") options are 
+                   "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
-    :param penalty: penalty type (default="roughness") options are "roughness", "l2gam",
-                    "l2psi", "geodesic". Only roughness implemented in all methods. To use
-                    others method needs to be "RBFGS"
+    :param penalty: penalty type (default="roughness") options are "roughness", 
+                    "l2gam", "l2psi", "geodesic". Only roughness implemented 
+                    in all methods. To use others method needs to be "RBFGS"
+                    or "cRBFGS"
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype: vector
@@ -209,6 +212,38 @@ def optimum_reparam(
                 obj = rlbfgs(q1[:, i], q2[:, i], time)
                 obj.solve(lam=lam, penalty=penalty)
                 gam[:, i] = obj.gammaOpt
+    elif method == "cRBFGS":
+        if penalty == "roughness":
+            pen = 0
+        elif penalty == "l2gam":
+            pen = 1
+        elif penalty == "l2psi":
+            pen = 2
+        elif penalty == "geodesic":
+            pen = 3
+        else:
+            raise Exception("penalty not implemented")
+          
+        if q1.ndim == 1 and q2.ndim == 1:
+            time = linspace(0, 1, q1.shape[0])
+            gam = cr.rlbfgs(ascontiguousarray(q1), ascontiguousarray(q2),
+                            ascontiguousarray(time), 30, lam, pen)
+
+        if q1.ndim == 1 and q2.ndim == 2:
+            gam = zeros(q2.shape)
+            time = linspace(0, 1, q1.shape[0])
+            for i in range(0, q2.shape[1]):
+                gam[:, i] = cr.rlbfgs(ascontiguousarray(q1),
+                                      ascontiguousarray(q2[:, i]),
+                                      ascontiguousarray(time), 30, lam, pen)
+
+        if q1.ndim == 2 and q2.ndim == 2:
+            gam = zeros(q2.shape)
+            time = linspace(0, 1, q1.shape[0])
+            for i in range(0, q2.shape[1]):
+                gam[:, i] = cr.rlbfgs(ascontiguousarray(q1[:, i]),
+                                      ascontiguousarray(q2[:, i]),
+                                      ascontiguousarray(time), 30, lam, pen)
 
     else:
         raise Exception("Invalid Optimization Method")
@@ -268,7 +303,7 @@ def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
     :param f: matrix of size MxN (M time points for N functions)
     :param time: vector of size M describing the sample points
     :param method: method to apply optimization (default="DP2") 
-                   options are "DP","DP2","RBFGS"
+                   options are "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the elasticity (default = 0.0)
 
     :rtype: scalar
@@ -314,7 +349,7 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None):
     :param f2: vector of size N
     :param time: vector of size N describing the sample points
     :param method: method to apply optimization (default="DP2") 
-                   options are "DP","DP2","RBFGS"
+                   options are "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the elasticity (default = 0.0)
     :param alpha: makes alpha * dx + (1-alpha) * dy
 
