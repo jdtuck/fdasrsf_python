@@ -219,8 +219,7 @@ class rlbfgs {
                 stat.accepted = accepted;
             }
 
-            gammaOpt = arma::zeros(T);
-            gammaOpt(arma::span(1, T)) = cumtrapz(time, pow(htilde,2));
+            gammaOpt = cumtrapz(time, pow(htilde,2));
             gammaOpt = (gammaOpt - gammaOpt.min()) / (gammaOpt.max() - gammaOpt.min());
             q2Opt = q2tilde;
             cost = hCurCost;
@@ -235,7 +234,7 @@ class rlbfgs {
                 vec b = arma::diff(time1);
                 double binsize = mean(b);
                 vec g = gradient(arma::pow(h, 2), binsize); 
-                arma::mat pen1 = arma::trapz(time1, g);
+                arma::mat pen1 = arma::trapz(time1, arma::pow(g, 2));
                 pen = pen1(0);
             }
             // l2gam
@@ -264,13 +263,13 @@ class rlbfgs {
                 pen = pow(real(acos(q1dotq2)),2);
             }
 
-            double f = normL2(q1-q2k);
+            double f = normL2(q1-q2new);
             f = pow(f,2) + lam * pen;
 
             return f;
         }
 
-        void alignment_costgrad(vec q2k, vec h, double f, vec g, double lam = 0, int penalty = 0){
+        void alignment_costgrad(vec q2k, vec h, double& f, vec& g, double lam = 0, int penalty = 0){
             // roughness
             double pen = 0;
             if (penalty == 0){
@@ -278,7 +277,7 @@ class rlbfgs {
                 vec b = arma::diff(time1);
                 double binsize = mean(b);
                 vec g = gradient(arma::pow(h, 2), binsize); 
-                arma::mat pen1 = arma::trapz(time1, g);
+                arma::mat pen1 = arma::trapz(time1, arma::pow(g, 2));
                 pen = pen1(0);
             }
             // l2gam
@@ -315,10 +314,9 @@ class rlbfgs {
             double binsize = 1.0/(T-1);
             vec q2kdot = gradient(q2k, binsize);
             vec dq = q1 - q2k;
-            vec v = arma::zeros(T);
             vec tmp = dq % q2kdot;
             vec tmp1 = dq % q2k;
-            v(arma::span(1,T-1)) = 2 * cumtrapz(time, tmp);
+            vec v = 2 * cumtrapz(time, tmp);
             v = v - tmp1;
 
             mat val = arma::trapz(time, v);
@@ -419,7 +417,7 @@ class rlbfgs {
             h1 = sqrt(h1);
             vec qnew;
             arma::interp1(time, q, gamma, qnew);
-            qnew = qnew % h;
+            qnew = qnew % h1;
 
             return qnew;
         }
@@ -531,14 +529,14 @@ class rlbfgs {
         }
 
         vec cumtrapz(vec x, vec y){
-        vec z = arma::zeros(T);
+            vec z = arma::zeros(T);
 
-        vec dt = arma::diff(x)/2.0;
-        vec tmp = dt % (y(arma::span(0, T-2))- y(arma::span(1,T-1)));
-        z(arma::span(1,T-1)) = cumsum(tmp);
+            vec dt = arma::diff(x)/2.0;
+            vec tmp = dt % (y(arma::span(1, T-1)) + y(arma::span(0,T-2)));
+            z(arma::span(1,T-1)) = cumsum(tmp);
 
-        return z;
-    }
+            return z;
+        }
 };
 
 
@@ -547,8 +545,10 @@ int main() {
     vec time = arma::linspace(0, 2*M_PI, T);
     vec q1 = sin(time);
     vec q2 = cos(time);
+    vec time1 = arma::linspace(0, 1, T);
 
-    rlbfgs myObj(q1, q2, time); 
+    rlbfgs myObj(q1, q2, time1); 
+    myObj.solve();
 
     return 0;
 }
