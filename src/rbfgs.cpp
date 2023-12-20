@@ -48,7 +48,7 @@ class rlbfgs {
         T = timei.n_elem;
         }
 
-        void solve(int maxiter=30, int verb=0, double lam=0.0, int penalty=0){
+        void solve(int maxiter=30, double lam=0.0, int penalty=0){
             // run solver
             options option;
             // terminates if the norm of the gradient drops below this
@@ -539,6 +539,15 @@ class rlbfgs {
         }
 };
 
+vec rlbfgs_optim(vec q1, vec q2, vec time, int maxiter=30, double lam=0.0, int penalty=0){
+    uword T = time.n_elem;
+    vec time1 = arma::linspace(0, 1, T);
+
+    rlbfgs myObj(q1, q2, time1); 
+    myObj.solve(maxiter, lam, penalty);
+
+    return myObj.gammaOpt;
+}
 
 int main() {
     uword T = 101;
@@ -549,6 +558,8 @@ int main() {
 
     rlbfgs myObj(q1, q2, time1); 
     myObj.solve();
+
+    myObj.gammaOpt.print();
 
     return 0;
 }

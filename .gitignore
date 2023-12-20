@@ -27,3 +27,4 @@ fdasrsf_python.code-workspace
 .coverage
 src/*.dSYM/
 src/rbfgs
+src/crbfgs.cpp
