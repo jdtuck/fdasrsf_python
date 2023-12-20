@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -26,9 +28,9 @@ template<typename T1>
 class SpValProxy
   {
   public:
-
+  
   typedef typename T1::elem_type eT; // Convenience typedef
-
+  
   friend class SpMat<eT>;
   friend class SpSubview<eT>;
   
@@ -36,7 +38,8 @@ class SpValProxy
    * Create the sparse value proxy.
    * Otherwise, pass a pointer to a reference of the value.
    */
-  arma_inline SpValProxy(uword row, uword col, T1& in_parent, eT* in_val_ptr = NULL);
+  arma_inline SpValProxy(uword row, uword col, T1& in_parent, eT* in_val_ptr = nullptr);
+       inline SpValProxy() = delete;
   
   //! For swapping operations.
   arma_inline SpValProxy& operator=(const SpValProxy& rhs);
@@ -46,16 +49,17 @@ class SpValProxy
   //! Overload all of the potential operators.
   
   //! First, the ones that could modify a value.
-  arma_inline SpValProxy& operator=(const eT rhs);
-  arma_inline SpValProxy& operator+=(const eT rhs);
-  arma_inline SpValProxy& operator-=(const eT rhs);
-  arma_inline SpValProxy& operator*=(const eT rhs);
-  arma_inline SpValProxy& operator/=(const eT rhs);
+  inline SpValProxy& operator= (const eT rhs);
+  inline SpValProxy& operator+=(const eT rhs);
+  inline SpValProxy& operator-=(const eT rhs);
+  inline SpValProxy& operator*=(const eT rhs);
+  inline SpValProxy& operator/=(const eT rhs);
   
-  arma_inline SpValProxy& operator++();
-  arma_inline SpValProxy& operator--();
-  arma_inline eT operator++(const int);
-  arma_inline eT operator--(const int);
+  inline SpValProxy& operator++();
+  inline SpValProxy& operator--();
+  
+  inline eT          operator++(const int);
+  inline eT          operator--(const int);
   
   //! This will work for any other operations that do not modify a value.
   arma_inline operator eT() const;
@@ -66,7 +70,7 @@ class SpValProxy
   
   private:
   
-  // Deletes the element if it is zero.  Does not check if val_ptr == NULL!
+  // Deletes the element if it is zero; NOTE: does not check if val_ptr == nullptr
   arma_inline void check_zero();
   
   arma_aligned const uword row;

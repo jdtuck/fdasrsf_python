@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -27,9 +29,9 @@ class glue_trapz
   template<typename T1, typename T2>
   struct traits
     {
-    static const bool is_row  = false;
-    static const bool is_col  = false;
-    static const bool is_xvec = true;
+    static constexpr bool is_row  = false;
+    static constexpr bool is_col  = false;
+    static constexpr bool is_xvec = true;
     };
   
   template<typename T1, typename T2> inline static void apply(Mat<typename T1::elem_type>& out, const Glue<T1,T2,glue_trapz>& in);

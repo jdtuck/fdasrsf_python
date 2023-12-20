@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -14,24 +16,29 @@
 // ------------------------------------------------------------------------
 
 
-//! \addtogroup spglue_elem_helper
+//! \addtogroup SpToDGlue
 //! @{
 
 
 
-class spglue_elem_helper
-  : public traits_glue_default
+template<typename T1, typename T2, typename glue_type>
+inline
+SpToDGlue<T1,T2,glue_type>::SpToDGlue(const T1& in_A, const T2& in_B)
+  : A(in_A)
+  , B(in_B)
   {
-  public:
-  
-  template<typename T1, typename T2>
-  arma_hot inline static uword max_n_nonzero_plus(const SpProxy<T1>& pa, const SpProxy<T2>& pb);
-  
-  template<typename T1, typename T2>
-  arma_hot inline static uword max_n_nonzero_schur(const SpProxy<T1>& pa, const SpProxy<T2>& pb);
-  };
+  arma_extra_debug_sigprint();
+  }
+
+
+
+template<typename T1, typename T2, typename glue_type>
+inline
+SpToDGlue<T1,T2,glue_type>::~SpToDGlue()
+  {
+  arma_extra_debug_sigprint();
+  }
 
 
 
 //! @}
-

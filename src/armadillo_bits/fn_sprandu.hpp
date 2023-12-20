@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -30,7 +32,7 @@ sprandu
   const uword  n_rows,
   const uword  n_cols,
   const double density,
-  const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = 0
+  const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -59,7 +61,7 @@ template<typename obj_type>
 arma_warn_unused
 inline
 obj_type
-sprandu(const SizeMat& s, const double density, const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = 0)
+sprandu(const SizeMat& s, const double density, const typename arma_SpMat_SpCol_SpRow_only<obj_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);

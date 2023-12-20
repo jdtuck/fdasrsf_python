@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -19,9 +21,9 @@
 
 
 //! Class for storing data required to construct or apply operations to a subcube
-//! (i.e. where the subcube starts and ends as well as a reference/pointer to the original cube),
+//! (ie. where the subcube starts and ends as well as a reference/pointer to the original cube),
 template<typename eT>
-class subview_cube : public BaseCube<eT, subview_cube<eT> >
+class subview_cube : public BaseCube< eT, subview_cube<eT> >
   {
   public:    
   
@@ -49,6 +51,14 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   public:
   
   inline ~subview_cube();
+  inline  subview_cube() = delete;
+  
+  inline  subview_cube(const subview_cube&  in);
+  inline  subview_cube(      subview_cube&& in);
+  
+  template<typename op_type             > inline void inplace_op(const eT                val                        );
+  template<typename op_type, typename T1> inline void inplace_op(const BaseCube<eT,T1>&  x,   const char* identifier);
+  template<typename op_type             > inline void inplace_op(const subview_cube<eT>& x,   const char* identifier);
   
   inline void operator=  (const eT val);
   inline void operator+= (const eT val);
@@ -95,14 +105,14 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   template<typename functor> inline void transform(functor F);
   template<typename functor> inline void     imbue(functor F);
   
-  #if defined(ARMA_USE_CXX11)
   inline void each_slice(const std::function< void(      Mat<eT>&) >& F);
   inline void each_slice(const std::function< void(const Mat<eT>&) >& F) const;
-  #endif
   
   inline void replace(const eT old_val, const eT new_val);
   
   inline void clean(const pod_type threshold);
+  
+  inline void clamp(const eT min_val, const eT max_val);
   
   inline void fill(const eT val);
   inline void zeros();
@@ -110,10 +120,12 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   inline void randu();
   inline void randn();
   
-  inline arma_warn_unused bool is_finite() const;
+  arma_warn_unused inline bool is_finite() const;
+  arma_warn_unused inline bool is_zero(const pod_type tol = 0) const;
   
-  inline arma_warn_unused bool has_inf() const;
-  inline arma_warn_unused bool has_nan() const;
+  arma_warn_unused inline bool has_inf()       const;
+  arma_warn_unused inline bool has_nan()       const;
+  arma_warn_unused inline bool has_nonfinite() const;
   
   inline eT  at_alt    (const uword i) const;
   
@@ -132,8 +144,10 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   arma_inline       eT* slice_colptr(const uword in_slice, const uword in_col);
   arma_inline const eT* slice_colptr(const uword in_slice, const uword in_col) const;
   
-  inline bool check_overlap(const subview_cube& x) const;
-  inline bool check_overlap(const Mat<eT>&      x) const;
+  template<typename eT2>
+  inline bool check_overlap(const subview_cube<eT2>& x) const;
+  
+  inline bool check_overlap(const Mat<eT>&           x) const;
   
   
   class const_iterator;
@@ -146,15 +160,15 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
     inline iterator(const iterator& X);
     inline iterator(subview_cube<eT>& in_sv, const uword in_row, const uword in_col, const uword in_slice);
     
-    inline arma_warn_unused eT& operator*();
+    arma_warn_unused inline eT& operator*();
     
-    inline                  iterator& operator++();
-    inline arma_warn_unused iterator  operator++(int);
+                     inline iterator& operator++();
+    arma_warn_unused inline iterator  operator++(int);
     
-    inline arma_warn_unused bool operator==(const       iterator& rhs) const;
-    inline arma_warn_unused bool operator!=(const       iterator& rhs) const;
-    inline arma_warn_unused bool operator==(const const_iterator& rhs) const;
-    inline arma_warn_unused bool operator!=(const const_iterator& rhs) const;
+    arma_warn_unused inline bool operator==(const       iterator& rhs) const;
+    arma_warn_unused inline bool operator!=(const       iterator& rhs) const;
+    arma_warn_unused inline bool operator==(const const_iterator& rhs) const;
+    arma_warn_unused inline bool operator!=(const const_iterator& rhs) const;
     
     typedef std::forward_iterator_tag iterator_category;
     typedef eT                        value_type;
@@ -185,15 +199,15 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
     inline const_iterator(const const_iterator& X);
     inline const_iterator(const subview_cube<eT>& in_sv, const uword in_row, const uword in_col, const uword in_slice);
     
-    inline arma_warn_unused const eT& operator*();
+    arma_warn_unused inline const eT& operator*();
     
-    inline                  const_iterator& operator++();
-    inline arma_warn_unused const_iterator  operator++(int);
+                     inline const_iterator& operator++();
+    arma_warn_unused inline const_iterator  operator++(int);
     
-    inline arma_warn_unused bool operator==(const       iterator& rhs) const;
-    inline arma_warn_unused bool operator!=(const       iterator& rhs) const;
-    inline arma_warn_unused bool operator==(const const_iterator& rhs) const;
-    inline arma_warn_unused bool operator!=(const const_iterator& rhs) const;
+    arma_warn_unused inline bool operator==(const       iterator& rhs) const;
+    arma_warn_unused inline bool operator!=(const       iterator& rhs) const;
+    arma_warn_unused inline bool operator==(const const_iterator& rhs) const;
+    arma_warn_unused inline bool operator!=(const const_iterator& rhs) const;
     
     // So that we satisfy the STL iterator types.
     typedef std::forward_iterator_tag iterator_category;
@@ -225,12 +239,8 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   inline const_iterator cend() const;
   
   
-  private:
-  
   friend class  Mat<eT>;
   friend class Cube<eT>;
-  
-  subview_cube();
   };
 
 

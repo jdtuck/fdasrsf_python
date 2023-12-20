@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -28,7 +30,7 @@ MapMat<eT>::~MapMat()
   if(map_ptr)  { (*map_ptr).clear();  delete map_ptr; }
   
   // try to expose buggy user code that accesses deleted objects
-  if(arma_config::debug)  { map_ptr = NULL; }
+  if(arma_config::debug)  { map_ptr = nullptr; }
   
   arma_type_check(( is_supported_elem_type<eT>::value == false ));
   }
@@ -41,7 +43,7 @@ MapMat<eT>::MapMat()
   : n_rows (0)
   , n_cols (0)
   , n_elem (0)
-  , map_ptr(NULL)
+  , map_ptr(nullptr)
   {
   arma_extra_debug_sigprint_this(this);
   
@@ -56,7 +58,7 @@ MapMat<eT>::MapMat(const uword in_n_rows, const uword in_n_cols)
   : n_rows (in_n_rows)
   , n_cols (in_n_cols)
   , n_elem (in_n_rows * in_n_cols)
-  , map_ptr(NULL)
+  , map_ptr(nullptr)
   {
   arma_extra_debug_sigprint_this(this);
   
@@ -71,7 +73,7 @@ MapMat<eT>::MapMat(const SizeMat& s)
   : n_rows (s.n_rows)
   , n_cols (s.n_cols)
   , n_elem (s.n_rows * s.n_cols)
-  , map_ptr(NULL)
+  , map_ptr(nullptr)
   {
   arma_extra_debug_sigprint_this(this);
   
@@ -86,7 +88,7 @@ MapMat<eT>::MapMat(const MapMat<eT>& x)
   : n_rows (0)
   , n_cols (0)
   , n_elem (0)
-  , map_ptr(NULL)
+  , map_ptr(nullptr)
   {
   arma_extra_debug_sigprint_this(this);
   
@@ -121,7 +123,7 @@ MapMat<eT>::MapMat(const SpMat<eT>& x)
   : n_rows (0)
   , n_cols (0)
   , n_elem (0)
-  , map_ptr(NULL)
+  , map_ptr(nullptr)
   {
   arma_extra_debug_sigprint_this(this);
   
@@ -164,60 +166,54 @@ MapMat<eT>::operator=(const SpMat<eT>& x)
       
       const uword index = (x_n_rows * col) + row;
       
-      #if defined(ARMA_USE_CXX11)
-        map_ref.emplace_hint(map_ref.cend(), index, val);
-      #else
-        map_ref.operator[](index) = val;
-      #endif
+      map_ref.emplace_hint(map_ref.cend(), index, val);
       }
     }
   }
 
 
 
-#if defined(ARMA_USE_CXX11)
+template<typename eT>
+inline
+MapMat<eT>::MapMat(MapMat<eT>&& x)
+  : n_rows (x.n_rows )
+  , n_cols (x.n_cols )
+  , n_elem (x.n_elem )
+  , map_ptr(x.map_ptr)
+  {
+  arma_extra_debug_sigprint_this(this);
+  
+  access::rw(x.n_rows)  = 0;
+  access::rw(x.n_cols)  = 0;
+  access::rw(x.n_elem)  = 0;
+  access::rw(x.map_ptr) = nullptr;
+  }
 
-  template<typename eT>
-  inline
-  MapMat<eT>::MapMat(MapMat<eT>&& x)
-    : n_rows (x.n_rows )
-    , n_cols (x.n_cols )
-    , n_elem (x.n_elem )
-    , map_ptr(x.map_ptr)
-    {
-    arma_extra_debug_sigprint_this(this);
-    
-    access::rw(x.n_rows)  = 0;
-    access::rw(x.n_cols)  = 0;
-    access::rw(x.n_elem)  = 0;
-    access::rw(x.map_ptr) = NULL;
-    }
-  
-  
-  
-  template<typename eT>
-  inline
-  void
-  MapMat<eT>::operator=(MapMat<eT>&& x)
-    {
-    arma_extra_debug_sigprint();
-    
-    reset();
-    
-    if(map_ptr)  { delete map_ptr; }
-    
-    access::rw(n_rows)  = x.n_rows;
-    access::rw(n_cols)  = x.n_cols;
-    access::rw(n_elem)  = x.n_elem;
-    access::rw(map_ptr) = x.map_ptr;
-    
-    access::rw(x.n_rows)  = 0;
-    access::rw(x.n_cols)  = 0;
-    access::rw(x.n_elem)  = 0;
-    access::rw(x.map_ptr) = NULL;
-    }
 
-#endif
+
+template<typename eT>
+inline
+void
+MapMat<eT>::operator=(MapMat<eT>&& x)
+  {
+  arma_extra_debug_sigprint();
+  
+  if(this == &x)  { return; }
+  
+  reset();
+  
+  if(map_ptr)  { delete map_ptr; }
+  
+  access::rw(n_rows)  = x.n_rows;
+  access::rw(n_cols)  = x.n_cols;
+  access::rw(n_elem)  = x.n_elem;
+  access::rw(map_ptr) = x.map_ptr;
+  
+  access::rw(x.n_rows)  = 0;
+  access::rw(x.n_cols)  = 0;
+  access::rw(x.n_elem)  = 0;
+  access::rw(x.map_ptr) = nullptr;
+  }
 
 
 
@@ -356,11 +352,7 @@ MapMat<eT>::eye(const uword in_n_rows, const uword in_n_cols)
     {
     const uword index = (in_n_rows * i) + i;
     
-    #if defined(ARMA_USE_CXX11)
-      map_ref.emplace_hint(map_ref.cend(), index, eT(1));
-    #else
-      map_ref.operator[](index) = eT(1);
-    #endif
+    map_ref.emplace_hint(map_ref.cend(), index, eT(1));
     }
   }
 
@@ -416,7 +408,6 @@ MapMat<eT>::speye(const SizeMat& s)
 
 template<typename eT>
 arma_inline
-arma_warn_unused
 MapMat_val<eT>
 MapMat<eT>::operator[](const uword index)
   {
@@ -427,7 +418,6 @@ MapMat<eT>::operator[](const uword index)
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 MapMat<eT>::operator[](const uword index) const
   {
@@ -443,11 +433,10 @@ MapMat<eT>::operator[](const uword index) const
 
 template<typename eT>
 arma_inline
-arma_warn_unused
 MapMat_val<eT>
 MapMat<eT>::operator()(const uword index)
   {
-  arma_debug_check( (index >= n_elem), "MapMat::operator(): index out of bounds" );
+  arma_debug_check_bounds( (index >= n_elem), "MapMat::operator(): index out of bounds" );
   
   return MapMat_val<eT>(*this, index);
   }
@@ -456,11 +445,10 @@ MapMat<eT>::operator()(const uword index)
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 MapMat<eT>::operator()(const uword index) const
   {
-  arma_debug_check( (index >= n_elem), "MapMat::operator(): index out of bounds" );
+  arma_debug_check_bounds( (index >= n_elem), "MapMat::operator(): index out of bounds" );
   
   map_type& map_ref = (*map_ptr);
   
@@ -474,7 +462,6 @@ MapMat<eT>::operator()(const uword index) const
 
 template<typename eT>
 arma_inline
-arma_warn_unused
 MapMat_val<eT>
 MapMat<eT>::at(const uword in_row, const uword in_col)
   {
@@ -487,7 +474,6 @@ MapMat<eT>::at(const uword in_row, const uword in_col)
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 MapMat<eT>::at(const uword in_row, const uword in_col) const
   {
@@ -505,11 +491,10 @@ MapMat<eT>::at(const uword in_row, const uword in_col) const
 
 template<typename eT>
 arma_inline
-arma_warn_unused
 MapMat_val<eT>
 MapMat<eT>::operator()(const uword in_row, const uword in_col)
   {
-  arma_debug_check( ((in_row >= n_rows) || (in_col >= n_cols)), "MapMat::operator(): index out of bounds" );
+  arma_debug_check_bounds( ((in_row >= n_rows) || (in_col >= n_cols)), "MapMat::operator(): index out of bounds" );
   
   const uword index = (n_rows * in_col) + in_row;
   
@@ -520,11 +505,10 @@ MapMat<eT>::operator()(const uword in_row, const uword in_col)
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 MapMat<eT>::operator()(const uword in_row, const uword in_col) const
   {
-  arma_debug_check( ((in_row >= n_rows) || (in_col >= n_cols)), "MapMat::operator(): index out of bounds" );
+  arma_debug_check_bounds( ((in_row >= n_rows) || (in_col >= n_cols)), "MapMat::operator(): index out of bounds" );
   
   const uword index = (n_rows * in_col) + in_row;
   
@@ -540,7 +524,6 @@ MapMat<eT>::operator()(const uword in_row, const uword in_col) const
 
 template<typename eT>
 inline
-arma_warn_unused
 bool
 MapMat<eT>::is_empty() const
   {
@@ -551,7 +534,6 @@ MapMat<eT>::is_empty() const
 
 template<typename eT>
 inline
-arma_warn_unused
 bool
 MapMat<eT>::is_vec() const
   {
@@ -562,7 +544,6 @@ MapMat<eT>::is_vec() const
 
 template<typename eT>
 inline
-arma_warn_unused
 bool
 MapMat<eT>::is_rowvec() const
   {
@@ -574,7 +555,6 @@ MapMat<eT>::is_rowvec() const
 //! returns true if the object can be interpreted as a column vector
 template<typename eT>
 inline
-arma_warn_unused
 bool
 MapMat<eT>::is_colvec() const
   {
@@ -585,7 +565,6 @@ MapMat<eT>::is_colvec() const
 
 template<typename eT>
 inline
-arma_warn_unused
 bool
 MapMat<eT>::is_square() const
   {
@@ -619,11 +598,7 @@ MapMat<eT>::sprandu(const uword in_n_rows, const uword in_n_cols, const double d
     const uword index = indx_mem[i];
     const eT    val   = vals_mem[i];
     
-    #if defined(ARMA_USE_CXX11)
-      map_ref.emplace_hint(map_ref.cend(), index, val);
-    #else
-      map_ref.operator[](index) = val;
-    #endif
+    map_ref.emplace_hint(map_ref.cend(), index, val);
     }
   }
 
@@ -744,10 +719,10 @@ MapMat<eT>::init_cold()
   
   // ensure that n_elem can hold the result of (n_rows * n_cols)
   
-  #if (defined(ARMA_USE_CXX11) || defined(ARMA_64BIT_WORD))
+  #if defined(ARMA_64BIT_WORD)
     const char* error_message = "MapMat(): requested size is too large";
   #else
-    const char* error_message = "MapMat(): requested size is too large; suggest to compile in C++11 mode or enable ARMA_64BIT_WORD";
+    const char* error_message = "MapMat(): requested size is too large; suggest to enable ARMA_64BIT_WORD";
   #endif
   
   arma_debug_check
@@ -762,7 +737,7 @@ MapMat<eT>::init_cold()
   
   map_ptr = new (std::nothrow) map_type;
   
-  arma_check_bad_alloc( (map_ptr == NULL), "MapMat(): out of memory" );
+  arma_check_bad_alloc( (map_ptr == nullptr), "MapMat(): out of memory" );
   }
 
 
@@ -778,10 +753,10 @@ MapMat<eT>::init_warm(const uword in_n_rows, const uword in_n_cols)
   
   // ensure that n_elem can hold the result of (n_rows * n_cols)
   
-  #if (defined(ARMA_USE_CXX11) || defined(ARMA_64BIT_WORD))
+  #if defined(ARMA_64BIT_WORD)
     const char* error_message = "MapMat(): requested size is too large";
   #else
-    const char* error_message = "MapMat(): requested size is too large; suggest to compile in C++11 mode or enable ARMA_64BIT_WORD";
+    const char* error_message = "MapMat(): requested size is too large; suggest to enable ARMA_64BIT_WORD";
   #endif
   
   arma_debug_check
@@ -814,24 +789,16 @@ MapMat<eT>::set_val(const uword index, const eT& in_val)
   
   if(in_val != eT(0))
     {
-    #if defined(ARMA_USE_CXX11)
+    map_type& map_ref = (*map_ptr);
+    
+    if( (map_ref.empty() == false) && (index > uword(map_ref.crbegin()->first)) )
       {
-      map_type& map_ref = (*map_ptr);
-      
-      if( (map_ref.empty() == false) && (index > uword(map_ref.crbegin()->first)) )
-        {
-        map_ref.emplace_hint(map_ref.cend(), index, in_val);
-        }
-      else
-        {
-        map_ref.operator[](index) = in_val;
-        }
+      map_ref.emplace_hint(map_ref.cend(), index, in_val);
       }
-    #else
+    else
       {
-      (*map_ptr).operator[](index) = in_val;
+      map_ref.operator[](index) = in_val;
       }
-    #endif
     }
   else
     {
@@ -1204,13 +1171,11 @@ SpMat_MapMat_val<eT>::operator=(const eT in_val)
       (*this).set(in_val);
       }
     }
-  #elif defined(ARMA_USE_CXX11)
+  #elif (!defined(ARMA_DONT_USE_STD_MUTEX))
     {
-    s_parent.cache_mutex.lock();
+    const std::lock_guard<std::mutex> lock(s_parent.cache_mutex);
     
     (*this).set(in_val);
-    
-    s_parent.cache_mutex.unlock();
     }
   #else
     {
@@ -1239,13 +1204,11 @@ SpMat_MapMat_val<eT>::operator+=(const eT in_val)
       (*this).add(in_val);
       }
     }
-  #elif defined(ARMA_USE_CXX11)
+  #elif (!defined(ARMA_DONT_USE_STD_MUTEX))
     {
-    s_parent.cache_mutex.lock();
+    const std::lock_guard<std::mutex> lock(s_parent.cache_mutex);
     
     (*this).add(in_val);
-    
-    s_parent.cache_mutex.unlock();
     }
   #else
     {
@@ -1274,13 +1237,11 @@ SpMat_MapMat_val<eT>::operator-=(const eT in_val)
       (*this).sub(in_val);
       }
     }
-  #elif defined(ARMA_USE_CXX11)
+  #elif (!defined(ARMA_DONT_USE_STD_MUTEX))
     {
-    s_parent.cache_mutex.lock();
+    const std::lock_guard<std::mutex> lock(s_parent.cache_mutex);
     
     (*this).sub(in_val);
-    
-    s_parent.cache_mutex.unlock();
     }
   #else
     {
@@ -1307,13 +1268,11 @@ SpMat_MapMat_val<eT>::operator*=(const eT in_val)
       (*this).mul(in_val);
       }
     }
-  #elif defined(ARMA_USE_CXX11)
+  #elif (!defined(ARMA_DONT_USE_STD_MUTEX))
     {
-    s_parent.cache_mutex.lock();
+    const std::lock_guard<std::mutex> lock(s_parent.cache_mutex);
     
     (*this).mul(in_val);
-    
-    s_parent.cache_mutex.unlock();
     }
   #else
     {
@@ -1340,13 +1299,11 @@ SpMat_MapMat_val<eT>::operator/=(const eT in_val)
       (*this).div(in_val);
       }
     }
-  #elif defined(ARMA_USE_CXX11)
+  #elif (!defined(ARMA_DONT_USE_STD_MUTEX))
     {
-    s_parent.cache_mutex.lock();
+    const std::lock_guard<std::mutex> lock(s_parent.cache_mutex);
     
     (*this).div(in_val);
-    
-    s_parent.cache_mutex.unlock();
     }
   #else
     {
@@ -1373,7 +1330,6 @@ SpMat_MapMat_val<eT>::operator++()
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 SpMat_MapMat_val<eT>::operator++(int)
   {
@@ -1402,7 +1358,6 @@ SpMat_MapMat_val<eT>::operator--()
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 SpMat_MapMat_val<eT>::operator--(int)
   {
@@ -1765,7 +1720,6 @@ SpSubview_MapMat_val<eT>::operator++()
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 SpSubview_MapMat_val<eT>::operator++(int)
   {
@@ -1804,7 +1758,6 @@ SpSubview_MapMat_val<eT>::operator--()
 
 template<typename eT>
 inline
-arma_warn_unused
 eT
 SpSubview_MapMat_val<eT>::operator--(int)
   {

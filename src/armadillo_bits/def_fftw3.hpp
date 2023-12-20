@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -14,35 +16,34 @@
 // ------------------------------------------------------------------------
 
 
-//! \addtogroup fn_cond
-//! @{
+#if defined(ARMA_USE_FFTW3)
 
 
-
-template<typename T1>
-arma_warn_unused
-inline
-typename enable_if2<is_supported_blas_type<typename T1::elem_type>::value, typename T1::pod_type>::result
-cond(const Base<typename T1::elem_type, T1>& X)
+extern "C"
   {
-  arma_extra_debug_sigprint();
+  // function prefix for single precision: fftwf_
+  // function prefix for double precision: fftw_
   
-  return op_cond::cond(X.get_ref());
+  
+  // single precision (float)
+  
+  void_ptr fftwf_plan_dft_1d(int N, void* input, void* output, int fftw3_sign, unsigned int fftw3_flags);
+  
+  void      fftwf_execute(void_ptr plan);
+  void fftwf_destroy_plan(void_ptr plan);
+  
+  void fftwf_cleanup();
+  
+  
+  // double precision (double)
+  
+  void_ptr fftw_plan_dft_1d(int N, void* input, void* output, int fftw3_sign, unsigned int fftw3_flags);
+  
+  void      fftw_execute(void_ptr plan);
+  void fftw_destroy_plan(void_ptr plan);
+  
+  void fftw_cleanup();
   }
 
 
-
-template<typename T1>
-arma_warn_unused
-inline
-typename enable_if2<is_supported_blas_type<typename T1::elem_type>::value, typename T1::pod_type>::result
-rcond(const Base<typename T1::elem_type, T1>& X)
-  {
-  arma_extra_debug_sigprint();
-  
-  return op_cond::rcond(X.get_ref());
-  }
-
-
-
-//! @}
+#endif

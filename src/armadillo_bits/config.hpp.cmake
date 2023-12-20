@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -15,17 +17,32 @@
 
 
 
+#if !defined(ARMA_WARN_LEVEL)
+  #define ARMA_WARN_LEVEL 2
+#endif
+//// The level of warning messages printed to ARMA_CERR_STREAM.
+//// Must be an integer >= 0. The default value is 2.
+//// 0 = no warnings; generally not recommended
+//// 1 = only critical warnings about arguments and/or data which are likely to lead to incorrect results
+//// 2 = as per level 1, and warnings about poorly conditioned systems (low rcond) detected by solve(), spsolve(), etc
+//// 3 = as per level 2, and warnings about failed decompositions, failed saving/loading, etc
+
+#cmakedefine ARMA_USE_WRAPPER
+//// Comment out the above line if you prefer to directly link with BLAS, LAPACK, etc
+//// instead of the Armadillo runtime library.
+//// You will need to link your programs directly with -lopenblas -llapack instead of -larmadillo
+
 #if !defined(ARMA_USE_LAPACK)
 #cmakedefine ARMA_USE_LAPACK
 //// Comment out the above line if you don't have LAPACK or a high-speed replacement for LAPACK,
-//// such as Intel MKL, AMD ACML, or the Accelerate framework.
+//// such as OpenBLAS, Intel MKL, or the Accelerate framework.
 //// LAPACK is required for matrix decompositions (eg. SVD) and matrix inverse.
 #endif
 
 #if !defined(ARMA_USE_BLAS)
 #cmakedefine ARMA_USE_BLAS
 //// Comment out the above line if you don't have BLAS or a high-speed replacement for BLAS,
-//// such as OpenBLAS, GotoBLAS, Intel MKL, AMD ACML, or the Accelerate framework.
+//// such as OpenBLAS, Intel MKL, or the Accelerate framework.
 //// BLAS is used for matrix multiplication.
 //// Without BLAS, matrix multiplication will still work, but might be slower.
 #endif
@@ -56,13 +73,30 @@
 //// Make sure the directory has a trailing /
 #endif
 
-#cmakedefine ARMA_USE_WRAPPER
-//// Comment out the above line if you're getting linking errors when compiling your programs,
-//// or if you prefer to directly link with LAPACK, BLAS + etc instead of the Armadillo runtime library.
-//// You will then need to link your programs directly with -llapack -lblas instead of -larmadillo
+#if !defined(ARMA_USE_ATLAS)
+#cmakedefine ARMA_USE_ATLAS
+//// NOTE: support for ATLAS is deprecated and will be removed.
+#endif
+
+#if !defined(ARMA_USE_HDF5)
+// #define ARMA_USE_HDF5
+//// Uncomment the above line to allow the ability to save and load matrices stored in HDF5 format;
+//// the hdf5.h header file must be available on your system,
+//// and you will need to link with the hdf5 library (eg. -lhdf5)
+#endif
+
+#if !defined(ARMA_USE_FFTW3)
+// #define ARMA_USE_FFTW3
+//// Uncomment the above line to allow the use of the FFTW3 library by fft() and ifft() functions;
+//// you will need to link with the FFTW3 library (eg. -lfftw3)
+#endif
+
+#if defined(ARMA_USE_FFTW)
+  #error "use ARMA_USE_FFTW3 instead of ARMA_USE_FFTW"
+#endif
 
 // #define ARMA_BLAS_CAPITALS
-//// Uncomment the above line if your BLAS and LAPACK libraries have capitalised function names (eg. ACML on 64-bit Windows)
+//// Uncomment the above line if your BLAS and LAPACK libraries have capitalised function names
 
 #define ARMA_BLAS_UNDERSCORE
 //// Uncomment the above line if your BLAS and LAPACK libraries have function names with a trailing underscore.
@@ -74,6 +108,12 @@
 // #define ARMA_BLAS_LONG_LONG
 //// Uncomment the above line if your BLAS and LAPACK libraries use "long long" instead of "int"
 
+// #define ARMA_BLAS_NOEXCEPT
+//// Uncomment the above line if you require BLAS functions to have the 'noexcept' specification
+
+// #define ARMA_LAPACK_NOEXCEPT
+//// Uncomment the above line if you require LAPACK functions to have the 'noexcept' specification
+
 #define ARMA_USE_FORTRAN_HIDDEN_ARGS
 //// Comment out the above line to call BLAS and LAPACK functions without using so-called "hidden" arguments.
 //// Fortran functions (compiled without a BIND(C) declaration) that have char arguments
@@ -82,28 +122,16 @@
 //// These "hidden" arguments are typically tacked onto the end of function definitions.
 
 // #define ARMA_USE_TBB_ALLOC
-//// Uncomment the above line if you want to use Intel TBB scalable_malloc() and scalable_free() instead of standard malloc() and free()
+//// Uncomment the above line to use Intel TBB scalable_malloc() and scalable_free() instead of standard malloc() and free()
 
 // #define ARMA_USE_MKL_ALLOC
-//// Uncomment the above line if you want to use Intel MKL mkl_malloc() and mkl_free() instead of standard malloc() and free()
+//// Uncomment the above line to use Intel MKL mkl_malloc() and mkl_free() instead of standard malloc() and free()
 
 // #define ARMA_USE_MKL_TYPES
-//// Uncomment the above line if you want to use Intel MKL types for complex numbers.
+//// Uncomment the above line to use Intel MKL types for complex numbers.
 //// You will need to include appropriate MKL headers before the Armadillo header.
 //// You may also need to enable or disable the following options:
 //// ARMA_BLAS_LONG, ARMA_BLAS_LONG_LONG, ARMA_USE_FORTRAN_HIDDEN_ARGS
-
-#cmakedefine ARMA_USE_ATLAS
-#define ARMA_ATLAS_INCLUDE_DIR ${ARMA_ATLAS_INCLUDE_DIR}/
-//// If you're using ATLAS and the compiler can't find cblas.h and/or clapack.h
-//// uncomment the above define and specify the appropriate include directory.
-//// Make sure the directory has a trailing /
-
-#if !defined(ARMA_USE_CXX11)
-// #define ARMA_USE_CXX11
-//// Uncomment the above line to forcefully enable use of C++11 features (eg. initialiser lists).
-//// Note that ARMA_USE_CXX11 is automatically enabled when a C++11 compiler is detected.
-#endif
 
 #if !defined(ARMA_USE_OPENMP)
 // #define ARMA_USE_OPENMP
@@ -114,33 +142,31 @@
 #if !defined(ARMA_64BIT_WORD)
 // #define ARMA_64BIT_WORD
 //// Uncomment the above line if you require matrices/vectors capable of holding more than 4 billion elements.
-//// Your machine and compiler must have support for 64 bit integers (eg. via "long" or "long long").
-//// Note that ARMA_64BIT_WORD is automatically enabled when a C++11 compiler is detected.
+//// Note that ARMA_64BIT_WORD is automatically enabled when std::size_t has 64 bits and ARMA_32BIT_WORD is not defined.
 #endif
 
-#if !defined(ARMA_USE_HDF5)
-// #define ARMA_USE_HDF5
-//// Uncomment the above line to allow the ability to save and load matrices stored in HDF5 format;
-//// the hdf5.h header file must be available on your system,
-//// and you will need to link with the hdf5 library (eg. -lhdf5)
+#if !defined(ARMA_OPTIMISE_BAND)
+  #define ARMA_OPTIMISE_BAND
+  //// Comment out the above line to disable optimised handling
+  //// of band matrices by solve() and chol()
 #endif
 
-#if !defined(ARMA_OPTIMISE_SOLVE_BAND)
-  #define ARMA_OPTIMISE_SOLVE_BAND
-  //// Comment out the above line if you don't want optimised handling of band matrices by solve()
+#if !defined(ARMA_OPTIMISE_SYM)
+  #define ARMA_OPTIMISE_SYM
+  //// Comment out the above line to disable optimised handling
+  //// of symmetric/hermitian matrices by various functions:
+  //// solve(), inv(), pinv(), expmat(), logmat(), sqrtmat(), rcond(), rank()
 #endif
 
-#if !defined(ARMA_OPTIMISE_SOLVE_SYMPD)
-  #define ARMA_OPTIMISE_SOLVE_SYMPD
-  //// Comment out the above line if you don't want optimised handling of symmetric/hermitian positive definite matrices by solve()
+#if !defined(ARMA_OPTIMISE_INVEXPR)
+  #define ARMA_OPTIMISE_INVEXPR
+  //// Comment out the above line to disable optimised handling
+  //// of inv() and inv_sympd() within compound expressions
 #endif
 
-#cmakedefine ARMA_USE_HDF5_ALT
-#if defined(ARMA_USE_HDF5_ALT) && defined(ARMA_USE_WRAPPER)
-  #undef  ARMA_USE_HDF5
-  #define ARMA_USE_HDF5
-  
-  #define ARMA_HDF5_INCLUDE_DIR ${ARMA_HDF5_INCLUDE_DIR}/
+#if !defined(ARMA_CHECK_NONFINITE)
+  #define ARMA_CHECK_NONFINITE
+  //// Comment out the above line to disable checking for nonfinite matrices
 #endif
 
 #if !defined(ARMA_MAT_PREALLOC)
@@ -152,27 +178,32 @@
 //// change the number to the size of your vectors.
 
 #if !defined(ARMA_OPENMP_THRESHOLD)
-  #define ARMA_OPENMP_THRESHOLD 240
+  #define ARMA_OPENMP_THRESHOLD 320
 #endif
 //// The minimum number of elements in a matrix to allow OpenMP based parallelisation;
 //// it must be an integer that is at least 1.
 
 #if !defined(ARMA_OPENMP_THREADS)
-  #define ARMA_OPENMP_THREADS 10
+  #define ARMA_OPENMP_THREADS 8
 #endif
 //// The maximum number of threads to use for OpenMP based parallelisation;
 //// it must be an integer that is at least 1.
 
 // #define ARMA_NO_DEBUG
-//// Uncomment the above line if you want to disable all run-time checks.
-//// This will result in faster code, but you first need to make sure that your code runs correctly!
-//// We strongly recommend to have the run-time checks enabled during development,
-//// as this greatly aids in finding mistakes in your code, and hence speeds up development.
-//// We recommend that run-time checks be disabled _only_ for the shipped version of your program.
+//// Uncomment the above line to disable all run-time checks. NOT RECOMMENDED.
+//// It is strongly recommended that run-time checks are enabled during development,
+//// as this greatly aids in finding mistakes in your code.
 
 // #define ARMA_EXTRA_DEBUG
-//// Uncomment the above line if you want to see the function traces of how Armadillo evaluates expressions.
+//// Uncomment the above line to see the function traces of how Armadillo evaluates expressions.
 //// This is mainly useful for debugging of the library.
+
+
+#if defined(ARMA_EXTRA_DEBUG)
+  #undef  ARMA_NO_DEBUG
+  #undef  ARMA_WARN_LEVEL
+  #define ARMA_WARN_LEVEL 3
+#endif
 
 
 #if defined(ARMA_DEFAULT_OSTREAM)
@@ -200,13 +231,12 @@
 #endif
 
 
-#if !defined(ARMA_PRINT_ERRORS)
-#define ARMA_PRINT_ERRORS
-//// Comment out the above line if you don't want errors and warnings printed (eg. failed decompositions)
-#endif
-
-#if !defined(ARMA_PRINT_HDF5_ERRORS)
-// #define ARMA_PRINT_HDF5_ERRORS
+#if !defined(ARMA_PRINT_EXCEPTIONS)
+  // #define ARMA_PRINT_EXCEPTIONS
+  #if defined(ARMA_PRINT_EXCEPTIONS_INTERNAL)
+    #undef  ARMA_PRINT_EXCEPTIONS
+    #define ARMA_PRINT_EXCEPTIONS
+  #endif
 #endif
 
 #if defined(ARMA_DONT_USE_LAPACK)
@@ -232,62 +262,84 @@
 
 #if defined(ARMA_DONT_USE_ATLAS)
   #undef ARMA_USE_ATLAS
-  #undef ARMA_ATLAS_INCLUDE_DIR
+#endif
+
+#if defined(ARMA_DONT_USE_HDF5)
+  #undef ARMA_USE_HDF5
+#endif
+
+#if defined(ARMA_DONT_USE_FFTW3)
+  #undef ARMA_USE_FFTW3
 #endif
 
 #if defined(ARMA_DONT_USE_WRAPPER)
   #undef ARMA_USE_WRAPPER
-  #undef ARMA_USE_HDF5_ALT
 #endif
 
 #if defined(ARMA_DONT_USE_FORTRAN_HIDDEN_ARGS)
   #undef ARMA_USE_FORTRAN_HIDDEN_ARGS
 #endif
 
-#if defined(ARMA_DONT_USE_CXX11)
-  #undef ARMA_USE_CXX11
-  #undef ARMA_USE_EXTERN_CXX11_RNG
+#if !defined(ARMA_DONT_USE_STD_MUTEX)
+  // #define ARMA_DONT_USE_STD_MUTEX
+  //// Uncomment the above line to disable use of std::mutex
+#endif
+
+// for compatibility with earlier versions of Armadillo
+#if defined(ARMA_DONT_USE_CXX11_MUTEX)
+  #pragma message ("WARNING: support for ARMA_DONT_USE_CXX11_MUTEX is deprecated and will be removed;")
+  #pragma message ("WARNING: use ARMA_DONT_USE_STD_MUTEX instead")
+  #undef  ARMA_DONT_USE_STD_MUTEX
+  #define ARMA_DONT_USE_STD_MUTEX
 #endif
 
 #if defined(ARMA_DONT_USE_OPENMP)
   #undef ARMA_USE_OPENMP
 #endif
 
-#if defined(ARMA_USE_WRAPPER)
-  #if defined(ARMA_USE_CXX11)
-    #if !defined(ARMA_USE_EXTERN_CXX11_RNG)
-      #cmakedefine ARMA_USE_EXTERN_CXX11_RNG
-    #endif
-  #endif
-#endif
-
-#if defined(ARMA_DONT_USE_EXTERN_CXX11_RNG)
-  #undef ARMA_USE_EXTERN_CXX11_RNG
-#endif
-
 #if defined(ARMA_32BIT_WORD)
   #undef ARMA_64BIT_WORD
 #endif
 
-#if defined(ARMA_DONT_USE_HDF5)
-  #undef ARMA_USE_HDF5
-  #undef ARMA_USE_HDF5_ALT
+#if defined(ARMA_DONT_OPTIMISE_BAND) || defined(ARMA_DONT_OPTIMISE_SOLVE_BAND)
+  #undef ARMA_OPTIMISE_BAND
 #endif
 
-#if defined(ARMA_DONT_OPTIMISE_SOLVE_BAND)
-  #undef ARMA_OPTIMISE_SOLVE_BAND
+#if defined(ARMA_DONT_OPTIMISE_SYM) || defined(ARMA_DONT_OPTIMISE_SYMPD) || defined(ARMA_DONT_OPTIMISE_SOLVE_SYMPD)
+  #undef ARMA_OPTIMISE_SYM
 #endif
 
-#if defined(ARMA_DONT_OPTIMISE_SOLVE_SYMPD)
-  #undef ARMA_OPTIMISE_SOLVE_SYMPD
+#if defined(ARMA_DONT_OPTIMISE_INVEXPR)
+  #undef ARMA_OPTIMISE_INVEXPR
+#endif
+
+#if defined(ARMA_DONT_CHECK_NONFINITE)
+  #undef ARMA_CHECK_NONFINITE
 #endif
 
 #if defined(ARMA_DONT_PRINT_ERRORS)
-  #undef ARMA_PRINT_ERRORS
+  #pragma message ("INFO: support for ARMA_DONT_PRINT_ERRORS option has been removed")
+  
+  #if defined(ARMA_PRINT_EXCEPTIONS)
+    #pragma message ("INFO: suggest to use ARMA_WARN_LEVEL and ARMA_DONT_PRINT_EXCEPTIONS options instead")
+  #else
+    #pragma message ("INFO: suggest to use ARMA_WARN_LEVEL option instead")
+  #endif
+  
+  #pragma message ("INFO: see the documentation for details")
 #endif
 
-#if defined(ARMA_DONT_PRINT_HDF5_ERRORS)
-  #undef ARMA_PRINT_HDF5_ERRORS
+#if defined(ARMA_DONT_PRINT_EXCEPTIONS)
+  #undef ARMA_PRINT_EXCEPTIONS
+#endif
+
+#if !defined(ARMA_DONT_ZERO_INIT)
+  // #define ARMA_DONT_ZERO_INIT
+  //// Uncomment the above line to disable initialising elements to zero during construction of dense matrices and cubes
+#endif
+
+#if defined(ARMA_NO_CRIPPLED_LAPACK)
+  #undef ARMA_CRIPPLED_LAPACK
 #endif
 
 

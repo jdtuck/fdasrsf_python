@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -200,6 +202,36 @@ SpCol<eT>::SpCol
 
 
 
+template<typename eT>
+inline
+const SpOp<SpCol<eT>,spop_htrans>
+SpCol<eT>::t() const
+  {
+  return SpOp<SpCol<eT>,spop_htrans>(*this);
+  }
+
+
+
+template<typename eT>
+inline
+const SpOp<SpCol<eT>,spop_htrans>
+SpCol<eT>::ht() const
+  {
+  return SpOp<SpCol<eT>,spop_htrans>(*this);
+  }
+
+
+
+template<typename eT>
+inline
+const SpOp<SpCol<eT>,spop_strans>
+SpCol<eT>::st() const
+  {
+  return SpOp<SpCol<eT>,spop_strans>(*this);
+  }
+
+
+
 //! remove specified row
 template<typename eT>
 inline
@@ -208,7 +240,7 @@ SpCol<eT>::shed_row(const uword row_num)
   {
   arma_extra_debug_sigprint();
 
-  arma_debug_check( row_num >= SpMat<eT>::n_rows, "SpCol::shed_row(): out of bounds");
+  arma_debug_check_bounds( row_num >= SpMat<eT>::n_rows, "SpCol::shed_row(): out of bounds" );
   
   shed_rows(row_num, row_num);
   }
@@ -223,7 +255,7 @@ SpCol<eT>::shed_rows(const uword in_row1, const uword in_row2)
   {
   arma_extra_debug_sigprint();
 
-  arma_debug_check
+  arma_debug_check_bounds
     (
     (in_row1 > in_row2) || (in_row2 >= SpMat<eT>::n_rows),
     "SpCol::shed_rows(): indices out of bounds or incorrectly used"
@@ -239,14 +271,14 @@ SpCol<eT>::shed_rows(const uword in_row1, const uword in_row2)
   for(uword i = 0; i < SpMat<eT>::n_nonzero; ++i)
     {
     // Start position found?
-    if (SpMat<eT>::row_indices[i] >= in_row1 && !start_found)
+    if(SpMat<eT>::row_indices[i] >= in_row1 && !start_found)
       {
       start = i;
       start_found = true;
       }
 
     // End position found?
-    if (SpMat<eT>::row_indices[i] > in_row2)
+    if(SpMat<eT>::row_indices[i] > in_row2)
       {
       end = i;
       end_found = true;
@@ -254,13 +286,13 @@ SpCol<eT>::shed_rows(const uword in_row1, const uword in_row2)
       }
     }
 
-  if (!end_found)
+  if(!end_found)
     {
     end = SpMat<eT>::n_nonzero;
     }
 
   // Now we can make the copy.
-  if (start != end)
+  if(start != end)
     {
     const uword elem_diff = end - start;
 
@@ -268,14 +300,14 @@ SpCol<eT>::shed_rows(const uword in_row1, const uword in_row2)
     uword* new_row_indices = memory::acquire<uword>(SpMat<eT>::n_nonzero - elem_diff);
 
     // Copy before the section we are dropping (if it exists).
-    if (start > 0)
+    if(start > 0)
       {
       arrayops::copy(new_values, SpMat<eT>::values, start);
       arrayops::copy(new_row_indices, SpMat<eT>::row_indices, start);
       }
 
     // Copy after the section we are dropping (if it exists).
-    if (end != SpMat<eT>::n_nonzero)
+    if(end != SpMat<eT>::n_nonzero)
       {
       arrayops::copy(new_values + start, SpMat<eT>::values + end, (SpMat<eT>::n_nonzero - end));
       arrayops::copy(new_row_indices + start, SpMat<eT>::row_indices + end, (SpMat<eT>::n_nonzero - end));
@@ -311,11 +343,11 @@ SpCol<eT>::shed_rows(const uword in_row1, const uword in_row2)
 // 
 //   arma_debug_check(set_to_zero == false, "SpCol::insert_rows(): cannot set nonzero values");
 // 
-//   arma_debug_check((row_num > SpMat<eT>::n_rows), "SpCol::insert_rows(): out of bounds");
+//   arma_debug_check_bounds((row_num > SpMat<eT>::n_rows), "SpCol::insert_rows(): out of bounds");
 // 
 //   for(uword row = 0; row < SpMat<eT>::n_rows; ++row)
 //     {
-//     if (SpMat<eT>::row_indices[row] >= row_num)
+//     if(SpMat<eT>::row_indices[row] >= row_num)
 //       {
 //       access::rw(SpMat<eT>::row_indices[row]) += N;
 //       }
@@ -334,7 +366,7 @@ SpCol<eT>::begin_row(const uword row_num)
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (row_num >= SpMat<eT>::n_rows), "SpCol::begin_row(): index out of bounds");
+  arma_debug_check_bounds( (row_num >= SpMat<eT>::n_rows), "SpCol::begin_row(): index out of bounds" );
   
   SpMat<eT>::sync_csc();
   
@@ -350,7 +382,7 @@ SpCol<eT>::begin_row(const uword row_num) const
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (row_num >= SpMat<eT>::n_rows), "SpCol::begin_row(): index out of bounds");
+  arma_debug_check_bounds( (row_num >= SpMat<eT>::n_rows), "SpCol::begin_row(): index out of bounds" );
   
   SpMat<eT>::sync_csc();
   
@@ -366,7 +398,7 @@ SpCol<eT>::end_row(const uword row_num)
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (row_num >= SpMat<eT>::n_rows), "SpCol::end_row(): index out of bounds");
+  arma_debug_check_bounds( (row_num >= SpMat<eT>::n_rows), "SpCol::end_row(): index out of bounds" );
   
   SpMat<eT>::sync_csc();
   
@@ -382,7 +414,7 @@ SpCol<eT>::end_row(const uword row_num) const
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (row_num >= SpMat<eT>::n_rows), "SpCol::end_row(): index out of bounds");
+  arma_debug_check_bounds( (row_num >= SpMat<eT>::n_rows), "SpCol::end_row(): index out of bounds" );
   
   SpMat<eT>::sync_csc();
   
@@ -391,7 +423,7 @@ SpCol<eT>::end_row(const uword row_num) const
 
 
 
-#ifdef ARMA_EXTRA_SPCOL_MEAT
+#if defined(ARMA_EXTRA_SPCOL_MEAT)
   #include ARMA_INCFILE_WRAP(ARMA_EXTRA_SPCOL_MEAT)
 #endif
 

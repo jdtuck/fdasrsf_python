@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -31,7 +33,7 @@ enable_if2
 var(const T1& X, const uword norm_type = 0)
   {
   arma_extra_debug_sigprint();
-
+  
   return op_var::var_vec(X, norm_type);
   }
 
@@ -49,7 +51,7 @@ enable_if2
 var(const T1& X, const uword norm_type = 0)
   {
   arma_extra_debug_sigprint();
-
+  
   return mtOp<typename T1::pod_type, T1, op_var>(X, norm_type, 0);
   }
 
@@ -67,7 +69,7 @@ enable_if2
 var(const T1& X, const uword norm_type, const uword dim)
   {
   arma_extra_debug_sigprint();
-
+  
   return mtOp<typename T1::pod_type, T1, op_var>(X, norm_type, dim);
   }
 
@@ -75,7 +77,7 @@ var(const T1& X, const uword norm_type, const uword dim)
 
 template<typename T>
 arma_warn_unused
-arma_inline
+inline
 typename arma_scalar_only<T>::result
 var(const T&)
   {
@@ -96,7 +98,7 @@ enable_if2
 var(const T1& X, const uword norm_type = 0)
   {
   arma_extra_debug_sigprint();
-
+  
   return spop_var::var_vec(X, norm_type);
   }
 
@@ -114,7 +116,7 @@ enable_if2
 var(const T1& X, const uword norm_type = 0)
   {
   arma_extra_debug_sigprint();
-
+  
   return mtSpOp<typename T1::pod_type, T1, spop_var>(X, norm_type, 0);
   }
 
@@ -132,7 +134,7 @@ enable_if2
 var(const T1& X, const uword norm_type, const uword dim)
   {
   arma_extra_debug_sigprint();
-
+  
   return mtSpOp<typename T1::pod_type, T1, spop_var>(X, norm_type, dim);
   }
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -35,8 +37,6 @@ class op_chi2rnd
 
 
 
-#if defined(ARMA_USE_CXX11)
-
 template<typename eT>
 class op_chi2rnd_varying_df
   {
@@ -49,8 +49,6 @@ class op_chi2rnd_varying_df
   
   inline eT operator()(const eT df);
   };
-
-#endif
 
 
 //! @}

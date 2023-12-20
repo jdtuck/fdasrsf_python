@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 //
@@ -179,8 +181,8 @@ op_sp_minus_post::apply(SpMat<typename T1::elem_type>& out, const SpToDOp<T1,op_
   
   const eT k = in.aux;
 
-  for (uword c = 0; c < n_cols; ++c)
-  for (uword r = 0; r < n_rows; ++r)
+  for(uword c = 0; c < n_cols; ++c)
+  for(uword r = 0; r < n_rows; ++r)
     {
     out.at(r, c) = proxy.at(r, c) - k;
     }

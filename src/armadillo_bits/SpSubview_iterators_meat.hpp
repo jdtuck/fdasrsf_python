@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -278,7 +280,6 @@ SpSubview<eT>::const_iterator::operator*() const
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::const_iterator&
 SpSubview<eT>::const_iterator::operator++()
   {
@@ -337,7 +338,6 @@ SpSubview<eT>::const_iterator::operator++()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::const_iterator
 SpSubview<eT>::const_iterator::operator++(int)
   {
@@ -352,7 +352,6 @@ SpSubview<eT>::const_iterator::operator++(int)
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::const_iterator&
 SpSubview<eT>::const_iterator::operator--()
   {
@@ -408,7 +407,6 @@ SpSubview<eT>::const_iterator::operator--()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::const_iterator
 SpSubview<eT>::const_iterator::operator--(int)
   {
@@ -423,7 +421,6 @@ SpSubview<eT>::const_iterator::operator--(int)
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator==(const const_iterator& rhs) const
   {
@@ -434,7 +431,6 @@ SpSubview<eT>::const_iterator::operator==(const const_iterator& rhs) const
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator!=(const const_iterator& rhs) const
   {
@@ -445,7 +441,6 @@ SpSubview<eT>::const_iterator::operator!=(const const_iterator& rhs) const
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator==(const typename SpMat<eT>::const_iterator& rhs) const
   {
@@ -456,7 +451,6 @@ SpSubview<eT>::const_iterator::operator==(const typename SpMat<eT>::const_iterat
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator!=(const typename SpMat<eT>::const_iterator& rhs) const
   {
@@ -467,7 +461,6 @@ SpSubview<eT>::const_iterator::operator!=(const typename SpMat<eT>::const_iterat
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator==(const const_row_iterator& rhs) const
   {
@@ -478,7 +471,6 @@ SpSubview<eT>::const_iterator::operator==(const const_row_iterator& rhs) const
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator!=(const const_row_iterator& rhs) const
   {
@@ -489,7 +481,6 @@ SpSubview<eT>::const_iterator::operator!=(const const_row_iterator& rhs) const
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator==(const typename SpMat<eT>::const_row_iterator& rhs) const
   {
@@ -500,7 +491,6 @@ SpSubview<eT>::const_iterator::operator==(const typename SpMat<eT>::const_row_it
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_iterator::operator!=(const typename SpMat<eT>::const_row_iterator& rhs) const
   {
@@ -515,11 +505,10 @@ SpSubview<eT>::const_iterator::operator!=(const typename SpMat<eT>::const_row_it
 
 template<typename eT>
 inline
-arma_hot
-SpValProxy<SpSubview<eT> >
+SpValProxy< SpSubview<eT> >
 SpSubview<eT>::iterator::operator*()
   {
-  return SpValProxy<SpSubview<eT> >(
+  return SpValProxy< SpSubview<eT> >(
     const_iterator::row(),
     iterator_base::col(),
     access::rw(*iterator_base::M),
@@ -530,7 +519,6 @@ SpSubview<eT>::iterator::operator*()
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::iterator&
 SpSubview<eT>::iterator::operator++()
   {
@@ -542,7 +530,6 @@ SpSubview<eT>::iterator::operator++()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::iterator
 SpSubview<eT>::iterator::operator++(int)
   {
@@ -557,7 +544,6 @@ SpSubview<eT>::iterator::operator++(int)
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::iterator&
 SpSubview<eT>::iterator::operator--()
   {
@@ -569,7 +555,6 @@ SpSubview<eT>::iterator::operator--()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::iterator
 SpSubview<eT>::iterator::operator--(int)
   {
@@ -625,9 +610,9 @@ SpSubview<eT>::const_row_iterator::const_row_iterator(const SpSubview<eT>& in_M,
   // Since we don't know where the elements are in each row, we have to loop
   // across all columns looking for elements in row 0 and add to our sum, then
   // in row 1, and so forth, until we get to the desired position.
-  for (uword row = 0; row < iterator_base::M->n_rows; ++row)
+  for(uword row = 0; row < iterator_base::M->n_rows; ++row)
     {
-    for (uword col = 0; col < iterator_base::M->n_cols; ++col)
+    for(uword col = 0; col < iterator_base::M->n_cols; ++col)
       {
       // Find the first element with row greater than or equal to row + aux_row.
       const uword      col_offset = iterator_base::M->m.col_ptrs[col + aux_col    ];
@@ -636,24 +621,24 @@ SpSubview<eT>::const_row_iterator::const_row_iterator(const SpSubview<eT>& in_M,
       const uword* start_ptr = &iterator_base::M->m.row_indices[     col_offset];
       const uword*   end_ptr = &iterator_base::M->m.row_indices[next_col_offset];
 
-      if (start_ptr != end_ptr)
+      if(start_ptr != end_ptr)
         {
         const uword* pos_ptr = std::lower_bound(start_ptr, end_ptr, row + aux_row);
 
         const uword offset = uword(pos_ptr - start_ptr);
 
-        if (iterator_base::M->m.row_indices[col_offset + offset] == row + aux_row)
+        if(iterator_base::M->m.row_indices[col_offset + offset] == row + aux_row)
           {
           cur_actual_pos = col_offset + offset;
 
           // Increment position portably.
-          if (cur_pos == std::numeric_limits<uword>::max())
+          if(cur_pos == std::numeric_limits<uword>::max())
             cur_pos = 0;
           else
             ++cur_pos;
 
           // Do we terminate?
-          if (cur_pos == initial_pos)
+          if(cur_pos == initial_pos)
             {
             internal_row = row;
             iterator_base::internal_col = col;
@@ -702,7 +687,7 @@ SpSubview<eT>::const_row_iterator::const_row_iterator(const SpSubview<eT>& in_M,
   uword cur_min_col = 0;
   uword cur_actual_pos = 0;
 
-  for (uword col = 0; col < iterator_base::M->n_cols; ++col)
+  for(uword col = 0; col < iterator_base::M->n_cols; ++col)
     {
     // Find the first element with row greater than or equal to in_row.
     const uword      col_offset = iterator_base::M->m.col_ptrs[col + aux_col    ];
@@ -711,12 +696,12 @@ SpSubview<eT>::const_row_iterator::const_row_iterator(const SpSubview<eT>& in_M,
     const uword* start_ptr = &iterator_base::M->m.row_indices[     col_offset];
     const uword*   end_ptr = &iterator_base::M->m.row_indices[next_col_offset];
 
-    if (start_ptr != end_ptr)
+    if(start_ptr != end_ptr)
       {
       // First let us find the first element that is in the subview.
       const uword* first_subview_ptr = std::lower_bound(start_ptr, end_ptr, aux_row);
 
-      if (first_subview_ptr != end_ptr && (*first_subview_ptr) < aux_row + iterator_base::M->n_rows)
+      if(first_subview_ptr != end_ptr && (*first_subview_ptr) < aux_row + iterator_base::M->n_rows)
         {
         // There exists at least one element in the subview.
         const uword* pos_ptr = std::lower_bound(first_subview_ptr, end_ptr, aux_row + in_row);
@@ -725,15 +710,15 @@ SpSubview<eT>::const_row_iterator::const_row_iterator(const SpSubview<eT>& in_M,
         // than in_row.
         cur_pos += uword(pos_ptr - first_subview_ptr);
 
-        if (pos_ptr != end_ptr && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
+        if(pos_ptr != end_ptr && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
           {
           // This is the row index of the first element in the column with row
           // index greater than or equal to in_row + aux_row.
-          if ((*pos_ptr) - aux_row < cur_min_row)
+          if((*pos_ptr) - aux_row < cur_min_row)
             {
             // If we are in the desired row but before the desired column, we
             // can't take this.
-            if (col >= in_col)
+            if(col >= in_col)
               {
               cur_min_row = (*pos_ptr) - aux_row;
               cur_min_col = col;
@@ -768,7 +753,6 @@ SpSubview<eT>::const_row_iterator::const_row_iterator(const const_row_iterator& 
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::const_row_iterator&
 SpSubview<eT>::const_row_iterator::operator++()
   {
@@ -795,7 +779,7 @@ SpSubview<eT>::const_row_iterator::operator++()
   uword next_min_col = 0;
   uword next_actual_pos = 0;
 
-  for (uword col = iterator_base::internal_col + 1; col < M_n_cols; ++col)
+  for(uword col = iterator_base::internal_col + 1; col < M_n_cols; ++col)
     {
     // Find the first element with row greater than or equal to row.
     const uword      col_offset = iterator_base::M->m.col_ptrs[col + aux_col    ];
@@ -804,24 +788,24 @@ SpSubview<eT>::const_row_iterator::operator++()
     const uword* start_ptr = &iterator_base::M->m.row_indices[     col_offset];
     const uword* end_ptr   = &iterator_base::M->m.row_indices[next_col_offset];
 
-    if (start_ptr != end_ptr)
+    if(start_ptr != end_ptr)
       {
       // Find the first element in the column with row greater than or equal to
       // the current row.  Since this is a subview, it's possible that we may
       // find rows past the end of the subview.
       const uword* pos_ptr = std::lower_bound(start_ptr, end_ptr, internal_row + aux_row);
 
-      if (pos_ptr != end_ptr)
+      if(pos_ptr != end_ptr)
         {
         // We found something; is the row index correct?
-        if ((*pos_ptr) == internal_row + aux_row && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
+        if((*pos_ptr) == internal_row + aux_row && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
           {
           // Exact match---so we are done.
           iterator_base::internal_col = col;
           actual_pos = col_offset + (pos_ptr - start_ptr);
           return *this;
           }
-        else if ((*pos_ptr) < next_min_row + aux_row && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
+        else if((*pos_ptr) < next_min_row + aux_row && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
           {
           // The first element in this column is in a subsequent row, but it's
           // the minimum row we've seen so far.
@@ -829,7 +813,7 @@ SpSubview<eT>::const_row_iterator::operator++()
           next_min_col = col;
           next_actual_pos = col_offset + (pos_ptr - start_ptr);
           }
-        else if ((*pos_ptr) == next_min_row + aux_row && col < next_min_col && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
+        else if((*pos_ptr) == next_min_row + aux_row && col < next_min_col && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
           {
           // The first element in this column is in a subsequent row that we
           // already have another elemnt for, but the column index is less so
@@ -842,7 +826,7 @@ SpSubview<eT>::const_row_iterator::operator++()
     }
 
   // Restart the search in the next row.
-  for (uword col = 0; col <= iterator_base::internal_col; ++col)
+  for(uword col = 0; col <= iterator_base::internal_col; ++col)
     {
     // Find the first element with row greater than or equal to row + 1.
     const uword      col_offset = iterator_base::M->m.col_ptrs[col + aux_col    ];
@@ -851,14 +835,14 @@ SpSubview<eT>::const_row_iterator::operator++()
     const uword* start_ptr = &iterator_base::M->m.row_indices[     col_offset];
     const uword* end_ptr   = &iterator_base::M->m.row_indices[next_col_offset];
 
-    if (start_ptr != end_ptr)
+    if(start_ptr != end_ptr)
       {
       const uword* pos_ptr = std::lower_bound(start_ptr, end_ptr, internal_row + aux_row + 1);
 
-      if (pos_ptr != end_ptr)
+      if(pos_ptr != end_ptr)
         {
         // We found something in the column, but is the row index correct?
-        if ((*pos_ptr) == internal_row + aux_row + 1 && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
+        if((*pos_ptr) == internal_row + aux_row + 1 && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
           {
           // Exact match---so we are done.
           iterator_base::internal_col = col;
@@ -866,7 +850,7 @@ SpSubview<eT>::const_row_iterator::operator++()
           actual_pos = col_offset + (pos_ptr - start_ptr);
           return *this;
           }
-        else if ((*pos_ptr) < next_min_row + aux_row && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
+        else if((*pos_ptr) < next_min_row + aux_row && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
           {
           // The first element in this column is in a subsequent row, but it's
           // the minimum row we've seen so far.
@@ -874,7 +858,7 @@ SpSubview<eT>::const_row_iterator::operator++()
           next_min_col = col;
           next_actual_pos = col_offset + (pos_ptr - start_ptr);
           }
-        else if ((*pos_ptr) == next_min_row + aux_row && col < next_min_col && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
+        else if((*pos_ptr) == next_min_row + aux_row && col < next_min_col && (*pos_ptr) < aux_row + iterator_base::M->n_rows)
           {
           // We've found a better column.
           next_min_col = col;
@@ -895,7 +879,6 @@ SpSubview<eT>::const_row_iterator::operator++()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::const_row_iterator
 SpSubview<eT>::const_row_iterator::operator++(int)
   {
@@ -910,11 +893,10 @@ SpSubview<eT>::const_row_iterator::operator++(int)
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::const_row_iterator&
 SpSubview<eT>::const_row_iterator::operator--()
   {
-  if (iterator_base::internal_pos == 0)
+  if(iterator_base::internal_pos == 0)
     {
     // We are already at the beginning.
     return *this;
@@ -930,7 +912,7 @@ SpSubview<eT>::const_row_iterator::operator--()
   uword max_col = 0;
   uword next_actual_pos = 0;
 
-  for (uword col = iterator_base::internal_col; col >= 1; --col)
+  for(uword col = iterator_base::internal_col; col >= 1; --col)
     {
     // Find the first element with row greater than or equal to in_row + 1.
     const uword      col_offset = iterator_base::M->m.col_ptrs[col + aux_col - 1];
@@ -939,21 +921,21 @@ SpSubview<eT>::const_row_iterator::operator--()
     const uword* start_ptr = &iterator_base::M->m.row_indices[     col_offset];
     const uword* end_ptr   = &iterator_base::M->m.row_indices[next_col_offset];
 
-    if (start_ptr != end_ptr)
+    if(start_ptr != end_ptr)
       {
       // There are elements in this column.
       const uword* pos_ptr = std::lower_bound(start_ptr, end_ptr, internal_row + aux_row + 1);
 
-      if (pos_ptr != start_ptr)
+      if(pos_ptr != start_ptr)
         {
-        if (*(pos_ptr - 1) > max_row + aux_row)
+        if(*(pos_ptr - 1) > max_row + aux_row)
           {
           // There are elements in this column with row index < internal_row.
           max_row = *(pos_ptr - 1) - aux_row;
           max_col = col - 1;
           next_actual_pos = col_offset + (pos_ptr - 1 - start_ptr);
           }
-        else if (*(pos_ptr - 1) == max_row + aux_row && (col - 1) >= max_col)
+        else if(*(pos_ptr - 1) == max_row + aux_row && (col - 1) >= max_col)
           {
           max_col = col - 1;
           next_actual_pos = col_offset + (pos_ptr - 1 - start_ptr);
@@ -962,7 +944,7 @@ SpSubview<eT>::const_row_iterator::operator--()
       }
     }
 
-  for (uword col = iterator_base::M->n_cols - 1; col >= iterator_base::internal_col; --col)
+  for(uword col = iterator_base::M->n_cols - 1; col >= iterator_base::internal_col; --col)
     {
     // Find the first element with row greater than or equal to row + 1.
     const uword      col_offset = iterator_base::M->m.col_ptrs[col + aux_col    ];
@@ -971,21 +953,21 @@ SpSubview<eT>::const_row_iterator::operator--()
     const uword* start_ptr = &iterator_base::M->m.row_indices[     col_offset];
     const uword*   end_ptr = &iterator_base::M->m.row_indices[next_col_offset];
 
-    if (start_ptr != end_ptr)
+    if(start_ptr != end_ptr)
       {
       // There are elements in this column.
       const uword* pos_ptr = std::lower_bound(start_ptr, end_ptr, internal_row + aux_row);
 
-      if (pos_ptr != start_ptr)
+      if(pos_ptr != start_ptr)
         {
         // There are elements in this column with row index < internal_row.
-        if (*(pos_ptr - 1) > max_row + aux_row)
+        if(*(pos_ptr - 1) > max_row + aux_row)
           {
           max_row = *(pos_ptr - 1) - aux_row;
           max_col = col;
           next_actual_pos = col_offset + (pos_ptr - 1 - start_ptr);
           }
-        else if (*(pos_ptr - 1) == max_row + aux_row && col >= max_col)
+        else if(*(pos_ptr - 1) == max_row + aux_row && col >= max_col)
           {
           max_col = col;
           next_actual_pos = col_offset + (pos_ptr - 1 - start_ptr);
@@ -993,7 +975,7 @@ SpSubview<eT>::const_row_iterator::operator--()
         }
       }
 
-    if (col == 0) // Catch edge case that the loop termination condition won't.
+    if(col == 0) // Catch edge case that the loop termination condition won't.
       {
       break;
       }
@@ -1010,7 +992,6 @@ SpSubview<eT>::const_row_iterator::operator--()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::const_row_iterator
 SpSubview<eT>::const_row_iterator::operator--(int)
   {
@@ -1025,7 +1006,6 @@ SpSubview<eT>::const_row_iterator::operator--(int)
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator==(const const_iterator& rhs) const
   {
@@ -1036,7 +1016,6 @@ SpSubview<eT>::const_row_iterator::operator==(const const_iterator& rhs) const
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator!=(const const_iterator& rhs) const
   {
@@ -1047,7 +1026,6 @@ SpSubview<eT>::const_row_iterator::operator!=(const const_iterator& rhs) const
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator==(const typename SpMat<eT>::const_iterator& rhs) const
   {
@@ -1058,7 +1036,6 @@ SpSubview<eT>::const_row_iterator::operator==(const typename SpMat<eT>::const_it
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator!=(const typename SpMat<eT>::const_iterator& rhs) const
   {
@@ -1069,7 +1046,6 @@ SpSubview<eT>::const_row_iterator::operator!=(const typename SpMat<eT>::const_it
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator==(const const_row_iterator& rhs) const
   {
@@ -1080,7 +1056,6 @@ SpSubview<eT>::const_row_iterator::operator==(const const_row_iterator& rhs) con
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator!=(const const_row_iterator& rhs) const
   {
@@ -1091,7 +1066,6 @@ SpSubview<eT>::const_row_iterator::operator!=(const const_row_iterator& rhs) con
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator==(const typename SpMat<eT>::const_row_iterator& rhs) const
   {
@@ -1102,7 +1076,6 @@ SpSubview<eT>::const_row_iterator::operator==(const typename SpMat<eT>::const_ro
 
 template<typename eT>
 inline
-arma_hot
 bool
 SpSubview<eT>::const_row_iterator::operator!=(const typename SpMat<eT>::const_row_iterator& rhs) const
   {
@@ -1117,11 +1090,10 @@ SpSubview<eT>::const_row_iterator::operator!=(const typename SpMat<eT>::const_ro
 
 template<typename eT>
 inline
-arma_hot
-SpValProxy<SpSubview<eT> >
+SpValProxy< SpSubview<eT> >
 SpSubview<eT>::row_iterator::operator*()
   {
-  return SpValProxy<SpSubview<eT> >(
+  return SpValProxy< SpSubview<eT> >(
     const_row_iterator::internal_row,
     iterator_base::internal_col,
     access::rw(*iterator_base::M),
@@ -1132,7 +1104,6 @@ SpSubview<eT>::row_iterator::operator*()
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::row_iterator&
 SpSubview<eT>::row_iterator::operator++()
   {
@@ -1144,7 +1115,6 @@ SpSubview<eT>::row_iterator::operator++()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::row_iterator
 SpSubview<eT>::row_iterator::operator++(int)
   {
@@ -1159,7 +1129,6 @@ SpSubview<eT>::row_iterator::operator++(int)
 
 template<typename eT>
 inline
-arma_hot
 typename SpSubview<eT>::row_iterator&
 SpSubview<eT>::row_iterator::operator--()
   {
@@ -1171,7 +1140,6 @@ SpSubview<eT>::row_iterator::operator--()
 
 template<typename eT>
 inline
-arma_warn_unused
 typename SpSubview<eT>::row_iterator
 SpSubview<eT>::row_iterator::operator--(int)
   {
@@ -1181,5 +1149,6 @@ SpSubview<eT>::row_iterator::operator--(int)
 
   return tmp;
   }
+
 
 //! @}

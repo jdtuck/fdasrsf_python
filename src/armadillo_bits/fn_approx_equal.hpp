@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -287,7 +289,7 @@ internal_approx_equal_handler(const T1& A, const T2& B, const char* method, cons
   
   typedef typename T1::pod_type T;
   
-  const char sig = (method != NULL) ? method[0] : char(0);
+  const char sig = (method != nullptr) ? method[0] : char(0);
   
   arma_debug_check( ((sig != 'a') && (sig != 'r') && (sig != 'b')), "approx_equal(): argument 'method' must be \"absdiff\" or \"reldiff\" or \"both\"" );
   
@@ -322,7 +324,7 @@ internal_approx_equal_handler(const T1& A, const T2& B, const char* method, cons
   
   typedef typename T1::pod_type T;
   
-  const char sig = (method != NULL) ? method[0] : char(0);
+  const char sig = (method != nullptr) ? method[0] : char(0);
   
   arma_debug_check( ((sig != 'a') && (sig != 'r') && (sig != 'b')), "approx_equal(): argument 'method' must be \"absdiff\" or \"reldiff\" or \"both\"" );
   
@@ -408,7 +410,7 @@ approx_equal(const SpBase<typename T1::elem_type,T1>& A, const SpBase<typename T
   typedef typename T1::elem_type eT;
   typedef typename T1::pod_type   T;
   
-  const char sig = (method != NULL) ? method[0] : char(0);
+  const char sig = (method != nullptr) ? method[0] : char(0);
   
   arma_debug_check( ((sig != 'a') && (sig != 'r') && (sig != 'b')), "approx_equal(): argument 'method' must be \"absdiff\" or \"reldiff\" or \"both\"" );
   
@@ -452,7 +454,7 @@ approx_equal(const SpBase<typename T1::elem_type,T1>& A, const SpBase<typename T
   
   typedef typename T1::pod_type T;
   
-  const char sig = (method != NULL) ? method[0] : char(0);
+  const char sig = (method != nullptr) ? method[0] : char(0);
   
   arma_debug_check( ((sig != 'a') && (sig != 'r') && (sig != 'b')), "approx_equal(): argument 'method' must be \"absdiff\" or \"reldiff\" or \"both\"" );
   

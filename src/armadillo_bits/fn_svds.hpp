@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -30,7 +32,7 @@ svds_helper
   const uword                              k,
   const typename T1::pod_type              tol,
   const bool                               calc_UV,
-  const typename arma_real_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_real_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -81,7 +83,10 @@ svds_helper
     Col<eT> eigval;
     Mat<eT> eigvec;
     
-    const bool status = sp_auxlib::eigs_sym(eigval, eigvec, C, kk, "la", (tol / Datum<T>::sqrt2));
+    eigs_opts opts;
+    opts.tol = (tol / Datum<T>::sqrt2);
+    
+    const bool status = eigs_sym(eigval, eigvec, C, kk, "la", opts);
     
     if(status == false)
       {
@@ -118,15 +123,15 @@ svds_helper
     
     if(calc_UV)
       {
-      uvec U_row_indices(A.n_rows);  for(uword i=0; i < A.n_rows; ++i)  { U_row_indices[i] = i;            }
-      uvec V_row_indices(A.n_cols);  for(uword i=0; i < A.n_cols; ++i)  { V_row_indices[i] = i + A.n_rows; }
+      uvec U_row_indices(A.n_rows, arma_nozeros_indicator());  for(uword i=0; i < A.n_rows; ++i)  { U_row_indices[i] = i;            }
+      uvec V_row_indices(A.n_cols, arma_nozeros_indicator());  for(uword i=0; i < A.n_cols; ++i)  { V_row_indices[i] = i + A.n_rows; }
       
       U = Datum<T>::sqrt2 * eigvec(U_row_indices, sorted_indices);
       V = Datum<T>::sqrt2 * eigvec(V_row_indices, sorted_indices);
       }
     }
   
-  if(S.n_elem < k)  { arma_debug_warn("svds(): found fewer singular values than specified"); }
+  if(S.n_elem < k)  { arma_debug_warn_level(1, "svds(): found fewer singular values than specified"); }
   
   return true;
   }
@@ -145,7 +150,7 @@ svds_helper
   const uword                              k,
   const typename T1::pod_type              tol,
   const bool                               calc_UV,
-  const typename arma_cx_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_cx_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -202,7 +207,10 @@ svds_helper
     Col<eT> eigval_tmp;
     Mat<eT> eigvec;
     
-    const bool status = sp_auxlib::eigs_gen(eigval_tmp, eigvec, C, kk, "lr", (tol / Datum<T>::sqrt2));
+    eigs_opts opts;
+    opts.tol = (tol / Datum<T>::sqrt2);
+    
+    const bool status = eigs_gen(eigval_tmp, eigvec, C, kk, "lr", opts);
     
     if(status == false)
       {
@@ -241,15 +249,15 @@ svds_helper
     
     if(calc_UV)
       {
-      uvec U_row_indices(A.n_rows);  for(uword i=0; i < A.n_rows; ++i)  { U_row_indices[i] = i;            }
-      uvec V_row_indices(A.n_cols);  for(uword i=0; i < A.n_cols; ++i)  { V_row_indices[i] = i + A.n_rows; }
+      uvec U_row_indices(A.n_rows, arma_nozeros_indicator());  for(uword i=0; i < A.n_rows; ++i)  { U_row_indices[i] = i;            }
+      uvec V_row_indices(A.n_cols, arma_nozeros_indicator());  for(uword i=0; i < A.n_cols; ++i)  { V_row_indices[i] = i + A.n_rows; }
       
       U = Datum<T>::sqrt2 * eigvec(U_row_indices, sorted_indices);
       V = Datum<T>::sqrt2 * eigvec(V_row_indices, sorted_indices);
       }
     }
   
-  if(S.n_elem < k)  { arma_debug_warn("svds(): found fewer singular values than specified"); }
+  if(S.n_elem < k)  { arma_debug_warn_level(1, "svds(): found fewer singular values than specified"); }
   
   return true;
   }
@@ -268,7 +276,7 @@ svds
   const SpBase<typename T1::elem_type,T1>& X,
   const uword                              k,
   const typename T1::pod_type              tol  = 0.0,
-  const typename arma_real_or_cx_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_real_or_cx_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -276,7 +284,7 @@ svds
   
   const bool status = svds_helper(U, S, V, X.get_ref(), k, tol, true);
   
-  if(status == false)  { arma_debug_warn("svds(): decomposition failed"); }
+  if(status == false)  { arma_debug_warn_level(3, "svds(): decomposition failed"); }
 
   return status;
   }
@@ -293,7 +301,7 @@ svds
   const SpBase<typename T1::elem_type,T1>& X,
   const uword                              k,
   const typename T1::pod_type              tol  = 0.0,
-  const typename arma_real_or_cx_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_real_or_cx_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();
@@ -304,7 +312,7 @@ svds
   
   const bool status = svds_helper(U, S, V, X.get_ref(), k, tol, false);
   
-  if(status == false)  { arma_debug_warn("svds(): decomposition failed"); }
+  if(status == false)  { arma_debug_warn_level(3, "svds(): decomposition failed"); }
   
   return status;
   }
@@ -321,7 +329,7 @@ svds
   const SpBase<typename T1::elem_type,T1>& X,
   const uword                              k,
   const typename T1::pod_type              tol  = 0.0,
-  const typename arma_real_or_cx_only<typename T1::elem_type>::result* junk = 0
+  const typename arma_real_or_cx_only<typename T1::elem_type>::result* junk = nullptr
   )
   {
   arma_extra_debug_sigprint();

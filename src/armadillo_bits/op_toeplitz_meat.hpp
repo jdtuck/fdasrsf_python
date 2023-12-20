@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -31,7 +33,7 @@ op_toeplitz::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_toeplitz>& i
   const unwrap_check<T1>  tmp(in.m, out);
   const Mat<eT>& X      = tmp.M;
   
-  arma_debug_check( ((X.is_vec() == false) && (X.is_empty() == false)), "toeplitz(): given object is not a vector" );
+  arma_debug_check( ((X.is_vec() == false) && (X.is_empty() == false)), "toeplitz(): given object must be a vector" );
   
   const uword N     = X.n_elem;
   const eT*   X_mem = X.memptr();
@@ -66,14 +68,14 @@ op_toeplitz_c::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_toeplitz_c
   const unwrap_check<T1>  tmp(in.m, out);
   const Mat<eT>& X      = tmp.M;
   
-  arma_debug_check( ((X.is_vec() == false) && (X.is_empty() == false)), "circ_toeplitz(): given object is not a vector" );
+  arma_debug_check( ((X.is_vec() == false) && (X.is_empty() == false)), "circ_toeplitz(): given object must be a vector" );
   
   const uword N     = X.n_elem;
   const eT*   X_mem = X.memptr();
   
   out.set_size(N,N);
   
-  if(X.is_rowvec() == true)
+  if(X.is_rowvec())
     {
     for(uword row=0; row < N; ++row)
       {

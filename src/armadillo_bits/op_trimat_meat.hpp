@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -36,7 +38,7 @@ op_trimat::fill_zeros(Mat<eT>& out, const bool upper)
       {
       eT* data = out.colptr(i);
       
-      arrayops::inplace_set( &data[i+1], eT(0), (N-(i+1)) );
+      arrayops::fill_zeros( &data[i+1], (N-(i+1)) );
       }
     }
   else
@@ -47,7 +49,7 @@ op_trimat::fill_zeros(Mat<eT>& out, const bool upper)
       {
       eT* data = out.colptr(i);
       
-      arrayops::inplace_set( data, eT(0), i );
+      arrayops::fill_zeros( data, i );
       }
     }
   }
@@ -63,17 +65,72 @@ op_trimat::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_trimat>& in)
   
   typedef typename T1::elem_type eT;
   
-  const unwrap<T1>   tmp(in.m);
-  const Mat<eT>& A = tmp.M;
+  const bool upper = (in.aux_uword_a == 0);
+  
+  // allow detection of in-place operation
+  if(is_Mat<T1>::value || (arma_config::openmp && Proxy<T1>::use_mp))
+    {
+    const unwrap<T1> U(in.m);
+    
+    op_trimat::apply_unwrap(out, U.M, upper);
+    }
+  else
+    {
+    const Proxy<T1> P(in.m);
+    
+    const bool is_alias = P.is_alias(out);
+    
+    if(is_Mat<typename Proxy<T1>::stored_type>::value)
+      {
+      const quasi_unwrap<typename Proxy<T1>::stored_type> U(P.Q);
+      
+      if(is_alias)
+        {
+        Mat<eT> tmp;
+        
+        op_trimat::apply_unwrap(tmp, U.M, upper);
+        
+        out.steal_mem(tmp);
+        }
+      else
+        {
+        op_trimat::apply_unwrap(out, U.M, upper);
+        }
+      }
+    else
+      {
+      if(is_alias)
+        {
+        Mat<eT> tmp;
+        
+        op_trimat::apply_proxy(tmp, P, upper);
+        
+        out.steal_mem(tmp);
+        }
+      else
+        {
+        op_trimat::apply_proxy(out, P, upper);
+        }
+      }
+    }
+  }
+
+
+
+template<typename eT>
+inline
+void
+op_trimat::apply_unwrap(Mat<eT>& out, const Mat<eT>& A, const bool upper)
+  {
+  arma_extra_debug_sigprint();
   
   arma_debug_check( (A.is_square() == false), "trimatu()/trimatl(): given matrix must be square sized" );
-  
-  const uword N     = A.n_rows;
-  const bool  upper = (in.aux_uword_a == 0);
   
   if(&out != &A)
     {
     out.copy_size(A);
+    
+    const uword N = A.n_rows;
     
     if(upper)
       {
@@ -107,138 +164,30 @@ op_trimat::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_trimat>& in)
 template<typename T1>
 inline
 void
-op_trimat::apply(Mat<typename T1::elem_type>& out, const Op<Op<T1, op_htrans>, op_trimat>& in)
+op_trimat::apply_proxy(Mat<typename T1::elem_type>& out, const Proxy<T1>& P, const bool upper)
   {
   arma_extra_debug_sigprint();
   
-  typedef typename T1::elem_type eT;
+  arma_debug_check( (P.get_n_rows() != P.get_n_cols()), "trimatu()/trimatl(): given matrix must be square sized" );
   
-  const unwrap<T1>   tmp(in.m.m);
-  const Mat<eT>& A = tmp.M;
+  const uword N = P.get_n_rows();
   
-  const bool upper = (in.aux_uword_a == 0);
-  
-  op_trimat::apply_htrans(out, A, upper);
-  }
-
-
-
-template<typename eT>
-inline
-void
-op_trimat::apply_htrans
-  (
-        Mat<eT>& out,
-  const Mat<eT>& A,
-  const bool     upper,
-  const typename arma_not_cx<eT>::result* junk
-  )
-  {
-  arma_extra_debug_sigprint();
-  arma_ignore(junk);
-  
-  // This specialisation is for trimatl(trans(X)) = trans(trimatu(X)) and also
-  // trimatu(trans(X)) = trans(trimatl(X)).  We want to avoid the creation of an
-  // extra temporary.
-  
-  // It doesn't matter if the input and output matrices are the same; we will
-  // pull data from the upper or lower triangular to the lower or upper
-  // triangular (respectively) and then set the rest to 0, so overwriting issues
-  // aren't present.
-  
-  arma_debug_check( (A.is_square() == false), "trimatu()/trimatl(): given matrix must be square sized" );
-  
-  const uword N = A.n_rows;
-  
-  if(&out != &A)
-    {
-    out.copy_size(A);
-    }
-  
-  // We can't really get away with any array copy operations here,
-  // unfortunately...
+  out.set_size(N,N);
   
   if(upper)
     {
-    // Upper triangular: but since we're transposing, we're taking the lower
-    // triangular and putting it in the upper half.
-    for(uword row = 0; row < N; ++row)
+    for(uword j=0; j < N;     ++j)
+    for(uword i=0; i < (j+1); ++i)
       {
-      eT* out_colptr = out.colptr(row);
-      
-      for(uword col = 0; col <= row; ++col)
-        {
-        //out.at(col, row) = A.at(row, col);
-        out_colptr[col] = A.at(row, col);
-        }
+      out.at(i,j) = P.at(i,j);
       }
     }
   else
     {
-    // Lower triangular: but since we're transposing, we're taking the upper
-    // triangular and putting it in the lower half.
-    for(uword row = 0; row < N; ++row)
+    for(uword j=0; j<N; ++j)
+    for(uword i=j; i<N; ++i)
       {
-      for(uword col = row; col < N; ++col)
-        {
-        out.at(col, row) = A.at(row, col);
-        }
-      }
-    }
-  
-  op_trimat::fill_zeros(out, upper);
-  }
-
-
-
-template<typename eT>
-inline
-void
-op_trimat::apply_htrans
-  (
-        Mat<eT>& out,
-  const Mat<eT>& A,
-  const bool     upper,
-  const typename arma_cx_only<eT>::result* junk
-  )
-  {
-  arma_extra_debug_sigprint();
-  arma_ignore(junk);
-  
-  arma_debug_check( (A.is_square() == false), "trimatu()/trimatl(): given matrix must be square sized" );
-  
-  const uword N = A.n_rows;
-  
-  if(&out != &A)
-    {
-    out.copy_size(A);
-    }
-  
-  if(upper)
-    {
-    // Upper triangular: but since we're transposing, we're taking the lower
-    // triangular and putting it in the upper half.
-    for(uword row = 0; row < N; ++row)
-      {
-      eT* out_colptr = out.colptr(row);
-      
-      for(uword col = 0; col <= row; ++col)
-        {
-        //out.at(col, row) = std::conj( A.at(row, col) );
-        out_colptr[col] = std::conj( A.at(row, col) );
-        }
-      }
-    }
-  else
-    {
-    // Lower triangular: but since we're transposing, we're taking the upper
-    // triangular and putting it in the lower half.
-    for(uword row = 0; row < N; ++row)
-      {
-      for(uword col = row; col < N; ++col)
-        {
-        out.at(col, row) = std::conj( A.at(row, col) );
-        }
+      out.at(i,j) = P.at(i,j);
       }
     }
   
@@ -271,7 +220,7 @@ op_trimatu_ext::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_trimatu_e
   const uword n_rows = A.n_rows;
   const uword n_cols = A.n_cols;
   
-  arma_debug_check( ((row_offset > 0) && (row_offset >= n_rows)) || ((col_offset > 0) && (col_offset >= n_cols)), "trimatu(): requested diagonal is out of bounds" );
+  arma_debug_check_bounds( ((row_offset > 0) && (row_offset >= n_rows)) || ((col_offset > 0) && (col_offset >= n_cols)), "trimatu(): requested diagonal is out of bounds" );
   
   if(&out != &A)
     {
@@ -362,7 +311,7 @@ op_trimatl_ext::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_trimatl_e
   const uword n_rows = A.n_rows;
   const uword n_cols = A.n_cols;
   
-  arma_debug_check( ((row_offset > 0) && (row_offset >= n_rows)) || ((col_offset > 0) && (col_offset >= n_cols)), "trimatl(): requested diagonal is out of bounds" );
+  arma_debug_check_bounds( ((row_offset > 0) && (row_offset >= n_rows)) || ((col_offset > 0) && (col_offset >= n_cols)), "trimatl(): requested diagonal is out of bounds" );
   
   if(&out != &A)
     {

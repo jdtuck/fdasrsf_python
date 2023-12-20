@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -24,7 +26,7 @@ template<typename T1>
 arma_warn_unused
 inline
 const eOp<T1, eop_eps>
-eps(const Base<typename T1::elem_type, T1>& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = 0)
+eps(const Base<typename T1::elem_type, T1>& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
@@ -38,7 +40,7 @@ template<typename T1>
 arma_warn_unused
 inline
 Mat< typename T1::pod_type >
-eps(const Base< std::complex<typename T1::pod_type>, T1>& X, const typename arma_cx_only<typename T1::elem_type>::result* junk = 0)
+eps(const Base< std::complex<typename T1::pod_type>, T1>& X, const typename arma_cx_only<typename T1::elem_type>::result* junk = nullptr)
   {
   arma_extra_debug_sigprint();
   arma_ignore(junk);
@@ -49,7 +51,7 @@ eps(const Base< std::complex<typename T1::pod_type>, T1>& X, const typename arma
   const unwrap<T1>   tmp(X.get_ref());
   const Mat<eT>& A = tmp.M;
   
-  Mat<T> out(A.n_rows, A.n_cols);
+  Mat<T> out(A.n_rows, A.n_cols, arma_nozeros_indicator());
   
          T* out_mem = out.memptr();
   const eT*   A_mem =   A.memptr();

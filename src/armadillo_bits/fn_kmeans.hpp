@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -40,7 +42,7 @@ kmeans
   
   const bool status = model.kmeans_wrapper(means, data.get_ref(), k, seed_mode, n_iter, print_mode);
   
-  if(status == true)
+  if(status)
     {
     means = model.means;
     }

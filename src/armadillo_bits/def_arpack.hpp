@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -14,7 +16,7 @@
 // ------------------------------------------------------------------------
 
 
-#ifdef ARMA_USE_ARPACK
+#if defined(ARMA_USE_ARPACK)
 
 // I'm not sure this is necessary.
 #if !defined(ARMA_BLAS_CAPITALS)

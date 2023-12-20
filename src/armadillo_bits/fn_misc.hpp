@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -57,7 +59,7 @@ linspace
     
     const uword num_m1 = num - 1;
     
-    if(is_non_integral<T>::value == true)
+    if(is_non_integral<T>::value)
       {
       const T delta = (end-start)/T(num_m1);
       
@@ -167,7 +169,7 @@ log_add_exp(eT log_a, eT log_b)
     }
   else
     {
-    return (log_a + arma_log1p(std::exp(negdelta)));
+    return (log_a + std::log1p(std::exp(negdelta)));
     }
   }
 
@@ -190,7 +192,7 @@ template<typename eT>
 arma_warn_unused
 arma_inline
 bool
-is_finite(const eT x, const typename arma_scalar_only<eT>::result* junk = 0)
+is_finite(const eT x, const typename arma_scalar_only<eT>::result* junk = nullptr)
   {
   arma_ignore(junk);
   
@@ -241,22 +243,6 @@ is_finite(const BaseCube<typename T1::elem_type,T1>& X)
 
 
 
-//! NOTE: don't use this function: it will be removed
-template<typename T1>
-arma_deprecated
-inline
-const T1&
-sympd(const Base<typename T1::elem_type,T1>& X)
-  {
-  arma_extra_debug_sigprint();
-  
-  arma_debug_warn("sympd() is deprecated and will be removed; change inv(sympd(X)) to inv_sympd(X)");
-  
-  return X.get_ref();
-  }
-
-
-
 template<typename eT>
 inline
 void
@@ -295,7 +281,7 @@ ind2sub(const SizeMat& s, const uword i)
   const uword row = i % s_n_rows;
   const uword col = i / s_n_rows;
   
-  uvec out(2);
+  uvec out(2, arma_nozeros_indicator());
   
   uword* out_mem = out.memptr();
   
@@ -329,7 +315,7 @@ ind2sub(const SizeMat& s, const T1& indices)
   
   arma_debug_check( ((P_is_empty == false) && (P_is_vec == false)), "ind2sub(): parameter 'indices' must be a vector" );
   
-  umat out(2,P_n_elem);
+  umat out(2, P_n_elem, arma_nozeros_indicator());
   
   if(Proxy<T1>::use_at == false)
     {
@@ -411,7 +397,7 @@ ind2sub(const SizeCube& s, const uword i)
   const uword row    = j % s_n_rows;
   const uword col    = j / s_n_rows;
   
-  uvec out(3);
+  uvec out(3, arma_nozeros_indicator());
   
   uword* out_mem = out.memptr();
   
@@ -443,7 +429,7 @@ ind2sub(const SizeCube& s, const T1& indices)
   const uword  U_n_elem = U.M.n_elem;
   const uword* U_mem    = U.M.memptr();
   
-  umat out(3,U_n_elem);
+  umat out(3, U_n_elem, arma_nozeros_indicator());
   
   for(uword count=0; count < U_n_elem; ++count)
     {
@@ -501,7 +487,7 @@ sub2ind(const SizeMat& s, const Base<uword,T1>& subscripts)
   
   const uword U_M_n_cols = U.M.n_cols;
   
-  uvec out(U_M_n_cols);
+  uvec out(U_M_n_cols, arma_nozeros_indicator());
   
         uword* out_mem = out.memptr();
   const uword* U_M_mem = U.M.memptr();
@@ -558,7 +544,7 @@ sub2ind(const SizeCube& s, const Base<uword,T1>& subscripts)
   
   const uword U_M_n_cols = U.M.n_cols;
   
-  uvec out(U_M_n_cols);
+  uvec out(U_M_n_cols, arma_nozeros_indicator());
   
         uword* out_mem = out.memptr();
   const uword* U_M_mem = U.M.memptr();

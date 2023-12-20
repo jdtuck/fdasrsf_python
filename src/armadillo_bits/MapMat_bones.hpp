@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -28,9 +30,9 @@ class MapMat
   typedef eT                                elem_type;  //!< the type of elements stored in the matrix
   typedef typename get_pod_type<eT>::result  pod_type;  //!< if eT is std::complex<T>, pod_type is T; otherwise pod_type is eT
   
-  static const bool is_row  = false;
-  static const bool is_col  = false;
-  static const bool is_xvec = false;
+  static constexpr bool is_row  = false;
+  static constexpr bool is_col  = false;
+  static constexpr bool is_xvec = false;
   
   const uword n_rows;    //!< number of rows     (read-only)
   const uword n_cols;    //!< number of columns  (read-only)
@@ -58,10 +60,8 @@ class MapMat
   inline explicit MapMat(const SpMat<eT>& x);
   inline void  operator=(const SpMat<eT>& x);
   
-  #if defined(ARMA_USE_CXX11)
   inline          MapMat(MapMat<eT>&& x);
   inline void  operator=(MapMat<eT>&& x);
-  #endif
   
   inline void reset();
   inline void set_size(const uword in_n_rows);
@@ -81,23 +81,23 @@ class MapMat
   inline void speye(const uword in_n_rows, const uword in_n_cols);
   inline void speye(const SizeMat& s);
   
-  arma_inline arma_warn_unused MapMat_val<eT> operator[](const uword index);
-       inline arma_warn_unused            eT  operator[](const uword index) const;
+  arma_warn_unused arma_inline MapMat_val<eT> operator[](const uword index);
+  arma_warn_unused      inline            eT  operator[](const uword index) const;
   
-  arma_inline arma_warn_unused MapMat_val<eT> operator()(const uword index);
-       inline arma_warn_unused            eT  operator()(const uword index) const;
+  arma_warn_unused arma_inline MapMat_val<eT> operator()(const uword index);
+  arma_warn_unused      inline            eT  operator()(const uword index) const;
   
-  arma_inline arma_warn_unused MapMat_val<eT>         at(const uword in_row, const uword in_col);
-       inline arma_warn_unused            eT          at(const uword in_row, const uword in_col) const;
+  arma_warn_unused arma_inline MapMat_val<eT>         at(const uword in_row, const uword in_col);
+  arma_warn_unused      inline            eT          at(const uword in_row, const uword in_col) const;
   
-  arma_inline arma_warn_unused MapMat_val<eT> operator()(const uword in_row, const uword in_col);
-       inline arma_warn_unused            eT  operator()(const uword in_row, const uword in_col) const;
+  arma_warn_unused arma_inline MapMat_val<eT> operator()(const uword in_row, const uword in_col);
+  arma_warn_unused      inline            eT  operator()(const uword in_row, const uword in_col) const;
   
-  inline arma_warn_unused bool is_empty()  const;
-  inline arma_warn_unused bool is_vec()    const;
-  inline arma_warn_unused bool is_rowvec() const;
-  inline arma_warn_unused bool is_colvec() const;
-  inline arma_warn_unused bool is_square() const;
+  arma_warn_unused inline bool is_empty()  const;
+  arma_warn_unused inline bool is_vec()    const;
+  arma_warn_unused inline bool is_rowvec() const;
+  arma_warn_unused inline bool is_colvec() const;
+  arma_warn_unused inline bool is_square() const;
   
   
   inline void sprandu(const uword in_n_rows, const uword in_n_cols, const double density);
@@ -195,11 +195,11 @@ class SpMat_MapMat_val
   inline SpMat_MapMat_val<eT>& operator*=(const eT in_val);
   inline SpMat_MapMat_val<eT>& operator/=(const eT in_val);
   
-  inline                  SpMat_MapMat_val<eT>& operator++();
-  inline arma_warn_unused eT                    operator++(int);
+                   inline SpMat_MapMat_val<eT>& operator++();
+  arma_warn_unused inline eT                    operator++(int);
   
-  inline                  SpMat_MapMat_val<eT>& operator--();
-  inline arma_warn_unused eT                    operator--(int);
+                   inline SpMat_MapMat_val<eT>& operator--();
+  arma_warn_unused inline eT                    operator--(int);
   
   inline void set(const eT in_val);
   inline void add(const eT in_val);
@@ -235,11 +235,11 @@ class SpSubview_MapMat_val : public SpMat_MapMat_val<eT>
   inline SpSubview_MapMat_val<eT>& operator*=(const eT in_val);
   inline SpSubview_MapMat_val<eT>& operator/=(const eT in_val);
   
-  inline                  SpSubview_MapMat_val<eT>& operator++();
-  inline arma_warn_unused eT                        operator++(int);
+                   inline SpSubview_MapMat_val<eT>& operator++();
+  arma_warn_unused inline eT                        operator++(int);
   
-  inline                  SpSubview_MapMat_val<eT>& operator--();
-  inline arma_warn_unused eT                        operator--(int);
+                   inline SpSubview_MapMat_val<eT>& operator--();
+  arma_warn_unused inline eT                        operator--(int);
   };
 
 

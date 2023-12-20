@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// 
 // Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
 // Copyright 2008-2016 National ICT Australia (NICTA)
 // 
@@ -45,7 +47,8 @@ orth(Mat<typename T1::elem_type>& out, const Base<typename T1::elem_type, T1>& X
   
   if(status == false)
     {
-    arma_debug_warn("orth(): svd failed");
+    out.soft_reset();
+    arma_debug_warn_level(3, "orth(): svd failed");
     }
   
   return status;
@@ -83,7 +86,8 @@ null(Mat<typename T1::elem_type>& out, const Base<typename T1::elem_type, T1>& X
   
   if(status == false)
     {
-    arma_debug_warn("null(): svd failed");
+    out.soft_reset();
+    arma_debug_warn_level(3, "null(): svd failed");
     }
   
   return status;
