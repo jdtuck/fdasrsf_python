@@ -44,7 +44,7 @@ documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
 # Note: the below skip command doesn't do much currently, the platforms to
 # build wheels for in CI are controlled in `.github/workflows/wheels.yml` and
 # `tools/ci/cirrus_wheels.yml`.
-skip = "cp36-* cp37-* cp38-* cp312-* pp* *-manylinux_i686 *_ppc64le *_s390x *-win32"
+skip = "cp36-* cp37-* cp38-* cp312-* pp* *-manylinux_i686 *_ppc64le *_s390x *-win32 *_i686"
 build-verbosity = "3"
 before-build = "bash {project}/bin/cibw_before_build.sh {project}"
 
