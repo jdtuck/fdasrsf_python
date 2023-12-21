@@ -17,9 +17,8 @@ if [[ $RUNNER_OS == "Linux" || $RUNNER_OS == "macOS" ]] ; then
         # sudo cp $basedir/include/* /usr/local/include/
         pip install mkl-devel
     else
-        # cp -r $basedir/lib/* /usr/local/lib/
-        # cp $basedir/include/* /usr/local/include/
-        pip install mkl-devel
+        cp -r $basedir/lib/* /usr/local/lib/
+        cp $basedir/include/* /usr/local/include/
     fi
 elif [[ $RUNNER_OS == "Windows" ]]; then
     # delvewheel is the equivalent of delocate/auditwheel for windows.
