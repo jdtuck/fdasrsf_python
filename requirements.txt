@@ -8,6 +8,7 @@ kiwisolver
 matplotlib
 numpy
 patsy
+findblas
 pyparsing
 python-dateutil
 scipy
