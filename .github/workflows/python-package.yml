@@ -51,7 +51,7 @@ jobs:
       CIBW_SKIP: cp36-* cp37-* cp38-* cp312-* pp*
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-11]
+        os: [ubuntu-22.04]
         
     steps:
       - uses: actions/checkout@v4
