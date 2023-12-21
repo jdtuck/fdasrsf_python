@@ -47,7 +47,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       CIBW_BEFORE_ALL_LINUX: yum install openblas-devel
-      CIBW_BEFORE_ALL_MACOS: brew install openblas
+      CIBW_BEFORE_ALL_MACOS: pip install mkl
       CIBW_SKIP: cp36-* cp37-* cp38-* cp312-* pp*
     strategy:
       matrix:
