@@ -4,6 +4,7 @@ import sys, os
 import platform
 from distutils.core import setup
 from distutils.core import Command
+from findblas.distutils import build_ext_with_blas
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
@@ -110,7 +111,6 @@ extensions = [
         sources=["src/crbfgs.pyx", "src/rbfgs.cpp"],
         include_dirs=[numpy.get_include()],
         language="c++",
-        libraries=['blas', 'lapack'],
         extra_compile_args=["-std=c++11"],
     ),
     Extension(
@@ -124,7 +124,7 @@ extensions = [
 
 
 setup(
-    cmdclass={"build_ext": build_ext, "build_docs": build_docs},
+    cmdclass={"build_ext": build_ext_with_blas, "build_docs": build_docs},
     ext_modules=extensions,
     name="fdasrsf",
     version="2.5.3",
