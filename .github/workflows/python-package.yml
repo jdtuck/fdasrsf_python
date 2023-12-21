@@ -46,12 +46,11 @@ jobs:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     env:
-      CIBW_BEFORE_ALL_LINUX: yum -y install openblas-devel
-      CIBW_BEFORE_ALL_MACOS: pip install mkl
-      CIBW_SKIP: cp36-* cp37-* cp38-* cp312-* pp*
+      CIBW_BEFORE_ALL: bash {project}/bin/cibw_before_build.sh {project}
+      CIBW_SKIP: cp36-* cp37-* cp38-* cp312-* pp* *-manylinux_i686 *_ppc64le *_s390x
     strategy:
       matrix:
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, windows-2022, macos-11]
         
     steps:
       - uses: actions/checkout@v4
