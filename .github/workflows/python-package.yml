@@ -46,6 +46,7 @@ jobs:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     env:
+      CIBW_BEFORE_ALL: apt install libopenblas-dev
       CIBW_SKIP: cp36-* cp37-* cp38-* cp312-* pp*
     strategy:
       matrix:
