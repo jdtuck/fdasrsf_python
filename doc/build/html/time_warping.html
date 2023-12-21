@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Functional Alignment &mdash; fdasrsf 2.5.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Functional Alignment &mdash; fdasrsf 2.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,6 +19,8 @@
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -93,8 +97,510 @@
            <div itemprop="articleBody">
              
   <a class="reference internal image-reference" href="_images/logo.png"><img alt="_images/logo.png" class="align-right" src="_images/logo.png" style="width: 200px;" /></a>
-<section id="functional-alignment">
-<h1>Functional Alignment<a class="headerlink" href="#functional-alignment" title="Permalink to this heading"></a></h1>
+<section id="module-time_warping">
+<span id="functional-alignment"></span><h1>Functional Alignment<a class="headerlink" href="#module-time_warping" title="Permalink to this heading"></a></h1>
+<p>Group-wise function alignment using SRSF framework and Dynamic Programming</p>
+<p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="time_warping.align_fPCA">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">align_fPCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPCA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.align_fPCA" title="Permalink to this definition"></a></dt>
+<dd><p>aligns a collection of functions while extracting principal components.
+The functions are aligned to the principal components</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>num_comp</strong> – number of fPCA components</p></li>
+<li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fn<span class="colon">:</span></dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples</p>
+</dd>
+<dt class="field-even">Return qn<span class="colon">:</span></dt>
+<dd class="field-even"><p>aligned srvfs - similar structure to fn</p>
+</dd>
+<dt class="field-odd">Return q0<span class="colon">:</span></dt>
+<dd class="field-odd"><p>original srvf - similar structure to fn</p>
+</dd>
+<dt class="field-even">Return mqn<span class="colon">:</span></dt>
+<dd class="field-even"><p>srvf mean or median - vector of length M</p>
+</dd>
+<dt class="field-odd">Return gam<span class="colon">:</span></dt>
+<dd class="field-odd"><p>warping functions - similar structure to fn</p>
+</dd>
+<dt class="field-even">Return q_pca<span class="colon">:</span></dt>
+<dd class="field-even"><p>srsf principal directions</p>
+</dd>
+<dt class="field-odd">Return f_pca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>functional principal directions</p>
+</dd>
+<dt class="field-even">Return latent<span class="colon">:</span></dt>
+<dd class="field-even"><p>latent values</p>
+</dd>
+<dt class="field-odd">Return coef<span class="colon">:</span></dt>
+<dd class="field-odd"><p>coefficients</p>
+</dd>
+<dt class="field-even">Return U<span class="colon">:</span></dt>
+<dd class="field-even"><p>eigenvectors</p>
+</dd>
+<dt class="field-odd">Return orig_var<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Original Variance of Functions</p>
+</dd>
+<dt class="field-even">Return amp_var<span class="colon">:</span></dt>
+<dd class="field-even"><p>Amplitude Variance</p>
+</dd>
+<dt class="field-odd">Return phase_var<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Phase Variance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="time_warping.align_fPLS">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">align_fPLS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#align_fPLS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.align_fPLS" title="Permalink to this definition"></a></dt>
+<dd><p>This function aligns a collection of functions while performing
+principal least squares</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>g</strong> (<em>np.ndarray</em>) – numpy ndarray of shape (M,N) of N functions with M samples</p></li>
+<li><p><strong>time</strong> (<em>np.ndarray</em>) – vector of size M describing the sample points</p></li>
+<li><p><strong>comps</strong> – number of fPLS components</p></li>
+<li><p><strong>showplot</strong> – Shows plots of results using matplotlib (default = T)</p></li>
+<li><p><strong>smooth_data</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>delta</strong> – gradient step size</p></li>
+<li><p><strong>max_itr</strong> – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of numpy array</p>
+</dd>
+<dt class="field-odd">Return fn<span class="colon">:</span></dt>
+<dd class="field-odd"><p>aligned functions - numpy ndarray of shape (M,N) of N</p>
+</dd>
+</dl>
+<p>functions with M samples
+:return gn: aligned functions - numpy ndarray of shape (M,N) of N
+functions with M samples
+:return qfn: aligned srvfs - similar structure to fn
+:return qgn: aligned srvfs - similar structure to fn
+:return qf0: original srvf - similar structure to fn
+:return qg0: original srvf - similar structure to fn
+:return gam: warping functions - similar structure to fn
+:return wqf: srsf principal weight functions
+:return wqg: srsf principal weight functions
+:return wf: srsf principal weight functions
+:return wg: srsf principal weight functions
+:return cost: cost function value</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="time_warping.fdawarp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">fdawarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp" title="Permalink to this definition"></a></dt>
+<dd><p>This class provides alignment methods for functional data using the SRVF framework</p>
+<p>Usage:  obj = fdawarp(f,t)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – (M,N): matrix defining N functions of M samples</p></li>
+<li><p><strong>time</strong> – time vector of length M</p></li>
+<li><p><strong>fn</strong> – aligned functions</p></li>
+<li><p><strong>qn</strong> – aligned srvfs</p></li>
+<li><p><strong>q0</strong> – initial srvfs</p></li>
+<li><p><strong>fmean</strong> – Karcher mean</p></li>
+<li><p><strong>mqn</strong> – mean srvf</p></li>
+<li><p><strong>gam</strong> – warping functions</p></li>
+<li><p><strong>psi</strong> – srvf of warping functions</p></li>
+<li><p><strong>stats</strong> – alignment statistics</p></li>
+<li><p><strong>qun</strong> – cost function</p></li>
+<li><p><strong>lambda</strong> – lambda</p></li>
+<li><p><strong>method</strong> – optimization method</p></li>
+<li><p><strong>gamI</strong> – inverse warping function</p></li>
+<li><p><strong>rsamps</strong> – random samples</p></li>
+<li><p><strong>fs</strong> – random aligned functions</p></li>
+<li><p><strong>gams</strong> – random warping functions</p></li>
+<li><p><strong>ft</strong> – random warped functions</p></li>
+<li><p><strong>qs</strong> – random aligned srvfs</p></li>
+<li><p><strong>type</strong> – alignment type</p></li>
+<li><p><strong>mcmc</strong> – mcmc output if bayesian</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
+Date   :  15-Mar-2018</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="time_warping.fdawarp.gauss_model">
+<span class="sig-name descname"><span class="pre">gauss_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.gauss_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.gauss_model" title="Permalink to this definition"></a></dt>
+<dd><p>This function models the functional data using a Gaussian model
+extracted from the principal components of the srvfs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
+<li><p><strong>sort_samples</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – sort samples (default = T)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="time_warping.fdawarp.joint_gauss_model">
+<span class="sig-name descname"><span class="pre">joint_gauss_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.joint_gauss_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.joint_gauss_model" title="Permalink to this definition"></a></dt>
+<dd><p>This function models the functional data using a joint Gaussian model
+extracted from the principal components of the srsfs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>integer</em>) – number of random samples</p></li>
+<li><p><strong>no</strong> (<em>integer</em>) – number of principal components (default = 3)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="time_warping.fdawarp.multiple_align_functions">
+<span class="sig-name descname"><span class="pre">multiple_align_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.multiple_align_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.multiple_align_functions" title="Permalink to this definition"></a></dt>
+<dd><p>This function aligns a collection of functions using the elastic 
+square-root slope (srsf) framework.</p>
+<dl class="simple">
+<dt>Usage:  obj.multiple_align_functions(mu)</dt><dd><p>obj.multiple_align_functions(lambda)</p>
+</dd>
+</dl>
+<p>obj.multiple_align_functions(lambda, …)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> – vector of function to align to</p></li>
+<li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS, cRBFGS) 
+(default = DP2)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
+<li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
+<li><p><strong>grid_dim</strong> – size of the grid, for the DP2 method only 
+(default = 7)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="time_warping.fdawarp.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.plot" title="Permalink to this definition"></a></dt>
+<dd><p>plot functional alignment results</p>
+<p>Usage: obj.plot()</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="time_warping.fdawarp.srsf_align">
+<span class="sig-name descname"><span class="pre">srsf_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MaxItr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#fdawarp.srsf_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.fdawarp.srsf_align" title="Permalink to this definition"></a></dt>
+<dd><p>This function aligns a collection of functions using the elastic
+square-root slope (srsf) framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> – (string) warp calculate Karcher Mean or Median 
+(options = “mean” or “median”) (default=”mean”)</p></li>
+<li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS, cRBFGS) 
+(default = DP2)</p></li>
+<li><p><strong>center</strong> – center warping functions (default = T)</p></li>
+<li><p><strong>smoothdata</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Smooth the data using a box filter (default = F)</p></li>
+<li><p><strong>MaxItr</strong> – Maximum number of iterations (default = 20)</p></li>
+<li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
+<li><p><strong>lam</strong> (<em>double</em>) – controls the elasticity (default = 0)</p></li>
+<li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
+<li><p><strong>grid_dim</strong> – size of the grid, for the DP2 method only 
+(default = 7)</p></li>
+<li><p><strong>verbose</strong> – print status output (default = T)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Examples
+&gt;&gt;&gt; import tables
+&gt;&gt;&gt; fun=tables.open_file(“../Data/simu_data.h5”)
+&gt;&gt;&gt; f = fun.root.f[:]
+&gt;&gt;&gt; f = f.transpose()
+&gt;&gt;&gt; time = fun.root.time[:]
+&gt;&gt;&gt; obj = fs.fdawarp(f,time)
+&gt;&gt;&gt; obj.srsf_align()</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="time_warping.normal">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.normal" title="Permalink to this definition"></a></dt>
+<dd><p>Draw random samples from a normal (Gaussian) distribution.</p>
+<p>The probability density function of the normal distribution, first
+derived by De Moivre and 200 years later by both Gauss and Laplace
+independently <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, is often called the bell curve because of
+its characteristic shape (see the example below).</p>
+<p>The normal distributions occurs often in nature.  For example, it
+describes the commonly occurring distribution of samples influenced
+by a large number of tiny, random disturbances, each with its own
+unique distribution <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>New code should use the <cite>~numpy.random.Generator.normal</cite>
+method of a <cite>~numpy.random.Generator</cite> instance instead;
+please see the <span class="xref std std-ref">random-quick-start</span>.</p>
+</div>
+<dl class="simple">
+<dt>loc<span class="classifier">float or array_like of floats</span></dt><dd><p>Mean (“centre”) of the distribution.</p>
+</dd>
+<dt>scale<span class="classifier">float or array_like of floats</span></dt><dd><p>Standard deviation (spread or “width”) of the distribution. Must be
+non-negative.</p>
+</dd>
+<dt>size<span class="classifier">int or tuple of ints, optional</span></dt><dd><p>Output shape.  If the given shape is, e.g., <code class="docutils literal notranslate"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  If size is <code class="docutils literal notranslate"><span class="pre">None</span></code> (default),
+a single value is returned if <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> are both scalars.
+Otherwise, <code class="docutils literal notranslate"><span class="pre">np.broadcast(loc,</span> <span class="pre">scale).size</span></code> samples are drawn.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>out<span class="classifier">ndarray or scalar</span></dt><dd><p>Drawn samples from the parameterized normal distribution.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>scipy.stats.norm<span class="classifier">probability density function, distribution or</span></dt><dd><p>cumulative density function, etc.</p>
+</dd>
+</dl>
+<p>random.Generator.normal: which should be used for new code.</p>
+<p>The probability density for the Gaussian distribution is</p>
+<div class="math notranslate nohighlight">
+\[p(x) = \frac{1}{\sqrt{ 2 \pi \sigma^2 }}
+e^{ - \frac{ (x - \mu)^2 } {2 \sigma^2} },\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the mean and <span class="math notranslate nohighlight">\(\sigma\)</span> the standard
+deviation. The square of the standard deviation, <span class="math notranslate nohighlight">\(\sigma^2\)</span>,
+is called the variance.</p>
+<p>The function has its peak at the mean, and its “spread” increases with
+the standard deviation (the function reaches 0.607 times its maximum at
+<span class="math notranslate nohighlight">\(x + \sigma\)</span> and <span class="math notranslate nohighlight">\(x - \sigma\)</span> <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>).  This implies that
+normal is more likely to return samples lying close to the mean, rather
+than those far away.</p>
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Wikipedia, “Normal distribution”,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution">https://en.wikipedia.org/wiki/Normal_distribution</a></p>
+</aside>
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>)</span>
+<p>P. R. Peebles Jr., “Central Limit Theorem” in “Probability,
+Random Variables and Random Signal Principles”, 4th ed., 2001,
+pp. 51, 51, 125.</p>
+</aside>
+<p>Draw samples from the distribution:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span> <span class="c1"># mean and standard deviation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Verify the mean and the variance:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<span class="go">0.0  # may vary</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">abs</span><span class="p">(</span><span class="n">sigma</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">0.1  # may vary</span>
+</pre></div>
+</div>
+<p>Display the histogram of the samples, along with
+the probability density function:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">ignored</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span>
+<span class="gp">... </span>               <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span> <span class="p">(</span><span class="n">bins</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">),</span>
+<span class="gp">... </span>         <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Two-by-four array of samples from the normal distribution with
+mean 3 and standard deviation 2.5:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">array([[-4.49401501,  4.00950034, -1.81814867,  7.29718677],   # random</span>
+<span class="go">       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]])  # random</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="time_warping.pairwise_align_bayes">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_bayes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mcmcopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes" title="Permalink to this definition"></a></dt>
+<dd><p>This function aligns two functions using Bayesian framework. It will align
+f2 to f1. It is based on mapping warping functions to a hypersphere, and a
+subsequent exponential mapping to a tangent space. In the tangent space,
+the Z-mixture pCN algorithm is used to explore both local and global
+structure in the posterior distribution.</p>
+<p>The Z-mixture pCN algorithm uses a mixture distribution for the proposal
+distribution, controlled by input parameter zpcn. The zpcn$betas must be
+between 0 and 1, and are the coefficients of the mixture components, with
+larger coefficients corresponding to larger shifts in parameter space. The
+zpcn[“probs”] give the probability of each shift size.</p>
+<dl class="simple">
+<dt>Usage:  out = pairwise_align_bayes(f1i, f2i, time)</dt><dd><p>out = pairwise_align_bayes(f1i, f2i, time, mcmcopts)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f1i</strong> – vector defining M samples of function 1</p></li>
+<li><p><strong>f2i</strong> – vector defining M samples of function 2</p></li>
+<li><p><strong>time</strong> – time vector of length M</p></li>
+<li><p><strong>mcmopts</strong> – dict of mcmc parameters</p></li>
+</ul>
+</dd>
+</dl>
+<p>default mcmc options:
+tmp = {“betas”:np.array([0.5,0.5,0.005,0.0001]),”probs”:np.array([0.1,0.1,0.7,0.1])}
+mcmcopts = {“iter”:2*(10**4) ,”burnin”:np.minimum(5*(10**3),2*(10**4)//2),</p>
+<blockquote>
+<div><p>“alpha0”:0.1, “beta0”:0.1,”zpcn”:tmp,”propvar”:1,
+“initcoef”:np.repeat(0,20), “npoints”:200, “extrainfo”:True}</p>
+</div></blockquote>
+<p>:rtype collection containing
+:return f2_warped: aligned f2
+:return gamma: warping function
+:return g_coef: final g_coef
+:return psi: final psi
+:return sigma1: final sigma</p>
+<p>if extrainfo
+:return accept: accept of psi samples
+:return betas_ind
+:return logl: log likelihood
+:return gamma_mat: posterior gammas
+:return gamma_stats: posterior gamma stats
+:return xdist: phase distance posterior
+:return ydist: amplitude distance posterior)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="time_warping.pairwise_align_bayes_infHMC">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_bayes_infHMC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mcmcopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_bayes_infHMC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_bayes_infHMC" title="Permalink to this definition"></a></dt>
+<dd><p>This function aligns two functions using Bayesian framework. It uses a 
+hierarchical Bayesian framework assuming mearsurement error error It will 
+align f2 to f1. It is based on mapping warping functions to a hypersphere, 
+and a subsequent exponential mapping to a tangent space. In the tangent 
+space, the infty-HMC algorithm is used to explore both local and global
+structure in the posterior distribution.</p>
+<dl class="simple">
+<dt>Usage:  out = pairwise_align_bayes_infHMC(f1i, f2i, time)</dt><dd><p>out = pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y1i</strong> – vector defining M samples of function 1</p></li>
+<li><p><strong>y2i</strong> – vector defining M samples of function 2</p></li>
+<li><p><strong>time</strong> – time vector of length M</p></li>
+<li><p><strong>mcmopts</strong> – dict of mcmc parameters</p></li>
+</ul>
+</dd>
+</dl>
+<p>default mcmc options:
+mcmcopts = {“iter”:1*(10**4), “nchains”:4, “vpriorvar”:1,</p>
+<blockquote>
+<div><p>“burnin”:np.minimum(5*(10**3),2*(10**4)//2),
+“alpha0”:0.1, “beta0”:0.1, “alpha”:1, “beta”:1,
+“h”:0.01, “L”:4, “f1propvar”:0.0001, “f2propvar”:0.0001,
+“L1propvar”:0.3, “L2propvar”:0.3, “npoints”:200, “thin”:1,
+“sampfreq”:1, “initcoef”:np.repeat(0,20), “nbasis”:10, 
+“basis”:’fourier’, “extrainfo”:True}</p>
+</div></blockquote>
+<p>Basis can be ‘fourier’ or ‘legendre’</p>
+<p>:rtype collection containing
+:return f2_warped: aligned f2
+:return gamma: warping function
+:return v_coef: final v_coef
+:return psi: final psi
+:return sigma1: final sigma</p>
+<p>if extrainfo
+:return theta_accept: accept of psi samples
+:return f2_accept: accept of f2 samples
+:return SSE: SSE
+:return gamma_mat: posterior gammas
+:return gamma_stats: posterior gamma stats
+:return xdist: phase distance posterior
+:return ydist: amplitude distance posterior)</p>
+<ol class="upperalpha simple" start="10">
+<li><ol class="upperalpha simple" start="4">
+<li><p>Tucker, L. Shand, and K. Chowdhary. “Multimodal Bayesian Registration of Noisy Functions using Hamiltonian Monte Carlo”, Computational Statistics and Data Analysis, accepted, 2021.</p></li>
+</ol>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="time_warping.pairwise_align_functions">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">pairwise_align_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/time_warping.html#pairwise_align_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#time_warping.pairwise_align_functions" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function aligns f2 to f1 using the elastic square-root</dt><dd><p>slope (srsf) framework.</p>
+</dd>
+<dt>Usage:  out = pairwise_align_functions(f1, f2, time)</dt><dd><dl class="simple">
+<dt>out = pairwise_align_functions(f1, f2, time, omethod, lam, </dt><dd><p>grid_dim)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f1</strong> – vector defining M samples of function 1</p></li>
+<li><p><strong>f2</strong> – vector defining M samples of function 2</p></li>
+<li><p><strong>time</strong> – time vector of length M</p></li>
+<li><p><strong>omethod</strong> – optimization method (DP, DP2, RBFGS, cRBFGS) (default = DP)</p></li>
+<li><p><strong>lam</strong> – controls the elasticity (default = 0)</p></li>
+<li><p><strong>grid_dim</strong> – size of the grid, for the DP2 method only (default = 7)</p></li>
+</ul>
+</dd>
+</dl>
+<p>:rtype list containing
+:return f2n: aligned f2
+:return gam: warping function
+:return q2n: aligned q2 (srsf)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="time_warping.rand">
+<span class="sig-prename descclassname"><span class="pre">time_warping.</span></span><span class="sig-name descname"><span class="pre">rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#time_warping.rand" title="Permalink to this definition"></a></dt>
+<dd><p>Random values in a given shape.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a convenience function for users porting code from Matlab,
+and wraps <cite>random_sample</cite>. That function takes a
+tuple to specify the size of the output, which is consistent with
+other NumPy functions like <cite>numpy.zeros</cite> and <cite>numpy.ones</cite>.</p>
+</div>
+<p>Create an array of the given shape and populate it with
+random samples from a uniform distribution
+over <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1)</span></code>.</p>
+<dl class="simple">
+<dt>d0, d1, …, dn<span class="classifier">int, optional</span></dt><dd><p>The dimensions of the returned array, must be non-negative.
+If no argument is given a single Python float is returned.</p>
+</dd>
+</dl>
+<dl>
+<dt>out<span class="classifier">ndarray, shape <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></code></span></dt><dd><p>Random values.</p>
+</dd>
+</dl>
+<p>random</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[ 0.14022471,  0.96360618],  #random</span>
+<span class="go">       [ 0.37601032,  0.25528411],  #random</span>
+<span class="go">       [ 0.49313049,  0.94909878]]) #random</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 </div>
 </section>

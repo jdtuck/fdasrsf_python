@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UMAP EFDA Metrics &mdash; fdasrsf 2.5.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>UMAP EFDA Metrics &mdash; fdasrsf 2.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -53,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="fPLS.html">Functional Principal Least Squares</a></li>
 <li class="toctree-l1"><a class="reference internal" href="regression.html">Elastic Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pcr_regression.html">Elastic Principal Component Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elastic_changepoint.html">Elastic Functional Changepoint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tolerance.html">Elastic Functional Tolerance Bounds</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kmeans.html">Elastic Functional Clustering</a></li>
@@ -100,7 +103,7 @@
 <dt class="sig sig-object py" id="umap_metric.efda_distance">
 <span class="sig-prename descclassname"><span class="pre">umap_metric.</span></span><span class="sig-name descname"><span class="pre">efda_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#umap_metric.efda_distance" title="Permalink to this definition"></a></dt>
 <dd><p>”
-calculates the distances between two curves, where 
+calculates the distances between two curves, where
 q2 is aligned to q1. In other words calculates the elastic distances/
 This metric is set up for use with UMAP or t-sne from scikit-learn</p>
 <dl class="field-list simple">
@@ -108,7 +111,8 @@ This metric is set up for use with UMAP or t-sne from scikit-learn</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>q1</strong> – vector of size N</p></li>
 <li><p><strong>q2</strong> – vector of size N</p></li>
-<li><p><strong>alpha</strong> – weight between phase and amplitude (default = 0, returns amplitude)</p></li>
+<li><p><strong>alpha</strong> – weight between phase and amplitude 
+(default = 0, returns amplitude)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -124,7 +128,7 @@ This metric is set up for use with UMAP or t-sne from scikit-learn</p>
 <dt class="sig sig-object py" id="umap_metric.efda_distance_curve">
 <span class="sig-prename descclassname"><span class="pre">umap_metric.</span></span><span class="sig-name descname"><span class="pre">efda_distance_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/umap_metric.html#efda_distance_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#umap_metric.efda_distance_curve" title="Permalink to this definition"></a></dt>
 <dd><p>”
-calculates the distances between two curves, where 
+calculates the distances between two curves, where
 beta2 is aligned to beta1. In other words calculates the elastic distance.
 This metric is set up for use with UMAP or t-sne from scikit-learn</p>
 <dl class="field-list simple">

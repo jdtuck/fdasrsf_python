@@ -1,91 +1,50 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>fPCA &mdash; fdasrsf 2.3.12 documentation</title>
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fPCA &mdash; fdasrsf 2.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
   
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> fdasrsf
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            fdasrsf
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                2.5
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../time_warping.html">Functional Alignment</a></li>
@@ -94,8 +53,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../fPLS.html">Functional Principal Least Squares</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../regression.html">Elastic Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../elastic_changepoint.html">Elastic Functional Changepoint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kmeans.html">Elastic Functional Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image.html">Elastic Image Warping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
@@ -103,66 +65,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../umap_metric.html">UMAP EFDA Metrics</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">fdasrsf</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="index.html">Module code</a> &raquo;</li>
-        
-      <li>fPCA</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fPCA</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for fPCA</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Vertical and Horizontal Functional Principal Component Analysis using SRSF</span>
@@ -171,6 +97,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">fdasrsf</span> <span class="k">as</span> <span class="nn">fs</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
 <span class="kn">import</span> <span class="nn">fdasrsf.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">svd</span>
@@ -183,7 +110,7 @@
 
 
 <div class="viewcode-block" id="fdavpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdavpca">[docs]</a><span class="k">class</span> <span class="nc">fdavpca</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides vertical fPCA using the</span>
 <span class="sd">    SRVF framework</span>
 
@@ -198,29 +125,33 @@
 <span class="sd">    :param mqn: mean srvf</span>
 <span class="sd">    :param U: eigenvectors</span>
 <span class="sd">    :param stds: geodesic directions</span>
+<span class="sd">    :param new_coef: principal coefficients of new data</span>
 
 <span class="sd">    Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;</span>
 <span class="sd">    Date   :  15-Mar-2018</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdavpca class</span>
 <span class="sd">        :param fdawarp: fdawarp class</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">fdawarp</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please align fdawarp class using srsf_align!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fdawarp</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Please align fdawarp class using srsf_align!&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span> <span class="o">=</span> <span class="n">fdawarp</span>
 
-<div class="viewcode-block" id="fdavpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdavpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This function calculates vertical functional principal component analysis</span>
-<span class="sd">        on aligned data</span>
+<div class="viewcode-block" id="fdavpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdavpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">var_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stds</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calculates vertical functional principal component</span>
+<span class="sd">        analysis on aligned data</span>
 
 <span class="sd">        :param no: number of components to extract (default = 3)</span>
+<span class="sd">        :param var_exp: compute no based on value percent variance explained</span>
+<span class="sd">                        (example: 0.95)</span>
 <span class="sd">        :param id: point to use for f(0) (default = midpoint)</span>
-<span class="sd">        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)</span>
+<span class="sd">        :param stds: number of standard deviations along geodesic to compute</span>
+<span class="sd">                     (default = -1,0,1)</span>
 <span class="sd">        :type no: int</span>
 <span class="sd">        :type id: int</span>
 
@@ -237,6 +168,11 @@
         <span class="n">qn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">qn</span>
 
         <span class="n">M</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">var_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var_exp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;var_exp is greater than 1&quot;</span><span class="p">)</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">M</span>
+
         <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mididx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">M</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
@@ -249,6 +185,7 @@
         <span class="n">N</span> <span class="o">=</span> <span class="n">mq_new</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">m_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:]))</span>
         <span class="n">mqn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mq_new</span><span class="p">,</span> <span class="n">m_new</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqn2</span> <span class="o">=</span> <span class="n">mqn</span>
         <span class="n">qn2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn</span><span class="p">,</span> <span class="n">m_new</span><span class="p">))</span>
         <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">qn2</span><span class="p">)</span>
 
@@ -265,12 +202,15 @@
         <span class="n">f_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">,</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
-                <span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]),</span>
-                                                <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
-                                                <span class="n">mididx</span><span class="p">)</span>
+                <span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span>
+                    <span class="n">time</span><span class="p">,</span>
+                    <span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_pca</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="n">mididx</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="n">fbar</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">fsbar</span> <span class="o">=</span> <span class="n">f_pca</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">fbar</span><span class="o">-</span><span class="n">fsbar</span><span class="p">,</span> <span class="p">(</span><span class="n">Nstd</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">fbar</span> <span class="o">-</span> <span class="n">fsbar</span><span class="p">,</span> <span class="p">(</span><span class="n">Nstd</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
             <span class="n">f_pca</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">err</span>
 
         <span class="n">N2</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -279,11 +219,15 @@
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N2</span><span class="p">):</span>
                 <span class="n">c</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">l</span><span class="p">],</span> <span class="n">m_new</span><span class="p">[</span><span class="n">l</span><span class="p">])</span> <span class="o">-</span> <span class="n">mqn</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
 
+        <span class="k">if</span> <span class="n">var_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cumm_coef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">cumm_coef</span> <span class="o">&lt;=</span> <span class="n">var_exp</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span> <span class="o">=</span> <span class="n">q_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span> <span class="o">=</span> <span class="n">f_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latent</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">c</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">mididx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mqn</span> <span class="o">=</span> <span class="n">mqn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
@@ -292,8 +236,45 @@
 
         <span class="k">return</span></div>
 
+<div class="viewcode-block" id="fdavpca.project"><a class="viewcode-back" href="../fPCA.html#fPCA.fdavpca.project">[docs]</a>    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        project new data onto fPCA basis</span>
+
+<span class="sd">        Usage: obj.project(f)</span>
+
+<span class="sd">        :param f: numpy array (MxN) of N functions on M time</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">mq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">mqn</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">gam</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">q1</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+            <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">warp_f_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">gam</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+            <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span>
+        <span class="n">no</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">m_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">:]))</span>
+        <span class="n">qn1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn</span><span class="p">,</span> <span class="n">m_new</span><span class="p">))</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">no</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">qn1</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqn2</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_coef</span> <span class="o">=</span> <span class="n">a</span>
+
+        <span class="k">return</span></div>
+
 <div class="viewcode-block" id="fdavpca.plot"><a class="viewcode-back" href="../fPCA.html#fPCA.fdavpca.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot plot elastic vertical fPCA result</span>
 <span class="sd">        Usage: obj.plot()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -301,42 +282,41 @@
         <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span>
         <span class="n">Nstd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
         <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.35</span><span class="p">,</span> <span class="mf">.7</span><span class="p">,</span> <span class="mf">.9</span><span class="p">),</span>
-            <span class="s1">&#39;bG&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.5</span><span class="p">),</span>
-            <span class="s1">&#39;Ye&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.95</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mf">.25</span><span class="p">),</span>
-            <span class="s1">&#39;Bu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.45</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
-            <span class="s1">&#39;Ve&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
+            <span class="s2">&quot;Bl&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;Or&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;SB&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
+            <span class="s2">&quot;bG&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+            <span class="s2">&quot;Ye&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
+            <span class="s2">&quot;Bu&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
+            <span class="s2">&quot;Ve&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;rP&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">cl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CBcdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_plot</span><span class="p">):</span>
-
-            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="k">break</span>
 
             <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-            
-            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
-                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+
+            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span> <span class="o">+</span> <span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
                 <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="k">break</span>
 
                 <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
                     <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
 
-                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;q domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;q domain: PD </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
                 <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
                 <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
                     <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
 
-                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;f domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;f domain: PD </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
             <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
@@ -350,8 +330,9 @@
 
         <span class="k">return</span></div></div>
 
+
 <div class="viewcode-block" id="fdahpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdahpca">[docs]</a><span class="k">class</span> <span class="nc">fdahpca</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides horizontal fPCA using the</span>
 <span class="sd">    SRVF framework</span>
 
@@ -372,21 +353,25 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdavpca class</span>
 <span class="sd">        :param fdawarp: fdawarp class</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">fdawarp</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please align fdawarp class using srsf_align!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fdawarp</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Please align fdawarp class using srsf_align!&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span> <span class="o">=</span> <span class="n">fdawarp</span>
 
-<div class="viewcode-block" id="fdahpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdahpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This function calculates horizontal functional principal component analysis on aligned data</span>
+<div class="viewcode-block" id="fdahpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdahpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">var_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stds</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calculates horizontal functional principal component</span>
+<span class="sd">        analysis on aligned data</span>
 
 <span class="sd">        :param no: number of components to extract (default = 3)</span>
-<span class="sd">        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)</span>
+<span class="sd">        :param var_exp: compute no based on value percent variance explained</span>
+<span class="sd">                        (example: 0.95)</span>
+<span class="sd">        :param stds: number of standard deviations along geodesic to compute</span>
+<span class="sd">                     (default = -1,0,1)</span>
 <span class="sd">        :type no: int</span>
 
 <span class="sd">        :rtype: fdahpca object of numpy ndarray</span>
@@ -402,11 +387,18 @@
         <span class="n">mu</span><span class="p">,</span> <span class="n">gam_mu</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">vec</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMean</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
         <span class="n">TT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="n">var_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var_exp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;var_exp is greater than 1&quot;</span><span class="p">)</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">TT</span>
+
         <span class="c1"># TFPCA</span>
         <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
 
         <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
         <span class="n">vm</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vm</span> <span class="o">=</span> <span class="n">vm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_psi</span> <span class="o">=</span> <span class="n">mu</span>
 
         <span class="n">gam_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">stds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">psi_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">stds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -420,20 +412,28 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">psi_pca</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">vn</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">vn</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">vn</span>
 
-                <span class="n">tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psi_pca</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">psi_pca</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">TT</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span>
+                    <span class="n">psi_pca</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">psi_pca</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">],</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">TT</span><span class="p">),</span>
+                    <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="p">)</span>
                 <span class="n">gam_pca</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="n">N2</span> <span class="o">=</span> <span class="n">gam</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="n">no</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">no</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N2</span><span class="p">):</span>
-                <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">vm</span><span class="p">,</span><span class="n">U</span><span class="p">[:,</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span> <span class="n">no</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N2</span><span class="p">):</span>
+                <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">vm</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">var_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cumm_coef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">cumm_coef</span> <span class="o">&lt;=</span> <span class="n">var_exp</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">gam_pca</span> <span class="o">=</span> <span class="n">gam_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">psi_pca</span> <span class="o">=</span> <span class="n">psi_pca</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latent</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gam_mu</span> <span class="o">=</span> <span class="n">gam_mu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">psi_mu</span> <span class="o">=</span> <span class="n">mu</span>
@@ -443,8 +443,47 @@
 
         <span class="k">return</span></div>
 
+<div class="viewcode-block" id="fdahpca.project"><a class="viewcode-back" href="../fPCA.html#fPCA.fdahpca.project">[docs]</a>    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        project new data onto fPCA basis</span>
+
+<span class="sd">        Usage: obj.project(f)</span>
+
+<span class="sd">        :param f: numpy array (MxN) of N functions on M time</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">mq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">mqn</span>
+        <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">gam</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">q1</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+
+        <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span>
+        <span class="n">no</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">mu_psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_psi</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">binsize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">psi</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">binsize</span><span class="p">))</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">inv_exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">psi</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="n">vec</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">no</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_coef</span> <span class="o">=</span> <span class="n">a</span>
+
+        <span class="k">return</span></div>
+
 <div class="viewcode-block" id="fdahpca.plot"><a class="viewcode-back" href="../fPCA.html#fPCA.fdahpca.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot plot elastic horizontal fPCA results</span>
 
 <span class="sd">        Usage: obj.plot()</span>
@@ -452,35 +491,34 @@
 
         <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span>
         <span class="n">TT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
         <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.35</span><span class="p">,</span> <span class="mf">.7</span><span class="p">,</span> <span class="mf">.9</span><span class="p">),</span>
-            <span class="s1">&#39;bG&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.5</span><span class="p">),</span>
-            <span class="s1">&#39;Ye&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.95</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mf">.25</span><span class="p">),</span>
-            <span class="s1">&#39;Bu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.45</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
-            <span class="s1">&#39;Ve&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
+            <span class="s2">&quot;Bl&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;Or&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;SB&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
+            <span class="s2">&quot;bG&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+            <span class="s2">&quot;Ye&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
+            <span class="s2">&quot;Bu&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
+            <span class="s2">&quot;Ve&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;rP&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_plot</span><span class="p">):</span>
-
-            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="k">break</span>
 
             <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-            
-            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
-                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+
+            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span> <span class="o">+</span> <span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
                 <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">k1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="k">break</span>
 
                 <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gam_pca</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">]</span>
                 <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">TT</span><span class="p">),</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
-                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">axt</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PD </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
 
             <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
@@ -493,8 +531,9 @@
 
         <span class="k">return</span></div></div>
 
+
 <div class="viewcode-block" id="fdajpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdajpca">[docs]</a><span class="k">class</span> <span class="nc">fdajpca</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides joint fPCA using the</span>
 <span class="sd">    SRVF framework</span>
 
@@ -518,24 +557,35 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fdawarp</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdavpca class</span>
 <span class="sd">        :param fdawarp: fdawarp class</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">fdawarp</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please align fdawarp class using srsf_align!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fdawarp</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Please align fdawarp class using srsf_align!&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span> <span class="o">=</span> <span class="n">fdawarp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">fdawarp</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<div class="viewcode-block" id="fdajpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdajpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span> 
-                  <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="fdajpca.calc_fpca"><a class="viewcode-back" href="../fPCA.html#fPCA.fdajpca.calc_fpca">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fpca</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">var_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">stds</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">),</span>
+        <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function calculates joint functional principal component analysis</span>
 <span class="sd">        on aligned data</span>
 
 <span class="sd">        :param no: number of components to extract (default = 3)</span>
+<span class="sd">        :param var_exp: compute no based on value percent variance explained</span>
+<span class="sd">                        (example: 0.95)</span>
 <span class="sd">        :param id: point to use for f(0) (default = midpoint)</span>
-<span class="sd">        :param stds: number of standard deviations along gedoesic to compute (default = -1,0,1)</span>
+<span class="sd">        :param stds: number of standard deviations along gedoesic to compute</span>
+<span class="sd">                     (default = -1,0,1)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :type no: int</span>
@@ -558,6 +608,11 @@
         <span class="n">gam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">gam</span>
 
         <span class="n">M</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">var_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var_exp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;var_exp is greater than 1&quot;</span><span class="p">)</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">M</span>
+
         <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mididx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">M</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
@@ -575,8 +630,10 @@
         <span class="n">mu_psi</span><span class="p">,</span> <span class="n">gam_mu</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">vec</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMean</span><span class="p">(</span><span class="n">gam</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="p">)</span>
 
         <span class="c1"># joint fPCA</span>
-        <span class="n">C</span> <span class="o">=</span> <span class="n">fminbound</span><span class="p">(</span><span class="n">find_C</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1e4</span><span class="p">,</span> <span class="p">(</span><span class="n">qn2</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span><span class="n">no</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="p">))</span>
-        <span class="n">qhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mu_g</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">jointfPCAd</span><span class="p">(</span><span class="n">qn2</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">fminbound</span><span class="p">(</span><span class="n">find_C</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1e4</span><span class="p">,</span> <span class="p">(</span><span class="n">qn2</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="p">))</span>
+        <span class="n">qhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mu_g</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">jointfPCAd</span><span class="p">(</span>
+            <span class="n">qn2</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span>
+        <span class="p">)</span>
 
         <span class="c1"># geodesic paths</span>
         <span class="n">q_pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">,</span> <span class="n">no</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -584,23 +641,34 @@
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
-                <span class="n">qhat</span> <span class="o">=</span> <span class="n">mqn</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">k</span><span class="p">],</span><span class="n">stds</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
-                <span class="n">vechat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[(</span><span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">):,</span><span class="n">k</span><span class="p">],(</span><span class="n">stds</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span><span class="o">/</span><span class="n">C</span><span class="p">)</span>
-                <span class="n">psihat</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span><span class="n">vechat</span><span class="p">)</span>
-                <span class="n">gamhat</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psihat</span><span class="o">*</span><span class="n">psihat</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">),</span><span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">qhat</span> <span class="o">=</span> <span class="n">mqn</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">k</span><span class="p">],</span> <span class="n">stds</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+                <span class="n">vechat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[(</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:,</span> <span class="n">k</span><span class="p">],</span> <span class="p">(</span><span class="n">stds</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="o">/</span> <span class="n">C</span><span class="p">)</span>
+                <span class="n">psihat</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">vechat</span><span class="p">)</span>
+                <span class="n">gamhat</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psihat</span> <span class="o">*</span> <span class="n">psihat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">gamhat</span> <span class="o">=</span> <span class="p">(</span><span class="n">gamhat</span> <span class="o">-</span> <span class="n">gamhat</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamhat</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gamhat</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">vechat</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
-                    <span class="n">gamhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vechat</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">gamhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
 
-                <span class="n">fhat</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">]</span><span class="o">*</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">]),</span> <span class="n">mididx</span><span class="p">)</span>
-                <span class="n">f_pca</span><span class="p">[:,</span><span class="n">l</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_f_gamma</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">),</span> <span class="n">fhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">)</span>
-                <span class="n">q_pca</span><span class="p">[:,</span><span class="n">l</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">),</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">],</span> <span class="n">gamhat</span><span class="p">)</span>
+                <span class="n">fhat</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">cumtrapzmid</span><span class="p">(</span>
+                    <span class="n">time</span><span class="p">,</span>
+                    <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">]</span> <span class="o">*</span> <span class="n">qhat</span><span class="p">[</span><span class="n">M</span><span class="p">]),</span>
+                    <span class="n">mididx</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_f_gamma</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">fhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">)</span>
+                <span class="n">q_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">],</span> <span class="n">gamhat</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">var_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cumm_coef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="n">s</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">cumm_coef</span> <span class="o">&gt;=</span> <span class="n">var_exp</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span> <span class="o">=</span> <span class="n">q_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span> <span class="o">=</span> <span class="n">f_pca</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latent</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">a</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">no</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu_psi</span> <span class="o">=</span> <span class="n">mu_psi</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu_g</span> <span class="o">=</span> <span class="n">mu_g</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">mididx</span>
@@ -613,51 +681,100 @@
 
         <span class="k">return</span></div>
 
+<div class="viewcode-block" id="fdajpca.project"><a class="viewcode-back" href="../fPCA.html#fPCA.fdajpca.project">[docs]</a>    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        project new data onto fPCA basis</span>
+
+<span class="sd">        Usage: obj.project(f)</span>
+
+<span class="sd">        :param f: numpy array (MxN) of N functions on M time</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">mq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="o">.</span><span class="n">mqn</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">gam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">gam</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">mq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">q1</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+            <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">warp_f_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">gam</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+            <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span>
+        <span class="n">no</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">m_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">:]))</span>
+        <span class="n">qn1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn</span><span class="p">,</span> <span class="n">m_new</span><span class="p">))</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span>
+        <span class="n">TT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">mu_g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_g</span>
+        <span class="n">mu_psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_psi</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">TT</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">binsize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">psi</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gam</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">binsize</span><span class="p">))</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">inv_exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">psi</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="n">vec</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn1</span><span class="p">,</span> <span class="n">C</span> <span class="o">*</span> <span class="n">vec</span><span class="p">))</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">no</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">g</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mu_g</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_coef</span> <span class="o">=</span> <span class="n">a</span>
+
+        <span class="k">return</span></div>
+
 <div class="viewcode-block" id="fdajpca.plot"><a class="viewcode-back" href="../fPCA.html#fPCA.fdajpca.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        plot plot elastic vertical fPCA result</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plot plot elastic joint fPCA result</span>
 
 <span class="sd">        Usage: obj.plot()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span>
         <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">Nstd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">num_plot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">no</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
         <span class="n">CBcdict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;Bl&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;Or&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.35</span><span class="p">,</span> <span class="mf">.7</span><span class="p">,</span> <span class="mf">.9</span><span class="p">),</span>
-            <span class="s1">&#39;bG&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.5</span><span class="p">),</span>
-            <span class="s1">&#39;Ye&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.95</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mf">.25</span><span class="p">),</span>
-            <span class="s1">&#39;Bu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.45</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
-            <span class="s1">&#39;Ve&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="s1">&#39;rP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
+            <span class="s2">&quot;Bl&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;Or&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;SB&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
+            <span class="s2">&quot;bG&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+            <span class="s2">&quot;Ye&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
+            <span class="s2">&quot;Bu&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
+            <span class="s2">&quot;Ve&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;rP&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">cl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CBcdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_plot</span><span class="p">):</span>
-
-            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="k">break</span>
 
             <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-            
-            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
-                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+
+            <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k1</span> <span class="o">+</span> <span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
                 <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="k">break</span>
 
                 <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
                     <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_pca</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
 
-                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;q domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;q domain: PD </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
                 <span class="n">axt</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k1</span><span class="p">]</span>
                 <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nstd</span><span class="p">):</span>
                     <span class="n">axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_pca</span><span class="p">[:,</span> <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">CBcdict</span><span class="p">[</span><span class="n">cl</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
 
-                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;f domain: PD </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">axt</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;f domain: PD </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
             <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
@@ -670,9 +787,10 @@
 
         <span class="k">return</span></div></div>
 
+
 <span class="k">def</span> <span class="nf">jointfPCAd</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="p">):</span>
-    <span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn</span><span class="p">,</span> <span class="n">C</span><span class="o">*</span><span class="n">vec</span><span class="p">))</span>
+    <span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn</span><span class="p">,</span> <span class="n">C</span> <span class="o">*</span> <span class="n">vec</span><span class="p">))</span>
 
     <span class="n">mu_q</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">mu_g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -680,104 +798,106 @@
     <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
     <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
 
-    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">m</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">m</span><span class="p">):</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">mu_g</span><span class="p">)</span>
-            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">g</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mu_g</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
 
-    <span class="n">qhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">mu_q</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">qhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">mu_q</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">qhat</span> <span class="o">=</span> <span class="n">qhat</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">qhat</span> <span class="o">=</span> <span class="n">qhat</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">],</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">qhat</span> <span class="o">=</span> <span class="n">qhat</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">],</span> <span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
-    <span class="n">vechat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="n">M</span><span class="p">:,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">],</span> <span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="o">/</span><span class="n">C</span><span class="p">)</span>
-    <span class="n">psihat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
-    <span class="n">gamhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+    <span class="n">vechat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="n">M</span><span class="p">:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">],</span> <span class="n">a</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">C</span><span class="p">)</span>
+    <span class="n">psihat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="n">gamhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">jfpca_sub</span><span class="p">)(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">vechat</span><span class="p">[:,</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span>
+            <span class="n">delayed</span><span class="p">(</span><span class="n">jfpca_sub</span><span class="p">)(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">vechat</span><span class="p">[:,</span> <span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">gamhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
         <span class="n">gamhat</span> <span class="o">=</span> <span class="n">gamhat</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
-            <span class="n">psihat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span><span class="n">vechat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">])</span>
-            <span class="n">gam_tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psihat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span><span class="o">*</span><span class="n">psihat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">gamhat</span><span class="p">[:,</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam_tmp</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gam_tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">psihat</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">vechat</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+            <span class="n">gam_tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span>
+                <span class="n">psihat</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">psihat</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span>
+            <span class="p">)</span>
+            <span class="n">gamhat</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam_tmp</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gam_tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 
-    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">]</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">qhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mu_g</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">K</span>
 
+
 <span class="k">def</span> <span class="nf">jfpca_sub</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">vechat</span><span class="p">):</span>
     <span class="n">M</span> <span class="o">=</span> <span class="n">mu_psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">psihat</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">exp_map</span><span class="p">(</span><span class="n">mu_psi</span><span class="p">,</span> <span class="n">vechat</span><span class="p">)</span>
-    <span class="n">gam_tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psihat</span><span class="o">*</span><span class="n">psihat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">gam_tmp</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">psihat</span> <span class="o">*</span> <span class="n">psihat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">gamhat</span> <span class="o">=</span> <span class="p">(</span><span class="n">gam_tmp</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">gam_tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">gam_tmp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">gamhat</span>
 
+
 <span class="k">def</span> <span class="nf">find_C</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="p">):</span>
-    <span class="n">qhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mu_g</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">jointfPCAd</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span><span class="p">)</span>
-    <span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">qhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mu_g</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">jointfPCAd</span><span class="p">(</span>
+        <span class="n">qn</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">mu_psi</span><span class="p">,</span> <span class="n">parallel</span><span class="p">,</span> <span class="n">cores</span>
+    <span class="p">)</span>
+    <span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">find_C_sub</span><span class="p">)(</span><span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">n</span><span class="p">],</span> <span class="n">gamhat</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">q0</span><span class="p">[:,</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span>
+            <span class="n">delayed</span><span class="p">(</span><span class="n">find_C_sub</span><span class="p">)(</span><span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">],</span> <span class="n">gamhat</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">q0</span><span class="p">[:,</span> <span class="n">n</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">i</span><span class="p">],</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">gamhat</span><span class="p">[:,</span><span class="n">i</span><span class="p">]))</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">((</span><span class="n">tmp</span><span class="o">-</span><span class="n">q0</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">tmp</span><span class="o">-</span><span class="n">q0</span><span class="p">[:,</span><span class="n">i</span><span class="p">]),</span> <span class="n">time</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span>
+                <span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">i</span><span class="p">],</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">gamhat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">((</span><span class="n">tmp</span> <span class="o">-</span> <span class="n">q0</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="n">q0</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]),</span> <span class="n">time</span><span class="p">)</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="n">N</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
 
     <span class="k">return</span> <span class="n">out</span>
 
+
 <span class="k">def</span> <span class="nf">find_C_sub</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">,</span> <span class="n">gamhat</span><span class="p">,</span> <span class="n">q0</span><span class="p">):</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">qhat</span><span class="p">,</span> <span class="n">uf</span><span class="o">.</span><span class="n">invertGamma</span><span class="p">(</span><span class="n">gamhat</span><span class="p">))</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">((</span><span class="n">tmp</span><span class="o">-</span><span class="n">q0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">tmp</span><span class="o">-</span><span class="n">q0</span><span class="p">),</span> <span class="n">time</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">((</span><span class="n">tmp</span> <span class="o">-</span> <span class="n">q0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="n">q0</span><span class="p">),</span> <span class="n">time</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">d</span>
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2022, J. Derek Tucker
-
-    </p>
+    <p>&#169; Copyright 2023, J. Derek Tucker.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
