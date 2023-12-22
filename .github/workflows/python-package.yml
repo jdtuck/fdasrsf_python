@@ -23,12 +23,12 @@ jobs:
     - name: Install dependencies
       run: |
           python -m pip install --upgrade pip
-          if [ "$RUNNER_OS" == "Linux" ]; then
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
             sudo apt-get install -y libopenblas-dev
-          elif [ "$RUNNER_OS" == "Windows" ]; then
+          elif [[ "$RUNNER_OS" == "Windows" ]]; then
             python -m pip install mkl-devel
-          elif [ "$RUNNER_OS" == "macOS" ]; then
-            brew install open
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install openblas
           else
             echo "$RUNNER_OS not supported"
             exit 1
