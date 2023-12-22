@@ -1,6 +1,6 @@
 #include <iostream>
 #include "armadillo"
-//#include "rbfgs.h"
+#include "rbfgs.h"
 
 using namespace arma;
 using namespace std;
