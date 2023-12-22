@@ -22,8 +22,13 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo apt-get install -y libopenblas-dev
         python -m pip install --upgrade pip
+        if: matrix.os == 'ubuntu-latest'
+          sudo apt-get install -y libopenblas-dev
+        if: matrix.os == 'windows-latest'
+          python -m pip install mkl-devel
+        if: matrix.os == 'macos-latest'
+          brew install open
         python -m pip install flake8 pytest pytest-runner coverage
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
