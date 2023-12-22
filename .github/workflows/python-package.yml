@@ -20,15 +20,14 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      - if: runner.os == 'Windows'
+    - if: runner.os == 'Windows'
       run: |
         python -m pip install --upgrade pip
         python -m pip install mkl-devel
-      - if: runner.os == 'Linux'
-        run: |
-          python -m pip install --upgrade pip
-          sudo apt-get install -y libopenblas-dev
+    - if: runner.os == 'Linux'
+      run: |
+        python -m pip install --upgrade pip
+        sudo apt-get install -y libopenblas-dev
     - name: Install python dependencies
       run: |
           python -m pip install flake8 pytest pytest-runner coverage
