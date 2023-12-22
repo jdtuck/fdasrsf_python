@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.9", "3.10", "3.11"]
 
     steps:
@@ -27,7 +27,6 @@ jobs:
     - if: runner.os == 'Windows'
       run: |
         python -m pip install --upgrade pip
-        python -m pip install mkl-devel
     - if: runner.os == 'Linux'
       run: |
         python -m pip install --upgrade pip
