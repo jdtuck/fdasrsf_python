@@ -23,11 +23,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        if: matrix.os == 'ubuntu-latest'
+        if [ "$RUNNER_OS" == "Linux" ]; then
           sudo apt-get install -y libopenblas-dev
-        if: matrix.os == 'windows-latest'
+        elif [ "$RUNNER_OS" == "Windows" ]; then
           python -m pip install mkl-devel
-        if: matrix.os == 'macos-latest'
+        elif [ "$RUNNER_OS" == "macOS" ]; then
           brew install open
         python -m pip install flake8 pytest pytest-runner coverage
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
