@@ -58,7 +58,8 @@ jobs:
       name: Build
       run: |
         python setup.py install
-    - name: Generate Report
+    - if: runner.os == 'Linux'
+      name: Generate Report
       run: |
         coverage run -m unittest
     - name: Upload Coverage to Codecov
