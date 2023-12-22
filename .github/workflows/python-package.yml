@@ -27,7 +27,7 @@ jobs:
     - if: runner.os == 'Windows'
       run: |
         python -m pip install --upgrade pip
-        python -m pip install scipy-openblas64
+        python -m pip install mkl-devel
     - if: runner.os == 'Linux'
       run: |
         python -m pip install --upgrade pip
@@ -46,9 +46,18 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+    - if: runner.os == 'Linux'
+      name: Test with pytest
       run: |
         python setup.py pytest --addopts "test" 
+    - if: runner.os == 'macOS'
+      name: Test with pytest
+      run: |
+        python setup.py pytest --addopts "test" 
+    - if: runner.os == 'Windows'
+      name: Build
+      run: |
+        python setup.py install
     - name: Generate Report
       run: |
         coverage run -m unittest
