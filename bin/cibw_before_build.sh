@@ -17,9 +17,8 @@ if [[ $RUNNER_OS == "Linux" || $RUNNER_OS == "macOS" ]] ; then
         sudo cp -r $basedir/lib/* /usr/local/lib/
         sudo cp $basedir/include/* /usr/local/include/
     else
-        export BLAS=/usr/local/lib/
-        sudo cp -r $basedir/lib/* /usr/local/lib/
-        sudo cp $basedir/include/* /usr/local/include/
+        cp -r $basedir/lib/* /usr/local/lib/
+        cp $basedir/include/* /usr/local/include/
     fi
 elif [[ $RUNNER_OS == "Windows" ]]; then
     # delvewheel is the equivalent of delocate/auditwheel for windows.
