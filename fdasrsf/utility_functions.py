@@ -340,7 +340,8 @@ def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
     return amp, phase
 
 
-def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None):
+def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None,
+                     return_dt_only=True):
     """ "
     calculates the distances between function, where f1 is aligned to
     f2. In other words
@@ -353,6 +354,7 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None):
                    options are "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the elasticity (default = 0.0)
     :param alpha: makes alpha * dx + (1-alpha) * dy
+    :param return_dt_only: returns only dt if alpha is set
 
     :rtype: scalar
     :return Dy: amplitude distance
@@ -382,7 +384,10 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None):
 
     if alpha is not None:
         Dt = alpha * Dx + (1 - alpha) * Dy
-        return Dy, Dx, Dt
+        if return_dt_only:
+            return Dt
+        else:
+            return Dy, Dx, Dt
     else:
         return Dy, Dx
 
