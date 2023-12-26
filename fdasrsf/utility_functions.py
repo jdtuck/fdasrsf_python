@@ -344,8 +344,7 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None,
                      return_dt_only=True):
     """ "
     calculates the distances between function, where f1 is aligned to
-    f2. In other words
-    calculates the elastic distances
+    f2. In other words calculates the elastic distances
 
     :param f1: vector of size N
     :param f2: vector of size N
