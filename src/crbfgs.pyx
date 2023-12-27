@@ -31,13 +31,15 @@ def rlbfgs_dist(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim
     alpha = 0.5
     time = np.linspace(0, 1, M)
     for i in range(q1.shape[1]):
-        gam = rlbfgs(q1[:,i], time, q2)
+        q1t = q1[:,1]
+        q1t = np.ascontiguousarray(q1t)
+        gam = rlbfgs(q1t, time, q2)
         # warp q
         gam_dev = np.gradient(gam, 1.0 / (M - 1))
         tmp = np.interp((time[-1] - time[0]) * gam + time[0], time, q2)
 
         qw = tmp * np.sqrt(gam_dev)
-        Dy = np.sqrt(np.trapz((qw - q1[:,i]) ** 2, time))
+        Dy = np.sqrt(np.trapz((qw - q1t) ** 2, time))
 
         binsize = np.mean(np.diff(time))
         psi = np.sqrt(np.gradient(gam, binsize))
