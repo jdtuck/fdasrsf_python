@@ -37,10 +37,12 @@ def rlbfgs_dist(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim
        for j in range(idx.shape[1]):
               q1t = q1[:,idx[i,j]]
               q1t = np.ascontiguousarray(q1t)
-              gam = rlbfgs(q1t, time, q2)
+              q2t = q2[:, i]
+              q2t = np.ascontiguousarray(q2t)
+              gam = rlbfgs(q1t, time, q2t)
               # warp q
               gam_dev = np.gradient(gam, 1.0 / (M - 1))
-              tmp = np.interp((time[-1] - time[0]) * gam + time[0], time, q2)
+              tmp = np.interp((time[-1] - time[0]) * gam + time[0], time, q2t)
 
               qw = tmp * np.sqrt(gam_dev)
               Dy = np.sqrt(np.trapz((qw - q1t) ** 2, time))
