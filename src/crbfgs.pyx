@@ -24,6 +24,8 @@ def rlbfgs(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, m
 
 
 def rlbfgs_dist(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] q2):
+    q1 = np.ascontiguousarray(q1)
+    q2 = np.ascontiguousarray(q2)
     d = np.zeros(q1.shape[1])
     M = q1.shape[0]
     alpha = 0.5
