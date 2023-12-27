@@ -1150,5 +1150,7 @@ def mrdivide(a, b):
 
 
 def rlbfgs_dist(q1, q2):
+    q1 = ascontiguousarray(q1)
+    q2 = ascontiguousarray(q2)
     d = cr.rlbfgs_dist(q1, q2)
     return d
