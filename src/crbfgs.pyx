@@ -3,7 +3,6 @@ import numpy as np
 cimport crbfgs
 cimport cyarma
 cimport numpy as np
-from cython.parallel import prange
 
 include "cyarma.pyx"
 
