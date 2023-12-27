@@ -1147,3 +1147,8 @@ def norm_gam(gam):
 def mrdivide(a, b):
     c = dot(a, pinv(b))
     return c
+
+
+def rlbfgs_dist(q1, q2):
+    d = cr.rlbfgs_dist(q1, q2)
+    return d
