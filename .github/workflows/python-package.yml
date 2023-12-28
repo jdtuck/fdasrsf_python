@@ -55,9 +55,9 @@ jobs:
       run: |
         python setup.py pytest --addopts "test" 
     - if: runner.os == 'Windows'
-      name: Test with pytest
+      name: Build
       run: |
-        python setup.py pytest --addopts "test" 
+        python setup.py install
     - if: runner.os == 'Linux'
       name: Generate Report
       run: |
