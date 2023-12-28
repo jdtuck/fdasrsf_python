@@ -41,11 +41,13 @@ class rlbfgs {
         double cost;
         // constructor
         rlbfgs(vec q1i, vec q2i, vec timei) {  
-        q1 = normalise( q1i, 2 );
-        q2 = normalise( q2i, 2 );
-        time = timei;
+            double q1inorm = norm2(q1i);
+            double q2inorm = norm2(q1i);
+            q1 = q1i / q1inorm;
+            q2 = q1i / q2inorm;
+            time = timei;
 
-        T = timei.n_elem;
+            T = timei.n_elem;
         }
 
         void solve(int maxiter=30, double lam=0.0, int penalty=0){
