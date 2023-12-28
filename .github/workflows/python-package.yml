@@ -55,9 +55,9 @@ jobs:
       run: |
         python setup.py pytest --addopts "test" 
     - if: runner.os == 'Windows'
-      name: Build
+      name: Test with pytest
       run: |
-        python setup.py install
+        python setup.py pytest --addopts "test" 
     - if: runner.os == 'Linux'
       name: Generate Report
       run: |
@@ -72,7 +72,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, windows-2022, macos-11]
+        os: [ubuntu-22.04, macos-11]
         
     steps:
       - uses: actions/checkout@v4
