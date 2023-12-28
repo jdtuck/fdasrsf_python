@@ -8,4 +8,5 @@ joblib
 patsy
 tqdm
 nbsphinx
+findblas
 sphinx-rtd-theme

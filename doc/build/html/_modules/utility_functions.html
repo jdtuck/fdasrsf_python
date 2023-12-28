@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>utility_functions &mdash; fdasrsf 2.5.3 documentation</title>
+  <title>utility_functions &mdash; fdasrsf 2.5.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
@@ -432,11 +432,11 @@
     <span class="k">return</span> <span class="n">amp</span><span class="p">,</span> <span class="n">phase</span></div>
 
 
-<div class="viewcode-block" id="elastic_distance"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_distance">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="elastic_distance"><a class="viewcode-back" href="../utility_functions.html#utility_functions.elastic_distance">[docs]</a><span class="k">def</span> <span class="nf">elastic_distance</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">return_dt_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; &quot;</span>
 <span class="sd">    calculates the distances between function, where f1 is aligned to</span>
-<span class="sd">    f2. In other words</span>
-<span class="sd">    calculates the elastic distances</span>
+<span class="sd">    f2. In other words calculates the elastic distances</span>
 
 <span class="sd">    :param f1: vector of size N</span>
 <span class="sd">    :param f2: vector of size N</span>
@@ -445,6 +445,7 @@
 <span class="sd">                   options are &quot;DP&quot;,&quot;DP2&quot;,&quot;RBFGS&quot;,&quot;cRBFGS&quot;</span>
 <span class="sd">    :param lam: controls the elasticity (default = 0.0)</span>
 <span class="sd">    :param alpha: makes alpha * dx + (1-alpha) * dy</span>
+<span class="sd">    :param return_dt_only: returns only dt if alpha is set</span>
 
 <span class="sd">    :rtype: scalar</span>
 <span class="sd">    :return Dy: amplitude distance</span>
@@ -474,7 +475,10 @@
 
     <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">Dt</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">Dx</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dy</span>
-        <span class="k">return</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">Dt</span>
+        <span class="k">if</span> <span class="n">return_dt_only</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Dt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">Dt</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">Dx</span></div>
 
@@ -1235,6 +1239,13 @@
 <span class="k">def</span> <span class="nf">mrdivide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">pinv</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">c</span>
+
+
+<span class="k">def</span> <span class="nf">rlbfgs_dist</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">q2</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">rlbfgs_dist</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">d</span>
 </pre></div>
 
            </div>

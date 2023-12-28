@@ -40,7 +40,7 @@ extensions = ['nbsphinx', 'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ex
 templates_path = ['_templates']
 
 autodoc_mock_imports = ["optimum_reparamN2","optimum_reparam_N","optimum_reparam_Ng","IPython","cbayesian","fpls_warp","mlogit_warp","cimage",
-                        "ocmlogit_warp","oclogit_warp"]
+                        "ocmlogit_warp","oclogit_warp","crbfgs"]
 
 # The suffix of source filenames.
 source_suffix = '.rst'

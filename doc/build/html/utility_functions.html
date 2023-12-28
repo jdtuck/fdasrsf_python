@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utility Functions &mdash; fdasrsf 2.5.3 documentation</title>
+  <title>Utility Functions &mdash; fdasrsf 2.5.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
 
@@ -249,11 +249,10 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.elastic_distance">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dt_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition"></a></dt>
 <dd><p>”
 calculates the distances between function, where f1 is aligned to
-f2. In other words
-calculates the elastic distances</p>
+f2. In other words calculates the elastic distances</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -264,6 +263,7 @@ calculates the elastic distances</p>
 options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 <li><p><strong>lam</strong> – controls the elasticity (default = 0.0)</p></li>
 <li><p><strong>alpha</strong> – makes alpha * dx + (1-alpha) * dy</p></li>
+<li><p><strong>return_dt_only</strong> – returns only dt if alpha is set</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
