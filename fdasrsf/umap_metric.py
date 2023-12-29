@@ -130,7 +130,7 @@ def shift_curve(f, tau):
     n, T = f.shape
     fn = zeros((n, T))
     for i in range(n):
-        fn[i, 0: (T - 1)] = roll(f[i, 0: (T - 1)], tau)
+        fn[i, 0 : (T - 1)] = roll(f[i, 0 : (T - 1)], tau)
         fn[i, T - 1] = fn[i, 0]
     return fn
 
@@ -326,7 +326,7 @@ def efda_distance(q1, q2, alpha=0):
 
     :param q1: vector of size N
     :param q2: vector of size N
-    :param alpha: weight between phase and amplitude 
+    :param alpha: weight between phase and amplitude
                   (default = 0, returns amplitude)
 
     :rtype: scalar

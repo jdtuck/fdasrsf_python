@@ -129,7 +129,7 @@ class elastic_pcr_regression:
         This function performs prediction on regression model on new
         data if available or current stored data in object
         Usage:  obj.predict(newdata)
-                
+
         :param newdata: dict containing new data for prediction (needs
                         the keys below, if None predicts on training data)
         :type newdata: dict
@@ -372,7 +372,7 @@ class elastic_lpcr_regression:
         """
         This function performs prediction on regression model on new data if available or current stored data in object
         Usage:  obj.predict(newdata)
-                
+
         :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
         :param f: (M,N) matrix of functions
@@ -624,7 +624,7 @@ class elastic_mlpcr_regression:
         """
         This function performs prediction on regression model on new data if available or current stored data in object
         Usage:  obj.predict(newdata)
-                
+
         :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
         :param f: (M,N) matrix of functions

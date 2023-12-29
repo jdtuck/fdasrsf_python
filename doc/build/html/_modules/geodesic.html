@@ -1,95 +1,436 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>geodesic &mdash; fdasrsf 2.3.12 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>geodesic &#8212; fdasrsf 2.5.6 documentation</title>
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="../_static/js/theme.js"></script>
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geodesic';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
-</head>
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
 
-          
-          
-          <a href="../index.html" class="icon icon-home">
-            fdasrsf
-          </a>
-              <div class="version">
-                2.2
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../time_warping.html">Functional Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fPCA.html">Functional Principal Component Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../boxplots.html">Elastic Functional Boxplots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fPLS.html">Functional Principal Least Squares</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../regression.html">Elastic Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
-<<<<<<< HEAD
-<li class="toctree-l1"><a class="reference internal" href="../kmeans.html">Elastic Functional Clustering</a></li>
-=======
-<li class="toctree-l1"><a class="reference internal" href="../image.html">Elastic Image Warping</a></li>
->>>>>>> image
-<li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../curve_functions.html">Curve Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../umap_metric.html">UMAP EFDA Metrics</a></li>
-</ul>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-        </div>
-      </div>
-    </nav>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">fdasrsf</a>
-      </nav>
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
-      <li class="breadcrumb-item active">geodesic</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.6 documentation - Home"/>
+    <script>document.write(`<img src="../_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.6 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
   </ul>
-  <hr/>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/fdasrsf" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/2964877" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/conda-forge/fdasrsf" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/3571983" class="icon-link-image" alt="Anaconda"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/fdasrsf" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/2964877" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/conda-forge/fdasrsf" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/3571983" class="icon-link-image" alt="Anaconda"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">geodesic</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <h1>Source code for geodesic</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">geodesic calculation for SRVF (curves) open and closed</span>
@@ -108,11 +449,7 @@
 
 
 <div class="viewcode-block" id="plot_geod"><a class="viewcode-back" href="../geodesic.html#geodesic.plot_geod">[docs]</a><span class="k">def</span> <span class="nf">plot_geod</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-<<<<<<< HEAD
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-=======
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
->>>>>>> image
 <span class="sd">    Plots the geodesic path as a sequence of curves</span>
 
 <span class="sd">    :param path: numpy ndarray of shape (2,M,K) of M sample points of K samples along path</span>
@@ -120,10 +457,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
     <span class="n">mv</span> <span class="o">=</span> <span class="mf">0.2</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">path</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mv</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">i</span><span class="p">],</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="n">i</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mv</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
     <span class="k">return</span></div>
@@ -160,24 +497,36 @@
     <span class="n">q1</span><span class="p">,</span> <span class="n">len1</span><span class="p">,</span> <span class="n">lenq1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
         <span class="n">q2</span><span class="p">,</span> <span class="n">len2</span><span class="p">,</span> <span class="n">lenq2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span>
-    <span class="n">beta2</span><span class="p">,</span> <span class="n">q2n</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
-    
+    <span class="n">beta2</span><span class="p">,</span> <span class="n">q2n</span><span class="p">,</span> <span class="n">O1</span><span class="p">,</span> <span class="n">gamI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">find_rotation_and_seed_coord</span><span class="p">(</span>
+        <span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span>
+    <span class="p">)</span>
+
     <span class="c1"># Forming geodesic between the registered curves</span>
     <span class="n">val</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2n</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="mf">1.0001</span><span class="p">:</span> <span class="c1"># assume numerical error</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="mf">1.0001</span><span class="p">:</span>  <span class="c1"># assume numerical error</span>
             <span class="kn">import</span> <span class="nn">warnings</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corrected a numerical error in geod_sphere: rounded </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> to 1&quot;</span><span class="p">)</span>
+
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Corrected a numerical error in geod_sphere: rounded </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> to 1&quot;</span>
+            <span class="p">)</span>
             <span class="n">val</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;innerpod_q2 computed an inner product of </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> which is much greater than 1&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;innerpod_q2 computed an inner product of </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> which is much greater than 1&quot;</span>
+            <span class="p">)</span>
     <span class="k">elif</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1.0001</span><span class="p">:</span> <span class="c1"># assume numerical error</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1.0001</span><span class="p">:</span>  <span class="c1"># assume numerical error</span>
             <span class="kn">import</span> <span class="nn">warnings</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corrected a numerical error in geod_sphere: rounded </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> to -1&quot;</span><span class="p">)</span>
+
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Corrected a numerical error in geod_sphere: rounded </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> to -1&quot;</span>
+            <span class="p">)</span>
             <span class="n">val</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;innerpod_q2 computed an inner product of </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> which is much less than -1&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;innerpod_q2 computed an inner product of </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> which is much less than -1&quot;</span>
+            <span class="p">)</span>
 
     <span class="n">dist</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">dist</span><span class="p">):</span>
@@ -190,21 +539,21 @@
             <span class="k">if</span> <span class="n">tau</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">tau1</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">tau1</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
-                
+                <span class="n">tau1</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+
             <span class="n">s</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">tau1</span>
             <span class="k">if</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="o">-</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span><span class="p">)</span><span class="o">/</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+                <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">dist</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">q1</span> <span class="o">+</span> <span class="n">sin</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">q2n</span><span class="p">)</span> <span class="o">/</span> <span class="n">sin</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">dist</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span> <span class="o">+</span> <span class="p">(</span><span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span>
+                <span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tau1</span><span class="p">)</span> <span class="o">*</span> <span class="n">q1</span> <span class="o">+</span> <span class="p">(</span><span class="n">tau1</span><span class="p">)</span> <span class="o">*</span> <span class="n">q2n</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;geod_sphere computed a negative distance&quot;</span><span class="p">)</span>
-                
+
             <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
-                <span class="n">scl</span> <span class="o">=</span> <span class="n">len1</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tau1</span><span class="p">)</span><span class="o">*</span><span class="n">len2</span><span class="o">**</span><span class="p">(</span><span class="n">tau1</span><span class="p">)</span>
+                <span class="n">scl</span> <span class="o">=</span> <span class="n">len1</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tau1</span><span class="p">)</span> <span class="o">*</span> <span class="n">len2</span> <span class="o">**</span> <span class="p">(</span><span class="n">tau1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">scl</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">beta</span> <span class="o">=</span> <span class="n">scl</span><span class="o">*</span><span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="n">scl</span> <span class="o">*</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">PsiQ</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">center</span><span class="p">:</span>
                 <span class="n">centroid</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
                 <span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">-</span> <span class="n">tile</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
@@ -214,15 +563,11 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">PsiQ</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">PsiQ</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="path_straightening"><a class="viewcode-back" href="../geodesic.html#geodesic.path_straightening">[docs]</a><span class="k">def</span> <span class="nf">path_straightening</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">betamid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">&quot;rand&quot;</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-<<<<<<< HEAD
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-=======
-    <span class="sd">&quot;&quot;&quot;</span>
->>>>>>> image
 <span class="sd">    Perform path straightening to find geodesic between two shapes in either</span>
 <span class="sd">    the space of closed curves or the space of affine standardized curves.</span>
 <span class="sd">    This algorithm follows the steps outlined in section 4.6 of the</span>
@@ -257,8 +602,7 @@
         <span class="n">betanewmid</span><span class="p">,</span> <span class="n">qnewmid</span><span class="p">,</span> <span class="n">Amid</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">pre_proc_curve</span><span class="p">(</span><span class="n">beta2</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">init</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">O</span> <span class="o">=</span> <span class="n">init_path_rand</span><span class="p">(</span><span class="n">betanew1</span><span class="p">,</span> <span class="n">betanewmid</span><span class="p">,</span>
-                                        <span class="n">betanew2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+        <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">O</span> <span class="o">=</span> <span class="n">init_path_rand</span><span class="p">(</span><span class="n">betanew1</span><span class="p">,</span> <span class="n">betanewmid</span><span class="p">,</span> <span class="n">betanew2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">init</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">O</span> <span class="o">=</span> <span class="n">init_path_geod</span><span class="p">(</span><span class="n">betanew1</span><span class="p">,</span> <span class="n">betanew2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
@@ -270,9 +614,9 @@
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">g</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="n">E</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxit</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">gradEnorm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxit</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">pathsqnc</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">maxit</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">gradEnorm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">maxit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pathsqnc</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">maxit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
     <span class="n">pathsqnc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span>
 
@@ -305,7 +649,7 @@
         <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">update_path</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gradE</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
         <span class="c1"># path evolution</span>
-        <span class="n">pathsqnc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span>
+        <span class="n">pathsqnc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span>
 
         <span class="k">if</span> <span class="n">g</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
             <span class="k">break</span>
@@ -315,16 +659,16 @@
     <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
         <span class="n">gradEnorm</span> <span class="o">=</span> <span class="n">gradEnorm</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">pathsqnc</span> <span class="o">=</span> <span class="n">pathsqnc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)]</span>
+        <span class="n">pathsqnc</span> <span class="o">=</span> <span class="n">pathsqnc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">gradEnorm</span> <span class="o">=</span> <span class="n">gradEnorm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">pathsqnc</span> <span class="o">=</span> <span class="n">pathsqnc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)]</span>
+        <span class="n">pathsqnc</span> <span class="o">=</span> <span class="n">pathsqnc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span>
 
     <span class="n">path</span> <span class="o">=</span> <span class="n">beta</span>
     <span class="n">dist</span> <span class="o">=</span> <span class="n">geod_dist_path_strt</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">pathsqnc</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">pathsqnc</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span></div>
 
 
 <span class="c1"># path straightening helper functions</span>
@@ -373,38 +717,41 @@
     <span class="c1"># Initialize a path as a geodesic through q1 --- q_mid --- q2</span>
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q_mid</span><span class="p">))</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q_mid</span><span class="p">,</span> <span class="n">q2n</span><span class="p">))</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
     <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">q1</span>
     <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta1</span>
 
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tau</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
-        <span class="n">qnew</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">sin</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">q1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">q_mid</span><span class="p">)</span>
-        <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">project_curve</span><span class="p">(</span><span class="n">qnew</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tile</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tau</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">qnew</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">sin</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="n">q1</span> <span class="o">+</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_mid</span>
+        <span class="p">)</span>
+        <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">project_curve</span><span class="p">(</span><span class="n">qnew</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tile</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">q_mid</span>
-    <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">beta_mid</span>
+    <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">q_mid</span>
+    <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">beta_mid</span>
 
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">qnew</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">sin</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">q_mid</span>
-                                <span class="o">+</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">q2n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">qnew</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">sin</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">theta2</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_mid</span> <span class="o">+</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">theta2</span><span class="p">)</span> <span class="o">*</span> <span class="n">q2n</span>
+        <span class="p">)</span>
         <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">project_curve</span><span class="p">(</span><span class="n">qnew</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tile</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">q2n</span>
-    <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta2n</span>
+    <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">q2n</span>
+    <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta2n</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">O</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">O</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="init_path_geod"><a class="viewcode-back" href="../geodesic.html#geodesic.init_path_geod">[docs]</a><span class="k">def</span> <span class="nf">init_path_geod</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -432,10 +779,10 @@
     <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">project_curve</span><span class="p">(</span><span class="n">pathq</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tile</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">O</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">O</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="find_basis_normal_path"><a class="viewcode-back" href="../geodesic.html#geodesic.find_basis_normal_path">[docs]</a><span class="k">def</span> <span class="nf">find_basis_normal_path</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -457,7 +804,7 @@
         <span class="n">basis_tmp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">gram_schmidt</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
         <span class="n">basis</span><span class="p">[</span><span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">basis_tmp</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">basis</span></div>
 
 
 <div class="viewcode-block" id="calc_alphadot"><a class="viewcode-back" href="../geodesic.html#geodesic.calc_alphadot">[docs]</a><span class="k">def</span> <span class="nf">calc_alphadot</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -477,16 +824,15 @@
 
     <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tau</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="n">tau</span> <span class="o">==</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">(</span><span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">tau</span> <span class="o">==</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">(</span><span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">(</span><span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">(</span><span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
 
-        <span class="n">alphadot</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">project_tangent</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">],</span>
-                                                 <span class="n">basis</span><span class="p">[</span><span class="n">tau</span><span class="p">])</span>
+        <span class="n">alphadot</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">project_tangent</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">],</span> <span class="n">basis</span><span class="p">[</span><span class="n">tau</span><span class="p">])</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">alphadot</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">alphadot</span></div>
 
 
 <div class="viewcode-block" id="calculate_energy"><a class="viewcode-back" href="../geodesic.html#geodesic.calculate_energy">[docs]</a><span class="k">def</span> <span class="nf">calculate_energy</span><span class="p">(</span><span class="n">alphadot</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -511,9 +857,9 @@
 
         <span class="n">integrand2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">integrand1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
 
-    <span class="n">E</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">trapz</span><span class="p">(</span><span class="n">integrand2</span><span class="p">,</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">trapz</span><span class="p">(</span><span class="n">integrand2</span><span class="p">,</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">E</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">E</span></div>
 
 
 <div class="viewcode-block" id="cov_integral"><a class="viewcode-back" href="../geodesic.html#geodesic.cov_integral">[docs]</a><span class="k">def</span> <span class="nf">cov_integral</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">alphadot</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -533,14 +879,14 @@
     <span class="n">u</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">q1</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">q2</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">basis</span><span class="p">[</span><span class="n">tau</span><span class="p">]</span>
         <span class="n">wbar</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">parallel_translate</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-        <span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">alphadot</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span><span class="o">+</span><span class="n">wbar</span>
+        <span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">alphadot</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">+</span> <span class="n">wbar</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">u</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">u</span></div>
 
 
 <div class="viewcode-block" id="back_parallel_transport"><a class="viewcode-back" href="../geodesic.html#geodesic.back_parallel_transport">[docs]</a><span class="k">def</span> <span class="nf">back_parallel_transport</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -559,15 +905,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">utilde</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
 
-    <span class="n">utilde</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u1</span>
-    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">utilde</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">q1</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">utilde</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u1</span>
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">utilde</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">q2</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">basis</span><span class="p">[</span><span class="n">tau</span><span class="p">]</span>
         <span class="n">utilde</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">parallel_translate</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">utilde</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">utilde</span></div>
 
 
 <div class="viewcode-block" id="calculate_gradE"><a class="viewcode-back" href="../geodesic.html#geodesic.calculate_gradE">[docs]</a><span class="k">def</span> <span class="nf">calculate_gradE</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">utilde</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -587,11 +933,15 @@
     <span class="n">gradE</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
     <span class="n">normgradE</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">tau</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mf">1.</span><span class="p">))</span> <span class="o">*</span> <span class="n">utilde</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">normgradE</span><span class="p">[</span><span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">tau</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">*</span> <span class="n">utilde</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">normgradE</span><span class="p">[</span><span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">gradE</span><span class="p">,</span> <span class="n">normgradE</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">gradE</span><span class="p">,</span> <span class="n">normgradE</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="update_path"><a class="viewcode-back" href="../geodesic.html#geodesic.update_path">[docs]</a><span class="k">def</span> <span class="nf">update_path</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gradE</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -610,14 +960,14 @@
 <span class="sd">    :return beta: updated path of curves</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">alpha_new</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span><span class="o">*</span><span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">alpha_new</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">gradE</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span>
         <span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">project_curve</span><span class="p">(</span><span class="n">alpha_new</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">q_to_curve</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">])</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">cf</span><span class="o">.</span><span class="n">calculatecentroid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">tau</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tile</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="geod_dist_path_strt"><a class="viewcode-back" href="../geodesic.html#geodesic.geod_dist_path_strt">[docs]</a><span class="k">def</span> <span class="nf">geod_dist_path_strt</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -634,41 +984,84 @@
     <span class="n">dist</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="n">beta1</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">beta1</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">beta2</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span>
         <span class="n">q1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">q2</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">curve_to_q</span><span class="p">(</span><span class="n">beta2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">innerprod_q2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">))</span>
         <span class="n">dist</span> <span class="o">+=</span> <span class="n">d</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">dist</span></div>
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Derek Tucker.</p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+  <p class="copyright">
+    
+      © Copyright 2024, J. Derek Tucker.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
 
-</body>
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>

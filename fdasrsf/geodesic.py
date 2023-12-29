@@ -23,10 +23,10 @@ def plot_geod(path):
     """
     fig, ax = plt.subplots()
     mv = 0.2
-    for i in range(0,path.shape[2]):
-        ax.plot(mv*i + path[0,:,i],path[1,:,i], linewidth=2)
-    ax.set_aspect('equal')
-    plt.axis('off')
+    for i in range(0, path.shape[2]):
+        ax.plot(mv * i + path[0, :, i], path[1, :, i], linewidth=2)
+    ax.set_aspect("equal")
+    plt.axis("off")
     plt.show()
 
     return
@@ -63,24 +63,36 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     q1, len1, lenq1 = cf.curve_to_q(beta1)
     if scale:
         q2, len2, lenq2 = cf.curve_to_q(beta2)
-    beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(beta1, beta2, rotation=rotation)
-    
+    beta2, q2n, O1, gamI = cf.find_rotation_and_seed_coord(
+        beta1, beta2, rotation=rotation
+    )
+
     # Forming geodesic between the registered curves
     val = cf.innerprod_q2(q1, q2n)
     if val > 1:
-        if val < 1.0001: # assume numerical error
+        if val < 1.0001:  # assume numerical error
             import warnings
-            warnings.warn(f"Corrected a numerical error in geod_sphere: rounded {val} to 1")
+
+            warnings.warn(
+                f"Corrected a numerical error in geod_sphere: rounded {val} to 1"
+            )
             val = 1
         else:
-            raise Exception(f"innerpod_q2 computed an inner product of {val} which is much greater than 1")
+            raise Exception(
+                f"innerpod_q2 computed an inner product of {val} which is much greater than 1"
+            )
     elif val < -1:
-        if val > -1.0001: # assume numerical error
+        if val > -1.0001:  # assume numerical error
             import warnings
-            warnings.warn(f"Corrected a numerical error in geod_sphere: rounded {val} to -1")
+
+            warnings.warn(
+                f"Corrected a numerical error in geod_sphere: rounded {val} to -1"
+            )
             val = -1
         else:
-            raise Exception(f"innerpod_q2 computed an inner product of {val} which is much less than -1")
+            raise Exception(
+                f"innerpod_q2 computed an inner product of {val} which is much less than -1"
+            )
 
     dist = arccos(val)
     if isnan(dist):
@@ -93,21 +105,21 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
             if tau == 0:
                 tau1 = 0
             else:
-                tau1 = tau / (k - 1.)
-                
+                tau1 = tau / (k - 1.0)
+
             s = dist * tau1
             if dist > 0:
-                PsiQ[:, :, tau] = (sin(dist-s)*q1+sin(s)*q2n)/sin(dist)
+                PsiQ[:, :, tau] = (sin(dist - s) * q1 + sin(s) * q2n) / sin(dist)
             elif dist == 0:
-                PsiQ[:, :, tau] = (1 - tau1)*q1 + (tau1)*q2n
+                PsiQ[:, :, tau] = (1 - tau1) * q1 + (tau1) * q2n
             else:
                 raise Exception("geod_sphere computed a negative distance")
-                
+
             if scale:
-                scl = len1**(1-tau1)*len2**(tau1)
+                scl = len1 ** (1 - tau1) * len2 ** (tau1)
             else:
                 scl = 1
-            beta = scl*cf.q_to_curve(PsiQ[:, :, tau])
+            beta = scl * cf.q_to_curve(PsiQ[:, :, tau])
             if center:
                 centroid = cf.calculatecentroid(beta)
                 beta = beta - tile(centroid, [T, 1]).T
@@ -117,7 +129,7 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     else:
         path = 0
 
-    return(dist, path, PsiQ)
+    return (dist, path, PsiQ)
 
 
 def path_straightening(beta1, beta2, betamid=None, init="rand", T=100, k=5):
@@ -156,8 +168,7 @@ def path_straightening(beta1, beta2, betamid=None, init="rand", T=100, k=5):
         betanewmid, qnewmid, Amid = cf.pre_proc_curve(beta2, T)
 
     if init == 0:
-        alpha, beta, O = init_path_rand(betanew1, betanewmid,
-                                        betanew2, T, k)
+        alpha, beta, O = init_path_rand(betanew1, betanewmid, betanew2, T, k)
     elif init == 1:
         alpha, beta, O = init_path_geod(betanew1, betanew2, T, k)
 
@@ -169,9 +180,9 @@ def path_straightening(beta1, beta2, betamid=None, init="rand", T=100, k=5):
     i = 0
     g = 1
     delta = 0.5
-    E = zeros(maxit+1)
-    gradEnorm = zeros(maxit+1)
-    pathsqnc = zeros((n, T, k, maxit+1))
+    E = zeros(maxit + 1)
+    gradEnorm = zeros(maxit + 1)
+    pathsqnc = zeros((n, T, k, maxit + 1))
 
     pathsqnc[:, :, :, 0] = beta
 
@@ -204,7 +215,7 @@ def path_straightening(beta1, beta2, betamid=None, init="rand", T=100, k=5):
         alpha, beta = update_path(alpha, beta, gradE, delta, T, k)
 
         # path evolution
-        pathsqnc[:, :, :, i+1] = beta
+        pathsqnc[:, :, :, i + 1] = beta
 
         if g < tol:
             break
@@ -214,16 +225,16 @@ def path_straightening(beta1, beta2, betamid=None, init="rand", T=100, k=5):
     if i > 0:
         E = E[0:i]
         gradEnorm = gradEnorm[0:i]
-        pathsqnc = pathsqnc[:, :, :, 0:(i+2)]
+        pathsqnc = pathsqnc[:, :, :, 0 : (i + 2)]
     else:
         E = E[0]
         gradEnorm = gradEnorm[0]
-        pathsqnc = pathsqnc[:, :, :, 0:(i+2)]
+        pathsqnc = pathsqnc[:, :, :, 0 : (i + 2)]
 
     path = beta
     dist = geod_dist_path_strt(beta, k)
 
-    return(dist, path, pathsqnc, E)
+    return (dist, path, pathsqnc, E)
 
 
 # path straightening helper functions
@@ -272,38 +283,41 @@ def init_path_rand(beta1, beta_mid, beta2, T=100, k=5):
     # Initialize a path as a geodesic through q1 --- q_mid --- q2
     theta1 = arccos(cf.innerprod_q2(q1, q_mid))
     theta2 = arccos(cf.innerprod_q2(q_mid, q2n))
-    tmp = arange(2, int((k-1)/2)+1)
+    tmp = arange(2, int((k - 1) / 2) + 1)
     t = zeros(tmp.size)
     alpha[:, :, 0] = q1
     beta[:, :, 0] = beta1
 
     i = 0
-    for tau in range(2, int((k-1)/2)+1):
-        t[i] = (tau-1.)/((k-1)/2.)
-        qnew = (1/sin(theta1))*(sin((1-t[i])*theta1)*q1+sin(t[i]*theta1)*q_mid)
-        alpha[:, :, tau-1] = cf.project_curve(qnew)
-        x = cf.q_to_curve(alpha[:, :, tau-1])
-        a = -1*cf.calculatecentroid(x)
-        beta[:, :, tau-1] = x + tile(a, [T, 1]).T
+    for tau in range(2, int((k - 1) / 2) + 1):
+        t[i] = (tau - 1.0) / ((k - 1) / 2.0)
+        qnew = (1 / sin(theta1)) * (
+            sin((1 - t[i]) * theta1) * q1 + sin(t[i] * theta1) * q_mid
+        )
+        alpha[:, :, tau - 1] = cf.project_curve(qnew)
+        x = cf.q_to_curve(alpha[:, :, tau - 1])
+        a = -1 * cf.calculatecentroid(x)
+        beta[:, :, tau - 1] = x + tile(a, [T, 1]).T
         i += 1
 
-    alpha[:, :, int((k-1)/2)] = q_mid
-    beta[:, :, int((k-1)/2)] = beta_mid
+    alpha[:, :, int((k - 1) / 2)] = q_mid
+    beta[:, :, int((k - 1) / 2)] = beta_mid
 
     i = 0
-    for tau in range(int((k-1)/2)+1, k-1):
-        qnew = (1/sin(theta2))*(sin((1-t[i])*theta2)*q_mid
-                                + sin(t[i]*theta2)*q2n)
+    for tau in range(int((k - 1) / 2) + 1, k - 1):
+        qnew = (1 / sin(theta2)) * (
+            sin((1 - t[i]) * theta2) * q_mid + sin(t[i] * theta2) * q2n
+        )
         alpha[:, :, tau] = cf.project_curve(qnew)
         x = cf.q_to_curve(alpha[:, :, tau])
-        a = -1*cf.calculatecentroid(x)
+        a = -1 * cf.calculatecentroid(x)
         beta[:, :, tau] = x + tile(a, [T, 1]).T
         i += 1
 
-    alpha[:, :, k-1] = q2n
-    beta[:, :, k-1] = beta2n
+    alpha[:, :, k - 1] = q2n
+    beta[:, :, k - 1] = beta2n
 
-    return(alpha, beta, O)
+    return (alpha, beta, O)
 
 
 def init_path_geod(beta1, beta2, T=100, k=5):
@@ -331,10 +345,10 @@ def init_path_geod(beta1, beta2, T=100, k=5):
     for tau in range(0, k):
         alpha[:, :, tau] = cf.project_curve(pathq[:, :, tau])
         x = cf.q_to_curve(alpha[:, :, tau])
-        a = -1*cf.calculatecentroid(x)
+        a = -1 * cf.calculatecentroid(x)
         beta[:, :, tau] = x + tile(a, [T, 1]).T
 
-    return(alpha, beta, O)
+    return (alpha, beta, O)
 
 
 def find_basis_normal_path(alpha, k=5):
@@ -356,7 +370,7 @@ def find_basis_normal_path(alpha, k=5):
         basis_tmp = cf.gram_schmidt(b)
         basis[tau] = basis_tmp
 
-    return(basis)
+    return basis
 
 
 def calc_alphadot(alpha, basis, T=100, k=5):
@@ -376,16 +390,15 @@ def calc_alphadot(alpha, basis, T=100, k=5):
 
     for tau in range(0, k):
         if tau == 0:
-            v = (k-1)*(alpha[:, :, tau+1] - alpha[:, :, tau])
-        elif tau == (k-1):
-            v = (k-1)*(alpha[:, :, tau] - alpha[:, :, (tau-1)])
+            v = (k - 1) * (alpha[:, :, tau + 1] - alpha[:, :, tau])
+        elif tau == (k - 1):
+            v = (k - 1) * (alpha[:, :, tau] - alpha[:, :, (tau - 1)])
         else:
-            v = ((k-1)/2.0)*(alpha[:, :, tau+1] - alpha[:, :, (tau-1)])
+            v = ((k - 1) / 2.0) * (alpha[:, :, tau + 1] - alpha[:, :, (tau - 1)])
 
-        alphadot[:, :, tau] = cf.project_tangent(v, alpha[:, :, tau],
-                                                 basis[tau])
+        alphadot[:, :, tau] = cf.project_tangent(v, alpha[:, :, tau], basis[tau])
 
-    return(alphadot)
+    return alphadot
 
 
 def calculate_energy(alphadot, T=100, k=5):
@@ -410,9 +423,9 @@ def calculate_energy(alphadot, T=100, k=5):
 
         integrand2[i] = trapz(integrand1[i, :], linspace(0, 1, T))
 
-    E = 0.5*trapz(integrand2, linspace(0, 1, k))
+    E = 0.5 * trapz(integrand2, linspace(0, 1, k))
 
-    return(E)
+    return E
 
 
 def cov_integral(alpha, alphadot, basis, T=100, k=5):
@@ -432,14 +445,14 @@ def cov_integral(alpha, alphadot, basis, T=100, k=5):
     u = zeros((2, T, k))
 
     for tau in range(1, k):
-        w = u[:, :, tau-1]
-        q1 = alpha[:, :, tau-1]
+        w = u[:, :, tau - 1]
+        q1 = alpha[:, :, tau - 1]
         q2 = alpha[:, :, tau]
         b = basis[tau]
         wbar = cf.parallel_translate(w, q1, q2, b)
-        u[:, :, tau] = (1./(k-1))*alphadot[:, :, tau]+wbar
+        u[:, :, tau] = (1.0 / (k - 1)) * alphadot[:, :, tau] + wbar
 
-    return(u)
+    return u
 
 
 def back_parallel_transport(u1, alpha, basis, T=100, k=5):
@@ -458,15 +471,15 @@ def back_parallel_transport(u1, alpha, basis, T=100, k=5):
     """
     utilde = zeros((2, T, k))
 
-    utilde[:, :, k-1] = u1
-    for tau in arange(k-2, -1, -1):
-        w = utilde[:, :, tau+1]
-        q1 = alpha[:, :, tau+1]
+    utilde[:, :, k - 1] = u1
+    for tau in arange(k - 2, -1, -1):
+        w = utilde[:, :, tau + 1]
+        q1 = alpha[:, :, tau + 1]
         q2 = alpha[:, :, tau]
         b = basis[tau]
         utilde[:, :, tau] = cf.parallel_translate(w, q1, q2, b)
 
-    return(utilde)
+    return utilde
 
 
 def calculate_gradE(u, utilde, T=100, k=5):
@@ -486,11 +499,15 @@ def calculate_gradE(u, utilde, T=100, k=5):
     gradE = zeros((2, T, k))
     normgradE = zeros(k)
 
-    for tau in range(2, k+1):
-        gradE[:, :, tau-1] = u[:, :, tau-1] - ((tau-1.)/(k-1.)) * utilde[:, :, tau-1]
-        normgradE[tau-1] = sqrt(cf.innerprod_q2(gradE[:, :, tau-1], gradE[:, :, tau-1]))
+    for tau in range(2, k + 1):
+        gradE[:, :, tau - 1] = (
+            u[:, :, tau - 1] - ((tau - 1.0) / (k - 1.0)) * utilde[:, :, tau - 1]
+        )
+        normgradE[tau - 1] = sqrt(
+            cf.innerprod_q2(gradE[:, :, tau - 1], gradE[:, :, tau - 1])
+        )
 
-    return(gradE, normgradE)
+    return (gradE, normgradE)
 
 
 def update_path(alpha, beta, gradE, delta, T=100, k=5):
@@ -509,14 +526,14 @@ def update_path(alpha, beta, gradE, delta, T=100, k=5):
     :return beta: updated path of curves
 
     """
-    for tau in range(1, k-1):
-        alpha_new = alpha[:, :, tau] - delta*gradE[:, :, tau]
+    for tau in range(1, k - 1):
+        alpha_new = alpha[:, :, tau] - delta * gradE[:, :, tau]
         alpha[:, :, tau] = cf.project_curve(alpha_new)
         x = cf.q_to_curve(alpha[:, :, tau])
-        a = -1*cf.calculatecentroid(x)
+        a = -1 * cf.calculatecentroid(x)
         beta[:, :, tau] = x + tile(a, [T, 1]).T
 
-    return(alpha, beta)
+    return (alpha, beta)
 
 
 def geod_dist_path_strt(beta, k=5):
@@ -533,11 +550,11 @@ def geod_dist_path_strt(beta, k=5):
     dist = 0
 
     for i in range(1, k):
-        beta1 = beta[:, :, i-1]
+        beta1 = beta[:, :, i - 1]
         beta2 = beta[:, :, i]
         q1 = cf.curve_to_q(beta1)[0]
         q2 = cf.curve_to_q(beta2)[0]
         d = arccos(cf.innerprod_q2(q1, q2))
         dist += d
 
-    return(dist)
+    return dist

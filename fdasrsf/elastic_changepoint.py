@@ -175,7 +175,7 @@ class elastic_change:
         else:
             self.no = np.argwhere(cumm_coef >= pc)[0][0]
 
-        lam = 1 / self.pca.latent[0: self.no]
+        lam = 1 / self.pca.latent[0 : self.no]
         Sigma = np.diag(lam)
         eta = self.pca.coef[:, 0 : self.no]
         eta_bar = eta.sum(axis=0) / N1

@@ -15,8 +15,8 @@ class rlbfgs:
     This class provides alignment methods for functional data using the SRVF
     framework using the Riemannian limited memory BFGS solver.  The solver is
     designed to operate on the positive orthant of the unit hypersphere in
-    :math:`L^2([0,1],R)`. The set of all functions 
-    :math:`h=\sqrt{\dot{\gamma}}`,  where :math:`\gamma` is a diffeomorphism, 
+    :math:`L^2([0,1],R)`. The set of all functions
+    :math:`h=\sqrt{\dot{\gamma}}`,  where :math:`\gamma` is a diffeomorphism,
     is that manifold.
 
     The inputs q1 and q2 are the square root velocity functions of curves in
@@ -32,9 +32,9 @@ class rlbfgs:
     :param cost: final cost
     :param info: dictionary consisting of info about the iterations
 
-    Wen Huang, Kyle A. Gallivan, Anuj Srivastava, Pierre-Antoine Absil. 
-    "Riemannian Optimization for Elastic Shape Analysis", Short version, 
-    The 21st International Symposium on Mathematical Theory of Networks and 
+    Wen Huang, Kyle A. Gallivan, Anuj Srivastava, Pierre-Antoine Absil.
+    "Riemannian Optimization for Elastic Shape Analysis", Short version,
+    The 21st International Symposium on Mathematical Theory of Networks and
     Systems (MTNS 2014).
 
     Code based on rlbfgs.m in Manopt: www.manopt.org
@@ -130,8 +130,7 @@ class rlbfgs:
         accepted = True
 
         # compute cost function and its gradient
-        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde, htilde, lam,
-                                                         penalty)
+        hCurCost, hCurGradient = self.alignment_costgrad(q2tilde, htilde, lam, penalty)
         hCurGradNorm = self.norm(hCurGradient)
 
         # line-search statistics for recording in info
@@ -205,7 +204,7 @@ class rlbfgs:
                 p, hCurCost, in_prod, q2tilde, lam, penalty
             )
 
-            # Iterative update of optimal diffeomorphism and q2 via group 
+            # Iterative update of optimal diffeomorphism and q2 via group
             # action
             htilde = self.group_action_SRVF(htilde, hNext)
             q2tilde = self.group_action_SRVF(q2tilde, hNext)
@@ -302,7 +301,7 @@ class rlbfgs:
             }
             info.append(stats)
 
-        self.info = info[0: (k + 1)]
+        self.info = info[0 : (k + 1)]
         self.gammaOpt = np.zeros(self.T)
         self.gammaOpt[1:] = cumtrapz(htilde**2, self.t)
         self.q2Opt = q2tilde
@@ -316,7 +315,7 @@ class rlbfgs:
     def alignment_cost(self, h, q2k, lam=0, penalty="roughness"):
         r"""
         Evaluate the cost function :math:`f = ||q1 - ((q2,hk),h)||^2`.
-        :math:`h=sqrt{\dot{\gamma}}` is a sequential update of cumulative 
+        :math:`h=sqrt{\dot{\gamma}}` is a sequential update of cumulative
         warping hk
         """
         q2new = self.group_action_SRVF(q2k, h)
@@ -348,7 +347,7 @@ class rlbfgs:
         r"""
         Evaluate the cost function :math:`f = ||q1 - (q2,hk)||^2`, and
         evaluate the gradient g = grad f in the tangent space of identity.
-        :math:`hk=sqrt{\dot{\gamma_k}}` is the cumulative warping of q2 
+        :math:`hk=sqrt{\dot{\gamma_k}}` is the cumulative warping of q2
         produced by an iterative sequential optimization algorithm.
         """
 
@@ -426,7 +425,7 @@ class rlbfgs:
 
     def linesearch_hint(self, d, f0, df0, q2k, lam=0, penalty="roughness"):
         """
-        Armijo line-search based on the line-search hint in the problem 
+        Armijo line-search based on the line-search hint in the problem
         structure.
 
         Base line-search algorithm for descent methods, based on a simple

@@ -29,7 +29,7 @@ def pls_svd(time, qf, qg, no, alpha=0.0):
     binsize = binsize.mean()
 
     Kfg = np.cov(qf, qg)
-    Kfg = Kfg[0:qf.shape[0], qf.shape[0]:Kfg.shape[0]]
+    Kfg = Kfg[0 : qf.shape[0], qf.shape[0] : Kfg.shape[0]]
     nx = Kfg.shape[0]
     D4x = diffop(nx, binsize)
     values, Lmat, Mmat = geigen(Kfg, np.eye(nx) + alpha * D4x, np.eye(nx) + alpha * D4x)

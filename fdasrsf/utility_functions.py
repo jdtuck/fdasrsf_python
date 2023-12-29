@@ -44,8 +44,8 @@ def smooth_data(f, sparam=1):
     fo = f.copy()
     for k in range(0, sparam):
         for r in range(0, N):
-            fo[1: (M - 2), r] = (
-                fo[0: (M - 3), r] + 2 * fo[1: (M - 2), r] + fo[2: (M - 1), r]
+            fo[1 : (M - 2), r] = (
+                fo[0 : (M - 3), r] + 2 * fo[1 : (M - 2), r] + fo[2 : (M - 1), r]
             ) / 4
     return fo
 
@@ -136,11 +136,11 @@ def optimum_reparam(
     :param q1: vector of size N or array of NxM samples of first SRSF
     :param time: vector of size N describing the sample points
     :param q2: vector of size N or array of NxM samples samples of second SRSF
-    :param method: method to apply optimization (default="DP2") options are 
+    :param method: method to apply optimization (default="DP2") options are
                    "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
-    :param penalty: penalty type (default="roughness") options are "roughness", 
-                    "l2gam", "l2psi", "geodesic". Only roughness implemented 
+    :param penalty: penalty type (default="roughness") options are "roughness",
+                    "l2gam", "l2psi", "geodesic". Only roughness implemented
                     in all methods. To use others method needs to be "RBFGS"
                     or "cRBFGS"
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
@@ -175,20 +175,17 @@ def optimum_reparam(
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN2.coptimum_reparam(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam,
-                grid_dim
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
             )
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam,
-                grid_dim
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
             )
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN2(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam,
-                grid_dim
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
             )
     elif method == "RBFGS":
         if q1.ndim == 1 and q2.ndim == 1:
@@ -223,27 +220,43 @@ def optimum_reparam(
             pen = 3
         else:
             raise Exception("penalty not implemented")
-          
+
         if q1.ndim == 1 and q2.ndim == 1:
             time = linspace(0, 1, q1.shape[0])
-            gam = cr.rlbfgs(ascontiguousarray(q1), ascontiguousarray(q2),
-                            ascontiguousarray(time), 30, lam, pen)
+            gam = cr.rlbfgs(
+                ascontiguousarray(q1),
+                ascontiguousarray(q2),
+                ascontiguousarray(time),
+                30,
+                lam,
+                pen,
+            )
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = zeros(q2.shape)
             time = linspace(0, 1, q1.shape[0])
             for i in range(0, q2.shape[1]):
-                gam[:, i] = cr.rlbfgs(ascontiguousarray(q1),
-                                      ascontiguousarray(q2[:, i]),
-                                      ascontiguousarray(time), 30, lam, pen)
+                gam[:, i] = cr.rlbfgs(
+                    ascontiguousarray(q1),
+                    ascontiguousarray(q2[:, i]),
+                    ascontiguousarray(time),
+                    30,
+                    lam,
+                    pen,
+                )
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = zeros(q2.shape)
             time = linspace(0, 1, q1.shape[0])
             for i in range(0, q2.shape[1]):
-                gam[:, i] = cr.rlbfgs(ascontiguousarray(q1[:, i]),
-                                      ascontiguousarray(q2[:, i]),
-                                      ascontiguousarray(time), 30, lam, pen)
+                gam[:, i] = cr.rlbfgs(
+                    ascontiguousarray(q1[:, i]),
+                    ascontiguousarray(q2[:, i]),
+                    ascontiguousarray(time),
+                    30,
+                    lam,
+                    pen,
+                )
 
     else:
         raise Exception("Invalid Optimization Method")
@@ -303,7 +316,7 @@ def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
 
     :param f: matrix of size MxN (M time points for N functions)
     :param time: vector of size M describing the sample points
-    :param method: method to apply optimization (default="DP2") 
+    :param method: method to apply optimization (default="DP2")
                    options are "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the elasticity (default = 0.0)
 
@@ -327,8 +340,7 @@ def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
             phs_dist[i, :] = out[i][1]
     else:
         for i in range(0, fns):
-            amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i,
-                                                     method)
+            amp_dist[i, :], phs_dist[i, :] = distmat(f, f[:, i], time, i, method)
 
     amp_dist = amp_dist + amp_dist.T
     phs_dist = phs_dist + phs_dist.T
@@ -340,8 +352,9 @@ def elastic_depth(f, time, method="DP2", lam=0.0, parallel=True):
     return amp, phase
 
 
-def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None,
-                     return_dt_only=True):
+def elastic_distance(
+    f1, f2, time, method="DP2", lam=0.0, alpha=None, return_dt_only=True
+):
     """ "
     calculates the distances between function, where f1 is aligned to
     f2. In other words calculates the elastic distances
@@ -349,7 +362,7 @@ def elastic_distance(f1, f2, time, method="DP2", lam=0.0, alpha=None,
     :param f1: vector of size N
     :param f2: vector of size N
     :param time: vector of size N describing the sample points
-    :param method: method to apply optimization (default="DP2") 
+    :param method: method to apply optimization (default="DP2")
                    options are "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the elasticity (default = 0.0)
     :param alpha: makes alpha * dx + (1-alpha) * dy
@@ -468,7 +481,7 @@ def SqrtMeanInverse(gam):
 
 def SqrtMean(gam, parallel=False, cores=-1):
     """
-    calculates the srsf of warping functions with corresponding shooting 
+    calculates the srsf of warping functions with corresponding shooting
     vectors
 
     :param gam: numpy ndarray of shape (M,N) of M warping functions
@@ -478,9 +491,9 @@ def SqrtMean(gam, parallel=False, cores=-1):
 
     :rtype: 2 numpy ndarray and vector
     :return mu: Karcher mean psi function
-    :return gam_mu: vector of dim N which is the Karcher mean warping 
+    :return gam_mu: vector of dim N which is the Karcher mean warping
                     function
-    :return psi: numpy ndarray of shape (M,N) of M SRSF of the warping 
+    :return psi: numpy ndarray of shape (M,N) of M SRSF of the warping
                  functions
     :return vec: numpy ndarray of shape (M,N) of M shooting vectors
 
@@ -559,7 +572,7 @@ def inv_exp_map_sub(mu, psi):
 
 def SqrtMedian(gam):
     """
-    calculates the median srsf of warping functions with corresponding 
+    calculates the median srsf of warping functions with corresponding
     shooting vectors
 
     :param gam: numpy ndarray of shape (M,N) of M warping functions
@@ -567,9 +580,9 @@ def SqrtMedian(gam):
 
     :rtype: 2 numpy ndarray and vector
     :return gam_median: Karcher median warping function
-    :return psi_meidan: vector of dim N which is the Karcher median srsf 
+    :return psi_meidan: vector of dim N which is the Karcher median srsf
                         function
-    :return psi: numpy ndarray of shape (M,N) of M SRSF of the warping 
+    :return psi: numpy ndarray of shape (M,N) of M SRSF of the warping
                  functions
     :return vec: numpy ndarray of shape (M,N) of M shooting vectors
 
@@ -644,7 +657,7 @@ def cumtrapzmid(x, y, c, mid):
     fa[0:mid] = tmp[::-1]
 
     # case >= mid
-    fa[mid:a] = c + cumtrapz(y[mid - 1: a - 1], x[mid - 1: a - 1], initial=0)
+    fa[mid:a] = c + cumtrapz(y[mid - 1 : a - 1], x[mid - 1 : a - 1], initial=0)
 
     return fa
 
@@ -1150,7 +1163,7 @@ def mrdivide(a, b):
 
 
 def rlbfgs_dist(q1, q2):
-    q1 = q1.copy(order='C')
-    q2 = q2.copy(order='C')
+    q1 = q1.copy(order="C")
+    q2 = q2.copy(order="C")
     d = cr.rlbfgs_dist(q1, q2)
     return d
