@@ -1,168 +1,436 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>regression &#8212; fdasrsf 2.5.6 documentation</title>
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>regression &mdash; fdasrsf 2.3.12 documentation</title>
   
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  
-  
-  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/regression';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.4.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home"> fdasrsf
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                2.2
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../time_warping.html">Functional Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fPCA.html">Functional Principal Component Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../boxplots.html">Elastic Functional Boxplots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fPLS.html">Functional Principal Least Squares</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../regression.html">Elastic Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pcr_regression.html">Elastic Principal Component Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../elastic_glm_regression.html">Elastic GLM Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tolerance.html">Elastic Functional Tolerance Bounds</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../curve_statistics.html">Curve Registration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../geodesic.html">SRVF Geodesic Computation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utility_functions.html">Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../curve_functions.html">Curve Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../umap_metric.html">UMAP EFDA Metrics</a></li>
-</ul>
-
-            
-          
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">fdasrsf</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="index.html">Module code</a> &raquo;</li>
-        
-      <li>regression</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-      </li>
-    
-  </ul>
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
 
   
-  <hr/>
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.6 documentation - Home"/>
+    <script>document.write(`<img src="../_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.6 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/fdasrsf" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/2964877" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/conda-forge/fdasrsf" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/3571983" class="icon-link-image" alt="Anaconda"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/fdasrsf" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/2964877" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/conda-forge/fdasrsf" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/3571983" class="icon-link-image" alt="Anaconda"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">regression</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <h1>Source code for regression</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Warping Invariant Regression using SRSF</span>
@@ -182,10 +450,10 @@
 
 
 <div class="viewcode-block" id="elastic_regression"><a class="viewcode-back" href="../regression.html#regression.elastic_regression">[docs]</a><span class="k">class</span> <span class="nc">elastic_regression</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides elastic regression for functional data using the</span>
 <span class="sd">    SRVF framework accounting for warping</span>
-<span class="sd">    </span>
+
 <span class="sd">    Usage:  obj = elastic_regression(f,y,time)</span>
 
 <span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -206,7 +474,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the elastic_regression class</span>
 <span class="sd">        :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
 <span class="sd">        :param y: response vector</span>
@@ -215,14 +483,14 @@
         <span class="n">a</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">a</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Columns of f and time must be equal&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Columns of f and time must be equal&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
 
 <div class="viewcode-block" id="elastic_regression.calc_model"><a class="viewcode-back" href="../regression.html#regression.elastic_regression.calc_model">[docs]</a>    <span class="k">def</span> <span class="nf">calc_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function identifies a regression model with phase-variability</span>
 <span class="sd">        using elastic pca</span>
 
@@ -232,7 +500,7 @@
 <span class="sd">        :param max_itr: maximum number of iterations (default 20)</span>
 <span class="sd">        :param cores: number of cores for parallel processing (default all)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-    
+
         <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -257,11 +525,11 @@
         <span class="n">Bdiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">Nb</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nb</span><span class="p">):</span>
             <span class="n">Bdiff</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">binsize</span><span class="p">),</span> <span class="n">binsize</span><span class="p">)</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">Bdiff</span> <span class="o">=</span> <span class="n">Bdiff</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
-        
+
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
@@ -273,20 +541,23 @@
             <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">+</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+                <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
+                <span class="p">)</span>
                 <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
 
             <span class="c1"># OLS using basis</span>
-            <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-                    <span class="n">Phi</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">jj</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">Phi</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">jj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
-            <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-                    <span class="n">R</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">Bdiff</span><span class="p">[:,</span> <span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">Bdiff</span><span class="p">[:,</span> <span class="n">jj</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">R</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">Bdiff</span><span class="p">[:,</span> <span class="n">ii</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">Bdiff</span><span class="p">[:,</span> <span class="n">jj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
             <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">Phi</span><span class="p">)</span>
             <span class="n">inv_xx</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
@@ -294,7 +565,7 @@
             <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv_xx</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span>
 
             <span class="n">alpha</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">beta</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
 
             <span class="c1"># compute the SSE</span>
@@ -307,14 +578,19 @@
             <span class="c1"># find gamma</span>
             <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">regression_warp</span><span class="p">)(</span><span class="n">beta</span><span class="p">,</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span>
+                    <span class="n">delayed</span><span class="p">(</span><span class="n">regression_warp</span><span class="p">)(</span>
+                        <span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">alpha</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
                 <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">gamma_new</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                    <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_warp</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
-                                                       <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="n">alpha</span><span class="p">)</span>
+                    <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_warp</span><span class="p">(</span>
+                        <span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="n">alpha</span>
+                    <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="n">gamma_new</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-5</span><span class="p">:</span>
                 <span class="k">break</span>
@@ -326,16 +602,26 @@
         <span class="c1"># Last Step with centering of gam</span>
         <span class="n">gamI</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">SqrtMeanInverse</span><span class="p">(</span><span class="n">gamma_new</span><span class="p">)</span>
         <span class="n">gamI_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">gamI</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                        <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">beta</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-            <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
-            <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
-            <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+            <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
+            <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamI_dev</span><span class="p">)</span>
+            <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamI</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">qn</span> <span class="o">=</span> <span class="n">qn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
@@ -348,10 +634,9 @@
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="elastic_regression.predict"><a class="viewcode-back" href="../regression.html#regression.elastic_regression.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newdata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function performs prediction on regression model on new data if available or current stored data in object</span>
-<span class="sd">        Usage:  obj.predict()</span>
-<span class="sd">                obj.predict(newdata)</span>
+<span class="sd">        Usage:  obj.predict(newdata)</span>
 
 <span class="sd">        :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)</span>
 <span class="sd">        :type newdata: dict</span>
@@ -363,26 +648,25 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">newdata</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-            
-            <span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;smooth&#39;</span><span class="p">])</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;f&quot;</span><span class="p">]</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
+
+            <span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;smooth&quot;</span><span class="p">])</span>
 
             <span class="n">n</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                 <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
                 <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span><span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">SSE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">SSE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span><span class="o">-</span><span class="n">yhat</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-            
+                <span class="bp">self</span><span class="o">.</span><span class="n">SSE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -390,22 +674,23 @@
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                 <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span>
+                <span class="p">)</span>
                 <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span><span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">SSE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">yhat</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SSE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
-        
+
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="elastic_logistic"><a class="viewcode-back" href="../regression.html#regression.elastic_logistic">[docs]</a><span class="k">class</span> <span class="nc">elastic_logistic</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides elastic logistic regression for functional data using the</span>
 <span class="sd">    SRVF framework accounting for warping</span>
-<span class="sd">    </span>
+
 <span class="sd">    Usage:  obj = elastic_logistic(f,y,time)</span>
 
 <span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -428,7 +713,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the elastic_regression class</span>
 <span class="sd">        :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
 <span class="sd">        :param y: response vector</span>
@@ -437,14 +722,14 @@
         <span class="n">a</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">a</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Columns of f and time must be equal&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Columns of f and time must be equal&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
 
 <div class="viewcode-block" id="elastic_logistic.calc_model"><a class="viewcode-back" href="../regression.html#regression.elastic_logistic.calc_model">[docs]</a>    <span class="k">def</span> <span class="nf">calc_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function identifies a regression model with phase-variability</span>
 <span class="sd">        using elastic pca</span>
 
@@ -454,7 +739,7 @@
 <span class="sd">        :param max_itr: maximum number of iterations (default 20)</span>
 <span class="sd">        :param cores: number of cores for parallel processing (default all)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-    
+
         <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -476,7 +761,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">B</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
-        
+
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
@@ -488,23 +773,33 @@
             <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">+</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+                <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
+                <span class="p">)</span>
                 <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
 
-            <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-                    <span class="n">Phi</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">jj</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">Phi</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">jj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
             <span class="c1"># Find alpha and beta using l_bfgs</span>
-            <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span><span class="n">logit_loss</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">fprime</span><span class="o">=</span><span class="n">logit_gradient</span><span class="p">,</span>
-                                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-                                <span class="n">maxfun</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">factr</span><span class="o">=</span><span class="mf">1e-30</span><span class="p">)</span>
+            <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
+                <span class="n">logit_loss</span><span class="p">,</span>
+                <span class="n">b0</span><span class="p">,</span>
+                <span class="n">fprime</span><span class="o">=</span><span class="n">logit_gradient</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+                <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span>
+                <span class="n">maxiter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                <span class="n">maxfun</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+                <span class="n">factr</span><span class="o">=</span><span class="mf">1e-30</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">beta</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
 
             <span class="c1"># compute the logistic loss</span>
@@ -513,13 +808,17 @@
             <span class="c1"># find gamma</span>
             <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">logistic_warp</span><span class="p">)(</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span>
+                    <span class="n">delayed</span><span class="p">(</span><span class="n">logistic_warp</span><span class="p">)(</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
                 <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">gamma_new</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                    <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">logistic_warp</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+                    <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">logistic_warp</span><span class="p">(</span>
+                        <span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+                    <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="n">gamma_new</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-5</span><span class="p">:</span>
                 <span class="k">break</span>
@@ -539,10 +838,9 @@
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="elastic_logistic.predict"><a class="viewcode-back" href="../regression.html#regression.elastic_logistic.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newdata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function performs prediction on regression model on new data if available or current stored data in object</span>
-<span class="sd">        Usage:  obj.predict()</span>
-<span class="sd">                obj.predict(newdata)</span>
+<span class="sd">        Usage:  obj.predict(newdata)</span>
 
 <span class="sd">        :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)</span>
 <span class="sd">        :type newdata: dict</span>
@@ -554,19 +852,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">newdata</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-            
-            <span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;smooth&#39;</span><span class="p">])</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;f&quot;</span><span class="p">]</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
+
+            <span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;smooth&quot;</span><span class="p">])</span>
 
             <span class="n">n</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                 <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
                 <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span><span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -582,8 +879,8 @@
                 <span class="n">FP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="n">TN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">FN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="o">+</span><span class="n">FN</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
-            
+                <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">FN</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
 
@@ -592,9 +889,10 @@
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                 <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span>
+                <span class="p">)</span>
                 <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span><span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">phi</span><span class="p">(</span><span class="n">yhat</span><span class="p">)</span>
@@ -604,7 +902,7 @@
             <span class="n">FP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">TN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">FN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="o">+</span><span class="n">FN</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">FN</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
 
@@ -612,10 +910,10 @@
 
 
 <div class="viewcode-block" id="elastic_mlogistic"><a class="viewcode-back" href="../regression.html#regression.elastic_mlogistic">[docs]</a><span class="k">class</span> <span class="nc">elastic_mlogistic</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides elastic multinomial logistic regression for functional data using the</span>
 <span class="sd">    SRVF framework accounting for warping</span>
-<span class="sd">    </span>
+
 <span class="sd">    Usage:  obj = elastic_mlogistic(f,y,time)</span>
 
 <span class="sd">    :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -638,7 +936,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the elastic_regression class</span>
 <span class="sd">        :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
 <span class="sd">        :param y: response vector</span>
@@ -649,7 +947,7 @@
         <span class="n">N</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">a</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Columns of f and time must be equal&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Columns of f and time must be equal&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
@@ -658,12 +956,14 @@
         <span class="n">m</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-            <span class="n">Y</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">Y</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
 
-<div class="viewcode-block" id="elastic_mlogistic.calc_model"><a class="viewcode-back" href="../regression.html#regression.elastic_mlogistic.calc_model">[docs]</a>    <span class="k">def</span> <span class="nf">calc_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">.01</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="elastic_mlogistic.calc_model"><a class="viewcode-back" href="../regression.html#regression.elastic_mlogistic.calc_model">[docs]</a>    <span class="k">def</span> <span class="nf">calc_model</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function identifies a regression model with phase-variability</span>
 <span class="sd">        using elastic pca</span>
 
@@ -673,7 +973,7 @@
 <span class="sd">        :param max_itr: maximum number of iterations (default 20)</span>
 <span class="sd">        :param cores: number of cores for parallel processing (default all)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-    
+
         <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -696,7 +996,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">B</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
-        
+
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
@@ -708,27 +1008,36 @@
             <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">+</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
+                <span class="n">fn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
+                <span class="p">)</span>
                 <span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="n">gamma</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">])</span>
 
-            
-            <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-                    <span class="n">Phi</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">jj</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">Phi</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">qn</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">jj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
             <span class="c1"># Find alpha and beta using l_bfgs</span>
-            <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="p">(</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span><span class="n">mlogit_loss</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">fprime</span><span class="o">=</span><span class="n">mlogit_gradient</span><span class="p">,</span>
-                                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">),</span> <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-                                <span class="n">maxfun</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">factr</span><span class="o">=</span><span class="mf">1e-30</span><span class="p">)</span>
+            <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="p">(</span><span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
+                <span class="n">mlogit_loss</span><span class="p">,</span>
+                <span class="n">b0</span><span class="p">,</span>
+                <span class="n">fprime</span><span class="o">=</span><span class="n">mlogit_gradient</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">),</span>
+                <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span>
+                <span class="n">maxiter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                <span class="n">maxfun</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+                <span class="n">factr</span><span class="o">=</span><span class="mf">1e-30</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">B0</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+            <span class="n">B0</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="n">B0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
-                <span class="n">beta</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B0</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">Nb</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
+                <span class="n">beta</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B0</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="n">Nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
 
             <span class="c1"># compute the logistic loss</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">LL</span><span class="p">[</span><span class="n">itr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mlogit_loss</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
@@ -736,14 +1045,24 @@
             <span class="c1"># find gamma</span>
             <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">mlogit_warp_grad</span><span class="p">)(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">cores</span><span class="p">)(</span>
+                    <span class="n">delayed</span><span class="p">(</span><span class="n">mlogit_warp_grad</span><span class="p">)(</span>
+                        <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
                 <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">gamma_new</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-                    <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">mlogit_warp_grad</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                                                        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="p">:],</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>
+                    <span class="n">gamma_new</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">mlogit_warp_grad</span><span class="p">(</span>
+                        <span class="n">alpha</span><span class="p">,</span>
+                        <span class="n">beta</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="p">:],</span>
+                        <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span>
+                    <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="n">gamma_new</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-5</span><span class="p">:</span>
                 <span class="k">break</span>
@@ -764,10 +1083,9 @@
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="elastic_mlogistic.predict"><a class="viewcode-back" href="../regression.html#regression.elastic_mlogistic.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newdata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function performs prediction on regression model on new data if available or current stored data in object</span>
-<span class="sd">        Usage:  obj.predict()</span>
-<span class="sd">                obj.predict(newdata)</span>
+<span class="sd">        Usage:  obj.predict(newdata)</span>
 
 <span class="sd">        :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)</span>
 <span class="sd">        :type newdata: dict</span>
@@ -779,45 +1097,48 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">newdata</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-            
-            <span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">newdata</span><span class="p">[</span><span class="s1">&#39;smooth&#39;</span><span class="p">])</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;f&quot;</span><span class="p">]</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
+
+            <span class="n">q</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">f_to_srsf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">newdata</span><span class="p">[</span><span class="s2">&quot;smooth&quot;</span><span class="p">])</span>
 
             <span class="n">n</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span>
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                 <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
                 <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
-                    <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span><span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[:,</span> <span class="n">jj</span><span class="p">],</span> <span class="n">time</span><span class="p">)</span>
+                    <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span>
+                        <span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[:,</span> <span class="n">jj</span><span class="p">],</span> <span class="n">time</span>
+                    <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">yhat</span> <span class="o">=</span> <span class="n">phi</span><span class="p">(</span><span class="n">yhat</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
                 <span class="n">yhat</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
-                <span class="n">y_labels</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">y_labels</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">yhat</span> <span class="o">=</span> <span class="n">phi</span><span class="p">(</span><span class="n">yhat</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
                 <span class="n">yhat</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
-                <span class="n">y_labels</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">y_labels</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="n">PC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-                <span class="n">cls_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">cls_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
                     <span class="n">cls_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cls_set</span><span class="p">,</span> <span class="n">ii</span><span class="p">)</span>
-                    <span class="n">TP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-                    <span class="n">FP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-                    <span class="n">TN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span> <span class="o">==</span>
-                            <span class="n">y_labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)])</span>
-                    <span class="n">FN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)],</span> <span class="n">cls_sub</span><span class="p">))</span>
-                    <span class="n">PC</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="o">+</span><span class="n">FN</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
-                
+                    <span class="n">TP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="n">FP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="n">TN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                        <span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span>
+                        <span class="o">==</span> <span class="n">y_labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span>
+                    <span class="p">)</span>
+                    <span class="n">FN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">cls_sub</span><span class="p">))</span>
+                    <span class="n">PC</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">FN</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span>
+
                 <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">y_labels</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">y_labels</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-            
+
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
 
@@ -827,26 +1148,31 @@
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                 <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">q_tmp</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">warp_q_gamma</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[:,</span> <span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span>
+                <span class="p">)</span>
                 <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
-                    <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span><span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[:,</span> <span class="n">jj</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+                    <span class="n">yhat</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">+</span> <span class="n">trapz</span><span class="p">(</span>
+                        <span class="n">q_tmp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[:,</span> <span class="n">jj</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
+                    <span class="p">)</span>
 
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">phi</span><span class="p">(</span><span class="n">yhat</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
             <span class="n">yhat</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
-            <span class="n">y_labels</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">y_labels</span> <span class="o">=</span> <span class="n">yhat</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">PC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-            <span class="n">cls_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">cls_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
                 <span class="n">cls_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cls_set</span><span class="p">,</span> <span class="n">ii</span><span class="p">)</span>
-                <span class="n">TP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-                <span class="n">FP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-                <span class="n">TN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span> <span class="o">==</span>
-                        <span class="n">y_labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)])</span>
-                <span class="n">FN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)],</span> <span class="n">cls_sub</span><span class="p">))</span>
-                <span class="n">PC</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="o">+</span><span class="n">FN</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
-            
+                <span class="n">TP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">FP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">TN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span>
+                    <span class="o">==</span> <span class="n">y_labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">y_labels</span><span class="p">,</span> <span class="n">cls_sub</span><span class="p">)]</span>
+                <span class="p">)</span>
+                <span class="n">FN</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">y_labels</span> <span class="o">==</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">cls_sub</span><span class="p">))</span>
+                <span class="n">PC</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">FN</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">PC</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">y_labels</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">y_labels</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">yhat</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_labels</span> <span class="o">=</span> <span class="n">y_labels</span>
@@ -856,7 +1182,7 @@
 
 <span class="c1"># helper functions for linear regression</span>
 <div class="viewcode-block" id="regression_warp"><a class="viewcode-back" href="../regression.html#regression.regression_warp">[docs]</a><span class="k">def</span> <span class="nf">regression_warp</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates optimal warping for function linear regression</span>
 
 <span class="sd">    :param beta: numpy ndarray of shape (M,N) of M functions with N samples</span>
@@ -882,15 +1208,14 @@
     <span class="k">elif</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">alpha</span> <span class="o">+</span> <span class="n">y_m</span><span class="p">:</span>
         <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">gam_m</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">zero_crossing</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">y_M</span><span class="p">,</span> <span class="n">y_m</span><span class="p">,</span>
-                                     <span class="n">gam_M</span><span class="p">,</span> <span class="n">gam_m</span><span class="p">)</span>
+        <span class="n">gamma_new</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">zero_crossing</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">y_M</span><span class="p">,</span> <span class="n">y_m</span><span class="p">,</span> <span class="n">gam_M</span><span class="p">,</span> <span class="n">gam_m</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">gamma_new</span></div>
 
 
 <span class="c1"># helper functions for logistic regression</span>
 <div class="viewcode-block" id="logistic_warp"><a class="viewcode-back" href="../regression.html#regression.logistic_warp">[docs]</a><span class="k">def</span> <span class="nf">logistic_warp</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates optimal warping for function logistic regression</span>
 
 <span class="sd">    :param beta: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -905,12 +1230,12 @@
     <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">y</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="n">gamma</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">optimum_reparam</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">gamma</span></div>
 
 
 <div class="viewcode-block" id="phi"><a class="viewcode-back" href="../regression.html#regression.phi">[docs]</a><span class="k">def</span> <span class="nf">phi</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates logistic function, returns 1 / (1 + exp(-t))</span>
 
 <span class="sd">    :param t: scalar</span>
@@ -922,14 +1247,14 @@
     <span class="c1"># logistic function, returns 1 / (1 + exp(-t))</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
     <span class="n">exp_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">])</span>
-    <span class="n">out</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">exp_t</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">exp_t</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">exp_t</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">exp_t</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span></div>
 
 
 <div class="viewcode-block" id="logit_loss"><a class="viewcode-back" href="../regression.html#regression.logit_loss">[docs]</a><span class="k">def</span> <span class="nf">logit_loss</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    logistic loss function, returns Sum{-log(phi(t))}</span>
 
 <span class="sd">    :param b: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -945,13 +1270,13 @@
     <span class="n">idx</span> <span class="o">=</span> <span class="n">yz</span> <span class="o">&gt;</span> <span class="mi">0</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yz</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">yz</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
-    <span class="n">out</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">yz</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">yz</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">])))</span>
+    <span class="n">out</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">yz</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">yz</span><span class="p">[</span><span class="o">~</span><span class="n">idx</span><span class="p">]))</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">out</span></div>
 
 
 <div class="viewcode-block" id="logit_gradient"><a class="viewcode-back" href="../regression.html#regression.logit_gradient">[docs]</a><span class="k">def</span> <span class="nf">logit_gradient</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates gradient of the logistic loss</span>
 
 <span class="sd">    :param b: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -970,7 +1295,7 @@
 
 
 <div class="viewcode-block" id="logit_hessian"><a class="viewcode-back" href="../regression.html#regression.logit_hessian">[docs]</a><span class="k">def</span> <span class="nf">logit_hessian</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates hessian of the logistic loss</span>
 
 <span class="sd">    :param s: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -992,9 +1317,10 @@
 
 
 <span class="c1"># helper functions for multinomial logistic regression</span>
-<div class="viewcode-block" id="mlogit_warp_grad"><a class="viewcode-back" href="../regression.html#regression.mlogit_warp_grad">[docs]</a><span class="k">def</span> <span class="nf">mlogit_warp_grad</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span>
-                     <span class="n">delta</span><span class="o">=</span><span class="mf">0.008</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="mlogit_warp_grad"><a class="viewcode-back" href="../regression.html#regression.mlogit_warp_grad">[docs]</a><span class="k">def</span> <span class="nf">mlogit_warp_grad</span><span class="p">(</span>
+    <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.008</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates optimal warping for functional multinomial logistic regression</span>
 
 <span class="sd">    :param alpha: scalar</span>
@@ -1012,17 +1338,23 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gam_old</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">mlogit_warp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span>
-                             <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">beta</span><span class="p">),</span>
-                             <span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q</span><span class="p">),</span>
-                             <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">max_itr</span><span class="p">,</span>
-                             <span class="n">tol</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span>
+    <span class="n">gam_old</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">mlogit_warp</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">beta</span><span class="p">),</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+        <span class="n">max_itr</span><span class="p">,</span>
+        <span class="n">tol</span><span class="p">,</span>
+        <span class="n">delta</span><span class="p">,</span>
+        <span class="n">display</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">gam_old</span></div>
 
 
 <div class="viewcode-block" id="mlogit_loss"><a class="viewcode-back" href="../regression.html#regression.mlogit_loss">[docs]</a><span class="k">def</span> <span class="nf">mlogit_loss</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates multinomial logistic loss (negative log-likelihood)</span>
 
 <span class="sd">    :param b: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -1050,7 +1382,7 @@
 
 
 <div class="viewcode-block" id="mlogit_gradient"><a class="viewcode-back" href="../regression.html#regression.mlogit_gradient">[docs]</a><span class="k">def</span> <span class="nf">mlogit_gradient</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    calculates gradient of the multinomial logistic loss</span>
 
 <span class="sd">    :param b: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -1080,43 +1412,74 @@
     <span class="k">return</span> <span class="n">grad</span></div>
 </pre></div>
 
-           </div>
-           
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2022, J. Derek Tucker
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
-        </div>
-      </div>
-
-    </section>
-
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
   
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
     
-   
+      © Copyright 2024, J. Derek Tucker.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
 
-</body>
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>

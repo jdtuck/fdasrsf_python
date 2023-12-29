@@ -19,7 +19,7 @@ class elastic_regression:
     """
     This class provides elastic regression for functional data using the
     SRVF framework accounting for warping
-    
+
     Usage:  obj = elastic_regression(f,y,time)
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
@@ -49,7 +49,7 @@ class elastic_regression:
         a = time.shape[0]
 
         if f.shape[0] != a:
-            raise Exception('Columns of f and time must be equal')
+            raise Exception("Columns of f and time must be equal")
 
         self.f = f
         self.y = y
@@ -66,7 +66,7 @@ class elastic_regression:
         :param max_itr: maximum number of iterations (default 20)
         :param cores: number of cores for parallel processing (default all)
         """
-    
+
         M = self.f.shape[0]
         N = self.f.shape[1]
 
@@ -91,11 +91,11 @@ class elastic_regression:
         Bdiff = np.zeros((M, Nb))
         for ii in range(0, Nb):
             Bdiff[:, ii] = np.gradient(np.gradient(B[:, ii], binsize), binsize)
-        
+
         self.Bdiff = Bdiff
 
         self.q = uf.f_to_srsf(self.f, self.time, smooth)
-        
+
         gamma = np.tile(np.linspace(0, 1, M), (N, 1))
         gamma = gamma.transpose()
 
@@ -107,20 +107,23 @@ class elastic_regression:
             fn = np.zeros((M, N))
             qn = np.zeros((M, N))
             for ii in range(0, N):
-                fn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamma[:, ii] +
-                                    self.time[0], self.time, self.f[:, ii])
+                fn[:, ii] = np.interp(
+                    (self.time[-1] - self.time[0]) * gamma[:, ii] + self.time[0],
+                    self.time,
+                    self.f[:, ii],
+                )
                 qn[:, ii] = uf.warp_q_gamma(self.time, self.q[:, ii], gamma[:, ii])
 
             # OLS using basis
-            Phi = np.ones((N, Nb+1))
+            Phi = np.ones((N, Nb + 1))
             for ii in range(0, N):
-                for jj in range(1, Nb+1):
-                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], self.time)
+                for jj in range(1, Nb + 1):
+                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj - 1], self.time)
 
-            R = np.zeros((Nb+1, Nb+1))
-            for ii in range(1, Nb+1):
-                for jj in range(1, Nb+1):
-                    R[ii, jj] = trapz(Bdiff[:, ii-1] * Bdiff[:, jj-1], self.time)
+            R = np.zeros((Nb + 1, Nb + 1))
+            for ii in range(1, Nb + 1):
+                for jj in range(1, Nb + 1):
+                    R[ii, jj] = trapz(Bdiff[:, ii - 1] * Bdiff[:, jj - 1], self.time)
 
             xx = np.dot(Phi.T, Phi)
             inv_xx = inv(xx + lam * R)
@@ -128,7 +131,7 @@ class elastic_regression:
             b = np.dot(inv_xx, xy)
 
             alpha = b[0]
-            beta = B.dot(b[1:Nb+1])
+            beta = B.dot(b[1 : Nb + 1])
             beta = beta.reshape(M)
 
             # compute the SSE
@@ -141,14 +144,19 @@ class elastic_regression:
             # find gamma
             gamma_new = np.zeros((M, N))
             if parallel:
-                out = Parallel(n_jobs=cores)(delayed(regression_warp)(beta,
-                                            self.time, self.q[:, n], self.y[n], alpha) for n in range(N))
+                out = Parallel(n_jobs=cores)(
+                    delayed(regression_warp)(
+                        beta, self.time, self.q[:, n], self.y[n], alpha
+                    )
+                    for n in range(N)
+                )
                 gamma_new = np.array(out)
                 gamma_new = gamma_new.transpose()
             else:
                 for ii in range(0, N):
-                    gamma_new[:, ii] = regression_warp(beta, self.time, self.q[:, ii],
-                                                       self.y[ii], alpha)
+                    gamma_new[:, ii] = regression_warp(
+                        beta, self.time, self.q[:, ii], self.y[ii], alpha
+                    )
 
             if norm(gamma - gamma_new) < 1e-5:
                 break
@@ -160,16 +168,26 @@ class elastic_regression:
         # Last Step with centering of gam
         gamI = uf.SqrtMeanInverse(gamma_new)
         gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-        beta = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], self.time,
-                        beta) * np.sqrt(gamI_dev)
+        beta = np.interp(
+            (self.time[-1] - self.time[0]) * gamI + self.time[0], self.time, beta
+        ) * np.sqrt(gamI_dev)
 
         for ii in range(0, N):
-            qn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0],
-                                self.time, qn[:, ii]) * np.sqrt(gamI_dev)
-            fn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0],
-                                self.time, fn[:, ii])
-            gamma[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0],
-                                    self.time, gamma_new[:, ii])
+            qn[:, ii] = np.interp(
+                (self.time[-1] - self.time[0]) * gamI + self.time[0],
+                self.time,
+                qn[:, ii],
+            ) * np.sqrt(gamI_dev)
+            fn[:, ii] = np.interp(
+                (self.time[-1] - self.time[0]) * gamI + self.time[0],
+                self.time,
+                fn[:, ii],
+            )
+            gamma[:, ii] = np.interp(
+                (self.time[-1] - self.time[0]) * gamI + self.time[0],
+                self.time,
+                gamma_new[:, ii],
+            )
 
         self.qn = qn
         self.fn = fn
@@ -184,8 +202,7 @@ class elastic_regression:
     def predict(self, newdata=None):
         """
         This function performs prediction on regression model on new data if available or current stored data in object
-        Usage:  obj.predict()
-                obj.predict(newdata)
+        Usage:  obj.predict(newdata)
 
         :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
@@ -197,26 +214,25 @@ class elastic_regression:
         """
 
         if newdata != None:
-            f = newdata['f']
-            time = newdata['time']
-            y = newdata['y']
-            
-            q = uf.f_to_srsf(f, time, newdata['smooth'])
+            f = newdata["f"]
+            time = newdata["time"]
+            y = newdata["y"]
+
+            q = uf.f_to_srsf(f, time, newdata["smooth"])
 
             n = f.shape[1]
             yhat = np.zeros(n)
             for ii in range(0, n):
                 diff = self.q - q[:, ii][:, np.newaxis]
-                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
-                q_tmp = uf.warp_q_gamma(time, q[:, ii],
-                                        self.gamma[:, dist.argmin()])
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
+                q_tmp = uf.warp_q_gamma(time, q[:, ii], self.gamma[:, dist.argmin()])
                 yhat[ii] = self.alpha + trapz(q_tmp * self.beta, time)
 
             if y is None:
                 self.SSE = np.nan
             else:
-                self.SSE = np.sum((y-yhat)**2)
-            
+                self.SSE = np.sum((y - yhat) ** 2)
+
             self.y_pred = yhat
 
         else:
@@ -224,14 +240,15 @@ class elastic_regression:
             yhat = np.zeros(n)
             for ii in range(0, n):
                 diff = self.q - self.q[:, ii][:, np.newaxis]
-                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
-                q_tmp = uf.warp_q_gamma(self.time, self.q[:, ii],
-                                        self.gamma[:, dist.argmin()])
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
+                q_tmp = uf.warp_q_gamma(
+                    self.time, self.q[:, ii], self.gamma[:, dist.argmin()]
+                )
                 yhat[ii] = self.alpha + trapz(q_tmp * self.beta, self.time)
 
-            self.SSE = np.sum((self.y-yhat)**2)
+            self.SSE = np.sum((self.y - yhat) ** 2)
             self.y_pred = yhat
-        
+
         return
 
 
@@ -239,7 +256,7 @@ class elastic_logistic:
     """
     This class provides elastic logistic regression for functional data using the
     SRVF framework accounting for warping
-    
+
     Usage:  obj = elastic_logistic(f,y,time)
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
@@ -271,7 +288,7 @@ class elastic_logistic:
         a = time.shape[0]
 
         if f.shape[0] != a:
-            raise Exception('Columns of f and time must be equal')
+            raise Exception("Columns of f and time must be equal")
 
         self.f = f
         self.y = y
@@ -288,7 +305,7 @@ class elastic_logistic:
         :param max_itr: maximum number of iterations (default 20)
         :param cores: number of cores for parallel processing (default all)
         """
-    
+
         M = self.f.shape[0]
         N = self.f.shape[1]
 
@@ -310,7 +327,7 @@ class elastic_logistic:
         self.B = B
 
         self.q = uf.f_to_srsf(self.f, self.time, smooth)
-        
+
         gamma = np.tile(np.linspace(0, 1, M), (N, 1))
         gamma = gamma.transpose()
 
@@ -322,23 +339,33 @@ class elastic_logistic:
             fn = np.zeros((M, N))
             qn = np.zeros((M, N))
             for ii in range(0, N):
-                fn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamma[:, ii] +
-                                    self.time[0], self.time, self.f[:, ii])
+                fn[:, ii] = np.interp(
+                    (self.time[-1] - self.time[0]) * gamma[:, ii] + self.time[0],
+                    self.time,
+                    self.f[:, ii],
+                )
                 qn[:, ii] = uf.warp_q_gamma(self.time, self.q[:, ii], gamma[:, ii])
 
-            Phi = np.ones((N, Nb+1))
+            Phi = np.ones((N, Nb + 1))
             for ii in range(0, N):
-                for jj in range(1, Nb+1):
-                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], self.time)
+                for jj in range(1, Nb + 1):
+                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj - 1], self.time)
 
             # Find alpha and beta using l_bfgs
-            b0 = np.zeros(Nb+1)
-            out = fmin_l_bfgs_b(logit_loss, b0, fprime=logit_gradient,
-                                args=(Phi, self.y), pgtol=1e-10, maxiter=200,
-                                maxfun=250, factr=1e-30)
+            b0 = np.zeros(Nb + 1)
+            out = fmin_l_bfgs_b(
+                logit_loss,
+                b0,
+                fprime=logit_gradient,
+                args=(Phi, self.y),
+                pgtol=1e-10,
+                maxiter=200,
+                maxfun=250,
+                factr=1e-30,
+            )
             b = out[0]
             alpha = b[0]
-            beta = B.dot(b[1:Nb+1])
+            beta = B.dot(b[1 : Nb + 1])
             beta = beta.reshape(M)
 
             # compute the logistic loss
@@ -347,13 +374,17 @@ class elastic_logistic:
             # find gamma
             gamma_new = np.zeros((M, N))
             if parallel:
-                out = Parallel(n_jobs=cores)(delayed(logistic_warp)(beta, self.time,
-                                            self.q[:, n], self.y[n]) for n in range(N))
+                out = Parallel(n_jobs=cores)(
+                    delayed(logistic_warp)(beta, self.time, self.q[:, n], self.y[n])
+                    for n in range(N)
+                )
                 gamma_new = np.array(out)
                 gamma_new = gamma_new.transpose()
             else:
                 for ii in range(0, N):
-                    gamma_new[:, ii] = logistic_warp(beta, self.time, self.q[:, ii], self.y[ii])
+                    gamma_new[:, ii] = logistic_warp(
+                        beta, self.time, self.q[:, ii], self.y[ii]
+                    )
 
             if norm(gamma - gamma_new) < 1e-5:
                 break
@@ -375,8 +406,7 @@ class elastic_logistic:
     def predict(self, newdata=None):
         """
         This function performs prediction on regression model on new data if available or current stored data in object
-        Usage:  obj.predict()
-                obj.predict(newdata)
+        Usage:  obj.predict(newdata)
 
         :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
@@ -388,19 +418,18 @@ class elastic_logistic:
         """
 
         if newdata != None:
-            f = newdata['f']
-            time = newdata['time']
-            y = newdata['y']
-            
-            q = uf.f_to_srsf(f, time, newdata['smooth'])
+            f = newdata["f"]
+            time = newdata["time"]
+            y = newdata["y"]
+
+            q = uf.f_to_srsf(f, time, newdata["smooth"])
 
             n = f.shape[1]
             yhat = np.zeros(n)
             for ii in range(0, n):
                 diff = self.q - q[:, ii][:, np.newaxis]
-                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
-                q_tmp = uf.warp_q_gamma(time, q[:, ii],
-                                        self.gamma[:, dist.argmin()])
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
+                q_tmp = uf.warp_q_gamma(time, q[:, ii], self.gamma[:, dist.argmin()])
                 yhat[ii] = self.alpha + trapz(q_tmp * self.beta, time)
 
             if y is None:
@@ -416,8 +445,8 @@ class elastic_logistic:
                 FP = sum(y[y_labels == -1] == 1)
                 TN = sum(y[y_labels == -1] == -1)
                 FN = sum(y[y_labels == 1] == -1)
-                self.PC = (TP+TN)/float(TP+FP+FN+TN)
-            
+                self.PC = (TP + TN) / float(TP + FP + FN + TN)
+
             self.y_pred = yhat
             self.y_labels = y_labels
 
@@ -426,9 +455,10 @@ class elastic_logistic:
             yhat = np.zeros(n)
             for ii in range(0, n):
                 diff = self.q - self.q[:, ii][:, np.newaxis]
-                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
-                q_tmp = uf.warp_q_gamma(self.time, self.q[:, ii],
-                                        self.gamma[:, dist.argmin()])
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
+                q_tmp = uf.warp_q_gamma(
+                    self.time, self.q[:, ii], self.gamma[:, dist.argmin()]
+                )
                 yhat[ii] = self.alpha + trapz(q_tmp * self.beta, self.time)
 
             yhat = phi(yhat)
@@ -438,7 +468,7 @@ class elastic_logistic:
             FP = sum(self.y[y_labels == -1] == 1)
             TN = sum(self.y[y_labels == -1] == -1)
             FN = sum(self.y[y_labels == 1] == -1)
-            self.PC = (TP+TN)/float(TP+FP+FN+TN)
+            self.PC = (TP + TN) / float(TP + FP + FN + TN)
             self.y_pred = yhat
             self.y_labels = y_labels
 
@@ -449,7 +479,7 @@ class elastic_mlogistic:
     """
     This class provides elastic multinomial logistic regression for functional data using the
     SRVF framework accounting for warping
-    
+
     Usage:  obj = elastic_mlogistic(f,y,time)
 
     :param f: numpy ndarray of shape (M,N) of N functions with M samples
@@ -483,7 +513,7 @@ class elastic_mlogistic:
         N = f.shape[1]
 
         if f.shape[0] != a:
-            raise Exception('Columns of f and time must be equal')
+            raise Exception("Columns of f and time must be equal")
 
         self.f = f
         self.y = y
@@ -492,11 +522,13 @@ class elastic_mlogistic:
         m = y.max()
         Y = np.zeros((N, m), dtype=int)
         for ii in range(0, N):
-            Y[ii, y[ii]-1] = 1
+            Y[ii, y[ii] - 1] = 1
         self.Y = Y
         self.time = time
 
-    def calc_model(self, B=None, lam=0, df=20, max_itr=20, delta=.01, cores=-1, smooth=False):
+    def calc_model(
+        self, B=None, lam=0, df=20, max_itr=20, delta=0.01, cores=-1, smooth=False
+    ):
         """
         This function identifies a regression model with phase-variability
         using elastic pca
@@ -507,7 +539,7 @@ class elastic_mlogistic:
         :param max_itr: maximum number of iterations (default 20)
         :param cores: number of cores for parallel processing (default all)
         """
-    
+
         M = self.f.shape[0]
         N = self.f.shape[1]
         m = self.y.max()
@@ -530,7 +562,7 @@ class elastic_mlogistic:
         self.B = B
 
         self.q = uf.f_to_srsf(self.f, self.time, smooth)
-        
+
         gamma = np.tile(np.linspace(0, 1, M), (N, 1))
         gamma = gamma.transpose()
 
@@ -542,27 +574,36 @@ class elastic_mlogistic:
             fn = np.zeros((M, N))
             qn = np.zeros((M, N))
             for ii in range(0, N):
-                fn[:, ii] = np.interp((self.time[-1] - self.time[0]) * gamma[:, ii] +
-                                    self.time[0], self.time, self.f[:, ii])
+                fn[:, ii] = np.interp(
+                    (self.time[-1] - self.time[0]) * gamma[:, ii] + self.time[0],
+                    self.time,
+                    self.f[:, ii],
+                )
                 qn[:, ii] = uf.warp_q_gamma(self.time, self.q[:, ii], gamma[:, ii])
 
-            
-            Phi = np.ones((N, Nb+1))
+            Phi = np.ones((N, Nb + 1))
             for ii in range(0, N):
-                for jj in range(1, Nb+1):
-                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj-1], self.time)
+                for jj in range(1, Nb + 1):
+                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj - 1], self.time)
 
             # Find alpha and beta using l_bfgs
-            b0 = np.zeros(m * (Nb+1))
-            out = fmin_l_bfgs_b(mlogit_loss, b0, fprime=mlogit_gradient,
-                                args=(Phi, self.Y), pgtol=1e-10, maxiter=200,
-                                maxfun=250, factr=1e-30)
+            b0 = np.zeros(m * (Nb + 1))
+            out = fmin_l_bfgs_b(
+                mlogit_loss,
+                b0,
+                fprime=mlogit_gradient,
+                args=(Phi, self.Y),
+                pgtol=1e-10,
+                maxiter=200,
+                maxfun=250,
+                factr=1e-30,
+            )
             b = out[0]
-            B0 = b.reshape(Nb+1, m)
+            B0 = b.reshape(Nb + 1, m)
             alpha = B0[0, :]
             beta = np.zeros((M, m))
             for i in range(0, m):
-                beta[:, i] = B.dot(B0[1:Nb+1, i])
+                beta[:, i] = B.dot(B0[1 : Nb + 1, i])
 
             # compute the logistic loss
             self.LL[itr - 1] = mlogit_loss(b, Phi, self.Y)
@@ -570,14 +611,24 @@ class elastic_mlogistic:
             # find gamma
             gamma_new = np.zeros((M, N))
             if parallel:
-                out = Parallel(n_jobs=cores)(delayed(mlogit_warp_grad)(alpha, beta,
-                                            self.time, self.q[:, n], self.Y[n, :], delta=delta) for n in range(N))
+                out = Parallel(n_jobs=cores)(
+                    delayed(mlogit_warp_grad)(
+                        alpha, beta, self.time, self.q[:, n], self.Y[n, :], delta=delta
+                    )
+                    for n in range(N)
+                )
                 gamma_new = np.array(out)
                 gamma_new = gamma_new.transpose()
             else:
                 for ii in range(0, N):
-                    gamma_new[:, ii] = mlogit_warp_grad(alpha, beta, self.time,
-                                                        self.q[:, ii], self.Y[ii, :], delta=delta)
+                    gamma_new[:, ii] = mlogit_warp_grad(
+                        alpha,
+                        beta,
+                        self.time,
+                        self.q[:, ii],
+                        self.Y[ii, :],
+                        delta=delta,
+                    )
 
             if norm(gamma - gamma_new) < 1e-5:
                 break
@@ -600,8 +651,7 @@ class elastic_mlogistic:
     def predict(self, newdata=None):
         """
         This function performs prediction on regression model on new data if available or current stored data in object
-        Usage:  obj.predict()
-                obj.predict(newdata)
+        Usage:  obj.predict(newdata)
 
         :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
@@ -613,45 +663,48 @@ class elastic_mlogistic:
         """
 
         if newdata != None:
-            f = newdata['f']
-            time = newdata['time']
-            y = newdata['y']
-            
-            q = uf.f_to_srsf(f, time, newdata['smooth'])
+            f = newdata["f"]
+            time = newdata["time"]
+            y = newdata["y"]
+
+            q = uf.f_to_srsf(f, time, newdata["smooth"])
 
             n = f.shape[1]
             m = self.n_classes
             yhat = np.zeros((n, m))
             for ii in range(0, n):
                 diff = self.q - q[:, ii][:, np.newaxis]
-                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
-                q_tmp = uf.warp_q_gamma(time, q[:, ii],
-                                        self.gamma[:, dist.argmin()])
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
+                q_tmp = uf.warp_q_gamma(time, q[:, ii], self.gamma[:, dist.argmin()])
                 for jj in range(0, m):
-                    yhat[ii, jj] = self.alpha[jj] + trapz(q_tmp * self.beta[:, jj], time)
+                    yhat[ii, jj] = self.alpha[jj] + trapz(
+                        q_tmp * self.beta[:, jj], time
+                    )
 
             if y is None:
                 yhat = phi(yhat.ravel())
                 yhat = yhat.reshape(n, m)
-                y_labels = yhat.argmax(axis=1)+1
+                y_labels = yhat.argmax(axis=1) + 1
                 self.PC = None
             else:
                 yhat = phi(yhat.ravel())
                 yhat = yhat.reshape(n, m)
-                y_labels = yhat.argmax(axis=1)+1
+                y_labels = yhat.argmax(axis=1) + 1
                 PC = np.zeros(m)
-                cls_set = np.arange(1, m+1)
+                cls_set = np.arange(1, m + 1)
                 for ii in range(0, m):
                     cls_sub = np.delete(cls_set, ii)
-                    TP = sum(y[y_labels == (ii+1)] == (ii+1))
-                    FP = sum(y[np.in1d(y_labels, cls_sub)] == (ii+1))
-                    TN = sum(y[np.in1d(y_labels, cls_sub)] ==
-                            y_labels[np.in1d(y_labels, cls_sub)])
-                    FN = sum(np.in1d(y[y_labels == (ii+1)], cls_sub))
-                    PC[ii] = (TP+TN)/float(TP+FP+FN+TN)
-                
+                    TP = sum(y[y_labels == (ii + 1)] == (ii + 1))
+                    FP = sum(y[np.in1d(y_labels, cls_sub)] == (ii + 1))
+                    TN = sum(
+                        y[np.in1d(y_labels, cls_sub)]
+                        == y_labels[np.in1d(y_labels, cls_sub)]
+                    )
+                    FN = sum(np.in1d(y[y_labels == (ii + 1)], cls_sub))
+                    PC[ii] = (TP + TN) / float(TP + FP + FN + TN)
+
                 self.PC = sum(y == y_labels) / float(y_labels.size)
-            
+
             self.y_pred = yhat
             self.y_labels = y_labels
 
@@ -661,26 +714,31 @@ class elastic_mlogistic:
             yhat = np.zeros((n, m))
             for ii in range(0, n):
                 diff = self.q - self.q[:, ii][:, np.newaxis]
-                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1. / 2)
-                q_tmp = uf.warp_q_gamma(self.time, self.q[:, ii],
-                                        self.gamma[:, dist.argmin()])
+                dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
+                q_tmp = uf.warp_q_gamma(
+                    self.time, self.q[:, ii], self.gamma[:, dist.argmin()]
+                )
                 for jj in range(0, m):
-                    yhat[ii, jj] = self.alpha[jj] + trapz(q_tmp * self.beta[:, jj], self.time)
+                    yhat[ii, jj] = self.alpha[jj] + trapz(
+                        q_tmp * self.beta[:, jj], self.time
+                    )
 
             yhat = phi(yhat.ravel())
             yhat = yhat.reshape(n, m)
-            y_labels = yhat.argmax(axis=1)+1
+            y_labels = yhat.argmax(axis=1) + 1
             PC = np.zeros(m)
-            cls_set = np.arange(1, m+1)
+            cls_set = np.arange(1, m + 1)
             for ii in range(0, m):
                 cls_sub = np.delete(cls_set, ii)
-                TP = sum(self.y[y_labels == (ii+1)] == (ii+1))
-                FP = sum(self.y[np.in1d(y_labels, cls_sub)] == (ii+1))
-                TN = sum(self.y[np.in1d(y_labels, cls_sub)] ==
-                        y_labels[np.in1d(y_labels, cls_sub)])
-                FN = sum(np.in1d(self.y[y_labels == (ii+1)], cls_sub))
-                PC[ii] = (TP+TN)/float(TP+FP+FN+TN)
-            
+                TP = sum(self.y[y_labels == (ii + 1)] == (ii + 1))
+                FP = sum(self.y[np.in1d(y_labels, cls_sub)] == (ii + 1))
+                TN = sum(
+                    self.y[np.in1d(y_labels, cls_sub)]
+                    == y_labels[np.in1d(y_labels, cls_sub)]
+                )
+                FN = sum(np.in1d(self.y[y_labels == (ii + 1)], cls_sub))
+                PC[ii] = (TP + TN) / float(TP + FP + FN + TN)
+
             self.PC = sum(self.y == y_labels) / float(y_labels.size)
             self.y_pred = yhat
             self.y_labels = y_labels
@@ -716,8 +774,7 @@ def regression_warp(beta, time, q, y, alpha):
     elif y < alpha + y_m:
         gamma_new = gam_m
     else:
-        gamma_new = uf.zero_crossing(y - alpha, q, beta, time, y_M, y_m,
-                                     gam_M, gam_m)
+        gamma_new = uf.zero_crossing(y - alpha, q, beta, time, y_M, y_m, gam_M, gam_m)
 
     return gamma_new
 
@@ -739,7 +796,7 @@ def logistic_warp(beta, time, q, y):
     if y == 1:
         gamma = uf.optimum_reparam(beta, time, q)
     elif y == -1:
-        gamma = uf.optimum_reparam(-1*beta, time, q)
+        gamma = uf.optimum_reparam(-1 * beta, time, q)
     return gamma
 
 
@@ -756,9 +813,9 @@ def phi(t):
     # logistic function, returns 1 / (1 + exp(-t))
     idx = t > 0
     out = np.empty(t.size, dtype=np.float)
-    out[idx] = 1. / (1 + np.exp(-t[idx]))
+    out[idx] = 1.0 / (1 + np.exp(-t[idx]))
     exp_t = np.exp(t[~idx])
-    out[~idx] = exp_t / (1. + exp_t)
+    out[~idx] = exp_t / (1.0 + exp_t)
     return out
 
 
@@ -779,7 +836,7 @@ def logit_loss(b, X, y):
     idx = yz > 0
     out = np.zeros_like(yz)
     out[idx] = np.log(1 + np.exp(-yz[idx]))
-    out[~idx] = (-yz[~idx] + np.log(1 + np.exp(yz[~idx])))
+    out[~idx] = -yz[~idx] + np.log(1 + np.exp(yz[~idx]))
     out = out.sum()
     return out
 
@@ -826,8 +883,9 @@ def logit_hessian(s, b, X, y):
 
 
 # helper functions for multinomial logistic regression
-def mlogit_warp_grad(alpha, beta, time, q, y, max_itr=8000, tol=1e-10,
-                     delta=0.008, display=0):
+def mlogit_warp_grad(
+    alpha, beta, time, q, y, max_itr=8000, tol=1e-10, delta=0.008, display=0
+):
     """
     calculates optimal warping for functional multinomial logistic regression
 
@@ -846,11 +904,17 @@ def mlogit_warp_grad(alpha, beta, time, q, y, max_itr=8000, tol=1e-10,
 
     """
 
-    gam_old = mw.mlogit_warp(np.ascontiguousarray(alpha),
-                             np.ascontiguousarray(beta),
-                             time, np.ascontiguousarray(q),
-                             np.ascontiguousarray(y, dtype=np.int32), max_itr,
-                             tol, delta, display)
+    gam_old = mw.mlogit_warp(
+        np.ascontiguousarray(alpha),
+        np.ascontiguousarray(beta),
+        time,
+        np.ascontiguousarray(q),
+        np.ascontiguousarray(y, dtype=np.int32),
+        max_itr,
+        tol,
+        delta,
+        display,
+    )
 
     return gam_old
 

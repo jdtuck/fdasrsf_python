@@ -1,106 +1,498 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utility Functions &mdash; fdasrsf 2.5.6 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Utility Functions &#8212; fdasrsf 2.5.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="_static/js/theme.js"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'utility_functions';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.4.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Curve Functions" href="curve_functions.html" />
-    <link rel="prev" title="SRVF Geodesic Computation" href="geodesic.html" /> 
-</head>
+    <link rel="prev" title="SRVF Geodesic Computation" href="geodesic.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
 
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.6 documentation - Home"/>
+    <script>document.write(`<img src="_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.6 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
           
           
-          <a href="index.html" class="icon icon-home">
-            fdasrsf
-          </a>
-              <div class="version">
-                2.5
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+          
+          
+          
+          
+          
+          
+          <a href="https://https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/fdasrsf" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/2964877" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/conda-forge/fdasrsf" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/3571983" class="icon-link-image" alt="Anaconda"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/fdasrsf" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/2964877" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/conda-forge/fdasrsf" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://avatars.githubusercontent.com/u/3571983" class="icon-link-image" alt="Anaconda"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="time_warping.html">Functional Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fPCA.html">Functional Principal Component Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="boxplots.html">Elastic Functional Boxplots</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="fPCA.html">Functional Principal Component Analysis</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="boxplots.html">Elastic Functional Boxplots</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="fPLS.html">Functional Principal Least Squares</a></li>
-<li class="toctree-l1"><a class="reference internal" href="regression.html">Elastic Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pcr_regression.html">Elastic Principal Component Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elastic_changepoint.html">Elastic Functional Changepoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elastic_glm_regression.html">Elastic GLM Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tolerance.html">Elastic Functional Tolerance Bounds</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kmeans.html">Elastic Functional Clustering</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="regression.html">Elastic Regression</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pcr_regression.html">Elastic Principal Component Regression</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="elastic_changepoint.html">Elastic Functional Changepoint</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="elastic_glm_regression.html">Elastic GLM Regression</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tolerance.html">Elastic Functional Tolerance Bounds</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="kmeans.html">Elastic Functional Clustering</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="image.html">Elastic Image Warping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="curve_statistics.html">Curve Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="geodesic.html">SRVF Geodesic Computation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Utility Functions</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="curve_functions.html">Curve Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="umap_metric.html">UMAP EFDA Metrics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="umap_metric.html">UMAP EFDA Metrics</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
 </ul>
-
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fdasrsf</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Utility Functions</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/utility_functions.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
+</li>
+</ul>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="api.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Utility Functions</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <a class="reference internal image-reference" href="_images/logo.png"><img alt="_images/logo.png" class="align-right" src="_images/logo.png" style="width: 200px;" /></a>
 <section id="module-utility_functions">
-<span id="utility-functions"></span><h1>Utility Functions<a class="headerlink" href="#module-utility_functions" title="Permalink to this heading"></a></h1>
+<span id="utility-functions"></span><h1>Utility Functions<a class="headerlink" href="#module-utility_functions" title="Permalink to this heading">#</a></h1>
 <p>Utility functions for SRSF Manipulations</p>
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.SqrtMean">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMean" title="Permalink to this definition"></a></dt>
-<dd><p>calculates the srsf of warping functions with corresponding shooting 
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMean" title="Permalink to this definition">#</a></dt>
+<dd><p>calculates the srsf of warping functions with corresponding shooting
 vectors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -118,11 +510,11 @@ with N samples</p></li>
 <dd class="field-odd"><p>Karcher mean psi function</p>
 </dd>
 <dt class="field-even">Return gam_mu<span class="colon">:</span></dt>
-<dd class="field-even"><p>vector of dim N which is the Karcher mean warping 
+<dd class="field-even"><p>vector of dim N which is the Karcher mean warping
 function</p>
 </dd>
 <dt class="field-odd">Return psi<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy ndarray of shape (M,N) of M SRSF of the warping 
+<dd class="field-odd"><p>numpy ndarray of shape (M,N) of M SRSF of the warping
 functions</p>
 </dd>
 <dt class="field-even">Return vec<span class="colon">:</span></dt>
@@ -133,7 +525,7 @@ functions</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.SqrtMeanInverse">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMeanInverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMeanInverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMeanInverse" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMeanInverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMeanInverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMeanInverse" title="Permalink to this definition">#</a></dt>
 <dd><p>finds the inverse of the mean of the set of the diffeomorphisms gamma</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -151,8 +543,8 @@ with M samples</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.SqrtMedian">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMedian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMedian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMedian" title="Permalink to this definition"></a></dt>
-<dd><p>calculates the median srsf of warping functions with corresponding 
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMedian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMedian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMedian" title="Permalink to this definition">#</a></dt>
+<dd><p>calculates the median srsf of warping functions with corresponding
 shooting vectors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -166,11 +558,11 @@ with N samples</p>
 <dd class="field-odd"><p>Karcher median warping function</p>
 </dd>
 <dt class="field-even">Return psi_meidan<span class="colon">:</span></dt>
-<dd class="field-even"><p>vector of dim N which is the Karcher median srsf 
+<dd class="field-even"><p>vector of dim N which is the Karcher median srsf
 function</p>
 </dd>
 <dt class="field-odd">Return psi<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy ndarray of shape (M,N) of M SRSF of the warping 
+<dd class="field-odd"><p>numpy ndarray of shape (M,N) of M SRSF of the warping
 functions</p>
 </dd>
 <dt class="field-even">Return vec<span class="colon">:</span></dt>
@@ -181,7 +573,7 @@ functions</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.cumtrapzmid">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">cumtrapzmid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#cumtrapzmid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.cumtrapzmid" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">cumtrapzmid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#cumtrapzmid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.cumtrapzmid" title="Permalink to this definition">#</a></dt>
 <dd><p>cumulative trapezoidal numerical integration taken from midpoint</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -203,7 +595,7 @@ functions</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.diffop">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">diffop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#diffop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.diffop" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">diffop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#diffop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.diffop" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a second order differential operator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -223,14 +615,14 @@ functions</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.elastic_depth">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.elastic_depth" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.elastic_depth" title="Permalink to this definition">#</a></dt>
 <dd><p>calculates the elastic depth between functions in matrix f</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – matrix of size MxN (M time points for N functions)</p></li>
 <li><p><strong>time</strong> – vector of size M describing the sample points</p></li>
-<li><p><strong>method</strong> – method to apply optimization (default=”DP2”) 
+<li><p><strong>method</strong> – method to apply optimization (default=”DP2”)
 options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 <li><p><strong>lam</strong> – controls the elasticity (default = 0.0)</p></li>
 </ul>
@@ -249,7 +641,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.elastic_distance">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dt_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">elastic_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dt_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#elastic_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.elastic_distance" title="Permalink to this definition">#</a></dt>
 <dd><p>”
 calculates the distances between function, where f1 is aligned to
 f2. In other words calculates the elastic distances</p>
@@ -259,7 +651,7 @@ f2. In other words calculates the elastic distances</p>
 <li><p><strong>f1</strong> – vector of size N</p></li>
 <li><p><strong>f2</strong> – vector of size N</p></li>
 <li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
-<li><p><strong>method</strong> – method to apply optimization (default=”DP2”) 
+<li><p><strong>method</strong> – method to apply optimization (default=”DP2”)
 options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 <li><p><strong>lam</strong> – controls the elasticity (default = 0.0)</p></li>
 <li><p><strong>alpha</strong> – makes alpha * dx + (1-alpha) * dy</p></li>
@@ -283,7 +675,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.f_K_fold">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">f_K_fold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_K_fold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.f_K_fold" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">f_K_fold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_K_fold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.f_K_fold" title="Permalink to this definition">#</a></dt>
 <dd><p>generates sample indices for K-fold cross validation</p>
 <p>:param Nobs number of observations
 :param K number of folds</p>
@@ -302,7 +694,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.f_to_srsf">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">f_to_srsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_to_srsf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.f_to_srsf" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">f_to_srsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#f_to_srsf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.f_to_srsf" title="Permalink to this definition">#</a></dt>
 <dd><p>converts f to a square-root slope function (SRSF)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -322,7 +714,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.geigen">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">geigen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Amat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cmat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#geigen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.geigen" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">geigen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Amat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cmat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#geigen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.geigen" title="Permalink to this definition">#</a></dt>
 <dd><p>generalized eigenvalue problem of the form</p>
 <p>max tr L’AM / sqrt(tr L’BL tr M’CM) w.r.t. L and M</p>
 <p>:param Amat numpy ndarray of shape (M,N)
@@ -346,7 +738,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.gradient_spline">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">gradient_spline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#gradient_spline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.gradient_spline" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">gradient_spline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#gradient_spline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.gradient_spline" title="Permalink to this definition">#</a></dt>
 <dd><p>This function takes the gradient of f using b-spline smoothing</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -373,7 +765,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.innerprod_q">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">innerprod_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#innerprod_q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.innerprod_q" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">innerprod_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#innerprod_q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.innerprod_q" title="Permalink to this definition">#</a></dt>
 <dd><p>calculates the innerproduct between two srsfs</p>
 <p>:param time vector descrbing time samples
 :param q1 vector of srsf 1
@@ -390,7 +782,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.invertGamma">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">invertGamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#invertGamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.invertGamma" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">invertGamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#invertGamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.invertGamma" title="Permalink to this definition">#</a></dt>
 <dd><p>finds the inverse of the diffeomorphism gamma</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -407,7 +799,7 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.optimum_reparam">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">optimum_reparam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'roughness'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">optimum_reparam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DP2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'roughness'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.optimum_reparam" title="Permalink to this definition">#</a></dt>
 <dd><p>calculates the warping to align srsf q2 to q1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -415,11 +807,11 @@ options are “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 <li><p><strong>q1</strong> – vector of size N or array of NxM samples of first SRSF</p></li>
 <li><p><strong>time</strong> – vector of size N describing the sample points</p></li>
 <li><p><strong>q2</strong> – vector of size N or array of NxM samples samples of second SRSF</p></li>
-<li><p><strong>method</strong> – method to apply optimization (default=”DP2”) options are 
+<li><p><strong>method</strong> – method to apply optimization (default=”DP2”) options are
 “DP”,”DP2”,”RBFGS”,”cRBFGS”</p></li>
 <li><p><strong>lam</strong> – controls the amount of elasticity (default = 0.0)</p></li>
-<li><p><strong>penalty</strong> – penalty type (default=”roughness”) options are “roughness”, 
-“l2gam”, “l2psi”, “geodesic”. Only roughness implemented 
+<li><p><strong>penalty</strong> – penalty type (default=”roughness”) options are “roughness”,
+“l2gam”, “l2psi”, “geodesic”. Only roughness implemented
 in all methods. To use others method needs to be “RBFGS”
 or “cRBFGS”</p></li>
 <li><p><strong>grid_dim</strong> – size of the grid, for the DP2 method only (default = 7)</p></li>
@@ -436,7 +828,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.optimum_reparam_pair">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">optimum_reparam_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.optimum_reparam_pair" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">optimum_reparam_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#optimum_reparam_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.optimum_reparam_pair" title="Permalink to this definition">#</a></dt>
 <dd><p>calculates the warping to align srsf pair q1 and q2 to q</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -459,7 +851,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.outlier_detection">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">outlier_detection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#outlier_detection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.outlier_detection" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">outlier_detection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#outlier_detection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.outlier_detection" title="Permalink to this definition">#</a></dt>
 <dd><p>calculates outlier’s using geodesic distances of the SRSFs from the median</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -478,7 +870,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.randomGamma">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">randomGamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#randomGamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.randomGamma" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">randomGamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#randomGamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.randomGamma" title="Permalink to this definition">#</a></dt>
 <dd><p>generates random warping functions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -495,7 +887,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.resamplefunction">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">resamplefunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#resamplefunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.resamplefunction" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">resamplefunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#resamplefunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.resamplefunction" title="Permalink to this definition">#</a></dt>
 <dd><p>resample function using n points</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -515,7 +907,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.rgam">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">rgam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_gam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#rgam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.rgam" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">rgam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_gam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#rgam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.rgam" title="Permalink to this definition">#</a></dt>
 <dd><p>Generates random warping functions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -532,7 +924,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.smooth_data">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">smooth_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#smooth_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.smooth_data" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">smooth_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#smooth_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.smooth_data" title="Permalink to this definition">#</a></dt>
 <dd><p>This function smooths a collection of functions using a box filter</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -552,7 +944,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.srsf_to_f">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">srsf_to_f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#srsf_to_f"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.srsf_to_f" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">srsf_to_f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#srsf_to_f"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.srsf_to_f" title="Permalink to this definition">#</a></dt>
 <dd><p>converts q (srsf) to a function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -573,7 +965,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.update_progress">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">update_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progress</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#update_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.update_progress" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">update_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progress</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#update_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.update_progress" title="Permalink to this definition">#</a></dt>
 <dd><p>This function creates a progress bar</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -584,7 +976,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.warp_f_gamma">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">warp_f_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_f_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.warp_f_gamma" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">warp_f_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_f_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.warp_f_gamma" title="Permalink to this definition">#</a></dt>
 <dd><p>warps a function f by gam</p>
 <p>:param time vector describing time samples
 :param q vector describing srsf
@@ -601,7 +993,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.warp_q_gamma">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">warp_q_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_q_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.warp_q_gamma" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">warp_q_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#warp_q_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.warp_q_gamma" title="Permalink to this definition">#</a></dt>
 <dd><p>warps a srsf q by gam</p>
 <p>:param time vector describing time samples
 :param q vector describing srsf
@@ -618,7 +1010,7 @@ or “cRBFGS”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.zero_crossing">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">zero_crossing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#zero_crossing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.zero_crossing" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">zero_crossing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#zero_crossing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.zero_crossing" title="Permalink to this definition">#</a></dt>
 <dd><p>finds zero-crossing of optimal gamma, gam = s*gmax + (1-s)*gmin
 from elastic regression model</p>
 <dl class="field-list simple">
@@ -646,34 +1038,121 @@ from elastic regression model</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="geodesic.html" class="btn btn-neutral float-left" title="SRVF Geodesic Computation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="curve_functions.html" class="btn btn-neutral float-right" title="Curve Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2023, J. Derek Tucker.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="geodesic.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SRVF Geodesic Computation</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="curve_functions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Curve Functions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-</body>
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/jdtuck/fdasrsf/edit/develop/docs/utility_functions.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/utility_functions.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, J. Derek Tucker.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>

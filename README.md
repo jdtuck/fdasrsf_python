@@ -35,13 +35,19 @@ The documentation is available at
 includes detailed information of the different modules, classes and methods of
 the package, along with several examples showing different functionalities.
 
+------------------------------------------------------------------------------
+
 ### Contributions
 All contributions are welcome. You can help this project be better by reporting issues, bugs, 
 or forking the repo and creating a pull request.
 
+------------------------------------------------------------------------------
+
 ### License
 The package is licensed under the BSD 3-Clause License. A copy of the
 [license](LICENSE.txt) can be found along with the code.
+
+------------------------------------------------------------------------------
 
 ### References
 See references below on methods implemented in this package, some of the papers can be

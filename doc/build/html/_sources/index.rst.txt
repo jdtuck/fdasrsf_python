@@ -16,26 +16,63 @@ using functional component analysis and regression.
 
 
 .. toctree::
-   :maxdepth: 3
-   :glob:
+   :maxdepth: 2
+   :titlesonly:
    
    user_guide.rst
-   time_warping.rst
-   fPCA.rst
-   boxplots.rst
-   fPLS.rst
-   regression.rst
-   pcr_regression.rst
-   elastic_changepoint.rst
-   elastic_glm_regression.rst
-   tolerance.rst
-   kmeans.rst
-   image.rst
-   curve_statistics.rst
-   geodesic.rst
-   utility_functions.rst
-   curve_functions.rst
-   umap_metric.rst
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+   
+   api.rst
+
+Installation
+=============
+Currently, *fdasrsf* is available in Python versions above 3.8, regardless of the
+platform.
+The stable version can be installed via
+`PyPI <https://pypi.org/project/fdasrsf/>`_:
+
+.. code-block:: bash
+
+   pip install fdasrsf
+
+It is also available from conda-forge:
+
+.. code-block:: bash
+
+    conda install -c conda-forge fdasrsf
+
+It is possible to install the latest version of the package, available in
+the develop branch, by cloning this repository and doing a manual installation.
+
+.. code-block:: bash
+
+   git clone https://github.com/jdtuck/fdasrsf_python.git
+   pip install ./fdasrsf_python
+
+
+In this type of installation make sure that your default Python version is
+currently supported, or change the python and pip commands by specifying a
+version, such as python3.8.
+
+How do I start?
+===============
+If you want a quick overview of the package, we recommend you to look at
+the example notebooks in the :doc:`Users Guide <user_guide>`
+
+Contributions
+=============
+All contributions are welcome. You can help this project grow in multiple ways,
+from creating an issue, reporting an improvement or a bug, to doing a
+repository fork and creating a pull request to the development branch.
+
+License
+=======
+The package is licensed under the BSD 3-Clause License. A copy of the
+`license <https://github.com/jdtuck/fdasrsf_python/LICENSE.txt>`_
+can be found along with the code or in the project page.
 
 References
 ==========

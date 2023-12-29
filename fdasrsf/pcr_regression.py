@@ -128,9 +128,8 @@ class elastic_pcr_regression:
         """
         This function performs prediction on regression model on new
         data if available or current stored data in object
-        Usage:  obj.predict()
-                obj.predict(newdata)
-
+        Usage:  obj.predict(newdata)
+                
         :param newdata: dict containing new data for prediction (needs
                         the keys below, if None predicts on training data)
         :type newdata: dict
@@ -272,7 +271,7 @@ class elastic_lpcr_regression:
     :param y: response vector of length N (-1/1)
     :param warp_data: fdawarp object of alignment
     :param pca: class dependent on fPCA method used object of fPCA
-    :param information
+    :param information:
     :param alpha: intercept
     :param b: coefficient vector
     :param Loss: logistic loss
@@ -372,9 +371,8 @@ class elastic_lpcr_regression:
     def predict(self, newdata=None):
         """
         This function performs prediction on regression model on new data if available or current stored data in object
-        Usage:  obj.predict()
-                obj.predict(newdata)
-
+        Usage:  obj.predict(newdata)
+                
         :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
         :param f: (M,N) matrix of functions
@@ -513,7 +511,7 @@ class elastic_mlpcr_regression:
     :param Y: coded label matrix
     :param warp_data: fdawarp object of alignment
     :param pca: class dependent on fPCA method used object of fPCA
-    :param information
+    :param information:
     :param alpha: intercept
     :param b: coefficient vector
     :param Loss: logistic loss
@@ -625,9 +623,8 @@ class elastic_mlpcr_regression:
     def predict(self, newdata=None):
         """
         This function performs prediction on regression model on new data if available or current stored data in object
-        Usage:  obj.predict()
-                obj.predict(newdata)
-
+        Usage:  obj.predict(newdata)
+                
         :param newdata: dict containing new data for prediction (needs the keys below, if None predicts on training data)
         :type newdata: dict
         :param f: (M,N) matrix of functions

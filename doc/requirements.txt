@@ -9,4 +9,4 @@ patsy
 tqdm
 nbsphinx
 findblas
-sphinx-rtd-theme
+pydata_sphinx_theme

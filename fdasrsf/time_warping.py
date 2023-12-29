@@ -31,7 +31,7 @@ class fdawarp:
     This class provides alignment methods for functional data using the SRVF framework
 
     Usage:  obj = fdawarp(f,t)
-    
+
     :param f: (M,N): matrix defining N functions of M samples
     :param time: time vector of length M
     :param fn: aligned functions
@@ -52,8 +52,8 @@ class fdawarp:
     :param ft: random warped functions
     :param qs: random aligned srvfs
     :param type: alignment type
-    :param mcmc: mcmc output if bayesian 
-    
+    :param mcmc: mcmc output if bayesian
+
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
     """
@@ -67,22 +67,32 @@ class fdawarp:
         a = time.shape[0]
 
         if f.shape[0] != a:
-            raise Exception('Columns of f and time must be equal')
+            raise Exception("Columns of f and time must be equal")
 
         self.f = f
         self.time = time
         self.rsamps = False
-    
-    def srsf_align(self, method="mean", omethod="DP2", center=True, 
-                   smoothdata=False, MaxItr=20, parallel=False, lam=0.0, 
-                   cores=-1, grid_dim=7, verbose=True):
+
+    def srsf_align(
+        self,
+        method="mean",
+        omethod="DP2",
+        center=True,
+        smoothdata=False,
+        MaxItr=20,
+        parallel=False,
+        lam=0.0,
+        cores=-1,
+        grid_dim=7,
+        verbose=True,
+    ):
         """
         This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
 
-        :param method: (string) warp calculate Karcher Mean or Median 
+        :param method: (string) warp calculate Karcher Mean or Median
                        (options = "mean" or "median") (default="mean")
-        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) 
+        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS)
                         (default = DP2)
         :param center: center warping functions (default = T)
         :param smoothdata: Smooth the data using a box filter (default = F)
@@ -90,7 +100,7 @@ class fdawarp:
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
-        :param grid_dim: size of the grid, for the DP2 method only 
+        :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
         :param verbose: print status output (default = T)
         :type lam: double
@@ -145,27 +155,39 @@ class fdawarp:
         mf = f[:, min_ind]
 
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
-                                    q[:, n], omethod, lam, grid_dim) for n in range(N))
+            out = Parallel(n_jobs=cores)(
+                delayed(uf.optimum_reparam)(
+                    mq, self.time, q[:, n], omethod, lam, grid_dim
+                )
+                for n in range(N)
+            )
             gam = np.array(out)
             gam = gam.transpose()
         else:
             gam = np.zeros((M, N))
             for k in range(0, N):
-                gam[:,  k] = uf.optimum_reparam(mq, self.time, q[:, k],
-                                                omethod, lam, grid_dim)
+                gam[:, k] = uf.optimum_reparam(
+                    mq, self.time, q[:, k], omethod, lam, grid_dim
+                )
 
         gamI = uf.SqrtMeanInverse(gam)
-        mf = np.interp((self.time[-1] - self.time[0]) * gamI + self.time[0], 
-                       self.time, mf)
+        mf = np.interp(
+            (self.time[-1] - self.time[0]) * gamI + self.time[0], self.time, mf
+        )
         mq = uf.f_to_srsf(mf, self.time)
 
         # Compute Karcher Mean
         if verbose:
             if method == 0:
-                print("Compute Karcher Mean of %d function in SRSF space with lam=%02f" % (N,lam))
+                print(
+                    "Compute Karcher Mean of %d function in SRSF space with lam=%02f"
+                    % (N, lam)
+                )
             if method == 1:
-                print("Compute Karcher Median of %d function in SRSF space with lam=%02f" % (N,lam))
+                print(
+                    "Compute Karcher Median of %d function in SRSF space with lam=%02f"
+                    % (N, lam)
+                )
 
         ds = np.repeat(0.0, MaxItr + 2)
         ds[0] = np.inf
@@ -173,8 +195,8 @@ class fdawarp:
         tmp = np.zeros((M, MaxItr + 2))
         tmp[:, 0] = mq
         mq = tmp
-        tmp = np.zeros((M, MaxItr+2))
-        tmp[:,0] = mf
+        tmp = np.zeros((M, MaxItr + 2))
+        tmp[:, 0] = mf
         mf = tmp
         tmp = np.zeros((M, N, MaxItr + 2))
         tmp[:, :, 0] = self.f
@@ -191,28 +213,35 @@ class fdawarp:
 
             # Matching Step
             if parallel:
-                out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r],
-                                             self.time, q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
+                out = Parallel(n_jobs=cores)(
+                    delayed(uf.optimum_reparam)(
+                        mq[:, r], self.time, q[:, n, 0], omethod, lam, grid_dim
+                    )
+                    for n in range(N)
+                )
                 gam = np.array(out)
                 gam = gam.transpose()
             else:
-                for k in range(0 ,N):
-                    gam[:, k] = uf.optimum_reparam(mq[:, r], self.time, 
-                                                   q[:, k, 0], omethod, lam, 
-                                                   grid_dim)
+                for k in range(0, N):
+                    gam[:, k] = uf.optimum_reparam(
+                        mq[:, r], self.time, q[:, k, 0], omethod, lam, grid_dim
+                    )
 
             gam_dev = np.zeros((M, N))
-            vtil = np.zeros((M,N))
+            vtil = np.zeros((M, N))
             dtil = np.zeros(N)
             for k in range(0, N):
-                f[:, k, r + 1] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
-                                        + self.time[0], self.time, f[:, k, 0])
+                f[:, k, r + 1] = np.interp(
+                    (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0],
+                    self.time,
+                    f[:, k, 0],
+                )
                 q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], self.time)
                 gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
                 v = q[:, k, r + 1] - mq[:, r]
-                d = np.sqrt(trapz(v*v, self.time))
-                vtil[:, k] = v/d
-                dtil[k] = 1.0/d
+                d = np.sqrt(trapz(v * v, self.time))
+                vtil[:, k] = v / d
+                dtil[k] = 1.0 / d
 
             mqt = mq[:, r]
             a = mqt.repeat(N)
@@ -241,14 +270,14 @@ class fdawarp:
 
                 # Minimization Step
                 # compute the mean of the matched function
-                stp = .3
-                vbar = vtil.sum(axis=1)*(1/dtil.sum())
-                qtemp = q[:, :, r + 1] 
-                ftemp = f[:, :, r + 1] 
-                mq[:, r + 1] = mq[:,r] + stp*vbar
+                stp = 0.3
+                vbar = vtil.sum(axis=1) * (1 / dtil.sum())
+                qtemp = q[:, :, r + 1]
+                ftemp = f[:, :, r + 1]
+                mq[:, r + 1] = mq[:, r] + stp * vbar
                 tmp = np.zeros(M)
                 tmp[1:] = cumtrapz(mq[:, r + 1] * np.abs(mq[:, r + 1]), self.time)
-                mf[:, r + 1] = np.median(f0[1, :])+tmp
+                mf[:, r + 1] = np.median(f0[1, :]) + tmp
 
                 qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
@@ -258,14 +287,19 @@ class fdawarp:
         # Last Step with centering of gam
         r += 1
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq[:, r], self.time,
-                q[:, n, 0], omethod, lam, grid_dim) for n in range(N))
+            out = Parallel(n_jobs=cores)(
+                delayed(uf.optimum_reparam)(
+                    mq[:, r], self.time, q[:, n, 0], omethod, lam, grid_dim
+                )
+                for n in range(N)
+            )
             gam = np.array(out)
             gam = gam.transpose()
         else:
             for k in range(0, N):
-                gam[:, k] = uf.optimum_reparam(mq[:, r], self.time, q[:, k, 0], omethod,
-                        lam, grid_dim)
+                gam[:, k] = uf.optimum_reparam(
+                    mq[:, r], self.time, q[:, k, 0], omethod, lam, grid_dim
+                )
 
         gam_dev = np.zeros((M, N))
         for k in range(0, N):
@@ -278,7 +312,9 @@ class fdawarp:
             mq[:, r + 1] = np.interp(time0, self.time, mq[:, r]) * np.sqrt(gamI_dev)
 
             for k in range(0, N):
-                q[:, k, r + 1] = np.interp(time0, self.time, q[:, k, r]) * np.sqrt(gamI_dev)
+                q[:, k, r + 1] = np.interp(time0, self.time, q[:, k, r]) * np.sqrt(
+                    gamI_dev
+                )
                 f[:, k, r + 1] = np.interp(time0, self.time, f[:, k, r])
                 gam[:, k] = np.interp(time0, self.time, gam[:, k])
         else:
@@ -308,8 +344,8 @@ class fdawarp:
             fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
         var_fgam = fgam.var(axis=1)
-        self.orig_var = trapz(std_f0 ** 2, self.time)
-        self.amp_var = trapz(std_fn ** 2, self.time)
+        self.orig_var = trapz(std_f0**2, self.time)
+        self.amp_var = trapz(std_fn**2, self.time)
         self.phase_var = trapz(var_fgam, self.time)
 
         return
@@ -317,16 +353,17 @@ class fdawarp:
     def plot(self):
         """
         plot functional alignment results
-        
+
         Usage: obj.plot()
         """
 
         M = self.f.shape[0]
         plot.f_plot(self.time, self.f, title="f Original Data")
 
-        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), self.gam,
-                              title="Warping Functions")
-        ax.set_aspect('equal')
+        fig, ax = plot.f_plot(
+            np.arange(0, M) / float(M - 1), self.gam, title="Warping Functions"
+        )
+        ax.set_aspect("equal")
 
         plot.f_plot(self.time, self.fn, title="Warped Data")
 
@@ -346,7 +383,7 @@ class fdawarp:
         plt.show()
 
         return
-    
+
     def gauss_model(self, n=1, sort_samples=False):
         """
         This function models the functional data using a Gaussian model
@@ -382,13 +419,16 @@ class fdawarp:
         # compute the correspondence to the original function domain
         fs = np.zeros((M, n))
         for k in range(0, n):
-            fs[:, k] = uf.cumtrapzmid(time, q_s[0:M, k] * np.abs(q_s[0:M, k]),
-                                      np.sign(q_s[M, k]) * (q_s[M, k] ** 2),
-                                      mididx)
+            fs[:, k] = uf.cumtrapzmid(
+                time,
+                q_s[0:M, k] * np.abs(q_s[0:M, k]),
+                np.sign(q_s[M, k]) * (q_s[M, k] ** 2),
+                mididx,
+            )
         fbar = fn.mean(axis=1)
 
         fsbar = fs.mean(axis=1)
-        err = np.transpose(np.tile(fbar-fsbar, (n, 1)))
+        err = np.transpose(np.tile(fbar - fsbar, (n, 1)))
         fs += err
 
         # random warping generation
@@ -417,25 +457,33 @@ class fdawarp:
             # combine x-variability and y-variability
             ft = np.zeros((M, n))
             for k in range(0, n):
-                ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) /
-                                     np.double(M - 1), fs[:, seq1[k]])
+                ft[:, k] = np.interp(
+                    gams[:, seq2[k]], np.arange(0, M) / np.double(M - 1), fs[:, seq1[k]]
+                )
                 tmp = np.isnan(ft[:, k])
                 while tmp.any():
                     rgam2 = uf.randomGamma(gam, 1)
-                    ft[:, k] = np.interp(gams[:, seq2[k]], np.arange(0, M) /
-                                        np.double(M - 1), uf.invertGamma(rgam2))
+                    ft[:, k] = np.interp(
+                        gams[:, seq2[k]],
+                        np.arange(0, M) / np.double(M - 1),
+                        uf.invertGamma(rgam2),
+                    )
         else:
             # combine x-variability and y-variability
             ft = np.zeros((M, n))
             for k in range(0, n):
-                ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
-                                     np.double(M - 1), fs[:, k])
+                ft[:, k] = np.interp(
+                    gams[:, k], np.arange(0, M) / np.double(M - 1), fs[:, k]
+                )
                 tmp = np.isnan(ft[:, k])
                 while tmp.any():
                     rgam2 = uf.randomGamma(gam, 1)
-                    ft[:, k] = np.interp(gams[:, k], np.arange(0, M) /
-                                         np.double(M - 1), uf.invertGamma(rgam2))
-     
+                    ft[:, k] = np.interp(
+                        gams[:, k],
+                        np.arange(0, M) / np.double(M - 1),
+                        uf.invertGamma(rgam2),
+                    )
+
         self.rsamps = True
         self.fs = fs
         self.gams = rgam
@@ -478,51 +526,63 @@ class fdawarp:
 
         # generate random samples
         vals = np.random.multivariate_normal(np.zeros(s.shape), np.diag(s), n)
-        
+
         tmp = np.matmul(U, np.transpose(vals))
-        qhat = np.tile(mqn.T, (n, 1)).T + tmp[0:M+1, :]
-        tmp = np.matmul(U, np.transpose(vals)/C)
-        vechat = tmp[(M+1):, :]
+        qhat = np.tile(mqn.T, (n, 1)).T + tmp[0 : M + 1, :]
+        tmp = np.matmul(U, np.transpose(vals) / C)
+        vechat = tmp[(M + 1) :, :]
         psihat = np.zeros((M, n))
         gamhat = np.zeros((M, n))
         for ii in range(n):
             psihat[:, ii] = geo.exp_map(mu_psi, vechat[:, ii])
-            gam_tmp = cumtrapz(psihat[:, ii]**2, np.linspace(0, 1, M), initial=0.0)
-            gamhat[:, ii] = (gam_tmp - gam_tmp.min())/(gam_tmp.max()-gam_tmp.min())
-        
+            gam_tmp = cumtrapz(psihat[:, ii] ** 2, np.linspace(0, 1, M), initial=0.0)
+            gamhat[:, ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
+
         ft = np.zeros((M, n))
         fhat = np.zeros((M, n))
         for ii in range(n):
-            fhat[:, ii] = uf.cumtrapzmid(time, qhat[0:M, ii]*np.fabs(qhat[0:M, ii]), np.sign(qhat[M,ii])*(qhat[M,ii]*qhat[M,ii]), mididx)
-            ft[:, ii] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat[:, ii], gamhat[:,ii])
+            fhat[:, ii] = uf.cumtrapzmid(
+                time,
+                qhat[0:M, ii] * np.fabs(qhat[0:M, ii]),
+                np.sign(qhat[M, ii]) * (qhat[M, ii] * qhat[M, ii]),
+                mididx,
+            )
+            ft[:, ii] = uf.warp_f_gamma(
+                np.linspace(0, 1, M), fhat[:, ii], gamhat[:, ii]
+            )
 
         self.rsamps = True
         self.fs = fhat
         self.gams = gamhat
         self.ft = ft
-        self.qs = qhat[0:M,:]
+        self.qs = qhat[0:M, :]
 
         return
 
-    def multiple_align_functions(self, mu, omethod="DP2", smoothdata=False,
-                                 parallel=False, lam=0.0, cores=-1, 
-                                 grid_dim=7):
+    def multiple_align_functions(
+        self,
+        mu,
+        omethod="DP2",
+        smoothdata=False,
+        parallel=False,
+        lam=0.0,
+        cores=-1,
+        grid_dim=7,
+    ):
         """
-        This function aligns a collection of functions using the elastic 
+        This function aligns a collection of functions using the elastic
         square-root slope (srsf) framework.
 
         Usage:  obj.multiple_align_functions(mu)
-                obj.multiple_align_functions(lambda)
-        obj.multiple_align_functions(lambda, ...)
-    
+
         :param mu: vector of function to align to
-        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) 
+        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS)
                         (default = DP2)
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param cores: number of cores for parallel (default = -1 (all))
-        :param grid_dim: size of the grid, for the DP2 method only 
+        :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
         :type lam: double
         :type smoothdata: bool
@@ -549,23 +609,31 @@ class fdawarp:
         mq = uf.f_to_srsf(mu, self.time)
 
         if parallel:
-            out = Parallel(n_jobs=cores)(delayed(uf.optimum_reparam)(mq, self.time,
-                                         q[:, n], omethod, lam, grid_dim) for n in range(N))
+            out = Parallel(n_jobs=cores)(
+                delayed(uf.optimum_reparam)(
+                    mq, self.time, q[:, n], omethod, lam, grid_dim
+                )
+                for n in range(N)
+            )
             gam = np.array(out)
             gam = gam.transpose()
         else:
             gam = np.zeros((M, N))
             for k in range(0, N):
-                gam[:, k] = uf.optimum_reparam(mq, self.time, q[:, k], omethod, 
-                                               lam, grid_dim)
+                gam[:, k] = uf.optimum_reparam(
+                    mq, self.time, q[:, k], omethod, lam, grid_dim
+                )
 
         self.gamI = uf.SqrtMeanInverse(gam)
 
         fn = np.zeros((M, N))
         qn = np.zeros((M, N))
         for k in range(0, N):
-            fn[:, k] = np.interp((self.time[-1] - self.time[0]) * gam[:, k]
-                                 + self.time[0], self.time, f[:, k])
+            fn[:, k] = np.interp(
+                (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0],
+                self.time,
+                f[:, k],
+            )
             qn[:, k] = uf.f_to_srsf(f[:, k], self.time)
 
         # Aligned data & stats
@@ -584,9 +652,9 @@ class fdawarp:
             fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
         var_fgam = fgam.var(axis=1)
-        self.orig_var = trapz(std_f0 ** 2, self.time)
-        self.amp_var = trapz(std_fn ** 2, self.time)
-        self.phase_var = trapz(var_fgam, self.time)            
+        self.orig_var = trapz(std_f0**2, self.time)
+        self.amp_var = trapz(std_fn**2, self.time)
+        self.phase_var = trapz(var_fgam, self.time)
 
         return
 
@@ -597,9 +665,9 @@ def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
         slope (srsf) framework.
 
     Usage:  out = pairwise_align_functions(f1, f2, time)
-            out = pairwise_align_functions(f1, f2, time, omethod, lam, 
+            out = pairwise_align_functions(f1, f2, time, omethod, lam,
                                            grid_dim)
-    
+
     :param f1: vector defining M samples of function 1
     :param f2: vector defining M samples of function 2
     :param time: time vector of length M
@@ -632,35 +700,32 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     subsequent exponential mapping to a tangent space. In the tangent space,
     the Z-mixture pCN algorithm is used to explore both local and global
     structure in the posterior distribution.
-   
+
     The Z-mixture pCN algorithm uses a mixture distribution for the proposal
     distribution, controlled by input parameter zpcn. The zpcn$betas must be
     between 0 and 1, and are the coefficients of the mixture components, with
     larger coefficients corresponding to larger shifts in parameter space. The
     zpcn["probs"] give the probability of each shift size.
-   
+
     Usage:  out = pairwise_align_bayes(f1i, f2i, time)
-            out = pairwise_align_bayes(f1i, f2i, time, mcmcopts)
-    
+
     :param f1i: vector defining M samples of function 1
     :param f2i: vector defining M samples of function 2
     :param time: time vector of length M
     :param mcmopts: dict of mcmc parameters
     :type mcmcopts: dict
-  
+
     default mcmc options:
     tmp = {"betas":np.array([0.5,0.5,0.005,0.0001]),"probs":np.array([0.1,0.1,0.7,0.1])}
-    mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2),
-                "alpha0":0.1, "beta0":0.1,"zpcn":tmp,"propvar":1,
-                "initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
-   
+    mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2), "alpha0":0.1, "beta0":0.1,"zpcn":tmp,"propvar":1, "initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
+
     :rtype collection containing
     :return f2_warped: aligned f2
     :return gamma: warping function
     :return g_coef: final g_coef
     :return psi: final psi
     :return sigma1: final sigma
-    
+
     if extrainfo
     :return accept: accept of psi samples
     :return betas_ind
@@ -672,54 +737,72 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     """
 
     if mcmcopts is None:
-        tmp = {"betas":np.array([0.5,0.5,0.005,0.0001]),"probs":np.array([0.1,0.1,0.7,0.1])}
-        mcmcopts = {"iter":2*(10**4) ,"burnin":np.minimum(5*(10**3),2*(10**4)//2),"alpha0":0.1,
-                    "beta0":0.1,"zpcn":tmp,"propvar":1,
-                    "initcoef":np.repeat(0,20), "npoints":200, "extrainfo":True}
+        tmp = {
+            "betas": np.array([0.5, 0.5, 0.005, 0.0001]),
+            "probs": np.array([0.1, 0.1, 0.7, 0.1]),
+        }
+        mcmcopts = {
+            "iter": 2 * (10**4),
+            "burnin": np.minimum(5 * (10**3), 2 * (10**4) // 2),
+            "alpha0": 0.1,
+            "beta0": 0.1,
+            "zpcn": tmp,
+            "propvar": 1,
+            "initcoef": np.repeat(0, 20),
+            "npoints": 200,
+            "extrainfo": True,
+        }
 
     if f1i.shape[0] != f2i.shape[0]:
-        raise Exception('Length of f1 and f2 must be equal')
+        raise Exception("Length of f1 and f2 must be equal")
 
     if f1i.shape[0] != time.shape[0]:
-        raise Exception('Length of f1 and time must be equal')
-    
+        raise Exception("Length of f1 and time must be equal")
+
     if mcmcopts["zpcn"]["betas"].shape[0] != mcmcopts["zpcn"]["probs"].shape[0]:
-        raise Exception('In zpcn, betas must equal length of probs')
+        raise Exception("In zpcn, betas must equal length of probs")
 
     if np.mod(mcmcopts["initcoef"].shape[0], 2) != 0:
-        raise Exception('Length of mcmcopts.initcoef must be even')
+        raise Exception("Length of mcmcopts.initcoef must be even")
 
     # Number of sig figs to report in gamma_mat
     iter = mcmcopts["iter"]
-    
+
     # parameter settings
     pw_sim_global_burnin = mcmcopts["burnin"]
-    valid_index = np.arange(pw_sim_global_burnin-1,iter)
-    pw_sim_global_Mg = mcmcopts["initcoef"].shape[0]//2
+    valid_index = np.arange(pw_sim_global_burnin - 1, iter)
+    pw_sim_global_Mg = mcmcopts["initcoef"].shape[0] // 2
     g_coef_ini = mcmcopts["initcoef"]
     numSimPoints = mcmcopts["npoints"]
-    pw_sim_global_domain_par = np.linspace(0,1,numSimPoints)
+    pw_sim_global_domain_par = np.linspace(0, 1, numSimPoints)
     g_basis = uf.basis_fourier(pw_sim_global_domain_par, pw_sim_global_Mg, 1)
     sigma1_ini = 1
     zpcn = mcmcopts["zpcn"]
-    pw_sim_global_sigma_g = mcmcopts["propvar"] 
+    pw_sim_global_sigma_g = mcmcopts["propvar"]
 
     def propose_g_coef(g_coef_curr):
         pCN_beta = zpcn["betas"]
         pCN_prob = zpcn["probs"]
-        probm = np.insert(np.cumsum(pCN_prob),0,0)
+        probm = np.insert(np.cumsum(pCN_prob), 0, 0)
         z = np.random.rand()
-        result = {"prop":g_coef_curr,"ind":1}
-        for i in range (0,pCN_beta.shape[0]):
-            if z <= probm[i+1] and z > probm[i]:
-                g_coef_new = normal(0, pw_sim_global_sigma_g / np.repeat(np.arange(1,pw_sim_global_Mg+1),2))
-                result["prop"] = np.sqrt(1-pCN_beta[i]**2) * g_coef_curr + pCN_beta[i] * g_coef_new
+        result = {"prop": g_coef_curr, "ind": 1}
+        for i in range(0, pCN_beta.shape[0]):
+            if z <= probm[i + 1] and z > probm[i]:
+                g_coef_new = normal(
+                    0,
+                    pw_sim_global_sigma_g
+                    / np.repeat(np.arange(1, pw_sim_global_Mg + 1), 2),
+                )
+                result["prop"] = (
+                    np.sqrt(1 - pCN_beta[i] ** 2) * g_coef_curr
+                    + pCN_beta[i] * g_coef_new
+                )
                 result["ind"] = i
 
         return result
 
     # normalize time to [0,1]
-    time = (time - time.min())/(time.max()-time.min())
+    time = (time - time.min()) / (time.max() - time.min())
     timet = np.linspace(0, 1, numSimPoints)
     f1 = uf.f_predictfunction(f1i, timet, 0)
     f2 = uf.f_predictfunction(f2i, timet, 0)
@@ -729,8 +812,7 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     q1i = uf.f_to_srsf(f1i, time)
     q2 = uf.f_to_srsf(f2, timet)
 
-    tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"], 0, 
-                                         g_coef_ini, g_basis))
+    tmp = uf.f_exp1(uf.f_basistofunction(g_basis["x"], 0, g_coef_ini, g_basis))
 
     if tmp.min() < 0:
         raise Exception("Invalid initial value of g")
@@ -746,14 +828,17 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     # init
     g_coef_curr = g_coef_ini
     sigma1_curr = sigma1_ini
-    SSE_curr = bf.f_SSEg_pw(uf.f_basistofunction(g_basis["x"], 0, 
-                                                 g_coef_ini, g_basis),
-                                                 q1, q2)
-    logl_curr = bf.f_logl_pw(uf.f_basistofunction(g_basis["x"], 0,
-                                                  g_coef_ini, g_basis),
-                                                  q1, q2, sigma1_ini**2,
-                                                  SSE_curr)
-    
+    SSE_curr = bf.f_SSEg_pw(
+        uf.f_basistofunction(g_basis["x"], 0, g_coef_ini, g_basis), q1, q2
+    )
+    logl_curr = bf.f_logl_pw(
+        uf.f_basistofunction(g_basis["x"], 0, g_coef_ini, g_basis),
+        q1,
+        q2,
+        sigma1_ini**2,
+        SSE_curr,
+    )
+
     g_coef[0, :] = g_coef_ini
     sigma1[0] = sigma1_ini
     SSE[0] = SSE_curr
@@ -762,16 +847,24 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     # update the chain for iter-1 times
     for m in tqdm(range(1, iter)):
         # update g
-        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = bf.f_updateg_pw(g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef)
-        
+        g_coef_curr, tmp, SSE_curr, accepti, zpcnInd = bf.f_updateg_pw(
+            g_coef_curr, g_basis, sigma1_curr**2, q1, q2, SSE_curr, propose_g_coef
+        )
+
         # update sigma1
-        newshape = q1.shape[0]/2 + mcmcopts["alpha0"]
-        newscale = 1/2 * SSE_curr + mcmcopts["beta0"]
-        sigma1_curr = np.sqrt(1/np.random.gamma(newshape,1/newscale))
-        logl_curr = bf.f_logl_pw(uf.f_basistofunction(g_basis["x"],0,g_coef_curr,g_basis), q1, q2, sigma1_curr**2, SSE_curr)
+        newshape = q1.shape[0] / 2 + mcmcopts["alpha0"]
+        newscale = 1 / 2 * SSE_curr + mcmcopts["beta0"]
+        sigma1_curr = np.sqrt(1 / np.random.gamma(newshape, 1 / newscale))
+        logl_curr = bf.f_logl_pw(
+            uf.f_basistofunction(g_basis["x"], 0, g_coef_curr, g_basis),
+            q1,
+            q2,
+            sigma1_curr**2,
+            SSE_curr,
+        )
 
         # save updates to results
-        g_coef[m,:] = g_coef_curr
+        g_coef[m, :] = g_coef_curr
         sigma1[m] = sigma1_curr
         SSE[m] = SSE_curr
         if mcmcopts["extrainfo"]:
@@ -780,17 +873,25 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
             accept_betas[m] = zpcnInd
 
     # calculate posterior mean of psi
-    pw_sim_est_psi_matrix = np.zeros((numSimPoints,valid_index.shape[0]))
-    for k in range(0,valid_index.shape[0]):
-        g_temp = uf.f_basistofunction(g_basis["x"],0,g_coef[valid_index[k],:],g_basis)
+    pw_sim_est_psi_matrix = np.zeros((numSimPoints, valid_index.shape[0]))
+    for k in range(0, valid_index.shape[0]):
+        g_temp = uf.f_basistofunction(
+            g_basis["x"], 0, g_coef[valid_index[k], :], g_basis
+        )
         psi_temp = uf.f_exp1(g_temp)
-        pw_sim_est_psi_matrix[:,k] = psi_temp
+        pw_sim_est_psi_matrix[:, k] = psi_temp
 
-    result_posterior_psi_simDomain = uf.f_psimean(pw_sim_global_domain_par, pw_sim_est_psi_matrix)
+    result_posterior_psi_simDomain = uf.f_psimean(
+        pw_sim_global_domain_par, pw_sim_est_psi_matrix
+    )
 
     # resample to same number of points as the input f1 and f2
-    interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, fill_value="extrapolate")
-    result_posterior_psi = interp(np.linspace(0,1,f1i.shape[0]))
+    interp = interp1d(
+        np.linspace(0, 1, result_posterior_psi_simDomain.shape[0]),
+        result_posterior_psi_simDomain,
+        fill_value="extrapolate",
+    )
+    result_posterior_psi = interp(np.linspace(0, 1, f1i.shape[0]))
 
     # transform posterior mean of psi to gamma
     result_posterior_gamma = uf.f_phiinv(result_posterior_psi)
@@ -800,67 +901,92 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
     f2_warped = uf.warp_f_gamma(time, f2i, result_posterior_gamma)
 
     if mcmcopts["extrainfo"]:
-        M,N = pw_sim_est_psi_matrix.shape
-        gamma_mat = np.zeros((time.shape[0],N))
+        M, N = pw_sim_est_psi_matrix.shape
+        gamma_mat = np.zeros((time.shape[0], N))
         one_v = np.ones(M)
         Dx = np.zeros(N)
         Dy = Dx
-        for ii in range(0,N):
-            interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), pw_sim_est_psi_matrix[:,ii], fill_value="extrapolate")
+        for ii in range(0, N):
+            interp = interp1d(
+                np.linspace(0, 1, result_posterior_psi_simDomain.shape[0]),
+                pw_sim_est_psi_matrix[:, ii],
+                fill_value="extrapolate",
+            )
             result_i = interp(time)
             tmp = uf.f_phiinv(result_i)
-            gamma_mat[:,ii] = uf.norm_gam(tmp)
-            v, theta = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
-            Dx[ii] = np.sqrt(trapz(v**2,pw_sim_global_domain_par))
-            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2,gamma_mat[:,ii])
-            Dy[ii] = np.sqrt(trapz((q1i-q2warp)**2,time))
+            gamma_mat[:, ii] = uf.norm_gam(tmp)
+            v, theta = geo.inv_exp_map(one_v, pw_sim_est_psi_matrix[:, ii])
+            Dx[ii] = np.sqrt(trapz(v**2, pw_sim_global_domain_par))
+            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par, q2, gamma_mat[:, ii])
+            Dy[ii] = np.sqrt(trapz((q1i - q2warp) ** 2, time))
 
         gamma_stats = uf.statsFun(gamma_mat)
 
-    
-    results_o = collections.namedtuple('align_bayes', ['f2_warped', 'gamma','g_coef', 'psi', 'sigma1', 'accept', 'betas_ind', 'logl', 'gamma_mat', 'gamma_stats', 'xdist', 'ydist'])
+    results_o = collections.namedtuple(
+        "align_bayes",
+        [
+            "f2_warped",
+            "gamma",
+            "g_coef",
+            "psi",
+            "sigma1",
+            "accept",
+            "betas_ind",
+            "logl",
+            "gamma_mat",
+            "gamma_stats",
+            "xdist",
+            "ydist",
+        ],
+    )
 
-    out = results_o(f2_warped, result_posterior_gamma, g_coef, result_posterior_psi, sigma1, accept[1:], accept_betas[1:], logl, gamma_mat, gamma_stats, Dx, Dy)
+    out = results_o(
+        f2_warped,
+        result_posterior_gamma,
+        g_coef,
+        result_posterior_psi,
+        sigma1,
+        accept[1:],
+        accept_betas[1:],
+        logl,
+        gamma_mat,
+        gamma_stats,
+        Dx,
+        Dy,
+    )
 
-    return(out)
+    return out
 
 
 def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     """
-    This function aligns two functions using Bayesian framework. It uses a 
-    hierarchical Bayesian framework assuming mearsurement error error It will 
-    align f2 to f1. It is based on mapping warping functions to a hypersphere, 
-    and a subsequent exponential mapping to a tangent space. In the tangent 
+    This function aligns two functions using Bayesian framework. It uses a
+    hierarchical Bayesian framework assuming mearsurement error error It will
+    align f2 to f1. It is based on mapping warping functions to a hypersphere,
+    and a subsequent exponential mapping to a tangent space. In the tangent
     space, the \infty-HMC algorithm is used to explore both local and global
     structure in the posterior distribution.
-   
+
     Usage:  out = pairwise_align_bayes_infHMC(f1i, f2i, time)
-            out = pairwise_align_bayes_infHMC(f1i, f2i, time, mcmcopts)
-    
+
     :param y1i: vector defining M samples of function 1
     :param y2i: vector defining M samples of function 2
     :param time: time vector of length M
     :param mcmopts: dict of mcmc parameters
     :type mcmcopts: dict
-  
+
     default mcmc options:
-    mcmcopts = {"iter":1*(10**4), "nchains":4, "vpriorvar":1, 
-                "burnin":np.minimum(5*(10**3),2*(10**4)//2),
-                "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
-                "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
-                "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
-                "sampfreq":1, "initcoef":np.repeat(0,20), "nbasis":10, 
-                "basis":'fourier', "extrainfo":True}
-    
+    mcmcopts = {"iter":1*(10**4), "nchains":4, "vpriorvar":1, "burnin":np.minimum(5*(10**3),2*(10**4)//2), "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1, "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001, "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1, "sampfreq":1, "initcoef":np.repeat(0,20), "nbasis":10, "basis":'fourier', "extrainfo":True}
+
     Basis can be 'fourier' or 'legendre'
-   
+
     :rtype collection containing
     :return f2_warped: aligned f2
     :return gamma: warping function
     :return v_coef: final v_coef
     :return psi: final psi
     :return sigma1: final sigma
-    
+
     if extrainfo
     :return theta_accept: accept of psi samples
     :return f2_accept: accept of f2 samples
@@ -874,198 +1000,297 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
     """
 
     if mcmcopts is None:
-        mcmcopts = {"iter":1*(10**4), "nchains":4 , "vpriorvar":1, 
-                    "burnin":np.minimum(5*(10**3),2*(10**4)//2),
-                    "alpha0":0.1, "beta0":0.1, "alpha":1, "beta":1,
-                    "h":0.01, "L":4, "f1propvar":0.0001, "f2propvar":0.0001,
-                    "L1propvar":0.3, "L2propvar":0.3, "npoints":200, "thin":1,
-                    "sampfreq":1, "initcoef":np.repeat(0,20), "nbasis":10, 
-                    "basis":'fourier', "extrainfo":True}
+        mcmcopts = {
+            "iter": 1 * (10**4),
+            "nchains": 4,
+            "vpriorvar": 1,
+            "burnin": np.minimum(5 * (10**3), 2 * (10**4) // 2),
+            "alpha0": 0.1,
+            "beta0": 0.1,
+            "alpha": 1,
+            "beta": 1,
+            "h": 0.01,
+            "L": 4,
+            "f1propvar": 0.0001,
+            "f2propvar": 0.0001,
+            "L1propvar": 0.3,
+            "L2propvar": 0.3,
+            "npoints": 200,
+            "thin": 1,
+            "sampfreq": 1,
+            "initcoef": np.repeat(0, 20),
+            "nbasis": 10,
+            "basis": "fourier",
+            "extrainfo": True,
+        }
 
     if y1i.shape[0] != y2i.shape[0]:
-        raise Exception('Length of f1 and f2 must be equal')
+        raise Exception("Length of f1 and f2 must be equal")
 
     if y1i.shape[0] != time.shape[0]:
-        raise Exception('Length of f1 and time must be equal')
+        raise Exception("Length of f1 and time must be equal")
 
     if np.mod(mcmcopts["initcoef"].shape[0], 2) != 0:
-        raise Exception('Length of mcmcopts.initcoef must be even')
-    
+        raise Exception("Length of mcmcopts.initcoef must be even")
+
     if np.mod(mcmcopts["nbasis"], 2) != 0:
-        raise Exception('Length of mcmcopts.nbasis must be even')
+        raise Exception("Length of mcmcopts.nbasis must be even")
 
     # set up random start points for more than 1 chain
     random_starts = np.zeros((mcmcopts["initcoef"].shape[0], mcmcopts["nchains"]))
     if mcmcopts["nchains"] > 1:
         for i in range(0, mcmcopts["nchains"]):
-            randcoef = -1 + (2)*rand(mcmcopts["initcoef"].shape[0])
+            randcoef = -1 + (2) * rand(mcmcopts["initcoef"].shape[0])
             random_starts[:, i] = randcoef
-    
+
     isparallel = True
     if mcmcopts["nchains"] == 1:
         isparallel = False
-    
+
     if isparallel:
         mcmcopts_p = []
         for i in range(0, mcmcopts["nchains"]):
             mcmcopts["initcoef"] = random_starts[:, i]
             mcmcopts_p.append(mcmcopts)
-    
+
     # run chains
     if isparallel:
-        chains = Parallel(n_jobs=-1)(delayed(run_mcmc)(y1i, y2i, time, 
-                               mcmcopts_p[n]) for n in range(mcmcopts["nchains"]))
+        chains = Parallel(n_jobs=-1)(
+            delayed(run_mcmc)(y1i, y2i, time, mcmcopts_p[n])
+            for n in range(mcmcopts["nchains"])
+        )
 
     else:
         chains = []
         chains1 = run_mcmc(y1i, y2i, time, mcmcopts)
         chains.append(chains1)
-    
+
     # combine outputs
-    Nsamples = chains[0]['f1'].shape[0]
-    M = chains[0]['f1'].shape[1]
-    f1 = np.zeros((Nsamples*mcmcopts["nchains"], M))
-    f2 = np.zeros((Nsamples*mcmcopts["nchains"], M))
+    Nsamples = chains[0]["f1"].shape[0]
+    M = chains[0]["f1"].shape[1]
+    f1 = np.zeros((Nsamples * mcmcopts["nchains"], M))
+    f2 = np.zeros((Nsamples * mcmcopts["nchains"], M))
     gamma = np.zeros((M, mcmcopts["nchains"]))
-    v_coef = np.zeros((Nsamples*mcmcopts["nchains"], chains[0]['v_coef'].shape[1]))
-    psi = np.zeros((M, Nsamples*mcmcopts["nchains"]))
-    sigma = np.zeros(Nsamples*mcmcopts["nchains"])
-    sigma1 = np.zeros(Nsamples*mcmcopts["nchains"])
-    sigma2 = np.zeros(Nsamples*mcmcopts["nchains"])
-    s1 = np.zeros(Nsamples*mcmcopts["nchains"])
-    s2 = np.zeros(Nsamples*mcmcopts["nchains"])
-    L1 = np.zeros(Nsamples*mcmcopts["nchains"])
-    L2 = np.zeros(Nsamples*mcmcopts["nchains"])
+    v_coef = np.zeros((Nsamples * mcmcopts["nchains"], chains[0]["v_coef"].shape[1]))
+    psi = np.zeros((M, Nsamples * mcmcopts["nchains"]))
+    sigma = np.zeros(Nsamples * mcmcopts["nchains"])
+    sigma1 = np.zeros(Nsamples * mcmcopts["nchains"])
+    sigma2 = np.zeros(Nsamples * mcmcopts["nchains"])
+    s1 = np.zeros(Nsamples * mcmcopts["nchains"])
+    s2 = np.zeros(Nsamples * mcmcopts["nchains"])
+    L1 = np.zeros(Nsamples * mcmcopts["nchains"])
+    L2 = np.zeros(Nsamples * mcmcopts["nchains"])
     f2_warped_mu = np.zeros((M, mcmcopts["nchains"]))
 
     if mcmcopts["extrainfo"]:
-        Nsamplesa = chains[0]['theta_accept'].shape[0]
-        theta_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
-        f1_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
-        f2_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
-        L1_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
-        L2_accept = np.zeros(Nsamplesa*mcmcopts["nchains"])
-        gamma_mat = np.zeros((M,Nsamplesa*mcmcopts["nchains"]))
-        SSE = np.zeros((Nsamplesa+1)*mcmcopts["nchains"])
-        logl = np.zeros((Nsamplesa+1)*mcmcopts["nchains"])
-        f2_warped = np.zeros((Nsamples*mcmcopts["nchains"], M))
-        phasedist = np.zeros(Nsamples*mcmcopts["nchains"])
-        ampdist = np.zeros(Nsamples*mcmcopts["nchains"])
+        Nsamplesa = chains[0]["theta_accept"].shape[0]
+        theta_accept = np.zeros(Nsamplesa * mcmcopts["nchains"])
+        f1_accept = np.zeros(Nsamplesa * mcmcopts["nchains"])
+        f2_accept = np.zeros(Nsamplesa * mcmcopts["nchains"])
+        L1_accept = np.zeros(Nsamplesa * mcmcopts["nchains"])
+        L2_accept = np.zeros(Nsamplesa * mcmcopts["nchains"])
+        gamma_mat = np.zeros((M, Nsamplesa * mcmcopts["nchains"]))
+        SSE = np.zeros((Nsamplesa + 1) * mcmcopts["nchains"])
+        logl = np.zeros((Nsamplesa + 1) * mcmcopts["nchains"])
+        f2_warped = np.zeros((Nsamples * mcmcopts["nchains"], M))
+        phasedist = np.zeros(Nsamples * mcmcopts["nchains"])
+        ampdist = np.zeros(Nsamples * mcmcopts["nchains"])
 
     for i in range(0, mcmcopts["nchains"]):
-        a = (i)*Nsamples
-        b = (i+1)*Nsamples
-        f1[a:b, :] = chains[i]['f1']
-        f2[a:b, :] = chains[i]['f2']
-        gamma[:, i] = chains[i]['gamma']
-        v_coef[a:b, :] = chains[i]['v_coef']
-        psi[:, i] = chains[i]['psi']
-        sigma[a:b] = chains[i]['sigma']
-        sigma1[a:b] = chains[i]['sigma1']
-        sigma2[a:b] = chains[i]['sigma2']
-        s1[a:b] = chains[i]['s1']
-        s2[a:b] = chains[i]['s2']
-        L1[a:b] = chains[i]['L1']
-        L2[a:b] = chains[i]['L2']
-        f2_warped_mu[:, i] = chains[i]['f2_warped_mu']
+        a = (i) * Nsamples
+        b = (i + 1) * Nsamples
+        f1[a:b, :] = chains[i]["f1"]
+        f2[a:b, :] = chains[i]["f2"]
+        gamma[:, i] = chains[i]["gamma"]
+        v_coef[a:b, :] = chains[i]["v_coef"]
+        psi[:, i] = chains[i]["psi"]
+        sigma[a:b] = chains[i]["sigma"]
+        sigma1[a:b] = chains[i]["sigma1"]
+        sigma2[a:b] = chains[i]["sigma2"]
+        s1[a:b] = chains[i]["s1"]
+        s2[a:b] = chains[i]["s2"]
+        L1[a:b] = chains[i]["L1"]
+        L2[a:b] = chains[i]["L2"]
+        f2_warped_mu[:, i] = chains[i]["f2_warped_mu"]
 
         if mcmcopts["extrainfo"]:
-            a1 = (i)*Nsamplesa
-            b1 = (i+1)*Nsamplesa
-            theta_accept[a1:b1] = chains[i]['theta_accept']
-            f1_accept[a1:b1] = chains[i]['f1_accept']
-            f2_accept[a1:b1] = chains[i]['f2_accept']
-            L1_accept[a1:b1] = chains[i]['L1_accept']
-            L2_accept[a1:b1] = chains[i]['L2_accept']
-            gamma_mat[:, a:b] = chains[i]['gamma_mat']
-            a1 = (i)*(Nsamplesa)
-            b1 = (i+1)*Nsamplesa
-            SSE[a1:b1] = chains[i]['SSE']
-            logl[a1:b1] = chains[i]['logl']
-            f2_warped[a:b, :] = chains[i]['f2_warped']
-            phasedist[a:b] = chains[i]['phasedist']
-            ampdist[a:b] = chains[i]['ampdist']
-    
+            a1 = (i) * Nsamplesa
+            b1 = (i + 1) * Nsamplesa
+            theta_accept[a1:b1] = chains[i]["theta_accept"]
+            f1_accept[a1:b1] = chains[i]["f1_accept"]
+            f2_accept[a1:b1] = chains[i]["f2_accept"]
+            L1_accept[a1:b1] = chains[i]["L1_accept"]
+            L2_accept[a1:b1] = chains[i]["L2_accept"]
+            gamma_mat[:, a:b] = chains[i]["gamma_mat"]
+            a1 = (i) * (Nsamplesa)
+            b1 = (i + 1) * Nsamplesa
+            SSE[a1:b1] = chains[i]["SSE"]
+            logl[a1:b1] = chains[i]["logl"]
+            f2_warped[a:b, :] = chains[i]["f2_warped"]
+            phasedist[a:b] = chains[i]["phasedist"]
+            ampdist[a:b] = chains[i]["ampdist"]
+
     # finding modes
     if mcmcopts["nchains"] > 1:
         Dx = np.zeros((mcmcopts["nchains"], mcmcopts["nchains"]))
-        time1 = np.linspace(0,1,gamma.shape[0])
+        time1 = np.linspace(0, 1, gamma.shape[0])
         binsize = np.diff(time1)
         binsize = binsize.mean()
         for i in range(0, mcmcopts["nchains"]):
-            for j in range(i+1,mcmcopts["nchains"]):
+            for j in range(i + 1, mcmcopts["nchains"]):
                 psi1 = np.sqrt(np.gradient(gamma[:, i], binsize))
                 psi2 = np.sqrt(np.gradient(gamma[:, j], binsize))
-                q1dotq2 = trapz(psi1*psi2, time1)
+                q1dotq2 = trapz(psi1 * psi2, time1)
                 if q1dotq2 > 1:
                     q1dotq2 = 1
                 elif q1dotq2 < -1:
                     q1dotq2 = -1
 
-                Dx[i,j] = np.real(np.arccos(q1dotq2))
-        
+                Dx[i, j] = np.real(np.arccos(q1dotq2))
+
         Dx = Dx + Dx.T
 
         # cluster modes
         y = squareform(Dx)
-        Z = linkage(y, method='complete')
+        Z = linkage(y, method="complete")
         cutoff = np.median(Dx)
-        T = fcluster(Z, cutoff, criterion='distance')
+        T = fcluster(Z, cutoff, criterion="distance")
         N = np.unique(T)
 
         # find mean and confidence region of cluster
         posterior_gamma_modes = np.zeros((M, N.shape[0]))
         posterior_gamma_modes_cr = np.zeros((M, 2, N.shape[0]))
-        for i in range(1, N.shape[0]+1):
+        for i in range(1, N.shape[0] + 1):
             idx = np.where(T == i)[0]
-            tmp = np.zeros((M, Nsamples*idx.shape[0]))
+            tmp = np.zeros((M, Nsamples * idx.shape[0]))
             for j in range(0, idx.shape[0]):
-                a = (j)*Nsamples
-                b = (j+1)*Nsamples
-                tmp[:, a:b] = chains[idx[j]]['gamma_mat']
+                a = (j) * Nsamples
+                b = (j + 1) * Nsamples
+                tmp[:, a:b] = chains[idx[j]]["gamma_mat"]
             mu, gam_mu, psi, vec = uf.SqrtMean(tmp)
-            posterior_gamma_modes[:, i-1] = gam_mu
-            posterior_gamma_modes_cr[:, :, i-1] = uf.statsFun(tmp)
-        
+            posterior_gamma_modes[:, i - 1] = gam_mu
+            posterior_gamma_modes_cr[:, :, i - 1] = uf.statsFun(tmp)
+
     # thining
-    f1 = f1[0::mcmcopts["thin"], :]
-    f2 = f2[0::mcmcopts["thin"], :]
-    v_coef = v_coef[0::mcmcopts["thin"], :]
-    sigma = sigma[0::mcmcopts["thin"]]
-    sigma1 = sigma1[0::mcmcopts["thin"]]
-    sigma2 = sigma2[0::mcmcopts["thin"]]
-    s1 = s1[0::mcmcopts["thin"]]
-    s2 = s2[0::mcmcopts["thin"]]
-    L1 = L1[0::mcmcopts["thin"]]
-    L2 = L2[0::mcmcopts["thin"]]
+    f1 = f1[0 :: mcmcopts["thin"], :]
+    f2 = f2[0 :: mcmcopts["thin"], :]
+    v_coef = v_coef[0 :: mcmcopts["thin"], :]
+    sigma = sigma[0 :: mcmcopts["thin"]]
+    sigma1 = sigma1[0 :: mcmcopts["thin"]]
+    sigma2 = sigma2[0 :: mcmcopts["thin"]]
+    s1 = s1[0 :: mcmcopts["thin"]]
+    s2 = s2[0 :: mcmcopts["thin"]]
+    L1 = L1[0 :: mcmcopts["thin"]]
+    L2 = L2[0 :: mcmcopts["thin"]]
 
     if mcmcopts["extrainfo"]:
-        theta_accept = theta_accept[0::mcmcopts["thin"]]
-        f1_accept = f1_accept[0::mcmcopts["thin"]]
-        f2_accept = f2_accept[0::mcmcopts["thin"]]
-        L1_accept = L1_accept[0::mcmcopts["thin"]]
-        L2_accept = L2_accept[0::mcmcopts["thin"]]
-        gamma_mat = gamma_mat[:, 0::mcmcopts["thin"]]
-        SSE = SSE[0::mcmcopts["thin"]]
-        logl = logl[0::mcmcopts["thin"]]
-        f2_warped = f2_warped[0::mcmcopts["thin"], :]
-        phasedist = phasedist[0::mcmcopts["thin"]]
-        ampdist = ampdist[0::mcmcopts["thin"]]
-
+        theta_accept = theta_accept[0 :: mcmcopts["thin"]]
+        f1_accept = f1_accept[0 :: mcmcopts["thin"]]
+        f2_accept = f2_accept[0 :: mcmcopts["thin"]]
+        L1_accept = L1_accept[0 :: mcmcopts["thin"]]
+        L2_accept = L2_accept[0 :: mcmcopts["thin"]]
+        gamma_mat = gamma_mat[:, 0 :: mcmcopts["thin"]]
+        SSE = SSE[0 :: mcmcopts["thin"]]
+        logl = logl[0 :: mcmcopts["thin"]]
+        f2_warped = f2_warped[0 :: mcmcopts["thin"], :]
+        phasedist = phasedist[0 :: mcmcopts["thin"]]
+        ampdist = ampdist[0 :: mcmcopts["thin"]]
 
     if mcmcopts["extrainfo"]:
-        results_o = collections.namedtuple('align_bayes_HMC', ['f1', 'f2', 'gamma', 'v_coef', 'psi', 'sigma', 'sigma1', 'sigma2', 's1', 's2', 'L1', 'L2', 'f2_warped_mu', 'theta_accept', 'f1_accept', 'f2_accept', 'L1_accept', 'L2_accept', 'gamma_mat', 'SSE', 'logl', 'f2_warped', 'phasedist', 'ampdist'])
+        results_o = collections.namedtuple(
+            "align_bayes_HMC",
+            [
+                "f1",
+                "f2",
+                "gamma",
+                "v_coef",
+                "psi",
+                "sigma",
+                "sigma1",
+                "sigma2",
+                "s1",
+                "s2",
+                "L1",
+                "L2",
+                "f2_warped_mu",
+                "theta_accept",
+                "f1_accept",
+                "f2_accept",
+                "L1_accept",
+                "L2_accept",
+                "gamma_mat",
+                "SSE",
+                "logl",
+                "f2_warped",
+                "phasedist",
+                "ampdist",
+            ],
+        )
 
-        out = results_o(f1, f2, gamma, v_coef, psi, sigma, sigma1, sigma2, s1, s2, L1, L2, f2_warped_mu,
-                        theta_accept, f1_accept, f2_accept, L1_accept, L2_accept, gamma_mat, SSE, logl,
-                        f2_warped, phasedist, ampdist)
+        out = results_o(
+            f1,
+            f2,
+            gamma,
+            v_coef,
+            psi,
+            sigma,
+            sigma1,
+            sigma2,
+            s1,
+            s2,
+            L1,
+            L2,
+            f2_warped_mu,
+            theta_accept,
+            f1_accept,
+            f2_accept,
+            L1_accept,
+            L2_accept,
+            gamma_mat,
+            SSE,
+            logl,
+            f2_warped,
+            phasedist,
+            ampdist,
+        )
 
     else:
-        results_o = collections.namedtuple('align_bayes_HMC', ['f1', 'f2', 'gamma', 'v_coef', 'psi', 'sigma', 'sigma1', 'sigma2', 's1', 's2', 'L1', 'L2', 'f2_warped_mu'])
+        results_o = collections.namedtuple(
+            "align_bayes_HMC",
+            [
+                "f1",
+                "f2",
+                "gamma",
+                "v_coef",
+                "psi",
+                "sigma",
+                "sigma1",
+                "sigma2",
+                "s1",
+                "s2",
+                "L1",
+                "L2",
+                "f2_warped_mu",
+            ],
+        )
 
-        out = results_o(f1, f2, gamma, v_coef, psi, sigma, sigma1, sigma2, s1, s2, L1, L2, f2_warped_mu)
+        out = results_o(
+            f1,
+            f2,
+            gamma,
+            v_coef,
+            psi,
+            sigma,
+            sigma1,
+            sigma2,
+            s1,
+            s2,
+            L1,
+            L2,
+            f2_warped_mu,
+        )
 
-    return(out)
+    return out
 
 
 def run_mcmc(y1i, y2i, time, mcmcopts):
@@ -1074,29 +1299,29 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     T = time.shape[0]
 
     # normalize time to [0,1]
-    time = (time - time.min())/(time.max()-time.min())
+    time = (time - time.min()) / (time.max() - time.min())
 
     # parameter settings
     pw_sim_global_burnin = mcmcopts["burnin"]
-    valid_index = np.arange(pw_sim_global_burnin-1,iter)
+    valid_index = np.arange(pw_sim_global_burnin - 1, iter)
     ncoef = mcmcopts["initcoef"].shape[0]
     nbasis = mcmcopts["nbasis"]
-    pw_sim_global_Mv = ncoef//2
+    pw_sim_global_Mv = ncoef // 2
     numSimPoints = T
-    pw_sim_global_domain_par = np.linspace(0,1,numSimPoints)
+    pw_sim_global_domain_par = np.linspace(0, 1, numSimPoints)
     d_basis = uf.basis_fourierd(pw_sim_global_domain_par, nbasis)
-    if mcmcopts["basis"] == 'fourier':
+    if mcmcopts["basis"] == "fourier":
         v_basis = uf.basis_fourier(pw_sim_global_domain_par, pw_sim_global_Mv, 1)
-    elif mcmcopts["basis"] == 'legendre':
+    elif mcmcopts["basis"] == "legendre":
         v_basis = uf.basis_legendre(pw_sim_global_domain_par, pw_sim_global_Mv, 1)
     else:
-        raise Exception('Incorrect Basis Specified')
+        raise Exception("Incorrect Basis Specified")
     sigma_ini = 1
     v_priorvar = mcmcopts["vpriorvar"]
     v_coef_ini = mcmcopts["initcoef"]
-    D = pdist(time.reshape((time.shape[0],1)))
+    D = pdist(time.reshape((time.shape[0], 1)))
     Dmat = squareform(D)
-    C = v_priorvar / np.repeat(np.arange(1,pw_sim_global_Mv+1), 2)
+    C = v_priorvar / np.repeat(np.arange(1, pw_sim_global_Mv + 1), 2)
     cholC = cholesky(np.diag(C))
     h = mcmcopts["h"]
     L = mcmcopts["L"]
@@ -1110,40 +1335,50 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     sigma2_ini = 0.01
     f1_propvar = mcmcopts["f1propvar"]
     f2_propvar = mcmcopts["f2propvar"]
-    y1itmp = y1i[0::mcmcopts["sampfreq"]]
-    timetmp = time[0::mcmcopts["sampfreq"]]
-    y2itmp = y2i[0::mcmcopts["sampfreq"]]
+    y1itmp = y1i[0 :: mcmcopts["sampfreq"]]
+    timetmp = time[0 :: mcmcopts["sampfreq"]]
+    y2itmp = y2i[0 :: mcmcopts["sampfreq"]]
     M1 = timetmp.shape[0]
 
-    f1_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y1itmp.reshape((M1,1)), timetmp.reshape((M1,1)), 
-                                    l2=np.mean(timetmp.std()), noise_var=y1itmp.std()/np.sqrt(2))
-    f2_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y2itmp.reshape((M1,1)), timetmp.reshape((M1,1)), 
-                                    l2=np.mean(timetmp.std()), noise_var=y2itmp.std()/np.sqrt(2))
+    f1_curr, predvar = gp_posterior(
+        timetmp.reshape((M1, 1)),
+        y1itmp.reshape((M1, 1)),
+        timetmp.reshape((M1, 1)),
+        l2=np.mean(timetmp.std()),
+        noise_var=y1itmp.std() / np.sqrt(2),
+    )
+    f2_curr, predvar = gp_posterior(
+        timetmp.reshape((M1, 1)),
+        y2itmp.reshape((M1, 1)),
+        timetmp.reshape((M1, 1)),
+        l2=np.mean(timetmp.std()),
+        noise_var=y2itmp.std() / np.sqrt(2),
+    )
 
-    s1_ini = y1itmp.std()/np.sqrt(2)
-    s2_ini = y2itmp.std()/np.sqrt(2)
+    s1_ini = y1itmp.std() / np.sqrt(2)
+    s2_ini = y2itmp.std() / np.sqrt(2)
     L1_propvar = mcmcopts["L1propvar"]
     L2_propvar = mcmcopts["L2propvar"]
     L1_ini = np.mean(timetmp.std())
     L2_ini = np.mean(timetmp.std())
 
-    K_f1_corr = uf.exp2corr2(L1_ini,Dmat)+0.1 * np.eye(y1i.shape[0])
+    K_f1_corr = uf.exp2corr2(L1_ini, Dmat) + 0.1 * np.eye(y1i.shape[0])
     K_f1 = s1_ini * K_f1_corr
     K_f1 = inv(K_f1)
-    K_f2_corr = uf.exp2corr2(L2_ini,Dmat)+0.1 * np.eye(y2i.shape[0])
+    K_f2_corr = uf.exp2corr2(L2_ini, Dmat) + 0.1 * np.eye(y2i.shape[0])
     K_f2 = s2_ini * K_f2_corr
     K_f2 = inv(K_f2)
-    K_f1prop= uf.exp2corr(f1_propvar,L1_ini,Dmat)
-    K_f2prop= uf.exp2corr(f2_propvar,L2_ini,Dmat)
+    K_f1prop = uf.exp2corr(f1_propvar, L1_ini, Dmat)
+    K_f2prop = uf.exp2corr(f2_propvar, L2_ini, Dmat)
 
     # result vectors
-    v_coef = np.zeros((iter,v_coef_ini.shape[0]))
+    v_coef = np.zeros((iter, v_coef_ini.shape[0]))
     sigma = np.zeros(iter)
     sigma1 = np.zeros(iter)
     sigma2 = np.zeros(iter)
-    f1 = np.zeros((iter,time.shape[0]))
-    f2 = np.zeros((iter,time.shape[0]))
-    f2_warped = np.zeros((iter,time.shape[0]))
+    f1 = np.zeros((iter, time.shape[0]))
+    f2 = np.zeros((iter, time.shape[0]))
+    f2_warped = np.zeros((iter, time.shape[0]))
     s1 = np.zeros(iter)
     s2 = np.zeros(iter)
     L1 = np.zeros(iter)
@@ -1159,18 +1394,28 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
 
     # init
     v_coef_curr = v_coef_ini
-    v_curr = uf.f_basistofunction(v_basis["x"],0,v_coef_ini,v_basis)
+    v_curr = uf.f_basistofunction(v_basis["x"], 0, v_coef_ini, v_basis)
     sigma_curr = sigma_ini
     sigma1_curr = sigma1_ini
     sigma2_curr = sigma2_ini
     L1_curr = L1_ini
     L2_curr = L2_ini
 
-    f1_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y1itmp.reshape((M1,1)), time.reshape((T,1)), 
-                                    l2=np.mean(timetmp.std()), noise_var=y1itmp.std()/np.sqrt(2))
-    f2_curr, predvar = gp_posterior(timetmp.reshape((M1,1)), y2itmp.reshape((M1,1)), time.reshape((T,1)), 
-                                    l2=np.mean(timetmp.std()), noise_var=y2itmp.std()/np.sqrt(2))
-    
+    f1_curr, predvar = gp_posterior(
+        timetmp.reshape((M1, 1)),
+        y1itmp.reshape((M1, 1)),
+        time.reshape((T, 1)),
+        l2=np.mean(timetmp.std()),
+        noise_var=y1itmp.std() / np.sqrt(2),
+    )
+    f2_curr, predvar = gp_posterior(
+        timetmp.reshape((M1, 1)),
+        y2itmp.reshape((M1, 1)),
+        time.reshape((T, 1)),
+        l2=np.mean(timetmp.std()),
+        noise_var=y2itmp.std() / np.sqrt(2),
+    )
+
     f1_curr = f1_curr.reshape(T)
     f2_curr = f2_curr.reshape(T)
 
@@ -1181,10 +1426,10 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
     SSE_curr = bf.f_SSEv_pw(v_curr, q1_curr, q2_curr)
     logl_curr, SSEv = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
 
-    v_coef[0,:] = v_coef_ini
-    f1[0,:] = f1_curr
-    f2[0,:] = f2_curr
-    f2_warped[0,:] = f2_curr
+    v_coef[0, :] = v_coef_ini
+    f1[0, :] = f1_curr
+    f2[0, :] = f2_curr
+    f2_warped[0, :] = f2_curr
     sigma[0] = sigma_ini
     sigma1[0] = sigma1_ini
     sigma2[0] = sigma2_ini
@@ -1198,70 +1443,111 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
 
     n = f1_curr.shape[0]
 
-    nll, g, SSE_curr = bf.f_dlogl_pw(v_coef_curr, v_basis, d_basis, sigma_curr, q1_curr, q2_curr)
+    nll, g, SSE_curr = bf.f_dlogl_pw(
+        v_coef_curr, v_basis, d_basis, sigma_curr, q1_curr, q2_curr
+    )
 
     # update the chain for iter-1 times
     for m in range(1, iter):
-
         # update f1
-        f1_curr, q1_curr, f1_accept1 = bf.f_updatef1_pw(f1_curr,q1_curr, y1i, q2_curr,v_coef_curr, v_basis,
-                                                       SSE_curr,K_f1,K_f1prop,sigma_curr,np.sqrt(sigma1_curr))
+        f1_curr, q1_curr, f1_accept1 = bf.f_updatef1_pw(
+            f1_curr,
+            q1_curr,
+            y1i,
+            q2_curr,
+            v_coef_curr,
+            v_basis,
+            SSE_curr,
+            K_f1,
+            K_f1prop,
+            sigma_curr,
+            np.sqrt(sigma1_curr),
+        )
 
         # update f2
-        f2_curr, q2_curr, f2_accept1 = bf.f_updatef2_pw(f2_curr,q2_curr, y2i, q1_curr,v_coef_curr, v_basis,
-                                                       SSE_curr,K_f2,K_f2prop,sigma_curr,np.sqrt(sigma2_curr))
+        f2_curr, q2_curr, f2_accept1 = bf.f_updatef2_pw(
+            f2_curr,
+            q2_curr,
+            y2i,
+            q1_curr,
+            v_coef_curr,
+            v_basis,
+            SSE_curr,
+            K_f2,
+            K_f2prop,
+            sigma_curr,
+            np.sqrt(sigma2_curr),
+        )
 
         # update v
-        v_coef_curr, nll, g, SSE_curr, theta_accept1 = bf.f_updatev_pw(v_coef_curr, v_basis, np.sqrt(sigma_curr),
-                                                                      q1_curr, q2_curr,nll, g,SSE_curr,
-                                                                      propose_v_coef,d_basis,cholC,h,L)
-        
+        v_coef_curr, nll, g, SSE_curr, theta_accept1 = bf.f_updatev_pw(
+            v_coef_curr,
+            v_basis,
+            np.sqrt(sigma_curr),
+            q1_curr,
+            q2_curr,
+            nll,
+            g,
+            SSE_curr,
+            propose_v_coef,
+            d_basis,
+            cholC,
+            h,
+            L,
+        )
+
         # update sigma^2
-        newshape = q1_curr.shape[0]/2 + mcmcopts["alpha"]
-        newscale = 1/2 * SSE_curr + mcmcopts["beta"]
-        sigma_curr = 1/np.random.gamma(newshape, 1/newscale)
-        
+        newshape = q1_curr.shape[0] / 2 + mcmcopts["alpha"]
+        newscale = 1 / 2 * SSE_curr + mcmcopts["beta"]
+        sigma_curr = 1 / np.random.gamma(newshape, 1 / newscale)
+
         # update sigma1^2
-        newshape = n/2 + mcmcopts["alpha0"]
-        newscale = np.sum((y1i-f1_curr)**2)/2 + mcmcopts["beta0"]
-        sigma1_curr = 1/np.random.gamma(newshape, 1/newscale)
-        
+        newshape = n / 2 + mcmcopts["alpha0"]
+        newscale = np.sum((y1i - f1_curr) ** 2) / 2 + mcmcopts["beta0"]
+        sigma1_curr = 1 / np.random.gamma(newshape, 1 / newscale)
+
         # update sigma^2
-        newshape = n/2 + mcmcopts["alpha0"]
-        newscale = np.sum((y2i-f2_curr)**2)/2 + mcmcopts["beta0"]
-        sigma2_curr = 1/np.random.gamma(newshape, 1/newscale)
+        newshape = n / 2 + mcmcopts["alpha0"]
+        newscale = np.sum((y2i - f2_curr) ** 2) / 2 + mcmcopts["beta0"]
+        sigma2_curr = 1 / np.random.gamma(newshape, 1 / newscale)
 
         # update hyperparameters
         # update s1^2
-        newshape = n/2 + mcmcopts["alpha0"]
-        newscale = (uf.mrdivide(f1_curr,K_f1_corr) @ f1_curr.T)/2 + mcmcopts["beta0"]
-        s1_curr = 1/np.random.gamma(newshape, 1/newscale)
+        newshape = n / 2 + mcmcopts["alpha0"]
+        newscale = (uf.mrdivide(f1_curr, K_f1_corr) @ f1_curr.T) / 2 + mcmcopts["beta0"]
+        s1_curr = 1 / np.random.gamma(newshape, 1 / newscale)
 
         # update s2^2
-        newshape = n/2 + mcmcopts["alpha0"]
-        newscale = (uf.mrdivide(f2_curr,K_f2_corr) @ f2_curr.T)/2 + mcmcopts["beta0"]
-        s2_curr = 1/np.random.gamma(newshape, 1/newscale)
+        newshape = n / 2 + mcmcopts["alpha0"]
+        newscale = (uf.mrdivide(f2_curr, K_f2_corr) @ f2_curr.T) / 2 + mcmcopts["beta0"]
+        s2_curr = 1 / np.random.gamma(newshape, 1 / newscale)
 
         # update L1
-        L1_curr, L1_accept1 = bf.f_updatephi_pw(f1_curr,K_f1,s1_curr, L1_curr, L1_propvar, Dmat)
+        L1_curr, L1_accept1 = bf.f_updatephi_pw(
+            f1_curr, K_f1, s1_curr, L1_curr, L1_propvar, Dmat
+        )
 
         # update L2
-        L2_curr, L2_accept1 = bf.f_updatephi_pw(f2_curr,K_f2,s2_curr, L2_curr, L2_propvar, Dmat)
+        L2_curr, L2_accept1 = bf.f_updatephi_pw(
+            f2_curr, K_f2, s2_curr, L2_curr, L2_propvar, Dmat
+        )
 
-        K_f1_corr = uf.exp2corr2(L1_curr,Dmat)+0.1 * np.eye(y1i.shape[0])
+        K_f1_corr = uf.exp2corr2(L1_curr, Dmat) + 0.1 * np.eye(y1i.shape[0])
         K_f1 = s1_curr * K_f1_corr
         K_f1 = inv(K_f1)
-        K_f2_corr = uf.exp2corr2(L2_curr,Dmat)+0.1 * np.eye(y2i.shape[0])
+        K_f2_corr = uf.exp2corr2(L2_curr, Dmat) + 0.1 * np.eye(y2i.shape[0])
         K_f2 = s2_curr * K_f2_corr
         K_f2 = inv(K_f2)
 
         v_curr = uf.f_basistofunction(v_basis["x"], 0, v_coef_curr, v_basis)
-        logl_curr, SSEv1 = bf.f_vpostlogl_pw(v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr)
+        logl_curr, SSEv1 = bf.f_vpostlogl_pw(
+            v_curr, q1_curr, q2_curr, sigma_curr, SSE_curr
+        )
 
         # save updates to results
-        v_coef[m,:] = v_coef_curr
-        f1[m,:] = f1_curr
-        f2[m,:] = f2_curr
+        v_coef[m, :] = v_coef_curr
+        f1[m, :] = f1_curr
+        f2[m, :] = f2_curr
         sigma[m] = sigma_curr
         sigma1[m] = sigma1_curr
         sigma2[m] = sigma2_curr
@@ -1279,40 +1565,55 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
             L2_accept[m] = L2_accept1
 
     # calculate posterior mean of psi
-    pw_sim_est_psi_matrix = np.zeros((pw_sim_global_domain_par.shape[0],valid_index.shape[0]))
-    for k in range(0,valid_index.shape[0]):
-        v_temp = uf.f_basistofunction(v_basis["x"],0,v_coef[valid_index[k],:],v_basis)
+    pw_sim_est_psi_matrix = np.zeros(
+        (pw_sim_global_domain_par.shape[0], valid_index.shape[0])
+    )
+    for k in range(0, valid_index.shape[0]):
+        v_temp = uf.f_basistofunction(
+            v_basis["x"], 0, v_coef[valid_index[k], :], v_basis
+        )
         psi_temp = uf.f_exp1(v_temp)
-        pw_sim_est_psi_matrix[:,k] = psi_temp
+        pw_sim_est_psi_matrix[:, k] = psi_temp
 
-    result_posterior_psi_simDomain = uf.f_psimean(pw_sim_global_domain_par, pw_sim_est_psi_matrix)
+    result_posterior_psi_simDomain = uf.f_psimean(
+        pw_sim_global_domain_par, pw_sim_est_psi_matrix
+    )
 
     # resample to same number of points as the input f1 and f2
-    interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), result_posterior_psi_simDomain, fill_value="extrapolate")
-    result_posterior_psi = interp(np.linspace(0,1,y1i.shape[0]))
+    interp = interp1d(
+        np.linspace(0, 1, result_posterior_psi_simDomain.shape[0]),
+        result_posterior_psi_simDomain,
+        fill_value="extrapolate",
+    )
+    result_posterior_psi = interp(np.linspace(0, 1, y1i.shape[0]))
 
     # transform posterior mean of psi to gamma
     result_posterior_gamma = uf.f_phiinv(result_posterior_psi)
     result_posterior_gamma = uf.norm_gam(result_posterior_gamma)
 
     if mcmcopts["extrainfo"]:
-        M,N = pw_sim_est_psi_matrix.shape
-        gamma_mat = np.zeros((time.shape[0],N))
+        M, N = pw_sim_est_psi_matrix.shape
+        gamma_mat = np.zeros((time.shape[0], N))
         one_v = np.ones(M)
         Dx = np.zeros(N)
         Dy = Dx
-        for ii in range(0,N):
-            interp = interp1d(np.linspace(0,1,result_posterior_psi_simDomain.shape[0]), pw_sim_est_psi_matrix[:,ii], fill_value="extrapolate")
+        for ii in range(0, N):
+            interp = interp1d(
+                np.linspace(0, 1, result_posterior_psi_simDomain.shape[0]),
+                pw_sim_est_psi_matrix[:, ii],
+                fill_value="extrapolate",
+            )
             result_i = interp(time)
             tmp = uf.f_phiinv(result_i)
-            gamma_mat[:,ii] = uf.norm_gam(tmp)
-            v, theta = geo.inv_exp_map(one_v,pw_sim_est_psi_matrix[:,ii])
-            Dx[ii] = np.sqrt(trapz(v**2,pw_sim_global_domain_par))
-            q2warp = uf.warp_q_gamma(pw_sim_global_domain_par,q2_curr,gamma_mat[:,ii])
-            Dy[ii] = np.sqrt(trapz((q1_curr-q2warp)**2,time))
+            gamma_mat[:, ii] = uf.norm_gam(tmp)
+            v, theta = geo.inv_exp_map(one_v, pw_sim_est_psi_matrix[:, ii])
+            Dx[ii] = np.sqrt(trapz(v**2, pw_sim_global_domain_par))
+            q2warp = uf.warp_q_gamma(
+                pw_sim_global_domain_par, q2_curr, gamma_mat[:, ii]
+            )
+            Dy[ii] = np.sqrt(trapz((q1_curr - q2warp) ** 2, time))
 
         gamma_stats = uf.statsFun(gamma_mat)
-
 
     f1 = f1[valid_index, :]
     f2 = f2[valid_index, :]
@@ -1342,20 +1643,56 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
 
         f2_warped = np.zeros((valid_index.shape[0], result_posterior_gamma.shape[0]))
         for ii in range(0, valid_index.shape[0]):
-            f2_warped[ii,:] = uf.warp_f_gamma(time, f2[ii,:], gamma_mat[:,ii])
+            f2_warped[ii, :] = uf.warp_f_gamma(time, f2[ii, :], gamma_mat[:, ii])
 
     if mcmcopts["extrainfo"]:
-        out_dict = {"v_coef":v_coef, "sigma":sigma, "sigma1":sigma1, "sigma2":sigma2, "f1":f1,   
-                    "f2_warped_mu":f2_warped_mu, "f2":f2, "s1":s1, "gamma":gamma, "psi":psi, "s2":s2, 
-                    "L1":L1, "L2":L2, "logl":logl, "SSE":SSE, "theta_accept":theta_accept,"f1_accept":f1_accept, 
-                    "f2_accept":f2_accept, "L1_accept":L1_accept, "L2_accept":L2_accept, "phasedist":phasedist, 
-                    "ampdist":ampdist, "f2_warped":f2_warped, "gamma_mat":gamma_mat, "gamma_stats":gamma_stats}
+        out_dict = {
+            "v_coef": v_coef,
+            "sigma": sigma,
+            "sigma1": sigma1,
+            "sigma2": sigma2,
+            "f1": f1,
+            "f2_warped_mu": f2_warped_mu,
+            "f2": f2,
+            "s1": s1,
+            "gamma": gamma,
+            "psi": psi,
+            "s2": s2,
+            "L1": L1,
+            "L2": L2,
+            "logl": logl,
+            "SSE": SSE,
+            "theta_accept": theta_accept,
+            "f1_accept": f1_accept,
+            "f2_accept": f2_accept,
+            "L1_accept": L1_accept,
+            "L2_accept": L2_accept,
+            "phasedist": phasedist,
+            "ampdist": ampdist,
+            "f2_warped": f2_warped,
+            "gamma_mat": gamma_mat,
+            "gamma_stats": gamma_stats,
+        }
     else:
-        out_dict = {"v_coef":v_coef, "sigma":sigma, "sigma1":sigma1, "sigma2":sigma2, "f1":f1, 
-                    "f2_warped_mu":f2_warped_mu, "f2":f2, "gamma":gamma, "psi":psi, "s1":s1, "s2":s2, 
-                    "L1":L1, "L2":L2, "logl":logl, "SSE":SSE}
+        out_dict = {
+            "v_coef": v_coef,
+            "sigma": sigma,
+            "sigma1": sigma1,
+            "sigma2": sigma2,
+            "f1": f1,
+            "f2_warped_mu": f2_warped_mu,
+            "f2": f2,
+            "gamma": gamma,
+            "psi": psi,
+            "s1": s1,
+            "s2": s2,
+            "L1": L1,
+            "L2": L2,
+            "logl": logl,
+            "SSE": SSE,
+        }
 
-    return(out_dict)
+    return out_dict
 
 
 def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
@@ -1393,7 +1730,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     """
     lam = 0.0
     MaxItr = 50
-    coef = np.arange(-2., 3.)
+    coef = np.arange(-2.0, 3.0)
     Nstd = coef.shape[0]
     M = f.shape[0]
     N = f.shape[1]
@@ -1414,7 +1751,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     f, g, g2 = uf.gradient_spline(time, f, smoothdata)
     q = g / np.sqrt(abs(g) + eps)
 
-    print ("Initializing...")
+    print("Initializing...")
     mnq = q.mean(axis=1)
     a = mnq.repeat(N)
     d1 = a.reshape(M, N)
@@ -1422,8 +1759,9 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     dqq = np.sqrt(d.sum(axis=0))
     min_ind = dqq.argmin()
 
-    print("Aligning %d functions in SRVF space to %d fPCA components..."
-          % (N, num_comp))
+    print(
+        "Aligning %d functions in SRVF space to %d fPCA components..." % (N, num_comp)
+    )
     itr = 0
     mq = np.zeros((M, MaxItr + 1))
     mq[:, itr] = q[:, min_ind]
@@ -1458,12 +1796,13 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         # Matching Step
         if parallel:
             out = Parallel(n_jobs=cores)(
-                delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr],
-                                            "DP", lam) for n in range(N))
+                delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr], "DP", lam)
+                for n in range(N)
+            )
             gam_t = np.array(out)
             gam[:, :, itr] = gam_t.transpose()
         else:
-            gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], "DP",  lam)
+            gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], "DP", lam)
 
         for k in range(0, N):
             time0 = (time[-1] - time[0]) * gam[:, k, itr] + time[0]
@@ -1488,8 +1827,8 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     if itr >= MaxItr:
         itrf = MaxItr
     else:
-        itrf = itr+1
-    cost = cost[1:(itrf+1)]
+        itrf = itr + 1
+    cost = cost[1 : (itrf + 1)]
 
     # Aligned data & stats
     fn = fi[:, :, itrf]
@@ -1550,21 +1889,22 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
 
     if showplot:
         CBcdict = {
-            'Bl': (0, 0, 0),
-            'Or': (.9, .6, 0),
-            'SB': (.35, .7, .9),
-            'bG': (0, .6, .5),
-            'Ye': (.95, .9, .25),
-            'Bu': (0, .45, .7),
-            'Ve': (.8, .4, 0),
-            'rP': (.8, .6, .7),
+            "Bl": (0, 0, 0),
+            "Or": (0.9, 0.6, 0),
+            "SB": (0.35, 0.7, 0.9),
+            "bG": (0, 0.6, 0.5),
+            "Ye": (0.95, 0.9, 0.25),
+            "Bu": (0, 0.45, 0.7),
+            "Ve": (0.8, 0.4, 0),
+            "rP": (0.8, 0.6, 0.7),
         }
         cl = sorted(CBcdict.keys())
 
         # Align Plots
-        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), gamf,
-                              title="Warping Functions")
-        ax.set_aspect('equal')
+        fig, ax = plot.f_plot(
+            np.arange(0, M) / float(M - 1), gamf, title="Warping Functions"
+        )
+        ax.set_aspect("equal")
 
         plot.f_plot(time, fn, title="Warped Data")
 
@@ -1584,14 +1924,14 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
                 axt.plot(time, q_pca[0:M, l, k], color=CBcdict[cl[l]])
                 axt.hold(True)
 
-            axt.set_title('q domain: PD %d' % (k + 1))
+            axt.set_title("q domain: PD %d" % (k + 1))
             plot.rstyle(axt)
             axt = ax[1, k]
             for l in range(0, Nstd):
                 axt.plot(time, f_pca[:, l, k], color=CBcdict[cl[l]])
                 axt.hold(True)
 
-            axt.set_title('f domain: PD %d' % (k + 1))
+            axt.set_title("f domain: PD %d" % (k + 1))
             plot.rstyle(axt)
         fig.set_tight_layout(True)
 
@@ -1616,27 +1956,43 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         fgam[:, k] = np.interp(time0, time, fmean)
 
     var_fgam = fgam.var(axis=1)
-    orig_var = trapz(std_f0 ** 2, time)
-    amp_var = trapz(std_fn ** 2, time)
+    orig_var = trapz(std_f0**2, time)
+    amp_var = trapz(std_fn**2, time)
     phase_var = trapz(var_fgam, time)
 
     K = np.cov(fn)
 
     U, s, V = svd(K)
 
-    align_fPCAresults = collections.namedtuple('align_fPCA', ['fn', 'qn',
-                                               'q0', 'mqn', 'gam', 'q_pca',
-                                               'f_pca', 'latent', 'coef',
-                                               'U', 'orig_var', 'amp_var',
-                                               'phase_var', 'cost'])
+    align_fPCAresults = collections.namedtuple(
+        "align_fPCA",
+        [
+            "fn",
+            "qn",
+            "q0",
+            "mqn",
+            "gam",
+            "q_pca",
+            "f_pca",
+            "latent",
+            "coef",
+            "U",
+            "orig_var",
+            "amp_var",
+            "phase_var",
+            "cost",
+        ],
+    )
 
-    out = align_fPCAresults(fn, qn, q0, mqn, gamf, q_pca, f_pca, s, c,
-                            U, orig_var, amp_var, phase_var, cost)
+    out = align_fPCAresults(
+        fn, qn, q0, mqn, gamf, q_pca, f_pca, s, c, U, orig_var, amp_var, phase_var, cost
+    )
     return out
 
 
-def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
-               delta=0.01, max_itr=100):
+def align_fPLS(
+    f, g, time, comps=3, showplot=True, smoothdata=False, delta=0.01, max_itr=100
+):
     """
     This function aligns a collection of functions while performing
     principal least squares
@@ -1655,10 +2011,8 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
     :type time: np.ndarray
 
     :rtype: tuple of numpy array
-    :return fn: aligned functions - numpy ndarray of shape (M,N) of N
-    functions with M samples
-    :return gn: aligned functions - numpy ndarray of shape (M,N) of N
-    functions with M samples
+    :return fn: aligned functions - numpy ndarray of shape (M,N) of N functions with M samples
+    :return gn: aligned functions - numpy ndarray of shape (M,N) of N functions with M samples
     :return qfn: aligned srvfs - similar structure to fn
     :return qgn: aligned srvfs - similar structure to fn
     :return qf0: original srvf - similar structure to fn
@@ -1671,7 +2025,7 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
     :return cost: cost function value
 
     """
-    print ("Initializing...")
+    print("Initializing...")
     binsize = np.diff(time)
     binsize = binsize.mean()
     eps = np.finfo(np.double).eps
@@ -1700,8 +2054,9 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
     qfi[:, :, itr] = qf
     qgi = np.zeros((M, N, max_itr + 1))
     qgi[:, :, itr] = qg
-    wqf1, wqg1, alpha, values, costmp = pls_svd(time, qfi[:, :, itr],
-                                                qgi[:, :, itr], 2, 0)
+    wqf1, wqg1, alpha, values, costmp = pls_svd(
+        time, qfi[:, :, itr], qgi[:, :, itr], 2, 0
+    )
     wqf = np.zeros((M, max_itr + 1))
     wqf[:, itr] = wqf1[:, 0]
     wqg = np.zeros((M, max_itr + 1))
@@ -1714,17 +2069,24 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
     cost_diff = 1
 
     while itr <= max_itr:
-
         # warping
         gamtmp = np.ascontiguousarray(gam[:, :, 0])
         qftmp = np.ascontiguousarray(qfi[:, :, 0])
         qgtmp = np.ascontiguousarray(qgi[:, :, 0])
         wqftmp = np.ascontiguousarray(wqf[:, itr])
         wqgtmp = np.ascontiguousarray(wqg[:, itr])
-        gam[:, :, itr + 1] = fpls.fpls_warp(time, gamtmp, qftmp, qgtmp,
-                                            wqftmp, wqgtmp, display=0,
-                                            delta=delta, tol=1e-6,
-                                            max_iter=4000)
+        gam[:, :, itr + 1] = fpls.fpls_warp(
+            time,
+            gamtmp,
+            qftmp,
+            qgtmp,
+            wqftmp,
+            wqgtmp,
+            display=0,
+            delta=delta,
+            tol=1e-6,
+            max_iter=4000,
+        )
 
         for k in range(0, N):
             gam_k = gam[:, k, itr + 1]
@@ -1735,8 +2097,9 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
             qgi[:, k, itr + 1] = uf.warp_q_gamma(time, qgi[:, k, 0], gam_k)
 
         # PLS
-        wqfi, wqgi, alpha, values, costmp = pls_svd(time, qfi[:, :, itr + 1],
-                                                    qgi[:, :, itr + 1], 2, 0)
+        wqfi, wqgi, alpha, values, costmp = pls_svd(
+            time, qfi[:, :, itr + 1], qgi[:, :, itr + 1], 2, 0
+        )
         wqf[:, itr + 1] = wqfi[:, 0]
         wqg[:, itr + 1] = wqgi[:, 0]
 
@@ -1754,14 +2117,15 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
         if itr > 1:
             cost_diff = cost[itr] - cost[itr - 1]
 
-        print("Iteration: %d - Diff Value: %f - %f" % (itr + 1, wqf_diff[itr],
-                                                       cost[itr]))
+        print(
+            "Iteration: %d - Diff Value: %f - %f" % (itr + 1, wqf_diff[itr], cost[itr])
+        )
         if wqf_diff[itr] < 1e-1 or abs(cost_diff) < 1e-3:
             break
 
         itr += 1
 
-    cost = cost[0:(itr + 1)]
+    cost = cost[0 : (itr + 1)]
 
     # Aligned data & stats
     fn = fi[:, :, itr + 1]
@@ -1782,9 +2146,10 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
 
     if showplot:
         # Align Plots
-        fig, ax = plot.f_plot(np.arange(0, M) / float(M - 1), gam_f,
-                              title="Warping Functions")
-        ax.set_aspect('equal')
+        fig, ax = plot.f_plot(
+            np.arange(0, M) / float(M - 1), gam_f, title="Warping Functions"
+        )
+        ax.set_aspect("equal")
 
         plot.f_plot(time, fn, title="fn Warped Data")
         plot.f_plot(time, gn, title="gn Warped Data")
@@ -1793,11 +2158,26 @@ def align_fPLS(f, g, time, comps=3, showplot=True, smoothdata=False,
 
         plt.show()
 
-    align_fPLSresults = collections.namedtuple('align_fPLS', ['wf', 'wg', 'fn',
-                                               'gn', 'qfn', 'qgn', 'qf0',
-                                               'qg0', 'wqf', 'wqg', 'gam',
-                                               'values', 'cost'])
+    align_fPLSresults = collections.namedtuple(
+        "align_fPLS",
+        [
+            "wf",
+            "wg",
+            "fn",
+            "gn",
+            "qfn",
+            "qgn",
+            "qf0",
+            "qg0",
+            "wqf",
+            "wqg",
+            "gam",
+            "values",
+            "cost",
+        ],
+    )
 
-    out = align_fPLSresults(wf, wg, fn, gn, qfn, qgn, qf0, qg0, wqfn,
-                            wqgn, gam_f, values, cost)
+    out = align_fPLSresults(
+        wf, wg, fn, gn, qfn, qgn, qf0, qg0, wqfn, wqgn, gam_f, values, cost
+    )
     return out
