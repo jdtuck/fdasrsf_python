@@ -1,5 +1,5 @@
 
-![fdasrsf: Elastic Functional Data Analysis in Python](https://raw.githubusercontent.com/fdasrsf_python/blob/master/doc/artwork/icon.png)
+![fdasrsf: Elastic Functional Data Analysis in Python](https://raw.githubusercontent.com/jdtuck/fdasrsf_python/blob/master/doc/artwork/icon.png)
 
 [![Build](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yml/badge.svg)](https://github.com/jdtuck/fdasrsf_python/actions/workflows/python-package.yml)
 [![codecov](https://codecov.io/gh/jdtuck/fdasrsf_python/branch/master/graph/badge.svg)](https://codecov.io/gh/jdtuck/fdasrsf_python)
