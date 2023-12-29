@@ -76,7 +76,7 @@ master_doc = "index"
 project = "fdasrsf"
 author = "J. Derek Tucker"
 copyright = "2024, J. Derek Tucker"
-github_url = "https://https://github.com/jdtuck/fdasrsf_python"
+github_url = "https://github.com/jdtuck/fdasrsf_python"
 rtd_version = os.environ.get("READTHEDOCS_VERSION")
 rtd_version_type = os.environ.get("READTHEDOCS_VERSION_TYPE")
 
