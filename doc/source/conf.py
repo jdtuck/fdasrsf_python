@@ -13,12 +13,6 @@
 
 import sys, os
 from glob import glob
-from os.path import dirname, relpath
-import inspect
-from typing import Mapping
-
-
-import fdasrsf
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -45,7 +39,6 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.linkcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
@@ -91,7 +84,7 @@ switcher_version = rtd_version
 if switcher_version == "latest":
     switcher_version = "dev"
 elif rtd_version_type not in {"branch", "tag"}:
-    switcher_version = fdasrsf.__version__
+    switcher_version = "2.5.6"
 
 
 nbsphinx_prolog = """
@@ -192,12 +185,12 @@ html_theme_options = {
 html_context = {
     "github_user": "jdtuck",
     "github_repo": "fdasrsf",
-    "github_version": "develop",
+    "github_version": "master",
     "doc_path": "docs",
     "default_mode": "light",
 }
 
-rtd_branch = os.environ.get(" READTHEDOCS_GIT_IDENTIFIER", "develop")
+rtd_branch = os.environ.get(" READTHEDOCS_GIT_IDENTIFIER", "master")
 language = "en"
 
 # The name of the Pygments (syntax highlighting) style to use.
@@ -332,58 +325,3 @@ epub_title = "fdasrsf"
 epub_author = "J. Derek Tucker"
 epub_publisher = "J. Derek Tucker"
 epub_copyright = "2024, J. Derek Tucker"
-
-
-def linkcode_resolve(domain: str, info: Mapping[str, str]) -> str | None:
-    """
-    Resolve a link to source in the Github repo.
-
-    Based on the NumPy version.
-    """
-    if domain != "py":
-        return None
-
-    modname = info["module"]
-    fullname = info["fullname"]
-
-    submod = sys.modules.get(modname)
-    if submod is None:
-        return None
-
-    obj = submod
-    for part in fullname.split("."):
-        try:
-            obj = getattr(obj, part)
-        except Exception:
-            return None
-
-    fn = None
-    lineno = None
-
-    try:
-        fn = inspect.getsourcefile(obj)
-    except Exception:
-        fn = None
-    if not fn:
-        return None
-
-    # Ignore re-exports as their source files are not within the skfda repo
-    module = inspect.getmodule(obj)
-    if module is not None and not module.__name__.startswith("fdasrsf"):
-        return None
-
-    try:
-        source, lineno = inspect.getsourcelines(obj)
-        lineno_final = lineno + len(source) - 1
-    except Exception:
-        lineno_final = None
-
-    fn = relpath(fn, start=dirname(fdasrsf.__file__))
-
-    if lineno:
-        linespec = f"#L{lineno}-L{lineno_final}"
-    else:
-        linespec = ""
-
-    return f"{github_url}/tree/{rtd_branch}/skfda/{fn}{linespec}"
-
