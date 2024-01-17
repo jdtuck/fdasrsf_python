@@ -82,6 +82,7 @@ class fdawarp:
         MaxItr=20,
         parallel=False,
         lam=0.0,
+        pen="roughness",
         cores=-1,
         grid_dim=7,
         verbose=True,
@@ -99,6 +100,10 @@ class fdawarp:
         :param MaxItr: Maximum number of iterations (default = 20)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
+        :param penalty: penalty type (default="roughness") options are "roughness",
+                "l2gam", "l2psi", "geodesic". Only roughness implemented
+                in all methods. To use others method needs to be "RBFGS"
+                or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -119,6 +124,7 @@ class fdawarp:
         M = self.f.shape[0]
         N = self.f.shape[1]
         self.lam = lam
+        self.penalty = pen
 
         if M > 500:
             parallel = True
@@ -157,7 +163,7 @@ class fdawarp:
         if parallel:
             out = Parallel(n_jobs=cores)(
                 delayed(uf.optimum_reparam)(
-                    mq, self.time, q[:, n], omethod, lam, grid_dim
+                    mq, self.time, q[:, n], omethod, lam, pen, grid_dim
                 )
                 for n in range(N)
             )
@@ -167,7 +173,7 @@ class fdawarp:
             gam = np.zeros((M, N))
             for k in range(0, N):
                 gam[:, k] = uf.optimum_reparam(
-                    mq, self.time, q[:, k], omethod, lam, grid_dim
+                    mq, self.time, q[:, k], omethod, lam, pen, grid_dim
                 )
 
         gamI = uf.SqrtMeanInverse(gam)
@@ -215,7 +221,7 @@ class fdawarp:
             if parallel:
                 out = Parallel(n_jobs=cores)(
                     delayed(uf.optimum_reparam)(
-                        mq[:, r], self.time, q[:, n, 0], omethod, lam, grid_dim
+                        mq[:, r], self.time, q[:, n, 0], omethod, lam, pen, grid_dim
                     )
                     for n in range(N)
                 )
@@ -224,7 +230,7 @@ class fdawarp:
             else:
                 for k in range(0, N):
                     gam[:, k] = uf.optimum_reparam(
-                        mq[:, r], self.time, q[:, k, 0], omethod, lam, grid_dim
+                        mq[:, r], self.time, q[:, k, 0], omethod, lam, pen, grid_dim
                     )
 
             gam_dev = np.zeros((M, N))
@@ -289,7 +295,7 @@ class fdawarp:
         if parallel:
             out = Parallel(n_jobs=cores)(
                 delayed(uf.optimum_reparam)(
-                    mq[:, r], self.time, q[:, n, 0], omethod, lam, grid_dim
+                    mq[:, r], self.time, q[:, n, 0], omethod, lam, pen, grid_dim
                 )
                 for n in range(N)
             )
@@ -298,7 +304,7 @@ class fdawarp:
         else:
             for k in range(0, N):
                 gam[:, k] = uf.optimum_reparam(
-                    mq[:, r], self.time, q[:, k, 0], omethod, lam, grid_dim
+                    mq[:, r], self.time, q[:, k, 0], omethod, lam, pen, grid_dim
                 )
 
         gam_dev = np.zeros((M, N))
@@ -566,6 +572,7 @@ class fdawarp:
         smoothdata=False,
         parallel=False,
         lam=0.0,
+        pen="roughness",
         cores=-1,
         grid_dim=7,
     ):
@@ -581,6 +588,10 @@ class fdawarp:
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
+        :param penalty: penalty type (default="roughness") options are "roughness",
+                "l2gam", "l2psi", "geodesic". Only roughness implemented
+                in all methods. To use others method needs to be "RBFGS"
+                or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -611,7 +622,7 @@ class fdawarp:
         if parallel:
             out = Parallel(n_jobs=cores)(
                 delayed(uf.optimum_reparam)(
-                    mq, self.time, q[:, n], omethod, lam, grid_dim
+                    mq, self.time, q[:, n], omethod, lam, pen, grid_dim
                 )
                 for n in range(N)
             )
@@ -621,7 +632,7 @@ class fdawarp:
             gam = np.zeros((M, N))
             for k in range(0, N):
                 gam[:, k] = uf.optimum_reparam(
-                    mq, self.time, q[:, k], omethod, lam, grid_dim
+                    mq, self.time, q[:, k], omethod, lam, pen, grid_dim
                 )
 
         self.gamI = uf.SqrtMeanInverse(gam)
@@ -659,7 +670,9 @@ class fdawarp:
         return
 
 
-def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
+def pairwise_align_functions(
+    f1, f2, time, omethod="DP2", lam=0, pen="roughness", grid_dim=7
+):
     """
     This function aligns f2 to f1 using the elastic square-root
         slope (srsf) framework.
@@ -673,6 +686,10 @@ def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
     :param time: time vector of length M
     :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) (default = DP)
     :param lam: controls the elasticity (default = 0)
+    :param penalty: penalty type (default="roughness") options are "roughness",
+                "l2gam", "l2psi", "geodesic". Only roughness implemented
+                in all methods. To use others method needs to be "RBFGS"
+                or "cRBFGS"
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype list containing
@@ -685,7 +702,7 @@ def pairwise_align_functions(f1, f2, time, omethod="DP2", lam=0, grid_dim=7):
     q1 = uf.f_to_srsf(f1, time)
     q2 = uf.f_to_srsf(f2, time)
 
-    gam = uf.optimum_reparam(q1, time, q2, omethod, lam, grid_dim)
+    gam = uf.optimum_reparam(q1, time, q2, omethod, lam, pen, grid_dim)
 
     f2n = uf.warp_f_gamma(time, f2, gam)
     q2n = uf.f_to_srsf(f2n, time)
@@ -1172,29 +1189,29 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
             posterior_gamma_modes_cr[:, :, i - 1] = uf.statsFun(tmp)
 
     # thining
-    f1 = f1[0 :: mcmcopts["thin"], :]
-    f2 = f2[0 :: mcmcopts["thin"], :]
-    v_coef = v_coef[0 :: mcmcopts["thin"], :]
-    sigma = sigma[0 :: mcmcopts["thin"]]
-    sigma1 = sigma1[0 :: mcmcopts["thin"]]
-    sigma2 = sigma2[0 :: mcmcopts["thin"]]
-    s1 = s1[0 :: mcmcopts["thin"]]
-    s2 = s2[0 :: mcmcopts["thin"]]
-    L1 = L1[0 :: mcmcopts["thin"]]
-    L2 = L2[0 :: mcmcopts["thin"]]
+    f1 = f1[0:: mcmcopts["thin"], :]
+    f2 = f2[0:: mcmcopts["thin"], :]
+    v_coef = v_coef[0:: mcmcopts["thin"], :]
+    sigma = sigma[0:: mcmcopts["thin"]]
+    sigma1 = sigma1[0:: mcmcopts["thin"]]
+    sigma2 = sigma2[0:: mcmcopts["thin"]]
+    s1 = s1[0:: mcmcopts["thin"]]
+    s2 = s2[0:: mcmcopts["thin"]]
+    L1 = L1[0:: mcmcopts["thin"]]
+    L2 = L2[0:: mcmcopts["thin"]]
 
     if mcmcopts["extrainfo"]:
-        theta_accept = theta_accept[0 :: mcmcopts["thin"]]
-        f1_accept = f1_accept[0 :: mcmcopts["thin"]]
-        f2_accept = f2_accept[0 :: mcmcopts["thin"]]
-        L1_accept = L1_accept[0 :: mcmcopts["thin"]]
-        L2_accept = L2_accept[0 :: mcmcopts["thin"]]
-        gamma_mat = gamma_mat[:, 0 :: mcmcopts["thin"]]
-        SSE = SSE[0 :: mcmcopts["thin"]]
-        logl = logl[0 :: mcmcopts["thin"]]
-        f2_warped = f2_warped[0 :: mcmcopts["thin"], :]
-        phasedist = phasedist[0 :: mcmcopts["thin"]]
-        ampdist = ampdist[0 :: mcmcopts["thin"]]
+        theta_accept = theta_accept[0:: mcmcopts["thin"]]
+        f1_accept = f1_accept[0:: mcmcopts["thin"]]
+        f2_accept = f2_accept[0:: mcmcopts["thin"]]
+        L1_accept = L1_accept[0:: mcmcopts["thin"]]
+        L2_accept = L2_accept[0:: mcmcopts["thin"]]
+        gamma_mat = gamma_mat[:, 0:: mcmcopts["thin"]]
+        SSE = SSE[0:: mcmcopts["thin"]]
+        logl = logl[0:: mcmcopts["thin"]]
+        f2_warped = f2_warped[0:: mcmcopts["thin"], :]
+        phasedist = phasedist[0:: mcmcopts["thin"]]
+        ampdist = ampdist[0:: mcmcopts["thin"]]
 
     if mcmcopts["extrainfo"]:
         results_o = collections.namedtuple(
