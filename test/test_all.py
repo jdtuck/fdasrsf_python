@@ -42,6 +42,13 @@ class TestFDASRSF(unittest.TestCase):
         gam = fs.optimum_reparam(q1, timet, q1, method="RBFGS")
         self.assertAlmostEqual(sum(gam - timet), 0)
 
+    def test_crlbgs(self):
+        M = 101
+        q1 = np.sin(np.linspace(0, 2 * np.pi, M))
+        timet = np.linspace(0, 1, M)
+        gam = fs.optimum_reparam(q1, timet, q1, method="cRBFGS")
+        self.assertAlmostEqual(sum(gam - timet), 0)
+
     def test_f_to_srvf(self):
         M = 101
         f1 = np.sin(np.linspace(0, 2 * np.pi, M))
