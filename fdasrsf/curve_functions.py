@@ -103,7 +103,7 @@ def curve_to_q(beta, mode="O"):
     v = v[1]
 
     q = zeros((n, T))
-    lenb = sqrt(innerprod_q2(v, v))
+    lenb = sqrt(innerprod_q2(sqrt(abs(v)), sqrt(abs(v))))
     for i in range(0, T):
         L = sqrt(norm(v[:, i]))
         if L > 0.0001:
