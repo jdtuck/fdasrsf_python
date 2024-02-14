@@ -21,7 +21,6 @@ import numpy.random as rn
 import optimum_reparamN2 as orN2
 import optimum_reparam_N as orN
 import cbayesian as bay
-import crbfgs as cr
 import fdasrsf.geometry as geo
 from fdasrsf.rbfgs import rlbfgs
 import sys
@@ -210,6 +209,7 @@ def optimum_reparam(
                 obj.solve(lam=lam, penalty=penalty)
                 gam[:, i] = obj.gammaOpt
     elif method == "cRBFGS":
+        import crbfgs as cr
         if penalty == "roughness":
             pen = 0
         elif penalty == "l2gam":
@@ -1163,6 +1163,7 @@ def mrdivide(a, b):
 
 
 def rlbfgs_dist(q1, q2):
+    import crbfgs as cr
     q1 = q1.copy(order="C")
     q2 = q2.copy(order="C")
     d = cr.rlbfgs_dist(q1, q2)
