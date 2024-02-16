@@ -31,7 +31,7 @@ def rlbfgs_dist(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim
     alpha = 0.5
     time = np.linspace(0, 1, M)
     for i in range(q1.shape[1]):
-        q1t = q1[:,1]
+        q1t = q1[:,i]
         q1t = np.ascontiguousarray(q1t)
         gam = rlbfgs(q1t, time, q2)
         # warp q
