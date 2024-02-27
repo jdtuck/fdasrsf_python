@@ -8,7 +8,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import fdasrsf.utility_functions as uf
 from scipy.optimize import fmin_l_bfgs_b
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 from scipy.linalg import inv, norm
 from patsy import bs
 from joblib import Parallel, delayed
@@ -118,12 +118,12 @@ class elastic_regression:
             Phi = np.ones((N, Nb + 1))
             for ii in range(0, N):
                 for jj in range(1, Nb + 1):
-                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj - 1], self.time)
+                    Phi[ii, jj] = trapezoid(qn[:, ii] * B[:, jj - 1], self.time)
 
             R = np.zeros((Nb + 1, Nb + 1))
             for ii in range(1, Nb + 1):
                 for jj in range(1, Nb + 1):
-                    R[ii, jj] = trapz(Bdiff[:, ii - 1] * Bdiff[:, jj - 1], self.time)
+                    R[ii, jj] = trapezoid(Bdiff[:, ii - 1] * Bdiff[:, jj - 1], self.time)
 
             xx = np.dot(Phi.T, Phi)
             inv_xx = inv(xx + lam * R)
@@ -137,7 +137,7 @@ class elastic_regression:
             # compute the SSE
             int_X = np.zeros(N)
             for ii in range(0, N):
-                int_X[ii] = trapz(qn[:, ii] * beta, self.time)
+                int_X[ii] = trapezoid(qn[:, ii] * beta, self.time)
 
             self.SSE[itr - 1] = sum((self.y.reshape(N) - alpha - int_X) ** 2)
 
@@ -226,7 +226,7 @@ class elastic_regression:
                 diff = self.q - q[:, ii][:, np.newaxis]
                 dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
                 q_tmp = uf.warp_q_gamma(time, q[:, ii], self.gamma[:, dist.argmin()])
-                yhat[ii] = self.alpha + trapz(q_tmp * self.beta, time)
+                yhat[ii] = self.alpha + trapezoid(q_tmp * self.beta, time)
 
             if y is None:
                 self.SSE = np.nan
@@ -244,7 +244,7 @@ class elastic_regression:
                 q_tmp = uf.warp_q_gamma(
                     self.time, self.q[:, ii], self.gamma[:, dist.argmin()]
                 )
-                yhat[ii] = self.alpha + trapz(q_tmp * self.beta, self.time)
+                yhat[ii] = self.alpha + trapezoid(q_tmp * self.beta, self.time)
 
             self.SSE = np.sum((self.y - yhat) ** 2)
             self.y_pred = yhat
@@ -349,7 +349,7 @@ class elastic_logistic:
             Phi = np.ones((N, Nb + 1))
             for ii in range(0, N):
                 for jj in range(1, Nb + 1):
-                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj - 1], self.time)
+                    Phi[ii, jj] = trapezoid(qn[:, ii] * B[:, jj - 1], self.time)
 
             # Find alpha and beta using l_bfgs
             b0 = np.zeros(Nb + 1)
@@ -430,7 +430,7 @@ class elastic_logistic:
                 diff = self.q - q[:, ii][:, np.newaxis]
                 dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
                 q_tmp = uf.warp_q_gamma(time, q[:, ii], self.gamma[:, dist.argmin()])
-                yhat[ii] = self.alpha + trapz(q_tmp * self.beta, time)
+                yhat[ii] = self.alpha + trapezoid(q_tmp * self.beta, time)
 
             if y is None:
                 yhat = phi(yhat)
@@ -459,7 +459,7 @@ class elastic_logistic:
                 q_tmp = uf.warp_q_gamma(
                     self.time, self.q[:, ii], self.gamma[:, dist.argmin()]
                 )
-                yhat[ii] = self.alpha + trapz(q_tmp * self.beta, self.time)
+                yhat[ii] = self.alpha + trapezoid(q_tmp * self.beta, self.time)
 
             yhat = phi(yhat)
             y_labels = np.ones(n)
@@ -584,7 +584,7 @@ class elastic_mlogistic:
             Phi = np.ones((N, Nb + 1))
             for ii in range(0, N):
                 for jj in range(1, Nb + 1):
-                    Phi[ii, jj] = trapz(qn[:, ii] * B[:, jj - 1], self.time)
+                    Phi[ii, jj] = trapezoid(qn[:, ii] * B[:, jj - 1], self.time)
 
             # Find alpha and beta using l_bfgs
             b0 = np.zeros(m * (Nb + 1))
@@ -677,7 +677,7 @@ class elastic_mlogistic:
                 dist = np.sum(np.abs(diff) ** 2, axis=0) ** (1.0 / 2)
                 q_tmp = uf.warp_q_gamma(time, q[:, ii], self.gamma[:, dist.argmin()])
                 for jj in range(0, m):
-                    yhat[ii, jj] = self.alpha[jj] + trapz(
+                    yhat[ii, jj] = self.alpha[jj] + trapezoid(
                         q_tmp * self.beta[:, jj], time
                     )
 
@@ -719,7 +719,7 @@ class elastic_mlogistic:
                     self.time, self.q[:, ii], self.gamma[:, dist.argmin()]
                 )
                 for jj in range(0, m):
-                    yhat[ii, jj] = self.alpha[jj] + trapz(
+                    yhat[ii, jj] = self.alpha[jj] + trapezoid(
                         q_tmp * self.beta[:, jj], self.time
                     )
 
@@ -763,11 +763,11 @@ def regression_warp(beta, time, q, y, alpha):
     """
     gam_M = uf.optimum_reparam(beta, time, q)
     qM = uf.warp_q_gamma(time, q, gam_M)
-    y_M = trapz(qM * beta, time)
+    y_M = trapezoid(qM * beta, time)
 
     gam_m = uf.optimum_reparam(-1 * beta, time, q)
     qm = uf.warp_q_gamma(time, q, gam_m)
-    y_m = trapz(qm * beta, time)
+    y_m = trapezoid(qm * beta, time)
 
     if y > alpha + y_M:
         gamma_new = gam_M

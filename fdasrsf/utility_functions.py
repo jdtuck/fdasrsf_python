@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 from scipy.interpolate import UnivariateSpline, interp1d
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.linalg import norm, svd, cholesky, inv, pinv
 from scipy.stats.mstats import mquantiles
 from scipy import special as sp
@@ -122,7 +122,7 @@ def srsf_to_f(q, time, f0=0.0):
 
     """
     integrand = q * fabs(q)
-    f = f0 + cumtrapz(integrand, time, initial=0)
+    f = f0 + cumulative_trapezoid(integrand, time, initial=0)
     return f
 
 
@@ -380,13 +380,13 @@ def elastic_distance(
     gam = optimum_reparam(q1, time, q2, method, lam)
     qw = warp_q_gamma(time, q2, gam)
 
-    Dy = sqrt(trapz((qw - q1) ** 2, time))
+    Dy = sqrt(trapezoid((qw - q1) ** 2, time))
     M = time.shape[0]
 
     time1 = linspace(0, 1, M)
     binsize = mean(diff(time1))
     psi = sqrt(gradient(gam, binsize))
-    q1dotq2 = trapz(psi, time1)
+    q1dotq2 = trapezoid(psi, time1)
     if q1dotq2 > 1:
         q1dotq2 = 1
     elif q1dotq2 < -1:
@@ -473,7 +473,7 @@ def SqrtMeanInverse(gam):
         vbar = vec.mean(axis=1)
         lvm[itr] = geo.L2norm(vbar)
 
-    gam_mu = cumtrapz(mu * mu, time, initial=0)
+    gam_mu = cumulative_trapezoid(mu * mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
     gamI = invertGamma(gam_mu)
     return gamI
@@ -559,7 +559,7 @@ def SqrtMean(gam, parallel=False, cores=-1):
         vbar = vec.mean(axis=1)
         lvm[itr] = geo.L2norm(vbar)
 
-    gam_mu = cumtrapz(mu * mu, time, initial=0)
+    gam_mu = cumulative_trapezoid(mu * mu, time, initial=0)
     gam_mu = (gam_mu - gam_mu.min()) / (gam_mu.max() - gam_mu.min())
 
     return mu, gam_mu, psi, vec
@@ -628,7 +628,7 @@ def SqrtMedian(gam):
         vbar_norm[r] = geo.L2norm(vbar)
 
     vec = v
-    gam_median = cumtrapz(psi_median**2, time, initial=0.0)
+    gam_median = cumulative_trapezoid(psi_median**2, time, initial=0.0)
     gam_median = (gam_median - gam_median.min()) / (gam_median.max() - gam_median.min())
 
     return gam_median, psi_median, psi, vec
@@ -653,11 +653,11 @@ def cumtrapzmid(x, y, c, mid):
     fa = zeros(a)
     tmpx = x[0:mid]
     tmpy = y[0:mid]
-    tmp = c + cumtrapz(tmpy[::-1], tmpx[::-1], initial=0)
+    tmp = c + cumulative_trapezoid(tmpy[::-1], tmpx[::-1], initial=0)
     fa[0:mid] = tmp[::-1]
 
     # case >= mid
-    fa[mid:a] = c + cumtrapz(y[mid - 1 : a - 1], x[mid - 1 : a - 1], initial=0)
+    fa[mid:a] = c + cumulative_trapezoid(y[mid - 1 : a - 1], x[mid - 1 : a - 1], initial=0)
 
     return fa
 
@@ -701,7 +701,7 @@ def rgam(N, sigma, num, mu_gam=None):
                 v = v + alpha_i * sqrt(2) * sin(cnt * omega * time)
 
         psi = geo.exp_map(mu.ravel(), v.ravel())
-        gam0 = cumtrapz(psi * psi, time, initial=0)
+        gam0 = cumulative_trapezoid(psi * psi, time, initial=0)
         gam[:, k] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam
@@ -722,7 +722,7 @@ def outlier_detection(q, time, mq, k=1.5):
     N = q.shape[1]
     ds = zeros(N)
     for kk in range(0, N):
-        ds[kk] = sqrt(trapz((mq - q[:, kk]) ** 2, time))
+        ds[kk] = sqrt(trapezoid((mq - q[:, kk]) ** 2, time))
 
     quartile_range = mquantiles(ds)
     IQR = quartile_range[2] - quartile_range[0]
@@ -891,7 +891,7 @@ def innerprod_q(time, q1, q2):
     :return val: inner product value
 
     """
-    val = trapz(q1 * q2, time)
+    val = trapezoid(q1 * q2, time)
     return val
 
 
@@ -1002,7 +1002,7 @@ def zero_crossing(Y, q, bt, time, y_max, y_min, gmax, gmin):
 
         gam_m = a[ii] * gmax + (1 - a[ii]) * gmin
         qtmp = warp_q_gamma(time, q, gam_m)
-        f[ii] = trapz(qtmp * bt, time) - Y
+        f[ii] = trapezoid(qtmp * bt, time) - Y
 
         if fabs(f[ii]) < 1e-5:
             break

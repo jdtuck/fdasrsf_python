@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.random import multivariate_normal, rand, normal
 from numpy.linalg import solve, det
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.stats import truncnorm, norm
 import fdasrsf.utility_functions as uf
 import cbayesian as bay
@@ -67,11 +67,11 @@ def f_dlogl_pw(v_coef, v_basis, d_basis, sigma_curr, q1, q2):
 
     g = np.zeros(N)
     for i in range(0, basismat.shape[1]):
-        ubar = cumtrapz(basismat[:, i], obs_domain, initial=0)
+        ubar = cumulative_trapezoid(basismat[:, i], obs_domain, initial=0)
         integrand = (q1 - q2_warp) * (
             -2 * q2_warp_grad * ubar - q2_warp * basismat[:, i]
         )
-        tmp = 1 / sigma_curr * trapz(integrand, obs_domain)
+        tmp = 1 / sigma_curr * trapezoid(integrand, obs_domain)
         g += tmp * basismat[:, i]
 
     out, SSEv = f_vpostlogl_pw(vec, q1, q2, sigma_curr, 0)

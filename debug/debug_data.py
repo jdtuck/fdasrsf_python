@@ -1,7 +1,7 @@
 import numpy as np
 import fdasrsf as fs
 from numpy.random import normal
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 from scipy.stats import norm as gauss
 from scipy.optimize import fmin_l_bfgs_b
 from patsy import bs
@@ -99,7 +99,7 @@ Nb = B.shape[1]
 Phi = np.ones((N, Nb+1))
 for ii in range(0, N):
     for jj in range(1, Nb+1):
-        Phi[ii, jj] = trapz(q[:, ii] * B[:, jj-1], time)
+        Phi[ii, jj] = trapezoid(q[:, ii] * B[:, jj-1], time)
 
 # Find alpha and beta using l_bfgs
 b0 = np.zeros(m * (Nb+1))

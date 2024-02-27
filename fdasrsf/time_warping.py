@@ -11,7 +11,7 @@ import fdasrsf.bayesian_functions as bf
 import fdasrsf.fPCA as fpca
 import fdasrsf.geometry as geo
 from fdasrsf.gp import gp_posterior
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.interpolate import interp1d
 from scipy.linalg import svd, cholesky
 from scipy.cluster.hierarchy import linkage, fcluster
@@ -245,7 +245,7 @@ class fdawarp:
                 q[:, k, r + 1] = uf.f_to_srsf(f[:, k, r + 1], self.time)
                 gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
                 v = q[:, k, r + 1] - mq[:, r]
-                d = np.sqrt(trapz(v * v, self.time))
+                d = np.sqrt(trapezoid(v * v, self.time))
                 vtil[:, k] = v / d
                 dtil[k] = 1.0 / d
 
@@ -254,8 +254,8 @@ class fdawarp:
             d1 = a.reshape(M, N)
             d = (q[:, :, r + 1] - d1) ** 2
             if method == 0:
-                d1 = sum(trapz(d, self.time, axis=0))
-                d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
+                d1 = sum(trapezoid(d, self.time, axis=0))
+                d2 = sum(trapezoid((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
                 ds_tmp = d1 + lam * d2
                 ds[r + 1] = ds_tmp
 
@@ -269,8 +269,8 @@ class fdawarp:
                 qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
             if method == 1:
-                d1 = np.sqrt(sum(trapz(d, self.time, axis=0)))
-                d2 = sum(trapz((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
+                d1 = np.sqrt(sum(trapezoid(d, self.time, axis=0)))
+                d2 = sum(trapezoid((1 - np.sqrt(gam_dev)) ** 2, self.time, axis=0))
                 ds_tmp = d1 + lam * d2
                 ds[r + 1] = ds_tmp
 
@@ -282,7 +282,7 @@ class fdawarp:
                 ftemp = f[:, :, r + 1]
                 mq[:, r + 1] = mq[:, r] + stp * vbar
                 tmp = np.zeros(M)
-                tmp[1:] = cumtrapz(mq[:, r + 1] * np.abs(mq[:, r + 1]), self.time)
+                tmp[1:] = cumulative_trapezoid(mq[:, r + 1] * np.abs(mq[:, r + 1]), self.time)
                 mf[:, r + 1] = np.median(f0[1, :]) + tmp
 
                 qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
@@ -341,7 +341,7 @@ class fdawarp:
         self.gam = gam
         self.mqn = mq[:, r + 1]
         tmp = np.zeros(M)
-        tmp[1:] = cumtrapz(self.mqn * np.abs(self.mqn), self.time)
+        tmp[1:] = cumulative_trapezoid(self.mqn * np.abs(self.mqn), self.time)
         self.fmean = np.mean(f0[1, :]) + tmp
 
         fgam = np.zeros((M, N))
@@ -350,9 +350,9 @@ class fdawarp:
             fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
         var_fgam = fgam.var(axis=1)
-        self.orig_var = trapz(std_f0**2, self.time)
-        self.amp_var = trapz(std_fn**2, self.time)
-        self.phase_var = trapz(var_fgam, self.time)
+        self.orig_var = trapezoid(std_f0**2, self.time)
+        self.amp_var = trapezoid(std_fn**2, self.time)
+        self.phase_var = trapezoid(var_fgam, self.time)
 
         return
 
@@ -541,7 +541,7 @@ class fdawarp:
         gamhat = np.zeros((M, n))
         for ii in range(n):
             psihat[:, ii] = geo.exp_map(mu_psi, vechat[:, ii])
-            gam_tmp = cumtrapz(psihat[:, ii] ** 2, np.linspace(0, 1, M), initial=0.0)
+            gam_tmp = cumulative_trapezoid(psihat[:, ii] ** 2, np.linspace(0, 1, M), initial=0.0)
             gamhat[:, ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
         ft = np.zeros((M, n))
@@ -663,9 +663,9 @@ class fdawarp:
             fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
         var_fgam = fgam.var(axis=1)
-        self.orig_var = trapz(std_f0**2, self.time)
-        self.amp_var = trapz(std_fn**2, self.time)
-        self.phase_var = trapz(var_fgam, self.time)
+        self.orig_var = trapezoid(std_f0**2, self.time)
+        self.amp_var = trapezoid(std_fn**2, self.time)
+        self.phase_var = trapezoid(var_fgam, self.time)
 
         return
 
@@ -933,9 +933,9 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
             tmp = uf.f_phiinv(result_i)
             gamma_mat[:, ii] = uf.norm_gam(tmp)
             v, theta = geo.inv_exp_map(one_v, pw_sim_est_psi_matrix[:, ii])
-            Dx[ii] = np.sqrt(trapz(v**2, pw_sim_global_domain_par))
+            Dx[ii] = np.sqrt(trapezoid(v**2, pw_sim_global_domain_par))
             q2warp = uf.warp_q_gamma(pw_sim_global_domain_par, q2, gamma_mat[:, ii])
-            Dy[ii] = np.sqrt(trapz((q1i - q2warp) ** 2, time))
+            Dy[ii] = np.sqrt(trapezoid((q1i - q2warp) ** 2, time))
 
         gamma_stats = uf.statsFun(gamma_mat)
 
@@ -1157,7 +1157,7 @@ def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
             for j in range(i + 1, mcmcopts["nchains"]):
                 psi1 = np.sqrt(np.gradient(gamma[:, i], binsize))
                 psi2 = np.sqrt(np.gradient(gamma[:, j], binsize))
-                q1dotq2 = trapz(psi1 * psi2, time1)
+                q1dotq2 = trapezoid(psi1 * psi2, time1)
                 if q1dotq2 > 1:
                     q1dotq2 = 1
                 elif q1dotq2 < -1:
@@ -1624,11 +1624,11 @@ def run_mcmc(y1i, y2i, time, mcmcopts):
             tmp = uf.f_phiinv(result_i)
             gamma_mat[:, ii] = uf.norm_gam(tmp)
             v, theta = geo.inv_exp_map(one_v, pw_sim_est_psi_matrix[:, ii])
-            Dx[ii] = np.sqrt(trapz(v**2, pw_sim_global_domain_par))
+            Dx[ii] = np.sqrt(trapezoid(v**2, pw_sim_global_domain_par))
             q2warp = uf.warp_q_gamma(
                 pw_sim_global_domain_par, q2_curr, gamma_mat[:, ii]
             )
-            Dy[ii] = np.sqrt(trapz((q1_curr - q2warp) ** 2, time))
+            Dy[ii] = np.sqrt(trapezoid((q1_curr - q2warp) ** 2, time))
 
         gamma_stats = uf.statsFun(gamma_mat)
 
@@ -1804,7 +1804,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         alpha_i = np.zeros((num_comp, N))
         for ii in range(0, num_comp):
             for jj in range(0, N):
-                alpha_i[ii, jj] = trapz(qhat_cent[:, jj] * U[:, ii], time)
+                alpha_i[ii, jj] = trapezoid(qhat_cent[:, jj] * U[:, ii], time)
 
         U1 = U[:, 0:num_comp]
         tmp = U1.dot(alpha_i)
@@ -1964,7 +1964,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     mean_fn = fn.mean(axis=1)
     std_fn = fn.std(axis=1)
     tmp = np.zeros(M)
-    tmp[1:] = cumtrapz(mqn * np.abs(mqn), time)
+    tmp[1:] = cumulative_trapezoid(mqn * np.abs(mqn), time)
     fmean = np.mean(f0[1, :]) + tmp
 
     fgam = np.zeros((M, N))
@@ -1973,9 +1973,9 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         fgam[:, k] = np.interp(time0, time, fmean)
 
     var_fgam = fgam.var(axis=1)
-    orig_var = trapz(std_f0**2, time)
-    amp_var = trapz(std_fn**2, time)
-    phase_var = trapz(var_fgam, time)
+    orig_var = trapezoid(std_f0**2, time)
+    amp_var = trapezoid(std_fn**2, time)
+    phase_var = trapezoid(var_fgam, time)
 
     K = np.cov(fn)
 
@@ -2156,8 +2156,8 @@ def align_fPLS(
     wf = np.zeros((M, comps))
     wg = np.zeros((M, comps))
     for ii in range(0, comps):
-        wf[:, ii] = cumtrapz(wqfn[:, ii] * np.abs(wqfn[:, ii]), time, initial=0)
-        wg[:, ii] = cumtrapz(wqgn[:, ii] * np.abs(wqgn[:, ii]), time, initial=0)
+        wf[:, ii] = cumulative_trapezoid(wqfn[:, ii] * np.abs(wqfn[:, ii]), time, initial=0)
+        wg[:, ii] = cumulative_trapezoid(wqgn[:, ii] * np.abs(wqgn[:, ii]), time, initial=0)
 
     gam_f = gam[:, :, itr + 1]
 

@@ -10,7 +10,7 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumtrapz
 from scipy.linalg import inv, norm, expm
 from patsy import bs
 from joblib import Parallel, delayed
@@ -114,7 +114,7 @@ class oc_elastic_regression:
             for ii in range(0, N):
                 for jj in range(0, n):
                     for kk in range(1, Nb + 1):
-                        Phi[ii, jj * Nb + kk] = trapz(
+                        Phi[ii, jj * Nb + kk] = trapezoid(
                             qn[jj, :, ii] * B[:, kk - 1], time
                         )
 
@@ -122,7 +122,7 @@ class oc_elastic_regression:
             for kk in range(0, n):
                 for ii in range(1, Nb + 1):
                     for jj in range(1, Nb + 1):
-                        R[kk * Nb + ii, kk * Nb + jj] = trapz(
+                        R[kk * Nb + ii, kk * Nb + jj] = trapezoid(
                             Bdiff[:, ii - 1] * Bdiff[:, jj - 1], time
                         )
 
@@ -355,7 +355,7 @@ class oc_elastic_logistic:
             for ii in range(0, N):
                 for jj in range(0, n):
                     for kk in range(1, Nb + 1):
-                        Phi[ii, jj * Nb + kk] = trapz(
+                        Phi[ii, jj * Nb + kk] = trapezoid(
                             qn[jj, :, ii] * B[:, kk - 1], time
                         )
 
@@ -632,7 +632,7 @@ class oc_elastic_mlogistic:
             for ii in range(0, N):
                 for jj in range(0, n):
                     for kk in range(1, Nb + 1):
-                        Phi[ii, jj * Nb + kk] = trapz(
+                        Phi[ii, jj * Nb + kk] = trapezoid(
                             qn[jj, :, ii] * B[:, kk - 1], time
                         )
 

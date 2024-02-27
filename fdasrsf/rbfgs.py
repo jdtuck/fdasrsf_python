@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 import numpy as np
 import time
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 from numpy.linalg import norm
 
 
@@ -303,7 +303,7 @@ class rlbfgs:
 
         self.info = info[0 : (k + 1)]
         self.gammaOpt = np.zeros(self.T)
-        self.gammaOpt[1:] = cumtrapz(htilde**2, self.t)
+        self.gammaOpt[1:] = cumulative_trapezoid(htilde**2, self.t)
         self.q2Opt = q2tilde
         self.cost = hCurCost
 
@@ -323,14 +323,14 @@ class rlbfgs:
         if penalty == "roughness":
             time1 = np.linspace(0, 1, h.shape[0])
             binsize = np.mean(np.diff(time1))
-            pen = trapz(np.gradient(h**2, binsize) ** 2, time1)
+            pen = trapezoid(np.gradient(h**2, binsize) ** 2, time1)
         elif penalty == "l2gam":
             pen = self.normL2(h**2 - np.ones(h.shape[0])) ** 2
         elif penalty == "l2psi":
             pen = self.normL2(h - np.ones(h.shape[0])) ** 2
         elif penalty == "geodesic":
             time1 = np.linspace(0, 1, h.shape[0])
-            q1dotq2 = trapz(h, time1)
+            q1dotq2 = trapezoid(h, time1)
             if q1dotq2 > 1:
                 q1dotq2 = 1
             elif q1dotq2 < -1:
@@ -354,14 +354,14 @@ class rlbfgs:
         if penalty == "roughness":
             time1 = np.linspace(0, 1, h.shape[0])
             binsize = np.mean(np.diff(time1))
-            pen = trapz(np.gradient(h**2, binsize) ** 2, time1)
+            pen = trapezoid(np.gradient(h**2, binsize) ** 2, time1)
         elif penalty == "l2gam":
             pen = self.normL2(h**2 - np.ones(h.shape[0])) ** 2
         elif penalty == "l2psi":
             pen = self.normL2(h - np.ones(h.shape[0])) ** 2
         elif penalty == "geodesic":
             time1 = np.linspace(0, 1, h.shape[0])
-            q1dotq2 = trapz(h, time1)
+            q1dotq2 = trapezoid(h, time1)
             if q1dotq2 > 1:
                 q1dotq2 = 1
             elif q1dotq2 < -1:
@@ -386,13 +386,13 @@ class rlbfgs:
         tmp = dq * q2kdot
         tmp1 = dq * q2k
         if tmp.ndim > 1:
-            v[1:] = 2 * cumtrapz(tmp.sum(axis=0), t)
+            v[1:] = 2 * cumulative_trapezoid(tmp.sum(axis=0), t)
             v = v - tmp1.sum(axis=0)
         else:
-            v[1:] = 2 * cumtrapz(tmp, t)
+            v[1:] = 2 * cumulative_trapezoid(tmp, t)
             v = v - tmp1
 
-        g = v - trapz(v, t)
+        g = v - trapezoid(v, t)
 
         return f, g
 
@@ -512,7 +512,7 @@ class rlbfgs:
     def group_action_SRVF(self, q, h):
         p = q.shape[0]
         gamma = np.zeros(self.T)
-        gamma[1:] = cumtrapz(h**2, self.t)
+        gamma[1:] = cumulative_trapezoid(h**2, self.t)
         gamma = gamma / gamma[-1]
         h = np.sqrt(np.gradient(gamma, self.t))
         qnew = np.zeros(q.shape)
@@ -531,9 +531,9 @@ class rlbfgs:
     def innerProdL2(self, f1, f2):
         tmp = f1 * f2
         if tmp.ndim > 1:
-            val = trapz(tmp.sum(axis=0), self.t)
+            val = trapezoid(tmp.sum(axis=0), self.t)
         else:
-            val = trapz(tmp, self.t)
+            val = trapezoid(tmp, self.t)
         return val
 
     def dist(self, f1, f2):
@@ -544,7 +544,7 @@ class rlbfgs:
         return np.pi / 2
 
     def proj(self, f, v):
-        out = v - f * trapz(f * v, self.t)
+        out = v - f * trapezoid(f * v, self.t)
         return out
 
     def log(self, f1, f2):
@@ -590,10 +590,10 @@ class rlbfgs:
         return Tv
 
     def inner(self, v1, v2):
-        return trapz(v1 * v2, self.t)
+        return trapezoid(v1 * v2, self.t)
 
     def norm(self, v):
-        return np.sqrt(trapz(v**2, self.t))
+        return np.sqrt(trapezoid(v**2, self.t))
 
     def zerovec(self):
         return np.zeros(self.T)

@@ -8,7 +8,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 from numpy import tile, eye, arccos, zeros, sin, arange, linspace, empty, isnan
 from numpy import sqrt
 import matplotlib.pyplot as plt
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 from scipy.linalg import norm
 import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
@@ -421,9 +421,9 @@ def calculate_energy(alphadot, T=100, k=5):
             tmp = alphadot[:, j, i].T
             integrand1[i, j] = tmp.dot(alphadot[:, j, i])
 
-        integrand2[i] = trapz(integrand1[i, :], linspace(0, 1, T))
+        integrand2[i] = trapezoid(integrand1[i, :], linspace(0, 1, T))
 
-    E = 0.5 * trapz(integrand2, linspace(0, 1, k))
+    E = 0.5 * trapezoid(integrand2, linspace(0, 1, k))
 
     return E
 
