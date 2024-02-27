@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 from numpy import zeros, ones, cumsum, linspace, gradient, sqrt
 from numpy import eye, roll, tile, array, cos, sin, ascontiguousarray
 from numpy import arccos, fabs, floor, fliplr, log, real, diff, mean
@@ -79,8 +79,8 @@ def calculatecentroid(beta):
         normbetadot[i] = norm(betadot[:, i])
         integrand[:, i] = beta[:, i] * normbetadot[i]
 
-    scale = trapz(normbetadot, linspace(0, 1, T))
-    centroid = trapz(integrand, linspace(0, 1, T), axis=1) / scale
+    scale = trapezoid(normbetadot, linspace(0, 1, T))
+    centroid = trapezoid(integrand, linspace(0, 1, T), axis=1) / scale
 
     return centroid
 
@@ -138,7 +138,7 @@ def q_to_curve(q, scale=1):
 
     beta = zeros((n, T))
     for i in range(0, n):
-        beta[i, :] = cumtrapz(q[i, :] * qnorm, initial=0) / T
+        beta[i, :] = cumulative_trapezoid(q[i, :] * qnorm, initial=0) / T
 
     beta = scale * beta
 
@@ -303,8 +303,8 @@ def calculate_variance(beta):
         a1 = a1.reshape((n, 1))
         integrand[:, :, i] = a1 @ a1.T * normbetadot[i]
 
-    l = trapz(normbetadot, t)
-    variance = trapz(integrand, t, axis=2)
+    l = trapezoid(normbetadot, t)
+    variance = trapezoid(integrand, t, axis=2)
     variance /= l
 
     return variance
@@ -362,8 +362,8 @@ def find_basis_normal(q):
         integrandb3[i] = a.dot(h3[:, i])
         integrandb4[i] = a.dot(h4[:, i])
 
-    b3 = h3 - q * trapz(integrandb3, linspace(0, 1, T))
-    b4 = h4 - q * trapz(integrandb4, linspace(0, 1, T))
+    b3 = h3 - q * trapezoid(integrandb3, linspace(0, 1, T))
+    b4 = h4 - q * trapezoid(integrandb4, linspace(0, 1, T))
 
     basis = [b3, b4]
 
@@ -395,9 +395,9 @@ def calc_j(basis):
         integrand22[i] = b.dot(b2[:, i])
 
     j = zeros((2, 2))
-    j[0, 0] = trapz(integrand11, linspace(0, 1, T))
-    j[0, 1] = trapz(integrand12, linspace(0, 1, T))
-    j[1, 1] = trapz(integrand22, linspace(0, 1, T))
+    j[0, 0] = trapezoid(integrand11, linspace(0, 1, T))
+    j[0, 1] = trapezoid(integrand12, linspace(0, 1, T))
+    j[1, 1] = trapezoid(integrand22, linspace(0, 1, T))
     j[1, 0] = j[0, 1]
 
     return j
@@ -702,7 +702,7 @@ def project_curve(q):
         # Jacobian
         for i in range(0, n):
             for j in range(0, n):
-                J[i, j] = 3 * trapz(qnew[i, :] * qnew[j, :], s)
+                J[i, j] = 3 * trapezoid(qnew[i, :] * qnew[j, :], s)
 
         J += eye(n)
 
@@ -711,7 +711,7 @@ def project_curve(q):
 
         # Compute the residue
         for i in range(0, n):
-            G[i] = trapz(qnew[i, :] * qnorm, s)
+            G[i] = trapezoid(qnew[i, :] * qnorm, s)
 
         res = -G
 
@@ -807,7 +807,7 @@ def elastic_distance_curve(
         time1 = linspace(0, 1, N)
         binsize = mean(diff(time1))
         psi = sqrt(gradient(gam, binsize))
-        q1dotq2 = trapz(psi, time1)
+        q1dotq2 = trapezoid(psi, time1)
         if q1dotq2 > 1:
             q1dotq2 = 1
         elif q1dotq2 < -1:
@@ -972,7 +972,7 @@ def scale_curve(beta):
     for i in range(0, T):
         normbetadot[i] = norm(betadot[:, i])
 
-    scale = trapz(normbetadot, linspace(0, 1, T))
+    scale = trapezoid(normbetadot, linspace(0, 1, T))
     beta_scaled = beta / scale
 
     return (beta_scaled, scale)

@@ -1,6 +1,6 @@
 import numpy as np
 import fdasrsf as fs
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.linalg import norm
 import h5py
 
@@ -39,8 +39,8 @@ while itr <= max_itr:
                           time, np.gradient(q, binsize))
     for i in range(0, m):
         A[i] = fs.innerprod_q(time, qtmp * psi_old, beta[:, i])
-        tmp1 = trapz(qtmp_diff * psi_old * beta[:, i], time)
-        tmp2 = cumtrapz(qtmp_diff * psi_old * beta[:, i], time, initial=0)
+        tmp1 = trapezoid(qtmp_diff * psi_old * beta[:, i], time)
+        tmp2 = cumulative_trapezoid(qtmp_diff * psi_old * beta[:, i], time, initial=0)
         tmp = tmp1 - tmp2
         Adiff[:, i] = 2 * psi_old * tmp + qtmp * beta[:, i]
 
@@ -54,7 +54,7 @@ while itr <= max_itr:
     costmp = np.cos(delta * vecnorm) * psi_old
     sintmp = np.sin(delta * vecnorm) * (vec / vecnorm)
     psi_new = costmp + sintmp
-    gam_tmp = cumtrapz(psi_new * psi_new, time, initial=0)
+    gam_tmp = cumulative_trapezoid(psi_new * psi_new, time, initial=0)
     gam_new = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
 
     max_val[itr] = np.sum(y * (alpha + A)) - np.log(tmp1)

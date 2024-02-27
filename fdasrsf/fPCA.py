@@ -9,7 +9,7 @@ import fdasrsf as fs
 import fdasrsf.utility_functions as uf
 import fdasrsf.geometry as geo
 from scipy.linalg import norm, svd
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.optimize import fminbound
 from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
@@ -320,7 +320,7 @@ class fdahpca:
                 else:
                     psi_pca[cnt, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
 
-                tmp = cumtrapz(
+                tmp = cumulative_trapezoid(
                     psi_pca[cnt, :, j] * psi_pca[cnt, :, j],
                     np.linspace(0, 1, TT),
                     initial=0,
@@ -552,7 +552,7 @@ class fdajpca:
                 qhat = mqn + np.dot(U[0 : (M + 1), k], stds[l] * np.sqrt(s[k]))
                 vechat = np.dot(U[(M + 1) :, k], (stds[l] * np.sqrt(s[k])) / C)
                 psihat = geo.exp_map(mu_psi, vechat)
-                gamhat = cumtrapz(psihat * psihat, np.linspace(0, 1, M), initial=0)
+                gamhat = cumulative_trapezoid(psihat * psihat, np.linspace(0, 1, M), initial=0)
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
                 if sum(vechat) == 0:
                     gamhat = np.linspace(0, 1, M)
@@ -728,7 +728,7 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     else:
         for ii in range(0, N):
             psihat[:, ii] = geo.exp_map(mu_psi, vechat[:, ii])
-            gam_tmp = cumtrapz(
+            gam_tmp = cumulative_trapezoid(
                 psihat[:, ii] * psihat[:, ii], np.linspace(0, 1, M - 1), initial=0
             )
             gamhat[:, ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
@@ -742,7 +742,7 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
 def jfpca_sub(mu_psi, vechat):
     M = mu_psi.shape[0]
     psihat = geo.exp_map(mu_psi, vechat)
-    gam_tmp = cumtrapz(psihat * psihat, np.linspace(0, 1, M), initial=0)
+    gam_tmp = cumulative_trapezoid(psihat * psihat, np.linspace(0, 1, M), initial=0)
     gamhat = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
     return gamhat
@@ -767,7 +767,7 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
             tmp = uf.warp_q_gamma(
                 time, qhat[0 : (M - 1), i], uf.invertGamma(gamhat[:, i])
             )
-            d[i] = trapz((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
+            d[i] = trapezoid((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 
     out = sum(d * d) / N
 
@@ -776,6 +776,6 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
 
 def find_C_sub(time, qhat, gamhat, q0):
     tmp = uf.warp_q_gamma(time, qhat, uf.invertGamma(gamhat))
-    d = trapz((tmp - q0) * (tmp - q0), time)
+    d = trapezoid((tmp - q0) * (tmp - q0), time)
 
     return d

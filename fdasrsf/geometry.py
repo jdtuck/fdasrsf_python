@@ -8,7 +8,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 from numpy import arccos, sin, cos, linspace, zeros, sqrt, finfo, double
 from numpy import ones, diff, gradient
 from scipy.interpolate import UnivariateSpline
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapezoid, cumulative_trapezoid
 
 
 def inv_exp_map(Psi, psi):
@@ -40,14 +40,14 @@ def exp_map(psi, v):
 def inner_product(psi1, psi2):
     M = psi1.shape[0]
     t = linspace(0, 1, M)
-    ip = trapz(psi1 * psi2, t)
+    ip = trapezoid(psi1 * psi2, t)
     return ip
 
 
 def L2norm(psi):
     M = psi.shape[0]
     t = linspace(0, 1, M)
-    l2norm = sqrt(trapz(psi * psi, t))
+    l2norm = sqrt(trapezoid(psi * psi, t))
     return l2norm
 
 
@@ -95,7 +95,7 @@ def v_to_gam(v):
     mu = ones(TT)
     if v.ndim == 1:
         psi = exp_map(mu, v)
-        gam0 = cumtrapz(psi * psi, time, initial=0)
+        gam0 = cumulative_trapezoid(psi * psi, time, initial=0)
         gam = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
     else:
         n = v.shape[1]
@@ -103,7 +103,7 @@ def v_to_gam(v):
         gam = zeros((TT, n))
         for i in range(0, n):
             psi = exp_map(mu, v[:, i])
-            gam0 = cumtrapz(psi * psi, time, initial=0)
+            gam0 = cumulative_trapezoid(psi * psi, time, initial=0)
             gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam

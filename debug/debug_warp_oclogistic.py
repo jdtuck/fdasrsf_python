@@ -1,6 +1,6 @@
 import numpy as np
 import fdasrsf as fs
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 from scipy.linalg import norm, expm
 import h5py
 
@@ -67,7 +67,7 @@ while itr <= max_itr:
     qtilde_diff = qtilde_diff[1]
     tmp3 = np.zeros((TT, p))
     for i in range(0, p):
-        cbar = cumtrapz(f_basis[:, i], time, initial=0)
+        cbar = cumulative_trapezoid(f_basis[:, i], time, initial=0)
         ctmp = 2*qtilde_diff*cbar + qtilde*f_basis[:, i]
         tmp3[:, i] = fs.innerprod_q2(ctmp, nu) * f_basis[:, i]
 
@@ -79,7 +79,7 @@ while itr <= max_itr:
     costmp = np.cos(deltag * vecnorm) * np.ones(TT)
     sintmp = np.sin(deltag * vecnorm) * (hpsi / vecnorm)
     psi_new = costmp + sintmp
-    gam_tmp = cumtrapz(psi_new * psi_new, time, initial=0)
+    gam_tmp = cumulative_trapezoid(psi_new * psi_new, time, initial=0)
     gam_tmp = (gam_tmp - gam_tmp[0]) / (gam_tmp[-1] - gam_tmp[0])
     gam_new = np.interp(gam_tmp, time, gam_old)
 

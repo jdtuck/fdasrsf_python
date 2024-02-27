@@ -7,7 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 import numpy as np
 import fdasrsf.utility_functions as uf
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 from numpy.linalg import norm
 from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
@@ -123,7 +123,7 @@ def kmeans_align(
             for i in range(0, N):
                 fw[:, i] = uf.warp_f_gamma(time, f[:, i], gam_tmp[:, i])
                 qw[:, i] = uf.f_to_srsf(fw[:, i], time)
-                dist[i] = np.sqrt(trapz((qw[:, i] - templates_q[:, k]) ** 2, time))
+                dist[i] = np.sqrt(trapezoid((qw[:, i] - templates_q[:, k]) ** 2, time))
 
             Dy[k, :] = dist
             qn[k] = qw

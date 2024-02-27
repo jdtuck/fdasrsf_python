@@ -1,6 +1,6 @@
 import numpy as np
 import fdasrsf as fs
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 from scipy.optimize import fmin_l_bfgs_b
 from patsy import bs
 import h5py
@@ -139,7 +139,7 @@ Phi = np.ones((N, n * Nb + 1))
 for ii in range(0, N):
     for jj in range(0, n):
         for kk in range(1, Nb + 1):
-            Phi[ii, jj * Nb + kk] = trapz(q[jj, :, ii] * B[:, kk - 1], time)
+            Phi[ii, jj * Nb + kk] = trapezoid(q[jj, :, ii] * B[:, kk - 1], time)
 
 # Find alpha and beta using l_bfgs
 b0 = np.zeros(n * Nb + 1)
