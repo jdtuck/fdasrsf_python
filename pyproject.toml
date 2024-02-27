@@ -74,3 +74,10 @@ environment = {PKG_CONFIG_PATH="/opt/32/lib/pkgconfig"}
 [build-system]
 requires = ["setuptools>=46.0", "wheel", "cffi>=1.0.0", "Cython", "findblas", "oldest-supported-numpy"]  # PEP 518 - what is required to build
 build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]

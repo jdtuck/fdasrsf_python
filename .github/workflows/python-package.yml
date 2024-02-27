@@ -38,7 +38,7 @@ jobs:
           python -m pip install mkl-devel
     - name: Install python dependencies
       run: |
-          python -m pip install flake8 pytest pytest-runner coverage
+          python -m pip install flake8 setuptools pytest pytest-runner coverage
           pip install -r requirements.txt
     - name: Lint with flake8
       run: |
@@ -49,11 +49,11 @@ jobs:
     - if: runner.os == 'Linux'
       name: Test with pytest
       run: |
-        pytest test/test_all.py 
+        python setup.py pytest --addopts "test"
     - if: runner.os == 'macOS'
       name: Test with pytest
       run: |
-        pytest test/test_all.py 
+        python setup.py pytest --addopts "test"
     - if: runner.os == 'Windows'
       name: Build
       run: |
