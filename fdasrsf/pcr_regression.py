@@ -55,6 +55,7 @@ class elastic_pcr_regression:
         self,
         pca_method="combined",
         no=5,
+        var_exp=None,
         smooth_data=False,
         sparam=25,
         parallel=False,
@@ -67,6 +68,8 @@ class elastic_pcr_regression:
         :param pca_method: string specifying pca method (options = "combined",
                         "vert", or "horiz", default = "combined")
         :param no: scalar specify number of principal components (default=5)
+        :param var_exp: compute no based on value percent variance explained
+                        (example: 0.95)
         :param smooth_data: smooth data using box filter (default = F)
         :param sparam: number of times to apply box filter (default = 25)
         :param parallel: run in parallel (default = F)
@@ -91,19 +94,21 @@ class elastic_pcr_regression:
             self.pca = fpca.fdahpca(self.warp_data)
         else:
             raise Exception("Invalid fPCA Method")
-        self.pca.calc_fpca(no)
+        self.pca.calc_fpca(no=no, var_exp=var_exp)
+
+        no = self.pca.no
 
         # OLS using PCA basis
         lam = 0
         R = 0
         Phi = np.ones((N1, no + 1))
-        Phi[:, 1 : (no + 1)] = self.pca.coef
+        Phi[:, 1:(no + 1)] = self.pca.coef
         xx = np.dot(Phi.T, Phi)
         inv_xx = inv(xx + lam * R)
         xy = np.dot(Phi.T, self.y)
         b = np.dot(inv_xx, xy)
         alpha = b[0]
-        b = b[1 : no + 1]
+        b = b[1:no + 1]
 
         # compute the SSE
         int_X = np.zeros(N1)
