@@ -39,7 +39,7 @@ jobs:
           python -m pip install mkl-devel
     - name: Install python dependencies
       run: |
-          python -m pip install flake8 setuptools pytest pytest-runner coverage
+          python -m pip install flake8 setuptools pytest pytest-runner coverage pytest-cov
           pip install -r requirements.txt
     - name: Lint with flake8
       run: |
@@ -50,7 +50,7 @@ jobs:
     - if: runner.os == 'Linux'
       name: Test with pytest
       run: |
-        python setup.py pytest --addopts "test"
+        python setup.py pytest --addopts "test" --cov app
     - if: runner.os == 'macOS'
       name: Test with pytest
       run: |
@@ -59,10 +59,6 @@ jobs:
       name: Build
       run: |
         pip install .
-    - if: runner.os == 'Linux'
-      name: Generate Report
-      run: |
-        coverage run -m unittest
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v3
     
