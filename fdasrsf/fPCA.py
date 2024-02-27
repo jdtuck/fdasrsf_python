@@ -130,7 +130,6 @@ class fdavpca:
         if var_exp is not None:
             cumm_coef = np.cumsum(s) / sum(s)
             no = int(np.argwhere(cumm_coef <= var_exp)[-1])
-            print(no)
 
         self.q_pca = q_pca
         self.f_pca = f_pca
@@ -338,7 +337,6 @@ class fdahpca:
         if var_exp is not None:
             cumm_coef = np.cumsum(s) / sum(s)
             no = int(np.argwhere(cumm_coef <= var_exp)[-1])
-            print(no)
 
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
