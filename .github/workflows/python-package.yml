@@ -49,15 +49,15 @@ jobs:
     - if: runner.os == 'Linux'
       name: Test with pytest
       run: |
-        python setup.py pytest --addopts "test" 
+        pytest test/test_all.py 
     - if: runner.os == 'macOS'
       name: Test with pytest
       run: |
-        python setup.py pytest --addopts "test" 
+        pytest test/test_all.py 
     - if: runner.os == 'Windows'
       name: Build
       run: |
-        python setup.py install
+        pip install .
     - if: runner.os == 'Linux'
       name: Generate Report
       run: |
