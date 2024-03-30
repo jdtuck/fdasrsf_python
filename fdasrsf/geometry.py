@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 from numpy import arccos, sin, cos, linspace, zeros, sqrt, finfo, double
-from numpy import ones, diff, gradient
+from numpy import ones, diff, gradient, log
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapezoid, cumulative_trapezoid
 
@@ -51,6 +51,49 @@ def L2norm(psi):
     return l2norm
 
 
+def gam_to_h(gam, smooth=True):
+    TT = gam.shape[0]
+    time = linspace(0, 1, TT)
+    binsize = diff(time)
+    binsize = binsize.mean()
+    s = np.logspace(-4,-1,10)
+    cnt = 1
+    if gam.ndim == 1:
+        if smooth:
+            tmp_spline = UnivariateSpline(time, gam, s=1e-4)
+            d = tmp_spline.derivative()
+            while (np.any(d(time)<0):
+                tmp_spline = UnivariateSpline(time, gam, s=s[cnt])
+                cnt += 1
+                d = tmp_spline.derivative()
+            psi = log(d(time))
+            h = psi - trapezoid(psi, time)
+        else:
+            psi = log(gradient(gam, binsize))
+            h = psi - trapezoid(psi, time)
+    else:
+        n = gam.shape[1]
+
+        psi = zeros((TT, n))
+        for i in range(0, n):
+            if smooth:
+                tmp_spline = UnivariateSpline(time, gam[:, i], s=1e-4)
+                d = tmp_spline.derivative()
+                while (np.any(d(time)<0):
+                    tmp_spline = UnivariateSpline(time, gam[:, i], s=s[cnt])
+                    cnt += 1
+                    d = tmp_spline.derivative()
+                psi[:, i] = log(d(time))
+            else:
+                psi[:, i] = log(gradient(gam[:, i], binsize))
+
+        h = zeros((TT, n))
+        for i in range(0, n):
+            h[:, i] = psi[:, i] - trapezoid(psi[:,i], time)
+
+    return h
+
+
 def gam_to_v(gam, smooth=True):
     TT = gam.shape[0]
     time = linspace(0, 1, TT)
@@ -89,6 +132,26 @@ def gam_to_v(gam, smooth=True):
     return vec
 
 
+def h_to_gam(h):
+    TT = h.shape[0]
+    time = linspace(0, 1, TT)
+    mu = ones(TT)
+    if v.ndim == 1:
+        gam0 = cumulative_trapezoid(exp(h), time, initial=0)
+        gam0 /= trapezoid(exp(h), time)
+        gam = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
+    else:
+        n = v.shape[1]
+
+        gam = zeros((TT, n))
+        for i in range(0, n):
+            gam0 = cumulative_trapezoid(exp(h[:,i]), time, initial=0)
+            gam0 /= trapezoid(exp(h[:,i]), time)
+            gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
+
+    return gam
+
+
 def v_to_gam(v):
     TT = v.shape[0]
     time = linspace(0, 1, TT)
@@ -107,3 +170,4 @@ def v_to_gam(v):
             gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam
+
