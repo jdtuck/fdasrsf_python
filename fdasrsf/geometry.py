@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 from numpy import arccos, sin, cos, linspace, zeros, sqrt, finfo, double
-from numpy import ones, diff, gradient, log, logspace, any
+from numpy import ones, diff, gradient, log, exp, logspace, any
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapezoid, cumulative_trapezoid
 
