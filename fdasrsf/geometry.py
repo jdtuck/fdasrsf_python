@@ -6,7 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 from numpy import arccos, sin, cos, linspace, zeros, sqrt, finfo, double
-from numpy import ones, diff, gradient, log
+from numpy import ones, diff, gradient, log, logspace, any
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapezoid, cumulative_trapezoid
 
@@ -56,13 +56,13 @@ def gam_to_h(gam, smooth=True):
     time = linspace(0, 1, TT)
     binsize = diff(time)
     binsize = binsize.mean()
-    s = np.logspace(-4,-1,10)
+    s = logspace(-4,-1,10)
     cnt = 1
     if gam.ndim == 1:
         if smooth:
             tmp_spline = UnivariateSpline(time, gam, s=1e-4)
             d = tmp_spline.derivative()
-            while (np.any(d(time)<0)):
+            while (any(d(time)<0)):
                 tmp_spline = UnivariateSpline(time, gam, s=s[cnt])
                 cnt += 1
                 d = tmp_spline.derivative()
@@ -79,7 +79,8 @@ def gam_to_h(gam, smooth=True):
             if smooth:
                 tmp_spline = UnivariateSpline(time, gam[:, i], s=1e-4)
                 d = tmp_spline.derivative()
-                while (np.any(d(time)<0)):
+                cnt = 1
+                while (any(d(time)<0)):
                     tmp_spline = UnivariateSpline(time, gam[:, i], s=s[cnt])
                     cnt += 1
                     d = tmp_spline.derivative()
