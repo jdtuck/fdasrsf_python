@@ -137,12 +137,12 @@ def h_to_gam(h):
     TT = h.shape[0]
     time = linspace(0, 1, TT)
     mu = ones(TT)
-    if v.ndim == 1:
+    if h.ndim == 1:
         gam0 = cumulative_trapezoid(exp(h), time, initial=0)
         gam0 /= trapezoid(exp(h), time)
         gam = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
     else:
-        n = v.shape[1]
+        n = h.shape[1]
 
         gam = zeros((TT, n))
         for i in range(0, n):
