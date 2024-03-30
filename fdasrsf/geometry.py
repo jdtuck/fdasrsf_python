@@ -62,7 +62,7 @@ def gam_to_h(gam, smooth=True):
         if smooth:
             tmp_spline = UnivariateSpline(time, gam, s=1e-4)
             d = tmp_spline.derivative()
-            while (np.any(d(time)<0):
+            while (np.any(d(time)<0)):
                 tmp_spline = UnivariateSpline(time, gam, s=s[cnt])
                 cnt += 1
                 d = tmp_spline.derivative()
@@ -79,7 +79,7 @@ def gam_to_h(gam, smooth=True):
             if smooth:
                 tmp_spline = UnivariateSpline(time, gam[:, i], s=1e-4)
                 d = tmp_spline.derivative()
-                while (np.any(d(time)<0):
+                while (np.any(d(time)<0)):
                     tmp_spline = UnivariateSpline(time, gam[:, i], s=s[cnt])
                     cnt += 1
                     d = tmp_spline.derivative()
