@@ -5,10 +5,11 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
-from numpy import arccos, sin, cos, linspace, zeros, sqrt, finfo, double
+from numpy import arccos, sin, cos, linspace, zeros, sqrt, newaxis
 from numpy import ones, diff, gradient, log, exp, logspace, any
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapezoid, cumulative_trapezoid
+from fdasrsf.utility_functions import smooth_data
 
 
 def inv_exp_map(Psi, psi):
@@ -56,41 +57,31 @@ def gam_to_h(gam, smooth=True):
     time = linspace(0, 1, TT)
     binsize = diff(time)
     binsize = binsize.mean()
-    s = logspace(-4,-1,10)
+    s = logspace(-4, -1, 10)
     cnt = 1
     if gam.ndim == 1:
         if smooth:
-            tmp_spline = UnivariateSpline(time, gam, s=1e-4)
-            d = tmp_spline.derivative()
-            while (any(d(time)<0)):
-                tmp_spline = UnivariateSpline(time, gam, s=s[cnt])
-                cnt += 1
-                d = tmp_spline.derivative()
-            psi = log(d(time))
+            gamtmp = smooth_data(gam[:, newaxis], 25)
+            psi = log(gradient(gamtmp[:,0], binsize))
             h = psi - trapezoid(psi, time)
         else:
             psi = log(gradient(gam, binsize))
             h = psi - trapezoid(psi, time)
     else:
         n = gam.shape[1]
+        if smooth:
+            gamtmp = smooth_data(gam[:, newaxis], 25)
 
         psi = zeros((TT, n))
         for i in range(0, n):
             if smooth:
-                tmp_spline = UnivariateSpline(time, gam[:, i], s=1e-4)
-                d = tmp_spline.derivative()
-                cnt = 1
-                while (any(d(time)<0)):
-                    tmp_spline = UnivariateSpline(time, gam[:, i], s=s[cnt])
-                    cnt += 1
-                    d = tmp_spline.derivative()
-                psi[:, i] = log(d(time))
+                psi[:, i] = log(gradient(gamtmp[:, i], binsize))
             else:
                 psi[:, i] = log(gradient(gam[:, i], binsize))
 
         h = zeros((TT, n))
         for i in range(0, n):
-            h[:, i] = psi[:, i] - trapezoid(psi[:,i], time)
+            h[:, i] = psi[:, i] - trapezoid(psi[:, i], time)
 
     return h
 
@@ -136,7 +127,6 @@ def gam_to_v(gam, smooth=True):
 def h_to_gam(h):
     TT = h.shape[0]
     time = linspace(0, 1, TT)
-    mu = ones(TT)
     if h.ndim == 1:
         gam0 = cumulative_trapezoid(exp(h), time, initial=0)
         gam0 /= trapezoid(exp(h), time)
@@ -146,8 +136,8 @@ def h_to_gam(h):
 
         gam = zeros((TT, n))
         for i in range(0, n):
-            gam0 = cumulative_trapezoid(exp(h[:,i]), time, initial=0)
-            gam0 /= trapezoid(exp(h[:,i]), time)
+            gam0 = cumulative_trapezoid(exp(h[:, i]), time, initial=0)
+            gam0 /= trapezoid(exp(h[:, i]), time)
             gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam
@@ -171,4 +161,3 @@ def v_to_gam(v):
             gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam
-
