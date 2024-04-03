@@ -57,8 +57,6 @@ def gam_to_h(gam, smooth=True):
     time = linspace(0, 1, TT)
     binsize = diff(time)
     binsize = binsize.mean()
-    s = logspace(-4, -1, 10)
-    cnt = 1
     if gam.ndim == 1:
         if smooth:
             gamtmp = smooth_data(gam[:, newaxis], 25)
