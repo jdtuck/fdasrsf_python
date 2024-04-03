@@ -60,7 +60,7 @@ def gam_to_h(gam, smooth=True):
     if gam.ndim == 1:
         if smooth:
             gamtmp = smooth_data(gam[:, newaxis], 25)
-            psi = log(gradient(gamtmp[:,0], binsize))
+            psi = log(gradient(gamtmp[:, 0], binsize))
             h = psi - trapezoid(psi, time)
         else:
             psi = log(gradient(gam, binsize))
