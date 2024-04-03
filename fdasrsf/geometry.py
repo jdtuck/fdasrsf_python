@@ -9,8 +9,7 @@ from numpy import arccos, sin, cos, linspace, zeros, sqrt, newaxis
 from numpy import ones, diff, gradient, log, exp, logspace, any
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapezoid, cumulative_trapezoid
-from fdasrsf.utility_functions import smooth_data
-
+import fdasrsf.utility_functions as uf
 
 def inv_exp_map(Psi, psi):
     tmp = inner_product(Psi, psi)
@@ -59,7 +58,7 @@ def gam_to_h(gam, smooth=True):
     binsize = binsize.mean()
     if gam.ndim == 1:
         if smooth:
-            gamtmp = smooth_data(gam[:, newaxis], 25)
+            gamtmp = uf.smooth_data(gam[:, newaxis], 25)
             psi = log(gradient(gamtmp[:, 0], binsize))
             h = psi - trapezoid(psi, time)
         else:
@@ -68,7 +67,7 @@ def gam_to_h(gam, smooth=True):
     else:
         n = gam.shape[1]
         if smooth:
-            gamtmp = smooth_data(gam[:, newaxis], 25)
+            gamtmp = uf.smooth_data(gam[:, newaxis], 25)
 
         psi = zeros((TT, n))
         for i in range(0, n):
