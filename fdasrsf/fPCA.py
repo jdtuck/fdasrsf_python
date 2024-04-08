@@ -729,8 +729,8 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
         for ii in range(0, N):
             psihat[:, ii] = geo.exp_map(mu_psi, vechat[:, ii])
             gam_tmp = cumulative_trapezoid(
-                psihat[:, ii] * psihat[:, ii], np.linspace(0, 1, M - 1), initial=0
-            )
+                psihat[:, ii] * psihat[:, ii], np.linspace(0, 1, M - 1), 
+                initial=0)
             gamhat[:, ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
     U = U[:, 0:m]
@@ -742,7 +742,8 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
 def jfpca_sub(mu_psi, vechat):
     M = mu_psi.shape[0]
     psihat = geo.exp_map(mu_psi, vechat)
-    gam_tmp = cumulative_trapezoid(psihat * psihat, np.linspace(0, 1, M), initial=0)
+    gam_tmp = cumulative_trapezoid(psihat * psihat, np.linspace(0, 1, M), 
+                                   initial=0)
     gamhat = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
     return gamhat
@@ -758,14 +759,15 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
     d = np.zeros(N)
     if parallel:
         out = Parallel(n_jobs=cores)(
-            delayed(find_C_sub)(time, qhat[0 : (M - 1), n], gamhat[:, n], q0[:, n])
+            delayed(find_C_sub)(time, qhat[0: (M - 1), n], gamhat[:, n], 
+                                q0[:, n])
             for n in range(N)
         )
         d = np.array(out)
     else:
         for i in range(0, N):
             tmp = uf.warp_q_gamma(
-                time, qhat[0 : (M - 1), i], uf.invertGamma(gamhat[:, i])
+                time, qhat[0: (M - 1), i], uf.invertGamma(gamhat[:, i])
             )
             d[i] = trapezoid((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 

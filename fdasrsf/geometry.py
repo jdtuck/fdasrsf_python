@@ -67,7 +67,7 @@ def gam_to_h(gam, smooth=True):
     else:
         n = gam.shape[1]
         if smooth:
-            gamtmp = uf.smooth_data(gam[:, newaxis], 25)
+            gamtmp = uf.smooth_data(gam, 25)
 
         psi = zeros((TT, n))
         for i in range(0, n):
