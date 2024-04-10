@@ -549,10 +549,12 @@ class fdajpca:
 
         for k in range(0, no):
             for l in range(0, Nstd):
-                qhat = mqn + np.dot(U[0 : (M + 1), k], stds[l] * np.sqrt(s[k]))
-                vechat = np.dot(U[(M + 1) :, k], (stds[l] * np.sqrt(s[k])) / C)
+                qhat = mqn + np.dot(U[0: (M + 1), k], stds[l] * np.sqrt(s[k]))
+                vechat = np.dot(U[(M + 1):, k], (stds[l] * np.sqrt(s[k])) / C)
                 psihat = geo.exp_map(mu_psi, vechat)
-                gamhat = cumulative_trapezoid(psihat * psihat, np.linspace(0, 1, M), initial=0)
+                gamhat = cumulative_trapezoid(psihat * psihat,
+                                              np.linspace(0, 1, M),
+                                              initial=0)
                 gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
                 if sum(vechat) == 0:
                     gamhat = np.linspace(0, 1, M)
@@ -563,7 +565,8 @@ class fdajpca:
                     np.sign(qhat[M]) * (qhat[M] * qhat[M]),
                     mididx,
                 )
-                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), fhat, gamhat)
+                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), 
+                                                 fhat, gamhat)
                 q_pca[:, l, k] = uf.warp_q_gamma(
                     np.linspace(0, 1, M), qhat[0:M], gamhat
                 )
@@ -622,7 +625,8 @@ class fdajpca:
         mu_psi = self.mu_psi
         vec = np.zeros((M, n))
         psi = np.zeros((TT, n))
-        binsize = np.mean(np.diff(self.time))
+        time = np.linspace(0, 1, TT)
+        binsize = np.mean(np.diff(time))
         for i in range(0, n):
             psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
             out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
