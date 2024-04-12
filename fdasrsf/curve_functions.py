@@ -85,12 +85,13 @@ def calculatecentroid(beta):
     return centroid
 
 
-def curve_to_q(beta, mode="O"):
+def curve_to_q(beta, mode="O", scale=True):
     """
     This function converts curve beta to srvf q
 
     :param beta: numpy ndarray of shape (2,M) of M samples
     :param mode: Open ('O') or closed curve ('C') (default 'O')
+    :param scale: scale curve to unit length (default = True)
 
     :rtype: numpy ndarray
     :return q: srvf of curve
@@ -99,11 +100,10 @@ def curve_to_q(beta, mode="O"):
 
     """
     n, T = beta.shape
-    v = gradient(beta, 1.0 / (T - 1))
+    v = gradient(beta, 1.0 / T)
     v = v[1]
 
     q = zeros((n, T))
-    lenb = sqrt(innerprod_q2(sqrt(abs(v)), sqrt(abs(v))))
     for i in range(0, T):
         L = sqrt(norm(v[:, i]))
         if L > 0.0001:
@@ -111,13 +111,15 @@ def curve_to_q(beta, mode="O"):
         else:
             q[:, i] = v[:, i] * 0.0001
 
-    lenq = sqrt(innerprod_q2(q, q))
-    q = q / lenq
+    len = innerprod_q2(q, q)
+    lenq = sqrt(len)
+    if scale:
+        q = q / lenq
 
     if mode == "C":
         q = project_curve(q)
 
-    return (q, lenb, lenq)
+    return (q, len, lenq)
 
 
 def q_to_curve(q, scale=1):
@@ -132,6 +134,7 @@ def q_to_curve(q, scale=1):
 
     """
     n, T = q.shape
+    q *= scale
     qnorm = zeros(T)
     for i in range(0, T):
         qnorm[i] = norm(q[:, i])
@@ -139,8 +142,6 @@ def q_to_curve(q, scale=1):
     beta = zeros((n, T))
     for i in range(0, n):
         beta[i, :] = cumulative_trapezoid(q[i, :] * qnorm, initial=0) / T
-
-    beta = scale * beta
 
     return beta
 
