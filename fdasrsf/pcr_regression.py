@@ -195,6 +195,8 @@ class elastic_pcr_regression:
                     for j in range(0, no):
                         tmp = g[:, i] - mu_g
                         a[i, j] = np.dot(tmp.T, U[:, j])
+                
+                self.new_coef = a
 
             elif self.pca.__class__.__name__ == "fdavpca":
                 m_new = np.sign(fn[self.pca.id, :]) * np.sqrt(
