@@ -206,6 +206,8 @@ class elastic_pcr_regression:
                     for j in range(0, no):
                         tmp = qn1[:, i] - self.pca.mqn
                         a[i, j] = np.dot(tmp.T, U[:, j])
+                
+                self.new_coef = a
 
             elif self.pca.__class__.__name__ == "fdahpca":
                 a = np.zeros((n, no))
@@ -224,6 +226,8 @@ class elastic_pcr_regression:
                 for i in range(0, n):
                     for j in range(0, no):
                         a[i, j] = np.sum(np.dot(vec[:, i] - vm, U[:, j]))
+                
+                self.new_coef = a
             else:
                 raise Exception("Invalid fPCA Method")
 
