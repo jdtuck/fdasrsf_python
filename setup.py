@@ -16,10 +16,10 @@ sys.path.insert(1, "src/")
 import dp_build
 
 # Make sure I have the right Python version.
-if sys.version_info[:2] < (3, 6):
+if sys.version_info[:2] < (3, 9):
     print(
         (
-            "fdasrsf requires Python 3.6 or newer. Python %d.%d detected"
+            "fdasrsf requires Python 3.9 or newer. Python %d.%d detected"
             % sys.version_info[:2]
         )
     )
@@ -145,6 +145,6 @@ setup(
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Mathematics",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
 )

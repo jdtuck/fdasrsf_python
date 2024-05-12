@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "BSD 3-Clause"}
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.9"
 
 keywords = ["functional data analysis"]
 
@@ -32,7 +32,7 @@ classifiers = [
     'Topic :: Scientific/Engineering',
     'Topic :: Scientific/Engineering :: Mathematics',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.9',
 ]
 
 [project.urls]
