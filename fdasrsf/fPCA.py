@@ -640,6 +640,7 @@ class fdajpca:
                 tmp = g[:, i] - mu_g
                 a[i, j] = np.dot(tmp.T, U[:, j])
 
+        self.new_g = g
         self.new_coef = a
 
         return
