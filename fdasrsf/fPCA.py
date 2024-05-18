@@ -738,6 +738,7 @@ class fdajpcah:
 
     def calc_fpca(
         self,
+        no=3,
         var_exp=0.99,
         stds=np.arange(-1.0, 2.0),
         id=None,
@@ -748,6 +749,7 @@ class fdajpcah:
         This function calculates joint functional principal component analysis
         on aligned data
 
+        :param no: number of components to extract (default = 3)
         :param var_exp: compute no based on value percent variance explained
                         (default: 0.99)
         :param id: point to use for f(0) (default = midpoint)
