@@ -505,8 +505,6 @@ def SqrtMean(gam, parallel=False, cores=-1, smooth=True):
     time = linspace(0, 1, T)
     binsize = mean(diff(time))
     psi = zeros((T, n))
-    if smooth:
-        
     if parallel:
         out = Parallel(n_jobs=cores)(
             delayed(gradient)(gam[:, k], binsize) for k in range(n)
