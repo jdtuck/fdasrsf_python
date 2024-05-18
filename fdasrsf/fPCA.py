@@ -835,6 +835,8 @@ class fdajpcah:
         self.U_h = Psi_h
         self.id = mididx
         self.C = C
+        self.h = h
+        self.qn1 = qn
         self.time = time
         self.no = no
         self.stds = stds
