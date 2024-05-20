@@ -840,7 +840,7 @@ class fdajpcah:
         self.id = mididx
         self.C = C
         self.h = h
-        self.qn1 = qn
+        self.qn1 = qn2
         self.time = time
         self.no = no
         self.stds = stds
