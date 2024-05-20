@@ -737,7 +737,6 @@ class fdajpcah:
 
     def calc_fpca(
         self,
-        no=3,
         var_exp=0.99,
         stds=np.arange(-1.0, 2.0),
         id=None,
@@ -748,7 +747,6 @@ class fdajpcah:
         This function calculates joint functional principal component analysis
         on aligned data
 
-        :param no: number of components to extract (default = 3)
         :param var_exp: compute no based on value percent variance explained
                         (default: None)
         :param id: point to use for f(0) (default = midpoint)
@@ -756,7 +754,6 @@ class fdajpcah:
                      (default = -1,0,1)
         :param parallel: run in parallel (default = F)
         :param cores: number of cores for parallel (default = -1 (all))
-        :type no: int
         :type id: int
         :type parallel: bool
         :type cores: int
@@ -806,9 +803,7 @@ class fdajpcah:
         mh = np.mean(hc, axis=1)
 
         # geodesic paths
-        no1 = cz.shape[1]
-        if no >= no1:
-            no = no1
+        no = cz.shape[1]
         q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
         f_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
 
@@ -833,6 +828,7 @@ class fdajpcah:
 
         self.q_pca = q_pca
         self.f_pca = f_pca
+        self.eigs = sz
         self.latent = sz[0:no]
         self.coef = cz[:, 0:no]
         self.U_q = Psi_q
@@ -888,6 +884,8 @@ class fdajpcah:
         cz = Xi @ self.Uz
 
         self.new_coef = cz
+        self.new_qn1 = qn1
+        self.new_h = h
 
         return
 
