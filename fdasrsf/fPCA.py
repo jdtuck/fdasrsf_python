@@ -14,7 +14,6 @@ from scipy.optimize import fminbound
 from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
 import fdasrsf.plot_style as plot
-import collections
 
 
 class fdavpca:
@@ -739,7 +738,7 @@ class fdajpcah:
     def calc_fpca(
         self,
         no=3,
-        var_exp=0.99,
+        var_exp=None,
         stds=np.arange(-1.0, 2.0),
         id=None,
         parallel=False,
@@ -751,7 +750,7 @@ class fdajpcah:
 
         :param no: number of components to extract (default = 3)
         :param var_exp: compute no based on value percent variance explained
-                        (default: 0.99)
+                        (default: None)
         :param id: point to use for f(0) (default = midpoint)
         :param stds: number of standard deviations along gedoesic to compute
                      (default = -1,0,1)
@@ -781,6 +780,7 @@ class fdajpcah:
         if var_exp is not None:
             if var_exp > 1:
                 raise Exception("var_exp is greater than 1")
+            no = M
 
         if id is None:
             mididx = int(np.round(M / 2))
@@ -799,8 +799,8 @@ class fdajpcah:
         h = geo.gam_to_h(gam)
 
         # joint fPCA
-        C = fminbound(find_C_h, 0, 200, (qn2, h, q0, 0.99, parallel, cores))
-        qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn2, h, C, var_exp)
+        C = fminbound(find_C_h, 0, 200, (qn2, h, q0, no, 0.99, parallel, cores))
+        qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn2, h, C, no, var_exp)
 
         hc = C * h
         mh = np.mean(hc, axis=1)
@@ -989,7 +989,7 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     return qhat, gamhat, a, U, s, mu_g, g, K
 
 
-def jointfPCAhd(qn, h, C, var_exp):
+def jointfPCAhd(qn, h, C, no_h=3, var_exp=None):
     (M, N) = qn.shape
 
     # Run Univariate fPCA
@@ -1017,7 +1017,8 @@ def jointfPCAhd(qn, h, C, var_exp):
     Uh, Vh = uf.svd_flip(Uh, Vh)
 
     cumm_coef = np.cumsum(sh) / sh.sum()
-    no_h = int(np.argwhere(cumm_coef >= var_exp)[0][0]) + 1
+    if var_exp is not None:
+        no_h = int(np.argwhere(cumm_coef >= var_exp)[0][0]) + 1
 
     ch = (hc - mh[:, np.newaxis]).T @ Uh
     ch = ch[:, 0:no_h]
@@ -1043,8 +1044,8 @@ def jointfPCAhd(qn, h, C, var_exp):
     return qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz
 
 
-def find_C_h(C, qn, h, q0, var_exp, parallel, cores):
-    qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn, h, C, var_exp)
+def find_C_h(C, qn, h, q0, no, var_exp, parallel, cores):
+    qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn, h, C, no, var_exp)
     (M, N) = qn.shape
     time = np.linspace(0, 1, M - 1)
 
