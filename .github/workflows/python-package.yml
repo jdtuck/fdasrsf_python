@@ -35,8 +35,8 @@ jobs:
         sudo apt-get install -y libopenblas-dev
     - if: runner.os == 'macOS'
       run: |
-          python -m pip install --upgrade pip
-          python -m pip install mkl-devel
+         python -m pip install --upgrade pip
+         pip install mkl-devel
     - name: Install python dependencies
       run: |
           python -m pip install flake8 setuptools pytest pytest-runner coverage pytest-cov
