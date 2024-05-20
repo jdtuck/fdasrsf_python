@@ -738,7 +738,7 @@ class fdajpcah:
     def calc_fpca(
         self,
         no=3,
-        var_exp=None,
+        var_exp=0.99,
         stds=np.arange(-1.0, 2.0),
         id=None,
         parallel=False,
@@ -799,14 +799,16 @@ class fdajpcah:
         h = geo.gam_to_h(gam)
 
         # joint fPCA
-        C = fminbound(find_C_h, 0, 200, (qn2, h, q0, no, 0.99, parallel, cores))
-        qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn2, h, C, no, var_exp)
+        C = fminbound(find_C_h, 0, 200, (qn2, h, q0, 0.99, parallel, cores))
+        qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn2, h, C, var_exp)
 
         hc = C * h
         mh = np.mean(hc, axis=1)
 
         # geodesic paths
-        no = cz.shape[1]
+        no1 = cz.shape[1]
+        if no >= no1:
+            no = no1
         q_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
         f_pca = np.ndarray(shape=(M, Nstd, no), dtype=float)
 
@@ -989,7 +991,7 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     return qhat, gamhat, a, U, s, mu_g, g, K
 
 
-def jointfPCAhd(qn, h, C, no_h=3, var_exp=None):
+def jointfPCAhd(qn, h, C, var_exp=None):
     (M, N) = qn.shape
 
     # Run Univariate fPCA
@@ -1017,8 +1019,7 @@ def jointfPCAhd(qn, h, C, no_h=3, var_exp=None):
     Uh, Vh = uf.svd_flip(Uh, Vh)
 
     cumm_coef = np.cumsum(sh) / sh.sum()
-    if var_exp is not None:
-        no_h = int(np.argwhere(cumm_coef >= var_exp)[0][0]) + 1
+    no_h = int(np.argwhere(cumm_coef >= var_exp)[0][0]) + 1
 
     ch = (hc - mh[:, np.newaxis]).T @ Uh
     ch = ch[:, 0:no_h]
@@ -1044,8 +1045,8 @@ def jointfPCAhd(qn, h, C, no_h=3, var_exp=None):
     return qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz
 
 
-def find_C_h(C, qn, h, q0, no, var_exp, parallel, cores):
-    qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn, h, C, no, var_exp)
+def find_C_h(C, qn, h, q0, var_exp, parallel, cores):
+    qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn, h, C, var_exp)
     (M, N) = qn.shape
     time = np.linspace(0, 1, M - 1)
 
