@@ -1036,7 +1036,7 @@ def jointfPCAhd(qn, h, C, var_exp=None):
     Psi_h = Uh @ Uz[no_q:, :]
 
     hhat = Psi_h @ (cz).T
-    gamhat = fs.geometry.h_to_gam(hhat)
+    gamhat = fs.geometry.h_to_gam(hhat/C)
 
     qhat = Psi_q @ cz.T + mqn[:, np.newaxis]
 
@@ -1098,7 +1098,7 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
             )
             d[i] = trapezoid((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 
-    out = sum(d * d) / N
+    out = d.mean()
 
     return out
 
