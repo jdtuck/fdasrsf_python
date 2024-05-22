@@ -742,6 +742,7 @@ class fdajpcah:
         id=None,
         parallel=False,
         cores=-1,
+        srsf=True,
     ):
         """
         This function calculates joint functional principal component analysis
@@ -770,7 +771,6 @@ class fdajpcah:
         fn = self.warp_data.fn
         time = self.warp_data.time
         qn = self.warp_data.qn
-        q0 = self.warp_data.q0
         gam = self.warp_data.gam
 
         M = time.shape[0]
@@ -787,16 +787,22 @@ class fdajpcah:
         Nstd = stds.shape[0]
 
         # set up for fPCA in q-space
-        mq_new = qn.mean(axis=1)
-        m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
-        mqn = np.append(mq_new, m_new.mean())
-        qn2 = np.vstack((qn, m_new))
+        if srsf:
+            mq_new = qn.mean(axis=1)
+            m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
+            mqn = np.append(mq_new, m_new.mean())
+            qn2 = np.vstack((qn, m_new))
+            q0 = self.warp_data.q0
+        else:
+            mqn = fn.mean(axis=1)
+            q0 = self.warp_data.f
+            qn2 = fn.copy()
 
         # calculate vector space of warping functions
         h = geo.gam_to_h(gam)
 
         # joint fPCA
-        C = fminbound(find_C_h, 0, 200, (qn2, h, q0, 0.99, parallel, cores))
+        C = fminbound(find_C_h, 0, 200, (qn2, h, q0, 0.99, parallel, cores, srsf))
         qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn2, h, C, var_exp)
 
         hc = C * h
@@ -813,18 +819,25 @@ class fdajpcah:
                 hhat = np.dot(Psi_h[:, k], (stds[l] * np.sqrt(sz[k])) / C)
                 gamhat = fs.geometry.h_to_gam(hhat)
 
-                fhat = fs.utility_functions.cumtrapzmid(
-                    time,
-                    qhat[0:M] * np.fabs(qhat[0:M]),
-                    np.sign(qhat[M]) * (qhat[M] * qhat[M]),
-                    mididx,
-                )
-                f_pca[:, l, k] = fs.utility_functions.warp_f_gamma(
-                    np.linspace(0, 1, M), fhat, gamhat
-                )
-                q_pca[:, l, k] = fs.utility_functions.warp_q_gamma(
-                    np.linspace(0, 1, M), qhat[0:M], gamhat
-                )
+                if srsf:
+                    fhat = fs.utility_functions.cumtrapzmid(
+                        time,
+                        qhat[0:M] * np.fabs(qhat[0:M]),
+                        np.sign(qhat[M]) * (qhat[M] * qhat[M]),
+                        mididx,
+                    )
+                    f_pca[:, l, k] = fs.utility_functions.warp_f_gamma(
+                        np.linspace(0, 1, M), fhat, gamhat
+                    )
+                    q_pca[:, l, k] = fs.utility_functions.warp_q_gamma(
+                        np.linspace(0, 1, M), qhat[0:M], gamhat
+                    )
+                else:
+                    f_pca[:, l, k] = fs.utility_functions.warp_f_gamma(
+                        np.linspace(0, 1, M), qhat, gamhat
+                    )
+                    q_pca[:, l, k] = fs.f_to_srsf(f_pca[:, l, k],
+                                                  np.linspace(0, 1, M))
 
         self.q_pca = q_pca
         self.f_pca = f_pca
@@ -1043,22 +1056,29 @@ def jointfPCAhd(qn, h, C, var_exp=None):
     return qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz
 
 
-def find_C_h(C, qn, h, q0, var_exp, parallel, cores):
+def find_C_h(C, qn, h, q0, var_exp, parallel, cores, srsf):
     qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn, h, C, var_exp)
     (M, N) = qn.shape
-    time = np.linspace(0, 1, M - 1)
+    if srsf:
+        time = np.linspace(0, 1, M - 1)
+    else:
+        time = np.linspace(0, 1, M)
 
     d = np.zeros(N)
     if parallel:
         out = Parallel(n_jobs=cores)(
-            delayed(find_C_sub)(time, qhat[0: (M - 1), n], gamhat[:, n], q0[:, n])
+            delayed(find_C_sub)(time, qhat[:, n], gamhat[:, n], q0[:, n], srsf)
             for n in range(N)
         )
         d = np.array(out)
     else:
         for i in range(0, N):
-            tmp = uf.warp_q_gamma(time, qhat[0: (M - 1), i],
-                                  uf.invertGamma(gamhat[:, i]))
+            if srsf:
+                tmp = uf.warp_q_gamma(time, qhat[0: (M - 1), i],
+                                      uf.invertGamma(gamhat[:, i]))
+            else:
+                tmp = uf.warp_f_gamma(time, qhat[:, i],
+                                      uf.invertGamma(gamhat[:, i]))
             d[i] = trapezoid((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 
     dout = d.mean()
@@ -1103,8 +1123,12 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
     return out
 
 
-def find_C_sub(time, qhat, gamhat, q0):
-    tmp = uf.warp_q_gamma(time, qhat, uf.invertGamma(gamhat))
+def find_C_sub(time, qhat, gamhat, q0, srsf):
+    if srsf:
+        M = qhat.shape[0]
+        tmp = uf.warp_q_gamma(time, qhat[0: (M - 1)], uf.invertGamma(gamhat))
+    else:
+        tmp = uf.warp_f_gamma(time, qhat, uf.invertGamma(gamhat))
     d = trapezoid((tmp - q0) * (tmp - q0), time)
 
     return d
