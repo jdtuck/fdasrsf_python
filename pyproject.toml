@@ -44,7 +44,7 @@ documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
 # Note: the below skip command doesn't do much currently, the platforms to
 # build wheels for in CI are controlled in `.github/workflows/wheels.yml` and
 # `tools/ci/cirrus_wheels.yml`.
-skip = "cp36-* cp37-* cp38-* pp* *-manylinux_i686 *_ppc64le *_s390x *-win32 *_i686"
+skip = "cp36-* cp37-* cp38-* pp* *_i686 *_ppc64le *_s390x *-win32"
 build-verbosity = "3"
 
 [tool.cibuildwheel.linux]
@@ -60,7 +60,7 @@ environment = {RUNNER_OS="macOS"}
 [tool.cibuildwheel.windows]
 before-build = "bash {project}/bin/cibw_before_build_win.sh {project}"
 repair-wheel-command = "bash ./tools/wheels/repair_windows.sh {wheel} {dest_dir}"
-environment = {PKG_CONFIG_PATH="C:/opt/64/lib/pkgconfig"}
+environment = {RUNNER_OS="Windows"}
 
 [[tool.cibuildwheel.overrides]]
 select = "*-win32"
