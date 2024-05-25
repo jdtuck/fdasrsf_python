@@ -56,6 +56,8 @@ if [[ $PLATFORM == "macosx-arm64" ]]; then
   # OpenBLAS pkgconfig files state
   sudo mkdir -p /opt/arm64-builds/lib
   sudo mkdir -p /opt/arm64-builds/include
+  udo mkdir -p /usr/local/lib
+  udo mkdir -p /usr/local/include
   sudo cp -r $basedir/lib/* /opt/arm64-builds/lib
   sudo cp $basedir/include/* /opt/arm64-builds/include
 
