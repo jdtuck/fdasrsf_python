@@ -66,6 +66,16 @@ environment = {RUNNER_OS="Windows"}
 select = "*-win32"
 environment = {PKG_CONFIG_PATH="/opt/32/lib/pkgconfig"}
 
+[[tool.cibuildwheel.overrides]]
+select = "*-win_amd64"
+# can use pkg-config detection for win_amd64 because the installed rtools
+# provide a working pkg-config.
+# An alternative is to set CMAKE_PREFIX_PATH="c:/opt/openblas/if_32/32"
+# Don't use double backslash for path separators, they don't get passed
+# to the build correctly
+# environment = { CMAKE_PREFIX_PATH="c:/opt/64" }
+environment = { PKG_CONFIG_PATH = "c:/opt/64/lib/pkgconfig" }
+
 [build-system]
 requires = ["setuptools>=46.0", "wheel", "cffi>=1.0.0", "Cython", "findblas", "oldest-supported-numpy"]  # PEP 518 - what is required to build
 build-backend = "setuptools.build_meta"
