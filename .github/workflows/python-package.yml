@@ -62,24 +62,24 @@ jobs:
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v3
     
-  # build_wheels:
-  #   needs: [build]
-  #   if: startsWith( github.ref, 'refs/tags/')
-  #   name: Build wheels on ${{ matrix.os }}
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-22.04]
+  build_wheels:
+    needs: [build]
+    # if: startsWith( github.ref, 'refs/tags/')
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
         
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Build wheels
-  #       uses: pypa/cibuildwheel@v2.16.2
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.16.2
 
-  #     - uses: actions/upload-artifact@v3
-  #       with:
-  #         path: ./wheelhouse/*.whl
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
 
   build_sdist:
     needs: [build]
