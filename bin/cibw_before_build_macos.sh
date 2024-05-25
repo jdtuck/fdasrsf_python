@@ -62,6 +62,9 @@ if [[ $PLATFORM == "macosx-arm64" ]]; then
   # we want to force a dynamic linking
   sudo rm /opt/arm64-builds/lib/*.a
 
+  sudo cp -r /opt/arm64-builds/lib/* /usr/local/lib
+  sudo cp /opt/arm64-builds/include/* /usr/local/include
+  
   curl -L https://github.com/fxcoudert/gfortran-for-macOS/releases/download/12.1-monterey/gfortran-ARM-12.1-Monterey.dmg -o gfortran.dmg
   GFORTRAN_SHA256=$(shasum -a 256 gfortran.dmg)
   KNOWN_SHA256="e2e32f491303a00092921baebac7ffb7ae98de4ca82ebbe9e6a866dd8501acdf  gfortran.dmg"
