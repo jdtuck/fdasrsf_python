@@ -55,6 +55,10 @@ jobs:
       name: Build
       run: |
         pip install .
+    - if: runner.os == 'MacOS'
+      name: Build
+      run: |
+        pip install .
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v3
     
