@@ -59,7 +59,7 @@ environment = {RUNNER_OS="macOS"}
 
 [tool.cibuildwheel.windows]
 before-build = "bash {project}/bin/cibw_before_build_win.sh {project}"
-repair-wheel-command = "bash ./tools/wheels/repair_windows.sh {wheel} {dest_dir}"
+#repair-wheel-command = "bash ./bin/repair_windows.sh {wheel} {dest_dir}"
 environment = {RUNNER_OS="Windows"}
 
 [[tool.cibuildwheel.overrides]]
