@@ -37,3 +37,5 @@ fi
 # attempt to deal with:
 # https://github.com/scipy/scipy/pull/20362#issuecomment-2028517797
 python -c "import bin.openblas_support as obs; obs.reformat_pkg_file('C:/opt/')"
+
+python -m pip install mkl-devel
