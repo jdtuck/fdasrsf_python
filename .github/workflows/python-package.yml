@@ -95,6 +95,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: cibw-sdist
           path: dist/*.tar.gz
   
   upload_pypi:
@@ -109,8 +110,9 @@ jobs:
         with:
           # unpacks default artifact into dist/
           # if `name: artifact` is omitted, the action will create extra parent dir
-          name: artifact
+          pattern: cibw-*
           path: dist
+          merge-multiple: true
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
