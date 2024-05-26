@@ -13,12 +13,12 @@ mkdir -p /c/opt/64/lib/pkgconfig
 # delvewheel is the equivalent of delocate/auditwheel for windows.
 python -m pip install delvewheel
 
-# make the DLL available for tools/wheels/repair_windows.sh. If you change
+# make the DLL available for bin/repair_windows.sh. If you change
 # this location you need to alter that script.
 mkdir -p /c/opt/openblas/openblas_dll
 which strip
 
-target=$(python -c "import tools.openblas_support as obs; plat=obs.get_plat(); ilp64=obs.get_ilp64(); target=f'openblas_{plat}.zip'; obs.download_openblas(target, plat, ilp64);print(target)")
+target=$(python -c "import bin.openblas_support as obs; plat=obs.get_plat(); ilp64=obs.get_ilp64(); target=f'openblas_{plat}.zip'; obs.download_openblas(target, plat, ilp64);print(target)")
 
 # The 32/64 bit Fortran wheels are currently coming from different locations.
 if [[ $PLATFORM == 'win-32' ]]; then
@@ -34,4 +34,4 @@ else
 fi
 # attempt to deal with:
 # https://github.com/scipy/scipy/pull/20362#issuecomment-2028517797
-python -c "import tools.openblas_support as obs; obs.reformat_pkg_file('C:/opt/')"
+python -c "import bin.openblas_support as obs; obs.reformat_pkg_file('C:/opt/')"
