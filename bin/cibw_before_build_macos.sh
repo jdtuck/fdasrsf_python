@@ -81,7 +81,7 @@ if [[ $PLATFORM == "macosx-arm64" ]]; then
   type -p gfortran
  
   # Link these into /usr/local so that there's no need to add rpath or -L
-  for f in libgfortran.dylib libgfortran.5.dylib libquadmath.dylib libquadmath.0.dylib; do
+  for f in libgfortran.dylib libgfortran.5.dylib libgcc_s.1.1.dylib libquadmath.dylib libquadmath.0.dylib; do
     sudo cp /usr/local/gfortran/lib/$f /opt/arm64-builds/lib/$f
   done
   sudo ln -sf /usr/local/gfortran//bin/gfortran /usr/local/bin/gfortran
