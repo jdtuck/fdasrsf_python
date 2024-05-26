@@ -51,10 +51,6 @@ jobs:
       name: Test with pytest
       run: |
         python setup.py pytest --addopts "test --cov app"
-    - if: runner.os == 'macOS'
-      name: Test with pytest
-      run: |
-        python setup.py pytest --addopts "test"
     - if: runner.os == 'Windows'
       name: Build
       run: |
