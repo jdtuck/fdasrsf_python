@@ -6,7 +6,7 @@ PLATFORM=$(PYTHONPATH=bin python -c "import openblas_support; print(openblas_sup
 printenv
 
 # Install Openblas
-PYTHONPATH=bin python -c "import openblas_support; openblas_support.make_init('scipy')"
+PYTHONPATH=bin python -c "import openblas_support; openblas_support.make_init('fdasrsf')"
 mkdir -p /c/opt/32/lib/pkgconfig
 mkdir -p /c/opt/64/lib/pkgconfig
 
