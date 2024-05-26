@@ -44,32 +44,37 @@ documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
 # Note: the below skip command doesn't do much currently, the platforms to
 # build wheels for in CI are controlled in `.github/workflows/wheels.yml` and
 # `tools/ci/cirrus_wheels.yml`.
-skip = "cp36-* cp37-* cp38-* cp312-* pp* *-manylinux_i686 *_ppc64le *_s390x *-win32 *_i686"
+skip = "cp36-* cp37-* cp38-* pp* *_i686 *_ppc64le *_s390x *-win32"
 build-verbosity = "3"
-environment = {BLAS="/usr/local/lib",BLAS_SRC="/usr/local/include"}
-before-build = "bash {project}/bin/cibw_before_build.sh {project}"
 
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "manylinux2014"
 manylinux-aarch64-image = "manylinux2014"
+before-build = "bash {project}/bin/cibw_before_build_linux.sh {project}"
 environment = {RUNNER_OS="Linux"}
 
 [tool.cibuildwheel.macos]
-# For universal2 wheels, we will need to fuse them manually
-# instead of going through cibuildwheel
-# This is because cibuildwheel tries to make a fat wheel
-# https://github.com/multi-build/multibuild/blame/devel/README.rst#L541-L565
-# for more info
-archs = "x86_64 arm64"
-test-skip = "*_universal2:arm64"
+before-build = "bash {project}/bin/cibw_before_build_macos.sh {project}"
 environment = {RUNNER_OS="macOS"}
 
 [tool.cibuildwheel.windows]
-environment = {PKG_CONFIG_PATH="C:/opt/64/lib/pkgconfig"}
+before-build = "bash {project}/bin/cibw_before_build_win.sh {project}"
+#repair-wheel-command = "bash ./bin/repair_windows.sh {wheel} {dest_dir}"
+environment = {RUNNER_OS="Windows"}
 
 [[tool.cibuildwheel.overrides]]
 select = "*-win32"
 environment = {PKG_CONFIG_PATH="/opt/32/lib/pkgconfig"}
+
+[[tool.cibuildwheel.overrides]]
+select = "*-win_amd64"
+# can use pkg-config detection for win_amd64 because the installed rtools
+# provide a working pkg-config.
+# An alternative is to set CMAKE_PREFIX_PATH="c:/opt/openblas/if_32/32"
+# Don't use double backslash for path separators, they don't get passed
+# to the build correctly
+# environment = { CMAKE_PREFIX_PATH="c:/opt/64" }
+environment = { PKG_CONFIG_PATH = "c:/opt/64/lib/pkgconfig" }
 
 [build-system]
 requires = ["setuptools>=46.0", "wheel", "cffi>=1.0.0", "Cython", "findblas", "oldest-supported-numpy"]  # PEP 518 - what is required to build
