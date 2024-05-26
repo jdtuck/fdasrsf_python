@@ -82,8 +82,8 @@ if [[ $PLATFORM == "macosx-arm64" ]]; then
  
   # Link these into /usr/local so that there's no need to add rpath or -L
   for f in libgfortran.dylib libgfortran.5.dylib libgcc_s.1.dylib libgcc_s.1.1.dylib libquadmath.dylib libquadmath.0.dylib; do
-    ln -sf /opt/gfortran-darwin-x86_64-native/lib/$f /usr/local/lib/$f
+    sudo ln -sf /opt/gfortran-darwin-x86_64-native/lib/$f /usr/local/lib/$f
   done
-  ln -sf /opt/gfortran-darwin-x86_64-native/bin/gfortran /usr/local/bin/gfortran
+  sudo ln -sf /opt/gfortran-darwin-x86_64-native/bin/gfortran /usr/local/bin/gfortran
 
 fi
