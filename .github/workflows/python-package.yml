@@ -64,7 +64,7 @@ jobs:
     
   build_wheels:
     needs: [build]
-    # if: startsWith( github.ref, 'refs/tags/')
+    if: startsWith( github.ref, 'refs/tags/')
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
