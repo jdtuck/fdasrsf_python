@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Elastic Principal Component Regression &#8212; fdasrsf 2.5.6 documentation</title>
+    <title>Elastic Principal Component Regression &#8212; fdasrsf 2.5.11 documentation</title>
   
   
   
@@ -46,7 +46,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.6';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.11';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -128,8 +128,8 @@
     
     
     
-    <img src="_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.6 documentation - Home"/>
-    <script>document.write(`<img src="_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.6 documentation - Home"/>`);</script>
+    <img src="_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.11 documentation - Home"/>
+    <script>document.write(`<img src="_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.11 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -644,7 +644,7 @@ SRVF framework accounting for warping</p>
 Date   :  18-Mar-2018</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pcr_regression.elastic_pcr_regression.calc_model">
-<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression.calc_model" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">calc_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_exp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcr_regression.html#elastic_pcr_regression.calc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcr_regression.elastic_pcr_regression.calc_model" title="Permalink to this definition">#</a></dt>
 <dd><p>This function identifies a regression model with phase-variability
 using elastic pca</p>
 <dl class="field-list simple">
@@ -653,6 +653,8 @@ using elastic pca</p>
 <li><p><strong>pca_method</strong> – string specifying pca method (options = “combined”,
 “vert”, or “horiz”, default = “combined”)</p></li>
 <li><p><strong>no</strong> – scalar specify number of principal components (default=5)</p></li>
+<li><p><strong>var_exp</strong> – compute no based on value percent variance explained
+(example: 0.95)</p></li>
 <li><p><strong>smooth_data</strong> – smooth data using box filter (default = F)</p></li>
 <li><p><strong>sparam</strong> – number of times to apply box filter (default = 25)</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>

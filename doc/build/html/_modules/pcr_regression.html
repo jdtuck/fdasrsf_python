@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pcr_regression &#8212; fdasrsf 2.5.6 documentation</title>
+    <title>pcr_regression &#8212; fdasrsf 2.5.11 documentation</title>
   
   
   
@@ -45,7 +45,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.6';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.11';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -125,8 +125,8 @@
     
     
     
-    <img src="../_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.6 documentation - Home"/>
-    <script>document.write(`<img src="../_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.6 documentation - Home"/>`);</script>
+    <img src="../_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.11 documentation - Home"/>
+    <script>document.write(`<img src="../_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.11 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -489,6 +489,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pca_method</span><span class="o">=</span><span class="s2">&quot;combined&quot;</span><span class="p">,</span>
         <span class="n">no</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">var_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">smooth_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">sparam</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
         <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -501,6 +502,8 @@ document.write(`
 <span class="sd">        :param pca_method: string specifying pca method (options = &quot;combined&quot;,</span>
 <span class="sd">                        &quot;vert&quot;, or &quot;horiz&quot;, default = &quot;combined&quot;)</span>
 <span class="sd">        :param no: scalar specify number of principal components (default=5)</span>
+<span class="sd">        :param var_exp: compute no based on value percent variance explained</span>
+<span class="sd">                        (example: 0.95)</span>
 <span class="sd">        :param smooth_data: smooth data using box filter (default = F)</span>
 <span class="sd">        :param sparam: number of times to apply box filter (default = 25)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
@@ -525,19 +528,21 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">pca</span> <span class="o">=</span> <span class="n">fpca</span><span class="o">.</span><span class="n">fdahpca</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">warp_data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid fPCA Method&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="n">calc_fpca</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="n">calc_fpca</span><span class="p">(</span><span class="n">no</span><span class="o">=</span><span class="n">no</span><span class="p">,</span> <span class="n">var_exp</span><span class="o">=</span><span class="n">var_exp</span><span class="p">)</span>
+
+        <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="n">no</span>
 
         <span class="c1"># OLS using PCA basis</span>
         <span class="n">lam</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">Phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span> <span class="n">no</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">Phi</span><span class="p">[:,</span> <span class="mi">1</span> <span class="p">:</span> <span class="p">(</span><span class="n">no</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="n">coef</span>
+        <span class="n">Phi</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:(</span><span class="n">no</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="n">coef</span>
         <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">Phi</span><span class="p">)</span>
         <span class="n">inv_xx</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv_xx</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="n">no</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">no</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># compute the SSE</span>
         <span class="n">int_X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N1</span><span class="p">)</span>
@@ -624,6 +629,8 @@ document.write(`
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
                         <span class="n">tmp</span> <span class="o">=</span> <span class="n">g</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mu_g</span>
                         <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">new_coef</span> <span class="o">=</span> <span class="n">a</span>
 
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;fdavpca&quot;</span><span class="p">:</span>
                 <span class="n">m_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
@@ -635,6 +642,8 @@ document.write(`
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
                         <span class="n">tmp</span> <span class="o">=</span> <span class="n">qn1</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="n">mqn</span>
                         <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">new_coef</span> <span class="o">=</span> <span class="n">a</span>
 
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;fdahpca&quot;</span><span class="p">:</span>
                 <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">no</span><span class="p">))</span>
@@ -653,6 +662,8 @@ document.write(`
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
                         <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">vm</span><span class="p">,</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]))</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">new_coef</span> <span class="o">=</span> <span class="n">a</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid fPCA Method&quot;</span><span class="p">)</span>
 

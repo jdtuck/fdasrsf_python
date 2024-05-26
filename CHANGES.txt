@@ -1,4 +1,4 @@
-v2.5.XX, 2024-04-08 -- bugfixes and joint fpca with h
+v2.5.11, 2024-05-26 -- bugfixes and joint fpca with h
 v2.5.10, 2024-04-01 -- bugfixes and add h transformation for gamma
 v2.5.9,  2024-02-26 -- bugfixes
 v2.5.7,  2024-01-16 -- bugfixes

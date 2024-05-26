@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Utility Functions &#8212; fdasrsf 2.5.6 documentation</title>
+    <title>Utility Functions &#8212; fdasrsf 2.5.11 documentation</title>
   
   
   
@@ -46,7 +46,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.6';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.11';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -128,8 +128,8 @@
     
     
     
-    <img src="_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.6 documentation - Home"/>
-    <script>document.write(`<img src="_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.6 documentation - Home"/>`);</script>
+    <img src="_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.11 documentation - Home"/>
+    <script>document.write(`<img src="_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.11 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -491,7 +491,7 @@ document.write(`
 <p>moduleauthor:: J. Derek Tucker &lt;<a class="reference external" href="mailto:jdtuck&#37;&#52;&#48;sandia&#46;gov">jdtuck<span>&#64;</span>sandia<span>&#46;</span>gov</a>&gt;</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utility_functions.SqrtMean">
-<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMean" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">SqrtMean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#SqrtMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.SqrtMean" title="Permalink to this definition">#</a></dt>
 <dd><p>calculates the srsf of warping functions with corresponding shooting
 vectors</p>
 <dl class="field-list simple">
@@ -501,6 +501,7 @@ vectors</p>
 with N samples</p></li>
 <li><p><strong>parallel</strong> – run in parallel (default = F)</p></li>
 <li><p><strong>cores</strong> – number of cores for parallel (default = -1 (all))</p></li>
+<li><p><strong>smooth</strong> – smooth warping functions before gradient calculation</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -959,6 +960,40 @@ or “cRBFGS”</p></li>
 </dd>
 <dt class="field-odd">Return f<span class="colon">:</span></dt>
 <dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utility_functions.svd_flip">
+<span class="sig-prename descclassname"><span class="pre">utility_functions.</span></span><span class="sig-name descname"><span class="pre">svd_flip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_based_decision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utility_functions.html#svd_flip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utility_functions.svd_flip" title="Permalink to this definition">#</a></dt>
+<dd><p>Sign correction to ensure deterministic output from SVD.</p>
+<p>Adjusts the columns of u and the rows of v such that the loadings in the
+columns in u that are largest in absolute value are always positive.</p>
+<p>If u_based_decision is False, then the same sign correction is applied to
+so that the rows in v that are largest in absolute value are always
+positive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>ndarray</em>) – Parameters u and v are the output of <cite>linalg.svd</cite> or
+<code class="xref py py-func docutils literal notranslate"><span class="pre">randomized_svd()</span></code>, with matching inner
+dimensions so one can compute <cite>np.dot(u * s, v)</cite>.</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Parameters u and v are the output of <cite>linalg.svd</cite> or
+<code class="xref py py-func docutils literal notranslate"><span class="pre">randomized_svd()</span></code>, with matching inner
+dimensions so one can compute <cite>np.dot(u * s, v)</cite>. The input v should
+really be called vt to be consistent with scipy’s output.</p></li>
+<li><p><strong>u_based_decision</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, use the columns of u as the basis for sign flipping.
+Otherwise, use the rows of v. The choice of which variable to base the
+decision on is generally algorithm dependent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>u_adjusted</strong> (<em>ndarray</em>) – Array u with adjusted columns and the same dimensions as u.</p></li>
+<li><p><strong>v_adjusted</strong> (<em>ndarray</em>) – Array v with adjusted rows and the same dimensions as v.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

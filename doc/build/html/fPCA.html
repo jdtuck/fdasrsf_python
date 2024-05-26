@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Functional Principal Component Analysis &#8212; fdasrsf 2.5.6 documentation</title>
+    <title>Functional Principal Component Analysis &#8212; fdasrsf 2.5.11 documentation</title>
   
   
   
@@ -46,7 +46,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.6';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.5.11';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -128,8 +128,8 @@
     
     
     
-    <img src="_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.6 documentation - Home"/>
-    <script>document.write(`<img src="_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.6 documentation - Home"/>`);</script>
+    <img src="_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.5.11 documentation - Home"/>
+    <script>document.write(`<img src="_static/icon.png" class="logo__image only-dark" alt="fdasrsf 2.5.11 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -644,6 +644,89 @@ on aligned data</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fPCA.fdajpca.project">
 <span class="sig-name descname"><span class="pre">project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpca.project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpca.project" title="Permalink to this definition">#</a></dt>
+<dd><p>project new data onto fPCA basis</p>
+<p>Usage: obj.project(f)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> – numpy array (MxN) of N functions on M time</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fPCA.fdajpcah">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fPCA.</span></span><span class="sig-name descname"><span class="pre">fdajpcah</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdawarp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpcah"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpcah" title="Permalink to this definition">#</a></dt>
+<dd><p>This class provides joint fPCA using the
+SRVF framework using MFPCA</p>
+<p>Usage:  obj = fdajpcah(warp_data)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>warp_data</strong> – fdawarp class with alignment data</p></li>
+<li><p><strong>q_pca</strong> – srvf principal directions</p></li>
+<li><p><strong>f_pca</strong> – f principal directions</p></li>
+<li><p><strong>latent</strong> – latent values</p></li>
+<li><p><strong>coef</strong> – principal coefficients</p></li>
+<li><p><strong>id</strong> – point used for f(0)</p></li>
+<li><p><strong>mqn</strong> – mean srvf</p></li>
+<li><p><strong>U_q</strong> – eigenvectors for q</p></li>
+<li><p><strong>U_h</strong> – eigenvectors for gam</p></li>
+<li><p><strong>C</strong> – scaling value</p></li>
+<li><p><strong>stds</strong> – geodesic directions</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author :  J. D. Tucker (JDT) &lt;jdtuck AT sandia.gov&gt;
+Date   :  06-April-2024</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fPCA.fdajpcah.calc_fpca">
+<span class="sig-name descname"><span class="pre">calc_fpca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var_exp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([-</span> <span class="pre">1.,</span> <span class="pre">0.,</span> <span class="pre">1.])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srsf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpcah.calc_fpca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpcah.calc_fpca" title="Permalink to this definition">#</a></dt>
+<dd><p>This function calculates joint functional principal component analysis
+on aligned data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_exp</strong> – compute no based on value percent variance explained
+(default: None)</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – point to use for f(0) (default = midpoint)</p></li>
+<li><p><strong>stds</strong> – number of standard deviations along gedoesic to compute
+(default = -1,0,1)</p></li>
+<li><p><strong>parallel</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – run in parallel (default = F)</p></li>
+<li><p><strong>cores</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – number of cores for parallel (default = -1 (all))</p></li>
+<li><p><strong>U_q</strong> – eigenvectors for q</p></li>
+<li><p><strong>U_h</strong> – eigenvectors for gam</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>fdajpcah object of numpy ndarray</p>
+</dd>
+<dt class="field-odd">Return q_pca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>srsf principal directions</p>
+</dd>
+<dt class="field-even">Return f_pca<span class="colon">:</span></dt>
+<dd class="field-even"><p>functional principal directions</p>
+</dd>
+<dt class="field-odd">Return latent<span class="colon">:</span></dt>
+<dd class="field-odd"><p>latent values</p>
+</dd>
+<dt class="field-even">Return coef<span class="colon">:</span></dt>
+<dd class="field-even"><p>coefficients</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fPCA.fdajpcah.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpcah.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpcah.plot" title="Permalink to this definition">#</a></dt>
+<dd><p>plot plot elastic joint fPCA result</p>
+<p>Usage: obj.plot()</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fPCA.fdajpcah.project">
+<span class="sig-name descname"><span class="pre">project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fPCA.html#fdajpcah.project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fPCA.fdajpcah.project" title="Permalink to this definition">#</a></dt>
 <dd><p>project new data onto fPCA basis</p>
 <p>Usage: obj.project(f)</p>
 <dl class="field-list simple">
