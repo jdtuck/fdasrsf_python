@@ -26,11 +26,13 @@ if [[ $PLATFORM == 'win-32' ]]; then
   # Download 32 bit openBLAS and put it into c/opt/32/lib
   unzip $target -d /c/opt/
   cp /c/opt/32/bin/*.dll /c/opt/openblas/openblas_dll
+  cp /c/opt/32/bin/*.dll /c/Windows/System32
   # rm /c/opt/openblas/if_32/32/lib/*.dll.a
 else
   # 64-bit openBLAS
   unzip $target -d /c/opt/
   cp /c/opt/64/bin/*.dll /c/opt/openblas/openblas_dll
+  cp /c/opt/64/bin/*.dll /c/Windows/SysNative
 fi
 # attempt to deal with:
 # https://github.com/scipy/scipy/pull/20362#issuecomment-2028517797
