@@ -1106,7 +1106,7 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
     d = np.zeros(N)
     if parallel:
         out = Parallel(n_jobs=cores)(
-            delayed(find_C_sub)(time, qhat[0: (M - 1), n], gamhat[:, n], 
+            delayed(find_C_sub)(time, qhat[:, n], gamhat[:, n], 
                                 q0[:, n])
             for n in range(N)
         )
