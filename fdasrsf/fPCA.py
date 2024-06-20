@@ -1123,7 +1123,7 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
     return out
 
 
-def find_C_sub(time, qhat, gamhat, q0, srsf):
+def find_C_sub(time, qhat, gamhat, q0, srsf=True):
     if srsf:
         M = qhat.shape[0]
         tmp = uf.warp_q_gamma(time, qhat[0: (M - 1)], uf.invertGamma(gamhat))
