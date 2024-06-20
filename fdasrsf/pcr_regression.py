@@ -145,94 +145,15 @@ class elastic_pcr_regression:
         :param sparam: number of times to run filter
         """
 
-        omethod = self.warp_data.method
-        lam = self.warp_data.lam
-        M = self.time.shape[0]
-
         if newdata is not None:
             f = newdata["f"]
-            time = newdata["time"]
             y = newdata["y"]
             if newdata["smooth"]:
                 sparam = newdata["sparam"]
                 f = fs.smooth_data(f, sparam)
-
-            q1 = fs.f_to_srsf(f, time)
-            n = q1.shape[1]
-            self.y_pred = np.zeros(n)
-            mq = self.warp_data.mqn
-            fn = np.zeros((M, n))
-            qn = np.zeros((M, n))
-            gam = np.zeros((M, n))
-            for ii in range(0, n):
-                gam[:, ii] = uf.optimum_reparam(mq, time, q1[:, ii], omethod, lam)
-                fn[:, ii] = uf.warp_f_gamma(time, f[:, ii], gam[:, ii])
-                qn[:, ii] = uf.f_to_srsf(fn[:, ii], time)
-
-            U = self.pca.U
-            no = U.shape[1]
-
-            if self.pca.__class__.__name__ == "fdajpca":
-                m_new = np.sign(fn[self.pca.id, :]) * np.sqrt(
-                    np.abs(fn[self.pca.id, :])
-                )
-                qn1 = np.vstack((qn, m_new))
-                C = self.pca.C
-                TT = self.time.shape[0]
-                mu_g = self.pca.mu_g
-                mu_psi = self.pca.mu_psi
-                vec = np.zeros((M, n))
-                psi = np.zeros((TT, n))
-                time = np.linspace(0, 1, TT)
-                binsize = np.mean(np.diff(time))
-                for i in range(0, n):
-                    psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-                    out, theta = geo.inv_exp_map(mu_psi, psi[:, i])
-                    vec[:, i] = out
-
-                g = np.vstack((qn1, C * vec))
-                a = np.zeros((n, no))
-                for i in range(0, n):
-                    for j in range(0, no):
-                        tmp = g[:, i] - mu_g
-                        a[i, j] = np.dot(tmp.T, U[:, j])
-                
-                self.new_coef = a
-
-            elif self.pca.__class__.__name__ == "fdavpca":
-                m_new = np.sign(fn[self.pca.id, :]) * np.sqrt(
-                    np.abs(fn[self.pca.id, :])
-                )
-                qn1 = np.vstack((qn, m_new))
-                a = np.zeros((n, no))
-                for i in range(0, n):
-                    for j in range(0, no):
-                        tmp = qn1[:, i] - self.pca.mqn
-                        a[i, j] = np.dot(tmp.T, U[:, j])
-                
-                self.new_coef = a
-
-            elif self.pca.__class__.__name__ == "fdahpca":
-                a = np.zeros((n, no))
-                mu_psi = self.pca.psi_mu
-                vec = np.zeros((M, n))
-                TT = self.time.shape[0]
-                psi = np.zeros((TT, n))
-                binsize = np.mean(np.diff(self.time))
-                for i in range(0, n):
-                    psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-                    out, theta = geo.inv_exp_map(mu_psi, psi[:, i])
-                    vec[:, i] = out
-
-                vm = self.pca.vec.mean(axis=1)
-
-                for i in range(0, n):
-                    for j in range(0, no):
-                        a[i, j] = np.sum(np.dot(vec[:, i] - vm, U[:, j]))
-                
-                self.new_coef = a
-            else:
-                raise Exception("Invalid fPCA Method")
+            
+            self.pca.project(f)
+            a = self.pca.new_coef
 
             self.y_int = np.zeros((n, 2))
             X = inv(self.pca.coef.T @ self.pca.coef)
@@ -371,7 +292,7 @@ class elastic_lpcr_regression:
         # compute the Loss
         LL = rg.logit_loss(b, Phi, self.y)
 
-        b = b[1 : no + 1]
+        b = b[1: no + 1]
 
         self.alpha = alpha
         self.b = b
@@ -394,87 +315,15 @@ class elastic_lpcr_regression:
         :param sparam: number of times to run filter
         """
 
-        omethod = self.warp_data.method
-        lam = self.warp_data.lam
-        M = self.time.shape[0]
-
-        if newdata != None:
+        if newdata is not None:
             f = newdata["f"]
-            time = newdata["time"]
             y = newdata["y"]
             if newdata["smooth"]:
                 sparam = newdata["sparam"]
                 f = fs.smooth_data(f, sparam)
 
-            q1 = fs.f_to_srsf(f, time)
-            n = q1.shape[1]
-            self.y_pred = np.zeros(n)
-            mq = self.warp_data.mqn
-            fn = np.zeros((M, n))
-            qn = np.zeros((M, n))
-            gam = np.zeros((M, n))
-            for ii in range(0, n):
-                gam[:, ii] = uf.optimum_reparam(mq, time, q1[:, ii], omethod)
-                fn[:, ii] = uf.warp_f_gamma(time, f[:, ii], gam[:, ii])
-                qn[:, ii] = uf.f_to_srsf(fn[:, ii], time)
-
-            U = self.pca.U
-            no = U.shape[1]
-
-            if self.pca.__class__.__name__ == "fdajpca":
-                m_new = np.sign(fn[self.pca.id, :]) * np.sqrt(
-                    np.abs(fn[self.pca.id, :])
-                )
-                qn1 = np.vstack((qn, m_new))
-                C = self.pca.C
-                TT = self.time.shape[0]
-                mu_g = self.pca.mu_g
-                mu_psi = self.pca.mu_psi
-                vec = np.zeros((M, n))
-                psi = np.zeros((TT, n))
-                binsize = np.mean(np.diff(self.time))
-                for i in range(0, n):
-                    psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-                    out, theta = geo.inv_exp_map(mu_psi, psi[:, i])
-                    vec[:, i] = out
-
-                g = np.vstack((qn1, C * vec))
-                a = np.zeros((n, no))
-                for i in range(0, n):
-                    for j in range(0, no):
-                        tmp = g[:, i] - mu_g
-                        a[i, j] = np.dot(tmp.T, U[:, j])
-
-            elif self.pca.__class__.__name__ == "fdavpca":
-                m_new = np.sign(fn[self.pca.id, :]) * np.sqrt(
-                    np.abs(fn[self.pca.id, :])
-                )
-                qn1 = np.vstack((qn, m_new))
-                a = np.zeros((n, no))
-                for i in range(0, n):
-                    for j in range(0, no):
-                        tmp = qn1[:, i] - self.pca.mqn
-                        a[i, j] = np.dot(tmp.T, U[:, j])
-
-            elif self.pca.__class__.__name__ == "fdahpca":
-                a = np.zeros((n, no))
-                mu_psi = self.pca.psi_mu
-                vec = np.zeros((M, n))
-                TT = self.time.shape[0]
-                psi = np.zeros((TT, n))
-                binsize = np.mean(np.diff(self.time))
-                for i in range(0, n):
-                    psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-                    out, theta = geo.inv_exp_map(mu_psi, psi[:, i])
-                    vec[:, i] = out
-
-                vm = self.pca.vec.mean(axis=1)
-
-                for i in range(0, n):
-                    for j in range(0, no):
-                        a[i, j] = np.sum(np.dot(vec[:, i] - vm, U[:, j]))
-            else:
-                raise Exception("Invalid fPCA Method")
+            self.pca.project(f)
+            a = self.pca.new_coef
 
             for ii in range(0, n):
                 self.y_pred[ii] = self.alpha + np.sum(a[ii, :] * self.b)
@@ -602,7 +451,7 @@ class elastic_mlpcr_regression:
         lam = 0
         R = 0
         Phi = np.ones((N1, no + 1))
-        Phi[:, 1 : (no + 1)] = self.pca.coef
+        Phi[:, 1: (no + 1)] = self.pca.coef
         # Find alpha and beta using l_bfgs
         b0 = np.zeros(self.n_classes * (no + 1))
         out = fmin_l_bfgs_b(
@@ -623,7 +472,7 @@ class elastic_mlpcr_regression:
         # compute the Loss
         LL = rg.mlogit_loss(b, Phi, self.y)
 
-        b = B0[1 : no + 1, :]
+        b = B0[1: no + 1, :]
 
         self.alpha = alpha
         self.b = b
@@ -646,88 +495,17 @@ class elastic_mlpcr_regression:
         :param sparam: number of times to run filter
         """
 
-        omethod = self.warp_data.method
-        lam = self.warp_data.lam
         m = self.n_classes
-        M = self.time.shape[0]
 
-        if newdata != None:
+        if newdata is not None:
             f = newdata["f"]
-            time = newdata["time"]
             y = newdata["y"]
             if newdata["smooth"]:
                 sparam = newdata["sparam"]
                 f = fs.smooth_data(f, sparam)
 
-            q1 = fs.f_to_srsf(f, time)
-            n = q1.shape[1]
-            self.y_pred = np.zeros((n, m))
-            mq = self.warp_data.mqn
-            fn = np.zeros((M, n))
-            qn = np.zeros((M, n))
-            gam = np.zeros((M, n))
-            for ii in range(0, n):
-                gam[:, ii] = uf.optimum_reparam(mq, time, q1[:, ii], omethod)
-                fn[:, ii] = uf.warp_f_gamma(time, f[:, ii], gam[:, ii])
-                qn[:, ii] = uf.f_to_srsf(fn[:, ii], time)
-
-            U = self.pca.U
-            no = U.shape[1]
-
-            if self.pca.__class__.__name__ == "fdajpca":
-                m_new = np.sign(fn[self.pca.id, :]) * np.sqrt(
-                    np.abs(fn[self.pca.id, :])
-                )
-                qn1 = np.vstack((qn, m_new))
-                C = self.pca.C
-                TT = self.time.shape[0]
-                mu_g = self.pca.mu_g
-                mu_psi = self.pca.mu_psi
-                vec = np.zeros((M, n))
-                psi = np.zeros((TT, n))
-                binsize = np.mean(np.diff(self.time))
-                for i in range(0, n):
-                    psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-                    out, theta = geo.inv_exp_map(mu_psi, psi[:, i])
-                    vec[:, i] = out
-
-                g = np.vstack((qn1, C * vec))
-                a = np.zeros((n, no))
-                for i in range(0, n):
-                    for j in range(0, no):
-                        tmp = g[:, i] - mu_g
-                        a[i, j] = np.dot(tmp.T, U[:, j])
-
-            elif self.pca.__class__.__name__ == "fdavpca":
-                m_new = np.sign(fn[self.pca.id, :]) * np.sqrt(
-                    np.abs(fn[self.pca.id, :])
-                )
-                qn1 = np.vstack((qn, m_new))
-                a = np.zeros((n, no))
-                for i in range(0, n):
-                    for j in range(0, no):
-                        tmp = qn1[:, i] - self.pca.mqn
-                        a[i, j] = np.dot(tmp.T, U[:, j])
-
-            elif self.pca.__class__.__name__ == "fdahpca":
-                a = np.zeros((n, no))
-                mu_psi = self.pca.psi_mu
-                vec = np.zeros((M, n))
-                TT = self.time.shape[0]
-                psi = np.zeros((TT, n))
-                binsize = np.mean(np.diff(self.time))
-                for i in range(0, n):
-                    psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-                    out, theta = geo.inv_exp_map(mu_psi, psi[:, i])
-                    vec[:, i] = out
-
-                vm = self.pca.vec.mean(axis=1)
-
-                for i in range(0, n):
-                    for j in range(0, no):
-                        a[i, j] = np.sum(np.dot(vec[:, i] - vm, U[:, j]))
-            else:
-                raise Exception("Invalid fPCA Method")
+            self.pca.project(f)
+            a = self.pca.new_coef
 
             for ii in range(0, n):
                 for jj in range(0, m):
