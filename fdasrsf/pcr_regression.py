@@ -183,7 +183,8 @@ class elastic_pcr_regression:
                 mu_psi = self.pca.mu_psi
                 vec = np.zeros((M, n))
                 psi = np.zeros((TT, n))
-                binsize = np.mean(np.diff(self.time))
+                time = np.linspace(0, 1, TT)
+                binsize = np.mean(np.diff(time))
                 for i in range(0, n):
                     psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
                     out, theta = geo.inv_exp_map(mu_psi, psi[:, i])
