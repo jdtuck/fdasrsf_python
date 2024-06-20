@@ -147,6 +147,7 @@ class elastic_pcr_regression:
 
         if newdata is not None:
             f = newdata["f"]
+            n = f.shape[1]
             y = newdata["y"]
             if newdata["smooth"]:
                 sparam = newdata["sparam"]
@@ -317,6 +318,7 @@ class elastic_lpcr_regression:
 
         if newdata is not None:
             f = newdata["f"]
+            n = f.shape[1]
             y = newdata["y"]
             if newdata["smooth"]:
                 sparam = newdata["sparam"]
@@ -499,6 +501,7 @@ class elastic_mlpcr_regression:
 
         if newdata is not None:
             f = newdata["f"]
+            n = f.shape[1]
             y = newdata["y"]
             if newdata["smooth"]:
                 sparam = newdata["sparam"]
