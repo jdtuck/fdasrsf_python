@@ -10,8 +10,8 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
-from scipy.integrate import trapezoid, cumtrapz
-from scipy.linalg import inv, norm, expm
+from scipy.integrate import trapezoid
+from scipy.linalg import inv, norm
 from patsy import bs
 from joblib import Parallel, delayed
 import ocmlogit_warp as mw
