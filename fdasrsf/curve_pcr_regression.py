@@ -11,8 +11,7 @@ import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
 import fdasrsf.regression as rg
 import fdasrsf.geometry as geo
-from scipy.linalg import inv, norm
-from scipy.integrate import trapz, cumtrapz
+from scipy.linalg import inv
 
 
 class elastic_curve_pcr_regression:
