@@ -28,7 +28,7 @@ def kmeans_align(
     MaxItr=50,
     thresh=0.01,
 ):
-    """
+    r"""
     This function clusters functions and aligns using the elastic square-root
     slope (srsf) framework.
 

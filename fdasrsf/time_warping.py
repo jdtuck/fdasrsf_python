@@ -976,7 +976,7 @@ def pairwise_align_bayes(f1i, f2i, time, mcmcopts=None):
 
 
 def pairwise_align_bayes_infHMC(y1i, y2i, time, mcmcopts=None):
-    """
+    r"""
     This function aligns two functions using Bayesian framework. It uses a
     hierarchical Bayesian framework assuming mearsurement error error It will
     align f2 to f1. It is based on mapping warping functions to a hypersphere,
