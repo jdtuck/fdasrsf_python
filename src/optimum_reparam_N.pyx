@@ -1,4 +1,3 @@
-# cython: language_level=2
 cimport cDP
 import numpy as np
 from numpy.linalg import norm

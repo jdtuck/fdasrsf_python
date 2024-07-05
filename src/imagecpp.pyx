@@ -1,4 +1,3 @@
-# cython: language_level=2
 cimport cUnitSquareImage
 import numpy as np
 

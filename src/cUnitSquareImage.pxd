@@ -1,4 +1,3 @@
-# cython: language_level=2
 from libcpp cimport bool
 
 cdef extern from "UnitSquareImage.h":
