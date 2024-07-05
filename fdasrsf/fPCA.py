@@ -74,6 +74,11 @@ class fdavpca:
         time = self.warp_data.time
         qn = self.warp_data.qn
 
+        if 0 in stds:
+            stds = stds
+        else:
+            raise Exception("stds needs to contain 0")
+
         M = time.shape[0]
         if var_exp is not None:
             if var_exp > 1:
@@ -190,17 +195,16 @@ class fdavpca:
         Nstd = self.stds.shape[0]
         N = self.time.shape[0]
         num_plot = int(np.ceil(no / 3))
-        CBcdict = {
-            "Bl": (0, 0, 0),
-            "Or": (0.9, 0.6, 0),
-            "SB": (0.35, 0.7, 0.9),
-            "bG": (0, 0.6, 0.5),
-            "Ye": (0.95, 0.9, 0.25),
-            "Bu": (0, 0.45, 0.7),
-            "Ve": (0.8, 0.4, 0),
-            "rP": (0.8, 0.6, 0.7),
-        }
-        cl = sorted(CBcdict.keys())
+        colors = [
+            "#66C2A5",
+            "#FC8D62",
+            "#8DA0CB",
+            "#E78AC3",
+            "#A6D854",
+            "#FFD92F",
+            "#E5C494",
+            "#B3B3B3",
+        ]
         k = 0
         for ii in range(0, num_plot):
             if k > (no - 1):
@@ -215,15 +219,21 @@ class fdavpca:
                     break
 
                 for l in range(0, Nstd):
-                    axt.plot(self.time, self.q_pca[0:N, l, k], color=CBcdict[cl[l]])
+                    axt.plot(self.time, self.q_pca[0:N, l, k], color=colors[l])
 
+                l0 = np.where(self.stds == 0)[0]
+                axt.plot(self.time, self.q_pca[0:N, l0, k], 'k')
                 axt.set_title("q domain: PD %d" % (k + 1))
+                plt.style.use("seaborn-v0_8-colorblind")
 
                 axt = ax[1, k1]
                 for l in range(0, Nstd):
-                    axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
+                    axt.plot(self.time, self.f_pca[:, l, k], color=colors[l])
 
+                l0 = np.where(self.stds == 0)[0]
+                axt.plot(self.time, self.f_pca[:, l0, k], 'k')
                 axt.set_title("f domain: PD %d" % (k + 1))
+                plt.style.use("seaborn-v0_8-colorblind")
 
             fig.set_tight_layout(True)
 
@@ -293,6 +303,11 @@ class fdahpca:
         gam = self.warp_data.gam
         mu, gam_mu, psi, vec = uf.SqrtMean(gam)
         TT = self.warp_data.time.shape[0]
+
+        if 0 in stds:
+            stds = stds
+        else:
+            raise Exception("stds needs to contain 0")
 
         if var_exp is not None:
             if var_exp > 1:
@@ -398,18 +413,20 @@ class fdahpca:
         """
 
         no = self.no
+        Nstd = self.stds.shape[0]
         TT = self.warp_data.time.shape[0]
         num_plot = int(np.ceil(no / 3))
-        CBcdict = {
-            "Bl": (0, 0, 0),
-            "Or": (0.9, 0.6, 0),
-            "SB": (0.35, 0.7, 0.9),
-            "bG": (0, 0.6, 0.5),
-            "Ye": (0.95, 0.9, 0.25),
-            "Bu": (0, 0.45, 0.7),
-            "Ve": (0.8, 0.4, 0),
-            "rP": (0.8, 0.6, 0.7),
-        }
+        colors = [
+            "#66C2A5",
+            "#FC8D62",
+            "#8DA0CB",
+            "#E78AC3",
+            "#A6D854",
+            "#FFD92F",
+            "#E5C494",
+            "#B3B3B3",
+        ]
+
         k = 0
         for ii in range(0, num_plot):
             if k > (no - 1):
@@ -423,8 +440,12 @@ class fdahpca:
                 if k > (no - 1):
                     break
 
-                tmp = self.gam_pca[:, :, k]
-                axt.plot(np.linspace(0, 1, TT), tmp.transpose())
+                for ll in range(0, Nstd):
+                    axt.plot(np.linspace(0, 1, TT), self.gam_pca[:, ll, k], 
+                             color=colors[ll])
+                l0 = np.where(self.stds == 0)[0]
+                axt.plot(np.linspace(0, 1, TT), self.gam_pca[:, l0, k], 'k')
+                plt.style.use("seaborn-v0_8-colorblind")
                 axt.set_title("PD %d" % (k + 1))
                 axt.set_aspect("equal")
 
@@ -514,6 +535,11 @@ class fdajpca:
         qn = self.warp_data.qn
         q0 = self.warp_data.q0
         gam = self.warp_data.gam
+
+        if 0 in stds:
+            stds = stds
+        else:
+            raise Exception("stds needs to contain 0")
 
         M = time.shape[0]
         if var_exp is not None:
@@ -654,17 +680,16 @@ class fdajpca:
         M = self.time.shape[0]
         Nstd = self.stds.shape[0]
         num_plot = int(np.ceil(no / 3))
-        CBcdict = {
-            "Bl": (0, 0, 0),
-            "Or": (0.9, 0.6, 0),
-            "SB": (0.35, 0.7, 0.9),
-            "bG": (0, 0.6, 0.5),
-            "Ye": (0.95, 0.9, 0.25),
-            "Bu": (0, 0.45, 0.7),
-            "Ve": (0.8, 0.4, 0),
-            "rP": (0.8, 0.6, 0.7),
-        }
-        cl = sorted(CBcdict.keys())
+        colors = [
+            "#66C2A5",
+            "#FC8D62",
+            "#8DA0CB",
+            "#E78AC3",
+            "#A6D854",
+            "#FFD92F",
+            "#E5C494",
+            "#B3B3B3",
+        ]
         k = 0
         for ii in range(0, num_plot):
             if k > (no - 1):
@@ -679,15 +704,21 @@ class fdajpca:
                     break
 
                 for l in range(0, Nstd):
-                    axt.plot(self.time, self.q_pca[0:M, l, k], color=CBcdict[cl[l]])
+                    axt.plot(self.time, self.q_pca[0:M, l, k], color=colors[l])
 
+                l0 = np.where(self.stds == 0)[0]
+                axt.plot(self.time, self.q_pca[0:M, l0, k], 'k')
                 axt.set_title("q domain: PD %d" % (k + 1))
+                plt.style.use("seaborn-v0_8-colorblind")
 
                 axt = ax[1, k1]
                 for l in range(0, Nstd):
-                    axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
+                    axt.plot(self.time, self.f_pca[:, l, k], color=colors[l])
 
+                l0 = np.where(self.stds == 0)[0]
+                axt.plot(self.time, self.f_pca[:, l0, k], 'k')
                 axt.set_title("f domain: PD %d" % (k + 1))
+                plt.style.use("seaborn-v0_8-colorblind")
 
             fig.set_tight_layout(True)
 
@@ -772,6 +803,11 @@ class fdajpcah:
         time = self.warp_data.time
         qn = self.warp_data.qn
         gam = self.warp_data.gam
+
+        if 0 in stds:
+            stds = stds
+        else:
+            raise Exception("stds needs to contain 0")
 
         M = time.shape[0]
         if var_exp is not None:
@@ -912,17 +948,16 @@ class fdajpcah:
         M = self.time.shape[0]
         Nstd = self.stds.shape[0]
         num_plot = int(np.ceil(no / 3))
-        CBcdict = {
-            "Bl": (0, 0, 0),
-            "Or": (0.9, 0.6, 0),
-            "SB": (0.35, 0.7, 0.9),
-            "bG": (0, 0.6, 0.5),
-            "Ye": (0.95, 0.9, 0.25),
-            "Bu": (0, 0.45, 0.7),
-            "Ve": (0.8, 0.4, 0),
-            "rP": (0.8, 0.6, 0.7),
-        }
-        cl = sorted(CBcdict.keys())
+        colors = [
+            "#66C2A5",
+            "#FC8D62",
+            "#8DA0CB",
+            "#E78AC3",
+            "#A6D854",
+            "#FFD92F",
+            "#E5C494",
+            "#B3B3B3",
+        ]
         k = 0
         for ii in range(0, num_plot):
             if k > (no - 1):
@@ -937,15 +972,21 @@ class fdajpcah:
                     break
 
                 for l in range(0, Nstd):
-                    axt.plot(self.time, self.q_pca[0:M, l, k], color=CBcdict[cl[l]])
+                    axt.plot(self.time, self.q_pca[0:M, l, k], color=colors[l])
 
+                l0 = np.where(self.stds == 0)[0]
+                axt.plot(self.time, self.q_pca[0:M, l0, k], 'k')
                 axt.set_title("q domain: PD %d" % (k + 1))
+                plt.style.use("seaborn-v0_8-colorblind")
 
                 axt = ax[1, k1]
                 for l in range(0, Nstd):
-                    axt.plot(self.time, self.f_pca[:, l, k], color=CBcdict[cl[l]])
+                    axt.plot(self.time, self.f_pca[:, l, k], color=colors[l])
 
+                l0 = np.where(self.stds == 0)[0]
+                axt.plot(self.time, self.f_pca[:, l0, k], 'k')
                 axt.set_title("f domain: PD %d" % (k + 1))
+                plt.style.use("seaborn-v0_8-colorblind")
 
             fig.set_tight_layout(True)
 
