@@ -43,7 +43,6 @@ class build_docs(Command):
 
         os.system("sphinx-build -b html doc/source doc/build/html")
         os.system("sphinx-build -b latex doc/source doc/build/latex")
-        os.system("sphinx-build -b man doc/source doc/build/man")
         os.chdir("doc/build/latex")
         os.system("latexmk -pdf fdasrsf.tex")
         os.chdir("../../../")
@@ -137,7 +136,6 @@ setup(
     keywords=["functional data analysis"],
     description="functional data analysis using the square root slope framework",
     long_description=open("README.md", encoding="utf8").read(),
-    data_files=[("share/man/man1", ["doc/build/man/fdasrsf.1"])],
     classifiers=[
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
