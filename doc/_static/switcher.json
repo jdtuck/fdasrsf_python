@@ -5,7 +5,7 @@
         "url": "https://fdasrsf-python.readthedocs.io/en/latest/"
     },
     {
-    	"name": "2.5.14 (stable)",
+    	"name": "2.6.0 (stable)",
         "version": "stable",
         "url": "https://fdasrsf-python.readthedocs.io/en/stable/",
         "preferred": true
