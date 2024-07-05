@@ -1,5 +1,5 @@
-numpy
-cffi
+numpy>=1.25.0
+cffi>=1.0.0
 numba
 scipy
 matplotlib

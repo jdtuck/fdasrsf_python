@@ -14,10 +14,10 @@ dependencies:
   - scipy
   - six
   - tqdm
-  - cffi
+  - cffi>=1.0.0
   - numba
   - tornado
-  - numpy>=1.13
+  - numpy>=1.25
   - scipy>=0.18
   - pandas >=0.18
   - patsy>=0.5

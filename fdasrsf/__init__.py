@@ -28,12 +28,12 @@ __all__ = [
     "gp",
 ]
 
-__version__ = "2.4.2"
+__version__ = "2.6.0"
 
 import sys
 
-if sys.version_info[0] == 3 and sys.version_info[1] < 6:
-    raise ImportError("Python Version 3.6 or above is required for fdasrsf.")
+if sys.version_info[0] == 3 and sys.version_info[1] < 9:
+    raise ImportError("Python Version 3.9 or above is required for fdasrsf.")
 else:  # Python 3
     pass
     # Here we can also check for specific Python 3 versions, if needed

@@ -98,9 +98,9 @@ nbsphinx_prolog = """
 """
 
 intersphinx_mapping = {
-    "numpy": ("https://docs.scipy.org/doc/numpy-1.17.0", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy-1.7.0", None),
-    "python": ("http://docs.python.org/3.6", None),
+    "numpy": ("https://numpy.org/doc/2.0", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy-1.14.0", None),
+    "python": ("http://docs.python.org/3.12", None),
 }
 
 # The version info for the project you're documenting, acts as replacement for
@@ -108,7 +108,7 @@ intersphinx_mapping = {
 # built documents.
 #
 # The short X.Y version.
-version = "2.5"
+version = "2.6"
 # The full version, including alpha/beta/rc tags.
 release = "2.6.0"
 

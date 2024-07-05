@@ -1,12 +1,12 @@
 certifi
 cycler
 Cython
-cffi
+cffi>=1.0.0
 numba
 joblib
 kiwisolver
 matplotlib
-numpy
+numpy>=1.25.0
 patsy
 findblas
 pyparsing
