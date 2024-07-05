@@ -441,10 +441,10 @@ class fdahpca:
                     break
 
                 for ll in range(0, Nstd):
-                    axt.plot(np.linspace(0, 1, TT), self.gam_pca[:, ll, k], 
+                    axt.plot(np.linspace(0, 1, TT), np.squeeze(self.gam_pca[ll, :, k]), 
                              color=colors[ll])
                 l0 = np.where(self.stds == 0)[0]
-                axt.plot(np.linspace(0, 1, TT), self.gam_pca[:, l0, k], 'k')
+                axt.plot(np.linspace(0, 1, TT), np.squeeze(self.gam_pca[l0, :, k]), 'k')
                 plt.style.use("seaborn-v0_8-colorblind")
                 axt.set_title("PD %d" % (k + 1))
                 axt.set_aspect("equal")
