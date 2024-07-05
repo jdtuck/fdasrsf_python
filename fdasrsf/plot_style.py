@@ -4,6 +4,41 @@ import fdasrsf.curve_functions as cf
 from numpy import tile, array, arange
 import matplotlib.pyplot as plt
 
+colors = [
+    "#66C2A5",
+    "#FC8D62",
+    "#8DA0CB",
+    "#E78AC3",
+    "#A6D854",
+    "#FFD92F",
+    "#E5C494",
+    "#B3B3B3",
+]
+
+colors1 = [
+    "#386cb0",
+    "#f87f01",
+    "#7fc97f",
+    "#ef3b2c",
+    "#feca01",
+    "#a6cee3",
+    "#fb9a99",
+    "#984ea3",
+    "#8C591D",
+]
+
+colors2 = [
+    "#fbb4ae",
+    "#b3cde3",
+    "#ccebc5",
+    "#decbe4",
+    "#fed9a6",
+    "#ffffcc",
+    "#e5d8bd",
+    "#fddaec",
+    "#f2f2f2",
+]
+
 
 def rstyle(ax, pres=False):
     """
@@ -96,7 +131,7 @@ def rstyle_bw(ax):
     ax.yaxis.set_ticks_position("left")
 
 
-def f_plot(time, f, title="Data", bw=False, pres=False):
+def f_plot(time, f, title="Data"):
     """
     plots function data using matplotlib
 
@@ -112,7 +147,7 @@ def f_plot(time, f, title="Data", bw=False, pres=False):
     fig, ax = plt.subplots()
     ax.plot(time, f)
     plt.title(title)
-    plt.style.use("ggplot")
+    plt.style.use("seaborn-v0_8-colorblind")
 
     return fig, ax
 
