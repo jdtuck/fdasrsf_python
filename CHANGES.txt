@@ -1,4 +1,5 @@
-v2.6.00, 2024-07-05 -- version compatible with numpy 2.0
+v2.6.1, 2024-07-06 -- update plots
+v2.6.0, 2024-07-05 -- version compatible with numpy 2.0
 v2.5.14, 2024-07-04 -- bugfixes for new scipy
 v2.5.13, 2024-06-20 -- bugfixes
 v2.5.11, 2024-05-26 -- bugfixes and joint fpca with h
