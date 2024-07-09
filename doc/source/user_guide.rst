@@ -13,4 +13,5 @@ Contents:
   time_warping_example.ipynb
   fpca_example.ipynb
   example_mvwarping.ipynb
+  example_cluster.ipynb
   curve_example.ipynb
