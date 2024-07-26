@@ -1,7 +1,7 @@
 numpy>=1.25.0
 cffi>=1.0.0
 numba
-scipy
+scipy>=1.14
 matplotlib
 Cython
 joblib

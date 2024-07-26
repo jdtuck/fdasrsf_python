@@ -15,7 +15,7 @@ dependencies=[
         "Cython",
         "matplotlib",
         "numpy>=1.25",
-        "scipy",
+        "scipy>=1.14",
         "joblib",
         "patsy",
         "tqdm",
