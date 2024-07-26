@@ -11,7 +11,7 @@ patsy
 findblas
 pyparsing
 python-dateutil
-scipy
+scipy>=1.14
 six
 tornado
 tqdm
