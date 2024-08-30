@@ -894,6 +894,7 @@ class fdajpcah:
         self.U1 = Uh
         self.Uz = Uz
         self.mh = mh
+        self.srsf = srsf
 
         return
 
@@ -919,8 +920,11 @@ class fdajpcah:
             fn[:, ii] = fs.warp_f_gamma(self.time, f[:, ii], gam[:, ii])
             qn[:, ii] = fs.f_to_srsf(fn[:, ii], self.time)
 
-        m_new = np.sign(fn[self.id, :]) * np.sqrt(np.abs(fn[self.id, :]))
-        qn1 = np.vstack((qn, m_new))
+        if self.srsf:
+            m_new = np.sign(fn[self.id, :]) * np.sqrt(np.abs(fn[self.id, :]))
+            qn1 = np.vstack((qn, m_new))
+        else:
+            qn1 = fn.copy()
         C = self.C
         
         h = geo.gam_to_h(gam)
