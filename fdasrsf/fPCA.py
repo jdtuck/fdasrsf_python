@@ -925,7 +925,7 @@ class fdajpcah:
         
         h = geo.gam_to_h(gam)
 
-        c = (qn1 - self.mqn[:, np.newaxis]).T @ self.U
+        c = (qn - self.mqn[:, np.newaxis]).T @ self.U
         ch = (C*h - self.mh[:, np.newaxis]).T @ self.U1
 
         Xi = np.hstack((c, ch))
