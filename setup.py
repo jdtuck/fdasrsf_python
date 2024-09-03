@@ -9,7 +9,7 @@ from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 from setuptools import dist
-from sysconfig import get_config_var, get_python_inc
+from sysconfig import get_config_var
 from looseversion import LooseVersion
 
 sys.path.insert(1, "src/")
