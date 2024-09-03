@@ -115,7 +115,6 @@ extensions = [
         include_dirs=[numpy.get_include()],
         language="c++",
     ),
-    dp_build.ffibuilder.distutils_extension(),
 ]
 
 
