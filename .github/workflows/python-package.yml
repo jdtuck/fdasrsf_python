@@ -51,7 +51,7 @@ jobs:
       name: Test with pytest
       run: |
         pip install .
-        pytest --cov test/
+        pytest --cov 
     - if: runner.os == 'Windows'
       name: Build
       run: |
