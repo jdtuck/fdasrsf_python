@@ -50,8 +50,8 @@ jobs:
     - if: runner.os == 'Linux'
       name: Test with pytest
       run: |
-        pip install .
-        pytest test/ --cov
+        pip install -e .
+        pytest --cov
     - if: runner.os == 'Windows'
       name: Build
       run: |
