@@ -121,7 +121,7 @@ extensions = [
 setup(
     cmdclass={"build_ext": build_ext_with_blas, "build_docs": build_docs},
     ext_modules=extensions,
-    cffi_modules=["fdasrsf/src/dp_build.py:ffibuilder"],
+    cffi_modules=["src/dp_build.py:ffibuilder"],
     name="fdasrsf",
     version="2.6.1",
     packages=["fdasrsf"],
