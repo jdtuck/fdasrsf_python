@@ -2,15 +2,15 @@ import setuptools
 import numpy
 import sys, os
 import platform
-from distutils.core import setup
-from distutils.core import Command
+from setuptools import setup
+from setuptools import Command
 from findblas.distutils import build_ext_with_blas
-from distutils.extension import Extension
+from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 from setuptools import dist
-from distutils.sysconfig import get_config_var, get_python_inc
-from distutils.version import LooseVersion
+from sysconfig import get_config_var
+from packaging.version import parse as LooseVersion
 
 sys.path.insert(1, "src/")
 import dp_build

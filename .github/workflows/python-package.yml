@@ -39,7 +39,7 @@ jobs:
          brew install openblas
     - name: Install python dependencies
       run: |
-          python -m pip install flake8 setuptools pytest pytest-runner coverage pytest-cov
+          python -m pip install flake8 setuptools pytest pytest-runner coverage pytest-cov looseversion
           pip install -r requirements.txt
     - name: Lint with flake8
       run: |
@@ -50,7 +50,8 @@ jobs:
     - if: runner.os == 'Linux'
       name: Test with pytest
       run: |
-        pytest --pyargs fdasrsf --cov
+        pip install .
+        pytest test/ --cov
     - if: runner.os == 'Windows'
       name: Build
       run: |

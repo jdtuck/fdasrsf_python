@@ -77,7 +77,7 @@ select = "*-win_amd64"
 environment = { PKG_CONFIG_PATH = "c:/opt/64/lib/pkgconfig" }
 
 [build-system]
-requires = ["setuptools>=46.0", "wheel", "cffi>=1.0.0", "Cython", "findblas", "numpy"]  # PEP 518 - what is required to build
+requires = ["setuptools<=73.0.1", "wheel", "cffi>=1.0.0", "Cython", "findblas", "numpy"]  # PEP 518 - what is required to build
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
