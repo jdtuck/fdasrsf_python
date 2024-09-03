@@ -50,8 +50,7 @@ jobs:
     - if: runner.os == 'Linux'
       name: Test with pytest
       run: |
-        pip install .
-        pytest --cov 
+        python -m pytest --addopts "test --cov fdasrsf"
     - if: runner.os == 'Windows'
       name: Build
       run: |
