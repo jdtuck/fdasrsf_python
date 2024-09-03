@@ -50,7 +50,7 @@ jobs:
     - if: runner.os == 'Linux'
       name: Test with pytest
       run: |
-        pytest --pyargs fdasrsf --cov
+        pytest test/ --cov
     - if: runner.os == 'Windows'
       name: Build
       run: |
