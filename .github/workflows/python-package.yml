@@ -27,7 +27,7 @@ jobs:
     - if: runner.os == 'Windows'
       run: |
         python -m pip install --upgrade pip
-        python -m pip install mkl-devel
+        python -m pip install mkl-devel distutils
     - if: runner.os == 'Linux'
       run: |
         python -m pip install --upgrade pip
