@@ -10,7 +10,7 @@ from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 from setuptools import dist
 from sysconfig import get_config_var
-from looseversion import LooseVersion
+from packaging.version import parse as LooseVersion
 
 sys.path.insert(1, "src/")
 import dp_build
