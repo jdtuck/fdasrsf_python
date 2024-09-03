@@ -12,9 +12,6 @@ from setuptools import dist
 from sysconfig import get_config_var
 from packaging.version import parse as LooseVersion
 
-sys.path.insert(1, "src/")
-import dp_build
-
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (3, 10):
     print(
@@ -118,13 +115,13 @@ extensions = [
         include_dirs=[numpy.get_include()],
         language="c++",
     ),
-    dp_build.ffibuilder.distutils_extension(),
 ]
 
 
 setup(
     cmdclass={"build_ext": build_ext_with_blas, "build_docs": build_docs},
     ext_modules=extensions,
+    cffi_modules=["src/dp_build.py:ffibuilder"],
     name="fdasrsf",
     version="2.6.1",
     packages=["fdasrsf"],
