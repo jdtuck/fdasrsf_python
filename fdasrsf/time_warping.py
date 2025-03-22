@@ -86,6 +86,7 @@ class fdawarp:
         cores=-1,
         grid_dim=7,
         verbose=True,
+	thresh = .01
     ):
         """
         This function aligns a collection of functions using the elastic
@@ -108,6 +109,7 @@ class fdawarp:
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
         :param verbose: print status output (default = T)
+        :param thresh: cost function threshold (default = .01)
         :type lam: double
         :type smoothdata: bool
 
@@ -287,7 +289,7 @@ class fdawarp:
 
                 qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
-            if qun[r] < 1e-2 or r >= MaxItr:
+            if qun[r] < thresh or r >= MaxItr:
                 break
 
         # Last Step with centering of gam
@@ -353,6 +355,7 @@ class fdawarp:
         self.orig_var = trapezoid(std_f0**2, self.time)
         self.amp_var = trapezoid(std_fn**2, self.time)
         self.phase_var = trapezoid(var_fgam, self.time)
+        self.qun = qun[0:r]
 
         return
 
