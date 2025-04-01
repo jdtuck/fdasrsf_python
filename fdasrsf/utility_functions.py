@@ -26,7 +26,7 @@ from fdasrsf.rbfgs import rlbfgs
 import sys
 
 
-def smooth_data(f, sparam=1):
+def smooth_data(f, sparam=25):
     """
     This function smooths a collection of functions using a box filter
 
