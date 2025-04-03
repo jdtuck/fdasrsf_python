@@ -84,6 +84,7 @@ from .utility_functions import (
 )
 from .fPCA import fdavpca, fdahpca, fdajpca, fdajpcah
 from .fPLS import pls_svd
+from .fPNS import fdahpns, project_pns_gam
 from .regression import elastic_logistic, elastic_regression, elastic_mlogistic
 from .elastic_glm_regression import elastic_glm_regression
 from .pcr_regression import (
