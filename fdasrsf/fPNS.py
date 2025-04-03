@@ -101,6 +101,7 @@ class fdahpns:
         self.psi = psi
         self.PNS = PNS
         self.coef = resmat
+        self.radius = radius
 
         return
 
@@ -185,3 +186,17 @@ class fdahpns:
         plt.show()
 
         return
+
+
+def project_pns_gam(resmat, PNS, radius, time):
+    
+    n = resmat.shape[1]
+    d = time.shape[0]
+    udir = np.eye(resmat.shape[0])
+    PCvec = pns.PNSe2s(udir@resmat, PNS) * radius
+    gam_hat = np.zeros((d, n))
+    for i in range(n):
+        gamt = cumulative_trapezoid(PCvec[:, i]**2, time, initial=0)
+        gam_hat[:, i] = (gamt - gamt.min()) / (gamt.max() - gamt.min())
+    
+    return gam_hat
