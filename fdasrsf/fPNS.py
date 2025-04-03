@@ -189,7 +189,7 @@ class fdahpns:
 
 
 def project_pns_gam(resmat, PNS, radius, time):
-    
+   
     n = resmat.shape[1]
     d = time.shape[0]
     udir = np.eye(resmat.shape[0])
@@ -198,5 +198,5 @@ def project_pns_gam(resmat, PNS, radius, time):
     for i in range(n):
         gamt = cumulative_trapezoid(PCvec[:, i]**2, time, initial=0)
         gam_hat[:, i] = (gamt - gamt.min()) / (gamt.max() - gamt.min())
-    
+   
     return gam_hat
