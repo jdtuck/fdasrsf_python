@@ -422,6 +422,8 @@ def PNSmainHDLSS(data, itype="small", a=0.05, R=100):
     maxd = np.where(s < 1e-15)[0]
     if maxd.shape[0] == 0 or k > n:
         maxd = np.minimum(k, n) + 1
+    else:
+        maxd = maxd[0]
     # dimension of subspace that contains no data
     nullspdim = k - maxd + 1
 
