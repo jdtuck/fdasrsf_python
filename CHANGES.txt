@@ -1,3 +1,4 @@
+v2.6.2, 2025-04-03 -- bugfixes and add pnsupdate plots
 v2.6.1, 2024-07-06 -- update plots
 v2.6.0, 2024-07-05 -- version compatible with numpy 2.0
 v2.5.14, 2024-07-04 -- bugfixes for new scipy

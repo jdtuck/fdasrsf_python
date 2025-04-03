@@ -1,6 +1,6 @@
 [project]
 name = "fdasrsf"
-version = "2.6.1"
+version = "2.6.2"
 description = "functional data analysis using the square root slope framework"
 authors = [
 	{name = "J. Derek Tucker", email = "jdtuck@sandia.gov"}

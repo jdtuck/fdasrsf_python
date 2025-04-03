@@ -19,6 +19,7 @@ __all__ = [
     "curve_regression",
     "regression",
     "fPCA",
+    "fPNS",
     "elastic_changepoint",
     "elastic_glm_regression",
     "curve_pcr_regression",
@@ -28,7 +29,7 @@ __all__ = [
     "gp",
 ]
 
-__version__ = "2.6.1"
+__version__ = "2.6.2"
 
 import sys
 
