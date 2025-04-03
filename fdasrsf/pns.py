@@ -300,6 +300,40 @@ def geodmeanS1(theta):
     return geodmean, geodvar
 
 
+def PNSs2e(spheredata, PNS):
+    """
+    PNS Sphere to Euclidean-type representation
+
+    Usage: EuclidData = PNSs2e(A,PNS)
+
+      with d x n matrix A consists of column
+        vectors that are on the (d-1) sphere, and PNS is the output from
+    """
+    kk, n = spheredata.shape
+    Res = np.zeros((kk-1, n))
+    currentSphere = spheredata.copy()
+
+    for i in range(kk-1):
+        v = PNS["orthaxis"][i]
+        r = PNS["dist"][i]
+        res = np.arccos(v.T @ currentSphere) - r
+        Res[i, :] = res
+        NestedSphere = rotMat(v) @ currentSphere
+        currentSphere = NestedSphere[0:(kk-i), :] / np.tile(
+            np.sqrt(1 - NestedSphere[-1, :] ** 2), (kk-i, 1)
+        )
+    
+    S1toRadian = np.arctan2(currentSphere[1, :], currentSphere[0, :])
+    devS1 = np.mod(S1toRadian - PNS["orthaxis"][-1] + np.pi, 2 * np.pi) - np.pi
+    Res[kk-2, :] = devS1
+
+    EuclidData = np.flipud(
+        np.tile(np.flipud(PNS["radii"]), (1, n)) * Res
+    )
+
+    return EuclidData
+
+
 def PNSe2s(resmat, PNS):
     """
     PNS coordinate transform from Euclidean-type residual matrix to Sphere

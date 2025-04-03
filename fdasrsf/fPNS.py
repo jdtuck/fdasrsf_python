@@ -6,9 +6,12 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 import numpy as np
+import fdasrsf as fs
 import fdasrsf.pns as pns
 import fdasrsf.utility_functions as uf
 from scipy.integrate import cumulative_trapezoid
+import matplotlib.pyplot as plt
+import fdasrsf.plot_style as plot
 
 
 class fdahpns:
@@ -98,3 +101,87 @@ class fdahpns:
         self.psi = psi
         self.PNS = PNS
         self.coef = resmat
+
+        return
+
+    def project(self, f):
+        """
+        project new data onto fPNS basis
+
+        Usage: obj.project(f)
+
+        :param f: numpy array (MxN) of N functions on M time
+
+        """
+
+        q1 = fs.f_to_srsf(f, self.time)
+        M = self.time.shape[0]
+        n = q1.shape[1]
+        mq = self.warp_data.mqn
+        gam = np.zeros((M, n))
+        for ii in range(0, n):
+            gam[:, ii] = fs.optimum_reparam(mq, self.time, q1[:, ii])
+
+        psi = np.zeros((M, n))
+        time = np.linspace(0, 1, M)
+        binsize = np.mean(np.diff(time))
+        for i in range(0, n):
+            psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
+
+        pnsdat = psi / np.tile(np.sqrt((psi**2).sum(axis=0)), (n, 1))
+
+        resmat = pns.PNSs2e(pnsdat, self.PNS)
+
+        self.new_coef = resmat
+
+        return
+    
+    def plot(self):
+        """
+        plot plot elastic horizontal fPNS results
+
+        Usage: obj.plot()
+        """
+
+        no = self.no
+        TT = self.warp_data.time.shape[0]
+        num_plot = int(np.ceil(no / 3))
+        colors = [
+            "#66C2A5",
+            "#FC8D62",
+            "#8DA0CB",
+            "#E78AC3",
+            "#A6D854",
+            "#FFD92F",
+            "#E5C494",
+            "#B3B3B3",
+        ]
+
+        k = 0
+        for ii in range(0, num_plot):
+            if k > (no - 1):
+                break
+
+            fig, ax = plt.subplots(1, 3)
+
+            for k1 in range(0, 3):
+                k = k1 + (ii) * 3
+                axt = ax[k1]
+                if k > (no - 1):
+                    break
+
+                axt.plot(np.linspace(0, 1, TT), np.squeeze(self.gam_pca[:, :, k]))
+                plt.style.use("seaborn-v0_8-colorblind")
+                axt.set_title("PD %d" % (k + 1))
+                axt.set_aspect("equal")
+
+            fig.set_tight_layout(True)
+
+        cumm_coef = 100 * self.cumvar
+        idx = np.arange(0, no) + 1
+        plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
+        plt.ylabel("Percentage")
+        plt.xlabel("Index")
+        plt.show()
+
+        return
