@@ -10,6 +10,7 @@ import fdasrsf.pns as pns
 import fdasrsf.utility_functions as uf
 from scipy.integrate import cumulative_trapezoid
 
+
 class fdahpns:
     """
     This class provides horizontal fPNS using the
@@ -40,7 +41,7 @@ class fdahpns:
             raise Exception("Please align fdawarp class using srsf_align!")
 
         self.warp_data = fdawarp
-    
+
     def calc_pns(self, var_exp=0.99):
         """
         This function calculates horizontal functional principal nested
@@ -64,14 +65,14 @@ class fdahpns:
         mu, gam_mu, psi, vec = uf.SqrtMean(gam)
 
         radius = np.mean(np.sqrt((psi**2).sum(axis=0)))
-        pnsdat = psi / np.tile(np.sqrt((psi**2).sum(axis=0)), (d,1))
+        pnsdat = psi / np.tile(np.sqrt((psi**2).sum(axis=0)), (d, 1))
 
         resmat, PNS = pns.PNSmainHDLSS(pnsdat)
 
         # Proportion of variance explained
-        varPNS = np.sum(np.abs(resmat)**2, axis=1) / n
+        varPNS = np.sum(np.abs(resmat) ** 2, axis=1) / n
         cumvarPNS = np.cumsum(varPNS)
-        propcumPNS =cumvarPNS / cumvarPNS[-1]
+        propcumPNS = cumvarPNS / cumvarPNS[-1]
         propPNS = varPNS / cumvarPNS[-1] * 100
 
         # Projection of PCs
@@ -80,13 +81,16 @@ class fdahpns:
         projPsi = np.zeros((d, n, no))
         projGam = np.zeros((d, n, no))
         for PCnum in range(no):
-            PCvec = pns.PNSe2s(np.outer(udir[:,PCnum],resmat[PCnum,:]), PNS)
-            projPsi[:,:,PCnum] = PCvec*radius
-            gamt = cumulative_trapezoid(projPsi[:,:,PCnum]**2, t, axis=0, initial=0)
+            PCvec = pns.PNSe2s(np.outer(udir[:, PCnum], resmat[PCnum, :]), PNS)
+            projPsi[:, :, PCnum] = PCvec * radius
+            gamt = cumulative_trapezoid(projPsi[:, :, PCnum] ** 2, t, axis=0, 
+                                        initial=0)
             for j in range(n):
-                gamt[:,j] = (gamt[:,j] - gamt[:,j].min()) / (gamt[:,j].max() - gamt[:,j].min())
-            projGam[:,:,PCnum] = gamt
-        
+                gamt[:, j] = (gamt[:, j] - gamt[:, j].min()) / (
+                    gamt[:, j].max() - gamt[:, j].min()
+                )
+            projGam[:, :, PCnum] = gamt
+
         self.gam_pns = projGam
         self.psi_pns = projPsi
         self.cumvar = propcumPNS

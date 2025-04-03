@@ -487,7 +487,7 @@ class fdajpca:
 
     def __init__(self, fdawarp):
         """
-        Construct an instance of the fdavpca class
+        Construct an instance of the fdajpca class
         :param fdawarp: fdawarp class
         """
         if fdawarp.fn.size == 0:
@@ -757,7 +757,7 @@ class fdajpcah:
 
     def __init__(self, fdawarp):
         """
-        Construct an instance of the fdavpca class
+        Construct an instance of the fdajpcah class
         :param fdawarp: fdawarp class
         """
         if fdawarp.fn.size == 0:
