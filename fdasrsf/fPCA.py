@@ -271,7 +271,7 @@ class fdahpca:
 
     def __init__(self, fdawarp):
         """
-        Construct an instance of the fdavpca class
+        Construct an instance of the fdahpca class
         :param fdawarp: fdawarp class
         """
         if fdawarp.fn.size == 0:
@@ -292,8 +292,8 @@ class fdahpca:
         :type no: int
 
         :rtype: fdahpca object of numpy ndarray
-        :return q_pca: srsf principal directions
-        :return f_pca: functional principal directions
+        :return gam_pca: srsf principal directions
+        :return psi_pca: functional principal directions
         :return latent: latent values
         :return coef: coefficients
         :return U: eigenvectors
