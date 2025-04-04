@@ -353,7 +353,7 @@ def PNSe2s(resmat, PNS):
     geodmean = PNS["orthaxis"][-1]
 
     # standardize components
-    res = resmat / np.tile(np.flipud(PNS["radii"]), (1, n))
+    res = resmat / np.tile(np.flipud(PNS["radii"][0:dm]), (1, n))
 
     # iteratviely mapping back to S^d
     # S^1 to S^2
