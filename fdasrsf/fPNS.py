@@ -79,7 +79,9 @@ class fdahpns:
         propPNS = varPNS / cumvarPNS[-1] * 100
 
         # Projection of PCs
-        no = int(np.argwhere(propcumPNS <= var_exp)[-1])
+        no = int(np.argwhere(propcumPNS <= var_exp)[-1])+1
+        if (no == 1):
+            no += 1
         udir = np.eye(resmat.shape[0])
         projPsi = np.zeros((d, n, no))
         projGam = np.zeros((d, n, no))

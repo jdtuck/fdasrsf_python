@@ -375,7 +375,7 @@ def PNSe2s(resmat, PNS):
         T = rotMat(NSOrthaxis[i + 1]).T @ tmpmat
 
     if PNS["basisu"].shape[0] != 0:
-        T = PNS["basisu"] @ T
+        T = PNS["basisu"][:,0:T.shape[0]] @ T
 
     return T
 
