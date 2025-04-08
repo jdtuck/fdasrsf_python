@@ -121,6 +121,37 @@ def gam_to_v(gam, smooth=True):
     return vec
 
 
+def gam_to_psi(gam, smooth=True):
+    TT = gam.shape[0]
+    time = linspace(0, 1, TT)
+    binsize = diff(time)
+    binsize = binsize.mean()
+    if gam.ndim == 1:
+        if smooth:
+            tmp_spline = UnivariateSpline(time, gam, s=1e-4)
+            g = tmp_spline(time, 1)
+            idx = g <= 0
+            g[idx] = 0
+            psi = sqrt(g)
+        else:
+            psi = sqrt(gradient(gam, binsize))
+    else:
+        n = gam.shape[1]
+
+        psi = zeros((TT, n))
+        for i in range(0, n):
+            if smooth:
+                tmp_spline = UnivariateSpline(time, gam[:, i], s=1e-4)
+                g = tmp_spline(time, 1)
+                idx = g <= 0
+                g[idx] = 0
+                psi[:, i] = sqrt(g)
+            else:
+                psi[:, i] = sqrt(gradient(gam[:, i], binsize))
+
+    return psi
+
+
 def h_to_gam(h):
     TT = h.shape[0]
     time = linspace(0, 1, TT)
@@ -154,6 +185,23 @@ def v_to_gam(v):
         gam = zeros((TT, n))
         for i in range(0, n):
             psi = exp_map(mu, v[:, i])
+            gam0 = cumulative_trapezoid(psi * psi, time, initial=0)
+            gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
+
+    return gam
+
+
+def psi_to_gam(psi):
+    TT = psi.shape[0]
+    time = linspace(0, 1, TT)
+    if psi.ndim == 1:
+        gam0 = cumulative_trapezoid(psi * psi, time, initial=0)
+        gam = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
+    else:
+        n = psi.shape[1]
+
+        gam = zeros((TT, n))
+        for i in range(0, n):
             gam0 = cumulative_trapezoid(psi * psi, time, initial=0)
             gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
