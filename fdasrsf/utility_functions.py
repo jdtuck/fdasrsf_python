@@ -574,6 +574,75 @@ def SqrtMean(gam, parallel=False, cores=-1, smooth=True):
     return mu, gam_mu, psi, vec
 
 
+def PsiMean(psi, parallel=False, cores=-1):
+    """
+   
+
+    :param psi: numpy ndarray of shape (M,N) of M psi functions
+                with N samples
+    :param parallel: run in parallel (default = F)
+    :param cores: number of cores for parallel (default = -1 (all))
+
+    :rtype: 2 numpy ndarray and vector
+    :return mu: Karcher mean psi function
+    :return gam_mu: vector of dim N which is the Karcher mean warping
+                    function
+    :return psi: numpy ndarray of shape (M,N) of M SRSF of the warping
+                 functions
+    :return vec: numpy ndarray of shape (M,N) of M shooting vectors
+
+    """
+
+    (T, n) = psi.shape
+
+    # Find Direction
+    mnpsi = psi.mean(axis=1)
+    a = mnpsi.repeat(n)
+    d1 = a.reshape(T, n)
+    d = (psi - d1) ** 2
+    dqq = sqrt(d.sum(axis=0))
+    min_ind = dqq.argmin()
+    mu = psi[:, min_ind]
+    maxiter = 501
+    lvm = zeros(maxiter)
+    vec = zeros((T, n))
+    stp = 0.3
+    itr = 0
+
+    if parallel:
+        out = Parallel(n_jobs=cores)(
+            delayed(inv_exp_map_sub)(mu, psi[:, i]) for i in range(n)
+        )
+        vec = array(out)
+        vec = vec.transpose()
+    else:
+        for i in range(0, n):
+            out, theta = geo.inv_exp_map(mu, psi[:, i])
+            vec[:, i] = out
+
+    vbar = vec.mean(axis=1)
+    lvm[itr] = geo.L2norm(vbar)
+
+    while (lvm[itr] > 0.00000001) and (itr < maxiter):
+        mu = geo.exp_map(mu, stp * vbar)
+        itr += 1
+        if parallel:
+            out = Parallel(n_jobs=cores)(
+                delayed(inv_exp_map_sub)(mu, psi[:, i]) for i in range(n)
+            )
+            vec = array(out)
+            vec = vec.transpose()
+        else:
+            for i in range(0, n):
+                out, theta = geo.inv_exp_map(mu, psi[:, i])
+                vec[:, i] = out
+
+        vbar = vec.mean(axis=1)
+        lvm[itr] = geo.L2norm(vbar)
+
+    return mu
+
+
 def inv_exp_map_sub(mu, psi):
     out, theta = geo.inv_exp_map(mu, psi)
     return out
