@@ -19,6 +19,7 @@ __all__ = [
     "curve_regression",
     "regression",
     "fPCA",
+    "fPNS",
     "elastic_changepoint",
     "elastic_glm_regression",
     "curve_pcr_regression",
@@ -28,7 +29,7 @@ __all__ = [
     "gp",
 ]
 
-__version__ = "2.6.1"
+__version__ = "2.6.2"
 
 import sys
 
@@ -83,6 +84,7 @@ from .utility_functions import (
 )
 from .fPCA import fdavpca, fdahpca, fdajpca, fdajpcah
 from .fPLS import pls_svd
+from .fPNS import fdahpns, project_pns_gam
 from .regression import elastic_logistic, elastic_regression, elastic_mlogistic
 from .elastic_glm_regression import elastic_glm_regression
 from .pcr_regression import (
