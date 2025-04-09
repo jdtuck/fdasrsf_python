@@ -202,7 +202,7 @@ def psi_to_gam(psi):
 
         gam = zeros((TT, n))
         for i in range(0, n):
-            gam0 = cumulative_trapezoid(psi * psi, time, initial=0)
+            gam0 = cumulative_trapezoid(psi[:, i] * psi[:, i], time, initial=0)
             gam[:, i] = (gam0 - gam0.min()) / (gam0.max() - gam0.min())
 
     return gam
