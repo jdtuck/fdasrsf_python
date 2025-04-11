@@ -380,7 +380,7 @@ def PNSe2s(resmat, PNS):
     return T
 
 
-def PNSmainHDLSS(data, itype="small", a=0.05, R=100):
+def PNSmainHDLSS(data, itype="small", a=0.05, R=100, thresh=1e-15):
     """
     Analysis of Principal Nested Spheres for data on hyperspheres
 
@@ -395,6 +395,7 @@ def PNSmainHDLSS(data, itype="small", a=0.05, R=100):
                  could be any number between 0 and 1.
     @param R:100 (default) : number of bootsrap samples to be evaluated for
                              the sequential test.
+    @param thresh: 1e-15 (default): eigenvalue threshold
 
     @return:
     resmat: The commensurate residual matrix (X_PNS). Each entry in row k
@@ -419,7 +420,7 @@ def PNSmainHDLSS(data, itype="small", a=0.05, R=100):
     k, n = data.shape
     U, s, Vh = np.linalg.svd(data, full_matrices=False)
 
-    maxd = np.where(s < 1e-15)[0]
+    maxd = np.where(s < thresh)[0]
     if maxd.shape[0] == 0 or k > n:
         maxd = np.minimum(k, n) + 1
     else:
