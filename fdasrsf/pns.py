@@ -375,7 +375,7 @@ def PNSe2s(resmat, PNS):
         T = rotMat(NSOrthaxis[i + 1]).T @ tmpmat
 
     if PNS["basisu"].shape[0] != 0:
-        T = PNS["basisu"][:,0:T.shape[0]] @ T
+        T = PNS["basisu"][:, 0:T.shape[0]] @ T
 
     return T
 
@@ -493,7 +493,7 @@ def PNSmainHDLSS(data, itype="small", a=0.05, R=100, thresh=1e-15):
     if nullspdim > 0:
         basisu = U[:, 0:(dm + 1)]
     else:
-        basisu = np.empty((U.shape[0], 0))
+        basisu = np.empty((0))
 
     PNS = {
         "radii": radii,  # size (radius) of nested spheres from largest to smallest
