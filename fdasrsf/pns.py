@@ -492,7 +492,7 @@ def PNSmainHDLSS(data, itype="small", a=0.05, R=100):
     if nullspdim > 0:
         basisu = U[:, 0:(dm + 1)]
     else:
-        basisu = np.empty()
+        basisu = np.empty((U.shape[0], 0))
 
     PNS = {
         "radii": radii,  # size (radius) of nested spheres from largest to smallest
