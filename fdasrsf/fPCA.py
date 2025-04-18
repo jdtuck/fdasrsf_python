@@ -375,13 +375,13 @@ class fdahpca:
 
         """
 
-        q1 = fs.f_to_srsf(f, self.time)
-        M = self.time.shape[0]
+        q1 = fs.f_to_srsf(f, self.warp_data.time)
+        M = self.warp_data.time.shape[0]
         n = q1.shape[1]
         mq = self.warp_data.mqn
         gam = np.zeros((M, n))
         for ii in range(0, n):
-            gam[:, ii] = fs.optimum_reparam(mq, self.time, q1[:, ii])
+            gam[:, ii] = fs.optimum_reparam(mq, self.warp_data.time, q1[:, ii])
 
         U = self.U
         no = U.shape[1]
