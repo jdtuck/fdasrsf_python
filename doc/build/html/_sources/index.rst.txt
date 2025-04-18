@@ -29,7 +29,7 @@ using functional component analysis and regression.
 
 Installation
 =============
-Currently, *fdasrsf* is available in Python versions above 3.8, regardless of the
+Currently, *fdasrsf* is available in Python versions above 3.10, regardless of the
 platform.
 The stable version can be installed via
 `PyPI <https://pypi.org/project/fdasrsf/>`_:
@@ -149,6 +149,8 @@ References
    Q. Xie, S. Kurtek, E. Klassen, G. E. Christensen and A. Srivastava. Metric-based pairwise and multiple image registration. IEEE European Conference on Computer Vision (ECCV), September, 2014
 
    J. D. Tucker and D. Yarger, “Elastic Functional Changepoint Detection of Climate Impacts from Localized Sources”, Envirometrics, 10.1002/env.2826, 2023.
+
+   Yu, Q., Lu, X., and Marron, J. S. (2017), “Principal Nested Spheres for Time-Warped Functional Data Analysis,” Journal of Computational and Graphical Statistics, 26, 144–151.
 
 
 Indices and tables
