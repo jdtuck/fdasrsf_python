@@ -13,6 +13,7 @@ API Reference
 
    time_warping.rst
    fPCA.rst
+   fPNS.rst
    boxplots.rst
    fPLS.rst
    regression.rst
