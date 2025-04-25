@@ -173,7 +173,7 @@ class fdahpns:
                 if k > (no - 1):
                     break
 
-                axt.plot(np.linspace(0, 1, TT), np.squeeze(self.gam_pca[:, :, k]))
+                axt.plot(np.linspace(0, 1, TT), np.squeeze(self.gam_pns[:, :, k]))
                 plt.style.use("seaborn-v0_8-colorblind")
                 axt.set_title("PD %d" % (k + 1))
                 axt.set_aspect("equal")
