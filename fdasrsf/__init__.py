@@ -82,7 +82,7 @@ from .utility_functions import (
     warp_f_gamma,
     elastic_depth,
 )
-from .fPCA import fdavpca, fdahpca, fdajpca, fdajpcah
+from .fPCA import fdavpca, fdahpca, fdahpcah, fdajpca, fdajpcah
 from .fPLS import pls_svd
 from .fPNS import fdahpns, project_pns_gam
 from .regression import elastic_logistic, elastic_regression, elastic_mlogistic
