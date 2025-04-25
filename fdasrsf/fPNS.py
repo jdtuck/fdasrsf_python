@@ -181,7 +181,7 @@ class fdahpns:
             fig.set_tight_layout(True)
 
         cumm_coef = 100 * self.cumvar
-        idx = np.arange(0, no) + 1
+        idx = np.arange(0, self.cumvar.shape[0]) + 1
         plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
         plt.ylabel("Percentage")
         plt.xlabel("Index")
