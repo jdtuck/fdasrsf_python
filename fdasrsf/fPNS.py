@@ -45,13 +45,15 @@ class fdahpns:
 
         self.warp_data = fdawarp
 
-    def calc_pns(self, var_exp=0.99):
+    def calc_pns(self, var_exp=0.99, stds=np.arange(-1, 2)):
         """
         This function calculates horizontal functional principal nested
         spheres on aligned data
 
         :param var_exp: compute no based on value percent variance explained
                         (example: 0.95)
+        :param stds: number of standard deviations along geodesic to compute
+                     (default = -1,0,1)
 
         :rtype: fdapns object of numpy ndarray
         :return gam_pca: srsf principal directions
@@ -82,15 +84,20 @@ class fdahpns:
         no = int(np.argwhere(propcumPNS <= var_exp)[-1])+1
         if (no == 1):
             no += 1
-        udir = np.eye(resmat.shape[0])
-        projPsi = np.zeros((d, n, no))
-        projGam = np.zeros((d, n, no))
+        projPsi = np.zeros((d, stds.shape[0], no))
+        projGam = np.zeros((d, stds.shape[0], no))
         for PCnum in range(no):
-            PCvec = pns.PNSe2s(np.outer(udir[:, PCnum], resmat[PCnum, :]), PNS)
+            std = resmat[PCnum, :].std()
+            mean = resmat[PCnum, :].mean()
+            dirtmp = stds * std + mean
+            restmp = np.zeros((resmat.shape[0], stds.shape[0]))
+            restmp[PCnum, :] = dirtmp
+
+            PCvec = fs.pns.PNSe2s(restmp, PNS)
             projPsi[:, :, PCnum] = PCvec * radius
             gamt = cumulative_trapezoid(projPsi[:, :, PCnum] ** 2, t, axis=0, 
                                         initial=0)
-            for j in range(n):
+            for j in range(stds.shape[0]):
                 gamt[:, j] = (gamt[:, j] - gamt[:, j].min()) / (
                     gamt[:, j].max() - gamt[:, j].min()
                 )
