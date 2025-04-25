@@ -6,10 +6,11 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 from numpy import arccos, sin, cos, linspace, zeros, sqrt, newaxis
-from numpy import ones, diff, gradient, log, exp, logspace, any
+from numpy import ones, diff, gradient, log, exp
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapezoid, cumulative_trapezoid
 import fdasrsf.utility_functions as uf
+
 
 def inv_exp_map(Psi, psi):
     tmp = inner_product(Psi, psi)
