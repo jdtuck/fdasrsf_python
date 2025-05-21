@@ -140,7 +140,9 @@ class fdahpns:
 
         pnsdat = psi / np.tile(np.sqrt((psi**2).sum(axis=0)), (n, 1))
 
-        resmat = pns.PNSs2e(pnsdat, self.PNS)
+        dat = self.PNS["basisu"].T @ pnsdat
+
+        resmat = pns.PNSs2e(dat, self.PNS)
 
         self.new_coef = resmat
 

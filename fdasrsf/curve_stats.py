@@ -322,7 +322,7 @@ class fdacurve:
 
             d = arccos(q1dotq2)
 
-            u = qn_t - q1dotq2 * mu
+            u = qn_t - q1dotq2 * q_mean
             normu = sqrt(cf.innerprod_q2(u, u))
             if normu > 1e-4:
                 w = u * arccos(q1dotq2) / normu
