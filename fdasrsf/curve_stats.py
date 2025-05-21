@@ -5,6 +5,7 @@ Mean and Variance
 moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
+
 from numpy import (
     zeros,
     sqrt,
@@ -261,6 +262,78 @@ class fdacurve:
             self.qn[:, :, ii] = out[ii][0]
             btmp = out[ii][1].dot(self.beta[:, :, ii])
             self.betan[:, :, ii] = cf.group_action_by_gamma_coord(btmp, out[ii][2])
+
+        return
+
+    def multiple_align_curves(
+        self, mu, rotation=True, parallel=False, lam=0.0, cores=-1, method="DP"
+    ):
+        """
+        This method aligns a collection of curves using the elastic
+        square-root slope (srsf) framework.
+
+        :param mu: array of curve to align to
+        :param rotation: compute optimal rotation (default = T)
+        :param parallel: run in parallel (default = F)
+        :param lam: controls the elasticity (default = 0)
+        :param cores: number of cores for parallel (default = -1 (all))
+        :param method: method to apply optimization (default="DP") options are "DP" or "RBFGS"
+        """
+
+        n, T, N = self.beta.shape
+        centroid2 = cf.calculatecentroid(mu)
+        self.beta_mean = mu - tile(centroid2, [T, 1]).T
+
+        q_mean, len1, lenq1 = cf.curve_to_q(self.beta_mean, self.mode)
+        self.q_mean = q_mean
+
+        if self.mode == "C":
+            self.basis = cf.find_basis_normal(q_mean)
+
+        self.qn = zeros((n, T, N))
+        self.betan = zeros((n, T, N))
+        self.v = zeros((n, T, N))
+        self.gams = zeros((T, N))
+        centroid2 = cf.calculatecentroid(self.beta_mean)
+        self.beta_mean = self.beta_mean - tile(centroid2, [T, 1]).T
+
+        # align to mean
+        out = Parallel(n_jobs=-1)(
+            delayed(cf.find_rotation_and_seed_unique)(
+                self.q_mean, self.q[:, :, n], self.mode, lam, rotation, method
+            )
+            for n in range(N)
+        )
+        for ii in range(0, N):
+            self.gams[:, ii] = out[ii][2]
+            self.qn[:, :, ii] = out[ii][0]
+            btmp = out[ii][1].dot(self.beta[:, :, ii])
+            self.betan[:, :, ii] = cf.group_action_by_gamma_coord(btmp, out[ii][2])
+
+            qn_t = self.qn[:, :, ii] / sqrt(
+                cf.innerprod_q2(self.qn[:, :, ii], self.qn[:, :, ii])
+            )
+            q1dotq2 = cf.innerprod_q2(q_mean, qn_t)
+
+            if q1dotq2 > 1:
+                q1dotq2 = 1
+            if q1dotq2 < -1:
+                q1dotq2 = -1
+
+            d = arccos(q1dotq2)
+
+            u = qn_t - q1dotq2 * mu
+            normu = sqrt(cf.innerprod_q2(u, u))
+            if normu > 1e-4:
+                w = u * arccos(q1dotq2) / normu
+            else:
+                w = zeros(qn_t.shape)
+
+            # Project to tangent space of manifold to obtain v_i
+            if self.mode == "O":
+                self.v[:, :, ii] = w
+            else:
+                self.v[:, :, ii] = cf.project_tangent(w, self.q[:, :, ii], self.basis)
 
         return
 
@@ -528,6 +601,8 @@ def karcher_calc(mu, q, basis, closed, lam, rotation, method):
 
     if q1dotq2 > 1:
         q1dotq2 = 1
+    if q1dotq2 < -1:
+        q1dotq2 = -1
 
     d = arccos(q1dotq2)
 
