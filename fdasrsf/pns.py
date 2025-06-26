@@ -36,9 +36,7 @@ def pcscore2sphere3(n_pc, X_hat, Xs, Tan, V):
     S_star = np.zeros((n, n_pc + 1))
     for i in range(n):
         U_norm = np.linalg.norm(U[i, :])
-        S_star[i, :] = np.concatenate(
-            (np.cos(U_norm), np.sin(U_norm) / U_norm * lam[i, 0:n_pc])
-        )
+        S_star[i, :] = np.insert(np.sin(U_norm) / U_norm * lam[i, 0:n_pc], 0, np.cos(U_norm))
     return S_star
 
 
@@ -583,7 +581,7 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
     pdim = x.shape[0]
     if n_pc == "Full":
         n_pc = np.minimum(pdim - 1, n - 1)
-    if n_pc == "Approx":
+    if n_pc == "Approx" or n_pc == pdim - 1:
         K = np.cov(x)
         U, s, V = svd(K)
         cumm_coef = np.cumsum(s) / np.sum(s)
@@ -600,22 +598,22 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
     for i in range(n):
         TT[i, :] = Xs[i, :] - np.sum(Xs[i, :] * muhat) * muhat
 
-    K = np.cov(TT.T)
-    U, s, V = svd(K)
+    centered_arr = TT - np.mean(TT, axis=1)[:, np.newaxis]
+    U, s, V = svd(centered_arr)
     pcapercent = np.sum(s[0:n_pc] ** 2 / np.sum(s**2))
-    print("Initial PNS subsphere dimension: %d\n" % n_pc + 1)
+    print("Initial PNS subsphere dimension: %d\n" % (n_pc + 1))
     print(
         "Percentage of variability in PNS sequence %f" % np.round(pcapercent * 100, 2)
     )
 
     TT = TT.T
-    ans = pcscore2sphere3(n_pc, muhat, Xs, TT, U)
+    ans = pcscore2sphere3(n_pc, muhat, Xs, TT, V)
     Xssubsphere = ans.T
 
     resmat, PNS = PNSmainHDLSS(Xssubsphere, itype, a, R, thresh)
 
     PNS["spehredata"] = Xssubsphere
-    PNS["pca"] = U
+    PNS["pca"] = V
     PNS["muhat"] = muhat
     PNS["n_pc"] = n_pc
 
