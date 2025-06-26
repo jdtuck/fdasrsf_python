@@ -422,10 +422,10 @@ def fastPNSe2s(res, PNS):
     muhat = PNS["muhat"]
     n_pc = PNS["n_pc"]
     s = np.arccos(GG[0, :])
-    ones = np.ones(n)
-    approx1 = GG[1:(n_pc + 1), :].T @ PNS["rotation"][:, 0:n_pc].T + np.diag(
+    ones = np.ones((n, 1))
+    approx1 = GG[1:(n_pc + 1), :].T @ PNS["pca"][:, 0:n_pc].T + np.diag(
         np.cos(s)
-    ) @ ones @ muhat.T / np.linalg.norm(muhat)
+    ) @ ones @ (muhat.T / np.linalg.norm(muhat))[np.newaxis, :]
 
     return approx1
 
