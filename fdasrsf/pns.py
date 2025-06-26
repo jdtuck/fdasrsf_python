@@ -598,7 +598,8 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
     for i in range(n):
         TT[i, :] = Xs[i, :] - np.sum(Xs[i, :] * muhat) * muhat
 
-    K = np.cov(TT.T)
+    TT = TT.T
+    K = np.cov(TT)
     U, s, V = svd(K)
     pcapercent = np.sum(s[0:n_pc] ** 2 / np.sum(s**2))
     print("Initial PNS subsphere dimension: %d\n" % (n_pc + 1))
@@ -606,7 +607,6 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
         "Percentage of variability in PNS sequence %f" % np.round(pcapercent * 100, 2)
     )
 
-    TT = TT.T
     ans = pcscore2sphere3(n_pc, muhat, Xs, TT, U)
     Xssubsphere = ans.T
 
