@@ -425,7 +425,7 @@ def fastPNSe2s(res, PNS):
     ones = np.ones((n, 1))
     approx1 = GG[1:(n_pc + 1), :].T @ PNS["pca"][:, 0:n_pc].T + np.diag(
         np.cos(s)
-    ) @ ones @ (muhat.T / np.linalg.norm(muhat))[np.newaxis, :]
+    ) @ ones @ muhat[:, np.newaxis].T / np.linalg.norm(muhat)
 
     return approx1
 
@@ -598,8 +598,8 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
     for i in range(n):
         TT[i, :] = Xs[i, :] - np.sum(Xs[i, :] * muhat) * muhat
 
-    centered_arr = TT - np.mean(TT, axis=1)[:, np.newaxis]
-    U, s, V = svd(centered_arr)
+    K = np.cov(TT.T)
+    U, s, V = svd(K)
     pcapercent = np.sum(s[0:n_pc] ** 2 / np.sum(s**2))
     print("Initial PNS subsphere dimension: %d\n" % (n_pc + 1))
     print(
@@ -607,13 +607,13 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
     )
 
     TT = TT.T
-    ans = pcscore2sphere3(n_pc, muhat, Xs, TT, V)
+    ans = pcscore2sphere3(n_pc, muhat, Xs, TT, U)
     Xssubsphere = ans.T
 
     resmat, PNS = PNSmainHDLSS(Xssubsphere, itype, a, R, thresh)
 
     PNS["spehredata"] = Xssubsphere
-    PNS["pca"] = V
+    PNS["pca"] = U
     PNS["muhat"] = muhat
     PNS["n_pc"] = n_pc
 
