@@ -72,13 +72,12 @@ class fdahpns:
         radius = np.mean(np.sqrt((psi**2).sum(axis=0)))
         pnsdat = psi / np.tile(np.sqrt((psi**2).sum(axis=0)), (d, 1))
 
-        resmat, PNS = pns.PNSmainHDLSS(pnsdat)
+        resmat, PNS = fs.pns.fastpns(pnsdat.T, n_pc="Approx")
 
         # Proportion of variance explained
         varPNS = np.sum(np.abs(resmat) ** 2, axis=1) / n
         cumvarPNS = np.cumsum(varPNS)
         propcumPNS = cumvarPNS / cumvarPNS[-1]
-        propPNS = varPNS / cumvarPNS[-1] * 100
 
         # Projection of PCs
         no = int(np.argwhere(propcumPNS <= var_exp)[-1])+1
@@ -93,7 +92,7 @@ class fdahpns:
             restmp = np.zeros((resmat.shape[0], stds.shape[0]))
             restmp[PCnum, :] = dirtmp
 
-            PCvec = fs.pns.PNSe2s(restmp, PNS)
+            PCvec = fs.pns.fastPNSe2s(restmp, PNS)
             projPsi[:, :, PCnum] = PCvec * radius
             gamt = cumulative_trapezoid(projPsi[:, :, PCnum] ** 2, t, axis=0, 
                                         initial=0)
@@ -142,7 +141,7 @@ class fdahpns:
 
         dat = self.PNS["basisu"].T @ pnsdat
 
-        resmat = pns.PNSs2e(dat, self.PNS)
+        resmat = pns.fastPNSe2s(dat, self.PNS)
 
         self.new_coef = resmat
 
@@ -204,7 +203,7 @@ def project_pns_gam(resmat, PNS, radius, time):
     n = resmat.shape[1]
     d = time.shape[0]
     udir = np.eye(resmat.shape[0])
-    PCvec = pns.PNSe2s(udir@resmat, PNS) * radius
+    PCvec = pns.fastPNSe2s(udir@resmat, PNS) * radius
     gam_hat = np.zeros((d, n))
     for i in range(n):
         gamt = cumulative_trapezoid(PCvec[:, i]**2, time, initial=0)
