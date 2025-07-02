@@ -1293,10 +1293,11 @@ def jointfPCAhd(qn, h, C, var_exp=None):
     mqn = qn.mean(axis=1)
 
     U, s, V = svd(K)
-    U, V = uf.svd_flip(U, V)
 
     cumm_coef = np.cumsum(s) / s.sum()
     no_q = int(np.argwhere(cumm_coef >= var_exp)[0][0])
+    if no_q == 0:
+        no_q = 1
 
     c = (qn - mqn[:, np.newaxis]).T @ U
     c = c[:, 0:no_q]
@@ -1311,6 +1312,8 @@ def jointfPCAhd(qn, h, C, var_exp=None):
 
     cumm_coef = np.cumsum(sh) / sh.sum()
     no_h = int(np.argwhere(cumm_coef >= var_exp)[0][0]) + 1
+    if no_h == 0:
+        no_h = 1
 
     ch = (hc - mh[:, np.newaxis]).T @ Uh
     ch = ch[:, 0:no_h]
