@@ -699,6 +699,7 @@ class fdajpca:
         stds=np.arange(-1.0, 2.0),
         id=None,
         parallel=False,
+        srsf=True,
         cores=-1,
     ):
         """
@@ -712,6 +713,7 @@ class fdajpca:
         :param stds: number of standard deviations along gedoesic to compute
                      (default = -1,0,1)
         :param parallel: run in parallel (default = F)
+        :param srsf: use srsf (default = T)
         :param cores: number of cores for parallel (default = -1 (all))
         :type no: int
         :type id: int
@@ -751,18 +753,23 @@ class fdajpca:
         Nstd = stds.shape[0]
 
         # set up for fPCA in q-space
-        mq_new = qn.mean(axis=1)
-        m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
-        mqn = np.append(mq_new, m_new.mean())
-        qn2 = np.vstack((qn, m_new))
+        if srsf:
+            mq_new = qn.mean(axis=1)
+            m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
+            mqn = np.append(mq_new, m_new.mean())
+            qn2 = np.vstack((qn, m_new))
+        else:
+            mqn = fn.mean(axis=1)
+            qn2 = fn.copy()
 
         # calculate vector space of warping functions
         mu_psi, gam_mu, psi, vec = uf.SqrtMean(gam, parallel, cores)
 
         # joint fPCA
-        C = fminbound(find_C, 0, 1e4, (qn2, vec, q0, no, mu_psi, parallel, cores))
+        maxval = np.round(np.max(qn2))+1
+        C = fminbound(find_C, 0, maxval, (qn2, vec, q0, no, mu_psi, parallel, srsf, cores))
         qhat, gamhat, a, U, s, mu_g, g, cov = jointfPCAd(
-            qn2, vec, C, no, mu_psi, parallel, cores
+            qn2, vec, C, no, mu_psi, parallel, srsf, cores
         )
 
         # geodesic paths
@@ -771,27 +778,44 @@ class fdajpca:
 
         for k in range(0, no):
             for l in range(0, Nstd):
-                qhat = mqn + np.dot(U[0: (M + 1), k], stds[l] * np.sqrt(s[k]))
-                vechat = np.dot(U[(M + 1):, k], (stds[l] * np.sqrt(s[k])) / C)
-                psihat = geo.exp_map(mu_psi, vechat)
-                gamhat = cumulative_trapezoid(psihat * psihat,
-                                              np.linspace(0, 1, M),
-                                              initial=0)
-                gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
-                if sum(vechat) == 0:
-                    gamhat = np.linspace(0, 1, M)
+                if srsf:
+                    qhat = mqn + np.dot(U[0: (M + 1), k], stds[l] * np.sqrt(s[k]))
+                    vechat = np.dot(U[(M + 1):, k], (stds[l] * np.sqrt(s[k])) / C)
+                    psihat = geo.exp_map(mu_psi, vechat)
+                    gamhat = cumulative_trapezoid(psihat * psihat,
+                                                np.linspace(0, 1, M),
+                                                initial=0)
+                    gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
+                    if sum(vechat) == 0:
+                        gamhat = np.linspace(0, 1, M)
 
-                fhat = uf.cumtrapzmid(
-                    time,
-                    qhat[0:M] * np.fabs(qhat[0:M]),
-                    np.sign(qhat[M]) * (qhat[M] * qhat[M]),
-                    mididx,
-                )
-                f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), 
-                                                 fhat, gamhat)
-                q_pca[:, l, k] = uf.warp_q_gamma(
-                    np.linspace(0, 1, M), qhat[0:M], gamhat
-                )
+                    fhat = uf.cumtrapzmid(
+                        time,
+                        qhat[0:M] * np.fabs(qhat[0:M]),
+                        np.sign(qhat[M]) * (qhat[M] * qhat[M]),
+                        mididx,
+                    )
+                    f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), 
+                                                    fhat, gamhat)
+                    q_pca[:, l, k] = uf.warp_q_gamma(
+                        np.linspace(0, 1, M), qhat[0:M], gamhat
+                    )
+                else:
+                    qhat = mqn + np.dot(U[0:M, k], stds[l] * np.sqrt(s[k]))
+                    vechat = np.dot(U[M:, k], (stds[l] * np.sqrt(s[k])) / C)
+                    psihat = geo.exp_map(mu_psi, vechat)
+                    gamhat = cumulative_trapezoid(psihat * psihat,
+                                                np.linspace(0, 1, M),
+                                                initial=0)
+                    gamhat = (gamhat - gamhat.min()) / (gamhat.max() - gamhat.min())
+                    if sum(vechat) == 0:
+                        gamhat = np.linspace(0, 1, M)
+
+                    f_pca[:, l, k] = uf.warp_f_gamma(np.linspace(0, 1, M), 
+                                                     qhat, gamhat)
+                    q_pca[:, l, k] = uf.f_to_srsf(f_pca[:, l, k],
+                        np.linspace(0, 1, M)
+                    )
 
         if var_exp is not None:
             cumm_coef = np.cumsum(s) / s.sum()
@@ -811,6 +835,7 @@ class fdajpca:
         self.cov = cov
         self.no = no
         self.stds = stds
+        self.srsf = srsf
 
         return
 
@@ -839,8 +864,12 @@ class fdajpca:
         U = self.U
         no = U.shape[1]
 
-        m_new = np.sign(fn[self.id, :]) * np.sqrt(np.abs(fn[self.id, :]))
-        qn1 = np.vstack((qn, m_new))
+        if self.srsf:
+            m_new = np.sign(fn[self.id, :]) * np.sqrt(np.abs(fn[self.id, :]))
+            qn1 = np.vstack((qn, m_new))
+        else:
+            qn1 = fn.copy()
+
         C = self.C
         TT = self.time.shape[0]
         mu_g = self.mu_g
@@ -981,6 +1010,7 @@ class fdajpcah:
         :param stds: number of standard deviations along gedoesic to compute
                      (default = -1,0,1)
         :param parallel: run in parallel (default = F)
+        :param srsf: use srsf (default = T)
         :param cores: number of cores for parallel (default = -1 (all))
         :type id: int
         :type parallel: bool
@@ -1024,17 +1054,18 @@ class fdajpcah:
             m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
             mqn = np.append(mq_new, m_new.mean())
             qn2 = np.vstack((qn, m_new))
-            q0 = self.warp_data.q0
+            q0 = self.warp_data.q0.copy()
         else:
             mqn = fn.mean(axis=1)
-            q0 = self.warp_data.f
+            q0 = self.warp_data.f.copy()
             qn2 = fn.copy()
 
         # calculate vector space of warping functions
         h = geo.gam_to_h(gam)
 
         # joint fPCA
-        C = fminbound(find_C_h, 0, 200, (qn2, h, q0, 0.99, parallel, cores, srsf))
+        maxval = np.round(np.max(qn2)) + 1
+        C = fminbound(find_C_h, 0, maxval, (qn2, h, q0, 0.99, parallel, cores, srsf))
         qhat, gamhat, cz, Psi_q, Psi_h, sz, U, Uh, Uz = jointfPCAhd(qn2, h, C, var_exp)
 
         hc = C * h
@@ -1200,7 +1231,7 @@ class fdajpcah:
         return
 
 
-def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
+def jointfPCAd(qn, vec, C, m, mu_psi, parallel, srsf, cores):
     (M, N) = qn.shape
     g = np.vstack((qn, C * vec))
 
@@ -1220,9 +1251,13 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     qhat = qhat.T
     qhat = qhat + np.dot(U[0:M, 0:m], a.T)
 
-    vechat = np.dot(U[M:, 0:m], a.T / C)
-    psihat = np.zeros((M - 1, N))
-    gamhat = np.zeros((M - 1, N))
+    vechat = np.dot(U[M:, 0:m], (a/ C).T)
+    if srsf:
+        psihat = np.zeros((M - 1, N))
+        gamhat = np.zeros((M - 1, N))
+    else:
+        psihat = np.zeros((M, N))
+        gamhat = np.zeros((M, N))
     if parallel:
         out = Parallel(n_jobs=cores)(
             delayed(jfpca_sub)(mu_psi, vechat[:, n]) for n in range(N)
@@ -1232,9 +1267,14 @@ def jointfPCAd(qn, vec, C, m, mu_psi, parallel, cores):
     else:
         for ii in range(0, N):
             psihat[:, ii] = geo.exp_map(mu_psi, vechat[:, ii])
-            gam_tmp = cumulative_trapezoid(
-                psihat[:, ii] * psihat[:, ii], np.linspace(0, 1, M - 1), 
-                initial=0)
+            if srsf:
+                gam_tmp = cumulative_trapezoid(
+                    psihat[:, ii] * psihat[:, ii], np.linspace(0, 1, M - 1), 
+                    initial=0)
+            else:
+                gam_tmp = cumulative_trapezoid(
+                    psihat[:, ii] * psihat[:, ii], np.linspace(0, 1, M), 
+                    initial=0)
             gamhat[:, ii] = (gam_tmp - gam_tmp.min()) / (gam_tmp.max() - gam_tmp.min())
 
     U = U[:, 0:m]
@@ -1268,7 +1308,6 @@ def jointfPCAhd(qn, h, C, var_exp=None):
     Kh = np.cov(hc)
 
     Uh, sh, Vh = svd(Kh)
-    Uh, Vh = uf.svd_flip(Uh, Vh)
 
     cumm_coef = np.cumsum(sh) / sh.sum()
     no_h = int(np.argwhere(cumm_coef >= var_exp)[0][0]) + 1
@@ -1337,9 +1376,9 @@ def jfpca_sub(mu_psi, vechat):
     return gamhat
 
 
-def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
+def find_C(C, qn, vec, q0, m, mu_psi, parallel, srsf, cores):
     qhat, gamhat, a, U, s, mu_g, g, K = jointfPCAd(
-        qn, vec, C, m, mu_psi, parallel, cores
+        qn, vec, C, m, mu_psi, parallel, srsf, cores
     )
     (M, N) = qn.shape
     time = np.linspace(0, 1, M - 1)
@@ -1354,12 +1393,20 @@ def find_C(C, qn, vec, q0, m, mu_psi, parallel, cores):
         d = np.array(out)
     else:
         for i in range(0, N):
-            tmp = uf.warp_q_gamma(
-                time, qhat[0: (M - 1), i], uf.invertGamma(gamhat[:, i])
-            )
+            if srsf:
+                time = np.linspace(0, 1, M - 1)
+
+                tmp = uf.warp_q_gamma(
+                    time, qhat[0: (M - 1), i], uf.invertGamma(gamhat[:, i])
+                )
+            else:
+                time = np.linspace(0, 1, M)
+                tmp = uf.warp_q_gamma(
+                    time, qhat[:, i], uf.invertGamma(gamhat[:, i])
+                )
             d[i] = trapezoid((tmp - q0[:, i]) * (tmp - q0[:, i]), time)
 
-    out = d.mean()
+    out = np.sum(d**2)/N
 
     return out
 
