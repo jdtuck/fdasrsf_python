@@ -72,7 +72,7 @@ class fdahpns:
         radius = np.mean(np.sqrt((psi**2).sum(axis=0)))
         pnsdat = psi / np.tile(np.sqrt((psi**2).sum(axis=0)), (d, 1))
 
-        resmat, PNS = fs.pns.fastpns(pnsdat.T, n_pc="Approx")
+        resmat, PNS = fs.pns.fastpns(pnsdat, n_pc="Approx")
 
         # Proportion of variance explained
         varPNS = np.sum(np.abs(resmat) ** 2, axis=1) / n
@@ -80,7 +80,10 @@ class fdahpns:
         propcumPNS = cumvarPNS / cumvarPNS[-1]
 
         # Projection of PCs
-        no = int(np.argwhere(propcumPNS <= var_exp)[-1])+1
+        if (not np.any((propcumPNS <= var_exp))):
+            no = 1
+        else:
+            no = int(np.argwhere(propcumPNS <= var_exp)[-1])+1
         if (no == 1):
             no += 1
         projPsi = np.zeros((d, stds.shape[0], no))
