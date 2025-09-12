@@ -612,7 +612,7 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
 
     resmat, PNS = PNSmainHDLSS(Xssubsphere, itype, a, R, thresh)
 
-    PNS["spehredata"] = Xssubsphere
+    PNS["spheredata"] = Xssubsphere
     PNS["pca"] = U
     PNS["muhat"] = muhat
     PNS["n_pc"] = n_pc
