@@ -11,11 +11,13 @@ import fdasrsf.bayesian_functions as bf
 import fdasrsf.fPCA as fpca
 import fdasrsf.geometry as geo
 from fdasrsf.gp import gp_posterior
+from fdasrsf.PPD import getPPDinfo, getPersistentPeaks, drawPPDBarChart, drawPPDSurface
 from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.interpolate import interp1d
 from scipy.linalg import svd, cholesky
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform, pdist
+from scipy.signal import find_peaks
 from numpy.linalg import norm, inv
 from numpy.random import rand, normal
 from joblib import Parallel, delayed
@@ -358,6 +360,86 @@ class fdawarp:
         self.qun = qun[0:r]
 
         return
+    
+    def ppd(self, 
+            max_lam = 2, 
+            num_lam=10, 
+            pt=0.15, 
+            method="mean",
+            omethod="DP2",
+            center=True,
+            smoothdata=False,
+            MaxItr=20,
+            parallel=True,
+            pen="roughness",
+            cores=-1,
+            grid_dim=7,
+            verbose=True):
+        """
+        This computes the peak persistance diagram over a range of
+        lambda. This can help determine the proper elasticity (penalty).
+        This can be slow and recommended to run in parallel.
+
+        
+        :param max_lam: max regularization parameter (default 2)
+        :param num_lam: number of steps (default 10)
+        :param pt: the percentile of negative curvature of raw data (default .15)
+        :param method: (string) warp calculate Karcher Mean or Median
+                       (options = "mean" or "median") (default="mean")
+        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS)
+                        (default = DP2)
+        :param center: center warping functions (default = T)
+        :param smoothdata: Smooth the data using a box filter (default = F)
+        :param MaxItr: Maximum number of iterations (default = 20)
+        :param parallel: run in parallel (default = F)
+        :param penalty: penalty type (default="roughness") options are "roughness",
+                "l2gam", "l2psi", "geodesic". Only roughness implemented
+                in all methods. To use others method needs to be "RBFGS"
+                or "cRBFGS"
+        :param cores: number of cores for parallel (default = -1 (all))
+        :param grid_dim: size of the grid, for the DP2 method only
+                         (default = 7)
+        :param verbose: print status output (default = T)
+        :param thresh: cost function threshold (default = .01)
+        :type lam: double
+        :type smoothdata: bool
+
+        """
+
+        # Obtain a lambda candidate set
+        lam_vec = np.linspace(0, max_lam, num_lam)
+        fns = []
+        for i in range(num_lam):
+            self.srsf_align(method,
+                            omethod,
+                            center,
+                            smoothdata,
+                            MaxItr,
+                            parallel,
+                            lam_vec[i],
+                            pen,
+                            cores,
+                            grid_dim,
+                            verbose)
+            fns.append(self.fn)
+        
+        # Peak Persistent Diagrams
+        # Get the threshold for significant peak
+        diff_t = np.mean(np.diff(self.time))
+        taus = []
+        for i in range(self.f.shape[1]):
+            idx = find_peaks(self.f[:,i])
+            df2 = np.gradient(np.gradient(self[:,i], diff_t), diff_t)
+            tau = -df2 / np.maximum(-df2)
+            tau[tau < 0] = 0
+            taus.append(tau[idx])
+
+        th = np.percentile(taus, pt*100)
+
+        IndicatorMatrix, Heights, Locs, Labels, FNm = getPPDinfo(self.time, fns, lam_vec, th)
+        
+
+        
 
     def plot(self):
         """
