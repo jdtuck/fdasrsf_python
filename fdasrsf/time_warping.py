@@ -428,18 +428,46 @@ class fdawarp:
         diff_t = np.mean(np.diff(self.time))
         taus = []
         for i in range(self.f.shape[1]):
-            idx = find_peaks(self.f[:,i])
-            df2 = np.gradient(np.gradient(self[:,i], diff_t), diff_t)
-            tau = -df2 / np.maximum(-df2)
+            idx, _ = find_peaks(self.f[:,i])
+            df2 = np.gradient(np.gradient(self.f[:,i], diff_t), diff_t)
+            tau = -df2 / np.max(-df2)
             tau[tau < 0] = 0
             taus.append(tau[idx])
 
         th = np.percentile(taus, pt*100)
 
         IndicatorMatrix, Heights, Locs, Labels, FNm = getPPDinfo(self.time, fns, lam_vec, th)
-        
+        persistent_peak_labels = getPersistentPeaks(IndicatorMatrix.T)
 
+        # choose optimal lambda
+        ref_row = np.zeros(IndicatorMatrix.shape[1])
+        ref_row[persistent_peak_labels] = 1
+
+        n_lams = IndicatorMatrix.shape[0]
+        hamming_distances = np.zeros(n_lams)
+        exact_match_indices = []
+
+        for i in range(n_lams):
+            comp = np.logical_not(np.isnan(IndicatorMatrix[i, :]))
+
+            # check for exact match
+            if comp == ref_row:
+                exact_match_indices.append(i)
+            
+            # calculate hamming distance
+            hamming_distances[i] = np.sum(comp != ref_row)
         
+        if len(exact_match_indices) != 0:
+            idx_opt = min(exact_match_indices)
+        else:
+            min_distance_indices = hamming_distances.argmin()
+            idx_opt = min_distance_indices.min()
+        
+        # draw PPD bar chart
+        drawPPDBarChart(IndicatorMatrix,Heights,lam_vec,idx_opt)
+        #draw PPD surface
+        drawPPDSurface(obj.time,lam_vec,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt)
+        self.lam_opt = lam_vec[idx_opt]
 
     def plot(self):
         """

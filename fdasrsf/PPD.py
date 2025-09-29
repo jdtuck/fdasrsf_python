@@ -244,7 +244,7 @@ def drawPPDBarChart(IndicatorMatrix, Heights, lam, idx_opt):
 
     plt.yticks(np.arange(1,labelMax+1))
 
-    plt.xlabel('$\lambda$')
+    plt.xlabel('$\\lambda$')
     plt.ylabel('Peak Index')
 
 
@@ -292,7 +292,7 @@ def drawPPDSurface(t,lam,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt):
         ax.plot(t[LocationMatrix_sig[:, j]], lam[idx_sig], HeightMatrix_sig[idx_sig, j], linestyle='dashed', linewidth=2, color='magenta', markersize=6)
     
     plt.xlabel('$t$')
-    plt.ylabel('$\lambda$')
-    plt.zlabel('$\hat{g}_\lambda(t)$')
+    plt.ylabel('$\\lambda$')
+    plt.zlabel('$\\hat{g}_\\lambda(t)$')
 
     plt.grid(True)
