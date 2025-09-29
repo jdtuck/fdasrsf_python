@@ -451,7 +451,7 @@ class fdawarp:
             comp = np.logical_not(np.isnan(IndicatorMatrix[i, :]))
 
             # check for exact match
-            if comp == ref_row:
+            if np.all(comp == ref_row):
                 exact_match_indices.append(i)
             
             # calculate hamming distance
@@ -466,7 +466,7 @@ class fdawarp:
         # draw PPD bar chart
         drawPPDBarChart(IndicatorMatrix,Heights,lam_vec,idx_opt)
         #draw PPD surface
-        drawPPDSurface(obj.time,lam_vec,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt)
+        drawPPDSurface(self.time,lam_vec,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt)
         self.lam_opt = lam_vec[idx_opt]
 
     def plot(self):

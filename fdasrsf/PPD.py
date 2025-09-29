@@ -12,16 +12,16 @@ def getPPDinfo(t, Fa, lam, th):
     n_lams = lam.shape[0]
 
     # Compute the mean of each function in FN_temp over its rows
-    FNm = np.zeros(t.shape[0], len(Fa))
+    FNm = np.zeros((t.shape[0], len(Fa)))
     FNm[:, 0] = Fa[0].mean(axis=1)
     
     # Find indices of local maxima in the first function's mean
-    idxMaxFirst = find_peaks(FNm[:, 0])
+    idxMaxFirst, _ = find_peaks(FNm[:, 0])
 
     # Initalize labels and Locations for the first function
     Labels = []
     Locs = []
-    Labels.append(np.arange(0, idxMaxFirst.shape[0]))
+    Labels.append(np.arange(1, idxMaxFirst.shape[0]+1, dtype=int))
     Locs.append(idxMaxFirst)
 
     # Initialize the maximum label number
@@ -35,7 +35,7 @@ def getPPDinfo(t, Fa, lam, th):
 
         # Find peak locations in the next function's mean
         FnmNextMean = Fa[i+1].mean(axis=1)
-        idxMaxNext = find_peaks(FnmNextMean)
+        idxMaxNext, _ = find_peaks(FnmNextMean)
         Locs.append(idxMaxNext)
 
         # Update the mean function
@@ -59,10 +59,10 @@ def peak_successor(f1, f2, labels1, labelMax, smooth_parameter):
     ranges, idx_max1 = computePeakRanges(fm[:, 0])
 
     # compute indices of local maxima in fm[:,1]
-    idx_max2 = find_peaks(fm[:,1])
+    idx_max2, _ = find_peaks(fm[:,1])
 
     if idx_max1.size==0:
-        labels2 = labelMax + np.arange(1, idx_max2.shape[0]+1)
+        labels2 = labelMax + np.arange(1, idx_max2.shape[0]+1, dtype=int)
     else:
         # assign labels to peaks in fm[:,1] based on matching ranges in fm[:,0]
         labels2 = assignLabelsToPeaks(idx_max2, ranges, idx_max1, labels1)
@@ -72,7 +72,7 @@ def peak_successor(f1, f2, labels1, labelMax, smooth_parameter):
 
         # assign new labels to unmatched peaks in fm[:,1]
         unmatched = labels2 == 0
-        labels2[unmatched] = labelMax + np.arange(1,np.sum(unmatched)+1)
+        labels2[unmatched] = labelMax + np.arange(1,np.sum(unmatched)+1, dtype=int)
         labelMax = labelMax + sum(unmatched)
     
     return(labels2, labelMax)
@@ -80,13 +80,15 @@ def peak_successor(f1, f2, labels1, labelMax, smooth_parameter):
 
 def computePeakRanges(data):
     # computes peak ranges defined by adjacent minima in the data
-    idx_max = find_peaks(data)
+    idx_max, _ = find_peaks(data)
     if idx_max.size == 0:
         idx_max = []
         ranges = []
     
-    idx_min = find_peaks(-1*data)
-    idx_min = np.unique(np.concatenate((0, data.shape[0], idx_min)))
+    idx_min, _ = find_peaks(-1*data)
+    idx_min = np.insert(idx_min, 0, 0)
+    idx_min = np.insert(idx_min, 0, data.shape[0])
+    idx_min = np.unique(idx_min)
     ranges = np.zeros((idx_max.shape[0], 2))
     for i in range(idx_max.shape[0]):
         ranges[i,0] = np.max(idx_min[idx_min<idx_max[i]])
@@ -99,8 +101,8 @@ def computePeakRanges(data):
 
 def assignLabelsToPeaks(idx_max2, ranges, idx_max1, labels1):
     # assigns labels to peaks in idx_max2 based on matching ranges in idx_max1
-    labels = np.zeros(idx_max2.shape[0])
-    for i in range(idx_max2.shape):
+    labels = np.zeros(idx_max2.shape[0], dtype=int)
+    for i in range(idx_max2.shape[0]):
         # find the range in fm[:,0] that contains the current peak in fm[:,1]
         in_range = np.logical_and(idx_max2[i] >= ranges[:,0], idx_max2[i] <= ranges[:,1])
         matching_ranges = np.argwhere(in_range)
@@ -110,6 +112,7 @@ def assignLabelsToPeaks(idx_max2, ranges, idx_max1, labels1):
             if matching_ranges.size > 1:
                 tmp = np.abs(idx_max1[matching_ranges] - idx_max2[i])
                 closest_idx = tmp.argmin()
+                matching_range = matching_ranges[closest_idx]
             else:
                 matching_range = matching_ranges.copy()
             
@@ -166,14 +169,14 @@ def PreprocessingForPPD(t, lam, Labels, Locs, labelMax, FNm, th):
         negCurvSelected = negCurvature[locsCurrent]
 
         # update curvatures and heights matrices at the appropriate labels
-        curvatures[i, labelsCurrent] = negCurvSelected
-        Heights[i, labelsCurrent] = fnm[locsCurrent]
+        curvatures[i, labelsCurrent-1] = negCurvSelected
+        Heights[i, labelsCurrent-1] = fnm[locsCurrent]
 
         # apply threshold to select significant peaks based on curvature
         significantLabels = labelsCurrent[negCurvSelected >= th]
 
         # update the indicator matrix for signficiant peaks
-        IndicatorMatrix[i, significantLabels] = 1
+        IndicatorMatrix[i, significantLabels-1] = 1
     
     # compute heighs2 by multiply heighs with the indicator matrix 
     Heights2 = IndicatorMatrix * Heights
@@ -225,7 +228,7 @@ def drawPPDBarChart(IndicatorMatrix, Heights, lam, idx_opt):
 
         for j in range(label_all_peaks.shape[0]):
             x = lam[i]
-            y = label_all_peaks[j]
+            y = label_all_peaks[j,0]
 
             if y in label_persistent_peaks:
                 rect = Rectangle((x, y), lam_diff, 1, facecolor='black', edgecolor='none')
@@ -237,10 +240,10 @@ def drawPPDBarChart(IndicatorMatrix, Heights, lam, idx_opt):
     for j in range(labelMax):
         plt.hlines(y=j+0.5, xmin=plt.xlim()[0], xmax=plt.xlim()[1])
     
-    plt.axvline(x=lam[idx_opt], color="red", linestyles='dashed', linewdith=2)
+    plt.axvline(x=lam[idx_opt], color="red", linestyle='dashed', linewidth=2)
 
     plt.xlim((lam[0], lam[-1]))
-    plt.ylim((0.5, labelMax+0.5))
+    plt.ylim((0.5, labelMax))
 
     plt.yticks(np.arange(1,labelMax+1))
 
@@ -259,16 +262,16 @@ def drawPPDSurface(t,lam,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt):
 
     # Create the custom colormap
     parula_cmap = LinearSegmentedColormap.from_list('parula_custom', parula_colors)
-
     
     n_lams = lam.shape[0]
     labelMax = IndicatorMatrix.shape[1]
 
-    LocationMatrix_full = np.full((n_lams, labelMax), np.nan)
+    LocationMatrix_full = np.full((n_lams, labelMax), np.nan, dtype=int)
     for i in range(n_lams):
-        LocationMatrix_full[i, Labels[i]] = Locs[i]
+        LocationMatrix_full[i, Labels[i]-1] = Locs[i]
     
     LocationMatrix_sig = LocationMatrix_full * IndicatorMatrix
+    LocationMatrix_sig = LocationMatrix_sig.astype(int)
     HeighMatrix_full = Heights.copy()
     HeightMatrix_sig = HeighMatrix_full * IndicatorMatrix
 
@@ -293,6 +296,6 @@ def drawPPDSurface(t,lam,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt):
     
     plt.xlabel('$t$')
     plt.ylabel('$\\lambda$')
-    plt.zlabel('$\\hat{g}_\\lambda(t)$')
+    ax.set_zlabel('$\\hat{g}_\\lambda(t)$')
 
     plt.grid(True)
