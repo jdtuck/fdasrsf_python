@@ -1,4 +1,4 @@
-v2.6.X, 2025-09-30 -- bugfixes, add PPD
+v2.6.5, 2025-10-02 -- bugfixes, add PPD
 v2.6.4, 2025-07-03 -- bugfixes
 v2.6.3, 2025-06-27 -- bugfixes
 v2.6.2, 2025-04-03 -- bugfixes and add pns
