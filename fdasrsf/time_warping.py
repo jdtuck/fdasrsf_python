@@ -365,6 +365,8 @@ class fdawarp:
             max_lam = 2, 
             num_lam=10, 
             pt=0.15, 
+            srvf=True,
+            mu=None,
             method="mean",
             omethod="DP2",
             center=True,
@@ -384,6 +386,8 @@ class fdawarp:
         :param max_lam: max regularization parameter (default 2)
         :param num_lam: number of steps (default 10)
         :param pt: the percentile of negative curvature of raw data (default .15)
+        :param srvf: perform in SRVF space (default=True)
+        :param mu: vector of function to align to (default None)
         :param method: (string) warp calculate Karcher Mean or Median
                        (options = "mean" or "median") (default="mean")
         :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS)
@@ -410,18 +414,32 @@ class fdawarp:
         lam_vec = np.linspace(0, max_lam, num_lam)
         fns = []
         for i in range(num_lam):
-            self.srsf_align(method,
-                            omethod,
-                            center,
-                            smoothdata,
-                            MaxItr,
-                            parallel,
-                            lam_vec[i],
-                            pen,
-                            cores,
-                            grid_dim,
-                            verbose)
-            fns.append(self.fn)
+            if mu is None:
+                self.srsf_align(method,
+                                omethod,
+                                center,
+                                smoothdata,
+                                MaxItr,
+                                parallel,
+                                lam_vec[i],
+                                pen,
+                                cores,
+                                grid_dim,
+                                verbose)
+            else:
+                self.multiple_align_functions(mu,
+                                              omethod,
+                                              smoothdata,
+                                              parallel,
+                                              lam_vec[i],
+                                              pen,
+                                              cores,
+                                              grid_dim=7)
+            
+            if srvf:
+                fns.append(self.qn)
+            else:
+                fns.append(self.fn)
         
         # Peak Persistent Diagrams
         # Get the threshold for significant peak
