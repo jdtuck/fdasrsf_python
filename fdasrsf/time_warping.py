@@ -441,13 +441,18 @@ class fdawarp:
             else:
                 fns.append(self.fn)
         
+        if srvf:
+            f0 = self.f.copy()
+        else
+            f0 = self.q0.copy()
+
         # Peak Persistent Diagrams
         # Get the threshold for significant peak
         diff_t = np.mean(np.diff(self.time))
         taus = []
         for i in range(self.f.shape[1]):
-            idx, _ = find_peaks(self.f[:,i])
-            df2 = np.gradient(np.gradient(self.f[:,i], diff_t), diff_t)
+            idx, _ = find_peaks(f0[:,i])
+            df2 = np.gradient(np.gradient(f0[:,i], diff_t), diff_t)
             tau = -df2 / np.max(-df2)
             tau[tau < 0] = 0
             taus.append(tau[idx])
