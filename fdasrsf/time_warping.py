@@ -442,9 +442,9 @@ class fdawarp:
                 fns.append(self.fn)
         
         if srvf:
-            f0 = self.f.copy()
-        else
             f0 = self.q0.copy()
+        else:
+            f0 = self.f.copy()
 
         # Peak Persistent Diagrams
         # Get the threshold for significant peak
