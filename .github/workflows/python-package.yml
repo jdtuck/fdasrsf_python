@@ -116,6 +116,17 @@ jobs:
           pattern: cibw-*
           path: dist
           merge-multiple: true
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
