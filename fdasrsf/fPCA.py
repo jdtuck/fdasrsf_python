@@ -1005,7 +1005,7 @@ class fdajpcah:
         on aligned data
 
         :param var_exp: compute no based on value percent variance explained
-                        (default: None)
+                        (default: 0.99)
         :param id: point to use for f(0) (default = midpoint)
         :param stds: number of standard deviations along gedoesic to compute
                      (default = -1,0,1)
