@@ -263,7 +263,7 @@ class fdahpca:
     :param coef: coefficients
     :param vec: shooting vectors
     :param mu: Karcher Mean
-    :param tau: principal directions
+    :param stds: principal directions
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
