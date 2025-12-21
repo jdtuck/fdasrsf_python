@@ -408,6 +408,42 @@ def PNSe2s(resmat, PNS):
     return T
 
 
+def fastPNSs2e(spheredata, PNS):
+    """
+    Fast PNS coordinate transform from Sphere to Euclidean-type residual matrix 
+
+    Usage: EuclidData = fastPNSs2e(spheredata, PNS)
+
+      where 'res' is d x m data matrix in PNS coordinate system (for any
+      m >= 1), 'PNS' is the structural array
+    """
+    muhat = PNS["muhat"]
+    U = PNS["pca"] 
+    muhat = PNS["muhat"]
+    n_pc = PNS["n_pc"]
+
+    Xs = spheredata.T
+    n = Xs.shape[0]
+    for i in range(n):
+        Xs[i, :] = Xs[i, :] / np.linalg.norm(Xs[i, :])
+
+    muhat = np.mean(Xs, axis=0)
+    muhat = muhat / np.linalg.norm(muhat)
+
+    TT = Xs.copy()
+    for i in range(n):
+        TT[i, :] = Xs[i, :] - np.sum(Xs[i, :] * muhat) * muhat
+
+    TT = TT.T
+
+    ans = pcscore2sphere3(n_pc, muhat, Xs, TT, U)
+    Xssubsphere = ans.T
+
+    EuclidData = PNSs2e(Xssubsphere,PNS)
+
+    return EuclidData
+
+
 def fastPNSe2s(res, PNS):
     """
     Fast PNS coordinate transform from Euclidean-type residual matrix to Sphere
