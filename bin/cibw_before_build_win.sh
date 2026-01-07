@@ -12,9 +12,11 @@ lib_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_lib_dir(
 include_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_include_dir())")
 
 includedir=$(python -c"import sys; import os; print(os.path.join(sys.prefix, 'include'))")
+Library=$(python -c"import sys; import os; print(os.path.join(sys.prefix, 'Library'))")
 libdir=$(python -c"import sys; import os; print(os.path.join(sys.prefix, 'Library', 'lib'))")
 
 mkdir $includedir
+mkdir $Library
 mkdir $libdir
 
 cp -r $lib_loc/* $libdir
