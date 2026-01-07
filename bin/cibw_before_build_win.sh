@@ -7,7 +7,7 @@ printenv
 cat $PROJECT_DIR/tools/wheels/LICENSE_win32.txt >> $PROJECT_DIR/LICENSE.txt
 
 # Install OpenBLAS
-python -m pip install scipy-openblas32==0.3.30.0.8
+python -m pip install -r requirements_openblas.txt
 python -c "import scipy_openblas32; print(scipy_openblas32.get_pkg_config())" > $PROJECT_DIR/scipy-openblas.pc
 
 # delvewheel is the equivalent of delocate/auditwheel for windows.
