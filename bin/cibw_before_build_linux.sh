@@ -13,12 +13,11 @@ else
     exit 1
 fi
 
-PLATFORM=$(PYTHONPATH=bin python -c "import openblas_support; print(openblas_support.get_plat())")
-
 printenv
 # Update license
 
-# Install Openblas
-basedir=$(python bin/openblas_support.py $NIGHTLY_FLAG)
-cp -r $basedir/lib/* /usr/local/lib
-cp $basedir/include/* /usr/local/include
+
+
+# Install OpenBLAS
+python -m pip install scipy-openblas32==0.3.30.0.8
+python -c "import scipy_openblas32; print(scipy_openblas32.get_pkg_config())" > $PROJECT_DIR/scipy-openblas.pc
