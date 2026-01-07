@@ -77,6 +77,9 @@ if [[ $PLATFORM == "x86_64" ]]; then
   cp -r $lib_loc/* /usr/local/lib
   cp $include_loc/* /usr/local/include
   cp /usr/local/lib/libscipy_openblas.dylib /usr/local/lib/libopenblas.dylib
+  cp /usr/local/gfortran/lib/libgfortran.5.dylib /usr/local/lib/libgfortran.5.dylib
+  cp /usr/local/gfortran/lib/libgcc_s.1.1.dylib /usr/local/lib/libgcc_s.1.1.dylib
+  cp /usr/local/gfortran/lib/libquadmath.0.dylib /usr/local/lib/libquadmath.0.dylib
 fi
 
 if [[ $PLATFORM == "arm64" ]]; then
@@ -85,4 +88,8 @@ if [[ $PLATFORM == "arm64" ]]; then
   sudo cp -r $lib_loc/*  /usr/local/lib
   sudo cp /usr/local/lib/libscipy_openblas.dylib /usr/local/lib/libopenblas.dylib
   sudo cp $include_loc/*  /usr/local/include
+  sudo cp /usr/local/lib/libscipy_openblas.dylib /usr/local/lib/libopenblas.dylib
+  sudo cp /usr/local/gfortran/lib/libgfortran.5.dylib /usr/local/lib/libgfortran.5.dylib
+  sudo cp /usr/local/gfortran/lib/libgcc_s.1.1.dylib /usr/local/lib/libgcc_s.1.1.dylib
+  sudo  cp /usr/local/gfortran/lib/libquadmath.0.dylib /usr/local/lib/libquadmath.0.dylib
 fi
