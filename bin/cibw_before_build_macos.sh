@@ -62,6 +62,7 @@ python -m pip install -r bin/requirements_openblas.txt
 python -c "import scipy_openblas32; print(scipy_openblas32.get_pkg_config())" > $PROJECT_DIR/scipy-openblas.pc
 
 lib_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_lib_dir())")
+include_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_include_dir())")
 # Use the libgfortran from gfortran rather than the one in the wheel
 # since delocate gets confused if there is more than one
 # https://github.com/scipy/scipy/issues/20852
@@ -70,3 +71,23 @@ install_name_tool -change @loader_path/../.dylibs/libgcc_s.1.1.dylib @rpath/libg
 install_name_tool -change @loader_path/../.dylibs/libquadmath.0.dylib @rpath/libquadmath.0.dylib $lib_loc/libsci*
 
 codesign -s - -f $lib_loc/libsci*
+
+if [[ $PLATFORM == "x86_64" ]]; then
+  cp -r $lib_loc/* /usr/local/lib
+  cp $include_loc/* /usr/local/include
+fi
+
+if [[ $PLATFORM == "arm64" ]]; then
+  sudo mkdir -p /opt/arm64-builds/lib
+  sudo mkdir -p /opt/arm64-builds/include
+  sudo mkdir -p /usr/local/lib
+  sudo mkdir -p /usr/local/include
+  sudo cp -r $lib_loc/* /opt/arm64-builds/lib
+  sudo cp $include_loc/* /opt/arm64-builds/include
+
+  # we want to force a dynamic linking
+  sudo rm /opt/arm64-builds/lib/*.a
+
+  sudo cp -r /opt/arm64-builds/lib/* /usr/local/lib
+  sudo cp /opt/arm64-builds/include/* /usr/local/include
+fi
