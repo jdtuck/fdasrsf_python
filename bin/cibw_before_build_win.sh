@@ -3,8 +3,6 @@ set -xe
 PROJECT_DIR="$1"
 
 printenv
-# Update license
-cat $PROJECT_DIR/tools/wheels/LICENSE_win32.txt >> $PROJECT_DIR/LICENSE.txt
 
 # Install OpenBLAS
 python -m pip install -r bin/requirements_openblas.txt
