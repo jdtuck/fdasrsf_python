@@ -82,5 +82,6 @@ if [[ $PLATFORM == "arm64" ]]; then
   sudo mkdir -p /usr/local/lib
   sudo mkdir -p /usr/local/include
   sudo cp -r $lib_loc/*  /usr/local/lib
+  sudo mv /usr/local/lib/libscipy_openblas.dylib /usr/local/lib/libopenblas.dylib
   sudo cp $include_loc/*  /usr/local/include
 fi
