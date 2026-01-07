@@ -19,7 +19,7 @@ printenv
 
 
 # Install OpenBLAS
-python -m pip install -r requirements_openblas.txt
+python -m pip install -r bin/requirements_openblas.txt
 include_dir=$(python -c "import scipy_openblas32; print(scipy_openblas32.get_include_dir())")  
 lib_dir=$(python -c "import scipy_openblas32; print(scipy_openblas32.get_lib_dir())")  
 cp -r $lib_dir/* /usr/local/lib
