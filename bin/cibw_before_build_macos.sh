@@ -78,16 +78,8 @@ if [[ $PLATFORM == "x86_64" ]]; then
 fi
 
 if [[ $PLATFORM == "arm64" ]]; then
-  sudo mkdir -p /opt/arm64-builds/lib
-  sudo mkdir -p /opt/arm64-builds/include
   sudo mkdir -p /usr/local/lib
   sudo mkdir -p /usr/local/include
-  sudo cp -r $lib_loc/* /opt/arm64-builds/lib
-  sudo cp $include_loc/* /opt/arm64-builds/include
-
-  # we want to force a dynamic linking
-  sudo rm /opt/arm64-builds/lib/*.a
-
-  sudo cp -r /opt/arm64-builds/lib/* /usr/local/lib
-  sudo cp /opt/arm64-builds/include/* /usr/local/include
+  sudo cp -r $lib_loc/*  /usr/local/lib
+  sudo cp $include_loc/*  /usr/local/include
 fi
