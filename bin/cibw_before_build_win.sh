@@ -22,8 +22,8 @@ mkdir $libdir
 cp -r $lib_loc/* $libdir
 cp $include_loc/* $includedir
 
-cp $libdir/libscipy_openblas.dll $libdir/libopenblas.dll
-cp $libdir/libscipy_openblas.lib $libdir/libopenblas.lib
+cp $libdir/libscipy_openblas.dll $libdir/openblas.dll
+cp $libdir/libscipy_openblas.lib $libdir/openblas.lib
 
 # delvewheel is the equivalent of delocate/auditwheel for windows.
 
