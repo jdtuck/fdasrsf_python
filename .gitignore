@@ -28,3 +28,9 @@ fdasrsf_python.code-workspace
 src/*.dSYM/
 src/rbfgs
 src/crbfgs.cpp
+
+wheelhouse/
+
+gfortran.dmg
+
+scipy-openblas.pc

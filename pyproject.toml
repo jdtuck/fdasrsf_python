@@ -55,7 +55,7 @@ environment = {RUNNER_OS="Linux"}
 
 [tool.cibuildwheel.macos]
 before-build = "bash {project}/bin/cibw_before_build_macos.sh {project}"
-environment = {RUNNER_OS="macOS"}
+environment = {RUNNER_OS="macOS", MACOSX_DEPLOYMENT_TARGET=12.3}
 
 [tool.cibuildwheel.windows]
 before-build = "bash {project}/bin/cibw_before_build_win.sh {project}"
