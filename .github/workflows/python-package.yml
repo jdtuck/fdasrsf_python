@@ -126,6 +126,13 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+      - name: Upload Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # The GITHUB_REF variable contains the tag name (e.g., refs/tags/v1.0.0)
+          TAG="${GITHUB_REF#refs/tags/}"
+          gh release upload "$TAG" dist/*
   
   upload_pypi:
     needs: [build_sdist, build_wheels]
