@@ -123,7 +123,7 @@ setup(
     ext_modules=extensions,
     cffi_modules=["src/dp_build.py:ffibuilder"],
     name="fdasrsf",
-    version="2.6.6",
+    version="2.6.7",
     packages=["fdasrsf"],
     url="http://research.tetonedge.net",
     license="LICENSE.txt",
