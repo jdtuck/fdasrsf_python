@@ -1,30 +1,14 @@
+
 set -xe
 
 PROJECT_DIR="$1"
 
 printenv
 
-# Install OpenBLAS
-python -m pip install -r bin/requirements_openblas.txt
-python -c "import scipy_openblas32; print(scipy_openblas32.get_pkg_config())" > $PROJECT_DIR/scipy-openblas.pc
+python -m pip install delvewheel wheel mkl-devel findblas
+lib_loc=$(python -c"import findblas; blas_path, blas_file, incl_path, incl_file, flags = findblas.find_blas();print(blas_path)")
+include_loc=$(python -c"import findblas; blas_path, blas_file, incl_path, incl_file, flags = findblas.find_blas();print(incl_path)")
 
-lib_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_lib_dir())")
-include_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_include_dir())")
-
-includedir=$(python -c"import sys; import os; print(os.path.join(sys.prefix, 'include'))")
-Library=$(python -c"import sys; import os; print(os.path.join(sys.prefix, 'Library'))")
-libdir=$(python -c"import sys; import os; print(os.path.join(sys.prefix, 'Library', 'lib'))")
-
-mkdir $includedir
-mkdir $Library
-mkdir $libdir
-
+libdir="C:\\WINDOWS"
 cp -r $lib_loc/* $libdir
-cp $include_loc/* $includedir
-
-cp $libdir/libscipy_openblas.dll $libdir/openblas.dll
-cp $libdir/libscipy_openblas.lib $libdir/openblas.lib
-
-# delvewheel is the equivalent of delocate/auditwheel for windows.
-
-python -m pip install delvewheel wheel mkl-devel
+cp -r $include_loc/* $libdir

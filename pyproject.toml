@@ -74,7 +74,7 @@ select = "*-win_amd64"
 # Don't use double backslash for path separators, they don't get passed
 # to the build correctly
 # environment = { CMAKE_PREFIX_PATH="c:/opt/64" }
-environment = { PKG_CONFIG_PATH = "c:/opt/64/lib/pkgconfig" }
+#environment = { PKG_CONFIG_PATH = "c:/opt/64/lib/pkgconfig" }
 
 [build-system]
 requires = ["setuptools<=73.0.1", "wheel", "cffi>=1.0.0", "Cython", "findblas", "numpy"]  # PEP 518 - what is required to build
