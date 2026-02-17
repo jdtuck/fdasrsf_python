@@ -457,7 +457,7 @@ class fdawarp:
             tau[tau < 0] = 0
             taus.append(tau[idx])
 
-        th = np.percentile(taus, pt*100)
+        th = np.percentile(np.concatenate(taus), pt*100)
 
         IndicatorMatrix, Heights, Locs, Labels, FNm = getPPDinfo(self.time, fns, lam_vec, th)
         persistent_peak_labels = getPersistentPeaks(IndicatorMatrix.T)
