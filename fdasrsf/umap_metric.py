@@ -19,7 +19,7 @@ from numpy import (
     sqrt,
     arange,
     int64,
-    trapz,
+    trapezoid,
     ones,
 )
 from numpy import (
@@ -214,7 +214,7 @@ def proj_c(q):
         # Jacobian
         for i in range(0, n):
             for j in range(0, n):
-                J[i, j] = 3 * trapz(qnew[i, :] * qnew[j, :], s)
+                J[i, j] = 3 * trapezoid(qnew[i, :] * qnew[j, :], s)
 
         J += eye(n)
 
@@ -223,7 +223,7 @@ def proj_c(q):
 
         # Compute the residue
         for i in range(0, n):
-            G[i] = trapz(qnew[i, :] * qnorm, s)
+            G[i] = trapezoid(qnew[i, :] * qnorm, s)
 
         res = -G
 
@@ -309,10 +309,10 @@ def curve_center(beta):
         normbetadot[i] = norm(betadot[:, i])
         integrand[:, i] = beta[:, i] * normbetadot[i]
 
-    scale = trapz(normbetadot, linspace(0, 1, T))
+    scale = trapezoid(normbetadot, linspace(0, 1, T))
     centroid = zeros(n)
     for i in range(n):
-        centroid[i] = trapz(integrand[i, :], linspace(0, 1, T)) / scale
+        centroid[i] = trapezoid(integrand[i, :], linspace(0, 1, T)) / scale
 
     return centroid
 
@@ -353,7 +353,7 @@ def efda_distance(q1, q2, alpha=0):
 
         binsize = mean(diff(time))
         psi = sqrt(grad(gam, binsize))
-        q1dotq2 = trapz(psi, time)
+        q1dotq2 = trapezoid(psi, time)
         if q1dotq2 > 1:
             q1dotq2 = 1
         elif q1dotq2 < -1:
