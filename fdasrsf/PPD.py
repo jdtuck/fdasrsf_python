@@ -287,11 +287,11 @@ def drawPPDSurface(t,lam,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt):
     for j in range(labelMax):
 
         # find non-nan indices for full location matrix and plot
-        idx_full = np.argwhere(np.logical_not(np.isnan(LocationMatrix_full[:, j])))
+        idx_full = np.argwhere(np.logical_not(np.isnan(LocationMatrix_full[:, j]))).ravel()
         ax.plot(t[LocationMatrix_full[idx_full, j]], lam[idx_full], HeighMatrix_full[idx_full, j], marker='o', color='black', linewidth=1.5, markersize=5, mfc='black')
 
         # find non-nan indices for significant location matrix and plot
-        idx_sig = np.argwhere(np.logical_not(np.isnan(LocationMatrix_sig[:, j])))
+        idx_sig = np.argwhere(np.logical_not(np.isnan(LocationMatrix_sig[:, j]))).ravel()
         ax.plot(t[LocationMatrix_sig[:, j]], lam[idx_sig], HeightMatrix_sig[idx_sig, j], linestyle='dashed', linewidth=2, color='magenta', markersize=6)
     
     plt.xlabel('$t$')
