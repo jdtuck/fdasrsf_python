@@ -1,3 +1,4 @@
+v2.6.9, 2026-03-27 -- updates for 3.14
 v2.6.8, 2026-02-19 -- bugfixes in PPD
 v2.6.7, 2026-01-09 -- bugfixes in wheels
 v2.6.6, 2026-01-07 -- bugfixes
