@@ -621,7 +621,7 @@ def fastpns(x, n_pc="Full", itype="small", a=0.05, R=100, thresh=1e-15):
         K = np.cov(x)
         U, s, V = svd(K)
         cumm_coef = np.cumsum(s) / np.sum(s)
-        n_pc = int(np.argwhere(cumm_coef <= 0.99)[-1])
+        n_pc = np.argwhere(cumm_coef <= 0.99)[-1][0] 
 
     Xs = x.T
     for i in range(n):
