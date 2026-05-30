@@ -18,13 +18,13 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - if: runner.os == 'Windows'
       run: |
         Invoke-WebRequest -Uri https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe
         ./vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.v141.x86.x64 --add Microsoft.VisualStudio.Component.VC.140 --includeRecommended 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
     - if: runner.os == 'Windows'
@@ -64,7 +64,7 @@ jobs:
       run: |
         pip install .
     - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v6
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     
@@ -78,7 +78,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3.0
@@ -94,12 +94,12 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build sdist
         run: pipx run build --sdist
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: cibw-sdist
           path: dist/*.tar.gz
@@ -109,8 +109,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v8
         with:
           # unpacks default artifact into release/
           # if `name: artifact` is omitted, the action will create extra parent dir
@@ -118,14 +118,12 @@ jobs:
           path: ./release/
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: elgohr/Github-Release-Action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          tag: ${{ github.ref }}
+          title: Release ${{ github.ref }}
   
   upload_pypi:
     needs: [build_sdist, build_wheels]
@@ -136,7 +134,7 @@ jobs:
       contents: write
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           # unpacks default artifact into dist/
           # if `name: artifact` is omitted, the action will create extra parent dir
