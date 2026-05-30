@@ -122,8 +122,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag: ${{ github.ref }}
-          title: Release ${{ github.ref }}
+          tag: ${{ github.ref_name }}
+          title: Release ${{ github.ref_name }}
   
   upload_pypi:
     needs: [build_sdist, build_wheels]
