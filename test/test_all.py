@@ -61,6 +61,37 @@ class TestFDASRSF(unittest.TestCase):
                     )
                     self.assertAlmostEqual(sum(gam - timet), 0)
 
+    def test_reparm_batched_penalties(self):
+        M = 101
+        timet = np.linspace(0, 1, M)
+        q1 = fs.f_to_srsf(np.sin(2 * np.pi * timet), timet)
+        q2 = fs.f_to_srsf(np.sin(2 * np.pi * timet**2), timet)
+        Q1 = np.column_stack((q1, q1))
+        Q2 = np.column_stack((q2, q2))
+        for method in ("DP", "DP2"):
+            with self.subTest(method=method):
+                gam = fs.optimum_reparam(
+                    q1, timet, q2, method=method, lam=1.0, penalty="l2gam"
+                )
+                gamN = fs.optimum_reparam(
+                    q1, timet, Q2, method=method, lam=1.0, penalty="l2gam"
+                )
+                gamN2 = fs.optimum_reparam(
+                    Q1, timet, Q2, method=method, lam=1.0, penalty="l2gam"
+                )
+                np.testing.assert_allclose(gamN[:, 0], gam)
+                np.testing.assert_allclose(gamN2[:, 1], gam)
+
+    def test_umap_efda_distance(self):
+        from fdasrsf.umap_metric import efda_distance
+
+        M = 101
+        q1 = np.sin(np.linspace(0, 2 * np.pi, M))
+        q2 = np.cos(np.linspace(0, 2 * np.pi, M))
+        d = efda_distance(q1, q2)
+        self.assertTrue(np.isfinite(d))
+        self.assertGreater(d, 0)
+
     def test_reparm_bad_penalty(self):
         M = 101
         q1 = np.sin(np.linspace(0, 2 * np.pi, M))
