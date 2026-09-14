@@ -6,8 +6,13 @@ cimport numpy as np
 from cpython cimport array
 
 
+def _check_pen(int pen):
+    if pen < 0 or pen > 4:
+        raise ValueError("pen must be one of 0 (none), 1 (roughness), 2 (l2gam), 3 (l2psi) or 4 (geodesic)")
+
+
 def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double, ndim=1, mode="c"] time,
-                      np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0):
+                      np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0, int pen=1):
     """
     cython interface calculates the warping to align a set of SRSFS q to a single SRSF mq
 
@@ -15,11 +20,14 @@ def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[doubl
     :param time: vector of size N describing the sample points
     :param q: numpy ndarray of shape (M,N) of N srsfs with M samples
     :param lam1: controls the amount of elasticity (default = 0.0)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype numpy ndarray
     :return gam: describing the warping functions used to align columns of q with mq
 
     """
+    _check_pen(pen)
     cdef int M, N, n1, disp
     cdef double lam
     mq = mq / norm(mq)
@@ -35,13 +43,14 @@ def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[doubl
         qi = q[:, k] / norm(q[:, k])
         qi = np.ascontiguousarray(qi)
 
-        cDP.DP(&qi[0], &mq[0], n1, M, lam, disp, &gami[0])
+        if cDP.DP(&qi[0], &mq[0], n1, M, lam, pen, disp, &gami[0]) != 0:
+            raise MemoryError("DP could not allocate its work buffers")
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                       np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0):
+                       np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=1):
     """
     cython interface calculates the warping to align a set of SRSFs q1 to another set of SRSFs q2
 
@@ -49,11 +58,14 @@ def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doub
     :param time: vector of size N describing the sample points
     :param q2: numpy ndarray of shape (M,N) of M srsfs with N samples
     :param lam1: controls the amount of elasticity (default = 0.0)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype numpy ndarray
     :return gam: describing the warping functions used to align columns of q with mq
 
     """
+    _check_pen(pen)
     cdef int M, N, n1, disp
     cdef double lam
 
@@ -72,13 +84,14 @@ def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doub
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        cDP.DP(&q2i[0], &q1i[0], n1, M, lam, disp, &gami[0])
+        if cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, disp, &gami[0]) != 0:
+            raise MemoryError("DP could not allocate its work buffers")
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                     np.ndarray[double, ndim=1, mode="c"] q2, lam1=0.0):
+                     np.ndarray[double, ndim=1, mode="c"] q2, lam1=0.0, int pen=1):
     """
     cython interface for calculates the warping to align SRSFs q2 to q1
 
@@ -86,10 +99,13 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     :param time: vector of size N describing the sample points
     :param q2: vector of size N samples of second SRSF
     :param lam1: controls the amount of elasticity (default = 0.0)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
+    _check_pen(pen)
     cdef int M, n1, disp
     cdef double lam
     M = q1.shape[0]
@@ -100,13 +116,15 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     q2 = q2 / norm(q2)
     cdef np.ndarray[double, ndim=1, mode="c"] gami = np.zeros(M)
 
-    cDP.DP(&q2[0], &q1[0], n1, M, lam, disp, &gami[0])
+    if cDP.DP(&q2[0], &q1[0], n1, M, lam, pen, disp, &gami[0]) != 0:
+        raise MemoryError("DP could not allocate its work buffers")
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[double, ndim=1, mode="c"] time,
-                            np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0):
+                            np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0,
+                            int pen=1):
     """
     cython interface for calculates the warping to align paired SRSF f1 and f2 to q
 
@@ -115,10 +133,13 @@ def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[
     :param q1: vector of size N samples of second SRSF
     :param q2: vector of size N samples of second SRSF
     :param lam1: controls the amount of elasticity (default = 0.0)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
+    _check_pen(pen)
     cdef int M, N, n1, disp
     n1 = 2
     cdef double lam
@@ -138,13 +159,14 @@ def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        cDP.DP(&q2i[0], &q1i[0], n1, M, lam, disp, &gami[0])
+        if cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, disp, &gami[0]) != 0:
+            raise MemoryError("DP could not allocate its work buffers")
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                          np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0):
+                          np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=1):
     """
     cython interface for calculates the warping to align paired srsf q2 to q1
 
@@ -152,10 +174,13 @@ def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[
     :param time: vector of size N describing the sample points
     :param q2: vector of size N samples of second function
     :param lam1: controls the amount of elasticity (default = 0.0)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
+    _check_pen(pen)
     cdef int M, N, disp
     cdef double lam
     M, N = q1.shape[0], q1.shape[1]
@@ -172,13 +197,14 @@ def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[
     q1i = np.ascontiguousarray(q1i)
     q2i = np.ascontiguousarray(q2i)
 
-    cDP.DP(&q2i[0], &q1i[0], N, M, lam, disp, &gami[0])
+    if cDP.DP(&q2i[0], &q1i[0], N, M, lam, pen, disp, &gami[0]) != 0:
+        raise MemoryError("DP could not allocate its work buffers")
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                     np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0):
+                     np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=1):
     """
     cython interface for calculates the warping to align curve q2 to q1
 
@@ -186,10 +212,13 @@ def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[d
     :param time: vector of size N describing the sample points
     :param q2: matrix of size nxN samples of second SRVF
     :param lam1: controls the amount of elasticity (default = 0.0)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
+    _check_pen(pen)
     cdef int M, n1, disp
     cdef double lam
     n1 = q1.shape[0]
@@ -206,7 +235,8 @@ def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[d
     q1i = np.ascontiguousarray(q1i)
     q2i = np.ascontiguousarray(q2i)
 
-    cDP.DP(&q2i[0], &q1i[0], n1, M, lam, disp, &gami[0])
+    if cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, disp, &gami[0]) != 0:
+        raise MemoryError("DP could not allocate its work buffers")
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam

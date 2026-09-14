@@ -139,9 +139,8 @@ def optimum_reparam(
                    "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
     :param penalty: penalty type (default="roughness") options are "roughness",
-                    "l2gam", "l2psi", "geodesic". Only roughness implemented
-                    in all methods. To use others method needs to be "RBFGS"
-                    or "cRBFGS"
+                    "l2gam", "l2psi", "geodesic" and "none". The penalty is
+                    weighted by lam, so it has no effect when lam is 0
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype: vector
@@ -149,48 +148,73 @@ def optimum_reparam(
 
     """
 
-    if penalty == "l2gam" and (method == "DP" or method == "DP2"):
-        raise Exception("penalty not implemented")
-    if penalty == "l2psi" and (method == "DP" or method == "DP2"):
-        raise Exception("penalty not implemented")
-    if penalty == "geodesic" and (method == "DP" or method == "DP2"):
-        raise Exception("penalty not implemented")
+    # The DP solvers number the penalties 0 = none, 1 = roughness, 2 = l2gam,
+    # 3 = l2psi, 4 = geodesic, while the RBFGS solvers have no "none" and
+    # number the rest from 0, so translate the name once here
+    penalties = ("none", "roughness", "l2gam", "l2psi", "geodesic")
+    if penalty not in penalties:
+        raise ValueError("penalty must be one of " + ", ".join(penalties))
+
+    penalty_rbfgs = penalty
+    lam_rbfgs = lam
+    if penalty == "none":
+        # the RBFGS solvers have no "none" penalty, but a zero weight is the
+        # same thing
+        penalty_rbfgs = "roughness"
+        lam_rbfgs = 0.0
+    pen_dp = penalties.index(penalty)
+    pen_rbfgs = penalties.index(penalty_rbfgs) - 1
 
     if method == "DP":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN.coptimum_reparam(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp
             )
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp
             )
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N2(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp
             )
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN2.coptimum_reparam(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
+                ascontiguousarray(q1),
+                time,
+                ascontiguousarray(q2),
+                lam,
+                grid_dim,
+                pen_dp,
             )
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
+                ascontiguousarray(q1),
+                time,
+                ascontiguousarray(q2),
+                lam,
+                grid_dim,
+                pen_dp,
             )
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN2.coptimum_reparamN2(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, grid_dim
+                ascontiguousarray(q1),
+                time,
+                ascontiguousarray(q2),
+                lam,
+                grid_dim,
+                pen_dp,
             )
     elif method == "RBFGS":
         if q1.ndim == 1 and q2.ndim == 1:
             time = linspace(0, 1, q1.shape[0])
             obj = rlbfgs(q1, q2, time)
-            obj.solve(lam=lam, penalty=penalty)
+            obj.solve(lam=lam_rbfgs, penalty=penalty_rbfgs)
             gam = obj.gammaOpt
 
         if q1.ndim == 1 and q2.ndim == 2:
@@ -198,7 +222,7 @@ def optimum_reparam(
             time = linspace(0, 1, q1.shape[0])
             for i in range(0, q2.shape[1]):
                 obj = rlbfgs(q1, q2[:, i], time)
-                obj.solve(lam=lam, penalty=penalty)
+                obj.solve(lam=lam_rbfgs, penalty=penalty_rbfgs)
                 gam[:, i] = obj.gammaOpt
 
         if q1.ndim == 2 and q2.ndim == 2:
@@ -206,21 +230,10 @@ def optimum_reparam(
             time = linspace(0, 1, q1.shape[0])
             for i in range(0, q2.shape[1]):
                 obj = rlbfgs(q1[:, i], q2[:, i], time)
-                obj.solve(lam=lam, penalty=penalty)
+                obj.solve(lam=lam_rbfgs, penalty=penalty_rbfgs)
                 gam[:, i] = obj.gammaOpt
     elif method == "cRBFGS":
         import crbfgs as cr
-
-        if penalty == "roughness":
-            pen = 0
-        elif penalty == "l2gam":
-            pen = 1
-        elif penalty == "l2psi":
-            pen = 2
-        elif penalty == "geodesic":
-            pen = 3
-        else:
-            raise Exception("penalty not implemented")
 
         if q1.ndim == 1 and q2.ndim == 1:
             time = linspace(0, 1, q1.shape[0])
@@ -229,8 +242,8 @@ def optimum_reparam(
                 ascontiguousarray(q2),
                 ascontiguousarray(time),
                 30,
-                lam,
-                pen,
+                lam_rbfgs,
+                pen_rbfgs,
             )
 
         if q1.ndim == 1 and q2.ndim == 2:
@@ -242,8 +255,8 @@ def optimum_reparam(
                     ascontiguousarray(q2[:, i]),
                     ascontiguousarray(time),
                     30,
-                    lam,
-                    pen,
+                    lam_rbfgs,
+                    pen_rbfgs,
                 )
 
         if q1.ndim == 2 and q2.ndim == 2:
@@ -255,8 +268,8 @@ def optimum_reparam(
                     ascontiguousarray(q2[:, i]),
                     ascontiguousarray(time),
                     30,
-                    lam,
-                    pen,
+                    lam_rbfgs,
+                    pen_rbfgs,
                 )
 
     else:

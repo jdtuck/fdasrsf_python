@@ -4,6 +4,16 @@
 #include "dp_nbhd.h"
 
 /**
+ * Penalty types accepted by \c dp_costs() and \c dp_edge_weight().  These
+ * match the pen argument of DynamicProgrammingQ().
+ */
+#define DP_PEN_NONE      0
+#define DP_PEN_ROUGHNESS 1
+#define DP_PEN_L2GAM     2
+#define DP_PEN_L2PSI     3
+#define DP_PEN_GEODESIC  4
+
+/**
  * Computes cost of best path from (0,0) to all other gridpoints.
  *
  * \param Q1 values of the first SRVF
@@ -19,11 +29,13 @@
  * \param tv2 the Q2 (row) parameter values for the DP grid
  * \param idxv2 Q2 indexes for tv2, as computed by \c dp_all_indexes()
  * \param ntv2 the length of tv2
- * \param E [output] on return, E[ntv2*i+j] holds the cost of the best 
+ * \param E [output] on return, E[ntv1*j+i] holds the cost of the best 
  *        path from (0,0) to (tv1[i],tv2[j]) in the grid.
- * \param P [output] on return, P[ntv2*i+j] holds the predecessor of 
+ * \param P [output] on return, P[ntv1*j+i] holds the predecessor of 
  *        (tv1[i],tv2[j]).  If predecessor is (tv1[k],tv2[l]), then 
- *        P[ntv2*i+j] = k*ntv2+l.
+ *        P[ntv1*j+i] = l*ntv1+k.
+ * \param lam weight applied to the warping penalty
+ * \param pen penalty type, one of the \c DP_PEN_* constants above
  * \param dp_nbhd_count Number of pairs in the grid.
  * \param dp_nbhd Grid.
  * \return E[ntv1*ntv2-1], the cost of the best path from (tv1[0],tv2[0]) 
@@ -35,7 +47,7 @@ double dp_costs(
   int dim, 
   double *tv1, int *idxv1, int ntv1, 
   double *tv2, int *idxv2, int ntv2, 
-  double *E, int *P, double lam,
+  double *E, int *P, double lam, int pen,
   size_t dp_nbhd_count, Pair *dp_nbhd );
 
 /**
@@ -54,6 +66,8 @@ double dp_costs(
  * \param d target Q2 parameter
  * \param aidx index such that Q1[aidx] <= a < Q1[aidx+1]
  * \param cidx index such that Q2[cidx] <= c < Q2[cidx+1]
+ * \param lam weight applied to the warping penalty
+ * \param pen penalty type, one of the \c DP_PEN_* constants above
  */
   double dp_edge_weight(
   double *Q1, double *T1, int nsamps1, 
@@ -61,7 +75,7 @@ double dp_costs(
   int dim,
   double a, double b, 
   double c, double d, 
-  int aidx, int cidx, double lam );
+  int aidx, int cidx, double lam, int pen );
   
 
 /**
@@ -71,8 +85,8 @@ double dp_costs(
  * G and T must already be allocated with size max(ntv1,ntv2).  The actual 
  * number of points on gamma will be the return value.
  *
- * \param P P[ntv2*i+j] holds the predecessor of (tv1[i],tv2[j]).  If 
- *        predecessor is (tv1[k],tv2[l]), then P[ntv2*i+j] = k*ntv2+l.
+ * \param P P[ntv1*j+i] holds the predecessor of (tv1[i],tv2[j]).  If 
+ *        predecessor is (tv1[k],tv2[l]), then P[ntv1*j+i] = l*ntv1+k.
  * \param tv1 the Q1 (column) parameter values for the DP grid
  * \param ntv1 the length of tv1
  * \param tv2 the Q2 (row) parameter values for the DP grid

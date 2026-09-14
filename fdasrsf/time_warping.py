@@ -104,9 +104,8 @@ class fdawarp:
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param penalty: penalty type (default="roughness") options are "roughness",
-                "l2gam", "l2psi", "geodesic". Only roughness implemented
-                in all methods. To use others method needs to be "RBFGS"
-                or "cRBFGS"
+                "l2gam", "l2psi", "geodesic" and "none". The penalty is
+                weighted by lam, so it has no effect when lam is 0
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -397,9 +396,8 @@ class fdawarp:
         :param MaxItr: Maximum number of iterations (default = 20)
         :param parallel: run in parallel (default = F)
         :param penalty: penalty type (default="roughness") options are "roughness",
-                "l2gam", "l2psi", "geodesic". Only roughness implemented
-                in all methods. To use others method needs to be "RBFGS"
-                or "cRBFGS"
+                "l2gam", "l2psi", "geodesic" and "none". The penalty is
+                weighted by lam, so it has no effect when lam is 0
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -733,9 +731,8 @@ class fdawarp:
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
         :param penalty: penalty type (default="roughness") options are "roughness",
-                "l2gam", "l2psi", "geodesic". Only roughness implemented
-                in all methods. To use others method needs to be "RBFGS"
-                or "cRBFGS"
+                "l2gam", "l2psi", "geodesic" and "none". The penalty is
+                weighted by lam, so it has no effect when lam is 0
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -831,9 +828,8 @@ def pairwise_align_functions(
     :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) (default = DP)
     :param lam: controls the elasticity (default = 0)
     :param penalty: penalty type (default="roughness") options are "roughness",
-                "l2gam", "l2psi", "geodesic". Only roughness implemented
-                in all methods. To use others method needs to be "RBFGS"
-                or "cRBFGS"
+                "l2gam", "l2psi", "geodesic" and "none". The penalty is
+                weighted by lam, so it has no effect when lam is 0
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype list containing

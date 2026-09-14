@@ -56,6 +56,7 @@ def warp(q1, q2):
     disp = 0
     n1 = 1
     lam = 0.0
+    pen = 1  # roughness
     gam = zeros(M)
     q1 = q1 / norm(q1)
     q2 = q2 / norm(q2)
@@ -65,7 +66,7 @@ def warp(q1, q2):
     q2i = ffi.from_buffer(q2)
     q1i = ffi.from_buffer(q1)
     gami = ffi.from_buffer(gam)
-    DP(q2i, q1i, n1, M, lam, disp, gami)
+    DP(q2i, q1i, n1, M, lam, pen, disp, gami)
 
     return gam
 
@@ -109,6 +110,7 @@ def warp_curve(q1, q2):
     n1, M = q1.shape
     disp = 0
     lam = 0.0
+    pen = 1  # roughness
     gam = zeros(M)
     q1i = freshape(q1)
     q2i = freshape(q2)
@@ -120,7 +122,7 @@ def warp_curve(q1, q2):
     q1ptr = ffi.from_buffer(q1i)
     q2ptr = ffi.from_buffer(q2i)
     gami = ffi.from_buffer(gam)
-    DP(q2ptr, q1ptr, n1, M, lam, disp, gami)
+    DP(q2ptr, q1ptr, n1, M, lam, pen, disp, gami)
 
     return gam
 
