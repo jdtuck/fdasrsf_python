@@ -11,8 +11,6 @@ class rlbfgs {
         vec q1;        // srvf1
         vec q2;        // srvf2
         uword T;         // size of time
-        double hCurCost;
-        vec hCurGradient;
         struct options{
             double tolgradnorm;
             double maxtime;
@@ -41,11 +39,11 @@ class rlbfgs {
         double cost;
         // constructor
         rlbfgs(vec q1i, vec q2i, vec timei) {  
-            q1 = normalise( q1i, 2 );
-            q2 = normalise( q2i, 2 );
-            time = timei;
+        q1 = normalise( q1i, 2 );
+        q2 = normalise( q2i, 2 );
+        time = timei;
 
-            T = timei.n_elem;
+        T = timei.n_elem;
         }
 
         void solve(int maxiter=30, double lam=0.0, int penalty=0){
@@ -91,6 +89,8 @@ class rlbfgs {
             vec hCurGradient;
             lstats lstat;
             vec hNext;
+            // htilde is the total warping accumulated so far, and is what the
+            // penalty is a function of; q2tilde is q2 under that warping
             alignment_costgrad(q2tilde, htilde, hCurCost, hCurGradient, lam, penalty);
             double hCurGradNorm = norm2(hCurGradient);
 
@@ -139,7 +139,7 @@ class rlbfgs {
 
                 // execute line search
                 in_prod = inner(hCurGradient, p);
-                lstat = linesearch_hint(p, hCurCost, in_prod, q2tilde, lam, penalty);
+                lstat = linesearch_hint(p, hCurCost, in_prod, q2tilde, htilde, lam, penalty);
 
                 stepsize = lstat.stepsize;
                 hNext = lstat.newh;
@@ -153,7 +153,7 @@ class rlbfgs {
                 step = alpha * p;
 
                 // query cost and gradient at the candidate new point
-                alignment_costgrad(q2tilde, hNext, hNextCost, hNextGradient, lam, penalty);
+                alignment_costgrad(q2tilde, htilde, hNextCost, hNextGradient, lam, penalty);
 
                 // compute sk and yk
                 sk = step;
@@ -169,7 +169,7 @@ class rlbfgs {
 
                 // cautious step
                 cap = strict_inc_func(hCurGradNorm);
-                if ((inner_sk_sk != 0) & ((inner_sk_yk/inner_sk_sk) >= cap)){
+                if ((inner_sk_sk != 0) && ((inner_sk_yk/inner_sk_sk) >= cap)){
                     accepted = true;
 
                     rhok = 1/inner_sk_yk;
@@ -186,8 +186,8 @@ class rlbfgs {
                             tmp(option.memory-1) = yHistory(0);
                             yHistory = tmp;
 
-                            tmp_vec(arma::span(0,option.memory-1)) = rhoHistory(arma::span(1,option.memory-2));
-                            tmp_vec(option.memory) = rhoHistory(0);
+                            tmp_vec(arma::span(0,option.memory-2)) = rhoHistory(arma::span(1,option.memory-1));
+                            tmp_vec(option.memory-1) = rhoHistory(0);
                             rhoHistory = tmp_vec;
                         }
                         if (option.memory > 0){
@@ -215,7 +215,7 @@ class rlbfgs {
                 stat.iter = k;
                 stat.cost = hCurCost;
                 stat.gradnorm = hCurGradNorm;
-                stat.stepsize = datum::nan;
+                stat.stepsize = stepsize;
                 stat.accepted = accepted;
             }
 
@@ -225,16 +225,20 @@ class rlbfgs {
             cost = hCurCost;
         }
 
-        double alignment_cost(vec h, vec q2k, double lam = 0, int penalty = 0){
-            vec q2new = group_action_SRVF(q2k, h);
-
+        // Value of the penalty term at the warping function h.  h is the
+        // total warping accumulated from the identity, not an increment: each
+        // of the penalties below measures h against the identity and so is
+        // only meaningful for the cumulative warping.
+        double penalty_cost(vec h, int penalty){
             double pen = 0;
+
+            // roughness
             if (penalty == 0){
                 vec time1 = arma::linspace<vec>(0,1,h.n_elem);
                 vec b = arma::diff(time1);
                 double binsize = mean(b);
-                vec g = gradient(arma::pow(h, 2), binsize); 
-                arma::mat pen1 = arma::trapz(time1, arma::pow(g, 2));
+                vec hdot = gradient(arma::pow(h, 2), binsize);
+                arma::mat pen1 = arma::trapz(time1, arma::pow(hdot, 2));
                 pen = pen1(0);
             }
             // l2gam
@@ -263,52 +267,123 @@ class rlbfgs {
                 pen = pow(real(acos(q1dotq2)),2);
             }
 
+            return pen;
+        }
+
+        // Partial derivatives of penalty_cost with respect to each sample of h.
+        // These differentiate the discretised penalties above exactly, so they
+        // agree with penalty_cost on the grid and not merely in the continuum
+        // limit, which matters because the roughness penalty differentiates to
+        // a second difference.
+        vec penalty_grad(vec h, int penalty){
+            vec time1 = arma::linspace<vec>(0,1,h.n_elem);
+            vec w = trapz_weights(time1);
+            vec dP = arma::zeros(T);
+
+            // roughness: pen = trapz(d(h^2)/dt ^ 2), differentiated through
+            // gradient() and then through the square
+            if (penalty == 0){
+                vec b = arma::diff(time1);
+                double binsize = mean(b);
+                vec hdot = gradient(arma::pow(h, 2), binsize);
+                dP = 2 * (h % gradient_adjoint(2 * (w % hdot), binsize));
+            }
+            // l2gam: pen = ||h^2-1||^2
+            if (penalty == 1){
+                vec tmp = arma::ones(T);
+                dP = 4 * (h % (arma::pow(h,2) - tmp)) % w;
+            }
+            // l2psi: pen = ||h-1||^2
+            if (penalty == 2){
+                vec tmp = arma::ones(T);
+                dP = 2 * (h - tmp) % w;
+            }
+            // geodesic: pen = acos(<1,h>)^2, so the gradient is a multiple of
+            // the constant function
+            if (penalty == 3){
+                arma::mat pen1 = arma::trapz(time1, h);
+                double q1dotq2 = pen1(0);
+                if (q1dotq2 > 1){
+                    q1dotq2 = 1;
+                } else if (q1dotq2 < -1)
+                {
+                    q1dotq2 = -1;
+                }
+                // acos(c)/sqrt(1-c^2) tends to 1 as c tends to 1, where both
+                // factors vanish; h is positive and of unit norm, so c lies in
+                // (0,1] and the singularity at c = -1 is out of reach
+                double scale = 1;
+                double c2 = pow(q1dotq2, 2);
+                if (1 - c2 > 1e-12){
+                    scale = acos(q1dotq2) / sqrt(1 - c2);
+                }
+                dP = -2 * scale * w;
+            }
+
+            return dP;
+        }
+
+        // Gradient at the identity of the map from an incremental warping hinc
+        // to penalty_cost(h composed with hinc), where h is the warping
+        // accumulated so far.  This differentiates group_action_SRVF itself
+        // rather than its continuum limit: the roughness penalty differentiates
+        // to a second difference, and the trapezoidal adjoint of the continuum
+        // chain rule does not resolve that on the grid.  Scaled by a half to
+        // match alignment_costgrad, whose data term is likewise the gradient of
+        // half the cost it returns.
+        vec penalty_costgrad(vec h, int penalty){
+            double binsize = 1.0/(T-1);
+            vec a = penalty_grad(h, penalty);
+
+            // group_action_SRVF maps gamma to h(gamma) % sqrt(gamma'), so
+            // perturbing gamma moves it by gradient(h) % dgamma
+            // + h % gradient(dgamma) / 2.  Linear interpolation has no
+            // derivative at the grid points it is evaluated on, and the central
+            // difference below is the two sided slopes averaged.
+            vec b = (a % gradient(h, binsize))
+                    + 0.5 * gradient_adjoint(a % h, binsize);
+
+            // gamma is cumtrapz(hinc^2) rescaled to end at one, so perturbing
+            // hinc at the identity by v moves gamma by
+            // 2*(cumtrapz(v) - trapz(v)*time)
+            vec w = trapz_weights(time);
+            vec dv = 2 * cumtrapz_adjoint(time, b) - 2 * dot(b, time) * w;
+
+            // back to a gradient under the inner product inner() uses
+            return 0.5 * (dv / w);
+        }
+
+        // Cost of taking the incremental step h from the current iterate, where
+        // q2k is q2 under the warping accumulated so far and htilde is that
+        // warping.  The penalty is evaluated at the composition of htilde with
+        // h, so that it measures the total warping the step would leave behind
+        // and is comparable with the cost the step is tested against.
+        double alignment_cost(vec h, vec q2k, vec htilde, double lam = 0, int penalty = 0){
+            vec q2new = group_action_SRVF(q2k, h);
+
             double f = normL2(q1-q2new);
-            f = pow(f,2) + lam * pen;
+            f = pow(f,2);
+
+            if (lam != 0){
+                f = f + lam * penalty_cost(group_action_SRVF(htilde, h), penalty);
+            }
 
             return f;
         }
 
+        // Cost and gradient at the current iterate, where q2k is q2 under the
+        // warping accumulated so far and h is that warping.  The gradient is
+        // taken with respect to an incremental warping at the identity, and
+        // covers the penalty as well as the data term, so that it agrees with
+        // the cost the line search decreases.
         void alignment_costgrad(vec q2k, vec h, double& f, vec& g, double lam = 0, int penalty = 0){
-            // roughness
-            double pen = 0;
-            if (penalty == 0){
-                vec time1 = arma::linspace<vec>(0,1,h.n_elem);
-                vec b = arma::diff(time1);
-                double binsize = mean(b);
-                vec g = gradient(arma::pow(h, 2), binsize); 
-                arma::mat pen1 = arma::trapz(time1, arma::pow(g, 2));
-                pen = pen1(0);
-            }
-            // l2gam
-            if (penalty == 1){
-                vec tmp = arma::ones(T);
-                pen = normL2(arma::pow(h,2)-tmp);
-                pen = pow(pen, 2);
-            }
-            // l2psi
-            if (penalty == 2){
-                vec tmp = arma::ones(T);
-                pen = normL2(h-tmp);
-                pen = pow(pen, 2);
-            }
-            // geodesic
-            if (penalty == 3){
-                vec time1 = arma::linspace<vec>(0,1,h.n_elem);
-                arma::mat pen1 = arma::trapz(time1, h);
-                double q1dotq2 = pen1(0);
-                if (q1dotq2 > 1){
-                    q1dotq2 = 1;
-                } else if (q1dotq2 < -1)
-                {
-                    q1dotq2 = -1;
-                }
-                pen = pow(real(acos(q1dotq2)),2);
-            }
-
-            // compute cost 
+            // compute cost
             f = normL2(q1-q2k);
-            f = pow(f,2) + lam * pen;
+            f = pow(f,2);
+
+            if (lam != 0){
+                f = f + lam * penalty_cost(h, penalty);
+            }
 
             // compute cost gradient
             double binsize = 1.0/(T-1);
@@ -318,6 +393,10 @@ class rlbfgs {
             vec tmp1 = dq % q2k;
             vec v = 2 * cumtrapz(time, tmp);
             v = v - tmp1;
+
+            if (lam != 0){
+                v = v + lam * penalty_costgrad(h, penalty);
+            }
 
             mat val = arma::trapz(time, v);
             g = v - val(0);
@@ -348,7 +427,7 @@ class rlbfgs {
             return direction;
         }
 
-        lstats linesearch_hint(vec d, double f0, double df0, vec q2k, double lam=0, int penalty=0){
+        lstats linesearch_hint(vec d, double f0, double df0, vec q2k, vec htilde, double lam=0, int penalty=0){
             // Armijo line-search based on the line-search hint in the problem
 
             double contraction_factor = 0.5;
@@ -361,15 +440,15 @@ class rlbfgs {
             vec hid = arma::ones(T);  // identity element
 
             vec newh = exp(hid, d, alpha);
-            double newf = alignment_cost(newh, q2k, lam, penalty);
+            double newf = alignment_cost(newh, q2k, htilde, lam, penalty);
             int cost_evaluations = 1;
 
             uvec tst = newh <= 0;
-            while (ls_backtrack & (newf > (f0 + suff_decr*alpha*df0)) || arma::sum(tst) > 0){
+            while ((ls_backtrack && (newf > (f0 + suff_decr*alpha*df0))) || arma::sum(tst) > 0){
                 alpha *= contraction_factor;
 
                 newh = exp(hid, d, alpha);
-                newf = alignment_cost(newh, q2k, lam, penalty);
+                newf = alignment_cost(newh, q2k, htilde, lam, penalty);
                 cost_evaluations += 1;
                 tst = newh <= 0;
 
@@ -378,7 +457,7 @@ class rlbfgs {
                 }
             }
 
-            if (ls_force_decrease & (newf > f0)){
+            if (ls_force_decrease && (newf > f0)){
                 alpha = 0;
                 newh = hid;
                 newf = f0;
@@ -409,7 +488,7 @@ class rlbfgs {
 
         vec group_action_SRVF(vec q, vec h){
             vec gamma = cumtrapz(time, arma::pow(h,2));
-            gamma = gamma / gamma.back();
+            gamma = gamma / gamma(T-1);
             vec time1 = arma::linspace<vec>(0,1,h.n_elem);
             vec b = arma::diff(time1);
             double binsize = mean(b);
@@ -444,7 +523,12 @@ class rlbfgs {
 
         double dist(vec f1, vec f2){
             double temp = inner(f1, f2);
-            double d = real(acos(temp));
+            if (temp > 1){
+                temp = 1;
+            } else if (temp < -1){
+                temp = -1;
+            }
+            double d = acos(temp);
             
             return d;
         }
@@ -510,12 +594,45 @@ class rlbfgs {
             if (dist_f1f2 > 0){
                 vec u = w / dist_f1f2;
                 double utv = inner(u, v);
-                Tv = v + (cos(dist_f1f2) - 1) * utv * u - sin(dist_f1f2);
+                Tv = v + (cos(dist_f1f2) - 1) * utv * u - sin(dist_f1f2) * utv * f1;
             } else{
                 Tv = v;
             }
 
             return Tv;
+        }
+
+        // Trapezoidal quadrature weights for the grid x, so that
+        // trapz(x, y) equals sum(w % y).
+        vec trapz_weights(vec x){
+            uword n = x.n_elem;
+            vec w = arma::zeros(n);
+            vec dx = arma::diff(x) / 2.0;
+
+            w(arma::span(0, n-2)) += dx;
+            w(arma::span(1, n-1)) += dx;
+
+            return w;
+        }
+
+        // Adjoint of gradient(): the transpose of the finite difference
+        // operator gradient() applies, accumulated stencil by stencil so that
+        // the two stay in step.
+        vec gradient_adjoint(vec y, double binsize){
+            vec out = arma::zeros(T);
+
+            out(1) += y(0) / binsize;
+            out(0) -= y(0) / binsize;
+
+            out(T-1) += y(T-1) / binsize;
+            out(T-2) -= y(T-1) / binsize;
+
+            for (uword i = 1; i <= T-2; i++){
+                out(i+1) += y(i) / (2 * binsize);
+                out(i-1) -= y(i) / (2 * binsize);
+            }
+
+            return out;
         }
 
         vec gradient(vec f, double binsize){
@@ -526,6 +643,22 @@ class rlbfgs {
             g(arma::span(1, T-2)) = (f(arma::span(2, T-1)) - f(arma::span(0, T-3))) / (2 * binsize);
 
             return g;
+        }
+
+        // Adjoint of cumtrapz(): the transpose of the running trapezoidal sum,
+        // built from the suffix sums of b so that the two stay in step.
+        vec cumtrapz_adjoint(vec x, vec b){
+            vec out = arma::zeros(T);
+            double acc = 0;
+
+            for (uword i = T-1; i >= 1; i--){
+                acc += b(i);
+                double dt = (x(i) - x(i-1)) / 2.0;
+                out(i) += dt * acc;
+                out(i-1) += dt * acc;
+            }
+
+            return out;
         }
 
         vec cumtrapz(vec x, vec y){
