@@ -1,6 +1,5 @@
 #include "dp_nbhd.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 
 /**
@@ -89,48 +88,55 @@ static size_t compute_nbhd_count_rec(size_t n, int * states) {
  * @f]
  *
  * @param[in] n Number of points in each axis of the grid.
+ * @param[out] count Number of elements in the set, on success.
  *
- * @return Number of elements in the set.
+ * @return 0 on success, -1 if the scratch buffer could not be allocated.
  */
-static size_t compute_nbhd_count(size_t n) {
+static int compute_nbhd_count(size_t n, size_t * count) {
 
     int * states = malloc((n + 1) * sizeof(*states));
     if(states == NULL)
     {
-    	fprintf(stderr, "Error allocating memory in compute_nbhd_count\n");
-    	abort();
+    	return -1;
     }
 
     for(size_t i = 0; i < n + 1; states[i++] = -1);
 
-    size_t an = compute_nbhd_count_rec(n, states);
+    *count = compute_nbhd_count_rec(n, states);
 
     free(states);
 
-    return an;
+    return 0;
 }
 
 /**
  * @brief Creates the nbhd grid.
  *
  * @param[in] nbhd_dim Number of points in each grid axis.
- * @param[out] nbhd_count Number of points in the set.
+ * @param[out] nbhd_count Number of points in the set, or 0 on failure.
  *
- * @return Set of points.
+ * @return Set of points, or NULL if it could not be allocated.  Callers are
+ *         responsible for reporting the failure: this is linked into a MEX
+ *         file, where aborting would take down the host process.
  */
 Pair * dp_generate_nbhd(size_t nbhd_dim, size_t * nbhd_count) {
 
 	size_t k = 0;
 
-    *nbhd_count = compute_nbhd_count(nbhd_dim) ;
+    *nbhd_count = 0;
+
+    if(compute_nbhd_count(nbhd_dim, nbhd_count) != 0)
+    {
+    	return NULL;
+    }
 
     /* Allocate memory for the partition, using the exact amount of we can use
     ~60% of memory that if we use nbhd_dim^2 */
     Pair * dp_nbhd = malloc((*nbhd_count) * sizeof(*dp_nbhd));
     if(dp_nbhd == NULL)
     {
-    	fprintf(stderr, "Error allocating memory in dp_generate_nbhd\n");
-    	abort();
+    	*nbhd_count = 0;
+    	return NULL;
     }
 
     for(size_t i = 1; i <= nbhd_dim; i++) {

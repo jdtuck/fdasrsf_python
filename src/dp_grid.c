@@ -10,7 +10,7 @@ double dp_costs(
   int dim, 
   double *tv1, int *idxv1, int ntv1, 
   double *tv2, int *idxv2, int ntv2, 
-  double *E, int *P, double lam,
+  double *E, int *P, double lam, int pen,
   size_t dp_nbhd_count, Pair *dp_nbhd )
 {
   int sr, sc;  /* source row and column */
@@ -36,7 +36,7 @@ double dp_costs(
         if ( sr < 0 || sc < 0 ) continue;
 
         w = dp_edge_weight( Q1, T1, nsamps1, Q2, T2, nsamps2, dim, 
-          tv1[sc], tv1[tc], tv2[sr], tv2[tr], idxv1[sc], idxv2[sr], lam );
+          tv1[sc], tv1[tc], tv2[sr], tv2[tr], idxv1[sc], idxv2[sr], lam, pen );
 
         cand_cost = E[ntv1*sr+sc] + w;
         if ( cand_cost < E[ntv1*tr+tc] )
@@ -58,7 +58,7 @@ double dp_edge_weight(
   int dim, 
   double a, double b, 
   double c, double d,
-  int aidx, int cidx, double lam)
+  int aidx, int cidx, double lam, int pen)
 {
   double res = 0.0;
   int Q1idx, Q2idx;
@@ -68,6 +68,8 @@ double dp_edge_weight(
   double t1nextcand1, t1nextcand2;
   double slope, rslope;
   double dq, dqi;
+  double pen_term = 0.0;
+  double q1dotq2;
   int i;
 
   Q1idx = aidx; /*dp_lookup( T1, nsamps1, a );*/
@@ -78,6 +80,28 @@ double dp_edge_weight(
 
   slope = (d-c)/(b-a);
   rslope = sqrt( slope );
+
+  /* The penalty depends only on the slope of the edge, so evaluate it once
+   * here.  DP_PEN_NONE leaves pen_term at 0, i.e. no penalty.  These match
+   * the penalties of CostFn2() in DynamicProgrammingQ.c. */
+  switch ( pen )
+  {
+    case DP_PEN_ROUGHNESS:
+      pen_term = (1-rslope)*(1-rslope);
+      break;
+    case DP_PEN_L2GAM:
+      pen_term = (slope-1)*(slope-1);
+      break;
+    case DP_PEN_L2PSI:
+      pen_term = (rslope-1)*(rslope-1);
+      break;
+    case DP_PEN_GEODESIC:
+      q1dotq2 = rslope;
+      if ( q1dotq2 > 1 ) q1dotq2 = 1;
+      else if ( q1dotq2 < -1 ) q1dotq2 = -1;
+      pen_term = acos(q1dotq2)*acos(q1dotq2);
+      break;
+  }
 
   while( t1 < b && t2 < d )
   {
@@ -114,7 +138,7 @@ double dp_edge_weight(
     {
       /* Q1 and Q2 are column-major arrays! */
       dqi = Q1[Q1idx*dim+i] - rslope * Q2[Q2idx*dim+i];
-      dq += dqi*dqi + lam*(1-rslope)*(1-rslope);
+      dq += dqi*dqi + lam*pen_term;
     }
     res += (t1next - t1) * dq;
 

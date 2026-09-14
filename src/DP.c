@@ -42,16 +42,21 @@ const int Nbrs[NNBRS][2] = {
 };
 
 int xycompare(const void *x1, const void *x2);
-double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j, int n, int scl, double lam);
+double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j, int n, int scl, double lam, int pen);
 void thomas(double *x, const double *a, const double *b, double *c, int n);
-void spline(double *D, const double *y, int n);
+int spline(double *D, const double *y, int n);
 void lookupspline(double *t, int *k, double dist, double len, int n);
 double evalspline(double t, const double D[2], const double y[2]);
 
-void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) {
-	int i, j, k, l, M, Eidx, Fidx, Ftmp, Fmin, Num, *Path, *xy, x, y, cnt;
+// pen selects the warping penalty weighted by lam:
+// 0 = no penalty, 1 = roughness, 2 = l2gam, 3 = l2psi, 4 = geodesic
+//
+// Returns 0 on success, or -1 if a work buffer could not be allocated, in
+// which case yy is not fully written.
+int DP(double *q1, double *q2, int n, int N, double lam, int pen, int Disp, double *yy) {
+	int i, j, k, l, M, Eidx, Fidx, Ftmp, Fmin, Num, *Path = 0, *xy = 0, x, y, cnt, status = -1;
 	const int scl = 1;
-	double *q1L, *q2L, *D1, *D2, *tmp1, *tmp2, *E, Etmp, Emin, t, a, b;
+	double *q1L = 0, *q2L = 0, *D1 = 0, *D2, *tmp1, *tmp2, *E = 0, Etmp, Emin, t, a, b;
 
 	M = scl*(N-1)+1;
 
@@ -59,6 +64,10 @@ void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) 
 	q2L = malloc(n*M*sizeof(double));
 
 	D1 = malloc(4*N*sizeof(double));
+
+	if (!q1L || !q2L || !D1)
+		goto cleanup;
+
 	tmp1 = D1 + N;
 	D2 = D1 + 2*N;
 	tmp2 = D2 + N;
@@ -70,8 +79,8 @@ void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) 
 			tmp2[j] = q2[n*j + i];
 		}
 
-		spline(D1, tmp1, N);
-		spline(D2, tmp2, N);
+		if (spline(D1, tmp1, N) != 0 || spline(D2, tmp2, N) != 0)
+			goto cleanup;
 
 		// for each point in fine discretization
 		for (j = 0; j < M; ++j) {
@@ -82,9 +91,13 @@ void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) 
 	}
 
 	free(D1);
+	D1 = 0;
 
 	E = calloc(N*N, sizeof(double));
 	Path = malloc(2*N*N*sizeof(int));
+
+	if (!E || !Path)
+		goto cleanup;
 
 	for (i = 0; i < N; ++i) {
 		E[N*i + 0] = 50000000000;
@@ -107,7 +120,7 @@ void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) 
 				l = j - Nbrs[Num][1];
 
 				if (k >= 0 && l >= 0) {
-					Etmp = E[N*l + k] + CostFn2(q1L,q2L,k,l,i,j,n,scl,lam);
+					Etmp = E[N*l + k] + CostFn2(q1L,q2L,k,l,i,j,n,scl,lam,pen);
 					if (Num == 0 || Etmp < Emin) {
 						Emin = Etmp;
 						Eidx = Num;
@@ -122,9 +135,15 @@ void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) 
 	}
 
 	free(E);
+	E = 0;
 	free(q2L);
+	q2L = 0;
 
 	xy = malloc(2*N*sizeof(int));
+
+	if (!xy)
+		goto cleanup;
+
 	xy[2*0 + 0] = N-1;
 	xy[2*0 + 1] = N-1;
 
@@ -138,6 +157,7 @@ void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) 
 	}
 
 	free(Path);
+	Path = 0;
 
 	qsort(xy, cnt, 2*sizeof(int), xycompare);
 
@@ -177,18 +197,55 @@ void DP(double *q1, double *q2, int n, int N, double lam, int Disp, double *yy) 
 		yy[i] = (yy[i]-yy[0])/(N-1);
 	}
 
+	status = 0;
+
+cleanup:
 	free(xy);
+	free(Path);
+	free(E);
+	free(D1);
+	free(q2L);
+	free(q1L);
+
+	return status;
 }
 
 int xycompare(const void *x1, const void *x2) {
 	return (*(int *)x1 > *(int *)x2) - (*(int *)x1 < *(int *)x2);
 }
 
-double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j, int n, int scl, double lam) {
-	double m = (j-l)/(double)(i-k), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp, tmp_pen;
+double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j, int n, int scl, double lam, int pen) {
+	double m = (j-l)/(double)(i-k), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp, tmp_pen = 0, q1dotq2;
 	int x, idx, d, iL=i*scl, kL=k*scl, lL=l*scl;
 
-	tmp_pen = (1-sqrtm)*(1-sqrtm);
+	// the penalty only depends on the slope m, so evaluate it once per call.
+	// pen == 0 leaves tmp_pen at 0, i.e. no penalty.
+	switch (pen) {
+		// roughness
+		case 1:
+			tmp_pen = (1-sqrtm)*(1-sqrtm);
+			break;
+		// l2gam
+		case 2:
+			tmp_pen = (m - 1)*(m - 1);
+			break;
+		// l2psi
+		case 3:
+			tmp_pen = (sqrtm - 1)*(sqrtm - 1);
+			break;
+		// geodesic
+		case 4:
+			q1dotq2 = sqrtm;
+			if (q1dotq2 > 1){
+				q1dotq2 = 1;
+			}
+			else if (q1dotq2 < -1){
+				q1dotq2 = -1;
+			}
+			tmp_pen = acos(q1dotq2)*acos(q1dotq2);
+			break;
+	}
+
 	for (x = kL; x <= iL; ++x) {
 		y = (x-kL)*m + lL;
 		fp = modf(y, &ip);
@@ -223,11 +280,16 @@ void thomas(double *x, const double *a, const double *b, double *c, int n) {
 
 // input:  y is array to interpolate, n is array length
 // output: D will be array of spline data
-void spline(double *D, const double *y, int n) {
+// returns 0 on success, or -1 if the work buffer could not be allocated
+int spline(double *D, const double *y, int n) {
 	int i;
 	double *a, *b, *c;
 
 	a = malloc(3*n*sizeof(double));
+
+	if (!a)
+		return -1;
+
 	b = a + n;
 	c = b + n;
 
@@ -264,6 +326,8 @@ void spline(double *D, const double *y, int n) {
 	thomas(D, a, b, c, n);
 
 	free(a);
+
+	return 0;
 }
 
 void lookupspline(double *t, int *k, double dist, double len, int n) {

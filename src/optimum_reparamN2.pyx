@@ -5,8 +5,14 @@ from numpy.linalg import norm
 cimport numpy as np
 from cpython cimport array
 
+
+def _check_pen(int pen):
+    if pen < 0 or pen > 4:
+        raise ValueError("pen must be one of 0 (none), 1 (roughness), 2 (l2gam), 3 (l2psi) or 4 (geodesic)")
+
+
 def coptimum_reparamN(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double, ndim=1, mode="c"] time,
-                      np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0, size_t nbhd_dim=7):
+                      np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0, size_t nbhd_dim=7, int pen=1):
     """
     cython interface calculates the warping to align a set of srfs q to a single srsf mq
 
@@ -15,11 +21,14 @@ def coptimum_reparamN(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double
     :param q: numpy ndarray of shape (M,N) of N srsfs with M samples
     :param lam1: controls the amount of elasticity (default = 0.0)
     :param nbhd_dim: size of the grid (default = 7)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype numpy ndarray
     :return gam: describing the warping functions used to align columns of q with mq
 
     """
+    _check_pen(pen)
     cdef int M, N, n1
     cdef double lam
     mq = mq / norm(mq)
@@ -39,9 +48,10 @@ def coptimum_reparamN(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double
         qi = q[:, k] / norm(q[:, k])
         qi = np.ascontiguousarray(qi)
 
-        cDPQ.DynamicProgrammingQ2(&mq[0], &time[0], &qi[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
-                                  &T[0], &size[0], lam, nbhd_dim)
-        sizes[k] = np.int32(size)
+        if cDPQ.DynamicProgrammingQ2(&mq[0], &time[0], &qi[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
+                                     &T[0], &size[0], lam, nbhd_dim, pen) != 0:
+            raise MemoryError("DynamicProgrammingQ2 could not allocate its work buffers")
+        sizes[k] = np.int32(size[0])
         Go[:, k] = G
         To[:, k] = T
 
@@ -52,7 +62,7 @@ def coptimum_reparamN(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double
     return gam
 
 def coptimum_reparamN2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                       np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7):
+                       np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7, int pen=1):
     """
     cython interface calculates the warping to align a set of srsfs q1 to another set of srsfs q2
 
@@ -61,11 +71,14 @@ def coptimum_reparamN2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doubl
     :param q2: numpy ndarray of shape (M,N) of M srsfs with N samples
     :param lam1: controls the amount of elasticity (default = 0.0)
     :param nbhd_dim: size of the grid (default = 7)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype numpy ndarray
     :return gam: describing the warping functions used to align columns of q with mq
 
     """
+    _check_pen(pen)
     cdef int M, N, n1
     cdef double lam
 
@@ -88,9 +101,10 @@ def coptimum_reparamN2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doubl
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
-                                  &T[0], &size[0], lam, nbhd_dim)
-        sizes[k] = np.int32(size)
+        if cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
+                                     &T[0], &size[0], lam, nbhd_dim, pen) != 0:
+            raise MemoryError("DynamicProgrammingQ2 could not allocate its work buffers")
+        sizes[k] = np.int32(size[0])
         Go[:, k] = G
         To[:, k] = T
 
@@ -101,7 +115,7 @@ def coptimum_reparamN2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doubl
     return gam
 
 def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                     np.ndarray[double, ndim=1, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7):
+                     np.ndarray[double, ndim=1, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7, int pen=1):
     """
     cython interface for calculates the warping to align srsf q2 to q1
 
@@ -110,10 +124,13 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     :param q2: vector of size N samples of second SRSF
     :param lam1: controls the amount of elasticity (default = 0.0)
     :param nbhd_dim: size of the grid (default = 7)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
+    _check_pen(pen)
     cdef int M, n1
     cdef double lam
     M = q1.shape[0]
@@ -128,8 +145,9 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     sizes = np.zeros(1, dtype=np.int32)
     Go = np.zeros((M, 1))
     To = np.zeros((M, 1))
-    cDPQ.DynamicProgrammingQ2(&q1[0], &time[0], &q2[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
-                              &T[0], &size[0], lam, nbhd_dim)
+    if cDPQ.DynamicProgrammingQ2(&q1[0], &time[0], &q2[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
+                                 &T[0], &size[0], lam, nbhd_dim, pen) != 0:
+        raise MemoryError("DynamicProgrammingQ2 could not allocate its work buffers")
     sizes = np.int32(size)
     Go[:, 0] = G
     To[:, 0] = T
@@ -139,8 +157,8 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     return gam
 
 def coptimum_reparamN2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[double, ndim=1, mode="c"] time,
-                            np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, 
-                            size_t nbhd_dim=7):
+                            np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0,
+                            size_t nbhd_dim=7, int pen=1):
     """
     cython interface for calculates the warping to align paired srsf q1 and q2 to q
 
@@ -150,10 +168,13 @@ def coptimum_reparamN2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[d
     :param q2: vector of size N samples of second SRSF
     :param lam1: controls the amount of elasticity (default = 0.0)
     :param nbhd_dim: size of the grid (default = 7)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
+    _check_pen(pen)
     cdef int M, N, n1
     n1 = 2
     cdef double lam
@@ -177,9 +198,10 @@ def coptimum_reparamN2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[d
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
-                                  &T[0], &size[0], lam, nbhd_dim)
-        sizes[k] = np.int32(size)
+        if cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
+                                     &T[0], &size[0], lam, nbhd_dim, pen) != 0:
+            raise MemoryError("DynamicProgrammingQ2 could not allocate its work buffers")
+        sizes[k] = np.int32(size[0])
         Go[:, k] = G
         To[:, k] = T
 
@@ -190,7 +212,7 @@ def coptimum_reparamN2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[d
     return gam
 
 def coptimum_reparam_pair(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                          np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7):
+                          np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7, int pen=1):
     """
     cython interface for calculates the warping to align paired srsf q2 to q1
 
@@ -199,10 +221,13 @@ def coptimum_reparam_pair(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[do
     :param q2: vector of size N samples of second SRSF
     :param lam1: controls the amount of elasticity (default = 0.0)
     :param nbhd_dim: size of the grid (default = 7)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
+    _check_pen(pen)
     cdef int M, N
     cdef double lam
     M, N = q1.shape[0], q1.shape[1]
@@ -222,8 +247,9 @@ def coptimum_reparam_pair(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[do
 
     Go = np.zeros((M, 1))
     To = np.zeros((M, 1))
-    cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], N, M, M, &time[0], &time[0], M, M, &G[0],
-                              &T[0], &size[0], lam, nbhd_dim)
+    if cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], N, M, M, &time[0], &time[0], M, M, &G[0],
+                                 &T[0], &size[0], lam, nbhd_dim, pen) != 0:
+        raise MemoryError("DynamicProgrammingQ2 could not allocate its work buffers")
     sizes = np.int32(size)
     Go[:, 0] = G
     To[:, 0] = T
@@ -233,7 +259,7 @@ def coptimum_reparam_pair(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[do
     return gam
 
 def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                     np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7):
+                     np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, size_t nbhd_dim=7, int pen=1):
     """
     cython interface for calculates the warping to align srvf q2 to q1
 
@@ -242,10 +268,13 @@ def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[d
     :param q2: matrix of size nxN samples of second SRVF
     :param lam1: controls the amount of elasticity (default = 0.0)
     :param nbhd_dim: size of the grid (default = 7)
+    :param pen: penalty weighted by lam1, 0 = none, 1 = roughness, 2 = l2gam,
+                3 = l2psi, 4 = geodesic (default = 1)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
+    _check_pen(pen)
     cdef int M, n1
     cdef double lam
     n1 = q1.shape[0]
@@ -266,8 +295,9 @@ def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[d
     sizes = np.zeros(1, dtype=np.int32)
     Go = np.zeros((M, 1))
     To = np.zeros((M, 1))
-    cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
-                              &T[0], &size[0], lam, nbhd_dim)
+    if cDPQ.DynamicProgrammingQ2(&q1i[0], &time[0], &q2i[0], &time[0], n1, M, M, &time[0], &time[0], M, M, &G[0],
+                                 &T[0], &size[0], lam, nbhd_dim, pen) != 0:
+        raise MemoryError("DynamicProgrammingQ2 could not allocate its work buffers")
     sizes = np.int32(size)
     Go[:, 0] = G
     To[:, 0] = T

@@ -49,6 +49,25 @@ class TestFDASRSF(unittest.TestCase):
         gam = fs.optimum_reparam(q1, timet, q1, method="cRBFGS")
         self.assertAlmostEqual(sum(gam - timet), 0)
 
+    def test_reparm_penalties(self):
+        M = 101
+        q1 = np.sin(np.linspace(0, 2 * np.pi, M))
+        timet = np.linspace(0, 1, M)
+        for method in ("DP", "DP2", "RBFGS", "cRBFGS"):
+            for penalty in ("none", "roughness", "l2gam", "l2psi", "geodesic"):
+                with self.subTest(method=method, penalty=penalty):
+                    gam = fs.optimum_reparam(
+                        q1, timet, q1, method=method, lam=0.1, penalty=penalty
+                    )
+                    self.assertAlmostEqual(sum(gam - timet), 0)
+
+    def test_reparm_bad_penalty(self):
+        M = 101
+        q1 = np.sin(np.linspace(0, 2 * np.pi, M))
+        timet = np.linspace(0, 1, M)
+        with self.assertRaises(ValueError):
+            fs.optimum_reparam(q1, timet, q1, penalty="bogus")
+
     def test_f_to_srvf(self):
         M = 101
         f1 = np.sin(np.linspace(0, 2 * np.pi, M))
