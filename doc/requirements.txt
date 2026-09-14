@@ -1,5 +1,5 @@
 numpy>=1.25.0
-setuptools<=73.0.1
+setuptools>=83.0.0
 cffi>=1.0.0
 numba
 scipy>=1.14

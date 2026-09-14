@@ -4,6 +4,15 @@ import sys, os
 import platform
 from setuptools import setup
 from setuptools import Command
+
+# 'findblas' probes 'numpy.distutils' when it can be imported, and NumPy still
+# ships it on Python < 3.12.  Importing it replaces distutils' 'new_compiler'
+# with one that instantiates the compiler class using the pre-setuptools-74
+# positional signature, which breaks the extension build on any newer
+# setuptools.  Hide the module so every Python version takes the same path that
+# 3.12+ already takes, where 'numpy.distutils' no longer exists.
+sys.modules.setdefault("numpy.distutils", None)
+
 from findblas.distutils import build_ext_with_blas
 from setuptools.extension import Extension
 from Cython.Distutils import build_ext
