@@ -161,7 +161,7 @@ def optimum_reparam(
     penalty is accepted by every method.
 
     "l2psi" is the default because it is the penalty the DP solvers have always
-    applied, under the name "roughness" up to and including 2.6.10.
+    applied, under the name "roughness" up to and including 2.7.0.
 
     """
 
