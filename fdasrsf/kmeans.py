@@ -59,7 +59,6 @@ def kmeans_align(
 
     """
 
-    w = 0.0
     k = 1
     cores = -1
     eps = np.finfo(np.double).eps

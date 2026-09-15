@@ -10,8 +10,7 @@ import matplotlib.pyplot as plt
 import fdasrsf as fs
 import fdasrsf.fPCA as fpca
 import fdasrsf.utility_functions as uf
-from scipy.linalg import norm, svd
-from fdasrsf.geometry import L2norm
+from scipy.linalg import norm
 
 
 # Function Definitions

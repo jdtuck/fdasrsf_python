@@ -7,10 +7,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 import numpy as np
 import fdasrsf as fs
-import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
-import fdasrsf.regression as rg
-import fdasrsf.geometry as geo
 from scipy.linalg import inv
 
 
@@ -133,8 +130,6 @@ class elastic_curve_pcr_regression:
 
                 if q1dotq2 > 1:
                     q1dotq2 = 1
-
-                d = np.arccos(q1dotq2)
 
                 u = qn_t - q1dotq2 * mu
                 normu = np.sqrt(cf.innerprod_q2(u, u))

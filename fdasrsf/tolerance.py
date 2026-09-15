@@ -47,10 +47,6 @@ def bootTB(f, time, a=0.05, p=0.99, B=500, no=5, parallel=True):
 
     # Calculate CI
     # a% tolerance bound with p%
-    fn = out_med.fn
-    qn = out_med.qn
-    gam = out_med.gam
-    q0 = out_med.q0
     print("Bootstrap Sampling")
     bootlwr_amp = np.zeros((M, B))
     bootupr_amp = np.zeros((M, B))

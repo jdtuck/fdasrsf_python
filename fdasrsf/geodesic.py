@@ -5,7 +5,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
-from numpy import tile, eye, arccos, zeros, sin, arange, linspace, empty, isnan
+from numpy import tile, arccos, zeros, sin, arange, linspace, empty, isnan
 from numpy import sqrt
 import matplotlib.pyplot as plt
 from scipy.integrate import trapezoid
@@ -50,7 +50,6 @@ def geod_sphere(beta1, beta2, k=5, scale=False, rotation=True, center=True):
     :return PsiQ: geodesic path in SRVF
 
     """
-    lam = 0.0
     returnpath = 1
     n, T = beta1.shape
 

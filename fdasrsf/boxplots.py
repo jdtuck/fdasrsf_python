@@ -9,7 +9,6 @@ from scipy.integrate import trapezoid
 import fdasrsf.utility_functions as uf
 import fdasrsf.geometry as geo
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import collections
 
@@ -258,7 +257,7 @@ class ampbox:
         ax1.plot(self.warp_data.time, self.maxx, "r")
 
         fig2 = plt.figure()
-        ax = fig2.gca(projection="3d")
+        ax = fig2.add_subplot(projection="3d")
         ax.plot_surface(
             self.plt.U,
             self.plt.V,
@@ -546,7 +545,7 @@ class phbox:
         ax1.set_aspect("equal")
 
         fig2 = plt.figure()
-        ax = fig2.gca(projection="3d")
+        ax = fig2.add_subplot(projection="3d")
         ax.plot_surface(
             self.plt.U,
             self.plt.V,

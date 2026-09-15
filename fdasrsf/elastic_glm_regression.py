@@ -210,7 +210,6 @@ def Amplitude_Index(f, t, B, y0, MaxIter, b, link, parallel):
 
 def MyLogLikelihoodFn2(c, y0, B, t, f, h, parallel):
     N = f.shape[1]
-    J = c.shape[0]
     y = c[0] + MapC_to_y(N, c[1:], B, t, f, parallel)
     tmp = np.polyval(h, y)
     x = (y0 - tmp) * (y0 - tmp)
@@ -220,7 +219,6 @@ def MyLogLikelihoodFn2(c, y0, B, t, f, h, parallel):
 
 def MyLogLikelihoodFn(c, y0, B, t, f, parallel):
     N = f.shape[1]
-    J = c.shape[0]
     y = c[0] + MapC_to_y(N, c[1:], B, t, f, parallel)
     x = (y0 - y) * (y0 - y)
 

@@ -340,9 +340,7 @@ class fdawarp:
         self.qn = q[:, :, r + 1]
         self.q0 = q[:, :, 0]
         self.gamI = gamI
-        mean_f0 = f0.mean(axis=1)
         std_f0 = f0.std(axis=1)
-        mean_fn = self.fn.mean(axis=1)
         std_fn = self.fn.std(axis=1)
         self.gam = gam
         self.mqn = mq[:, r + 1]
@@ -2200,8 +2198,6 @@ def align_fPLS(
     eps = np.finfo(np.double).eps
     M = f.shape[0]
     N = f.shape[1]
-    f0 = f
-    g0 = g
 
     if showplot:
         plot.f_plot(time, f, title="f Original Data")

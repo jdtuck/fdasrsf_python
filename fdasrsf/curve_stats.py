@@ -25,11 +25,9 @@ from numpy import append, arccos, cumsum, sum, linspace
 from numpy.linalg import svd
 from numpy.random import randn
 import fdasrsf.curve_functions as cf
-import fdasrsf.utility_functions as uf
 import fdasrsf.plot_style as plot
 import matplotlib.pyplot as plt
 from joblib import Parallel, delayed
-import collections
 
 
 class fdacurve:
@@ -319,8 +317,6 @@ class fdacurve:
                 q1dotq2 = 1
             if q1dotq2 < -1:
                 q1dotq2 = -1
-
-            d = arccos(q1dotq2)
 
             u = qn_t - q1dotq2 * q_mean
             normu = sqrt(cf.innerprod_q2(u, u))
