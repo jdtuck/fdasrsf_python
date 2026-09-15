@@ -120,6 +120,37 @@ class TestFDASRSF(unittest.TestCase):
         self.assertTrue(np.isfinite(d))
         self.assertGreater(d, 0)
 
+    def test_optimum_reparam_pair(self):
+        # the pair is aligned jointly, so one warping comes back for both
+        M = 101
+        timet = np.linspace(0, 1, M)
+        qa = fs.f_to_srsf(np.sin(2 * np.pi * timet), timet)
+        qb = fs.f_to_srsf(np.cos(2 * np.pi * timet), timet)
+        q = np.column_stack((qa, qb))
+        q1 = fs.f_to_srsf(np.sin(2 * np.pi * timet**1.3), timet)
+        q2 = fs.f_to_srsf(np.cos(2 * np.pi * timet**1.3), timet)
+
+        # aligning a pair to itself gives the identity
+        gamid = fs.optimum_reparam_pair(q, timet, qa, qb)
+        np.testing.assert_allclose(gamid, timet, atol=1e-10)
+
+        gam = fs.optimum_reparam_pair(q, timet, q1, q2)
+        self.assertEqual(gam.shape, (M,))
+        self.assertTrue(np.all(np.diff(gam) >= -1e-12))
+
+        # the batched branch must agree column by column with the single one
+        Q1 = np.column_stack((q1, q1))
+        Q2 = np.column_stack((q2, q2))
+        gamN = fs.optimum_reparam_pair(q, timet, Q1, Q2)
+        self.assertEqual(gamN.shape, (M, 2))
+        np.testing.assert_allclose(gamN[:, 0], gam)
+        np.testing.assert_allclose(gamN[:, 1], gam)
+
+        with self.assertRaises(ValueError):
+            fs.optimum_reparam_pair(qa, timet, q1, q2)
+        with self.assertRaises(ValueError):
+            fs.optimum_reparam_pair(q, timet, q1, Q2)
+
     def test_apply_gam_imag(self):
         # the identity diffeomorphism must leave the image alone, and a
         # genuine 2-D one must sample it at the points it names: both fail if

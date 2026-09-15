@@ -18,18 +18,19 @@ size_t nbhd_dim, int pen){
   int *idxv1 = 0;
   int *idxv2 = 0;
   double *E = 0; /* E[ntv1*j+i] = cost of best path to (tv1[i],tv2[j]) */
-  int *P = 0; /* P[ntv1*j+i] = predecessor of (tv1[i],tv2[j]) along best path */
+  dp_index *P = 0; /* P[ntv1*j+i] = predecessor of (tv1[i],tv2[j]) along best path */
   size_t nbhd_count; /* Number of indexes */
   Pair *dp_nbhd = 0;
   int status = -1;
 
   if ( pen < DP_PEN_NONE || pen > DP_PEN_L2PSI ) return -2;
 
-  /* Sizes are computed in size_t: n1v*n2v overflows int for large grids. */
+  /* Sizes are computed in size_t: n1v*n2v overflows int for large grids.  The
+   * flat indexes into E and P are dp_index for the same reason. */
   idxv1=(int*)malloc((size_t)n1v*sizeof(int));
   idxv2=(int*)malloc((size_t)n2v*sizeof(int));
   E=(double*)malloc((size_t)n1v*(size_t)n2v*sizeof(double));
-  P=(int*)calloc((size_t)n1v*(size_t)n2v,sizeof(int));
+  P=(dp_index*)calloc((size_t)n1v*(size_t)n2v,sizeof(dp_index));
   dp_nbhd = dp_generate_nbhd(nbhd_dim, &nbhd_count);
 
   if ( idxv1 && idxv2 && E && P && dp_nbhd )

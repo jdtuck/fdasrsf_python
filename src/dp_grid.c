@@ -10,45 +10,49 @@ double dp_costs(
   int dim, 
   double *tv1, int *idxv1, int ntv1, 
   double *tv2, int *idxv2, int ntv2, 
-  double *E, int *P, double lam, int pen,
+  double *E, dp_index *P, double lam, int pen,
   size_t dp_nbhd_count, Pair *dp_nbhd )
 {
   int sr, sc;  /* source row and column */
   int tr, tc;  /* target row and column */
   double w, cand_cost;
   int i;
+  /* ntv1*ntv2 can exceed INT_MAX on a fine grid, so every flat index into
+   * E and P is computed in dp_index, never in int. */
+  dp_index row = (dp_index)ntv1;
+  size_t k;
   
   E[0] = 0.0;
-  for ( i=1; i<ntv1; E[i++]=INFINITY );
-  for ( i=1; i<ntv2; E[ntv1*i++]=INFINITY );
+  for ( i=1; i<ntv1; ++i ) E[i] = INFINITY;
+  for ( i=1; i<ntv2; ++i ) E[row*i] = INFINITY;
 
   for ( tr=1; tr<ntv2; ++tr )
   {
     for ( tc=1; tc<ntv1; ++tc )
     {
-      E[ntv1*tr + tc] = INFINITY;
+      E[row*tr + tc] = INFINITY;
 
-      for ( i=0; i<dp_nbhd_count; ++i )
+      for ( k=0; k<dp_nbhd_count; ++k )
       {
-        sr = tr - dp_nbhd[i][0];
-        sc = tc - dp_nbhd[i][1];
+        sr = tr - dp_nbhd[k][0];
+        sc = tc - dp_nbhd[k][1];
 
         if ( sr < 0 || sc < 0 ) continue;
 
         w = dp_edge_weight( Q1, T1, nsamps1, Q2, T2, nsamps2, dim, 
           tv1[sc], tv1[tc], tv2[sr], tv2[tr], idxv1[sc], idxv2[sr], lam, pen );
 
-        cand_cost = E[ntv1*sr+sc] + w;
-        if ( cand_cost < E[ntv1*tr+tc] )
+        cand_cost = E[row*sr+sc] + w;
+        if ( cand_cost < E[row*tr+tc] )
         {
-          E[ntv1*tr+tc] = cand_cost;
-          P[ntv1*tr+tc] = ntv1*sr + sc;
+          E[row*tr+tc] = cand_cost;
+          P[row*tr+tc] = row*sr + sc;
         }
       }
     }
   }
 
-  return E[ntv1*ntv2-1];
+  return E[row*ntv2-1];
 }
 
 
@@ -144,14 +148,16 @@ double dp_edge_weight(
 
 
 int dp_build_gamma( 
-  int *P, 
+  dp_index *P, 
   double *tv1, int ntv1, 
   double *tv2, int ntv2,
   double *G, double *T )
 {
   int sr, sc;
   int tr, tc;
-  int p, i;
+  int i;
+  dp_index p;
+  dp_index row = (dp_index)ntv1;  /* see dp_costs(): flat indexes are dp_index */
   int npts;  /* result = length of Tg */
 
   /* Dry run first, to determine length of Tg */
@@ -160,9 +166,9 @@ int dp_build_gamma(
   tc = ntv1-1;
   while( tr > 0 && tc > 0 )
   {
-    p = P[tr*ntv1+tc];
-    tr = p / ntv1;
-    tc = p % ntv1;
+    p = P[row*tr+tc];
+    tr = (int)(p / row);
+    tc = (int)(p % row);
     ++npts;
   }
 
@@ -174,9 +180,9 @@ int dp_build_gamma(
   i = npts-2;
   while( tr > 0 && tc > 0 )
   {
-    p = P[tr*ntv1+tc];
-    sr = p / ntv1;
-    sc = p % ntv1;
+    p = P[row*tr+tc];
+    sr = (int)(p / row);
+    sc = (int)(p % row);
     
     G[i] = tv2[sr];
     T[i] = tv1[sc];

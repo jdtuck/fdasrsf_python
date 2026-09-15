@@ -1,8 +1,17 @@
 #ifndef DP_GRID_H
 #define DP_GRID_H 1
 
+#include <stddef.h>
+
 #include "dp_nbhd.h"
 #include "dp_penalty.h"
+
+/**
+ * Type of a flat index into the ntv1 x ntv2 DP tables, and of the predecessor
+ * values stored in \c P.  A fine grid makes ntv1*ntv2 exceed INT_MAX, so these
+ * must not be computed or stored in an int.
+ */
+typedef ptrdiff_t dp_index;
 
 /**
  * Computes cost of best path from (0,0) to all other gridpoints.
@@ -38,7 +47,7 @@ double dp_costs(
   int dim, 
   double *tv1, int *idxv1, int ntv1, 
   double *tv2, int *idxv2, int ntv2, 
-  double *E, int *P, double lam, int pen,
+  double *E, dp_index *P, double lam, int pen,
   size_t dp_nbhd_count, Pair *dp_nbhd );
 
 /**
@@ -87,7 +96,7 @@ double dp_costs(
  * \return the length of G (same as length of T).
  */
 int dp_build_gamma( 
-  int *P, 
+  dp_index *P, 
   double *tv1, int ntv1, 
   double *tv2, int ntv2,
   double *G, double *T );

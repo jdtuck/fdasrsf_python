@@ -315,30 +315,39 @@ def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
     """
     calculates the warping to align srsf pair q1 and q2 to q
 
-    :param q: vector of size N or array of NxM samples of first SRSF
+    The two SRSFs are aligned jointly, as one bivariate SRVF, so a single
+    warping is returned for the pair rather than one per function.
+
+    :param q: numpy ndarray of shape (N,2) holding the pair of SRSFs to align
+              to, as columns
     :param time: vector of size N describing the sample points
-    :param q1: vector of size N or array of NxM samples samples of second SRSF
-    :param q2: vector of size N or array of NxM samples samples of second SRSF
+    :param q1: vector of size N, or array of shape (N,M) of M such vectors,
+               giving the first SRSF of the pair to align
+    :param q2: vector of size N, or array of shape (N,M) of M such vectors,
+               giving the second SRSF of the pair to align
     :param lam: controls the amount of elasticity (default = 0.0)
 
     :rtype: vector
-    :return gam: describing the warping function used to align q2 with q1
+    :return gam: describing the warping function that aligns the pair to q
 
     """
+    q = ascontiguousarray(q)
+    if q.ndim != 2 or q.shape[1] != 2:
+        raise ValueError("q must be an (N,2) array holding the pair to align to")
+
     if q1.ndim == 1 and q2.ndim == 1:
         q_c = column_stack((q1, q2))
-        gam = orN.coptimum_reparam_pair(
-            ascontiguousarray(q), time, ascontiguousarray(q_c), lam
-        )
-
-    if q1.ndim == 2 and q2.ndim == 2:
-        gam = orN.coptimum_reparamN2_pair(
-            ascontiguousarray(q),
+        gam = orN.coptimum_reparam_pair_q(q, time, ascontiguousarray(q_c), lam)
+    elif q1.ndim == 2 and q2.ndim == 2:
+        gam = orN.coptimum_reparam_N2_pair(
+            q,
             time,
             ascontiguousarray(q1),
             ascontiguousarray(q2),
             lam,
         )
+    else:
+        raise ValueError("q1 and q2 must both be 1-D or both be 2-D")
 
     return gam
 
