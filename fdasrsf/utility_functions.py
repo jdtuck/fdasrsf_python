@@ -127,7 +127,7 @@ def srsf_to_f(q, time, f0=0.0):
 
 
 def optimum_reparam(
-    q1, time, q2, method="DP2", lam=0.0, penalty="roughness", grid_dim=7
+    q1, time, q2, method="DP2", lam=0.0, penalty="l2psi", grid_dim=7
 ):
     """
     calculates the warping to align srsf q2 to q1
@@ -138,32 +138,64 @@ def optimum_reparam(
     :param method: method to apply optimization (default="DP2") options are
                    "DP","DP2","RBFGS","cRBFGS"
     :param lam: controls the amount of elasticity (default = 0.0)
-    :param penalty: penalty type (default="roughness") options are "roughness",
+    :param penalty: penalty type (default="l2psi") options are "roughness",
                     "l2gam", "l2psi", "geodesic" and "none". The penalty is
-                    weighted by lam, so it has no effect when lam is 0
+                    weighted by lam, so it has no effect when lam is 0.
+                    "roughness" and "geodesic" are only available for the
+                    "RBFGS" and "cRBFGS" methods, see below
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype: vector
     :return gam: describing the warping function used to align q2 with q1
 
+    The dynamic programming solvers accumulate the penalty edge by edge along a
+    piecewise-linear path, so they can only express a penalty that is the
+    integral of a pointwise function of gammadot.  "l2gam" and "l2psi" are of
+    that form and "none" is trivially so, but the other two are not:
+    "roughness" is the integral of the squared second derivative of gamma,
+    which is zero inside every edge and concentrates on the knots, and
+    "geodesic" is a nonlinear function (an arccosine, squared) of a global
+    integral.  Asking "DP" or "DP2" for either of them with a nonzero lam
+    therefore raises a ValueError; use "RBFGS" or "cRBFGS", which implement all
+    four.  With lam == 0 the penalty drops out of the cost altogether, so every
+    penalty is accepted by every method.
+
+    "l2psi" is the default because it is the penalty the DP solvers have always
+    applied, under the name "roughness" up to and including 2.6.10.
+
     """
 
-    # The DP solvers number the penalties 0 = none, 1 = roughness, 2 = l2gam,
-    # 3 = l2psi, 4 = geodesic, while the RBFGS solvers have no "none" and
-    # number the rest from 0, so translate the name once here
     penalties = ("none", "roughness", "l2gam", "l2psi", "geodesic")
     if penalty not in penalties:
         raise ValueError("penalty must be one of " + ", ".join(penalties))
 
-    penalty_rbfgs = penalty
-    lam_rbfgs = lam
-    if penalty == "none":
-        # the RBFGS solvers have no "none" penalty, but a zero weight is the
-        # same thing
-        penalty_rbfgs = "roughness"
-        lam_rbfgs = 0.0
-    pen_dp = penalties.index(penalty)
+    # the RBFGS solvers have no "none" penalty, but a zero weight is the same
+    # thing
+    penalty_rbfgs = "roughness" if penalty == "none" else penalty
+    lam_rbfgs = 0.0 if penalty == "none" else lam
+    # the RBFGS solvers number their four penalties from 0, in the order they
+    # appear in "penalties" above
     pen_rbfgs = penalties.index(penalty_rbfgs) - 1
+
+    # the DP solvers number the penalties they can express 0 = none,
+    # 1 = l2gam, 2 = l2psi (the DP_PEN_* constants in src/dp_penalty.h)
+    dp_penalties = {"none": 0, "l2gam": 1, "l2psi": 2}
+    if method in ("DP", "DP2"):
+        if lam == 0:
+            # the penalty is weighted by lam, so it makes no contribution and
+            # any of them can be honoured by simply not applying one
+            pen_dp = dp_penalties["none"]
+        elif penalty in dp_penalties:
+            pen_dp = dp_penalties[penalty]
+        else:
+            raise ValueError(
+                'the "%s" penalty is not additive along a piecewise-linear '
+                "warping and so has no counterpart in the %s solver; use "
+                'method="RBFGS" or method="cRBFGS" for it, or one of the '
+                "penalties %s" % (penalty, method, ", ".join(dp_penalties))
+            )
+    else:
+        pen_dp = None
 
     if method == "DP":
         if q1.ndim == 1 and q2.ndim == 1:

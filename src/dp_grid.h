@@ -2,16 +2,7 @@
 #define DP_GRID_H 1
 
 #include "dp_nbhd.h"
-
-/**
- * Penalty types accepted by \c dp_costs() and \c dp_edge_weight().  These
- * match the pen argument of DynamicProgrammingQ().
- */
-#define DP_PEN_NONE      0
-#define DP_PEN_ROUGHNESS 1
-#define DP_PEN_L2GAM     2
-#define DP_PEN_L2PSI     3
-#define DP_PEN_GEODESIC  4
+#include "dp_penalty.h"
 
 /**
  * Computes cost of best path from (0,0) to all other gridpoints.
@@ -35,7 +26,7 @@
  *        (tv1[i],tv2[j]).  If predecessor is (tv1[k],tv2[l]), then 
  *        P[ntv1*j+i] = l*ntv1+k.
  * \param lam weight applied to the warping penalty
- * \param pen penalty type, one of the \c DP_PEN_* constants above
+ * \param pen penalty type, one of the \c DP_PEN_* constants in dp_penalty.h
  * \param dp_nbhd_count Number of pairs in the grid.
  * \param dp_nbhd Grid.
  * \return E[ntv1*ntv2-1], the cost of the best path from (tv1[0],tv2[0]) 
@@ -67,7 +58,7 @@ double dp_costs(
  * \param aidx index such that Q1[aidx] <= a < Q1[aidx+1]
  * \param cidx index such that Q2[cidx] <= c < Q2[cidx+1]
  * \param lam weight applied to the warping penalty
- * \param pen penalty type, one of the \c DP_PEN_* constants above
+ * \param pen penalty type, one of the \c DP_PEN_* constants in dp_penalty.h
  */
   double dp_edge_weight(
   double *Q1, double *T1, int nsamps1, 

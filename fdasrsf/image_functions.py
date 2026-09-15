@@ -23,9 +23,11 @@ def apply_gam_imag(F, gam):
     """
     ndim = F.ndim
 
+    # (x2[k], y2[k]) is one query point, so both components have to be
+    # flattened the same way: sorting one of them, or flattening it in the
+    # other order, breaks the pairing for any gam but the identity
     x2 = gam[:, :, 1].ravel(order="F")
-    gamtmp = gam[:, :, 0].T
-    y2 = np.sort(gamtmp.ravel(order="F"))
+    y2 = gam[:, :, 0].ravel(order="F")
 
     if ndim == 3:
         (m, n, d) = F.shape
@@ -195,9 +197,10 @@ def apply_gam_gamid(gamid, gaminc):
     V = np.linspace(0, 1, n)
 
     gamcum = np.zeros((m, n, d))
+    # as in apply_gam_imag(), the two components must be flattened alike so
+    # that (x2[k], y2[k]) is the point gaminc maps the k'th gridpoint to
     x2 = gaminc[:, :, 1].ravel(order="F")
-    gamtmp = gaminc[:, :, 0].T
-    y2 = np.sort(gamtmp.ravel(order="F"))
+    y2 = gaminc[:, :, 0].ravel(order="F")
     for j in range(d):
         interp = RegularGridInterpolator((U, V), gamid[:, :, j], method="linear")
         tmp = interp((x2, y2))

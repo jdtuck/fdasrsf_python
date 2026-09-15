@@ -84,7 +84,7 @@ class fdawarp:
         MaxItr=20,
         parallel=False,
         lam=0.0,
-        pen="roughness",
+        pen="l2psi",
         cores=-1,
         grid_dim=7,
         verbose=True,
@@ -103,9 +103,12 @@ class fdawarp:
         :param MaxItr: Maximum number of iterations (default = 20)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
-        :param penalty: penalty type (default="roughness") options are "roughness",
+        :param penalty: penalty type (default="l2psi") options are "roughness",
                 "l2gam", "l2psi", "geodesic" and "none". The penalty is
-                weighted by lam, so it has no effect when lam is 0
+                weighted by lam, so it has no effect when lam is 0.
+                "roughness" and "geodesic" have no dynamic programming
+                counterpart, so with a nonzero lam they need omethod
+                "RBFGS" or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -372,7 +375,7 @@ class fdawarp:
             smoothdata=False,
             MaxItr=20,
             parallel=True,
-            pen="roughness",
+            pen="l2psi",
             cores=-1,
             grid_dim=7,
             verbose=True):
@@ -395,9 +398,12 @@ class fdawarp:
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param MaxItr: Maximum number of iterations (default = 20)
         :param parallel: run in parallel (default = F)
-        :param penalty: penalty type (default="roughness") options are "roughness",
+        :param penalty: penalty type (default="l2psi") options are "roughness",
                 "l2gam", "l2psi", "geodesic" and "none". The penalty is
-                weighted by lam, so it has no effect when lam is 0
+                weighted by lam, so it has no effect when lam is 0.
+                "roughness" and "geodesic" have no dynamic programming
+                counterpart, so with a nonzero lam they need omethod
+                "RBFGS" or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -714,7 +720,7 @@ class fdawarp:
         smoothdata=False,
         parallel=False,
         lam=0.0,
-        pen="roughness",
+        pen="l2psi",
         cores=-1,
         grid_dim=7,
     ):
@@ -730,9 +736,12 @@ class fdawarp:
         :param smoothdata: Smooth the data using a box filter (default = F)
         :param parallel: run in parallel (default = F)
         :param lam: controls the elasticity (default = 0)
-        :param penalty: penalty type (default="roughness") options are "roughness",
+        :param penalty: penalty type (default="l2psi") options are "roughness",
                 "l2gam", "l2psi", "geodesic" and "none". The penalty is
-                weighted by lam, so it has no effect when lam is 0
+                weighted by lam, so it has no effect when lam is 0.
+                "roughness" and "geodesic" have no dynamic programming
+                counterpart, so with a nonzero lam they need omethod
+                "RBFGS" or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
                          (default = 7)
@@ -812,7 +821,7 @@ class fdawarp:
 
 
 def pairwise_align_functions(
-    f1, f2, time, omethod="DP2", lam=0, pen="roughness", grid_dim=7
+    f1, f2, time, omethod="DP2", lam=0, pen="l2psi", grid_dim=7
 ):
     """
     This function aligns f2 to f1 using the elastic square-root
@@ -827,9 +836,12 @@ def pairwise_align_functions(
     :param time: time vector of length M
     :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) (default = DP)
     :param lam: controls the elasticity (default = 0)
-    :param penalty: penalty type (default="roughness") options are "roughness",
+    :param penalty: penalty type (default="l2psi") options are "roughness",
                 "l2gam", "l2psi", "geodesic" and "none". The penalty is
-                weighted by lam, so it has no effect when lam is 0
+                weighted by lam, so it has no effect when lam is 0.
+                "roughness" and "geodesic" have no dynamic programming
+                counterpart, so with a nonzero lam they need omethod
+                "RBFGS" or "cRBFGS"
     :param grid_dim: size of the grid, for the DP2 method only (default = 7)
 
     :rtype list containing

@@ -69,7 +69,6 @@ double dp_edge_weight(
   double slope, rslope;
   double dq, dqi;
   double pen_term = 0.0;
-  double q1dotq2;
   int i;
 
   Q1idx = aidx; /*dp_lookup( T1, nsamps1, a );*/
@@ -81,25 +80,17 @@ double dp_edge_weight(
   slope = (d-c)/(b-a);
   rslope = sqrt( slope );
 
-  /* The penalty depends only on the slope of the edge, so evaluate it once
-   * here.  DP_PEN_NONE leaves pen_term at 0, i.e. no penalty.  These match
-   * the penalties of CostFn2() in DynamicProgrammingQ.c. */
+  /* gamma is linear along the edge, so gammadot is the constant slope and the
+   * penalty integrand is constant too: evaluate it once here.  DP_PEN_NONE
+   * leaves pen_term at 0, i.e. no penalty.  These match the penalties of
+   * CostFn2() in DP.c. */
   switch ( pen )
   {
-    case DP_PEN_ROUGHNESS:
-      pen_term = (1-rslope)*(1-rslope);
-      break;
     case DP_PEN_L2GAM:
       pen_term = (slope-1)*(slope-1);
       break;
     case DP_PEN_L2PSI:
       pen_term = (rslope-1)*(rslope-1);
-      break;
-    case DP_PEN_GEODESIC:
-      q1dotq2 = rslope;
-      if ( q1dotq2 > 1 ) q1dotq2 = 1;
-      else if ( q1dotq2 < -1 ) q1dotq2 = -1;
-      pen_term = acos(q1dotq2)*acos(q1dotq2);
       break;
   }
 

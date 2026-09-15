@@ -1,6 +1,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "dp_penalty.h"
+
 // #define NNBRS	23
 
 // const int Nbrs[NNBRS][2] = {
@@ -48,15 +50,21 @@ int spline(double *D, const double *y, int n);
 void lookupspline(double *t, int *k, double dist, double len, int n);
 double evalspline(double t, const double D[2], const double y[2]);
 
-// pen selects the warping penalty weighted by lam:
-// 0 = no penalty, 1 = roughness, 2 = l2gam, 3 = l2psi, 4 = geodesic
+// pen selects the warping penalty weighted by lam, one of the DP_PEN_*
+// constants in dp_penalty.h: 0 = no penalty, 1 = l2gam, 2 = l2psi.  The
+// roughness and geodesic penalties of the RBFGS solvers are not additive over
+// the edges of the path and so have no dynamic-programming counterpart; see
+// dp_penalty.h.
 //
-// Returns 0 on success, or -1 if a work buffer could not be allocated, in
-// which case yy is not fully written.
+// Returns 0 on success, -1 if a work buffer could not be allocated (in which
+// case yy is not fully written), or -2 if pen is not a known penalty type.
 int DP(double *q1, double *q2, int n, int N, double lam, int pen, int Disp, double *yy) {
 	int i, j, k, l, M, Eidx, Fidx, Ftmp, Fmin, Num, *Path = 0, *xy = 0, x, y, cnt, status = -1;
 	const int scl = 1;
 	double *q1L = 0, *q2L = 0, *D1 = 0, *D2, *tmp1, *tmp2, *E = 0, Etmp, Emin, t, a, b;
+
+	if (pen < DP_PEN_NONE || pen > DP_PEN_L2PSI)
+		return -2;
 
 	M = scl*(N-1)+1;
 
@@ -215,34 +223,20 @@ int xycompare(const void *x1, const void *x2) {
 }
 
 double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j, int n, int scl, double lam, int pen) {
-	double m = (j-l)/(double)(i-k), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp, tmp_pen = 0, q1dotq2;
+	double m = (j-l)/(double)(i-k), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp, tmp_pen = 0;
 	int x, idx, d, iL=i*scl, kL=k*scl, lL=l*scl;
 
-	// the penalty only depends on the slope m, so evaluate it once per call.
-	// pen == 0 leaves tmp_pen at 0, i.e. no penalty.
+	// gamma is linear along the candidate edge, so gammadot is the constant
+	// slope m and the penalty integrand is constant too: evaluate it once per
+	// call.  DP_PEN_NONE leaves tmp_pen at 0, i.e. no penalty.
 	switch (pen) {
-		// roughness
-		case 1:
-			tmp_pen = (1-sqrtm)*(1-sqrtm);
-			break;
 		// l2gam
-		case 2:
+		case DP_PEN_L2GAM:
 			tmp_pen = (m - 1)*(m - 1);
 			break;
 		// l2psi
-		case 3:
+		case DP_PEN_L2PSI:
 			tmp_pen = (sqrtm - 1)*(sqrtm - 1);
-			break;
-		// geodesic
-		case 4:
-			q1dotq2 = sqrtm;
-			if (q1dotq2 > 1){
-				q1dotq2 = 1;
-			}
-			else if (q1dotq2 < -1){
-				q1dotq2 = -1;
-			}
-			tmp_pen = acos(q1dotq2)*acos(q1dotq2);
 			break;
 	}
 
