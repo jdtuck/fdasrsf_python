@@ -7,10 +7,8 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 import numpy as np
 import fdasrsf as fs
-import fdasrsf.utility_functions as uf
 import fdasrsf.fPCA as fpca
 import fdasrsf.regression as rg
-import fdasrsf.geometry as geo
 from scipy.linalg import inv
 from scipy.stats import t
 from scipy.optimize import fmin_l_bfgs_b
@@ -271,8 +269,6 @@ class elastic_lpcr_regression:
         self.pca.calc_fpca(no)
 
         # OLS using PCA basis
-        lam = 0
-        R = 0
         Phi = np.ones((N1, no + 1))
         Phi[:, 1 : (no + 1)] = self.pca.coef
         # Find alpha and beta using l_bfgs
@@ -452,8 +448,6 @@ class elastic_mlpcr_regression:
         self.pca.calc_fpca(no)
 
         # OLS using PCA basis
-        lam = 0
-        R = 0
         Phi = np.ones((N1, no + 1))
         Phi[:, 1: (no + 1)] = self.pca.coef
         # Find alpha and beta using l_bfgs

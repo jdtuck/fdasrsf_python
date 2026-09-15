@@ -9,7 +9,7 @@ def kernel(x, y, l2):
 
 def gp_posterior(X, y, Xtest, l2=0.1, noise_var=1e-6):
     # compute the mean at our test points.
-    N, n = len(X), len(Xtest)
+    N = len(X)
     K = kernel(X, X, l2)
     L = np.linalg.cholesky(K + noise_var * np.eye(N))
     Lk = np.linalg.solve(L, kernel(X, Xtest, l2))

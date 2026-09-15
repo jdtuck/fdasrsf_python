@@ -509,7 +509,6 @@ class elastic_mlogistic:
         :param time: vector of size M describing the sample points
         """
         a = time.shape[0]
-        M = f.shape[0]
         N = f.shape[1]
 
         if f.shape[0] != a:

@@ -6,9 +6,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 """
 
 import numpy as np
-import fdasrsf.utility_functions as uf
 import fdasrsf.curve_functions as cf
-from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.integrate import trapezoid
 from scipy.linalg import inv, norm
@@ -177,7 +175,6 @@ class oc_elastic_regression:
 
             itr += 1
 
-        tau = np.zeros(N)
         self.alpha = alpha
         self.nu = nu
         self.beta0 = beta0
@@ -869,8 +866,6 @@ def regression_warp(nu, q, y, alpha):
     :return gamma_new: warping function
 
     """
-    T = q.shape[1]
-
     qM, O_M, gam_M = cf.find_rotation_and_seed_q(nu, q, rotation=False)
     y_M = cf.innerprod_q2(qM, nu)
 
@@ -938,7 +933,6 @@ def logistic_warp(
     elif method == 2:
         betanu = cf.q_to_curve(nu)
         beta = cf.q_to_curve(q)
-        T = beta.shape[1]
         if y == 1:
             beta1, O_old, tau = cf.find_rotation_and_seed_coord(betanu, beta)
             q = cf.curve_to_q(beta1)[0]

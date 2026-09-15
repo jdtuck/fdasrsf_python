@@ -165,6 +165,14 @@ def optimum_reparam(
 
     """
 
+    # the solvers below handle exactly these combinations; any other would
+    # fall through every branch and leave gam unset
+    if (q1.ndim, q2.ndim) not in ((1, 1), (1, 2), (2, 2)):
+        raise ValueError(
+            "q1 and q2 must be 1-D and 1-D, 1-D and 2-D, or 2-D and 2-D, "
+            "not %d-D and %d-D" % (q1.ndim, q2.ndim)
+        )
+
     penalties = ("none", "roughness", "l2gam", "l2psi", "geodesic")
     if penalty not in penalties:
         raise ValueError("penalty must be one of " + ", ".join(penalties))

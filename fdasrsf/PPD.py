@@ -4,7 +4,6 @@ from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, fcluster
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.colors import LinearSegmentedColormap
 
 

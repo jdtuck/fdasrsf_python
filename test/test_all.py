@@ -183,6 +183,16 @@ class TestFDASRSF(unittest.TestCase):
         with self.assertRaises(ValueError):
             fs.optimum_reparam(q1, timet, q1, penalty="bogus")
 
+    def test_reparm_bad_shapes(self):
+        M = 101
+        q1 = np.sin(np.linspace(0, 2 * np.pi, M))
+        timet = np.linspace(0, 1, M)
+        Q = np.column_stack((q1, q1))
+        # a 2-D q1 with a 1-D q2 has no solver branch in any method
+        for method in ("DP", "DP2", "RBFGS", "cRBFGS"):
+            with self.assertRaises(ValueError):
+                fs.optimum_reparam(Q, timet, q1, method=method)
+
     def test_f_to_srvf(self):
         M = 101
         f1 = np.sin(np.linspace(0, 2 * np.pi, M))

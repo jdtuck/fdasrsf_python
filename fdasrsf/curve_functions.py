@@ -894,9 +894,7 @@ def inverse_exp(q1, q2, beta2):
     beta2 = group_action_by_gamma_coord(beta2, gamI)
     q2 = curve_to_q(beta2)
 
-    # Compute geodesic distance
     q1dotq2 = innerprod_q2(q1, q2)
-    dist = arccos(q1dotq2)
 
     # Compute shooting vector
     if q1dotq2 > 1:
@@ -1034,7 +1032,6 @@ def curve_zero_crossing(Y, q, bt, y_max, y_min, gmax, gmin):
     """
     # simple iterative method based on intermediate theorem
     n = q.shape[0]
-    T = q.shape[1]
     max_itr = 100
     a = zeros(max_itr)
     a[0] = 1
