@@ -1,6 +1,6 @@
 [project]
 name = "fdasrsf"
-version = "2.7.0"
+version = "2.7.1"
 description = "functional data analysis using the square root slope framework"
 authors = [
 	{name = "J. Derek Tucker", email = "jdtuck@sandia.gov"}
@@ -51,20 +51,24 @@ documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
 skip = "cp38-* *_i686 cp314t-* *_ppc64le *_s390x *-win32"
 build-verbosity = "3"
 
+# FDASRSF_BLAS_LIB names the BLAS that setup.py links 'crbfgs' against; it must
+# match what the corresponding before-build script actually stages.  The wheel
+# builds use scipy-openblas32, whose library is 'libscipy_openblas', NOT
+# 'libblas' -- the default would not link.  Windows stages MKL instead.
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "manylinux_2_28"
 manylinux-aarch64-image = "manylinux_2_28"
 before-build = "bash {project}/bin/cibw_before_build_linux.sh {project}"
-environment = {RUNNER_OS="Linux"}
+environment = {RUNNER_OS="Linux", FDASRSF_BLAS_LIB="scipy_openblas", FDASRSF_BLAS_DIR="/usr/local/lib"}
 
 [tool.cibuildwheel.macos]
 before-build = "bash {project}/bin/cibw_before_build_macos.sh {project}"
-environment = {RUNNER_OS="macOS", MACOSX_DEPLOYMENT_TARGET=12.3}
+environment = {RUNNER_OS="macOS", MACOSX_DEPLOYMENT_TARGET=12.3, FDASRSF_BLAS_LIB="scipy_openblas", FDASRSF_BLAS_DIR="/usr/local/lib"}
 
 [tool.cibuildwheel.windows]
 before-build = "bash {project}/bin/cibw_before_build_win.sh {project}"
 #repair-wheel-command = "bash ./bin/repair_windows.sh {wheel} {dest_dir}"
-environment = {RUNNER_OS="Windows"}
+environment = {RUNNER_OS="Windows", FDASRSF_BLAS_LIB="mkl_rt"}
 
 [[tool.cibuildwheel.overrides]]
 select = "*-win32"
@@ -81,7 +85,7 @@ select = "*-win_amd64"
 #environment = { PKG_CONFIG_PATH = "c:/opt/64/lib/pkgconfig" }
 
 [build-system]
-requires = ["setuptools>=83.0.0", "wheel", "cffi>=1.0.0", "Cython", "findblas", "numpy"]  # PEP 518 - what is required to build
+requires = ["setuptools>=83.0.0", "wheel", "cffi>=1.0.0", "Cython", "numpy"]  # PEP 518 - what is required to build
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
