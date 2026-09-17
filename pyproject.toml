@@ -1,6 +1,6 @@
 [project]
 name = "fdasrsf"
-version = "2.7.1"
+version = "2.7.2"
 description = "functional data analysis using the square root slope framework"
 authors = [
 	{name = "J. Derek Tucker", email = "jdtuck@sandia.gov"}
@@ -64,7 +64,9 @@ build-verbosity = "3"
 # against; they must match what the corresponding before-build script stages.
 # Linux and macOS need them because they stage scipy-openblas32, whose library is
 # 'libscipy_openblas' and not one of the names setup.py would look for.  Windows
-# needs neither: setup.py finds the mkl-devel wheel's mkl_rt itself.
+# needs neither: setup.py finds the mkl-devel wheel's mkl_rt itself, and mkl_rt
+# carries LAPACK too, so no FDASRSF_LAPACK_LIB either (a BLAS that ships LAPACK
+# separately, as conda-forge does, needs one -- see _find_lapack in setup.py).
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "manylinux_2_28"
 manylinux-aarch64-image = "manylinux_2_28"

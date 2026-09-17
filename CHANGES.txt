@@ -1,3 +1,5 @@
+v2.7.2, 2026-09-17 -- link LAPACK alongside BLAS on windows for crbfgs
+v2.7.1, 2026-09-16 -- link BLAS explicitly instead of via findblas
 v2.7.0, 2026-09-14 -- bugfixes and expose DP penalities to all versions and code
 v2.6.10, 2026-06-20 -- bugfixes
 v2.6.9, 2026-03-27 -- updates for 3.14

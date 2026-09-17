@@ -79,6 +79,61 @@ def _find_blas(preferred=None, preferred_dir=None):
     return names[0], preferred_dir
 
 
+def _find_lapack(blas_lib, blas_dir):
+    """The LAPACK import library MSVC needs alongside 'blas_lib', if any.
+
+    Returns a list of extra library names to put on the link line -- empty
+    everywhere except a Windows build whose BLAS ships LAPACK separately.
+
+    rbfgs.cpp calls no LAPACK (it compiles clean under -DARMA_DONT_USE_LAPACK),
+    but MSVC still emits references to it.  Armadillo's auxlib dispatches on
+    element type inside a single function body, so a call it cannot use is a
+    dead branch rather than an uninstantiated template; clang and gcc fold those
+    branches away at -O2 and the references vanish, MSVC keeps them.  The
+    result is a link that needs gesv_, posv_ and gesdd_ (each in s/d/c/z form)
+    resolved even though nothing will ever call them.
+
+    Whether that costs a second '-l' depends on how the BLAS is packaged:
+
+      * MKL and OpenBLAS put LAPACK in the same import library as BLAS, so
+        naming the BLAS is enough -- this is what the Windows install
+        instructions and the cibuildwheel jobs provide, which is why the gap
+        went unnoticed;
+      * conda-forge splits them, one DLL and one import library each
+        (blas.lib -> libblas.dll, lapack.lib -> liblapack.dll).  There, linking
+        only the BLAS fails outright:
+
+            rbfgs.obj : error LNK2001: unresolved external symbol dgesdd_
+            ... fatal error LNK1120: 10 unresolved externals
+
+    So look for a matching LAPACK next to the BLAS and add it when one exists.
+    FDASRSF_LAPACK_LIB names it explicitly for a layout not covered here.
+    """
+    if sys.platform != "win32":
+        return []
+
+    requested = os.environ.get("FDASRSF_LAPACK_LIB")
+    if requested is not None:
+        # An empty value is a deliberate "this BLAS needs no separate LAPACK".
+        return [requested] if requested else []
+
+    # A combined BLAS+LAPACK needs nothing added; naming its LAPACK a second
+    # time would be harmless but misleading in the build log.
+    if re.match(r"mkl|openblas|scipy_openblas", blas_lib, re.I):
+        return []
+
+    dirs = _windows_blas_dirs()
+    if blas_dir:
+        dirs.insert(0, blas_dir)
+
+    for directory in dirs:
+        for name in ("lapack", "liblapack"):
+            if os.path.exists(os.path.join(directory, name + ".lib")):
+                return [name]
+
+    return []
+
+
 def blas_link_args():
     """Link settings for extensions that reference BLAS directly.
 
@@ -107,6 +162,9 @@ def blas_link_args():
     the name because they stage scipy-openblas32, whose library is
     'libscipy_openblas' rather than 'libblas'; see the [tool.cibuildwheel.*]
     environment tables in pyproject.toml.
+
+    A Windows build may also need LAPACK named separately even though this code
+    calls none; see _find_lapack.
     """
     requested = os.environ.get("FDASRSF_BLAS_LIB")
     requested_dir = os.environ.get("FDASRSF_BLAS_DIR")
@@ -116,7 +174,7 @@ def blas_link_args():
     lib, lib_dir = _find_blas(requested, requested_dir)
 
     return {
-        "libraries": [lib],
+        "libraries": [lib] + _find_lapack(lib, lib_dir),
         "library_dirs": [lib_dir] if lib_dir else [],
         "include_dirs": [numpy.get_include()],
     }
@@ -329,7 +387,7 @@ setup(
     ext_modules=extensions,
     cffi_modules=["src/dp_build.py:ffibuilder"],
     name="fdasrsf",
-    version="2.7.1",
+    version="2.7.2",
     packages=["fdasrsf"],
     url="http://research.tetonedge.net",
     license="LICENSE.txt",
