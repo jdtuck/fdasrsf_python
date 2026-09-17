@@ -1,5 +1,6 @@
 import setuptools
 import numpy
+import glob
 import re
 import subprocess
 import sys, os
@@ -13,6 +14,69 @@ from Cython.Build import cythonize
 from setuptools import dist
 from sysconfig import get_config_var
 from packaging.version import parse as LooseVersion
+
+
+def _windows_blas_dirs():
+    """Directories a Windows build may find a BLAS import library in.
+
+    MSVC, unlike the Unix linkers, has no default place to look for a BLAS, and
+    a stock Windows box has none.  Both CI and the install docs get one from the
+    'mkl-devel' wheel, which unpacks into the same <prefix>/Library layout conda
+    uses.  pip's isolated build environment is the same interpreter with a
+    rewritten sys.path rather than a separate venv, so sys.prefix still points
+    at the environment mkl-devel was installed into; sys.base_prefix covers a
+    venv whose base holds it instead.  LIB and C:\\Windows are what
+    bin/cibw_before_build_win.sh stages MKL into for the wheel builds.
+    """
+    dirs = [
+        os.path.join(sys.prefix, "Library", "lib"),
+        os.path.join(sys.base_prefix, "Library", "lib"),
+    ]
+    dirs += [d for d in os.environ.get("LIB", "").split(os.pathsep) if d]
+    dirs.append(os.environ.get("SystemRoot", r"C:\Windows"))
+
+    seen = set()
+    return [d for d in dirs if d not in seen and not seen.add(d)]
+
+
+def _find_blas(preferred=None, preferred_dir=None):
+    """Locate a BLAS to link against, as a (library name, directory) pair.
+
+    'directory' is None when the linker's own search path already finds the
+    library, which is the case everywhere except Windows.  'preferred' and
+    'preferred_dir' are the name and directory asked for via FDASRSF_BLAS_LIB /
+    FDASRSF_BLAS_DIR.
+    """
+    if sys.platform != "win32":
+        # 'blas' is provided by conda-forge (libblas), by Debian/Ubuntu (the
+        # libblas.so alternative that libopenblas-dev installs) and by the macOS
+        # SDK (libblas.tbd, i.e. Accelerate), and the linker finds it unaided.
+        return preferred or "blas", preferred_dir
+
+    # Most-specific first: MKL is what the Windows instructions install, and
+    # matching on a prefix picks up the versioned import libraries (mkl_rt.2.lib)
+    # that newer MKL releases ship instead of a bare mkl_rt.lib.
+    if preferred:
+        names = [preferred]
+    else:
+        names = ["mkl_rt", "openblas", "scipy_openblas", "blas"]
+
+    dirs = _windows_blas_dirs()
+    if preferred_dir:
+        dirs.insert(0, preferred_dir)
+
+    for directory in dirs:
+        for name in names:
+            exact = os.path.join(directory, name + ".lib")
+            if os.path.exists(exact):
+                return name, directory
+            hits = sorted(glob.glob(os.path.join(directory, name + "*.lib")))
+            if hits:
+                return os.path.splitext(os.path.basename(hits[0]))[0], directory
+
+    # Nothing found; name the preferred library anyway so the linker reports a
+    # missing library rather than a wall of unresolved BLAS symbols.
+    return names[0], preferred_dir
 
 
 def blas_link_args():
@@ -37,20 +101,23 @@ def blas_link_args():
     Mach-O rejects undefined symbols by default, which is why macOS builds and
     the local test suite never showed it.
 
-    Naming the library directly removes the guesswork.  The default 'blas' is
-    what conda-forge provides (libblas/libcblas in the recipe's 'host'), and is
-    the usual name for a system Fortran BLAS.  Environments that stage something
-    else must say so via FDASRSF_BLAS_LIB / FDASRSF_BLAS_DIR -- notably the
-    cibuildwheel jobs, which install scipy-openblas32 ('libscipy_openblas', not
-    'libblas') on Linux/macOS and MKL ('mkl_rt') on Windows; see the
-    [tool.cibuildwheel.*] environment tables in pyproject.toml.
+    FDASRSF_BLAS_LIB / FDASRSF_BLAS_DIR override the library name and the
+    directory it is looked for in; both are optional, and the defaults are
+    whatever the platform provides (see _find_blas).  The cibuildwheel jobs set
+    the name because they stage scipy-openblas32, whose library is
+    'libscipy_openblas' rather than 'libblas'; see the [tool.cibuildwheel.*]
+    environment tables in pyproject.toml.
     """
-    libs = [os.environ.get("FDASRSF_BLAS_LIB", "blas")]
-    lib_dirs = [d for d in (os.environ.get("FDASRSF_BLAS_DIR"),) if d]
+    requested = os.environ.get("FDASRSF_BLAS_LIB")
+    requested_dir = os.environ.get("FDASRSF_BLAS_DIR")
+
+    # Search even when a name was requested: on Windows that is how a versioned
+    # import library ('mkl_rt.2.lib' for FDASRSF_BLAS_LIB=mkl_rt) is resolved.
+    lib, lib_dir = _find_blas(requested, requested_dir)
 
     return {
-        "libraries": libs,
-        "library_dirs": lib_dirs,
+        "libraries": [lib],
+        "library_dirs": [lib_dir] if lib_dir else [],
         "include_dirs": [numpy.get_include()],
     }
 

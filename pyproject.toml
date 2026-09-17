@@ -51,10 +51,11 @@ documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
 skip = "cp38-* *_i686 cp314t-* *_ppc64le *_s390x *-win32"
 build-verbosity = "3"
 
-# FDASRSF_BLAS_LIB names the BLAS that setup.py links 'crbfgs' against; it must
-# match what the corresponding before-build script actually stages.  The wheel
-# builds use scipy-openblas32, whose library is 'libscipy_openblas', NOT
-# 'libblas' -- the default would not link.  Windows stages MKL instead.
+# FDASRSF_BLAS_LIB / FDASRSF_BLAS_DIR name the BLAS that setup.py links 'crbfgs'
+# against; they must match what the corresponding before-build script stages.
+# Linux and macOS need them because they stage scipy-openblas32, whose library is
+# 'libscipy_openblas' and not one of the names setup.py would look for.  Windows
+# needs neither: setup.py finds the mkl-devel wheel's mkl_rt itself.
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "manylinux_2_28"
 manylinux-aarch64-image = "manylinux_2_28"
@@ -68,7 +69,7 @@ environment = {RUNNER_OS="macOS", MACOSX_DEPLOYMENT_TARGET=12.3, FDASRSF_BLAS_LI
 [tool.cibuildwheel.windows]
 before-build = "bash {project}/bin/cibw_before_build_win.sh {project}"
 #repair-wheel-command = "bash ./bin/repair_windows.sh {wheel} {dest_dir}"
-environment = {RUNNER_OS="Windows", FDASRSF_BLAS_LIB="mkl_rt"}
+environment = {RUNNER_OS="Windows"}
 
 [[tool.cibuildwheel.overrides]]
 select = "*-win32"

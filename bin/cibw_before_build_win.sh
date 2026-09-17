@@ -9,8 +9,8 @@ python -m pip install delvewheel wheel mkl-devel
 
 # Locate MKL from the installed mkl-devel wheel directly.  This used to go
 # through findblas, but findblas only scans for a file *named* like a BLAS and
-# nothing else here depends on it now that setup.py links BLAS by name (see
-# FDASRSF_BLAS_LIB=mkl_rt in the [tool.cibuildwheel.windows] environment).
+# nothing else here depends on it now: setup.py looks for MKL in this same
+# <prefix>/Library/lib itself (see _windows_blas_dirs).
 prefix=$(python -c "import sys, os; print(os.path.join(sys.prefix, 'Library'))")
 lib_loc="$prefix/lib"
 include_loc="$prefix/include"
