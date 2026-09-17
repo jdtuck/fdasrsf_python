@@ -8,7 +8,6 @@ kiwisolver
 matplotlib
 numpy>=1.25.0
 patsy
-findblas
 pyparsing
 python-dateutil
 scipy>=1.14

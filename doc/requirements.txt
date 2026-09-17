@@ -9,5 +9,4 @@ joblib
 patsy
 tqdm
 nbsphinx
-findblas
 pydata_sphinx_theme
