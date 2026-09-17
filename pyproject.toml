@@ -48,7 +48,16 @@ documentation = "https://fdasrsf-python.readthedocs.io/en/latest/"
 # Note: the below skip command doesn't do much currently, the platforms to
 # build wheels for in CI are controlled in `.github/workflows/wheels.yml` and
 # `tools/ci/cirrus_wheels.yml`.
-skip = "cp38-* *_i686 cp314t-* *_ppc64le *_s390x *-win32"
+# musllinux is skipped because 'crbfgs' cannot resolve BLAS there: the link
+# against the staged libscipy_openblas.so succeeds, yet the module comes out with
+# no BLAS in DT_NEEDED and no BLAS routines of its own, so it would fail at
+# import with 'undefined symbol: dnrm2_' (and auditwheel has no dependency to
+# vendor).  manylinux does record the dependency and is unaffected.  This is not
+# a new break -- it predates the build_ext check that now catches it, so the
+# musllinux wheels published before this were almost certainly already broken.
+# Revisit by checking whether that .so exports the F77 symbols:
+#   nm -D --defined-only /usr/local/lib/libscipy_openblas.so | grep dnrm2_
+skip = "cp38-* *_i686 cp314t-* *_ppc64le *_s390x *-win32 *musllinux*"
 build-verbosity = "3"
 
 # FDASRSF_BLAS_LIB / FDASRSF_BLAS_DIR name the BLAS that setup.py links 'crbfgs'
