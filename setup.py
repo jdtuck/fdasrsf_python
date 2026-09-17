@@ -132,6 +132,11 @@ if sys.version_info[:2] < (3, 10):
     sys.exit(-1)
 
 
+#: BLAS routines rbfgs.cpp reaches through Armadillo's norm()/dot(); if the
+#: module can satisfy these it will import, however that was arranged.
+BLAS_SYMBOLS = ("dnrm2_", "ddot_", "dasum_", "dgemv_")
+
+
 class build_ext_checked(build_ext):
     """build_ext that refuses to emit a BLAS extension linked without BLAS.
 
@@ -140,16 +145,25 @@ class build_ext_checked(build_ext):
     how a 'crbfgs' missing dnrm2_ got all the way into a conda-forge build.
     Check the freshly linked objects here so the failure lands on the build.
 
-    Note that an undefined BLAS symbol is NOT itself the signal -- 'nm -D -u'
-    lists dnrm2_ as undefined even for a correctly linked module, because that
-    is how dynamic linking works.  What distinguishes a broken module is the
-    absence of a DT_NEEDED entry naming a BLAS library to resolve it against.
+    The check asks the question dlopen will ask: is every BLAS symbol either
+    defined in the module or backed by a DT_NEEDED library that can supply it?
+    Both are legitimate outcomes, and which one you get depends on the BLAS that
+    was found rather than on anything this project controls:
+
+      * a shared BLAS leaves the symbols undefined and records a DT_NEEDED --
+        this is the usual conda-forge / distro case;
+      * a static BLAS (a '.a', which is what the scipy-openblas32 wheel ships
+        for Linux) is pulled straight into the module, so the symbols come out
+        *defined* and there is deliberately no DT_NEEDED for it.
+
+    An earlier version of this check demanded a DT_NEEDED unconditionally and so
+    rejected the perfectly good statically linked wheel builds.
 
     Best-effort by design: if the platform is not ELF, or no symbol reader is
     available, this stays quiet rather than blocking the build.
     """
 
-    #: extensions whose objects reference BLAS and so must record a DT_NEEDED
+    #: extensions whose objects reference BLAS and so must be able to resolve it
     needs_blas = ("crbfgs",)
 
     def run(self):
@@ -166,28 +180,51 @@ class build_ext_checked(build_ext):
             path = self.get_ext_fullpath(ext.name)
             if not os.path.exists(path):
                 continue
+            self._check_blas_resolvable(path)
+
+    def _check_blas_resolvable(self, path):
+        # Look in both symbol tables: a static BLAS built with hidden visibility
+        # is defined in .symtab without appearing in .dynsym, and a stripped
+        # module has only .dynsym.  Missing either one is not an error here.
+        defined = ""
+        for argv in (["nm", "-D", "--defined-only", path],
+                     ["nm", "--defined-only", path]):
             try:
-                out = subprocess.run(
-                    ["readelf", "-d", path],
-                    capture_output=True,
-                    text=True,
-                    check=True,
+                defined += subprocess.run(
+                    argv, capture_output=True, text=True, check=True
                 ).stdout
             except (OSError, subprocess.CalledProcessError):
-                continue  # no readelf; skip rather than fail the build
+                continue
 
-            needed = re.findall(r"NEEDED\).*?\[([^\]]+)\]", out)
-            if not any(
-                re.search(r"blas|lapack|mkl|accelerate", n, re.I) for n in needed
-            ):
-                raise SystemExit(
-                    "%s references BLAS but was linked without it "
-                    "(no BLAS in DT_NEEDED: %s).\n"
-                    "It would fail at import with 'undefined symbol: dnrm2_'. "
-                    "Make sure a Fortran BLAS is on the linker search path, or "
-                    "point at one with FDASRSF_BLAS_LIB / FDASRSF_BLAS_DIR."
-                    % (os.path.basename(path), ", ".join(needed) or "none")
-                )
+        if not defined:
+            return  # no usable nm; skip rather than fail the build
+
+        # Statically linked BLAS: the routines are part of the module already.
+        if any(re.search(r"\b%s\b" % s, defined) for s in BLAS_SYMBOLS):
+            return
+
+        try:
+            dyn = subprocess.run(
+                ["readelf", "-d", path],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout
+        except (OSError, subprocess.CalledProcessError):
+            return  # no readelf; skip rather than fail the build
+
+        # Otherwise they must come from a shared library at load time.
+        needed = re.findall(r"NEEDED\).*?\[([^\]]+)\]", dyn)
+        if not any(re.search(r"blas|lapack|mkl|accelerate", n, re.I) for n in needed):
+            raise SystemExit(
+                "%s references BLAS but cannot resolve it: the BLAS routines are "
+                "neither linked into the module nor provided by a library it "
+                "depends on (DT_NEEDED: %s).\n"
+                "It would fail at import with 'undefined symbol: dnrm2_'. "
+                "Make sure a BLAS is on the linker search path, or point at one "
+                "with FDASRSF_BLAS_LIB / FDASRSF_BLAS_DIR."
+                % (os.path.basename(path), ", ".join(needed) or "none")
+            )
 
 
 class build_docs(Command):
