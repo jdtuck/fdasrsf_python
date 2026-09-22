@@ -102,7 +102,14 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--import-mode=importlib"
+# The fast tier runs by default; slow/iterative/stochastic tests are opt-in.
+# Run the full suite with:  pytest -m ''   (or -m slow for only the slow ones)
+addopts = "--import-mode=importlib -m 'not slow'"
 testpaths = [
     "tests",
 ]
+markers = [
+    "slow: heavy, iterative or stochastic tests (deselected by default)",
+    "needs_ext: requires a compiled C/Cython extension",
+]
+
