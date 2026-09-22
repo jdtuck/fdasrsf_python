@@ -957,7 +957,7 @@ def phi(t):
     """
     # logistic function, returns 1 / (1 + exp(-t))
     idx = t > 0
-    out = np.empty(t.size, dtype=np.float)
+    out = np.empty(t.size, dtype=float)
     out[idx] = 1.0 / (1 + np.exp(-t[idx]))
     exp_t = np.exp(t[~idx])
     out[~idx] = exp_t / (1.0 + exp_t)
