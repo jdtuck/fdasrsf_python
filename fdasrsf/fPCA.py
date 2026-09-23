@@ -253,7 +253,7 @@ class fdahpca:
     This class provides horizontal fPCA using the
     SRVF framework
 
-    Usage:  obj = fdahpca(warp_data)
+    Usage:  obj = fdahpca(warp_data, log_der=False)
 
     :param warp_data: fdawarp class with alignment data
     :param gam_pca: warping functions principal directions
@@ -264,20 +264,25 @@ class fdahpca:
     :param vec: shooting vectors
     :param mu: Karcher Mean
     :param stds: principal directions
+    :param log_der: log-derivative transform used
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
     """
 
-    def __init__(self, fdawarp):
+    def __init__(self, fdawarp, log_der=False):
         """
         Construct an instance of the fdahpca class
         :param fdawarp: fdawarp class
+        :param log_der: use the log-derivative transform of the warping
+                        functions instead of the SRSF (square-root slope)
+                        representation (default = False)
         """
         if fdawarp.fn.size == 0:
             raise Exception("Please align fdawarp class using srsf_align!")
 
         self.warp_data = fdawarp
+        self.log_der = log_der
 
     def calc_fpca(self, no=3, var_exp=None, stds=np.arange(-1, 2)):
         """
@@ -293,7 +298,8 @@ class fdahpca:
 
         :rtype: fdahpca object of numpy ndarray
         :return gam_pca: srsf principal directions
-        :return psi_pca: functional principal directions
+        :return psi_pca: functional principal directions (log-derivative
+                         directions if log_der is True)
         :return latent: latent values
         :return coef: coefficients
         :return U: eigenvectors
@@ -301,7 +307,12 @@ class fdahpca:
         """
         # Calculate Shooting Vectors
         gam = self.warp_data.gam
-        mu, gam_mu, psi, vec = uf.SqrtMean(gam)
+        if self.log_der:
+            vec = geo.gam_to_h(gam)
+            mu = vec.mean(axis=1)
+            gam_mu = geo.h_to_gam(mu)
+        else:
+            mu, gam_mu, psi, vec = uf.SqrtMean(gam)
         TT = self.warp_data.time.shape[0]
 
         if 0 in stds:
@@ -328,17 +339,21 @@ class fdahpca:
             cnt = 0
             for k in stds:
                 v = k * np.sqrt(s[j]) * U[:, j]
-                vn = norm(v) / np.sqrt(TT)
-                if vn < 0.0001:
-                    psi_pca[cnt, :, j] = mu
+                if self.log_der:
+                    psi_pca[cnt, :, j] = mu + v
+                    tmp = geo.h_to_gam(psi_pca[cnt, :, j])
                 else:
-                    psi_pca[cnt, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
+                    vn = norm(v) / np.sqrt(TT)
+                    if vn < 0.0001:
+                        psi_pca[cnt, :, j] = mu
+                    else:
+                        psi_pca[cnt, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
 
-                tmp = cumulative_trapezoid(
-                    psi_pca[cnt, :, j] * psi_pca[cnt, :, j],
-                    np.linspace(0, 1, TT),
-                    initial=0,
-                )
+                    tmp = cumulative_trapezoid(
+                        psi_pca[cnt, :, j] * psi_pca[cnt, :, j],
+                        np.linspace(0, 1, TT),
+                        initial=0,
+                    )
                 gam_pca[cnt, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
                 cnt += 1
 
@@ -386,15 +401,18 @@ class fdahpca:
         U = self.U
         no = U.shape[1]
 
-        mu_psi = self.mu_psi
-        vec = np.zeros((M, n))
-        psi = np.zeros((M, n))
-        time = np.linspace(0, 1, M)
-        binsize = np.mean(np.diff(time))
-        for i in range(0, n):
-            psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-            out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
-            vec[:, i] = out
+        if self.log_der:
+            vec = geo.gam_to_h(gam)
+        else:
+            mu_psi = self.mu_psi
+            vec = np.zeros((M, n))
+            psi = np.zeros((M, n))
+            time = np.linspace(0, 1, M)
+            binsize = np.mean(np.diff(time))
+            for i in range(0, n):
+                psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
+                out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
+                vec[:, i] = out
 
         a = np.zeros((n, no))
         for i in range(0, n):
@@ -460,202 +478,6 @@ class fdahpca:
 
         return
     
-
-class fdahpcah:
-    """
-    This class provides horizontal fPCA using the
-    SRVF framework using the log derivative transform
-
-    Usage:  obj = fdahpcah(warp_data)
-
-    :param warp_data: fdawarp class with alignment data
-    :param gam_pca: warping functions principal directions
-    :param h_pca: srvf principal directions
-    :param latent: latent values
-    :param U: eigenvectors
-    :param coef: coefficients
-    :param vec: shooting vectors
-    :param mu: Karcher Mean
-    :param tau: principal directions
-
-    Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
-    Date   :  25-Apr-2025
-    """
-
-    def __init__(self, fdawarp):
-        """
-        Construct an instance of the fdahpca class
-        :param fdawarp: fdawarp class
-        """
-        if fdawarp.fn.size == 0:
-            raise Exception("Please align fdawarp class using srsf_align!")
-
-        self.warp_data = fdawarp
-
-    def calc_fpca(self, no=3, var_exp=None, stds=np.arange(-1, 2)):
-        """
-        This function calculates horizontal functional principal component
-        analysis on aligned data
-
-        :param no: number of components to extract (default = 3)
-        :param var_exp: compute no based on value percent variance explained
-                        (example: 0.95)
-        :param stds: number of standard deviations along geodesic to compute
-                     (default = -1,0,1)
-        :type no: int
-
-        :rtype: fdahpca object of numpy ndarray
-        :return gam_pca: srsf principal directions
-        :return h_pca: functional principal directions
-        :return latent: latent values
-        :return coef: coefficients
-        :return U: eigenvectors
-
-        """
-        # Calculate Shooting Vectors
-        gam = self.warp_data.gam
-        h = geo.gam_to_h(gam)
-        mu = h.mean(axis=1)
-        TT = self.warp_data.time.shape[0]
-
-        if 0 in stds:
-            stds = stds
-        else:
-            raise Exception("stds needs to contain 0")
-
-        if var_exp is not None:
-            if var_exp > 1:
-                raise Exception("var_exp is greater than 1")
-            no = TT
-
-        # TFPCA
-        K = np.cov(h)
-
-        U, s, V = svd(K)
-        self.mu_h = mu
-
-        gam_pca = np.ndarray(shape=(stds.shape[0], mu.shape[0], no), dtype=float)
-        h_pca = np.ndarray(shape=(stds.shape[0], mu.shape[0], no), dtype=float)
-        for j in range(0, no):
-            cnt = 0
-            for k in stds:
-                h_pca[cnt, :, j] = mu + k * np.sqrt(s[j]) * U[:, j]
-
-                tmp = geo.h_to_gam(h_pca[cnt, :, j])
-                gam_pca[cnt, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
-                cnt += 1
-
-        N2 = gam.shape[1]
-        c = np.zeros((N2, no))
-        for k in range(0, no):
-            for i in range(0, N2):
-                c[i, k] = np.dot(h[:, i] - mu, U[:, k])
-
-        if var_exp is not None:
-            cumm_coef = np.cumsum(s) / sum(s)
-            no = int(np.argwhere(cumm_coef <= var_exp)[-1])
-
-        self.gam_pca = gam_pca
-        self.h_pca = h_pca
-        self.U = U[:, 0:no]
-        self.coef = c[:, 0:no]
-        self.latent = s[0:no]
-        self.gam_mu = geo.h_to_gam(mu)
-        self.h_mu = mu
-        self.h = h
-        self.no = no
-        self.stds = stds
-
-        return
-
-    def project(self, f):
-        """
-        project new data onto fPCA basis
-
-        Usage: obj.project(f)
-
-        :param f: numpy array (MxN) of N functions on M time
-
-        """
-
-        q1 = fs.f_to_srsf(f, self.warp_data.time)
-        M = self.warp_data.time.shape[0]
-        n = q1.shape[1]
-        mq = self.warp_data.mqn
-        gam = np.zeros((M, n))
-        for ii in range(0, n):
-            gam[:, ii] = fs.optimum_reparam(mq, self.warp_data.time, q1[:, ii])
-
-        U = self.U
-        no = U.shape[1]
-
-        mu = self.h_mu
-        h = geo.gam_to_h(gam)
-
-        a = np.zeros((n, no))
-        for i in range(0, n):
-            for j in range(0, no):
-                a[i, j] = np.dot(h[:, i] - mu, U[:, j])
-
-        self.new_coef = a
-
-        return
-
-    def plot(self):
-        """
-        plot plot elastic horizontal fPCA results
-
-        Usage: obj.plot()
-        """
-
-        no = self.no
-        Nstd = self.stds.shape[0]
-        TT = self.warp_data.time.shape[0]
-        num_plot = int(np.ceil(no / 3))
-        colors = [
-            "#66C2A5",
-            "#FC8D62",
-            "#8DA0CB",
-            "#E78AC3",
-            "#A6D854",
-            "#FFD92F",
-            "#E5C494",
-            "#B3B3B3",
-        ]
-
-        k = 0
-        for ii in range(0, num_plot):
-            if k > (no - 1):
-                break
-
-            fig, ax = plt.subplots(1, 3)
-
-            for k1 in range(0, 3):
-                k = k1 + (ii) * 3
-                axt = ax[k1]
-                if k > (no - 1):
-                    break
-
-                for ll in range(0, Nstd):
-                    axt.plot(np.linspace(0, 1, TT), np.squeeze(self.gam_pca[ll, :, k]), 
-                             color=colors[ll])
-                l0 = np.where(self.stds == 0)[0]
-                axt.plot(np.linspace(0, 1, TT), np.squeeze(self.gam_pca[l0, :, k]), 'k')
-                plt.style.use("seaborn-v0_8-colorblind")
-                axt.set_title("PD %d" % (k + 1))
-                axt.set_aspect("equal")
-
-            fig.set_tight_layout(True)
-
-        cumm_coef = 100 * np.cumsum(self.latent[0:no]) / sum(self.latent[0:no])
-        idx = np.arange(0, no) + 1
-        plot.f_plot(idx, cumm_coef, "Coefficient Cumulative Percentage")
-        plt.ylabel("Percentage")
-        plt.xlabel("Index")
-        plt.show()
-
-        return
-
 
 class fdajpca:
     """
