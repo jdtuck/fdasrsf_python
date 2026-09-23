@@ -253,7 +253,7 @@ class fdahpca:
     This class provides horizontal fPCA using the
     SRVF framework
 
-    Usage:  obj = fdahpca(warp_data)
+    Usage:  obj = fdahpca(warp_data, log_der=False)
 
     :param warp_data: fdawarp class with alignment data
     :param gam_pca: warping functions principal directions
@@ -264,20 +264,25 @@ class fdahpca:
     :param vec: shooting vectors
     :param mu: Karcher Mean
     :param stds: principal directions
+    :param log_der: log-derivative transform used
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
     """
 
-    def __init__(self, fdawarp):
+    def __init__(self, fdawarp, log_der=False):
         """
         Construct an instance of the fdahpca class
         :param fdawarp: fdawarp class
+        :param log_der: use the log-derivative transform of the warping
+                        functions instead of the SRSF (square-root slope)
+                        representation (default = False)
         """
         if fdawarp.fn.size == 0:
             raise Exception("Please align fdawarp class using srsf_align!")
 
         self.warp_data = fdawarp
+        self.log_der = log_der
 
     def calc_fpca(self, no=3, var_exp=None, stds=np.arange(-1, 2)):
         """
@@ -293,7 +298,8 @@ class fdahpca:
 
         :rtype: fdahpca object of numpy ndarray
         :return gam_pca: srsf principal directions
-        :return psi_pca: functional principal directions
+        :return psi_pca: functional principal directions (log-derivative
+                         directions if log_der is True)
         :return latent: latent values
         :return coef: coefficients
         :return U: eigenvectors
@@ -301,7 +307,12 @@ class fdahpca:
         """
         # Calculate Shooting Vectors
         gam = self.warp_data.gam
-        mu, gam_mu, psi, vec = uf.SqrtMean(gam)
+        if self.log_der:
+            vec = geo.gam_to_h(gam)
+            mu = vec.mean(axis=1)
+            gam_mu = geo.h_to_gam(mu)
+        else:
+            mu, gam_mu, psi, vec = uf.SqrtMean(gam)
         TT = self.warp_data.time.shape[0]
 
         if 0 in stds:
@@ -328,17 +339,21 @@ class fdahpca:
             cnt = 0
             for k in stds:
                 v = k * np.sqrt(s[j]) * U[:, j]
-                vn = norm(v) / np.sqrt(TT)
-                if vn < 0.0001:
-                    psi_pca[cnt, :, j] = mu
+                if self.log_der:
+                    psi_pca[cnt, :, j] = mu + v
+                    tmp = geo.h_to_gam(psi_pca[cnt, :, j])
                 else:
-                    psi_pca[cnt, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
+                    vn = norm(v) / np.sqrt(TT)
+                    if vn < 0.0001:
+                        psi_pca[cnt, :, j] = mu
+                    else:
+                        psi_pca[cnt, :, j] = np.cos(vn) * mu + np.sin(vn) * v / vn
 
-                tmp = cumulative_trapezoid(
-                    psi_pca[cnt, :, j] * psi_pca[cnt, :, j],
-                    np.linspace(0, 1, TT),
-                    initial=0,
-                )
+                    tmp = cumulative_trapezoid(
+                        psi_pca[cnt, :, j] * psi_pca[cnt, :, j],
+                        np.linspace(0, 1, TT),
+                        initial=0,
+                    )
                 gam_pca[cnt, :, j] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
                 cnt += 1
 
@@ -386,15 +401,18 @@ class fdahpca:
         U = self.U
         no = U.shape[1]
 
-        mu_psi = self.mu_psi
-        vec = np.zeros((M, n))
-        psi = np.zeros((M, n))
-        time = np.linspace(0, 1, M)
-        binsize = np.mean(np.diff(time))
-        for i in range(0, n):
-            psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
-            out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
-            vec[:, i] = out
+        if self.log_der:
+            vec = geo.gam_to_h(gam)
+        else:
+            mu_psi = self.mu_psi
+            vec = np.zeros((M, n))
+            psi = np.zeros((M, n))
+            time = np.linspace(0, 1, M)
+            binsize = np.mean(np.diff(time))
+            for i in range(0, n):
+                psi[:, i] = np.sqrt(np.gradient(gam[:, i], binsize))
+                out, theta = fs.inv_exp_map(mu_psi, psi[:, i])
+                vec[:, i] = out
 
         a = np.zeros((n, no))
         for i in range(0, n):
