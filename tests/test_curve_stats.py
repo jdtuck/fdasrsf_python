@@ -52,3 +52,16 @@ def test_karcher_calc_projects_onto_tangent_at_mean(mpeg7_beta):
     bo = cf.gram_schmidt(basis)
     for b in bo:
         assert cf.innerprod_q2(v, b) == pytest.approx(0.0, abs=1e-4)
+
+
+def test_multiple_align_curves_tangent_at_mean(mpeg7_beta):
+    pytest.importorskip("optimum_reparam_N")
+    from fdasrsf import curve_functions as cf
+
+    beta = mpeg7_beta[:, :, :3].copy()
+    obj = fs.fdacurve(beta, mode="C", N=beta.shape[1])
+    obj.multiple_align_curves(beta[:, :, 0].copy())
+    # shooting vectors live in the tangent space at q_mean
+    for ii in range(beta.shape[2]):
+        v = obj.v[:, :, ii]
+        assert cf.innerprod_q2(v, obj.q_mean) == pytest.approx(0.0, abs=1e-3)
