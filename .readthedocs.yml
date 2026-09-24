@@ -10,6 +10,9 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.11"
+  # crbfgs links against BLAS (-lblas); the build image ships none.
+  apt_packages:
+    - libopenblas-dev
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
@@ -26,5 +29,5 @@ formats: all
 python:
   install:
     - requirements: doc/requirements.txt
-    - method: setuptools
+    - method: pip
       path: .
