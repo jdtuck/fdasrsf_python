@@ -559,7 +559,7 @@ class fdawarp:
 
         # compute mean and covariance in q-domain
         mq_new = qn.mean(axis=1)
-        mididx = np.round(time.shape[0] / 2)
+        mididx = int(np.round(time.shape[0] / 2))
         m_new = np.sign(fn[mididx, :]) * np.sqrt(np.abs(fn[mididx, :]))
         mqn = np.append(mq_new, m_new.mean())
         qn2 = np.vstack((qn, m_new))
@@ -2004,8 +2004,10 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     mean_f0 = f0.mean(axis=1)
     std_f0 = f0.std(axis=1)
     mqn = mq[:, itrf]
-    gamf = gam[:, :, 0]
-    for k in range(1, itr):
+    # fi[:, :, itrf] has warps gam[:, :, 0..itrf-1] applied, so compose all of
+    # them (copy so the per-iteration warps in gam are not overwritten)
+    gamf = gam[:, :, 0].copy()
+    for k in range(1, itrf):
         gam_k = gam[:, :, k]
         for l in range(0, N):
             time0 = (time[-1] - time[0]) * gam_k[:, l] + time[0]

@@ -893,7 +893,9 @@ def randomGamma(gam, num):
 
     U, s, V = svd(K)
     n = 5
-    TT = vec.shape[0] + 1
+    # rgam lives on the same T-point grid as gam
+    TT = vec.shape[0]
+    time = linspace(0, 1, TT)
     vm = vec.mean(axis=1)
 
     rgam = zeros((TT, num))
@@ -905,8 +907,7 @@ def randomGamma(gam, num):
 
         vn = norm(v) / sqrt(TT)
         psi = cos(vn) * mu + sin(vn) * v / vn
-        tmp = zeros(TT)
-        tmp[1:TT] = cumsum(psi * psi) / TT
+        tmp = cumulative_trapezoid(psi * psi, time, initial=0)
         rgam[:, k] = (tmp - tmp[0]) / (tmp[-1] - tmp[0])
 
     return rgam
