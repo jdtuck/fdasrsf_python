@@ -469,7 +469,7 @@ def find_rotation_and_seed_unique(
         if norm(q1 - q2new, "fro") > 0.0001:
             gam = optimum_reparam_curve(q2new, q1, lam, method)
             gamI = uf.invertGamma(gam)
-            p2n = q_to_curve(q2n)
+            p2n = q_to_curve(q2new)
             p2n = group_action_by_gamma_coord(p2n, gamI)
             q2new = curve_to_q(p2n)[0]
             if closed == 1:

@@ -89,3 +89,27 @@ def test_elastic_distance_curve_between_shapes(circle, spiral):
     d, dx = fs.elastic_distance_curve(circle.copy(), spiral.copy())
     assert np.isfinite(d) and d > 0
     assert np.isfinite(dx) and dx >= 0
+
+
+def test_find_rotation_and_seed_unique_keeps_rotation(spiral):
+    pytest.importorskip("optimum_reparam_N")
+    from fdasrsf.curve_functions import (
+        find_rotation_and_seed_unique,
+        group_action_by_gamma_coord,
+    )
+
+    theta = np.pi / 3
+    R_true = np.array(
+        [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+    )
+    t = np.linspace(0, 1, spiral.shape[1])
+    beta2 = group_action_by_gamma_coord(R_true @ spiral, t**2)
+    q1 = fs.curve_to_q(spiral)[0]
+    q2 = fs.curve_to_q(beta2)[0]
+
+    q2n, R, gamI = find_rotation_and_seed_unique(q1, q2, closed=0)
+    # the returned SRVF must be q2 rotated by R and then warped by gamI
+    expected = fs.curve_to_q(
+        group_action_by_gamma_coord(fs.q_to_curve(R @ q2), gamI)
+    )[0]
+    np.testing.assert_allclose(q2n, expected, atol=1e-8)
