@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>time_warping &#8212; fdasrsf 2.6.2 documentation</title>
+    <title>time_warping &#8212; fdasrsf 2.7.2 documentation</title>
   
   
   
@@ -26,48 +26,55 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=3db9c557"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?v=4c6c8f0e"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/time_warping';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://fdasrsf-python.readthedocs.io/en/latest/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.6.2';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '2.7.2';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.6" />
+  <meta name="docsearch:version" content="2.7" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
-
+  <body data-default-mode="light">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -93,7 +100,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -117,8 +124,8 @@
     
     
     
-    <img src="../_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.6.2 documentation - Home"/>
-    <img src="../_static/icon.png" class="logo__image only-dark pst-js-only" alt="fdasrsf 2.6.2 documentation - Home"/>
+    <img src="../_static/icon.png" class="logo__image only-light" alt="fdasrsf 2.7.2 documentation - Home"/>
+    <img src="../_static/icon.png" class="logo__image only-dark pst-js-only" alt="fdasrsf 2.7.2 documentation - Home"/>
   
   
 </a></div>
@@ -187,11 +194,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -204,8 +218,7 @@
           
           
           
-          <a href="https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -300,11 +313,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -317,8 +337,7 @@
           
           
           
-          <a href="https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/jdtuck/fdasrsf_python" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -410,31 +429,33 @@
 <span class="sd">moduleauthor:: J. Derek Tucker &lt;jdtuck@sandia.gov&gt;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">fdasrsf.utility_functions</span> <span class="k">as</span> <span class="nn">uf</span>
-<span class="kn">import</span> <span class="nn">fdasrsf.bayesian_functions</span> <span class="k">as</span> <span class="nn">bf</span>
-<span class="kn">import</span> <span class="nn">fdasrsf.fPCA</span> <span class="k">as</span> <span class="nn">fpca</span>
-<span class="kn">import</span> <span class="nn">fdasrsf.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
-<span class="kn">from</span> <span class="nn">fdasrsf.gp</span> <span class="kn">import</span> <span class="n">gp_posterior</span>
-<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapezoid</span><span class="p">,</span> <span class="n">cumulative_trapezoid</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">svd</span><span class="p">,</span> <span class="n">cholesky</span>
-<span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="kn">import</span> <span class="n">linkage</span><span class="p">,</span> <span class="n">fcluster</span>
-<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">squareform</span><span class="p">,</span> <span class="n">pdist</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">inv</span>
-<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">rand</span><span class="p">,</span> <span class="n">normal</span>
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">fdasrsf.fPLS</span> <span class="kn">import</span> <span class="n">pls_svd</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">import</span> <span class="nn">fdasrsf.plot_style</span> <span class="k">as</span> <span class="nn">plot</span>
-<span class="kn">import</span> <span class="nn">fpls_warp</span> <span class="k">as</span> <span class="nn">fpls</span>
-<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fdasrsf.utility_functions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">uf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fdasrsf.bayesian_functions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fdasrsf.fPCA</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fpca</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fdasrsf.geometry</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">geo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fdasrsf.gp</span><span class="w"> </span><span class="kn">import</span> <span class="n">gp_posterior</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fdasrsf.PPD</span><span class="w"> </span><span class="kn">import</span> <span class="n">getPPDinfo</span><span class="p">,</span> <span class="n">getPersistentPeaks</span><span class="p">,</span> <span class="n">drawPPDBarChart</span><span class="p">,</span> <span class="n">drawPPDSurface</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">trapezoid</span><span class="p">,</span> <span class="n">cumulative_trapezoid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">interp1d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">svd</span><span class="p">,</span> <span class="n">cholesky</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.cluster.hierarchy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linkage</span><span class="p">,</span> <span class="n">fcluster</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">squareform</span><span class="p">,</span> <span class="n">pdist</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_peaks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">inv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.random</span><span class="w"> </span><span class="kn">import</span> <span class="n">rand</span><span class="p">,</span> <span class="n">normal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fdasrsf.fPLS</span><span class="w"> </span><span class="kn">import</span> <span class="n">pls_svd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fdasrsf.plot_style</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plot</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fpls_warp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fpls</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
 
 
 <div class="viewcode-block" id="fdawarp">
 <a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp">[docs]</a>
-<span class="k">class</span> <span class="nc">fdawarp</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">fdawarp</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class provides alignment methods for functional data using the SRVF framework</span>
 
@@ -466,7 +487,7 @@
 <span class="sd">    Date   :  15-Mar-2018</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an instance of the fdawarp class</span>
 <span class="sd">        :param f: numpy ndarray of shape (M,N) of N functions with M samples</span>
@@ -483,7 +504,7 @@
 
 <div class="viewcode-block" id="fdawarp.srsf_align">
 <a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.srsf_align">[docs]</a>
-    <span class="k">def</span> <span class="nf">srsf_align</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">srsf_align</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
         <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span>
@@ -492,7 +513,7 @@
         <span class="n">MaxItr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">pen</span><span class="o">=</span><span class="s2">&quot;roughness&quot;</span><span class="p">,</span>
+        <span class="n">pen</span><span class="o">=</span><span class="s2">&quot;l2psi&quot;</span><span class="p">,</span>
         <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -511,10 +532,12 @@
 <span class="sd">        :param MaxItr: Maximum number of iterations (default = 20)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param lam: controls the elasticity (default = 0)</span>
-<span class="sd">        :param penalty: penalty type (default=&quot;roughness&quot;) options are &quot;roughness&quot;,</span>
-<span class="sd">                &quot;l2gam&quot;, &quot;l2psi&quot;, &quot;geodesic&quot;. Only roughness implemented</span>
-<span class="sd">                in all methods. To use others method needs to be &quot;RBFGS&quot;</span>
-<span class="sd">                or &quot;cRBFGS&quot;</span>
+<span class="sd">        :param penalty: penalty type (default=&quot;l2psi&quot;) options are &quot;roughness&quot;,</span>
+<span class="sd">                &quot;l2gam&quot;, &quot;l2psi&quot;, &quot;geodesic&quot; and &quot;none&quot;. The penalty is</span>
+<span class="sd">                weighted by lam, so it has no effect when lam is 0.</span>
+<span class="sd">                &quot;roughness&quot; and &quot;geodesic&quot; have no dynamic programming</span>
+<span class="sd">                counterpart, so with a nonzero lam they need omethod</span>
+<span class="sd">                &quot;RBFGS&quot; or &quot;cRBFGS&quot;</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :param grid_dim: size of the grid, for the DP2 method only</span>
 <span class="sd">                         (default = 7)</span>
@@ -746,9 +769,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">qn</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q0</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamI</span> <span class="o">=</span> <span class="n">gamI</span>
-        <span class="n">mean_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">std_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">mean_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">std_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gam</span> <span class="o">=</span> <span class="n">gam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mqn</span> <span class="o">=</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
@@ -769,10 +790,146 @@
 
         <span class="k">return</span></div>
 
+    
+<div class="viewcode-block" id="fdawarp.ppd">
+<a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.ppd">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ppd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+            <span class="n">max_lam</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> 
+            <span class="n">num_lam</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+            <span class="n">pt</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> 
+            <span class="n">srvf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+            <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span>
+            <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">MaxItr</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">pen</span><span class="o">=</span><span class="s2">&quot;l2psi&quot;</span><span class="p">,</span>
+            <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This computes the peak persistance diagram over a range of</span>
+<span class="sd">        lambda. This can help determine the proper elasticity (penalty).</span>
+<span class="sd">        This can be slow and recommended to run in parallel.</span>
+
+<span class="sd">        </span>
+<span class="sd">        :param max_lam: max regularization parameter (default 2)</span>
+<span class="sd">        :param num_lam: number of steps (default 10)</span>
+<span class="sd">        :param pt: the percentile of negative curvature of raw data (default .15)</span>
+<span class="sd">        :param srvf: perform in SRVF space (default=True)</span>
+<span class="sd">        :param mu: vector of function to align to (default None)</span>
+<span class="sd">        :param method: (string) warp calculate Karcher Mean or Median</span>
+<span class="sd">                       (options = &quot;mean&quot; or &quot;median&quot;) (default=&quot;mean&quot;)</span>
+<span class="sd">        :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS)</span>
+<span class="sd">                        (default = DP2)</span>
+<span class="sd">        :param center: center warping functions (default = T)</span>
+<span class="sd">        :param smoothdata: Smooth the data using a box filter (default = F)</span>
+<span class="sd">        :param MaxItr: Maximum number of iterations (default = 20)</span>
+<span class="sd">        :param parallel: run in parallel (default = F)</span>
+<span class="sd">        :param penalty: penalty type (default=&quot;l2psi&quot;) options are &quot;roughness&quot;,</span>
+<span class="sd">                &quot;l2gam&quot;, &quot;l2psi&quot;, &quot;geodesic&quot; and &quot;none&quot;. The penalty is</span>
+<span class="sd">                weighted by lam, so it has no effect when lam is 0.</span>
+<span class="sd">                &quot;roughness&quot; and &quot;geodesic&quot; have no dynamic programming</span>
+<span class="sd">                counterpart, so with a nonzero lam they need omethod</span>
+<span class="sd">                &quot;RBFGS&quot; or &quot;cRBFGS&quot;</span>
+<span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
+<span class="sd">        :param grid_dim: size of the grid, for the DP2 method only</span>
+<span class="sd">                         (default = 7)</span>
+<span class="sd">        :param verbose: print status output (default = T)</span>
+<span class="sd">        :param thresh: cost function threshold (default = .01)</span>
+<span class="sd">        :type lam: double</span>
+<span class="sd">        :type smoothdata: bool</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Obtain a lambda candidate set</span>
+        <span class="n">lam_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_lam</span><span class="p">,</span> <span class="n">num_lam</span><span class="p">)</span>
+        <span class="n">fns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lam</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">mu</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">srsf_align</span><span class="p">(</span><span class="n">method</span><span class="p">,</span>
+                                <span class="n">omethod</span><span class="p">,</span>
+                                <span class="n">center</span><span class="p">,</span>
+                                <span class="n">smoothdata</span><span class="p">,</span>
+                                <span class="n">MaxItr</span><span class="p">,</span>
+                                <span class="n">parallel</span><span class="p">,</span>
+                                <span class="n">lam_vec</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                <span class="n">pen</span><span class="p">,</span>
+                                <span class="n">cores</span><span class="p">,</span>
+                                <span class="n">grid_dim</span><span class="p">,</span>
+                                <span class="n">verbose</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">multiple_align_functions</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span>
+                                              <span class="n">omethod</span><span class="p">,</span>
+                                              <span class="n">smoothdata</span><span class="p">,</span>
+                                              <span class="n">parallel</span><span class="p">,</span>
+                                              <span class="n">lam_vec</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                              <span class="n">pen</span><span class="p">,</span>
+                                              <span class="n">cores</span><span class="p">,</span>
+                                              <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">srvf</span><span class="p">:</span>
+                <span class="n">fns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qn</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">srvf</span><span class="p">:</span>
+            <span class="n">f0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Peak Persistent Diagrams</span>
+        <span class="c1"># Get the threshold for significant peak</span>
+        <span class="n">diff_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+        <span class="n">taus</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">idx</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">find_peaks</span><span class="p">(</span><span class="n">f0</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">df2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">f0</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">diff_t</span><span class="p">),</span> <span class="n">diff_t</span><span class="p">)</span>
+            <span class="n">tau</span> <span class="o">=</span> <span class="o">-</span><span class="n">df2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="o">-</span><span class="n">df2</span><span class="p">)</span>
+            <span class="n">tau</span><span class="p">[</span><span class="n">tau</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">taus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tau</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+        <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">taus</span><span class="p">),</span> <span class="n">pt</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="n">IndicatorMatrix</span><span class="p">,</span> <span class="n">Heights</span><span class="p">,</span> <span class="n">Locs</span><span class="p">,</span> <span class="n">Labels</span><span class="p">,</span> <span class="n">FNm</span> <span class="o">=</span> <span class="n">getPPDinfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">fns</span><span class="p">,</span> <span class="n">lam_vec</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
+        <span class="n">persistent_peak_labels</span> <span class="o">=</span> <span class="n">getPersistentPeaks</span><span class="p">(</span><span class="n">IndicatorMatrix</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+        <span class="c1"># choose optimal lambda</span>
+        <span class="n">ref_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">IndicatorMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ref_row</span><span class="p">[</span><span class="n">persistent_peak_labels</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">n_lams</span> <span class="o">=</span> <span class="n">IndicatorMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">hamming_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_lams</span><span class="p">)</span>
+        <span class="n">exact_match_indices</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_lams</span><span class="p">):</span>
+            <span class="n">comp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">IndicatorMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]))</span>
+
+            <span class="c1"># check for exact match</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">comp</span> <span class="o">==</span> <span class="n">ref_row</span><span class="p">):</span>
+                <span class="n">exact_match_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            
+            <span class="c1"># calculate hamming distance</span>
+            <span class="n">hamming_distances</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">comp</span> <span class="o">!=</span> <span class="n">ref_row</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exact_match_indices</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">idx_opt</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">exact_match_indices</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">min_distance_indices</span> <span class="o">=</span> <span class="n">hamming_distances</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+            <span class="n">idx_opt</span> <span class="o">=</span> <span class="n">min_distance_indices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        
+        <span class="c1"># draw PPD bar chart</span>
+        <span class="n">drawPPDBarChart</span><span class="p">(</span><span class="n">IndicatorMatrix</span><span class="p">,</span><span class="n">Heights</span><span class="p">,</span><span class="n">lam_vec</span><span class="p">,</span><span class="n">idx_opt</span><span class="p">)</span>
+        <span class="c1">#draw PPD surface</span>
+        <span class="n">drawPPDSurface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span><span class="n">lam_vec</span><span class="p">,</span><span class="n">FNm</span><span class="p">,</span><span class="n">Heights</span><span class="p">,</span><span class="n">Locs</span><span class="p">,</span><span class="n">IndicatorMatrix</span><span class="p">,</span><span class="n">Labels</span><span class="p">,</span><span class="n">idx_opt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lam_opt</span> <span class="o">=</span> <span class="n">lam_vec</span><span class="p">[</span><span class="n">idx_opt</span><span class="p">]</span></div>
+
 
 <div class="viewcode-block" id="fdawarp.plot">
 <a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.plot">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot functional alignment results</span>
 
@@ -817,7 +974,7 @@
 
 <div class="viewcode-block" id="fdawarp.gauss_model">
 <a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.gauss_model">[docs]</a>
-    <span class="k">def</span> <span class="nf">gauss_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort_samples</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gauss_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort_samples</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function models the functional data using a Gaussian model</span>
 <span class="sd">        extracted from the principal components of the srvfs</span>
@@ -840,7 +997,7 @@
 
         <span class="c1"># compute mean and covariance in q-domain</span>
         <span class="n">mq_new</span> <span class="o">=</span> <span class="n">qn</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">mididx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">mididx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
         <span class="n">m_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">mididx</span><span class="p">,</span> <span class="p">:]))</span>
         <span class="n">mqn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mq_new</span><span class="p">,</span> <span class="n">m_new</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
         <span class="n">qn2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">qn</span><span class="p">,</span> <span class="n">m_new</span><span class="p">))</span>
@@ -928,7 +1085,7 @@
 
 <div class="viewcode-block" id="fdawarp.joint_gauss_model">
 <a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.joint_gauss_model">[docs]</a>
-    <span class="k">def</span> <span class="nf">joint_gauss_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">joint_gauss_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">no</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function models the functional data using a joint Gaussian model</span>
 <span class="sd">        extracted from the principal components of the srsfs</span>
@@ -998,14 +1155,14 @@
 
 <div class="viewcode-block" id="fdawarp.multiple_align_functions">
 <a class="viewcode-back" href="../time_warping.html#time_warping.fdawarp.multiple_align_functions">[docs]</a>
-    <span class="k">def</span> <span class="nf">multiple_align_functions</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">multiple_align_functions</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">,</span>
         <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span>
         <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">lam</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">pen</span><span class="o">=</span><span class="s2">&quot;roughness&quot;</span><span class="p">,</span>
+        <span class="n">pen</span><span class="o">=</span><span class="s2">&quot;l2psi&quot;</span><span class="p">,</span>
         <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
     <span class="p">):</span>
@@ -1021,10 +1178,12 @@
 <span class="sd">        :param smoothdata: Smooth the data using a box filter (default = F)</span>
 <span class="sd">        :param parallel: run in parallel (default = F)</span>
 <span class="sd">        :param lam: controls the elasticity (default = 0)</span>
-<span class="sd">        :param penalty: penalty type (default=&quot;roughness&quot;) options are &quot;roughness&quot;,</span>
-<span class="sd">                &quot;l2gam&quot;, &quot;l2psi&quot;, &quot;geodesic&quot;. Only roughness implemented</span>
-<span class="sd">                in all methods. To use others method needs to be &quot;RBFGS&quot;</span>
-<span class="sd">                or &quot;cRBFGS&quot;</span>
+<span class="sd">        :param penalty: penalty type (default=&quot;l2psi&quot;) options are &quot;roughness&quot;,</span>
+<span class="sd">                &quot;l2gam&quot;, &quot;l2psi&quot;, &quot;geodesic&quot; and &quot;none&quot;. The penalty is</span>
+<span class="sd">                weighted by lam, so it has no effect when lam is 0.</span>
+<span class="sd">                &quot;roughness&quot; and &quot;geodesic&quot; have no dynamic programming</span>
+<span class="sd">                counterpart, so with a nonzero lam they need omethod</span>
+<span class="sd">                &quot;RBFGS&quot; or &quot;cRBFGS&quot;</span>
 <span class="sd">        :param cores: number of cores for parallel (default = -1 (all))</span>
 <span class="sd">        :param grid_dim: size of the grid, for the DP2 method only</span>
 <span class="sd">                         (default = 7)</span>
@@ -1107,8 +1266,8 @@
 
 <div class="viewcode-block" id="pairwise_align_functions">
 <a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_functions">[docs]</a>
-<span class="k">def</span> <span class="nf">pairwise_align_functions</span><span class="p">(</span>
-    <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="s2">&quot;roughness&quot;</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pairwise_align_functions</span><span class="p">(</span>
+    <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">omethod</span><span class="o">=</span><span class="s2">&quot;DP2&quot;</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="s2">&quot;l2psi&quot;</span><span class="p">,</span> <span class="n">grid_dim</span><span class="o">=</span><span class="mi">7</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function aligns f2 to f1 using the elastic square-root</span>
@@ -1123,10 +1282,12 @@
 <span class="sd">    :param time: time vector of length M</span>
 <span class="sd">    :param omethod: optimization method (DP, DP2, RBFGS, cRBFGS) (default = DP)</span>
 <span class="sd">    :param lam: controls the elasticity (default = 0)</span>
-<span class="sd">    :param penalty: penalty type (default=&quot;roughness&quot;) options are &quot;roughness&quot;,</span>
-<span class="sd">                &quot;l2gam&quot;, &quot;l2psi&quot;, &quot;geodesic&quot;. Only roughness implemented</span>
-<span class="sd">                in all methods. To use others method needs to be &quot;RBFGS&quot;</span>
-<span class="sd">                or &quot;cRBFGS&quot;</span>
+<span class="sd">    :param penalty: penalty type (default=&quot;l2psi&quot;) options are &quot;roughness&quot;,</span>
+<span class="sd">                &quot;l2gam&quot;, &quot;l2psi&quot;, &quot;geodesic&quot; and &quot;none&quot;. The penalty is</span>
+<span class="sd">                weighted by lam, so it has no effect when lam is 0.</span>
+<span class="sd">                &quot;roughness&quot; and &quot;geodesic&quot; have no dynamic programming</span>
+<span class="sd">                counterpart, so with a nonzero lam they need omethod</span>
+<span class="sd">                &quot;RBFGS&quot; or &quot;cRBFGS&quot;</span>
 <span class="sd">    :param grid_dim: size of the grid, for the DP2 method only (default = 7)</span>
 
 <span class="sd">    :rtype list containing</span>
@@ -1150,7 +1311,7 @@
 
 <div class="viewcode-block" id="pairwise_align_bayes">
 <a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_bayes">[docs]</a>
-<span class="k">def</span> <span class="nf">pairwise_align_bayes</span><span class="p">(</span><span class="n">f1i</span><span class="p">,</span> <span class="n">f2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pairwise_align_bayes</span><span class="p">(</span><span class="n">f1i</span><span class="p">,</span> <span class="n">f2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function aligns two functions using Bayesian framework. It will align</span>
 <span class="sd">    f2 to f1. It is based on mapping warping functions to a hypersphere, and a</span>
@@ -1237,7 +1398,7 @@
     <span class="n">zpcn</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;zpcn&quot;</span><span class="p">]</span>
     <span class="n">pw_sim_global_sigma_g</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;propvar&quot;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">propose_g_coef</span><span class="p">(</span><span class="n">g_coef_curr</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">propose_g_coef</span><span class="p">(</span><span class="n">g_coef_curr</span><span class="p">):</span>
         <span class="n">pCN_beta</span> <span class="o">=</span> <span class="n">zpcn</span><span class="p">[</span><span class="s2">&quot;betas&quot;</span><span class="p">]</span>
         <span class="n">pCN_prob</span> <span class="o">=</span> <span class="n">zpcn</span><span class="p">[</span><span class="s2">&quot;probs&quot;</span><span class="p">]</span>
         <span class="n">probm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">pCN_prob</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -1418,7 +1579,7 @@
 
 <div class="viewcode-block" id="pairwise_align_bayes_infHMC">
 <a class="viewcode-back" href="../time_warping.html#time_warping.pairwise_align_bayes_infHMC">[docs]</a>
-<span class="k">def</span> <span class="nf">pairwise_align_bayes_infHMC</span><span class="p">(</span><span class="n">y1i</span><span class="p">,</span> <span class="n">y2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pairwise_align_bayes_infHMC</span><span class="p">(</span><span class="n">y1i</span><span class="p">,</span> <span class="n">y2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function aligns two functions using Bayesian framework. It uses a</span>
 <span class="sd">    hierarchical Bayesian framework assuming mearsurement error error It will</span>
@@ -1754,7 +1915,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">run_mcmc</span><span class="p">(</span><span class="n">y1i</span><span class="p">,</span> <span class="n">y2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_mcmc</span><span class="p">(</span><span class="n">y1i</span><span class="p">,</span> <span class="n">y2i</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">mcmcopts</span><span class="p">):</span>
     <span class="c1"># Number of sig figs to report in gamma_mat</span>
     <span class="nb">iter</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;iter&quot;</span><span class="p">]</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1787,7 +1948,7 @@
     <span class="n">h</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;h&quot;</span><span class="p">]</span>
     <span class="n">L</span> <span class="o">=</span> <span class="n">mcmcopts</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">propose_v_coef</span><span class="p">(</span><span class="n">v_coef_curr</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">propose_v_coef</span><span class="p">(</span><span class="n">v_coef_curr</span><span class="p">):</span>
         <span class="n">v_coef_new</span> <span class="o">=</span> <span class="n">normal</span><span class="p">(</span><span class="n">v_coef_curr</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v_coef_new</span>
 
@@ -2158,7 +2319,7 @@
 
 <div class="viewcode-block" id="align_fPCA">
 <a class="viewcode-back" href="../time_warping.html#time_warping.align_fPCA">[docs]</a>
-<span class="k">def</span> <span class="nf">align_fPCA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">num_comp</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">align_fPCA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">num_comp</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cores</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    aligns a collection of functions while extracting principal components.</span>
 <span class="sd">    The functions are aligned to the principal components</span>
@@ -2300,8 +2461,10 @@
     <span class="n">mean_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">std_f0</span> <span class="o">=</span> <span class="n">f0</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">mqn</span> <span class="o">=</span> <span class="n">mq</span><span class="p">[:,</span> <span class="n">itrf</span><span class="p">]</span>
-    <span class="n">gamf</span> <span class="o">=</span> <span class="n">gam</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">itr</span><span class="p">):</span>
+    <span class="c1"># fi[:, :, itrf] has warps gam[:, :, 0..itrf-1] applied, so compose all of</span>
+    <span class="c1"># them (copy so the per-iteration warps in gam are not overwritten)</span>
+    <span class="n">gamf</span> <span class="o">=</span> <span class="n">gam</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">itrf</span><span class="p">):</span>
         <span class="n">gam_k</span> <span class="o">=</span> <span class="n">gam</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
             <span class="n">time0</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">gam_k</span><span class="p">[:,</span> <span class="n">l</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -2456,7 +2619,7 @@
 
 <div class="viewcode-block" id="align_fPLS">
 <a class="viewcode-back" href="../time_warping.html#time_warping.align_fPLS">[docs]</a>
-<span class="k">def</span> <span class="nf">align_fPLS</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">align_fPLS</span><span class="p">(</span>
     <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">comps</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_itr</span><span class="o">=</span><span class="mi">100</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2497,8 +2660,6 @@
     <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
     <span class="n">M</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">f0</span> <span class="o">=</span> <span class="n">f</span>
-    <span class="n">g0</span> <span class="o">=</span> <span class="n">g</span>
 
     <span class="k">if</span> <span class="n">showplot</span><span class="p">:</span>
         <span class="n">plot</span><span class="o">.</span><span class="n">f_plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;f Original Data&quot;</span><span class="p">)</span>
@@ -2677,8 +2838,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2698,7 +2859,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
@@ -2712,7 +2873,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>
