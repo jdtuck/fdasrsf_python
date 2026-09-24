@@ -329,7 +329,7 @@ class fdacurve:
             if self.mode == "O":
                 self.v[:, :, ii] = w
             else:
-                self.v[:, :, ii] = cf.project_tangent(w, self.q[:, :, ii], self.basis)
+                self.v[:, :, ii] = cf.project_tangent(w, q_mean, self.basis)
 
         return
 
@@ -613,6 +613,6 @@ def karcher_calc(mu, q, basis, closed, lam, rotation, method):
     if closed == 0:
         v = w
     else:
-        v = cf.project_tangent(w, q, basis)
+        v = cf.project_tangent(w, mu, basis)
 
     return (v, gamI, d)
