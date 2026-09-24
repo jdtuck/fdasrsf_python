@@ -52,3 +52,36 @@ def test_align_fPCA_runs(simu_data):
     f, time = simu_data
     obj = fs.align_fPCA(f, time, num_comp=2, showplot=False)
     assert obj.fn.shape == f.shape
+
+
+def test_align_fPCA_gam_includes_final_warp(simu_data, monkeypatch):
+    """After an early stop, gam must include the warp applied last."""
+    pytest.importorskip("optimum_reparamN2")
+    import fdasrsf.time_warping as tw
+
+    f, time = simu_data
+    f = f[:, :10]
+    M, N = f.shape
+    g = np.linspace(0, 1, M) ** 1.5
+
+    # every matching step applies the same known warp g ...
+    monkeypatch.setattr(
+        tw.uf, "optimum_reparam", lambda *args, **kw: np.tile(g, (N, 1)).T
+    )
+    # ... and a constant cost stops the loop after the second step
+    monkeypatch.setattr(tw, "norm", lambda x: 1.0)
+
+    obj = fs.align_fPCA(f, time, num_comp=2, showplot=False)
+
+    # fn is f warped by g twice (then centred), so gam must reproduce it
+    for k in range(N):
+        t0 = (time[-1] - time[0]) * obj.gam[:, k] + time[0]
+        fk = np.interp(t0, time, f[:, k])
+        np.testing.assert_allclose(fk, obj.fn[:, k], atol=0.02 * np.abs(f).max())
+
+
+def test_gauss_model_samples(aligned_fdawarp):
+    np.random.seed(0)
+    aligned_fdawarp.gauss_model(n=3)
+    assert aligned_fdawarp.fs.shape == (aligned_fdawarp.fn.shape[0], 3)
+    assert np.all(np.isfinite(aligned_fdawarp.fs))

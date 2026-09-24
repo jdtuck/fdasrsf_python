@@ -934,8 +934,10 @@ def mlogit_loss(b, X, Y):
     M = X.shape[1]  # n_features
     B = b.reshape(M, m)
     Yhat = np.dot(X, B)
-    Yhat -= Yhat.min(axis=1)[:, np.newaxis]
-    Yhat = np.exp(-Yhat)
+    # softmax: larger scores mean more probable classes, matching the
+    # warping step (mlogit_warp_grad) and argmax prediction
+    Yhat -= Yhat.max(axis=1)[:, np.newaxis]
+    Yhat = np.exp(Yhat)
     # l1-normalize
     Yhat /= Yhat.sum(axis=1)[:, np.newaxis]
 
@@ -962,8 +964,10 @@ def mlogit_gradient(b, X, Y):
     M = X.shape[1]  # n_features
     B = b.reshape(M, m)
     Yhat = np.dot(X, B)
-    Yhat -= Yhat.min(axis=1)[:, np.newaxis]
-    Yhat = np.exp(-Yhat)
+    # softmax: larger scores mean more probable classes, matching the
+    # warping step (mlogit_warp_grad) and argmax prediction
+    Yhat -= Yhat.max(axis=1)[:, np.newaxis]
+    Yhat = np.exp(Yhat)
     # l1-normalize
     Yhat /= Yhat.sum(axis=1)[:, np.newaxis]
 
@@ -971,7 +975,7 @@ def mlogit_gradient(b, X, Y):
     _Yhat /= _Yhat.sum(axis=1)[:, np.newaxis]
     Yhat -= _Yhat
     grad = np.dot(X.T, Yhat)
-    grad /= -float(N)
+    grad /= float(N)
     grad = grad.ravel()
 
     return grad

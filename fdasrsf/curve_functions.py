@@ -351,8 +351,14 @@ def find_basis_normal(q):
     f1 = zeros((n, T))
     f2 = zeros((n, T))
     for i in range(0, T):
-        f1[:, i] = q[0, i] * q[:, i] / norm(q[:, i]) + array([norm(q[:, i]), 0])
-        f2[:, i] = q[1, i] * q[:, i] / norm(q[:, i]) + array([0, norm(q[:, i])])
+        qnorm = norm(q[:, i])
+        # q_j q / |q| -> 0 as q -> 0, so a zero srvf sample contributes nothing
+        if qnorm > 0:
+            qunit = q[:, i] / qnorm
+        else:
+            qunit = zeros(n)
+        f1[:, i] = q[0, i] * qunit + array([qnorm, 0])
+        f2[:, i] = q[1, i] * qunit + array([0, qnorm])
 
     h3 = f1
     h4 = f2
@@ -657,6 +663,8 @@ def group_action_by_gamma(q, gamma):
     """
     n, T = q.shape
     gammadot = gradient(gamma, 1.0 / T)
+    # guard against small negative slopes from numerical error
+    gammadot[gammadot < 0] = 0
     qn = zeros((n, T))
 
     for j in range(0, n):
@@ -890,15 +898,18 @@ def inverse_exp(q1, q2, beta2):
     # Optimize over SO(n)
     q2, O_hat, gamI = find_rotation_and_seed_q(q1, q2)
 
-    # Applying optimal re-parameterization to the second curve
+    # Applying optimal rotation and re-parameterization to the second curve
+    beta2 = O_hat @ beta2
     beta2 = group_action_by_gamma_coord(beta2, gamI)
-    q2 = curve_to_q(beta2)
+    q2 = curve_to_q(beta2)[0]
 
     q1dotq2 = innerprod_q2(q1, q2)
 
     # Compute shooting vector
     if q1dotq2 > 1:
         q1dotq2 = 1
+    if q1dotq2 < -1:
+        q1dotq2 = -1
 
     u = q2 - q1dotq2 * q1
     normu = sqrt(innerprod_q2(u, u))
@@ -906,7 +917,7 @@ def inverse_exp(q1, q2, beta2):
     if normu > 1e-4:
         v = u * arccos(q1dotq2) / normu
     else:
-        v = zeros((2, T))
+        v = zeros(q1.shape)
 
     return v
 
@@ -998,7 +1009,13 @@ def parallel_translate(w, q1, q2, basis, mode=0):
     else:
         mode = mode[0]
 
-    wtilde = w - 2 * innerprod_q2(w, q2) / innerprod_q2(q1 + q2, q1 + q2) * (q1 + q2)
+    # transport along the great circle is undefined when q2 = -q1; the
+    # reflection term then has a vanishing denominator, so leave w unchanged
+    denom = innerprod_q2(q1 + q2, q1 + q2)
+    if denom > 1e-10:
+        wtilde = w - 2 * innerprod_q2(w, q2) / denom * (q1 + q2)
+    else:
+        wtilde = w.copy()
     l = sqrt(innerprod_q2(wtilde, wtilde))
 
     if mode == 1:

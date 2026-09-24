@@ -468,7 +468,7 @@ class elastic_mlpcr_regression:
         alpha = B0[0, :]
 
         # compute the Loss
-        LL = rg.mlogit_loss(b, Phi, self.y)
+        LL = rg.mlogit_loss(b, Phi, self.Y)
 
         b = B0[1: no + 1, :]
 
@@ -497,7 +497,6 @@ class elastic_mlpcr_regression:
 
         if newdata is not None:
             f = newdata["f"]
-            n = f.shape[1]
             y = newdata["y"]
             if newdata["smooth"]:
                 sparam = newdata["sparam"]
@@ -505,61 +504,31 @@ class elastic_mlpcr_regression:
 
             self.pca.project(f)
             a = self.pca.new_coef
-
-            self.y_pred = np.zeros(n)
-            for ii in range(0, n):
-                for jj in range(0, m):
-                    self.y_pred[ii, jj] = self.alpha[jj] + np.sum(
-                        a[ii, :] * self.b[:, jj]
-                    )
-
-            if y is None:
-                self.y_pred = rg.phi(self.y_pred.reshape((1, n * m)))
-                self.y_pred = self.y_pred.reshape((n, m))
-                self.y_labels = np.argmax(self.y_pred, axis=1)
-                self.PC = np.nan
-            else:
-                self.y_pred = rg.phi(self.y_pred.reshape((1, n * m)))
-                self.y_pred = self.y_pred.reshape((n, m))
-                self.y_labels = np.argmax(self.y_pred, axis=1)
-                self.PC = np.zeros(m)
-                cls_set = np.arange(0, m)
-                for ii in range(0, m):
-                    cls_sub = np.setdiff1d(cls_set, ii)
-                    TP = np.sum(y[self.y_labels == ii] == ii)
-                    FP = np.sum(y[np.in1d(self.y_labels, cls_sub)] == ii)
-                    TN = np.sum(
-                        y[np.in1d(self.y_labels, cls_sub)]
-                        == self.y_labels[np.in1d(self.y_labels, cls_sub)]
-                    )
-                    FN = np.sum(np.in1d(y[self.y_labels == ii], cls_sub))
-                    self.PC[ii] = (TP + TN) / (TP + FP + FN + TN)
-
-                self.PCo = np.sum(y == self.y_labels) / self.y_labels.shape[0]
         else:
-            n = self.pca.coef.shape[0]
-            self.y_pred = np.zeros((n, m))
-            for ii in range(0, n):
-                for jj in range(0, m):
-                    self.y_pred[ii, jj] = self.alpha[jj] + np.sum(
-                        self.pca.coef[ii, :] * self.b[:, jj]
-                    )
+            y = self.y
+            a = self.pca.coef
 
-            self.y_pred = rg.phi(self.y_pred.reshape((1, n * m)))
-            self.y_pred = self.y_pred.reshape((n, m))
-            self.y_labels = np.argmax(self.y_pred, axis=1)
+        # class scores; the model is a softmax over them, so the most
+        # probable class is the one with the largest score
+        scores = self.alpha[np.newaxis, :] + a @ self.b
+        n = scores.shape[0]
+        self.y_pred = rg.phi(scores.ravel()).reshape((n, m))
+        # class labels are 1..m, matching the coding of y in __init__
+        self.y_labels = np.argmax(self.y_pred, axis=1) + 1
+
+        if y is None:
+            self.PC = np.nan
+        else:
             self.PC = np.zeros(m)
-            cls_set = np.arange(0, m)
-            for ii in range(0, m):
+            cls_set = np.arange(1, m + 1)
+            for ii in cls_set:
                 cls_sub = np.setdiff1d(cls_set, ii)
-                TP = np.sum(self.y[self.y_labels == ii] == ii)
-                FP = np.sum(self.y[np.in1d(self.y_labels, cls_sub)] == ii)
-                TN = np.sum(
-                    self.y[np.in1d(self.y_labels, cls_sub)]
-                    == self.y_labels[np.in1d(self.y_labels, cls_sub)]
-                )
-                FN = np.sum(np.in1d(y[self.y_labels == ii], cls_sub))
-                self.PC[ii] = (TP + TN) / (TP + FP + FN + TN)
+                in_sub = np.isin(self.y_labels, cls_sub)
+                TP = np.sum(y[self.y_labels == ii] == ii)
+                FP = np.sum(y[in_sub] == ii)
+                TN = np.sum(y[in_sub] == self.y_labels[in_sub])
+                FN = np.sum(np.isin(y[self.y_labels == ii], cls_sub))
+                self.PC[ii - 1] = (TP + TN) / (TP + FP + FN + TN)
 
             self.PCo = np.sum(y == self.y_labels) / self.y_labels.shape[0]
 
