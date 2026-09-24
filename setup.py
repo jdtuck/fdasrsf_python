@@ -390,7 +390,6 @@ setup(
     version="2.7.2",
     packages=["fdasrsf"],
     url="http://research.tetonedge.net",
-    license="LICENSE.txt",
     author="J. Derek Tucker",
     author_email="jdtuck@sandia.gov",
     scripts=["bin/ex_srsf_align.py"],
@@ -398,7 +397,6 @@ setup(
     description="functional data analysis using the square root slope framework",
     long_description=open("README.md", encoding="utf8").read(),
     classifiers=[
-        "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Topic :: Scientific/Engineering",
