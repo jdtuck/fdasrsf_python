@@ -5,7 +5,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
-from scipy.interpolate import UnivariateSpline, interp1d
+from scipy.interpolate import UnivariateSpline, CubicSpline, interp1d
 from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.linalg import norm, svd, cholesky, inv, pinv
 from scipy.stats.mstats import mquantiles
@@ -51,11 +51,12 @@ def smooth_data(f, sparam=25):
 
 def gradient_spline(time, f, smooth=False):
     """
-    This function takes the gradient of f using b-spline smoothing
+    This function takes the gradient of f using an interpolating cubic spline
+    (default) or a smoothing spline
 
     :param time: vector of size N describing the sample points
     :param f: numpy ndarray of shape (M,N) of M functions with N samples
-    :param smooth: smooth data (default = F)
+    :param smooth: use a smoothing spline instead of interpolating (default = F)
 
     :rtype: tuple of numpy ndarray
     :return f0: smoothed functions functions
@@ -63,6 +64,11 @@ def gradient_spline(time, f, smooth=False):
     :return g2: second derivative of each function
 
     """
+    if not smooth:
+        # interpolating cubic spline (not-a-knot ends), all columns in one call
+        cs = CubicSpline(time, f, axis=0)
+        return cs(time), cs(time, 1), cs(time, 2)
+
     M = f.shape[0]
 
     if f.ndim > 1:
@@ -71,19 +77,13 @@ def gradient_spline(time, f, smooth=False):
         g = zeros((M, N))
         g2 = zeros((M, N))
         for k in range(0, N):
-            if smooth:
-                spar = time.shape[0] * (0.025 * fabs(f[:, k]).max()) ** 2
-            else:
-                spar = 0
+            spar = time.shape[0] * (0.025 * fabs(f[:, k]).max()) ** 2
             tmp_spline = UnivariateSpline(time, f[:, k], s=spar)
             f0[:, k] = tmp_spline(time)
             g[:, k] = tmp_spline(time, 1)
             g2[:, k] = tmp_spline(time, 2)
     else:
-        if smooth:
-            spar = time.shape[0] * (0.025 * fabs(f).max()) ** 2
-        else:
-            spar = 0
+        spar = time.shape[0] * (0.025 * fabs(f).max()) ** 2
         tmp_spline = UnivariateSpline(time, f, s=spar)
         f0 = tmp_spline(time)
         g = tmp_spline(time, 1)
@@ -113,6 +113,10 @@ def srsf_to_f(q, time, f0=0.0):
     """
     converts q (srsf) to a function
 
+    The integral is taken of the interpolating cubic spline of q|q|, which is
+    the exact inverse of the spline derivative used in f_to_srsf (with
+    smooth=False), so f -> q -> f is accurate to O(h^4) for smooth f.
+
     :param q: vector of size N samples of srsf
     :param time: vector of size N describing time sample points
     :param f0: initial value
@@ -122,7 +126,8 @@ def srsf_to_f(q, time, f0=0.0):
 
     """
     integrand = q * fabs(q)
-    f = f0 + cumulative_trapezoid(integrand, time, initial=0)
+    F = CubicSpline(time, integrand, axis=0).antiderivative()(time)
+    f = f0 + F - F[0]
     return f
 
 

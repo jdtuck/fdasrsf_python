@@ -287,9 +287,7 @@ class fdawarp:
                 qtemp = q[:, :, r + 1]
                 ftemp = f[:, :, r + 1]
                 mq[:, r + 1] = mq[:, r] + stp * vbar
-                tmp = np.zeros(M)
-                tmp[1:] = cumulative_trapezoid(mq[:, r + 1] * np.abs(mq[:, r + 1]), self.time)
-                mf[:, r + 1] = np.median(f0[1, :]) + tmp
+                mf[:, r + 1] = uf.srsf_to_f(mq[:, r + 1], self.time, np.median(f0[1, :]))
 
                 qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
@@ -344,9 +342,7 @@ class fdawarp:
         std_fn = self.fn.std(axis=1)
         self.gam = gam
         self.mqn = mq[:, r + 1]
-        tmp = np.zeros(M)
-        tmp[1:] = cumulative_trapezoid(self.mqn * np.abs(self.mqn), self.time)
-        self.fmean = np.mean(f0[1, :]) + tmp
+        self.fmean = uf.srsf_to_f(self.mqn, self.time, np.mean(f0[1, :]))
 
         fgam = np.zeros((M, N))
         for k in range(0, N):
@@ -2115,9 +2111,7 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
     std_f0 = f0.std(axis=1)
     mean_fn = fn.mean(axis=1)
     std_fn = fn.std(axis=1)
-    tmp = np.zeros(M)
-    tmp[1:] = cumulative_trapezoid(mqn * np.abs(mqn), time)
-    fmean = np.mean(f0[1, :]) + tmp
+    fmean = uf.srsf_to_f(mqn, time, np.mean(f0[1, :]))
 
     fgam = np.zeros((M, N))
     for k in range(0, N):

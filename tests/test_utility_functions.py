@@ -142,9 +142,69 @@ def test_optimum_reparam_pair(timet):
 
 def test_f_to_srsf_round_trip(sine_signal, timet):
     q1 = fs.f_to_srsf(sine_signal, timet)
-    f1a = fs.srsf_to_f(q1, timet)
-    # srsf_to_f integrates from f0 == 0.0, so match the first sample
-    np.testing.assert_allclose(f1a + sine_signal[0], sine_signal, atol=1e-3)
+    f1a = fs.srsf_to_f(q1, timet, sine_signal[0])
+    np.testing.assert_allclose(f1a, sine_signal, atol=1e-6)
+
+
+def test_f_to_srsf_round_trip_oscillatory():
+    t = np.linspace(0, 1, 401)
+    for f in (
+        np.sin(2 * np.pi * 10 * t),
+        np.exp(-200 * (t - 0.5) ** 2),
+        t**3 * np.sin(40 * t),
+    ):
+        q = fs.f_to_srsf(f, t)
+        frec = fs.srsf_to_f(q, t, f[0])
+        assert np.abs(frec - f).max() / np.ptp(f) < 1e-4
+
+
+def test_f_to_srsf_round_trip_converges():
+    err = []
+    for n in (101, 201):
+        t = np.linspace(0, 1, n)
+        f = np.sin(2 * np.pi * 5 * t)
+        err.append(np.abs(fs.srsf_to_f(fs.f_to_srsf(f, t), t, f[0]) - f).max())
+    assert err[0] / err[1] > 8
+
+
+def test_gradient_spline_matches_univariate_spline():
+    from scipy.interpolate import UnivariateSpline
+
+    t = np.linspace(0, 1, 101)
+    f = np.column_stack([np.sin(2 * np.pi * t), t**2 + np.cos(5 * t)])
+    f0, g, g2 = fs.utility_functions.gradient_spline(t, f)
+    for k in range(f.shape[1]):
+        sp = UnivariateSpline(t, f[:, k], s=0)
+        np.testing.assert_allclose(f0[:, k], sp(t), atol=1e-8)
+        np.testing.assert_allclose(g[:, k], sp(t, 1), atol=1e-6)
+        np.testing.assert_allclose(g2[:, k], sp(t, 2), atol=1e-4)
+    # 1-D input gives 1-D output
+    f0_1, g_1, g2_1 = fs.utility_functions.gradient_spline(t, f[:, 0])
+    assert g_1.shape == t.shape
+    np.testing.assert_allclose(g_1, g[:, 0], atol=1e-10)
+
+
+def test_gradient_spline_smooth_removes_noise():
+    rng = np.random.default_rng(0)
+    t = np.linspace(0, 1, 201)
+    clean = np.sin(2 * np.pi * t)
+    f = np.column_stack([clean, clean]) + 0.02 * rng.standard_normal((201, 2))
+    f0, g, g2 = fs.utility_functions.gradient_spline(t, f, smooth=True)
+    assert f0.shape == g.shape == g2.shape == f.shape
+    # smoothing spline gives a far less rough derivative than interpolation
+    _, g_interp, _ = fs.utility_functions.gradient_spline(t, f)
+    assert np.abs(np.diff(g[:, 0])).sum() < 0.1 * np.abs(np.diff(g_interp[:, 0])).sum()
+    # 1-D input matches the corresponding column
+    f0_1, g_1, g2_1 = fs.utility_functions.gradient_spline(t, f[:, 0], smooth=True)
+    assert g_1.shape == t.shape
+    np.testing.assert_allclose(g_1, g[:, 0], atol=1e-10)
+
+
+def test_srsf_to_f_starts_at_f0():
+    t = np.linspace(0, 1, 101)
+    f = fs.srsf_to_f(np.ones(101), t, 2.0)
+    assert f[0] == pytest.approx(2.0)
+    assert f[-1] == pytest.approx(3.0, abs=1e-10)
 
 
 def test_warp_f_gamma_identity(sine_signal, timet):
