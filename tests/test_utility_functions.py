@@ -184,6 +184,22 @@ def test_gradient_spline_matches_univariate_spline():
     np.testing.assert_allclose(g_1, g[:, 0], atol=1e-10)
 
 
+def test_gradient_spline_smooth_removes_noise():
+    rng = np.random.default_rng(0)
+    t = np.linspace(0, 1, 201)
+    clean = np.sin(2 * np.pi * t)
+    f = np.column_stack([clean, clean]) + 0.02 * rng.standard_normal((201, 2))
+    f0, g, g2 = fs.utility_functions.gradient_spline(t, f, smooth=True)
+    assert f0.shape == g.shape == g2.shape == f.shape
+    # smoothing spline gives a far less rough derivative than interpolation
+    _, g_interp, _ = fs.utility_functions.gradient_spline(t, f)
+    assert np.abs(np.diff(g[:, 0])).sum() < 0.1 * np.abs(np.diff(g_interp[:, 0])).sum()
+    # 1-D input matches the corresponding column
+    f0_1, g_1, g2_1 = fs.utility_functions.gradient_spline(t, f[:, 0], smooth=True)
+    assert g_1.shape == t.shape
+    np.testing.assert_allclose(g_1, g[:, 0], atol=1e-10)
+
+
 def test_srsf_to_f_starts_at_f0():
     t = np.linspace(0, 1, 101)
     f = fs.srsf_to_f(np.ones(101), t, 2.0)
