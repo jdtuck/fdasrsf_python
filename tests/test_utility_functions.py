@@ -167,6 +167,23 @@ def test_f_to_srsf_round_trip_converges():
     assert err[0] / err[1] > 8
 
 
+def test_gradient_spline_matches_univariate_spline():
+    from scipy.interpolate import UnivariateSpline
+
+    t = np.linspace(0, 1, 101)
+    f = np.column_stack([np.sin(2 * np.pi * t), t**2 + np.cos(5 * t)])
+    f0, g, g2 = fs.utility_functions.gradient_spline(t, f)
+    for k in range(f.shape[1]):
+        sp = UnivariateSpline(t, f[:, k], s=0)
+        np.testing.assert_allclose(f0[:, k], sp(t), atol=1e-8)
+        np.testing.assert_allclose(g[:, k], sp(t, 1), atol=1e-6)
+        np.testing.assert_allclose(g2[:, k], sp(t, 2), atol=1e-4)
+    # 1-D input gives 1-D output
+    f0_1, g_1, g2_1 = fs.utility_functions.gradient_spline(t, f[:, 0])
+    assert g_1.shape == t.shape
+    np.testing.assert_allclose(g_1, g[:, 0], atol=1e-10)
+
+
 def test_srsf_to_f_starts_at_f0():
     t = np.linspace(0, 1, 101)
     f = fs.srsf_to_f(np.ones(101), t, 2.0)
