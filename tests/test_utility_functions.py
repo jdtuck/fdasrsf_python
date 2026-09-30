@@ -142,9 +142,36 @@ def test_optimum_reparam_pair(timet):
 
 def test_f_to_srsf_round_trip(sine_signal, timet):
     q1 = fs.f_to_srsf(sine_signal, timet)
-    f1a = fs.srsf_to_f(q1, timet)
-    # srsf_to_f integrates from f0 == 0.0, so match the first sample
-    np.testing.assert_allclose(f1a + sine_signal[0], sine_signal, atol=1e-3)
+    f1a = fs.srsf_to_f(q1, timet, sine_signal[0])
+    np.testing.assert_allclose(f1a, sine_signal, atol=1e-6)
+
+
+def test_f_to_srsf_round_trip_oscillatory():
+    t = np.linspace(0, 1, 401)
+    for f in (
+        np.sin(2 * np.pi * 10 * t),
+        np.exp(-200 * (t - 0.5) ** 2),
+        t**3 * np.sin(40 * t),
+    ):
+        q = fs.f_to_srsf(f, t)
+        frec = fs.srsf_to_f(q, t, f[0])
+        assert np.abs(frec - f).max() / np.ptp(f) < 1e-4
+
+
+def test_f_to_srsf_round_trip_converges():
+    err = []
+    for n in (101, 201):
+        t = np.linspace(0, 1, n)
+        f = np.sin(2 * np.pi * 5 * t)
+        err.append(np.abs(fs.srsf_to_f(fs.f_to_srsf(f, t), t, f[0]) - f).max())
+    assert err[0] / err[1] > 8
+
+
+def test_srsf_to_f_starts_at_f0():
+    t = np.linspace(0, 1, 101)
+    f = fs.srsf_to_f(np.ones(101), t, 2.0)
+    assert f[0] == pytest.approx(2.0)
+    assert f[-1] == pytest.approx(3.0, abs=1e-10)
 
 
 def test_warp_f_gamma_identity(sine_signal, timet):

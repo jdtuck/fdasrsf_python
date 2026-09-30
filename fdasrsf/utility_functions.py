@@ -5,7 +5,7 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
-from scipy.interpolate import UnivariateSpline, interp1d
+from scipy.interpolate import UnivariateSpline, CubicSpline, interp1d
 from scipy.integrate import trapezoid, cumulative_trapezoid
 from scipy.linalg import norm, svd, cholesky, inv, pinv
 from scipy.stats.mstats import mquantiles
@@ -113,6 +113,10 @@ def srsf_to_f(q, time, f0=0.0):
     """
     converts q (srsf) to a function
 
+    The integral is taken of the interpolating cubic spline of q|q|, which is
+    the exact inverse of the spline derivative used in f_to_srsf (with
+    smooth=False), so f -> q -> f is accurate to O(h^4) for smooth f.
+
     :param q: vector of size N samples of srsf
     :param time: vector of size N describing time sample points
     :param f0: initial value
@@ -122,7 +126,8 @@ def srsf_to_f(q, time, f0=0.0):
 
     """
     integrand = q * fabs(q)
-    f = f0 + cumulative_trapezoid(integrand, time, initial=0)
+    F = CubicSpline(time, integrand, axis=0).antiderivative()(time)
+    f = f0 + F - F[0]
     return f
 
 
