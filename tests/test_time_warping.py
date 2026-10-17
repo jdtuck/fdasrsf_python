@@ -50,7 +50,9 @@ def _warp(f, gam, time):
 
 
 @pytest.mark.parametrize(
-    "kw", [{}, {"method": "median"}, {"center": False}], ids=["mean", "median", "nocenter"]
+    "kw",
+    [{}, {"method": "median"}, {"center": False}, {"method": "median", "center": False}],
+    ids=["mean", "median", "nocenter", "median-nocenter"],
 )
 def test_srsf_align_fn_is_f_warped_by_gam(simu_data, kw):
     """fn, qn and mqn must come from the returned gam, not an earlier one."""
@@ -63,6 +65,19 @@ def test_srsf_align_fn_is_f_warped_by_gam(simu_data, kw):
     np.testing.assert_allclose(obj.qn, fs.f_to_srsf(obj.fn, time), atol=1e-12)
     if not kw:
         np.testing.assert_allclose(obj.mqn, obj.qn.mean(axis=1), atol=1e-12)
+
+
+def test_multiple_align_functions_fn_and_stats(simu_data):
+    """Aligning to a given template: fn = f o gam and variances use N - 1."""
+    pytest.importorskip("optimum_reparamN2")
+    f, time = simu_data
+    f = f[:, :8]
+    obj = fs.fdawarp(f, time)
+    obj.multiple_align_functions(f[:, 0])
+    np.testing.assert_allclose(obj.fn, _warp(f, obj.gam, time), atol=1e-12)
+    assert obj.orig_var == pytest.approx(trapezoid(f.var(axis=1, ddof=1), time))
+    assert obj.amp_var == pytest.approx(trapezoid(obj.fn.var(axis=1, ddof=1), time))
+    assert np.isfinite(obj.phase_var)
 
 
 def test_srsf_align_stats_conventions(aligned_fdawarp):
