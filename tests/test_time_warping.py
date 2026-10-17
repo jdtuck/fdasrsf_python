@@ -7,6 +7,7 @@ suite and needs the ``optimum_reparamN2`` extension plus the sample data.
 
 import numpy as np
 import pytest
+from scipy.integrate import trapezoid
 
 import fdasrsf as fs
 
@@ -34,8 +35,62 @@ def test_pairwise_align_functions_aligns_warped_copy():
 
 
 def test_srsf_align_golden_amp_var(aligned_fdawarp):
-    # regression value carried over from the legacy test/test_all.py suite
-    assert aligned_fdawarp.amp_var == pytest.approx(0.018998691036349585, rel=1e-6)
+    # regression value; matches MATLAB fdawarp.time_warping(0, method='DP')
+    # (0.02000), since fn is f o gam and the variances use N - 1
+    assert aligned_fdawarp.amp_var == pytest.approx(0.02000430750010335, rel=1e-6)
+
+
+def _warp(f, gam, time):
+    return np.column_stack(
+        [
+            np.interp((time[-1] - time[0]) * gam[:, k] + time[0], time, f[:, k])
+            for k in range(f.shape[1])
+        ]
+    )
+
+
+@pytest.mark.parametrize(
+    "kw",
+    [{}, {"method": "median"}, {"center": False}, {"method": "median", "center": False}],
+    ids=["mean", "median", "nocenter", "median-nocenter"],
+)
+def test_srsf_align_fn_is_f_warped_by_gam(simu_data, kw):
+    """fn, qn and mqn must come from the returned gam, not an earlier one."""
+    pytest.importorskip("optimum_reparamN2")
+    f, time = simu_data
+    f = f[:, :8]
+    obj = fs.fdawarp(f, time)
+    obj.srsf_align(verbose=False, **kw)
+    np.testing.assert_allclose(obj.fn, _warp(f, obj.gam, time), atol=1e-12)
+    np.testing.assert_allclose(obj.qn, fs.f_to_srsf(obj.fn, time), atol=1e-12)
+    if not kw:
+        np.testing.assert_allclose(obj.mqn, obj.qn.mean(axis=1), atol=1e-12)
+
+
+def test_multiple_align_functions_fn_and_stats(simu_data):
+    """Aligning to a given template: fn = f o gam and variances use N - 1."""
+    pytest.importorskip("optimum_reparamN2")
+    f, time = simu_data
+    f = f[:, :8]
+    obj = fs.fdawarp(f, time)
+    obj.multiple_align_functions(f[:, 0])
+    np.testing.assert_allclose(obj.fn, _warp(f, obj.gam, time), atol=1e-12)
+    assert obj.orig_var == pytest.approx(trapezoid(f.var(axis=1, ddof=1), time))
+    assert obj.amp_var == pytest.approx(trapezoid(obj.fn.var(axis=1, ddof=1), time))
+    assert np.isfinite(obj.phase_var)
+
+
+def test_srsf_align_stats_conventions(aligned_fdawarp):
+    """fmean starts at the mean of the first samples; variances use N - 1."""
+    obj = aligned_fdawarp
+    t = obj.time
+    assert obj.fmean[0] == pytest.approx(obj.f[0, :].mean())
+    assert obj.orig_var == pytest.approx(
+        trapezoid(obj.f.var(axis=1, ddof=1), t)
+    )
+    assert obj.amp_var == pytest.approx(
+        trapezoid(obj.fn.var(axis=1, ddof=1), t)
+    )
 
 
 def test_srsf_align_populates_outputs(aligned_fdawarp):
