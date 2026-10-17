@@ -207,6 +207,9 @@ def optimum_reparam(
                 'method="RBFGS" or method="cRBFGS" for it, or one of the '
                 "penalties %s" % (penalty, method, ", ".join(dp_penalties))
             )
+        # the cython wrappers take time as a C-contiguous double vector, which
+        # a column slice such as d[:, 0] is not
+        time = ascontiguousarray(time, dtype=double)
     else:
         pen_dp = None
 
