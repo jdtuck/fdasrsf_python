@@ -287,7 +287,7 @@ class fdawarp:
                 qtemp = q[:, :, r + 1]
                 ftemp = f[:, :, r + 1]
                 mq[:, r + 1] = mq[:, r] + stp * vbar
-                mf[:, r + 1] = uf.srsf_to_f(mq[:, r + 1], self.time, np.median(f0[1, :]))
+                mf[:, r + 1] = uf.srsf_to_f(mq[:, r + 1], self.time, np.median(f0[0, :]))
 
                 qun[r] = norm(mq[:, r + 1] - mq[:, r]) / norm(mq[:, r])
 
@@ -311,26 +311,32 @@ class fdawarp:
                     mq[:, r], self.time, q[:, k, 0], omethod, lam, pen, grid_dim
                 )
 
-        gam_dev = np.zeros((M, N))
-        for k in range(0, N):
-            gam_dev[:, k] = np.gradient(gam[:, k], 1 / float(M - 1))
-
+        gamI = uf.SqrtMeanInverse(gam)
         if center:
-            gamI = uf.SqrtMeanInverse(gam)
-            gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+            # center gam (and, for the median, the template) by gamI
             time0 = (self.time[-1] - self.time[0]) * gamI + self.time[0]
-            mq[:, r + 1] = np.interp(time0, self.time, mq[:, r]) * np.sqrt(gamI_dev)
-
             for k in range(0, N):
-                q[:, k, r + 1] = np.interp(time0, self.time, q[:, k, r]) * np.sqrt(
-                    gamI_dev
-                )
-                f[:, k, r + 1] = np.interp(time0, self.time, f[:, k, r])
                 gam[:, k] = np.interp(time0, self.time, gam[:, k])
-        else:
-            gamI = uf.SqrtMeanInverse(gam)
-            gamI_dev = np.gradient(gamI, 1 / float(M - 1))
-            r -= 1
+            if method == 1:
+                gamI_dev = np.gradient(gamI, 1 / float(M - 1))
+                mq[:, r + 1] = np.interp(time0, self.time, mq[:, r]) * np.sqrt(
+                    np.maximum(gamI_dev, 0)
+                )
+        elif method == 1:
+            mq[:, r + 1] = mq[:, r]
+
+        # warp the original data once by the final gam, so fn = f o gam holds
+        # exactly (previously fn/qn kept the previous iteration's alignment
+        # while gam came from this final matching step)
+        for k in range(0, N):
+            f[:, k, r + 1] = np.interp(
+                (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0],
+                self.time,
+                f[:, k, 0],
+            )
+        q[:, :, r + 1] = uf.f_to_srsf(f[:, :, r + 1], self.time)
+        if method == 0:
+            mq[:, r + 1] = q[:, :, r + 1].mean(axis=1)
 
         # Aligned data & stats
         self.center = center
@@ -338,18 +344,18 @@ class fdawarp:
         self.qn = q[:, :, r + 1]
         self.q0 = q[:, :, 0]
         self.gamI = gamI
-        std_f0 = f0.std(axis=1)
-        std_fn = self.fn.std(axis=1)
+        std_f0 = f0.std(axis=1, ddof=1)
+        std_fn = self.fn.std(axis=1, ddof=1)
         self.gam = gam
         self.mqn = mq[:, r + 1]
-        self.fmean = uf.srsf_to_f(self.mqn, self.time, np.mean(f0[1, :]))
+        self.fmean = uf.srsf_to_f(self.mqn, self.time, np.mean(f0[0, :]))
 
         fgam = np.zeros((M, N))
         for k in range(0, N):
             time0 = (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0]
             fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
-        var_fgam = fgam.var(axis=1)
+        var_fgam = fgam.var(axis=1, ddof=1)
         self.orig_var = trapezoid(std_f0**2, self.time)
         self.amp_var = trapezoid(std_fn**2, self.time)
         self.phase_var = trapezoid(var_fgam, self.time)
@@ -795,8 +801,8 @@ class fdawarp:
         self.fn = fn
         self.qn = qn
         self.q0 = q
-        std_f0 = f.std(axis=1)
-        std_fn = self.fn.std(axis=1)
+        std_f0 = f.std(axis=1, ddof=1)
+        std_fn = self.fn.std(axis=1, ddof=1)
         self.gam = gam
         self.mqn = mq
         self.fmean = mu
@@ -806,7 +812,7 @@ class fdawarp:
             time0 = (self.time[-1] - self.time[0]) * gam[:, k] + self.time[0]
             fgam[:, k] = np.interp(time0, self.time, self.fmean)
 
-        var_fgam = fgam.var(axis=1)
+        var_fgam = fgam.var(axis=1, ddof=1)
         self.orig_var = trapezoid(std_f0**2, self.time)
         self.amp_var = trapezoid(std_fn**2, self.time)
         self.phase_var = trapezoid(var_fgam, self.time)
@@ -2108,17 +2114,17 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         plt.show()
 
     mean_f0 = f0.mean(axis=1)
-    std_f0 = f0.std(axis=1)
+    std_f0 = f0.std(axis=1, ddof=1)
     mean_fn = fn.mean(axis=1)
-    std_fn = fn.std(axis=1)
-    fmean = uf.srsf_to_f(mqn, time, np.mean(f0[1, :]))
+    std_fn = fn.std(axis=1, ddof=1)
+    fmean = uf.srsf_to_f(mqn, time, np.mean(f0[0, :]))
 
     fgam = np.zeros((M, N))
     for k in range(0, N):
         time0 = (time[-1] - time[0]) * gamf[:, k] + time[0]
         fgam[:, k] = np.interp(time0, time, fmean)
 
-    var_fgam = fgam.var(axis=1)
+    var_fgam = fgam.var(axis=1, ddof=1)
     orig_var = trapezoid(std_f0**2, time)
     amp_var = trapezoid(std_fn**2, time)
     phase_var = trapezoid(var_fgam, time)
