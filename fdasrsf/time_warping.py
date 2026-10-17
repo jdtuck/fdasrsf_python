@@ -348,7 +348,10 @@ class fdawarp:
         std_fn = self.fn.std(axis=1, ddof=1)
         self.gam = gam
         self.mqn = mq[:, r + 1]
-        self.fmean = uf.srsf_to_f(self.mqn, self.time, np.mean(f0[0, :]))
+        if method == 1:
+            self.fmean = uf.srsf_to_f(self.mqn, self.time, np.median(f0[0, :]))
+        else:
+            self.fmean = uf.srsf_to_f(self.mqn, self.time, np.mean(f0[0, :]))
 
         fgam = np.zeros((M, N))
         for k in range(0, N):
