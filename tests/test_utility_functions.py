@@ -99,6 +99,56 @@ def test_reparam_bad_shapes(method, sine_signal, timet):
         fs.optimum_reparam(Q, timet, sine_signal, method=method)
 
 
+# Warps of the "DP" solver for two Gaussian bumps on 101 points, as
+# (grid index, 100*gamma) knots of the piecewise-linear gamma, keyed by lam
+# with the default l2psi penalty.  They were produced by MATLAB fdasrvf
+# optimum_reparam(..., 'DP1') (DynamicProgrammingQ with scl = 1) from the SRSFs
+# below, and Python agreed with them to machine precision.  R optimum.reparam
+# (method = "DPo") must give the same warps.  The cost is integrated on the
+# sample grid itself (scl = 1 in src/DP.c), and an upsampled grid (scl = 5)
+# moves these warps by up to two grid steps.
+_DP_REFERENCE_KNOTS = {
+    0.0: [(0, 0), (2, 20), (3, 22), (18, 43), (25, 53), (30, 60), (44, 80),
+          (47, 84), (52, 91), (56, 95), (60, 96), (100, 100)],
+    0.05: [(0, 0), (16, 36), (21, 45), (25, 52), (30, 60), (38, 69), (39, 70),
+           (46, 75), (55, 80), (100, 100)],
+    0.5: [(0, 0), (40, 36), (47, 42), (54, 50), (90, 90), (100, 100)],
+    5.0: [(0, 0), (19, 19), (29, 28), (30, 29), (40, 38), (58, 58), (60, 60),
+          (69, 70), (79, 79), (100, 100)],
+}
+
+
+def _gaussian_bump_srsfs():
+    t = np.linspace(0, 1, 101)
+    f1 = np.exp(-((t - 0.3) ** 2) / 0.005)
+    f2 = 0.8 * np.exp(-((t - 0.6) ** 2) / 0.01)
+    return t, fs.f_to_srsf(f1, t), fs.f_to_srsf(f2, t)
+
+
+@pytest.mark.parametrize("lam", sorted(_DP_REFERENCE_KNOTS))
+def test_reparam_dp_matches_reference(lam):
+    pytest.importorskip("optimum_reparam_N")
+    t, q1, q2 = _gaussian_bump_srsfs()
+    idx, val = zip(*_DP_REFERENCE_KNOTS[lam])
+    expected = np.interp(np.arange(t.size), idx, val) / 100
+    gam = fs.optimum_reparam(q1, t, q2, method="DP", lam=lam)
+    np.testing.assert_allclose(gam, expected, rtol=0, atol=1e-12)
+
+
+@pytest.mark.parametrize("method", ["DP", "DP2"])
+def test_reparam_dp_accepts_noncontiguous_time(method):
+    pytest.importorskip("optimum_reparam_N")
+    pytest.importorskip("optimum_reparamN2")
+    t, q1, q2 = _gaussian_bump_srsfs()
+    # a column slice is a strided view, not C-contiguous
+    time = np.column_stack((t, t))[:, 0]
+    assert not time.flags.c_contiguous
+    gam = fs.optimum_reparam(q1, time, q2, method=method)
+    np.testing.assert_array_equal(
+        gam, fs.optimum_reparam(q1, t, q2, method=method)
+    )
+
+
 # ---------------------------------------------------------------------------
 # optimum_reparam_pair
 # ---------------------------------------------------------------------------
