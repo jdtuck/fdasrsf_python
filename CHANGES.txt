@@ -1,4 +1,4 @@
-v2.7.3 (unreleased), 2026-09-30 -- srsf_to_f integrates the interpolating spline of q|q| (exact inverse of f_to_srsf, O(h^4) round trip); fdawarp mean function uses srsf_to_f; srsf_align builds fn/qn/mqn from the final centred gam (fn = f o gam, matching MATLAB time_warping), fmean starts at mean(f[0, :]) (was f[1, :]) and the alignment variances use N - 1
+v2.7.3, 2026-10-20 -- srsf_to_f integrates the interpolating spline of q|q| (exact inverse of f_to_srsf, O(h^4) round trip); fdawarp mean function uses srsf_to_f; srsf_align builds fn/qn/mqn from the final centred gam (fn = f o gam, matching MATLAB time_warping), fmean starts at mean(f[0, :]) (was f[1, :]) and the alignment variances use N - 1; DP solvers accept non-contiguous time
 v2.7.2, 2026-09-17 -- link LAPACK alongside BLAS on windows for crbfgs
 v2.7.1, 2026-09-16 -- link BLAS explicitly instead of via findblas
 v2.7.0, 2026-09-14 -- bugfixes and expose DP penalities to all versions and code
