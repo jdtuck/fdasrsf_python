@@ -9,10 +9,11 @@ from scipy.interpolate import InterpolatedUnivariateSpline, interp1d
 from scipy.integrate import trapezoid, cumulative_trapezoid
 from numpy import zeros, ones, cumsum, linspace, gradient, sqrt
 from numpy import eye, roll, tile, array, cos, sin, ascontiguousarray
-from numpy import arccos, fabs, floor, fliplr, log, real, diff, mean
+from numpy import arccos, arctan2, fabs, floor, fliplr, log, real, diff, mean
 from scipy.linalg import norm, svd, det, solve
 import optimum_reparam_N as orN
 import fdasrsf.utility_functions as uf
+import fdasrsf.geometry as geo
 from fdasrsf.rbfgs import rlbfgs
 
 
@@ -814,15 +815,10 @@ def elastic_distance_curve(
             d = arccos(q1dotq2)
 
         time1 = linspace(0, 1, N)
-        binsize = mean(diff(time1))
-        psi = sqrt(gradient(gam, binsize))
-        q1dotq2 = trapezoid(psi, time1)
-        if q1dotq2 > 1:
-            q1dotq2 = 1
-        elif q1dotq2 < -1:
-            q1dotq2 = -1
-
-        dx = real(arccos(q1dotq2))
+        psi = geo.gam_to_psi(gam, smooth=False)
+        # arctan2 form of arccos(<psi,1>), accurate for small distances
+        ip = trapezoid(psi, time1)
+        dx = arctan2(sqrt(trapezoid((psi - ip) ** 2, time1)), ip)
 
     return d, dx
 

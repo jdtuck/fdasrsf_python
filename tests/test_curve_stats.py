@@ -20,8 +20,10 @@ def test_karcher_mean_populates_mean(karcher_fdacurve):
 def test_karcher_mean_golden_energy(karcher_fdacurve):
     # regression value; updated after find_rotation_and_seed_unique was fixed to
     # keep the optimal rotation when applying the reparameterization (the old
-    # value, 0.022668183569717587, reflected curves aligned without rotation)
-    assert karcher_fdacurve.E[-1] == pytest.approx(0.029669729165135855, rel=1e-6)
+    # value, 0.022668183569717587, reflected curves aligned without rotation),
+    # and again when the DP cost moved to a 3x finer grid with q2 interpolated
+    # linearly (scl = 3; it was 0.029669729165135855 at scl = 1 with rounding)
+    assert karcher_fdacurve.E[-1] == pytest.approx(0.014492738411949134, rel=1e-6)
 
 
 @pytest.mark.slow

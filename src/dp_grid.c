@@ -39,6 +39,10 @@ double dp_costs(
 
         if ( sr < 0 || sc < 0 ) continue;
 
+        /* The edge weight is >= 0 when lam >= 0, so a source that already
+         * costs at least the best candidate cannot win; skip its edge. */
+        if ( lam >= 0 && E[row*sr+sc] >= E[row*tr+tc] ) continue;
+
         w = dp_edge_weight( Q1, T1, nsamps1, Q2, T2, nsamps2, dim, 
           tv1[sc], tv1[tc], tv2[sr], tv2[tr], idxv1[sc], idxv2[sr], lam, pen );
 
@@ -71,7 +75,8 @@ double dp_edge_weight(
   double t1next, t2next;
   double t1nextcand1, t1nextcand2;
   double slope, rslope;
-  double dq, dqi;
+  double dq;
+  double w10, w11, w20, w21, a1, b1, a2, b2, f0, f1;
   double pen_term = 0.0;
   int i;
 
@@ -127,13 +132,24 @@ double dp_edge_weight(
     if ( t1next > b ) t1next = b;
     if ( t2next > d ) t2next = d;
 
-    /* Get contribution for current interval */
+    /* Get contribution for current interval.  Q1 and Q2 are linear between
+     * their changepoints, so the residual is linear on [t1,t1next] and its
+     * square integrates exactly to h*(f0^2 + f0*f1 + f1^2)/3. */
+    w10 = (t1 - T1[Q1idx]) / (T1[Q1idx+1] - T1[Q1idx]);
+    w11 = (t1next - T1[Q1idx]) / (T1[Q1idx+1] - T1[Q1idx]);
+    w20 = (t2 - T2[Q2idx]) / (T2[Q2idx+1] - T2[Q2idx]);
+    w21 = (t2next - T2[Q2idx]) / (T2[Q2idx+1] - T2[Q2idx]);
     dq = 0.0;
     for ( i=0; i<dim; ++i )
     {
       /* Q1 and Q2 are column-major arrays! */
-      dqi = Q1[Q1idx*dim+i] - rslope * Q2[Q2idx*dim+i];
-      dq += dqi*dqi + lam*pen_term;
+      a1 = Q1[Q1idx*dim+i];
+      b1 = Q1[(Q1idx+1)*dim+i];
+      a2 = Q2[Q2idx*dim+i];
+      b2 = Q2[(Q2idx+1)*dim+i];
+      f0 = a1 + w10*(b1-a1) - rslope*(a2 + w20*(b2-a2));
+      f1 = a1 + w11*(b1-a1) - rslope*(a2 + w21*(b2-a2));
+      dq += (f0*f0 + f0*f1 + f1*f1)/3.0 + lam*pen_term;
     }
     res += (t1next - t1) * dq;
 

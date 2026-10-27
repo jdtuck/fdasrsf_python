@@ -56,15 +56,22 @@ double evalspline(double t, const double D[2], const double y[2]);
 // the edges of the path and so have no dynamic-programming counterpart; see
 // dp_penalty.h.
 //
+// q1 and q2 are resampled scl times finer for the cost along each path
+// segment; the path itself stays on the N x N grid.  scl = 1 evaluates the
+// cost on the original grid.
+//
 // Returns 0 on success, -1 if a work buffer could not be allocated (in which
-// case yy is not fully written), or -2 if pen is not a known penalty type.
-int DP(double *q1, double *q2, int n, int N, double lam, int pen, int Disp, double *yy) {
+// case yy is not fully written), -2 if pen is not a known penalty type, or -3
+// if scl is not between 1 and 64.
+int DP(double *q1, double *q2, int n, int N, double lam, int pen, int scl, int Disp, double *yy) {
 	int i, j, k, l, M, Eidx, Fidx, Ftmp, Fmin, Num, *Path = 0, *xy = 0, x, y, cnt, status = -1;
-	const int scl = 1;
 	double *q1L = 0, *q2L = 0, *D1 = 0, *D2, *tmp1, *tmp2, *E = 0, Etmp, Emin, t, a, b;
 
 	if (pen < DP_PEN_NONE || pen > DP_PEN_L2PSI)
 		return -2;
+
+	if (scl < 1 || scl > 64)
+		return -3;
 
 	M = scl*(N-1)+1;
 
@@ -127,7 +134,9 @@ int DP(double *q1, double *q2, int n, int N, double lam, int pen, int Disp, doub
 				k = i - Nbrs[Num][0];
 				l = j - Nbrs[Num][1];
 
-				if (k >= 0 && l >= 0) {
+				// the edge cost is >= 0 when lam >= 0, so a source that already
+				// costs at least Emin cannot win; skip computing its edge
+				if (k >= 0 && l >= 0 && (Num == 0 || lam < 0 || E[N*l + k] < Emin)) {
 					Etmp = E[N*l + k] + CostFn2(q1L,q2L,k,l,i,j,n,scl,lam,pen);
 					if (Num == 0 || Etmp < Emin) {
 						Emin = Etmp;
@@ -224,7 +233,7 @@ int xycompare(const void *x1, const void *x2) {
 
 double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j, int n, int scl, double lam, int pen) {
 	double m = (j-l)/(double)(i-k), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp, tmp_pen = 0;
-	int x, idx, d, iL=i*scl, kL=k*scl, lL=l*scl;
+	int x, idx, d, iL=i*scl, kL=k*scl, lL=l*scl, jL=j*scl;
 
 	// gamma is linear along the candidate edge, so gammadot is the constant
 	// slope m and the penalty integrand is constant too: evaluate it once per
@@ -243,10 +252,20 @@ double CostFn2(const double *q1L, const double *q2L, int k, int l, int i, int j,
 	for (x = kL; x <= iL; ++x) {
 		y = (x-kL)*m + lL;
 		fp = modf(y, &ip);
-		idx = (int)(ip + (fp >= 0.5));
+		idx = (int)ip;
+		// y can land a rounding error past the segment end jL
+		if (idx >= jL) {
+			idx = jL;
+			fp = 0;
+		}
 
+		// interpolate q2 linearly between grid points; rounding to the
+		// nearest one made the cost, and so the warp, jump on the grid
 		for (d = 0; d < n; ++d) {
-			tmp = q1L[n*x + d] - sqrtm*q2L[n*idx + d];
+			tmp = q2L[n*idx + d];
+			if (fp > 0)
+				tmp += fp*(q2L[n*(idx+1) + d] - tmp);
+			tmp = q1L[n*x + d] - sqrtm*tmp;
 			E += (tmp*tmp + lam*tmp_pen);
 		}
 	}

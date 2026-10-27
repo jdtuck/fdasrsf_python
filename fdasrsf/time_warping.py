@@ -86,7 +86,7 @@ class fdawarp:
         lam=0.0,
         pen="l2psi",
         cores=-1,
-        grid_dim=7,
+        grid_dim=10,
         verbose=True,
 	thresh = .01
     ):
@@ -111,7 +111,7 @@ class fdawarp:
                 "RBFGS" or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
-                         (default = 7)
+                         (default = 10)
         :param verbose: print status output (default = T)
         :param thresh: cost function threshold (default = .01)
         :type lam: double
@@ -380,7 +380,7 @@ class fdawarp:
             parallel=True,
             pen="l2psi",
             cores=-1,
-            grid_dim=7,
+            grid_dim=10,
             verbose=True):
         """
         This computes the peak persistance diagram over a range of
@@ -409,7 +409,7 @@ class fdawarp:
                 "RBFGS" or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
-                         (default = 7)
+                         (default = 10)
         :param verbose: print status output (default = T)
         :param thresh: cost function threshold (default = .01)
         :type lam: double
@@ -441,7 +441,7 @@ class fdawarp:
                                               lam_vec[i],
                                               pen,
                                               cores,
-                                              grid_dim=7)
+                                              grid_dim=grid_dim)
             
             if srvf:
                 fns.append(self.qn)
@@ -725,7 +725,7 @@ class fdawarp:
         lam=0.0,
         pen="l2psi",
         cores=-1,
-        grid_dim=7,
+        grid_dim=10,
     ):
         """
         This function aligns a collection of functions using the elastic
@@ -747,7 +747,7 @@ class fdawarp:
                 "RBFGS" or "cRBFGS"
         :param cores: number of cores for parallel (default = -1 (all))
         :param grid_dim: size of the grid, for the DP2 method only
-                         (default = 7)
+                         (default = 10)
         :type lam: double
         :type smoothdata: bool
 
@@ -824,7 +824,7 @@ class fdawarp:
 
 
 def pairwise_align_functions(
-    f1, f2, time, omethod="DP2", lam=0, pen="l2psi", grid_dim=7
+    f1, f2, time, omethod="DP2", lam=0, pen="l2psi", grid_dim=10
 ):
     """
     This function aligns f2 to f1 using the elastic square-root
@@ -845,7 +845,7 @@ def pairwise_align_functions(
                 "roughness" and "geodesic" have no dynamic programming
                 counterpart, so with a nonzero lam they need omethod
                 "RBFGS" or "cRBFGS"
-    :param grid_dim: size of the grid, for the DP2 method only (default = 7)
+    :param grid_dim: size of the grid, for the DP2 method only (default = 10)
 
     :rtype list containing
     :return f2n: aligned f2
@@ -1968,13 +1968,13 @@ def align_fPCA(f, time, num_comp=3, showplot=True, smoothdata=False, cores=-1):
         # Matching Step
         if parallel:
             out = Parallel(n_jobs=cores)(
-                delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr], "DP", lam)
+                delayed(uf.optimum_reparam)(qhat[:, n], time, qi[:, n, itr], "DP2", lam)
                 for n in range(N)
             )
             gam_t = np.array(out)
             gam[:, :, itr] = gam_t.transpose()
         else:
-            gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], "DP", lam)
+            gam[:, :, itr] = uf.optimum_reparam(qhat, time, qi[:, :, itr], "DP2", lam)
 
         for k in range(0, N):
             time0 = (time[-1] - time[0]) * gam[:, k, itr] + time[0]

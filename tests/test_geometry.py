@@ -57,3 +57,31 @@ def test_gamma_representation_round_trip(to_fn, from_fn):
     rep = getattr(geo, to_fn)(gam, smooth=False)
     gam_back = getattr(geo, from_fn)(rep)
     np.testing.assert_allclose(gam_back, gam, atol=2e-2)
+
+
+def test_inv_exp_map_small_angle(identity_psi):
+    # the angle stays accurate for nearby points, where arccos of the inner
+    # product would round to zero or ~1e-8
+    M = identity_psi.shape[0]
+    v0 = np.sin(2 * np.pi * np.linspace(0, 1, M))
+    v = v0 - geo.inner_product(v0, identity_psi) * identity_psi
+    v = 1e-7 * v / geo.L2norm(v)
+    p2 = geo.exp_map(identity_psi, v)
+    _, theta = geo.inv_exp_map(identity_psi, p2)
+    assert theta == pytest.approx(1e-7, rel=1e-6)
+
+
+def test_gam_to_psi_is_unit_norm():
+    s = np.linspace(0, 1, 101)
+    gam = np.column_stack((s, (np.exp(3 * s) - 1) / (np.exp(3) - 1)))
+    psi = geo.gam_to_psi(gam)
+    np.testing.assert_allclose(
+        np.sqrt(np.trapezoid(psi**2, s, axis=0)), [1, 1], rtol=0, atol=1e-12
+    )
+
+
+def test_gam_to_h_flat_segment_is_finite():
+    # a warp with a flat segment (gamdot = 0) gives a finite h
+    s = np.linspace(0, 1, 101)
+    gam = np.interp(s, [0, 0.3, 0.5, 1], [0, 0.4, 0.4, 1])
+    assert np.all(np.isfinite(geo.gam_to_h(gam)))

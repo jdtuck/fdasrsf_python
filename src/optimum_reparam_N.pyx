@@ -11,15 +11,22 @@ def _check_pen(int pen):
         raise ValueError("pen must be one of 0 (none), 1 (l2gam) or 2 (l2psi)")
 
 
+def _check_scl(int scl):
+    if scl < 1 or scl > 64:
+        raise ValueError("scl must be an integer between 1 and 64")
+
+
 cdef _check_status(int status):
     if status == -2:
         raise ValueError("unknown penalty type passed to the DP solver")
+    if status == -3:
+        raise ValueError("scl passed to the DP solver must be between 1 and 64")
     if status != 0:
         raise MemoryError("the DP solver could not allocate its work buffers")
 
 
 def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[double, ndim=1, mode="c"] time,
-                      np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0, int pen=2):
+                      np.ndarray[double, ndim=2, mode="c"] q, lam1=0.0, int pen=2, int scl=3):
     """
     cython interface calculates the warping to align a set of SRSFS q to a single SRSF mq
 
@@ -30,12 +37,16 @@ def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[doubl
     :param pen: penalty weighted by lam1, 0 = none, 1 = l2gam, 2 = l2psi
                 (default = 2).  The roughness and geodesic penalties of the
                 RBFGS solvers have no dynamic-programming counterpart.
+    :param scl: the SRSFs are resampled scl times finer to evaluate the
+                alignment cost; the warp stays on the grid (default = 3,
+                1 evaluates the cost on the original grid)
 
     :rtype numpy ndarray
     :return gam: describing the warping functions used to align columns of q with mq
 
     """
     _check_pen(pen)
+    _check_scl(scl)
     cdef int M, N, n1, disp
     cdef double lam
     mq = mq / norm(mq)
@@ -51,13 +62,13 @@ def coptimum_reparam_N(np.ndarray[double, ndim=1, mode="c"] mq, np.ndarray[doubl
         qi = q[:, k] / norm(q[:, k])
         qi = np.ascontiguousarray(qi)
 
-        _check_status(cDP.DP(&qi[0], &mq[0], n1, M, lam, pen, disp, &gami[0]))
+        _check_status(cDP.DP(&qi[0], &mq[0], n1, M, lam, pen, scl, disp, &gami[0]))
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                       np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=2):
+                       np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=2, int scl=3):
     """
     cython interface calculates the warping to align a set of SRSFs q1 to another set of SRSFs q2
 
@@ -68,12 +79,16 @@ def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doub
     :param pen: penalty weighted by lam1, 0 = none, 1 = l2gam, 2 = l2psi
                 (default = 2).  The roughness and geodesic penalties of the
                 RBFGS solvers have no dynamic-programming counterpart.
+    :param scl: the SRSFs are resampled scl times finer to evaluate the
+                alignment cost; the warp stays on the grid (default = 3,
+                1 evaluates the cost on the original grid)
 
     :rtype numpy ndarray
     :return gam: describing the warping functions used to align columns of q with mq
 
     """
     _check_pen(pen)
+    _check_scl(scl)
     cdef int M, N, n1, disp
     cdef double lam
 
@@ -92,13 +107,13 @@ def coptimum_reparam_N2(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[doub
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        _check_status(cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, disp, &gami[0]))
+        _check_status(cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, scl, disp, &gami[0]))
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                     np.ndarray[double, ndim=1, mode="c"] q2, lam1=0.0, int pen=2):
+                     np.ndarray[double, ndim=1, mode="c"] q2, lam1=0.0, int pen=2, int scl=3):
     """
     cython interface for calculates the warping to align SRSFs q2 to q1
 
@@ -109,11 +124,15 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     :param pen: penalty weighted by lam1, 0 = none, 1 = l2gam, 2 = l2psi
                 (default = 2).  The roughness and geodesic penalties of the
                 RBFGS solvers have no dynamic-programming counterpart.
+    :param scl: the SRSFs are resampled scl times finer to evaluate the
+                alignment cost; the warp stays on the grid (default = 3,
+                1 evaluates the cost on the original grid)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
     _check_pen(pen)
+    _check_scl(scl)
     cdef int M, n1, disp
     cdef double lam
     M = q1.shape[0]
@@ -124,14 +143,14 @@ def coptimum_reparam(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double,
     q2 = q2 / norm(q2)
     cdef np.ndarray[double, ndim=1, mode="c"] gami = np.zeros(M)
 
-    _check_status(cDP.DP(&q2[0], &q1[0], n1, M, lam, pen, disp, &gami[0]))
+    _check_status(cDP.DP(&q2[0], &q1[0], n1, M, lam, pen, scl, disp, &gami[0]))
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[double, ndim=1, mode="c"] time,
                             np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0,
-                            int pen=2):
+                            int pen=2, int scl=3):
     """
     cython interface for calculates the warping to align paired SRSF f1 and f2 to q
 
@@ -143,11 +162,15 @@ def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[
     :param pen: penalty weighted by lam1, 0 = none, 1 = l2gam, 2 = l2psi
                 (default = 2).  The roughness and geodesic penalties of the
                 RBFGS solvers have no dynamic-programming counterpart.
+    :param scl: the SRSFs are resampled scl times finer to evaluate the
+                alignment cost; the warp stays on the grid (default = 3,
+                1 evaluates the cost on the original grid)
 
     :rtype vector
     :return gam: describing the warping function used to align q2 with q1
     """
     _check_pen(pen)
+    _check_scl(scl)
     cdef int M, N, n1, disp
     n1 = 2
     cdef double lam
@@ -167,13 +190,13 @@ def coptimum_reparam_N2_pair(np.ndarray[double, ndim=2, mode="c"] q, np.ndarray[
         q1i = np.ascontiguousarray(q1i)
         q2i = np.ascontiguousarray(q2i)
 
-        _check_status(cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, disp, &gami[0]))
+        _check_status(cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, scl, disp, &gami[0]))
         gam[:, k] = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                          np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=2):
+                          np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=2, int scl=3):
     """
     cython interface for calculates the warping to align paired srsf q2 to q1
 
@@ -184,11 +207,15 @@ def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[
     :param pen: penalty weighted by lam1, 0 = none, 1 = l2gam, 2 = l2psi
                 (default = 2).  The roughness and geodesic penalties of the
                 RBFGS solvers have no dynamic-programming counterpart.
+    :param scl: the SRSFs are resampled scl times finer to evaluate the
+                alignment cost; the warp stays on the grid (default = 3,
+                1 evaluates the cost on the original grid)
 
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
     _check_pen(pen)
+    _check_scl(scl)
     cdef int M, N, disp
     cdef double lam
     M, N = q1.shape[0], q1.shape[1]
@@ -205,13 +232,13 @@ def coptimum_reparam_pair_q(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[
     q1i = np.ascontiguousarray(q1i)
     q2i = np.ascontiguousarray(q2i)
 
-    _check_status(cDP.DP(&q2i[0], &q1i[0], N, M, lam, pen, disp, &gami[0]))
+    _check_status(cDP.DP(&q2i[0], &q1i[0], N, M, lam, pen, scl, disp, &gami[0]))
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam
 
 def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[double, ndim=1, mode="c"] time,
-                     np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=2):
+                     np.ndarray[double, ndim=2, mode="c"] q2, lam1=0.0, int pen=2, int scl=3):
     """
     cython interface for calculates the warping to align curve q2 to q1
 
@@ -222,11 +249,15 @@ def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[d
     :param pen: penalty weighted by lam1, 0 = none, 1 = l2gam, 2 = l2psi
                 (default = 2).  The roughness and geodesic penalties of the
                 RBFGS solvers have no dynamic-programming counterpart.
+    :param scl: the SRSFs are resampled scl times finer to evaluate the
+                alignment cost; the warp stays on the grid (default = 3,
+                1 evaluates the cost on the original grid)
 
     :rtype vector
     :return gam: describing the warping function used to align f2 with f1
     """
     _check_pen(pen)
+    _check_scl(scl)
     cdef int M, n1, disp
     cdef double lam
     n1 = q1.shape[0]
@@ -243,7 +274,7 @@ def coptimum_reparam_curve(np.ndarray[double, ndim=2, mode="c"] q1, np.ndarray[d
     q1i = np.ascontiguousarray(q1i)
     q2i = np.ascontiguousarray(q2i)
 
-    _check_status(cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, disp, &gami[0]))
+    _check_status(cDP.DP(&q2i[0], &q1i[0], n1, M, lam, pen, scl, disp, &gami[0]))
     gam = (gami - gami[0]) / (gami[-1] - gami[0])
 
     return gam

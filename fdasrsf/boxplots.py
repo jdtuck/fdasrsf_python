@@ -134,6 +134,13 @@ class ampbox:
 
         Q1a_index = CR_alpha[maxloc_row]
         Q3a_index = CR_alpha[maxloc_col]
+
+        # check quartile and quantile going in same direction
+        tst = trapezoid(
+            (qt[:, Q1a_index] - q_median) * (qt[:, Q1_index] - q_median), time
+        )
+        if tst < 0:
+            Q1a_index, Q3a_index = Q3a_index, Q1a_index
         Q1a_q = qt[:, Q1a_index]
         Q3a_q = qt[:, Q3a_index]
         Q1a = ft[:, Q1a_index]
@@ -154,7 +161,7 @@ class ampbox:
         outlier_index = np.array([])
         for i in range(0, N):
             if dy[dy_ordering[N - i - 1]] > whisker_dis:
-                outlier_index = np.append(outlier_index, dy[dy_ordering[N - i - 1]])
+                outlier_index = np.append(outlier_index, dy_ordering[N - i - 1])
 
         # identify amplitude extremes
         distance_to_upper = np.full(N, np.inf)
@@ -167,8 +174,6 @@ class ampbox:
 
         max_index = distance_to_upper.argmin()
         min_index = distance_to_lower.argmin()
-        min_q = qt[:, min_index]
-        max_q = qt[:, max_index]
         minn = ft[:, min_index]
         maxx = ft[:, max_index]
 
@@ -183,12 +188,15 @@ class ampbox:
             Fs2[:, 395 + j] = (1 - s[j]) * Q3 + s[j] * Q3a
             Fs2[:, 494 + j] = (1 - s[j]) * Q3a + s[j] * maxx
 
-        d1 = np.sqrt(trapezoid((q_median - Q1_q) ** 2, time))
-        d1a = np.sqrt(trapezoid((Q1_q - Q1a_q) ** 2, time))
-        dl = np.sqrt(trapezoid((Q1a_q - min_q) ** 2, time))
-        d3 = np.sqrt(trapezoid((q_median - Q3_q) ** 2, time))
-        d3a = np.sqrt(trapezoid((Q3_q - Q3a_q) ** 2, time))
-        du = np.sqrt(trapezoid((Q3a_q - max_q) ** 2, time))
+        # place each curve at its distance from the median; the increments
+        # between neighbouring curves then sum to that distance (pairwise
+        # distances like d(Q1,Q1a) would overshoot by the triangle inequality)
+        d1 = dy[Q1_index]
+        d1a = dy[Q1a_index] - d1
+        dl = dy[min_index] - d1 - d1a
+        d3 = dy[Q3_index]
+        d3a = dy[Q3a_index] - d3
+        du = dy[max_index] - d3 - d3a
         part1 = np.linspace(-d1 - d1a - dl, -d1 - d1a, 100)
         part2 = np.linspace(-d1 - d1a, -d1, 100)
         part3 = np.linspace(-d1, 0, 100)
@@ -373,8 +381,9 @@ class phbox:
             for j in range(i + 1, CR_50.shape[0]):
                 q1 = v[:, CR_50[i]]
                 q3 = v[:, CR_50[j]]
-                q1 /= np.sqrt(trapezoid(q1**2, time))
-                q3 /= np.sqrt(trapezoid(q3**2, time))
+                # not in place: q1 and q3 are views into v
+                q1 = q1 / np.sqrt(trapezoid(q1**2, time))
+                q3 = q3 / np.sqrt(trapezoid(q3**2, time))
                 angle[i, j] = trapezoid(q1 * q3, time)
                 energy[i, j] = (1 - lam) * (
                     dx[CR_50[i]] / m + dx[CR_50[j]] / m
@@ -387,8 +396,6 @@ class phbox:
         Q3_index = CR_50[maxloc_col]
         Q1 = gam[:, Q1_index]
         Q3 = gam[:, Q3_index]
-        Q1_psi = np.sqrt(np.gradient(Q1, 1 / (M - 1)))
-        Q3_psi = np.sqrt(np.gradient(Q3, 1 / (M - 1)))
 
         # identify phase quantiles
         dx_ordering = dx.argsort()
@@ -401,8 +408,9 @@ class phbox:
             for j in range(i + 1, CR_alpha.shape[0]):
                 q1 = v[:, CR_alpha[i]]
                 q3 = v[:, CR_alpha[j]]
-                q1 /= np.sqrt(trapezoid(q1**2, time))
-                q3 /= np.sqrt(trapezoid(q3**2, time))
+                # not in place: q1 and q3 are views into v
+                q1 = q1 / np.sqrt(trapezoid(q1**2, time))
+                q3 = q3 / np.sqrt(trapezoid(q3**2, time))
                 angle[i, j] = trapezoid(q1 * q3, time)
                 energy[i, j] = (1 - lam) * (
                     dx[CR_alpha[i]] / m + dx[CR_alpha[j]] / m
@@ -413,26 +421,25 @@ class phbox:
 
         Q1a_index = CR_alpha[maxloc_row]
         Q3a_index = CR_alpha[maxloc_col]
-        Q1a = gam[:, Q1a_index]
-        Q3a = gam[:, Q3a_index]
-        Q1a_psi = np.sqrt(np.gradient(Q1a, 1 / (M - 1)))
-        Q3a_psi = np.sqrt(np.gradient(Q3a, 1 / (M - 1)))
 
         # check quartile and quantile going in same direction
-        tst = trapezoid(v[:, Q1a_index] * v[:, Q1_index])
+        tst = trapezoid(v[:, Q1a_index] * v[:, Q1_index], time)
         if tst < 0:
-            Q1a = gam[:, Q3a_index]
-            Q3a = gam[:, Q1a_index]
+            Q1a_index, Q3a_index = Q3a_index, Q1a_index
+        Q1a = gam[:, Q1a_index]
+        Q3a = gam[:, Q3a_index]
+        Q1a_psi = psi[:, Q1a_index]
+        Q3a_psi = psi[:, Q3a_index]
 
         # compute phase whiskers
         IQR = dx[Q1_index] + dx[Q3_index]
-        v1 = v[:, Q3a_index]
-        v3 = v[:, Q3a_index]
+        v1 = v[:, Q1_index]
+        v3 = v[:, Q3_index]
         upper_v = v3 + k_a * IQR * v3 / np.sqrt(trapezoid(v3**2, time))
         lower_v = v1 + k_a * IQR * v1 / np.sqrt(trapezoid(v1**2, time))
 
-        upper_dis = np.sqrt(trapezoid(v3**2, time))
-        lower_dis = np.sqrt(trapezoid(v1**2, time))
+        upper_dis = np.sqrt(trapezoid(upper_v**2, time))
+        lower_dis = np.sqrt(trapezoid(lower_v**2, time))
         whisker_dis = max(upper_dis, lower_dis)
 
         # identify phase outliers
@@ -454,8 +461,6 @@ class phbox:
         min_index = distance_to_lower.argmin()
         minn = gam[:, min_index]
         maxx = gam[:, max_index]
-        min_psi = psi[:, min_index]
-        max_psi = psi[:, max_index]
 
         s = np.linspace(0, 1, 100)
         Fs2 = np.zeros((time.shape[0], 595))
@@ -468,12 +473,15 @@ class phbox:
             Fs2[:, 395 + j] = (1 - s[j]) * (Q3 - t) + s[j] * (Q3a - t)
             Fs2[:, 494 + j] = (1 - s[j]) * (Q3a - t) + s[j] * (maxx - t)
 
-        d1 = np.sqrt(trapezoid(psi_median * Q1_psi, time))
-        d1a = np.sqrt(trapezoid(Q1_psi * Q1a_psi, time))
-        dl = np.sqrt(trapezoid(Q1a_psi * min_psi, time))
-        d3 = np.sqrt(trapezoid((psi_median * Q3_psi), time))
-        d3a = np.sqrt(trapezoid((Q3_psi * Q3a_psi), time))
-        du = np.sqrt(trapezoid((Q3a_psi * max_psi), time))
+        # place each curve at its distance from the median; the increments
+        # between neighbouring curves then sum to that distance (pairwise
+        # distances like d(Q1,Q1a) would overshoot by the triangle inequality)
+        d1 = dx[Q1_index]
+        d1a = dx[Q1a_index] - d1
+        dl = dx[min_index] - d1 - d1a
+        d3 = dx[Q3_index]
+        d3a = dx[Q3a_index] - d3
+        du = dx[max_index] - d3 - d3a
         part1 = np.linspace(-d1 - d1a - dl, -d1 - d1a, 100)
         part2 = np.linspace(-d1 - d1a, -d1, 100)
         part3 = np.linspace(-d1, 0, 100)

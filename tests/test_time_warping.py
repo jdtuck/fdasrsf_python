@@ -35,9 +35,10 @@ def test_pairwise_align_functions_aligns_warped_copy():
 
 
 def test_srsf_align_golden_amp_var(aligned_fdawarp):
-    # regression value; matches MATLAB fdawarp.time_warping(0, method='DP')
-    # (0.02000), since fn is f o gam and the variances use N - 1
-    assert aligned_fdawarp.amp_var == pytest.approx(0.02000430750010335, rel=1e-6)
+    # regression value; fn is f o gam and the variances use N - 1.  R
+    # time_warping(penalty_method = "l2psi") gives the same 0.0200446 now that
+    # both integrate the SRSFs linearly in the DP2 cost with grid_dim = 10
+    assert aligned_fdawarp.amp_var == pytest.approx(0.02004456438020598, rel=1e-6)
 
 
 def _warp(f, gam, time):
