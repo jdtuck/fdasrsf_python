@@ -11,7 +11,7 @@ from scipy.linalg import norm, svd, cholesky, inv, pinv
 from scipy.stats.mstats import mquantiles
 from scipy import special as sp
 from numpy import zeros, interp, finfo, double, sqrt, diff, linspace
-from numpy import arccos, sin, cos, arange, ascontiguousarray, round
+from numpy import arccos, arctan2, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
 from numpy import gradient, column_stack, append, mean, hstack, median
 from numpy import insert, vectorize, ceil, mod, array, percentile, dot
@@ -132,7 +132,7 @@ def srsf_to_f(q, time, f0=0.0):
 
 
 def optimum_reparam(
-    q1, time, q2, method="DP2", lam=0.0, penalty="l2psi", grid_dim=7
+    q1, time, q2, method="DP2", lam=0.0, penalty="l2psi", grid_dim=10, scl=3
 ):
     """
     calculates the warping to align srsf q2 to q1
@@ -148,7 +148,12 @@ def optimum_reparam(
                     weighted by lam, so it has no effect when lam is 0.
                     "roughness" and "geodesic" are only available for the
                     "RBFGS" and "cRBFGS" methods, see below
-    :param grid_dim: size of the grid, for the DP2 method only (default = 7)
+    :param grid_dim: size of the grid, for the DP2 method only (default = 10,
+                     the 63 slopes the DP method searches)
+    :param scl: for the DP method, the SRSFs are resampled scl times finer to
+                evaluate the alignment cost; the warp stays on the grid time
+                (default = 3, 1 turns the resampling off).  DP2 integrates the
+                linearly interpolated SRSFs exactly, so it does not use scl
 
     :rtype: vector
     :return gam: describing the warping function used to align q2 with q1
@@ -216,17 +221,20 @@ def optimum_reparam(
     if method == "DP":
         if q1.ndim == 1 and q2.ndim == 1:
             gam = orN.coptimum_reparam(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp,
+                scl,
             )
 
         if q1.ndim == 1 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp,
+                scl,
             )
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = orN.coptimum_reparam_N2(
-                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp
+                ascontiguousarray(q1), time, ascontiguousarray(q2), lam, pen_dp,
+                scl,
             )
     elif method == "DP2":
         if q1.ndim == 1 and q2.ndim == 1:
@@ -456,15 +464,10 @@ def elastic_distance(
     M = time.shape[0]
 
     time1 = linspace(0, 1, M)
-    binsize = mean(diff(time1))
-    psi = sqrt(gradient(gam, binsize))
-    q1dotq2 = trapezoid(psi, time1)
-    if q1dotq2 > 1:
-        q1dotq2 = 1
-    elif q1dotq2 < -1:
-        q1dotq2 = -1
-
-    Dx = real(arccos(q1dotq2))
+    psi = geo.gam_to_psi(gam, smooth=False)
+    # arctan2 form of arccos(<psi,1>), accurate for small distances
+    ip = trapezoid(psi, time1)
+    Dx = arctan2(sqrt(trapezoid((psi - ip) ** 2, time1)), ip)
 
     if alpha is not None:
         Dt = alpha * Dx + (1 - alpha) * Dy

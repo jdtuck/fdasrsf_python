@@ -101,20 +101,18 @@ def test_reparam_bad_shapes(method, sine_signal, timet):
 
 # Warps of the "DP" solver for two Gaussian bumps on 101 points, as
 # (grid index, 100*gamma) knots of the piecewise-linear gamma, keyed by lam
-# with the default l2psi penalty.  They were produced by MATLAB fdasrvf
-# optimum_reparam(..., 'DP1') (DynamicProgrammingQ with scl = 1) from the SRSFs
-# below, and Python agreed with them to machine precision.  R optimum.reparam
-# (method = "DPo") must give the same warps.  The cost is integrated on the
-# sample grid itself (scl = 1 in src/DP.c), and an upsampled grid (scl = 5)
-# moves these warps by up to two grid steps.
+# with the default l2psi penalty.  The cost resamples the SRSFs three times
+# finer (scl = 3 in src/DP.c) and interpolates q2 linearly between those
+# points, as MATLAB fdasrvf optimum_reparam(..., 'DP1') does since 3.7.X.  R
+# optimum.reparam (method = "DPo") gives the same warps to machine precision.
 _DP_REFERENCE_KNOTS = {
-    0.0: [(0, 0), (2, 20), (3, 22), (18, 43), (25, 53), (30, 60), (44, 80),
-          (47, 84), (52, 91), (56, 95), (60, 96), (100, 100)],
-    0.05: [(0, 0), (16, 36), (21, 45), (25, 52), (30, 60), (38, 69), (39, 70),
+    0.0: [(0, 0), (2, 20), (6, 26), (13, 36), (18, 43), (25, 53), (35, 67),
+          (42, 77), (47, 84), (54, 94), (56, 95), (60, 96), (100, 100)],
+    0.05: [(0, 0), (16, 36), (21, 45), (25, 52), (30, 60), (37, 68), (39, 70),
            (46, 75), (55, 80), (100, 100)],
-    0.5: [(0, 0), (40, 36), (47, 42), (54, 50), (90, 90), (100, 100)],
-    5.0: [(0, 0), (19, 19), (29, 28), (30, 29), (40, 38), (58, 58), (60, 60),
-          (69, 70), (79, 79), (100, 100)],
+    0.5: [(0, 0), (10, 10), (50, 46), (86, 86), (100, 100)],
+    5.0: [(0, 0), (19, 19), (29, 28), (31, 30), (41, 39), (49, 47), (58, 57),
+          (64, 63), (73, 73), (100, 100)],
 }
 
 
@@ -133,6 +131,59 @@ def test_reparam_dp_matches_reference(lam):
     expected = np.interp(np.arange(t.size), idx, val) / 100
     gam = fs.optimum_reparam(q1, t, q2, method="DP", lam=lam)
     np.testing.assert_allclose(gam, expected, rtol=0, atol=1e-12)
+
+
+@pytest.fixture
+def known_warp():
+    """f2 = f1 o gam_true on 101 points, so aligning q2 to q1 should recover
+    the inverse of gam_true (as in MATLAB tests/DynamicProgrammingTest.m)."""
+    t = np.linspace(0, 1, 101)
+
+    def f(s):
+        return np.sin(3 * np.pi * s) + 0.5 * np.cos(7 * np.pi * s) + 2 * s
+
+    gam_true = t + 0.5 * np.sin(np.pi * t) / np.pi
+    q1 = fs.f_to_srsf(f(t), t)
+    q2 = fs.f_to_srsf(f(gam_true), t)
+    gam_inv = np.interp(t, gam_true, t)
+    return t, q1, q2, gam_inv
+
+
+def _align_error(t, q1, q2, gam):
+    qw = fs.warp_q_gamma(t, q2, gam)
+    return np.sqrt(np.trapezoid((q1 - qw) ** 2, t))
+
+
+def test_reparam_dp_recovers_known_warp(known_warp):
+    # rounding q2 to the nearest grid point at scl = 1 left the warp up to
+    # 0.63 grid cells off
+    pytest.importorskip("optimum_reparam_N")
+    t, q1, q2, gam_inv = known_warp
+    gam = fs.optimum_reparam(q1, t, q2, method="DP")
+    assert np.max(np.abs(gam - gam_inv)) * (t.size - 1) < 0.5
+
+
+@pytest.mark.parametrize("method", ["DP", "DP2"])
+def test_reparam_dp_fits_as_well_as_true_warp(known_warp, method):
+    # the old DP cost fit 1.35x and the old DP2 cost (piecewise-constant
+    # SRSFs, grid_dim = 7) 1.52x worse than the true warp
+    pytest.importorskip("optimum_reparam_N")
+    pytest.importorskip("optimum_reparamN2")
+    t, q1, q2, gam_inv = known_warp
+    gam = fs.optimum_reparam(q1, t, q2, method=method)
+    assert _align_error(t, q1, q2, gam) < 1.1 * _align_error(t, q1, q2, gam_inv)
+
+
+def test_reparam_dp_scl(known_warp):
+    pytest.importorskip("optimum_reparam_N")
+    t, q1, q2, _ = known_warp
+    gam = fs.optimum_reparam(q1, t, q2, method="DP")
+    assert np.array_equal(gam, fs.optimum_reparam(q1, t, q2, method="DP", scl=3))
+    gam1 = fs.optimum_reparam(q1, t, q2, method="DP", scl=1)
+    assert gam1.shape == gam.shape
+    assert np.all(np.diff(gam1) >= 0)
+    with pytest.raises(ValueError):
+        fs.optimum_reparam(q1, t, q2, method="DP", scl=0)
 
 
 @pytest.mark.parametrize("method", ["DP", "DP2"])
@@ -278,7 +329,7 @@ def test_elastic_distance_self_is_zero(sine_signal, timet):
     pytest.importorskip("optimum_reparamN2")
     da, dp = fs.elastic_distance(sine_signal, sine_signal, timet)
     assert da <= 1e-10
-    assert dp <= 1e-6
+    assert dp <= 1e-10
 
 
 def test_innerprod_q_of_self_is_positive(sine_signal, timet):

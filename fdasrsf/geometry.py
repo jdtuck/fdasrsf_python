@@ -5,26 +5,26 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 
 """
 
-from numpy import arccos, sin, cos, linspace, zeros, sqrt, newaxis
-from numpy import ones, diff, gradient, log, exp
+from numpy import arctan2, sin, cos, linspace, zeros, sqrt, newaxis
+from numpy import ones, diff, gradient, log, exp, maximum, where, finfo, double
 from scipy.interpolate import UnivariateSpline
 from scipy.integrate import trapezoid, cumulative_trapezoid
 import fdasrsf.utility_functions as uf
 
 
 def inv_exp_map(Psi, psi):
-    tmp = inner_product(Psi, psi)
-    if tmp > 1:
-        tmp = 1
-    if tmp < -1:
-        tmp = -1
-
-    theta = arccos(tmp)
+    # The angle is computed with arctan2 of the tangent and normal components
+    # rather than arccos of the inner product, which loses about half the
+    # significant digits for nearby points
+    ip = inner_product(Psi, psi)
+    w = psi - ip * Psi
+    wnorm = L2norm(w)
+    theta = arctan2(wnorm, ip)
 
     if theta < 1e-10:
         exp_inv = zeros(psi.shape[0])
     else:
-        exp_inv = theta / sin(theta) * (psi - cos(theta) * Psi)
+        exp_inv = theta / wnorm * w
 
     return exp_inv, theta
 
@@ -52,18 +52,19 @@ def L2norm(psi):
     return l2norm
 
 
-def gam_to_h(gam, smooth=True):
+def gam_to_h(gam, smooth=False):
     TT = gam.shape[0]
     time = linspace(0, 1, TT)
     binsize = diff(time)
     binsize = binsize.mean()
+    eps = finfo(double).eps
     if gam.ndim == 1:
         if smooth:
             gamtmp = uf.smooth_data(gam[:, newaxis], 25)
-            psi = log(gradient(gamtmp[:, 0], binsize))
+            psi = log(maximum(gradient(gamtmp[:, 0], binsize), eps))
             h = psi - trapezoid(psi, time)
         else:
-            psi = log(gradient(gam, binsize))
+            psi = log(maximum(gradient(gam, binsize), eps))
             h = psi - trapezoid(psi, time)
     else:
         n = gam.shape[1]
@@ -73,9 +74,9 @@ def gam_to_h(gam, smooth=True):
         psi = zeros((TT, n))
         for i in range(0, n):
             if smooth:
-                psi[:, i] = log(gradient(gamtmp[:, i], binsize))
+                psi[:, i] = log(maximum(gradient(gamtmp[:, i], binsize), eps))
             else:
-                psi[:, i] = log(gradient(gam[:, i], binsize))
+                psi[:, i] = log(maximum(gradient(gam[:, i], binsize), eps))
 
         h = zeros((TT, n))
         for i in range(0, n):
@@ -84,36 +85,14 @@ def gam_to_h(gam, smooth=True):
     return h
 
 
-def gam_to_v(gam, smooth=True):
+def gam_to_v(gam, smooth=False):
     TT = gam.shape[0]
-    time = linspace(0, 1, TT)
-    binsize = diff(time)
-    binsize = binsize.mean()
     mu = ones(TT)
+    psi = gam_to_psi(gam, smooth)
     if gam.ndim == 1:
-        if smooth:
-            tmp_spline = UnivariateSpline(time, gam, s=1e-4)
-            g = tmp_spline(time, 1)
-            idx = g <= 0
-            g[idx] = 0
-            psi = sqrt(g)
-        else:
-            psi = sqrt(gradient(gam, binsize))
         vec, theta = inv_exp_map(mu, psi)
     else:
         n = gam.shape[1]
-
-        psi = zeros((TT, n))
-        for i in range(0, n):
-            if smooth:
-                tmp_spline = UnivariateSpline(time, gam[:, i], s=1e-4)
-                g = tmp_spline(time, 1)
-                idx = g <= 0
-                g[idx] = 0
-                psi[:, i] = sqrt(g)
-            else:
-                psi[:, i] = sqrt(gradient(gam[:, i], binsize))
-
         vec = zeros((TT, n))
         for i in range(0, n):
             out, theta = inv_exp_map(mu, psi[:, i])
@@ -122,33 +101,36 @@ def gam_to_v(gam, smooth=True):
     return vec
 
 
-def gam_to_psi(gam, smooth=True):
+def _gam_to_psi_1(gam, time, binsize, smooth):
+    if smooth:
+        tmp_spline = UnivariateSpline(time, gam, s=1e-4)
+        g = tmp_spline(time, 1)
+    else:
+        g = gradient(gam, binsize)
+    return sqrt(maximum(g, 0))
+
+
+def gam_to_psi(gam, smooth=False):
+    """
+    psi = sqrt(gamdot), rescaled to unit L2 norm so it lies on the Hilbert
+    sphere (smoothing and clipping negative slopes otherwise move it off)
+    """
     TT = gam.shape[0]
     time = linspace(0, 1, TT)
     binsize = diff(time)
     binsize = binsize.mean()
     if gam.ndim == 1:
-        if smooth:
-            tmp_spline = UnivariateSpline(time, gam, s=1e-4)
-            g = tmp_spline(time, 1)
-            idx = g <= 0
-            g[idx] = 0
-            psi = sqrt(g)
-        else:
-            psi = sqrt(gradient(gam, binsize))
+        psi = _gam_to_psi_1(gam, time, binsize, smooth)
     else:
         n = gam.shape[1]
 
         psi = zeros((TT, n))
         for i in range(0, n):
-            if smooth:
-                tmp_spline = UnivariateSpline(time, gam[:, i], s=1e-4)
-                g = tmp_spline(time, 1)
-                idx = g <= 0
-                g[idx] = 0
-                psi[:, i] = sqrt(g)
-            else:
-                psi[:, i] = sqrt(gradient(gam[:, i], binsize))
+            psi[:, i] = _gam_to_psi_1(gam[:, i], time, binsize, smooth)
+
+    nrm = sqrt(trapezoid(psi**2, time, axis=0))
+    nrm = where(nrm == 0, 1, nrm)
+    psi = psi / nrm
 
     return psi
 
