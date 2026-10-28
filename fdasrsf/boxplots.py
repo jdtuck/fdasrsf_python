@@ -13,6 +13,42 @@ from matplotlib import cm
 import collections
 
 
+_classify_out = collections.namedtuple(
+    "classify", ["dist", "level", "region", "side", "fn", "qn", "gam"]
+)
+
+
+def boxplot_region(dist, edges, alpha):
+    """
+    Boxplot region of a distance to the median
+
+    :param dist: vector of distances to the median
+    :param edges: [r50, ralpha, whisker_dis] from ampbox/phbox
+    :param alpha: quantile level used for the (1-alpha) region
+
+    :rtype: tuple of numpy ndarray
+    :return level: 1 = 50% region, 2 = (1-alpha) region, 3 = within whiskers,
+                   4 = outlier
+    :return region: level as text
+    """
+    names = np.array(
+        [
+            "50% central region",
+            "%g%% central region" % (100 * (1 - alpha)),
+            "within whiskers",
+            "outlier",
+        ]
+    )
+    # the whisker can fall inside ralpha, so test it last: construct_boxplot
+    # flags every distance beyond it as an outlier
+    dist = np.atleast_1d(np.asarray(dist, dtype=float))
+    level = np.full(dist.shape, 3)
+    level[dist <= edges[1]] = 2
+    level[dist <= edges[0]] = 1
+    level[dist > edges[2]] = 4
+    return level, names[level - 1]
+
+
 class ampbox:
     """
     This class provides amplitude boxplot for functional data using the
@@ -32,6 +68,10 @@ class ampbox:
     :param f_median: median function
     :param q_median: median srvf
     :param plt: surface plot mesh
+    :param dist: amplitude distance of each function to the median
+    :param r50: distance bounding the 50% central region
+    :param ralpha: distance bounding the (1-alpha) central region
+    :param whisker_dis: whisker (outlier cutoff) distance
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
@@ -86,6 +126,7 @@ class ampbox:
         CR_50 = dy_ordering[0 : np.ceil(N / 2).astype("int")]
         tmp = dy[CR_50]
         m = tmp.max()
+        r50 = m
 
         # identify amplitude quartiles
         angle = np.zeros((CR_50.shape[0], CR_50.shape[0]))
@@ -116,6 +157,7 @@ class ampbox:
         CR_alpha = dy_ordering[0 : np.round(N * (1 - alpha)).astype("int")]
         tmp = dy[CR_alpha]
         m = tmp.max()
+        ralpha = m
         angle = np.zeros((CR_alpha.shape[0], CR_alpha.shape[0]))
         energy = np.zeros((CR_alpha.shape[0], CR_alpha.shape[0]))
         for i in range(0, CR_alpha.shape[0] - 1):
@@ -226,6 +268,17 @@ class ampbox:
         self.outlier_index = outlier_index
         self.f_median = f_median
         self.q_median = q_median
+        self.Q1_index = Q1_index
+        self.Q3_index = Q3_index
+        self.Q1a_index = Q1a_index
+        self.Q3a_index = Q3a_index
+        self.Q3_q = Q3_q
+        self.dist = dy
+        self.alpha = alpha
+        self.k_a = k_a
+        self.r50 = r50
+        self.ralpha = ralpha
+        self.whisker_dis = whisker_dis
 
         plt = collections.namedtuple(
             "plt",
@@ -247,6 +300,51 @@ class ampbox:
 
         self.plt = plt(U, V, Fs2, allparts, d1, d1a, dl, d3, d3a, du, Q1a_q, Q3a_q)
         return
+
+    def classify(self, f_new, smoothdata=None):
+        """
+        Places new functions in the amplitude boxplot regions: aligns them to
+        the template and compares their amplitude distance to the median with
+        the boxplot regions
+
+        Usage: out = obj.classify(f_new)
+
+        :param f_new: numpy ndarray of shape (M,K) of K new functions sampled
+                      at warp_data.time (a vector is a single function)
+        :param smoothdata: smooth the data when computing the srsfs
+                           (default = None, the value used for the alignment)
+
+        :rtype: namedtuple
+        :return dist: amplitude distance of each function to the median srsf
+        :return level: 1 = 50% region, 2 = (1-alpha) region, 3 = within
+                       whiskers, 4 = outlier
+        :return region: level as text
+        :return side: "Q1" or "Q3", the quartile direction each function lies in
+        :return fn: aligned functions
+        :return qn: aligned srsfs
+        :return gam: warping functions
+        """
+        if not hasattr(self, "whisker_dis"):
+            raise Exception("Please run construct_boxplot first!")
+
+        time = self.warp_data.time
+        fn, qn, gam = self.warp_data.align_new(f_new, smoothdata)
+
+        v3 = self.Q3_q - self.q_median
+        K = qn.shape[1]
+        dist = np.zeros(K)
+        side = np.zeros(K)
+        for k in range(0, K):
+            v = qn[:, k] - self.q_median
+            dist[k] = np.sqrt(trapezoid(v**2, time))
+            side[k] = trapezoid(v * v3, time)
+
+        level, region = boxplot_region(
+            dist, [self.r50, self.ralpha, self.whisker_dis], self.alpha
+        )
+        return _classify_out(
+            dist, level, region, np.where(side >= 0, "Q3", "Q1"), fn, qn, gam
+        )
 
     def plot(self):
         """
@@ -321,6 +419,10 @@ class phbox:
     :param median_x: median warping function
     :param psi_median: median srvf of warping function
     :param plt: surface plot mesh
+    :param dist: phase distance of each function to the median
+    :param r50: distance bounding the 50% central region
+    :param ralpha: distance bounding the (1-alpha) central region
+    :param whisker_dis: whisker (outlier cutoff) distance
 
     Author :  J. D. Tucker (JDT) <jdtuck AT sandia.gov>
     Date   :  15-Mar-2018
@@ -373,6 +475,7 @@ class phbox:
         CR_50 = dx_ordering[0 : np.ceil(N / 2).astype("int")]
         tmp = dx[CR_50]
         m = tmp.max()
+        r50 = m
 
         # identify phase quartiles
         angle = np.zeros((CR_50.shape[0], CR_50.shape[0]))
@@ -402,6 +505,7 @@ class phbox:
         CR_alpha = dx_ordering[0 : np.round(N * (1 - alpha)).astype("int")]
         tmp = dx[CR_alpha]
         m = tmp.max()
+        ralpha = m
         angle = np.zeros((CR_alpha.shape[0], CR_alpha.shape[0]))
         energy = np.zeros((CR_alpha.shape[0], CR_alpha.shape[0]))
         for i in range(0, CR_alpha.shape[0] - 1):
@@ -510,7 +614,19 @@ class phbox:
         self.maxx = maxx
         self.outlier_index = outlier_index
         self.median_x = median_x
+        self.psi_median = psi_median
+        # misspelled name kept for backwards compatibility
         self.psi_media = psi_median
+        self.Q1_index = Q1_index
+        self.Q3_index = Q3_index
+        self.Q1a_index = Q1a_index
+        self.Q3a_index = Q3a_index
+        self.dist = dx
+        self.alpha = alpha
+        self.k_a = k_a
+        self.r50 = r50
+        self.ralpha = ralpha
+        self.whisker_dis = whisker_dis
 
         plt = collections.namedtuple(
             "plt",
@@ -532,6 +648,56 @@ class phbox:
 
         self.plt = plt(U, V, Fs2, allparts, d1, d1a, dl, d3, d3a, du, Q1a_psi, Q3a_psi)
         return
+
+    def classify(self, f_new, smoothdata=None):
+        """
+        Places new functions in the phase boxplot regions: aligns them to the
+        template and compares the phase distance of their warping functions
+        to the median with the boxplot regions
+
+        Usage: out = obj.classify(f_new)
+
+        :param f_new: numpy ndarray of shape (M,K) of K new functions sampled
+                      at warp_data.time (a vector is a single function)
+        :param smoothdata: smooth the data when computing the srsfs
+                           (default = None, the value used for the alignment)
+
+        :rtype: namedtuple
+        :return dist: phase distance of each function to the median warping
+                      function
+        :return level: 1 = 50% region, 2 = (1-alpha) region, 3 = within
+                       whiskers, 4 = outlier
+        :return region: level as text
+        :return side: "Q1" or "Q3", the quartile direction each function lies in
+        :return fn: aligned functions
+        :return qn: aligned srsfs
+        :return gam: warping functions
+        """
+        if not hasattr(self, "whisker_dis"):
+            raise Exception("Please run construct_boxplot first!")
+
+        fn, qn, gam = self.warp_data.align_new(f_new, smoothdata)
+
+        M, K = gam.shape
+        t = np.linspace(0, 1, M)
+        binsize = np.mean(np.diff(t))
+        psi_Q3 = np.sqrt(np.maximum(np.gradient(self.Q3, binsize), 0))
+        v3, _ = geo.inv_exp_map(self.psi_median, psi_Q3)
+
+        dist = np.zeros(K)
+        side = np.zeros(K)
+        for k in range(0, K):
+            psi = np.sqrt(np.maximum(np.gradient(gam[:, k], binsize), 0))
+            v, _ = geo.inv_exp_map(self.psi_median, psi)
+            dist[k] = np.sqrt(trapezoid(v**2, t))
+            side[k] = trapezoid(v * v3, t)
+
+        level, region = boxplot_region(
+            dist, [self.r50, self.ralpha, self.whisker_dis], self.alpha
+        )
+        return _classify_out(
+            dist, level, region, np.where(side >= 0, "Q3", "Q1"), fn, qn, gam
+        )
 
     def plot(self):
         """

@@ -131,6 +131,8 @@ class fdawarp:
         N = self.f.shape[1]
         self.lam = lam
         self.penalty = pen
+        self.grid_dim = grid_dim
+        self.smoothdata = smoothdata
 
         if M > 500:
             parallel = True
@@ -499,6 +501,56 @@ class fdawarp:
         drawPPDSurface(self.time,lam_vec,FNm,Heights,Locs,IndicatorMatrix,Labels,idx_opt)
         self.lam_opt = lam_vec[idx_opt]
 
+    def align_new(self, f_new, smoothdata=None):
+        """
+        Aligns new functions to the fitted template srsf (mqn) with the same
+        lam, omethod, penalty and grid_dim used to fit the object
+
+        Usage:  fn, qn, gam = obj.align_new(f_new)
+
+        :param f_new: numpy ndarray of shape (M,K) of K new functions sampled
+                      at obj.time (a vector is a single function)
+        :param smoothdata: smooth the data when computing the srsfs
+                           (default = None, the value used for the fit)
+
+        :rtype: tuple of numpy ndarray
+        :return fn: (M,K) aligned functions
+        :return qn: (M,K) aligned srsfs
+        :return gam: (M,K) warping functions
+        """
+        if not hasattr(self, "mqn"):
+            raise Exception(
+                "Please align fdawarp class using srsf_align or "
+                "multiple_align_functions first!"
+            )
+        if smoothdata is None:
+            smoothdata = getattr(self, "smoothdata", False)
+        grid_dim = getattr(self, "grid_dim", 10)
+        penalty = getattr(self, "penalty", "l2psi")
+
+        f_new = np.asarray(f_new, dtype=float)
+        if f_new.ndim == 1:
+            f_new = f_new.reshape(-1, 1)
+        M, K = f_new.shape
+        if M != self.time.shape[0]:
+            raise Exception("f_new must have len(obj.time) rows")
+
+        eps = np.finfo(np.double).eps
+        f, g, g2 = uf.gradient_spline(self.time, f_new, smoothdata)
+        q_new = g / np.sqrt(abs(g) + eps)
+
+        fn = np.zeros((M, K))
+        gam = np.zeros((M, K))
+        for k in range(0, K):
+            gam[:, k] = uf.optimum_reparam(
+                self.mqn, self.time, q_new[:, k], self.method, self.lam,
+                penalty, grid_dim
+            )
+            fn[:, k] = uf.warp_f_gamma(self.time, f_new[:, k], gam[:, k])
+        qn = uf.f_to_srsf(fn, self.time)
+
+        return fn, qn, gam
+
     def plot(self):
         """
         plot functional alignment results
@@ -756,6 +808,9 @@ class fdawarp:
         M = self.f.shape[0]
         N = self.f.shape[1]
         self.lam = lam
+        self.penalty = pen
+        self.grid_dim = grid_dim
+        self.smoothdata = smoothdata
 
         if M > 500:
             parallel = True
