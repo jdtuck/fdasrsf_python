@@ -75,9 +75,16 @@ def test_classify_amplitude_median_and_outlier(boxplots, median_fdawarp, simu_da
     assert c.level[0] == 4, "a 10x scaled function should be an amplitude outlier"
 
 
-def test_classify_requires_construct(median_fdawarp):
-    with pytest.raises(Exception):
-        fs.ampbox(median_fdawarp).classify(median_fdawarp.f[:, 0])
+@pytest.mark.parametrize("cls_name", ["ampbox", "phbox"])
+def test_classify_requires_construct(median_fdawarp, cls_name):
+    with pytest.raises(Exception, match="construct_boxplot"):
+        getattr(fs, cls_name)(median_fdawarp).classify(median_fdawarp.f[:, 0])
+
+
+def test_align_new_requires_alignment(simu_data):
+    f, time = simu_data
+    with pytest.raises(Exception, match="align"):
+        fs.fdawarp(f, time).align_new(f[:, 0])
 
 
 def test_align_new_matches_fit(median_fdawarp):
