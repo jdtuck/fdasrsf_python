@@ -387,7 +387,7 @@ setup(
     ext_modules=extensions,
     cffi_modules=["src/dp_build.py:ffibuilder"],
     name="fdasrsf",
-    version="2.7.3",
+    version="2.7.4",
     packages=["fdasrsf"],
     url="http://research.tetonedge.net",
     author="J. Derek Tucker",
