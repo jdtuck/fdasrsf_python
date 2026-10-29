@@ -11,6 +11,7 @@ class rlbfgs {
         vec q1;        // srvf1
         vec q2;        // srvf2
         uword T;         // size of time
+        double lamScale; // converts lam to the unit L2 norm SRVFs
         struct options{
             double tolgradnorm;
             double maxtime;
@@ -37,17 +38,31 @@ class rlbfgs {
         vec gammaOpt;
         vec q2Opt;
         double cost;
+        // why the solver stopped: 1 step size, 2 gradient norm, 3 iterations
+        int stopReason;
+        int iterations;
+        double gradNorm;
         // constructor
         rlbfgs(vec q1i, vec q2i, vec timei) {  
-        q1 = normalise( q1i, 2 );
-        q2 = normalise( q2i, 2 );
         time = timei;
 
         T = timei.n_elem;
+
+        // unit L2 norm on time rather than unit Euclidean norm, so the cost,
+        // its gradient and so tolgradnorm do not scale with the grid size
+        q1 = q1i / norm2(q1i);
+        q2 = q2i / norm2(q2i);
+
+        // the data term used to be that of the unit Euclidean norm SRVFs;
+        // lamScale keeps lam weighing the penalty against it as before
+        lamScale = 1 / (norm2(normalise(q1i, 2)) * norm2(normalise(q2i, 2)));
         }
 
-        void solve(int maxiter=30, double lam=0.0, int penalty=0){
+        // gam0, when not empty, is the warping to start from instead of the
+        // identity, sampled on time
+        void solve(int maxiter=30, double lam=0.0, int penalty=0, vec gam0=vec()){
             // run solver
+            lam = lam * lamScale;
             options option;
             // terminates if the norm of the gradient drops below this
             option.tolgradnorm = 1e-3;
@@ -63,6 +78,15 @@ class rlbfgs {
             // Initialization of Variables
             vec htilde = ones(T);
             vec q2tilde = q2;
+            if (!gam0.is_empty()){
+                // h is the square root of the warping's derivative, rescaled
+                // to unit norm so that group_action_SRVF maps the identity
+                // to gam0
+                double binsize = 1.0/(T-1);
+                htilde = sqrt(clamp(gradient(gam0, binsize), 0, datum::inf));
+                htilde = htilde / norm2(htilde);
+                q2tilde = group_action_SRVF(q2, htilde);
+            }
 
             // list to store step vectors
             arma::field<vec> tmp(option.memory);
@@ -144,9 +168,11 @@ class rlbfgs {
                 stepsize = lstat.stepsize;
                 hNext = lstat.newh;
 
-                // iterative update
+                // iterative update; q2tilde is recomputed from q2 rather than
+                // warped again, so interpolation errors do not accumulate and
+                // the cost stays that of the warping returned
                 htilde = group_action_SRVF(htilde, hNext);
-                q2tilde = group_action_SRVF(q2tilde, hNext);
+                q2tilde = group_action_SRVF(q2, htilde);
 
                 // record the BGFS step multiplier
                 alpha = stepsize / norm2(p);
@@ -223,6 +249,9 @@ class rlbfgs {
             gammaOpt = (gammaOpt - gammaOpt.min()) / (gammaOpt.max() - gammaOpt.min());
             q2Opt = q2tilde;
             cost = hCurCost;
+            stopReason = stop;
+            iterations = k;
+            gradNorm = hCurGradNorm;
         }
 
         // Value of the penalty term at the warping function h.  h is the
@@ -359,13 +388,16 @@ class rlbfgs {
         // h, so that it measures the total warping the step would leave behind
         // and is comparable with the cost the step is tested against.
         double alignment_cost(vec h, vec q2k, vec htilde, double lam = 0, int penalty = 0){
-            vec q2new = group_action_SRVF(q2k, h);
+            // warp the original q2 by the total warping the step leaves, as
+            // solve() does once the step is taken
+            vec hnew = group_action_SRVF(htilde, h);
+            vec q2new = group_action_SRVF(q2, hnew);
 
             double f = normL2(q1-q2new);
             f = pow(f,2);
 
             if (lam != 0){
-                f = f + lam * penalty_cost(group_action_SRVF(htilde, h), penalty);
+                f = f + lam * penalty_cost(hnew, penalty);
             }
 
             return f;
@@ -672,14 +704,26 @@ class rlbfgs {
         }
 };
 
-vec rlbfgs_optim(vec q1, vec q2, vec time, int maxiter=30, double lam=0.0, int penalty=0){
+// info holds the iterations run, the stopping reason, the final cost and the
+// final gradient norm
+vec rlbfgs_optim(vec q1, vec q2, vec time, int maxiter, double lam, int penalty,
+                 vec gam0, vec& info){
     uword T = time.n_elem;
     vec time1 = arma::linspace(0, 1, T);
 
-    rlbfgs myObj(q1, q2, time1); 
-    myObj.solve(maxiter, lam, penalty);
+    rlbfgs myObj(q1, q2, time1);
+    myObj.solve(maxiter, lam, penalty, gam0);
+
+    info = {double(myObj.iterations), double(myObj.stopReason), myObj.cost,
+            myObj.gradNorm};
 
     return myObj.gammaOpt;
+}
+
+vec rlbfgs_optim(vec q1, vec q2, vec time, int maxiter, double lam, int penalty){
+    vec info;
+
+    return rlbfgs_optim(q1, q2, time, maxiter, lam, penalty, vec(), info);
 }
 
 int main() {
