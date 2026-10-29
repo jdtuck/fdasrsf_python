@@ -56,11 +56,19 @@ class rlbfgs:
         if q1.ndim > 1:
             self.q1 = q1
             self.q2 = q2
+            self.lamScale = 1.0
         else:
-            self.q1 = q1 / norm(q1)
-            self.q2 = q2 / norm(q2)
+            # unit L2 norm on t rather than unit Euclidean norm, so the cost,
+            # its gradient and so tolgradnorm do not scale with the grid size
+            self.q1 = q1 / self.normL2(q1)
+            self.q2 = q2 / self.normL2(q2)
+            # the data term used to be that of the unit Euclidean norm SRVFs;
+            # lamScale keeps lam weighing the penalty against it as before
+            self.lamScale = 1 / (
+                self.normL2(q1 / norm(q1)) * self.normL2(q2 / norm(q2))
+            )
 
-    def solve(self, maxiter=30, verb=0, lam=0, penalty="roughness"):
+    def solve(self, maxiter=30, verb=0, lam=0, penalty="roughness", gam0=None):
         """
         Run solver
 
@@ -68,7 +76,14 @@ class rlbfgs:
         :param verb: integer used to tune the amount of output
         :param lam: amount of penalty
         :param penalty: penalty, "roughness", "l2gam", "l2psi", "geodesic"
+        :param gam0: warping function sampled on t to start from (default =
+                     None, the identity)
+
+        After solving, ``stopReason`` holds why the solver stopped (1 step
+        size, 2 gradient norm, 3 time, 4 iterations), ``iterations`` the
+        iterations run and ``gradNorm`` the final gradient norm.
         """
+        lam = lam * self.lamScale
 
         # @todo add options to parameters if needed
         # terminates if the norm of the gradient drops below this
@@ -98,6 +113,15 @@ class rlbfgs:
         # Initialization of Variables
         htilde = np.ones(self.T)
         q2tilde = self.q2
+        if gam0 is not None:
+            # h is the square root of the warping's derivative, rescaled to
+            # unit norm so that group_action_SRVF maps the identity to gam0
+            gam0 = np.asarray(gam0, dtype=float)
+            if gam0.shape[0] != self.T:
+                raise ValueError("gam0 must have as many elements as t")
+            htilde = np.sqrt(np.clip(np.gradient(gam0, 1 / (self.T - 1)), 0, None))
+            htilde = htilde / self.norm(htilde)
+            q2tilde = self.group_action_SRVF(self.q2, htilde)
 
         # number of iterations since last restart
         j = 0
@@ -201,13 +225,15 @@ class rlbfgs:
             # execute line-search
             in_prod = self.inner(hCurGradient, p)
             stepsize, hNext, lsstats = self.linesearch_hint(
-                p, hCurCost, in_prod, q2tilde, lam, penalty
+                p, hCurCost, in_prod, htilde, lam, penalty
             )
 
             # Iterative update of optimal diffeomorphism and q2 via group
-            # action
+            # action; q2tilde is recomputed from q2 rather than warped again,
+            # so interpolation errors do not accumulate and the cost stays
+            # that of the warping returned
             htilde = self.group_action_SRVF(htilde, hNext)
-            q2tilde = self.group_action_SRVF(q2tilde, hNext)
+            q2tilde = self.group_action_SRVF(self.q2, htilde)
 
             # Record the BFGS step-multiplier alpha which was effectively
             # selected. Toward convergence, we hope to see alpha = 1.
@@ -216,7 +242,7 @@ class rlbfgs:
 
             # query cost and gradient at the candidate new point
             hNextCost, hNextGradient = self.alignment_costgrad(
-                q2tilde, hNext, lam, penalty
+                q2tilde, htilde, lam, penalty
             )
 
             # compute sk and yk
@@ -306,19 +332,25 @@ class rlbfgs:
         self.gammaOpt[1:] = cumulative_trapezoid(htilde**2, self.t)
         self.q2Opt = q2tilde
         self.cost = hCurCost
+        self.stopReason = stop
+        self.iterations = k
+        self.gradNorm = hCurGradNorm
 
         if verb >= 1:
-            print("Total time is %f [s] (excludes statsfun)\n" % info[-1].time)
+            print("Total time is %f [s] (excludes statsfun)\n" % info[-1]["time"])
 
         return
 
-    def alignment_cost(self, h, q2k, lam=0, penalty="roughness"):
+    def alignment_cost(self, h, htilde, lam=0, penalty="roughness"):
         r"""
-        Evaluate the cost function :math:`f = ||q1 - ((q2,hk),h)||^2`.
+        Evaluate the cost function :math:`f = ||q1 - (q2,(hk,h))||^2`.
         :math:`h=sqrt{\dot{\gamma}}` is a sequential update of cumulative
-        warping hk
+        warping hk (htilde).  The original q2 is warped by the total warping
+        the step leaves, as solve() does once the step is taken, and the
+        penalty is evaluated at that total warping
         """
-        q2new = self.group_action_SRVF(q2k, h)
+        h = self.group_action_SRVF(htilde, h)
+        q2new = self.group_action_SRVF(self.q2, h)
 
         if penalty == "roughness":
             time1 = np.linspace(0, 1, h.shape[0])
@@ -423,7 +455,7 @@ class rlbfgs:
 
         return direction
 
-    def linesearch_hint(self, d, f0, df0, q2k, lam=0, penalty="roughness"):
+    def linesearch_hint(self, d, f0, df0, htilde, lam=0, penalty="roughness"):
         """
         Armijo line-search based on the line-search hint in the problem
         structure.
@@ -457,7 +489,7 @@ class rlbfgs:
 
         # Make the chosen step and compute cost there
         newh = self.exp(hid, d, alpha)
-        newf = self.alignment_cost(newh, q2k, lam, penalty)
+        newf = self.alignment_cost(newh, htilde, lam, penalty)
         cost_evaluations = 1
 
         # backtrack while the Armijo criterion is not satisfied
@@ -471,7 +503,7 @@ class rlbfgs:
 
             # look closer down the line
             newh = self.exp(hid, d, alpha)
-            newf = self.alignment_cost(newh, q2k, lam, penalty)
+            newf = self.alignment_cost(newh, htilde, lam, penalty)
             cost_evaluations += 1
             tst = newh <= 0
 

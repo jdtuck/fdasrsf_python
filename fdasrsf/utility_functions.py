@@ -148,12 +148,15 @@ def optimum_reparam(
                     weighted by lam, so it has no effect when lam is 0.
                     "roughness" and "geodesic" are only available for the
                     "RBFGS" and "cRBFGS" methods, see below
-    :param grid_dim: size of the grid, for the DP2 method only (default = 10,
-                     the 63 slopes the DP method searches)
-    :param scl: for the DP method, the SRSFs are resampled scl times finer to
-                evaluate the alignment cost; the warp stays on the grid time
-                (default = 3, 1 turns the resampling off).  DP2 integrates the
-                linearly interpolated SRSFs exactly, so it does not use scl
+    :param grid_dim: size of the grid, for the DP2 method and the DP2 start
+                     of the RBFGS methods (default = 10, the 63 slopes the DP
+                     method searches)
+    :param scl: for the DP and RBFGS methods, the SRSFs are resampled scl
+                times finer to evaluate the alignment cost; the warp stays on
+                the grid time (default = 3, 1 turns the resampling off).  DP2
+                integrates the linearly interpolated SRSFs exactly, so it does
+                not use scl.  RBFGS and cRBFGS start from a DP2 warp on a
+                coarse grid of at most 51 points (using grid_dim) and refine it
 
     :rtype: vector
     :return gam: describing the warping function used to align q2 with q1
@@ -266,73 +269,97 @@ def optimum_reparam(
                 grid_dim,
                 pen_dp,
             )
-    elif method == "RBFGS":
-        if q1.ndim == 1 and q2.ndim == 1:
-            time = linspace(0, 1, q1.shape[0])
-            obj = rlbfgs(q1, q2, time)
-            obj.solve(lam=lam_rbfgs, penalty=penalty_rbfgs)
-            gam = obj.gammaOpt
+    elif method in ("RBFGS", "cRBFGS"):
+        # the DP warp the RBFGS solvers start from can only honour the
+        # penalties the DP solvers express; "l2psi" stands in for the others
+        if lam == 0:
+            pen_start = dp_penalties["none"]
+        else:
+            pen_start = dp_penalties.get(penalty, dp_penalties["l2psi"])
 
-        if q1.ndim == 1 and q2.ndim == 2:
-            gam = zeros(q2.shape)
-            time = linspace(0, 1, q1.shape[0])
-            for i in range(0, q2.shape[1]):
-                obj = rlbfgs(q1, q2[:, i], time)
-                obj.solve(lam=lam_rbfgs, penalty=penalty_rbfgs)
-                gam[:, i] = obj.gammaOpt
-
-        if q1.ndim == 2 and q2.ndim == 2:
-            gam = zeros(q2.shape)
-            time = linspace(0, 1, q1.shape[0])
-            for i in range(0, q2.shape[1]):
-                obj = rlbfgs(q1[:, i], q2[:, i], time)
-                obj.solve(lam=lam_rbfgs, penalty=penalty_rbfgs)
-                gam[:, i] = obj.gammaOpt
-    elif method == "cRBFGS":
-        import crbfgs as cr
-
-        if q1.ndim == 1 and q2.ndim == 1:
-            time = linspace(0, 1, q1.shape[0])
-            gam = cr.rlbfgs(
-                ascontiguousarray(q1),
-                ascontiguousarray(q2),
-                ascontiguousarray(time),
-                30,
-                lam_rbfgs,
-                pen_rbfgs,
+        def align(q1i, q2i):
+            return _rbfgs_reparam(
+                q1i, q2i, method, lam, lam_rbfgs, penalty_rbfgs, pen_rbfgs,
+                pen_start, grid_dim, scl,
             )
 
+        if q1.ndim == 1 and q2.ndim == 1:
+            gam = align(q1, q2)
+
         if q1.ndim == 1 and q2.ndim == 2:
             gam = zeros(q2.shape)
-            time = linspace(0, 1, q1.shape[0])
             for i in range(0, q2.shape[1]):
-                gam[:, i] = cr.rlbfgs(
-                    ascontiguousarray(q1),
-                    ascontiguousarray(q2[:, i]),
-                    ascontiguousarray(time),
-                    30,
-                    lam_rbfgs,
-                    pen_rbfgs,
-                )
+                gam[:, i] = align(q1, q2[:, i])
 
         if q1.ndim == 2 and q2.ndim == 2:
             gam = zeros(q2.shape)
-            time = linspace(0, 1, q1.shape[0])
             for i in range(0, q2.shape[1]):
-                gam[:, i] = cr.rlbfgs(
-                    ascontiguousarray(q1[:, i]),
-                    ascontiguousarray(q2[:, i]),
-                    ascontiguousarray(time),
-                    30,
-                    lam_rbfgs,
-                    pen_rbfgs,
-                )
-
+                gam[:, i] = align(q1[:, i], q2[:, i])
     else:
         raise Exception("Invalid Optimization Method")
 
     gam = (gam - gam.min()) / (gam.max() - gam.min())
     return gam
+
+
+def _rbfgs_reparam(
+    q1, q2, method, lam, lam_rbfgs, penalty_rbfgs, pen_rbfgs, pen_start,
+    grid_dim, scl,
+):
+    """
+    Align the SRSF q2 to q1 with the RBFGS solver ("RBFGS" for the python
+    solver, "cRBFGS" for the compiled one), on a uniform grid of len(q1)
+    points.
+
+    RBFGS descends from where it starts, so it starts from a DP2 warp on a
+    coarse grid of at most 51 points and refines that warp on q1 and q2
+    resampled scl times finer, where its linearly interpolated cost is
+    accurate.  The DP warp is piecewise linear, which a penalty can make
+    costly to start from, so with lam > 0 it also starts from the identity and
+    keeps the warp of lower cost.
+    """
+    M = q1.shape[0]
+    t1 = linspace(0, 1, M)
+    nc = min(M, 51)
+    tc = linspace(0, 1, nc)
+    q1c = ascontiguousarray(CubicSpline(t1, q1)(tc))
+    q2c = ascontiguousarray(CubicSpline(t1, q2)(tc))
+    gamc = orN2.coptimum_reparam(q1c, tc, q2c, lam, grid_dim, pen_start)
+
+    tf = linspace(0, 1, (M - 1) * scl + 1)
+    if abs(gamc - tc).max() < 1e-12:
+        # start from the exact identity rather than its interpolation
+        gam0 = None
+    else:
+        gam0 = interp(tf, tc, gamc)
+
+    # lam is divided by scl to weigh the penalty as it would on t1
+    q1f = ascontiguousarray(CubicSpline(t1, q1)(tf))
+    q2f = ascontiguousarray(CubicSpline(t1, q2)(tf))
+    lamf = lam_rbfgs / scl
+
+    if method == "cRBFGS":
+        import crbfgs as cr
+
+        def solve(start):
+            return cr.rlbfgs(
+                q1f, q2f, tf, 30, lamf, pen_rbfgs, gam0=start, return_info=True
+            )
+    else:
+
+        def solve(start):
+            obj = rlbfgs(q1f, q2f, tf)
+            obj.solve(lam=lamf, penalty=penalty_rbfgs, gam0=start)
+            return obj.gammaOpt, [obj.iterations, obj.stopReason, obj.cost]
+
+    gamf, info = solve(gam0)
+    if lamf > 0:
+        gami, infoi = solve(None)
+        if infoi[2] < info[2]:
+            gamf = gami
+
+    # every scl-th point of tf is a point of t1
+    return gamf[::scl]
 
 
 def optimum_reparam_pair(q, time, q1, q2, lam=0.0):
