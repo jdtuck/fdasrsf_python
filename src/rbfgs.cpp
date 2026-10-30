@@ -5,45 +5,56 @@
 using namespace arma;
 using namespace std;
 
-class rlbfgs {      
-    private:             
+class rlbfgs {
+    // Riemannian limited-memory BFGS for the warping that aligns q2 to q1, as
+    // in Huang, Gallivan, Srivastava and Absil, "Riemannian optimization for
+    // registration of curves in elastic shape analysis", restricted to open
+    // functions (no rotation and no shift).  The iterate is l = sqrt(gamma')
+    // on the unit sphere of L2[0,1], gamma = cumtrapz(l^2), and the cost is
+    //   ||q1 - q2(gamma) l||^2 + lam*penalty(l) + omega*B(l),
+    // where B is the barrier of their eq. (15), whose weight omega starts at
+    // 1/100 and is cut by 0.8 each iteration.  Steps are taken with the
+    // exponential map, and the stored BFGS pairs are moved to the new tangent
+    // space by parallel translation (their Lemma 1).
+    private:
         vec time;      // time
         vec q1;        // srvf1
         vec q2;        // srvf2
+        vec q2M;       // second derivatives of the cubic spline of q2
         uword T;         // size of time
         double lamScale; // converts lam to the unit L2 norm SRVFs
         struct options{
             double tolgradnorm;
-            double maxtime;
             int memory;
             int ls_max_steps;
             int maxiter;
-            double minstepsize;
+            int miniter;
+            double tolrelcost;
+            int relcostcount;
+            double omega0;
+            double omegarate;
         };
 
-        struct stats{
-            int iter;
-            double cost;
-            double gradnorm;
-            double stepsize;
-            bool accepted;
+        // the cost split into the part that stays fixed (data and penalty) and
+        // the barrier, whose weight changes each iteration
+        struct costparts{
+            double fixedcost;
+            double barrier;
+            vec fixedgrad;
+            vec barriergrad;
         };
-
-        struct lstats{
-        double stepsize;
-        vec newh;
-    };
 
   public:
         vec gammaOpt;
         vec q2Opt;
         double cost;
-        // why the solver stopped: 1 step size, 2 gradient norm, 3 iterations
+        // why the solver stopped: 1 step size, 2 gradient norm, 3 iterations,
+        // 4 relative change of the cost
         int stopReason;
         int iterations;
         double gradNorm;
         // constructor
-        rlbfgs(vec q1i, vec q2i, vec timei) {  
+        rlbfgs(vec q1i, vec q2i, vec timei) {
         time = timei;
 
         T = timei.n_elem;
@@ -56,202 +67,168 @@ class rlbfgs {
         // the data term used to be that of the unit Euclidean norm SRVFs;
         // lamScale keeps lam weighing the penalty against it as before
         lamScale = 1 / (norm2(normalise(q1i, 2)) * norm2(normalise(q2i, 2)));
+
+        // q2 is composed with gamma, so it is represented by an interpolatory
+        // cubic spline, which makes the cost twice differentiable as the
+        // convergence theory of the quasi-Newton method needs
+        q2M = spline_second_derivs(q2);
         }
 
         // gam0, when not empty, is the warping to start from instead of the
         // identity, sampled on time
         void solve(int maxiter=30, double lam=0.0, int penalty=0, vec gam0=vec()){
-            // run solver
             lam = lam * lamScale;
             options option;
-            // terminates if the norm of the gradient drops below this
-            option.tolgradnorm = 1e-3;
-            // terminates if more than seconds elapsed
-            option.maxtime = datum::inf;
+            // a safeguard; the paper's own test is on the change of the cost
+            option.tolgradnorm = 1e-10;
             // number of previous iterations the program remembers
             option.memory = 30;
             option.ls_max_steps = 25;
             option.maxiter = maxiter;
-            // minimum norm of tangent vector that points from current to next
-            option.minstepsize = 1e-10;
-
-            // Initialization of Variables
-            vec htilde = ones(T);
-            vec q2tilde = q2;
+            // the paper stops once the relative change of the cost has stayed
+            // below 1e-3 for more than 5 iterations, after at least 10
+            option.miniter = 10;
+            option.tolrelcost = 1e-3;
+            option.relcostcount = 5;
+            option.omega0 = 1.0/100;
+            option.omegarate = 0.8;
+            vec l = arma::ones(T);
             if (!gam0.is_empty()){
-                // h is the square root of the warping's derivative, rescaled
-                // to unit norm so that group_action_SRVF maps the identity
-                // to gam0
-                double binsize = 1.0/(T-1);
-                htilde = sqrt(clamp(gradient(gam0, binsize), 0, datum::inf));
-                htilde = htilde / norm2(htilde);
-                q2tilde = group_action_SRVF(q2, htilde);
+                l = srvf_of_warp(gam0);
             }
+            l = l / norm2(l);
 
-            // list to store step vectors
-            arma::field<vec> tmp(option.memory);
             arma::field<vec> sHistory(option.memory);
             arma::field<vec> yHistory(option.memory);
             vec rhoHistory(option.memory);
-            vec tmp_vec(option.memory);
 
-            // number of iterations since last restart
+            // number of stored pairs
             int j = 0;
             // Total number of BFGS iterations
             int k = 0;
-            // scaling of direction given by getDirection
-            double alpha = 1;
             // scaling of initial matrix, Barzilai-Borwein
             double scaleFactor = 1;
-            // Norm of the step
-            double stepsize = 1;
+            int stop = 0;
+            int smallchange = 0;
+            int failedsteps = 0;
+            double omega = option.omega0;
 
-            bool accepted = true;
-            int stop;
+            costparts cur = costgrad(l, lam, penalty);
+            double f = cur.fixedcost + omega * cur.barrier;
+            vec g = riemannian_grad(l, cur, omega);
+            double gnorm = norm2(g);
 
-            double hCurCost;
-            vec hCurGradient;
-            lstats lstat;
-            vec hNext;
-            // htilde is the total warping accumulated so far, and is what the
-            // penalty is a function of; q2tilde is q2 under that warping
-            alignment_costgrad(q2tilde, htilde, hCurCost, hCurGradient, lam, penalty);
-            double hCurGradNorm = norm2(hCurGradient);
-
-            bool ultimatum = false;
-
-            stats stat;
-            stat.iter = k;
-            stat.cost = hCurCost;
-            stat.gradnorm = hCurGradNorm;
-            stat.stepsize = datum::nan;
-            stat.accepted = false;
-
-            vec p;
-            double in_prod;
-            vec step;
-            double hNextCost;
-            vec hNextGradient;
-            vec sk;
-            vec yk;
-            double norm_sk;
-            double inner_sk_yk;
-            double inner_sk_sk;
-            double cap, rhok;
             while (true){
-                stop = stoppingcriterion(option, stat);
-
-                if (stop == 0){
-                    if (stat.stepsize < option.minstepsize){
-                        if (!ultimatum){
-                            j = 0;
-                            ultimatum = true;
-                        } else {
-                            stop = 1;
-                        }
-                    } else {
-                        ultimatum = false;
-                    }
+                if (gnorm <= option.tolgradnorm){
+                    stop = 2;
+                    break;
                 }
-
-                if (stop > 0){
+                if (k >= option.maxiter){
+                    stop = 3;
                     break;
                 }
 
-                // compute BFGS direction
-                p = getDirection(hCurGradient, sHistory, yHistory, rhoHistory, scaleFactor, min(j, option.memory));
-
-                // execute line search
-                in_prod = inner(hCurGradient, p);
-                lstat = linesearch_hint(p, hCurCost, in_prod, q2tilde, htilde, lam, penalty);
-
-                stepsize = lstat.stepsize;
-                hNext = lstat.newh;
-
-                // iterative update; q2tilde is recomputed from q2 rather than
-                // warped again, so interpolation errors do not accumulate and
-                // the cost stays that of the warping returned
-                htilde = group_action_SRVF(htilde, hNext);
-                q2tilde = group_action_SRVF(q2, htilde);
-
-                // record the BGFS step multiplier
-                alpha = stepsize / norm2(p);
-                step = alpha * p;
-
-                // query cost and gradient at the candidate new point
-                alignment_costgrad(q2tilde, htilde, hNextCost, hNextGradient, lam, penalty);
-
-                // compute sk and yk
-                sk = step;
-                yk = hNextGradient - hCurGradient;
-
-                // computation of the BFGS step
-                norm_sk = norm2(sk);
-                sk = sk / norm_sk;
-                yk = yk / norm_sk;
-
-                inner_sk_yk = inner(sk, yk);
-                inner_sk_sk = pow(norm2(sk),2);  // ensures nonnegativity
-
-                // cautious step
-                cap = strict_inc_func(hCurGradNorm);
-                if ((inner_sk_sk != 0) && ((inner_sk_yk/inner_sk_sk) >= cap)){
-                    accepted = true;
-
-                    rhok = 1/inner_sk_yk;
-
-                    scaleFactor = inner_sk_yk / pow(norm2(yk),2);
-
-                    if (j >= option.memory){
-                        if (option.memory > 1){
-                            tmp.subfield(0, 0, option.memory-2, 0) = sHistory.subfield(1, 0, option.memory-1, 0);
-                            tmp(option.memory-1) = sHistory(0);
-                            sHistory = tmp;
-
-                            tmp.subfield(0, 0, option.memory-2, 0) = yHistory.subfield(1, 0, option.memory-1, 0);
-                            tmp(option.memory-1) = yHistory(0);
-                            yHistory = tmp;
-
-                            tmp_vec(arma::span(0,option.memory-2)) = rhoHistory(arma::span(1,option.memory-1));
-                            tmp_vec(option.memory-1) = rhoHistory(0);
-                            rhoHistory = tmp_vec;
-                        }
-                        if (option.memory > 0){
-                            sHistory(option.memory-1) = sk;
-                            yHistory(option.memory-1) = yk;
-                            rhoHistory(option.memory-1) = rhok;
-                        }
-                    } else {
-                        sHistory(j) = sk;
-                        yHistory(j) = yk;
-                        rhoHistory(j) = rhok;
-                    }
-
-                    j += 1;
-                } else {
-                    accepted = false;
+                // compute BFGS direction; fall back to steepest descent if the
+                // quasi-Newton direction is not a descent direction
+                vec p = getDirection(g, sHistory, yHistory, rhoHistory, scaleFactor, j);
+                double df0 = inner(g, p);
+                if (df0 >= 0){
+                    j = 0;
+                    scaleFactor = 1;
+                    p = -g;
+                    df0 = -gnorm*gnorm;
                 }
 
-                hCurGradient = hNextGradient;
-                hCurGradNorm = norm2(hNextGradient);
-                hCurCost = hNextCost;
+                // Armijo backtracking along the exponential map
+                double alpha = 1;
+                vec lnew = exp(l, p, alpha);
+                costparts nxt = costgrad(lnew, lam, penalty);
+                double fnew = nxt.fixedcost + omega * nxt.barrier;
+                int evals = 1;
+                while (arma::any(lnew <= 0) || !std::isfinite(fnew) ||
+                       fnew > f + 1e-4 * alpha * df0){
+                    alpha *= 0.5;
+                    lnew = exp(l, p, alpha);
+                    nxt = costgrad(lnew, lam, penalty);
+                    fnew = nxt.fixedcost + omega * nxt.barrier;
+                    evals += 1;
+                    if (evals >= option.ls_max_steps) break;
+                }
+                if (arma::any(lnew <= 0) || !std::isfinite(fnew) || fnew > f){
+                    // no acceptable step: restart the memory once, then stop
+                    failedsteps += 1;
+                    if (failedsteps >= 2 || j == 0){
+                        stop = 1;
+                        break;
+                    }
+                    j = 0;
+                    scaleFactor = 1;
+                    continue;
+                }
+                failedsteps = 0;
 
+                // the gradient at the new point with this iteration's omega,
+                // so that the BFGS pair is that of one cost function
+                vec gnew = riemannian_grad(lnew, nxt, omega);
+
+                // parallel translation of tangent vectors from l to lnew
+                vec step = alpha * p;
+                vec sk = transp(l, lnew, step);
+                vec yk = gnew - transp(l, lnew, g);
+                for (int i = 0; i < j; i++){
+                    sHistory(i) = transp(l, lnew, sHistory(i));
+                    yHistory(i) = transp(l, lnew, yHistory(i));
+                }
+
+                // cautious update
+                double inner_sk_yk = inner(sk, yk);
+                double inner_sk_sk = inner(sk, sk);
+                if (inner_sk_sk > 0 && inner_sk_yk / inner_sk_sk >= strict_inc_func(gnorm)){
+                    if (j >= option.memory){
+                        for (int i = 0; i < option.memory - 1; i++){
+                            sHistory(i) = sHistory(i+1);
+                            yHistory(i) = yHistory(i+1);
+                            rhoHistory(i) = rhoHistory(i+1);
+                        }
+                        j = option.memory - 1;
+                    }
+                    sHistory(j) = sk;
+                    yHistory(j) = yk;
+                    rhoHistory(j) = 1 / inner_sk_yk;
+                    scaleFactor = inner_sk_yk / inner(yk, yk);
+                    j += 1;
+                }
+
+                // relative change of the cost, both values at this omega
+                double relchange = std::abs(f - fnew) / std::max(std::abs(f), 1e-300);
+                smallchange = (relchange < option.tolrelcost) ? smallchange + 1 : 0;
+
+                l = lnew;
+                cur = nxt;
                 k += 1;
 
-                stat.iter = k;
-                stat.cost = hCurCost;
-                stat.gradnorm = hCurGradNorm;
-                stat.stepsize = stepsize;
-                stat.accepted = accepted;
+                // the barrier fades as the iterations proceed
+                omega *= option.omegarate;
+                f = cur.fixedcost + omega * cur.barrier;
+                g = riemannian_grad(l, cur, omega);
+                gnorm = norm2(g);
+
+                if (k >= option.miniter && smallchange > option.relcostcount){
+                    stop = 4;
+                    break;
+                }
             }
 
-            gammaOpt = cumtrapz(time, pow(htilde,2));
-            gammaOpt = (gammaOpt - gammaOpt.min()) / (gammaOpt.max() - gammaOpt.min());
-            q2Opt = q2tilde;
-            cost = hCurCost;
+            vec gam = cumtrapz(time, arma::pow(l, 2));
+            gammaOpt = (gam - gam.min()) / (gam.max() - gam.min());
+            vec Q, Qdot;
+            spline_eval(q2, q2M, gam, Q, Qdot);
+            q2Opt = Q % l;
+            // the cost of the warping returned, without the barrier
+            cost = cur.fixedcost;
             stopReason = stop;
             iterations = k;
-            gradNorm = hCurGradNorm;
+            gradNorm = gnorm;
         }
 
         // Value of the penalty term at the warping function h.  h is the
@@ -352,185 +329,139 @@ class rlbfgs {
             return dP;
         }
 
-        // Gradient at the identity of the map from an incremental warping hinc
-        // to penalty_cost(h composed with hinc), where h is the warping
-        // accumulated so far.  This differentiates group_action_SRVF itself
-        // rather than its continuum limit: the roughness penalty differentiates
-        // to a second difference, and the trapezoidal adjoint of the continuum
-        // chain rule does not resolve that on the grid.  Scaled by a half to
-        // match alignment_costgrad, whose data term is likewise the gradient of
-        // half the cost it returns.
-        vec penalty_costgrad(vec h, int penalty){
-            double binsize = 1.0/(T-1);
-            vec a = penalty_grad(h, penalty);
-
-            // group_action_SRVF maps gamma to h(gamma) % sqrt(gamma'), so
-            // perturbing gamma moves it by gradient(h) % dgamma
-            // + h % gradient(dgamma) / 2.  Linear interpolation has no
-            // derivative at the grid points it is evaluated on, and the central
-            // difference below is the two sided slopes averaged.
-            vec b = (a % gradient(h, binsize))
-                    + 0.5 * gradient_adjoint(a % h, binsize);
-
-            // gamma is cumtrapz(hinc^2) rescaled to end at one, so perturbing
-            // hinc at the identity by v moves gamma by
-            // 2*(cumtrapz(v) - trapz(v)*time)
+        // Cost parts and their partial derivatives with respect to each
+        // sample of l, differentiating the discretised cost exactly: gamma is
+        // cumtrapz(l^2), q2 is evaluated on its cubic spline and the integrals
+        // are trapezoidal sums
+        costparts costgrad(const vec& l, double lam, int penalty){
+            costparts c;
             vec w = trapz_weights(time);
-            vec dv = 2 * cumtrapz_adjoint(time, b) - 2 * dot(b, time) * w;
-
-            // back to a gradient under the inner product inner() uses
-            return 0.5 * (dv / w);
-        }
-
-        // Cost of taking the incremental step h from the current iterate, where
-        // q2k is q2 under the warping accumulated so far and htilde is that
-        // warping.  The penalty is evaluated at the composition of htilde with
-        // h, so that it measures the total warping the step would leave behind
-        // and is comparable with the cost the step is tested against.
-        double alignment_cost(vec h, vec q2k, vec htilde, double lam = 0, int penalty = 0){
-            // warp the original q2 by the total warping the step leaves, as
-            // solve() does once the step is taken
-            vec hnew = group_action_SRVF(htilde, h);
-            vec q2new = group_action_SRVF(q2, hnew);
-
-            double f = normL2(q1-q2new);
-            f = pow(f,2);
+            vec gam = cumtrapz(time, arma::pow(l, 2));
+            vec Q, Qdot;
+            spline_eval(q2, q2M, gam, Q, Qdot);
+            vec r = q1 - Q % l;
+            c.fixedcost = dot(w, r % r);
+            // r depends on l directly and through gamma
+            vec a = -2 * (w % r % Qdot % l);
+            c.fixedgrad = -2 * (w % r % Q) + 2 * (l % cumtrapz_adjoint(time, a));
 
             if (lam != 0){
-                f = f + lam * penalty_cost(hnew, penalty);
+                c.fixedcost += lam * penalty_cost(l, penalty);
+                c.fixedgrad += lam * penalty_grad(l, penalty);
             }
 
-            return f;
+            // B = trapz((l^2 + 1/l^2) sqrt(1 + l^4)), eq. (15) of the paper;
+            // it grows where gamma is nearly flat or vertical and is
+            // symmetric under inverting gamma
+            vec l2 = arma::pow(l, 2);
+            vec l4 = arma::pow(l, 4);
+            vec rt = arma::sqrt(1 + l4);
+            vec u = l2 + 1 / l2;
+            c.barrier = dot(w, u % rt);
+            vec du = 2 * l - 2 / arma::pow(l, 3);
+            vec drt = 2 * arma::pow(l, 3) / rt;
+            c.barriergrad = w % (du % rt + u % drt);
+            return c;
         }
 
-        // Cost and gradient at the current iterate, where q2k is q2 under the
-        // warping accumulated so far and h is that warping.  The gradient is
-        // taken with respect to an incremental warping at the identity, and
-        // covers the penalty as well as the data term, so that it agrees with
-        // the cost the line search decreases.
-        void alignment_costgrad(vec q2k, vec h, double& f, vec& g, double lam = 0, int penalty = 0){
-            // compute cost
-            f = normL2(q1-q2k);
-            f = pow(f,2);
-
-            if (lam != 0){
-                f = f + lam * penalty_cost(h, penalty);
-            }
-
-            // compute cost gradient
-            double binsize = 1.0/(T-1);
-            vec q2kdot = gradient(q2k, binsize);
-            vec dq = q1 - q2k;
-            vec tmp = dq % q2kdot;
-            vec tmp1 = dq % q2k;
-            vec v = 2 * cumtrapz(time, tmp);
-            v = v - tmp1;
-
-            if (lam != 0){
-                v = v + lam * penalty_costgrad(h, penalty);
-            }
-
-            mat val = arma::trapz(time, v);
-            g = v - val(0);
-
-            return;
-
+        // Riemannian gradient under the L2 metric inner() uses: the partial
+        // derivatives divided by the quadrature weights, projected onto the
+        // tangent space of the sphere at l
+        vec riemannian_grad(const vec& l, const costparts& c, double omega){
+            vec w = trapz_weights(time);
+            vec v = (c.fixedgrad + omega * c.barriergrad) / w;
+            return v - inner(v, l) * l;
         }
 
-        vec getDirection(vec hCurGradient, arma::field<vec> sHistory, arma::field<vec> yHistory, vec rhoHistory, double scaleFactor, int j){
-            vec q = hCurGradient;
+        // l = sqrt(gamma') of the warping gam, sampled on time, from central
+        // differences; on the spline cost this keeps a DP warping's cost (an
+        // inversion of the trapezoid rule cell by cell oscillates instead),
+        // and a small floor keeps l inside the barrier
+        vec srvf_of_warp(vec gam){
+            double hb = 1.0/(T-1);
+            gam = (gam - gam(0)) / (gam(T-1) - gam(0));
+            return arma::sqrt(arma::clamp(gradient(gam, hb), 1e-6, datum::inf));
+        }
+
+        // solves the tridiagonal system with sub-diagonal a, diagonal b and
+        // super-diagonal c (a(0) and c(T-1) unused)
+        vec thomas(vec a, vec b, vec c, vec d){
+            uword n = b.n_elem;
+            for (uword i = 1; i < n; i++){
+                double m = a(i) / b(i-1);
+                b(i) -= m * c(i-1);
+                d(i) -= m * d(i-1);
+            }
+            vec x(n);
+            x(n-1) = d(n-1) / b(n-1);
+            for (int i = (int)n-2; i >= 0; i--){
+                x(i) = (d(i) - c(i) * x(i+1)) / b(i);
+            }
+            return x;
+        }
+
+        // second derivatives of the natural cubic spline interpolating y on
+        // the uniform grid time
+        vec spline_second_derivs(const vec& y){
+            vec M = arma::zeros(T);
+            if (T < 3) return M;
+            double hb = 1.0/(T-1);
+            uword n = T - 2;
+            vec a(n), b(n), c(n), d(n);
+            for (uword i = 0; i < n; i++){
+                a(i) = 1; b(i) = 4; c(i) = 1;
+                d(i) = 6 * (y(i+2) - 2*y(i+1) + y(i)) / (hb*hb);
+            }
+            M(arma::span(1, T-2)) = thomas(a, b, c, d);
+            return M;
+        }
+
+        // value and derivative at x of the natural cubic spline of y, whose
+        // second derivatives are M
+        void spline_eval(const vec& y, const vec& M, const vec& x, vec& val, vec& dval){
+            double hb = 1.0/(T-1);
+            uword n = x.n_elem;
+            val.set_size(n);
+            dval.set_size(n);
+            for (uword i = 0; i < n; i++){
+                double xi = std::min(std::max(x(i), 0.0), 1.0);
+                uword k = std::min((uword) std::floor(xi / hb), T-2);
+                double A = (k+1)*hb - xi;   // distance to the right node
+                double B = xi - k*hb;       // distance to the left node
+                double cA = y(k)/hb - M(k)*hb/6;
+                double cB = y(k+1)/hb - M(k+1)*hb/6;
+                val(i) = M(k)*A*A*A/(6*hb) + M(k+1)*B*B*B/(6*hb) + cA*A + cB*B;
+                dval(i) = -M(k)*A*A/(2*hb) + M(k+1)*B*B/(2*hb) - cA + cB;
+            }
+        }
+
+        vec getDirection(vec g, arma::field<vec>& sHistory, arma::field<vec>& yHistory, vec& rhoHistory, double scaleFactor, int j){
+            vec q = g;
             vec inner_s_q = arma::zeros(j);
 
             for (int i = j; i > 0; i--) {
                 inner_s_q(i-1) = rhoHistory(i-1) * inner(sHistory(i-1), q);
                 q = q - inner_s_q(i-1) * yHistory(i-1);
-            } 
+            }
 
             vec r = scaleFactor * q;
 
-            double omega;
+            double om;
             for (int i=0; i < j; i++){
-                omega = rhoHistory(i) * inner(yHistory(i), r);
-                r = r + (inner_s_q(i) - omega) * sHistory(i);
+                om = rhoHistory(i) * inner(yHistory(i), r);
+                r = r + (inner_s_q(i) - om) * sHistory(i);
             }
 
-            vec direction = -1 * r;
-
-            return direction;
+            return -1 * r;
         }
 
-        lstats linesearch_hint(vec d, double f0, double df0, vec q2k, vec htilde, double lam=0, int penalty=0){
-            // Armijo line-search based on the line-search hint in the problem
-
-            double contraction_factor = 0.5;
-            double suff_decr = 1e-6;
-            int max_ls_steps = 25;
-            bool ls_backtrack = true;
-            bool ls_force_decrease = true;
-
-            double alpha = 1;
-            vec hid = arma::ones(T);  // identity element
-
-            vec newh = exp(hid, d, alpha);
-            double newf = alignment_cost(newh, q2k, htilde, lam, penalty);
-            int cost_evaluations = 1;
-
-            uvec tst = newh <= 0;
-            while ((ls_backtrack && (newf > (f0 + suff_decr*alpha*df0))) || arma::sum(tst) > 0){
-                alpha *= contraction_factor;
-
-                newh = exp(hid, d, alpha);
-                newf = alignment_cost(newh, q2k, htilde, lam, penalty);
-                cost_evaluations += 1;
-                tst = newh <= 0;
-
-                if (cost_evaluations >= max_ls_steps){
-                    break;
-                }
-            }
-
-            if (ls_force_decrease && (newf > f0)){
-                alpha = 0;
-                newh = hid;
-                newf = f0;
-            }
-
-            double norm_d = norm2(d);
-            double stepsize = alpha * norm_d;
-
-            lstats lstat;
-            lstat.stepsize = stepsize;
-            lstat.newh = newh;
-
-            return lstat;
-        }
-
-        int stoppingcriterion(options option, stats stat){
-            int stop = 0;
-            if (stat.gradnorm <= option.tolgradnorm){
-                stop = 2;
-            }
-
-            if (stat.iter >= option.maxiter){
-                stop = 3;
-            }
-
-            return stop;
-        }
-
-        vec group_action_SRVF(vec q, vec h){
-            vec gamma = cumtrapz(time, arma::pow(h,2));
-            gamma = gamma / gamma(T-1);
-            vec time1 = arma::linspace<vec>(0,1,h.n_elem);
-            vec b = arma::diff(time1);
-            double binsize = mean(b);
-            vec h1 = gradient(gamma, binsize);
-            h1 = sqrt(h1);
-            vec qnew;
-            arma::interp1(time, q, gamma, qnew);
-            qnew = qnew % h1;
-
-            return qnew;
+        // parallel translation of v from the tangent space at l to that at
+        // lnew = exp(l, u), Lemma 1 of the paper
+        vec transp(const vec& l, const vec& lnew, const vec& v){
+            vec sum = l + lnew;
+            double n2 = inner(sum, sum);
+            if (n2 <= 0) return v;
+            return v - (2 * inner(v, lnew) / n2) * sum;
         }
 
         double strict_inc_func(double t){
@@ -615,23 +546,6 @@ class rlbfgs {
             double out = sqrt(tmp1(0));
 
             return out;
-        }
-
-        vec transp(vec f1, vec f2, vec v){
-            // isometric vector transport
-            vec w = log(f1, f2);
-            double dist_f1f2 = norm2(w);
-
-            vec Tv;
-            if (dist_f1f2 > 0){
-                vec u = w / dist_f1f2;
-                double utv = inner(u, v);
-                Tv = v + (cos(dist_f1f2) - 1) * utv * u - sin(dist_f1f2) * utv * f1;
-            } else{
-                Tv = v;
-            }
-
-            return Tv;
         }
 
         // Trapezoidal quadrature weights for the grid x, so that

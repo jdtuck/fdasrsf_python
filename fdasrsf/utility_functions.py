@@ -157,6 +157,7 @@ def optimum_reparam(
                 integrates the linearly interpolated SRSFs exactly, so it does
                 not use scl.  RBFGS and cRBFGS start from a DP2 warp on a
                 coarse grid of at most 51 points (using grid_dim) and refine it
+                on the SRSFs resampled linearly scl times finer
 
     :rtype: vector
     :return gam: describing the warping function used to align q2 with q1
@@ -311,12 +312,16 @@ def _rbfgs_reparam(
     solver, "cRBFGS" for the compiled one), on a uniform grid of len(q1)
     points.
 
-    RBFGS descends from where it starts, so it starts from a DP2 warp on a
-    coarse grid of at most 51 points and refines that warp on q1 and q2
-    resampled scl times finer, where its linearly interpolated cost is
-    accurate.  The DP warp is piecewise linear, which a penalty can make
-    costly to start from, so with lam > 0 it also starts from the identity and
-    keeps the warp of lower cost.
+    As in Huang et al., "Riemannian optimization for registration of curves
+    in elastic shape analysis": RBFGS descends from where it starts, so it
+    starts from a DP2 warp on a coarse grid of at most 51 points, which is
+    cheap, and refines that warp on q1 and q2 resampled linearly scl times
+    finer, for at most 30 iterations.  On the original grid the trapezoid rule
+    samples q2 only at the warped grid points, so where the warp is steep the
+    solver could skip features of q2 and lower its cost without aligning them.
+    The DP warp is piecewise linear, which a penalty can make costly to start
+    from, so with lam > 0 it also starts from the identity and keeps the warp
+    of lower cost.
     """
     M = q1.shape[0]
     t1 = linspace(0, 1, M)
@@ -333,23 +338,25 @@ def _rbfgs_reparam(
     else:
         gam0 = interp(tf, tc, gamc)
 
+    q1f = ascontiguousarray(interp(tf, t1, q1))
+    q2f = ascontiguousarray(interp(tf, t1, q2))
     # lam is divided by scl to weigh the penalty as it would on t1
-    q1f = ascontiguousarray(CubicSpline(t1, q1)(tf))
-    q2f = ascontiguousarray(CubicSpline(t1, q2)(tf))
     lamf = lam_rbfgs / scl
+    maxit = 30
 
     if method == "cRBFGS":
         import crbfgs as cr
 
         def solve(start):
             return cr.rlbfgs(
-                q1f, q2f, tf, 30, lamf, pen_rbfgs, gam0=start, return_info=True
+                q1f, q2f, tf, maxit, lamf, pen_rbfgs, gam0=start,
+                return_info=True,
             )
     else:
 
         def solve(start):
             obj = rlbfgs(q1f, q2f, tf)
-            obj.solve(lam=lamf, penalty=penalty_rbfgs, gam0=start)
+            obj.solve(maxit, lam=lamf, penalty=penalty_rbfgs, gam0=start)
             return obj.gammaOpt, [obj.iterations, obj.stopReason, obj.cost]
 
     gamf, info = solve(gam0)

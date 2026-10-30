@@ -16,7 +16,8 @@ def rlbfgs(np.ndarray[double, ndim=1, mode="c"] q1, np.ndarray[double, ndim=1, m
     gam0, when given, is the warping (sampled on time) to start from instead
     of the identity.  With return_info, also returns
     [iterations, stop reason, cost, gradient norm], the stop reason being 1
-    for a vanishing step, 2 for the gradient norm and 3 for maxiter.
+    for no acceptable step, 2 for the gradient norm, 3 for maxiter and 4 for
+    the relative change of the cost.
     """
     q1 = np.ascontiguousarray(q1)
     q2 = np.ascontiguousarray(q2)
