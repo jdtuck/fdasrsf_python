@@ -912,7 +912,7 @@ class fdawarp:
         # initialization
         if str(init).lower() == "dp":
             tmp = fdawarp(f0, t01)
-            tmp.srsf_align(MaxItr=10, verbose=False)
+            tmp.srsf_align(MaxItr=1, verbose=False)
             c_curr = bf.bayes_gam_to_coef(tmp.gam, Phi, rep)
             gam0, psi0 = bf.bayes_coef_to_gam(c_curr, Phi, rep)
             qtil = np.zeros((M, N))
