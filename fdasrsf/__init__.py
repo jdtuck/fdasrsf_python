@@ -49,6 +49,15 @@ from .time_warping import (
     pairwise_align_functions,
 )
 from .time_warping import pairwise_align_bayes_infHMC
+from .bayesian_functions import (
+    bayes_warp_basis,
+    bayes_coef_to_gam,
+    bayes_gam_to_coef,
+    bayes_warp_geom,
+    infhmc_step,
+    infhmc_step_batch,
+    dual_avg_step,
+)
 from .plot_style import (
     f_plot,
     rstyle,
@@ -82,6 +91,7 @@ from .utility_functions import (
     warp_f_gamma,
     elastic_depth,
 )
+from .utility_functions import create_basismatrix, f_phi, f_exp1inv
 from .fPCA import fdavpca, fdahpca, fdajpca, fdajpcah
 from .fPLS import pls_svd
 from .fPNS import fdahpns, project_pns_gam

@@ -15,7 +15,7 @@ from numpy import arccos, arctan2, sin, cos, arange, ascontiguousarray, round
 from numpy import ones, real, pi, cumsum, fabs, cov, diagflat, inner
 from numpy import gradient, column_stack, append, mean, hstack, median
 from numpy import insert, vectorize, ceil, mod, array, percentile, dot
-from numpy import exp, argmax, abs, sign, take, reshape, newaxis
+from numpy import exp, argmax, abs, sign, take, reshape, newaxis, asarray
 from joblib import Parallel, delayed
 import numpy.random as rn
 import optimum_reparamN2 as orN2
@@ -1290,11 +1290,13 @@ def statsFun(vec):
 
 
 def f_exp1(g):
+    g = ascontiguousarray(g, dtype=double)
     out = bay.bcalcY(f_L2norm(g), g)
     return out
 
 
 def f_L2norm(f):
+    f = ascontiguousarray(f, dtype=double)
     x = linspace(0, 1, f.shape[0])
     out = bay.border_l2norm(x, f)
     return out
@@ -1335,6 +1337,7 @@ def f_psimean(x, y):
 
 
 def f_phiinv(psi):
+    psi = ascontiguousarray(psi, dtype=double)
     f_domain = linspace(0, 1, psi.shape[0])
     result = insert(bay.bcuL2norm2(f_domain, psi), 0, 0)
     return result
@@ -1413,3 +1416,105 @@ def svd_flip(u, v, u_based_decision=True):
         u *= signs[newaxis, :]
         v *= signs[:, newaxis]
     return u, v
+
+
+def create_basismatrix(x, nbasis, norder=4):
+    """
+    Create Basis Matrix for a BSPLINE basis
+
+    Evaluates a B-spline basis of nbasis functions of order norder on
+    len(x) equally spaced points spanning the range of x.  The knot sequence
+    is nbasis-norder+2 equally spaced breakpoints with norder-fold
+    multiplicity at each end of the range.
+
+    :param x: vector of argument values; only its range and length are used
+    :param nbasis: number of basis functions
+    :param norder: order of the B-splines, i.e. degree + 1
+                   (default = 4, cubic)
+
+    :rtype: numpy ndarray
+    :return basismat: (len(x), nbasis) matrix of basis function values
+    """
+    from scipy.interpolate import BSpline
+
+    x = asarray(x, dtype=double).ravel()
+    nbasis = int(nbasis)
+    norder = int(norder)
+    nbreaks = nbasis - norder + 2
+    if nbreaks < 2:
+        raise Exception(
+            "nbasis (%d) must be at least norder (%d)." % (nbasis, norder)
+        )
+
+    a = x.min()
+    b = x.max()
+    breaks = linspace(a, b, nbreaks)
+    knots = hstack((append(ones(norder - 1) * a, breaks), ones(norder - 1) * b))
+    xi = linspace(a, b, x.shape[0])
+    basismat = BSpline.design_matrix(xi, knots, norder - 1, extrapolate=True)
+
+    return asarray(basismat.todense())
+
+
+def basis_bspline(f_domain, numBasis, df):
+    """
+    B-spline basis on f_domain
+
+    :param f_domain: grid on which the basis is returned
+    :param numBasis: number of basis functions
+    :param df: order of the B-splines (degree + 1)
+
+    :rtype: dict
+    :return out: dict with the grid ("x") and the basis ("matrix")
+    """
+    out = {"x": f_domain, "matrix": create_basismatrix(f_domain, numBasis, df)}
+    return out
+
+
+def f_phi(gamma):
+    """
+    psi = sqrt(gamma') of a warping function, normalized to unit L2 norm
+
+    :param gamma: vector describing the warping function on [0,1]
+
+    :rtype: numpy ndarray
+    :return psi: srsf of gamma
+    """
+    f_domain = linspace(0, 1, gamma.shape[0])
+    k = f_predictfunction(gamma, f_domain, 1)
+    k[k < 0] = 0
+    result = sqrt(k)
+    nrm = f_L2norm(result)
+    if nrm >= 1.01 or nrm <= 0.99:
+        result = result / nrm
+
+    return result
+
+
+def f_exp1inv(psi):
+    """
+    inverse exponential map at the identity of the Hilbert sphere of srsfs of
+    warping functions, i.e. the shooting vector from psi = 1 to psi
+
+    :param psi: vector describing the srsf of a warping function
+
+    :rtype: numpy ndarray
+    :return yy: shooting vector
+    """
+    x = linspace(0, 1, psi.shape[0])
+    inner = round(trapezoid(psi, x), 10)
+
+    if inner < 1.001 and inner >= 1:
+        inner = 1.0
+    if inner <= -1 and inner > -1.001:
+        inner = -1.0
+    if inner < -1 or inner > 1:
+        print("exp1inv: can't calculate the acos of: %f" % inner)
+
+    theta = arccos(inner)
+    if theta == 0:
+        return zeros(psi.shape[0])
+
+    yy = theta / sin(theta) * (psi - inner)
+
+    return yy
