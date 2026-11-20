@@ -74,6 +74,56 @@ def test_kmeans_align_runs(two_group_functions):
     assert set(np.unique(out["labels"])) == {0, 1}
 
 
+@pytest.fixture
+def one_two_bump_functions():
+    """Two groups that differ in shape (one bump vs two), not just in phase."""
+    rng = np.random.default_rng(0)
+    M = 101
+    time = np.linspace(0, 1, M)
+    cols = []
+    for _ in range(6):
+        c = 0.5 + rng.normal(scale=0.05)
+        cols.append(np.exp(-((time - c) ** 2) / 0.005))
+    for _ in range(6):
+        c = 0.5 + rng.normal(scale=0.03)
+        cols.append(
+            np.exp(-((time - c + 0.15) ** 2) / 0.003)
+            + np.exp(-((time - c - 0.15) ** 2) / 0.003)
+        )
+    return np.column_stack(cols), time
+
+
+@pytest.mark.slow
+def test_kmeans_align_recovers_groups(one_two_bump_functions):
+    pytest.importorskip("optimum_reparamN2")
+    f, time = one_two_bump_functions
+    out = fs.kmeans_align(f, time, K=2, seeds=[0, 6], showplot=False)
+    lab = out["labels"]
+    assert len(set(lab[:6])) == 1 and len(set(lab[6:])) == 1
+    assert lab[0] != lab[6]
+    assert len(out["gamI"]) == 2
+    for k in range(2):
+        assert out["gam"][k].shape[1] == out["fn"][k].shape[1]
+    assert out["qun"].shape[0] >= 1
+
+
+@pytest.mark.slow
+def test_dpmeans_align(one_two_bump_functions):
+    pytest.importorskip("optimum_reparamN2")
+    f, time = one_two_bump_functions
+    np.random.seed(0)
+    out = fs.dpmeans_align(f, time, lam=0.5, showplot=False)
+    lab = out["labels"]
+    assert out["K"] == 2
+    assert len(set(lab[:6])) == 1 and len(set(lab[6:])) == 1
+    assert lab[0] != lab[6]
+    assert out["templates"].shape == (f.shape[0], 2)
+    assert len(out["gamI"]) == 2
+    # automatic lambda runs and returns a positive penalty
+    out = fs.dpmeans_align(f, time, MaxItr=2, showplot=False)
+    assert out["lambda"] > 0 and out["K"] >= 1
+
+
 @pytest.mark.slow
 def test_elastic_change_compute_runs(small_functions):
     pytest.importorskip("optimum_reparamN2")

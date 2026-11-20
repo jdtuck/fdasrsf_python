@@ -110,7 +110,7 @@ from .elastic_changepoint import (
 )
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB
-from .kmeans import kmeans_align
+from .kmeans import kmeans_align, dpmeans_align
 from .image import reparam_image
 from .image_functions import formbasisTid, apply_gam_imag, makediffeoid
 from .curve_functions import (

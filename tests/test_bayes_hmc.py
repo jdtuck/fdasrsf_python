@@ -185,3 +185,35 @@ def test_group_alignment_pcn(simu_data):
     assert np.isfinite(obj.fmean).all()
     assert obj.mcmc["gamma_mat"].shape == (M, 76, N)
     assert obj.mcmc["g_coef"].shape == (150, 20, N)
+
+
+@pytest.mark.slow
+def test_plot_mcmc(simu_data):
+    pytest.importorskip("cbayesian")
+    matplotlib = pytest.importorskip("matplotlib")
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    f, time = simu_data
+    np.random.seed(1)
+    obj = fs.fdawarp(f, time)
+    with pytest.raises(Exception):
+        obj.plot_mcmc(show=False)
+
+    obj.time_warping_bayes(iter=150, burnin=75, verbose=False)
+    assert obj.mcmc["burnin"] == 75 and obj.mcmc["iter"] == 150
+    assert obj.mcmc["logl"].shape == (150,)
+    plt.close("all")
+    obj.plot_mcmc(show=False)
+    assert len(plt.get_fignums()) == 4
+    plt.close("all")
+
+    obj.time_warping_bayes_infHMC(iter=150, burnin=75, verbose=False)
+    assert obj.mcmc["burnin"] == 75 and obj.mcmc["iter"] == 150
+    obj.plot_mcmc(show=False)
+    assert len(plt.get_fignums()) == 4
+    plt.close("all")
+
+    # non-Bayesian alignment clears the stale chain
+    obj.srsf_align(parallel=False)
+    assert obj.mcmc is None
