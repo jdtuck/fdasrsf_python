@@ -24,6 +24,7 @@ __all__ = [
     "elastic_glm_regression",
     "curve_pcr_regression",
     "kmeans",
+    "spc",
     "image",
     "image_functions",
     "gp",
@@ -111,6 +112,7 @@ from .elastic_changepoint import (
 from .boxplots import ampbox, phbox
 from .tolerance import bootTB, pcaTB
 from .kmeans import kmeans_align, dpmeans_align
+from .spc import fdaspc
 from .image import reparam_image
 from .image_functions import formbasisTid, apply_gam_imag, makediffeoid
 from .curve_functions import (

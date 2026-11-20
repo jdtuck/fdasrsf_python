@@ -22,6 +22,7 @@ API Reference
    elastic_glm_regression.rst
    tolerance.rst
    kmeans.rst
+   spc.rst
    image.rst
    curve_statistics.rst
    geodesic.rst

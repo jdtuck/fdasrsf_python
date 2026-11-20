@@ -132,8 +132,9 @@ class fdavpca:
                 c[l, k] = sum((np.append(qn[:, l], m_new[l]) - mqn) * U[:, k])
 
         if var_exp is not None:
+            # smallest number of components explaining var_exp
             cumm_coef = np.cumsum(s) / sum(s)
-            no = int(np.argwhere(cumm_coef <= var_exp)[-1])
+            no = int(np.argmax(cumm_coef >= var_exp - 1e-12)) + 1
 
         self.q_pca = q_pca
         self.f_pca = f_pca
@@ -364,8 +365,9 @@ class fdahpca:
                 c[i, k] = np.dot(vec[:, i] - vm, U[:, k])
 
         if var_exp is not None:
+            # smallest number of components explaining var_exp
             cumm_coef = np.cumsum(s) / sum(s)
-            no = int(np.argwhere(cumm_coef <= var_exp)[-1])
+            no = int(np.argmax(cumm_coef >= var_exp - 1e-12)) + 1
 
         self.gam_pca = gam_pca
         self.psi_pca = psi_pca
