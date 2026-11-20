@@ -75,6 +75,7 @@ class fdawarp:
         self.f = f
         self.time = time
         self.rsamps = False
+        self.mcmc = None
 
     def srsf_align(
         self,
@@ -146,6 +147,7 @@ class fdawarp:
 
         methods = ["mean", "median"]
         self.type = method
+        self.mcmc = None
 
         # 0 mean, 1-median
         method = [i for i, x in enumerate(methods) if x == method]
@@ -426,11 +428,15 @@ class fdawarp:
 
         mcmc['g_coef']: (iter,D,N) posterior warping coefficients
         mcmc['sigma1']: posterior sigma1
+        mcmc['logl']: log-likelihood trace
+        mcmc['burnin'], mcmc['iter']: burn-in and number of iterations
+        mcmc['extrainfo']: whether the extra information was stored
 
         if extrainfo
 
         mcmc['accept']: acceptance of q_star samples
         mcmc['betas_ind']: pCN mixture component of each sample
+        mcmc['zpcn']: pCN parameters used
         mcmc['gamma_mat']: (M,nsamp,N) posterior gammas
         mcmc['gamma_stats']: posterior gamma stats
         mcmc['q_star_mat']: (M,nsamp) posterior q_star
@@ -752,11 +758,19 @@ class fdawarp:
         self.rsamps = False
         self.type = "mean"
 
-        self.mcmc = {"g_coef": result_g_coef, "sigma1": result_sigma1}
+        self.mcmc = {
+            "g_coef": result_g_coef,
+            "sigma1": result_sigma1,
+            "logl": result_logl,
+            "burnin": burnin,
+            "iter": iter,
+            "extrainfo": extrainfo,
+        }
 
         if extrainfo:
             self.mcmc["accept"] = result_accept[1:]
             self.mcmc["betas_ind"] = result_accept_betas[1:]
+            self.mcmc["zpcn"] = zpcn
             self.mcmc["gamma_mat"] = gamma_mat
             self.mcmc["gamma_stats"] = gamma_stats
             # posterior templates and mean functions on the original grid
@@ -864,6 +878,7 @@ class fdawarp:
         mcmc['accept']: (N,iter-1) HMC acceptance indicators
         mcmc['epsilon']: (N,iter) step sizes
         mcmc['logl']: log-likelihood trace
+        mcmc['burnin'], mcmc['iter']: burn-in and number of iterations
 
         if extrainfo
 
@@ -1055,6 +1070,8 @@ class fdawarp:
             "accept": accept[:, 1:],
             "epsilon": eps_tr,
             "warp_rep": warp_rep,
+            "burnin": burnin,
+            "iter": iter,
         }
         if extrainfo:
             self.mcmc["gamma_mat"] = gamma_mat
@@ -1301,7 +1318,259 @@ class fdawarp:
         plt.style.use("seaborn-v0_8-colorblind")
 
         plot.f_plot(self.time, self.fmean, title="$f_{mean}$")
+
+        # MCMC diagnostics when the Bayesian alignment was used
+        mc = getattr(self, "mcmc", None)
+        if isinstance(mc, dict) and ("sigma1" in mc or "sigma" in mc):
+            self.plot_mcmc(show=False)
+
         plt.show()
+
+        return
+
+    def plot_mcmc(self, show=True):
+        """
+        plot diagnostics of the Bayesian alignment MCMC chain
+
+        Plots trace, posterior and mixing diagnostics of the chain stored in
+        self.mcmc by time_warping_bayes (pCN) or time_warping_bayes_infHMC.
+        Plots that need the extra information (extrainfo=True) are only
+        drawn when it is available.
+
+        Figures:
+          chain diagnostics: sigma trace, log-likelihood trace, posterior of
+            sigma, autocorrelation of sigma (with effective sample size),
+            running acceptance rate and pCN step usage (pCN) or HMC step
+            sizes per function (infHMC)
+          warping coefficient norm trace for each function
+          posterior template with 95% credible band
+          posterior warping functions with 95% credible bands
+
+        :param show: call plt.show() at the end (default = True)
+
+        Usage: obj.plot_mcmc()
+        """
+        mc = getattr(self, "mcmc", None)
+        if not isinstance(mc, dict) or not ("sigma1" in mc or "sigma" in mc):
+            raise Exception(
+                "No MCMC output available, run time_warping_bayes or "
+                "time_warping_bayes_infHMC first"
+            )
+        is_hmc = "epsilon" in mc
+
+        if "sigma1" in mc:
+            sigma1 = np.ravel(mc["sigma1"])
+        else:
+            sigma1 = np.ravel(mc["sigma"])
+        niter = sigma1.shape[0]
+        if "burnin" in mc:
+            burnin = int(mc["burnin"])
+        elif "q_star_mat" in mc:
+            burnin = niter - mc["q_star_mat"].shape[1] + 1
+        else:
+            burnin = niter // 2
+        burnin = min(max(burnin, 1), niter)
+        if "logl" in mc:
+            logl = np.ravel(mc["logl"])
+        else:
+            logl = np.ravel(getattr(self, "qun", np.zeros(0)))
+        has_extra = "accept" in mc and np.size(mc["accept"]) > 0
+        # iterations are 1-based in the labels, post burn-in includes burnin
+        it_all = np.arange(1, niter + 1)
+        post = sigma1[burnin - 1 :]
+        col = "#66C2A5"
+
+        def burnline(ax):
+            ax.axvline(burnin, color="k", linestyle="--", linewidth=1)
+            ax.text(
+                burnin,
+                1.0,
+                " burn-in",
+                transform=ax.get_xaxis_transform(),
+                va="top",
+                ha="left",
+                fontsize=8,
+            )
+
+        def not_stored(ax, what):
+            ax.axis("off")
+            ax.text(
+                0.5,
+                0.5,
+                "%s not stored\n(set extrainfo=True)" % what,
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
+
+        # chain diagnostics
+        fig, axs = plt.subplots(2, 3, figsize=(14, 8), layout="constrained")
+        fig.suptitle("MCMC diagnostics", fontsize=16)
+
+        ax = axs[0, 0]
+        ax.plot(it_all, sigma1, color=col, linewidth=1)
+        burnline(ax)
+        ax.set_xlabel("iteration")
+        ax.set_ylabel(r"$\sigma$")
+        ax.set_title(r"Trace of $\sigma$")
+
+        ax = axs[0, 1]
+        if logl.shape[0] == niter:
+            ax.plot(it_all, logl, color=col, linewidth=1)
+            burnline(ax)
+            ax.set_xlabel("iteration")
+            ax.set_ylabel("log-likelihood")
+        else:
+            not_stored(ax, "log-likelihood")
+        ax.set_title("Trace of log-likelihood")
+
+        ax = axs[0, 2]
+        ax.hist(post, bins="auto", density=True, color=col)
+        ax.axvline(post.mean(), color="k", linewidth=1.5)
+        for qv in np.quantile(post, [0.025, 0.975]):
+            ax.axvline(qv, color="k", linestyle="--")
+        ax.set_xlabel(r"$\sigma$")
+        ax.set_ylabel("density")
+        ax.set_title(r"Posterior of $\sigma$ (95% CI)")
+
+        ax = axs[1, 0]
+        maxlag = min(50, post.shape[0] - 1)
+        rho = _acf_vec(post, maxlag)
+        lags = np.arange(0, maxlag + 1)
+        ax.vlines(lags, 0, rho, color=col)
+        ax.plot(lags, rho, "o", color=col, markersize=3)
+        ci = 1.96 / np.sqrt(post.shape[0])
+        ax.axhline(ci, color="k", linestyle="--")
+        ax.axhline(-ci, color="k", linestyle="--")
+        ax.axhline(0, color="k", linewidth=0.5)
+        ax.set_xlabel("lag")
+        ax.set_ylabel("ACF")
+        ess = post.shape[0] / max(1 + 2 * rho[1:].sum(), 1)
+        ax.set_title(r"ACF of $\sigma$ (ESS $\approx$ %.0f)" % ess)
+
+        ax = axs[1, 1]
+        if has_extra:
+            acc = np.asarray(mc["accept"], dtype=float)
+            if is_hmc:
+                # HMC stores (N,iter-1) indicators: average over functions
+                acc = acc.mean(axis=0)
+                lab = "warps"
+            else:
+                lab = "$q^*$"
+            acc = np.ravel(acc)
+            it = np.arange(1, acc.shape[0] + 1) + 1
+            ax.plot(
+                it,
+                np.cumsum(acc) / np.arange(1, acc.shape[0] + 1),
+                color=col,
+                linewidth=1,
+            )
+            burnline(ax)
+            ax.set_ylim(0, 1)
+            ax.set_xlabel("iteration")
+            ax.set_ylabel("rate")
+            ax.set_title("Running acceptance of %s (%.2f)" % (lab, acc.mean()))
+        else:
+            not_stored(ax, "acceptance")
+            ax.set_title("Running acceptance of $q^*$")
+
+        ax = axs[1, 2]
+        if is_hmc:
+            eps_tr = np.atleast_2d(mc["epsilon"])
+            ax.semilogy(np.arange(1, eps_tr.shape[1] + 1), eps_tr.T, linewidth=1)
+            burnline(ax)
+            ax.set_xlabel("iteration")
+            ax.set_ylabel(r"$\epsilon$")
+            ax.set_title("HMC step size per function")
+        elif has_extra and "betas_ind" in mc:
+            bind = np.ravel(mc["betas_ind"]).astype(int)
+            acc = np.ravel(mc["accept"]).astype(bool)
+            if "zpcn" in mc:
+                nb = len(mc["zpcn"]["betas"])
+            else:
+                nb = bind.max() + 1
+            nprop = np.bincount(bind, minlength=nb)[:nb]
+            nacc = np.bincount(bind[acc], minlength=nb)[:nb]
+            x = np.arange(nb)
+            ax.bar(x, nprop - nacc, label="rejected")
+            ax.bar(x, nacc, bottom=nprop - nacc, label="accepted")
+            ax.set_xticks(x)
+            if "zpcn" in mc:
+                ax.set_xticklabels(["%g" % b for b in mc["zpcn"]["betas"]])
+                ax.set_xlabel(r"pCN $\beta$")
+            else:
+                ax.set_xlabel("pCN step index")
+            ax.set_ylabel("proposals")
+            ax.legend(loc="best")
+            rate = nacc / np.maximum(nprop, 1)
+            for xi, npi, ri in zip(x, nprop, rate):
+                ax.text(xi, npi, "%.2f" % ri, ha="center", va="bottom")
+            ax.set_ylim(0, 1.15 * max(nprop.max(), 1))
+            ax.set_title("$q^*$ proposals by pCN step (acc. rate)")
+        else:
+            not_stored(ax, "pCN step usage")
+            ax.set_title("pCN step usage")
+
+        # warping coefficient traces
+        if "g_coef" in mc and np.size(mc["g_coef"]) > 0:
+            # pCN stores (iter,D,N) draws
+            gnorm = np.sqrt((np.asarray(mc["g_coef"]) ** 2).sum(axis=1))
+            fig, ax = plt.subplots()
+            ax.plot(np.arange(1, gnorm.shape[0] + 1), gnorm, linewidth=1)
+            burnline(ax)
+            ax.set_xlabel("iteration")
+            ax.set_ylabel("norm of warping coefficients")
+            ax.set_title("Trace of warping coefficient norm per function")
+        elif "v_coef" in mc and np.size(mc["v_coef"]) > 0:
+            # infHMC stores (D,N,nsamp) post burn-in draws only
+            vnorm = np.sqrt((np.asarray(mc["v_coef"]) ** 2).sum(axis=0)).T
+            fig, ax = plt.subplots()
+            ax.plot(np.arange(1, vnorm.shape[0] + 1), vnorm, linewidth=1)
+            ax.set_xlabel("posterior draw (after burn-in)")
+            ax.set_ylabel("norm of warping coefficients")
+            ax.set_title("Trace of warping coefficient norm per function")
+
+        if "fmean_mat" in mc and "gamma_mat" in mc:
+            # posterior template
+            fmean_mat = mc["fmean_mat"]
+            ts = np.linspace(self.time[0], self.time[-1], fmean_mat.shape[0])
+            ndraw = fmean_mat.shape[1]
+            idx = np.unique(
+                np.round(np.linspace(0, ndraw - 1, min(ndraw, 100))).astype(int)
+            )
+            fig, ax = plt.subplots()
+            ax.plot(ts, fmean_mat[:, idx], color="0.7", alpha=0.3, linewidth=0.5)
+            ax.fill_between(
+                ts,
+                mc["fmean_stats"][:, 0],
+                mc["fmean_stats"][:, 1],
+                color=col,
+                alpha=0.35,
+                linewidth=0,
+            )
+            ax.plot(self.time, self.fmean, "k-", linewidth=2, label="posterior mean")
+            ax.legend(loc="best")
+            ax.set_title("Posterior template with 95% credible band")
+
+            # posterior warping functions
+            gamma_mat = mc["gamma_mat"]
+            N = gamma_mat.shape[2]
+            tg = np.linspace(0, 1, gamma_mat.shape[0])
+            cmap = plt.get_cmap("tab10")
+            fig, ax = plt.subplots()
+            for jj in range(N):
+                band = np.quantile(gamma_mat[:, :, jj], [0.025, 0.975], axis=1)
+                ax.fill_between(
+                    tg, band[0], band[1], color=cmap(jj % 10), alpha=0.2, linewidth=0
+                )
+            for jj in range(N):
+                ax.plot(tg, self.gam[:, jj], color=cmap(jj % 10), linewidth=1)
+            ax.plot([0, 1], [0, 1], "k:")
+            ax.set_aspect("equal")
+            ax.set_title("Posterior warping functions with 95% credible bands")
+
+        if show:
+            plt.show()
 
         return
 
@@ -1532,6 +1801,7 @@ class fdawarp:
         eps = np.finfo(np.double).eps
         self.method = omethod
         self.type = "multiple"
+        self.mcmc = None
 
         # Compute SRSF function from data
         f, g, g2 = uf.gradient_spline(self.time, self.f, smoothdata)
@@ -1588,6 +1858,20 @@ class fdawarp:
         self.phase_var = trapezoid(var_fgam, self.time)
 
         return
+
+
+def _acf_vec(x, maxlag):
+    """sample autocorrelation of x for lags 0..maxlag"""
+    x = np.ravel(x) - np.mean(x)
+    n = x.shape[0]
+    c0 = (x**2).sum()
+    rho = np.zeros(maxlag + 1)
+    if c0 == 0:
+        rho[0] = 1
+        return rho
+    for k in range(maxlag + 1):
+        rho[k] = (x[: n - k] * x[k:]).sum() / c0
+    return rho
 
 
 def pairwise_align_functions(
