@@ -20,7 +20,6 @@ moduleauthor:: J. Derek Tucker <jdtuck@sandia.gov>
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import f as f_dist, chi2
-from scipy.interpolate import UnivariateSpline
 import fdasrsf.geometry as geo
 from fdasrsf.fPCA import fdavpca, fdahpca
 
@@ -294,21 +293,16 @@ def _amp_features(vpca, fn, qn):
 
 def _ph_features(hpca, gam):
     """
-    shooting vectors at the Karcher mean, or the log-derivative transform
-
-    psi is computed exactly as in uf.SqrtMean (smooth=True, its default and
-    what fdahpca.calc_fpca uses), so monitored features live in the same
-    space as the phase basis. MATLAB's SqrtMean takes the plain gradient;
-    the smoothing spline is a Python-only difference.
+    shooting vectors at the Karcher mean (same map as uf.SqrtMean, which
+    fdahpca.calc_fpca uses), or the log-derivative transform
     """
     if hpca.log_der:
         return geo.gam_to_h(gam)
     M, n = gam.shape
-    time = np.linspace(0, 1, M)
+    binsize = 1.0 / (M - 1)
     V = np.zeros((M, n))
     for i in range(n):
-        g = UnivariateSpline(time, gam[:, i], s=1e-4)(time, 1)
-        psi = np.sqrt(np.maximum(g, 0))
+        psi = np.sqrt(np.maximum(np.gradient(gam[:, i], binsize), 0))
         V[:, i] = geo.inv_exp_map(hpca.mu_psi, psi)[0]
     return V
 

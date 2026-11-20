@@ -587,7 +587,7 @@ def SqrtMeanInverse(gam):
     return gamI
 
 
-def SqrtMean(gam, parallel=False, cores=-1, smooth=True):
+def SqrtMean(gam, parallel=False, cores=-1, smooth=False):
     """
     calculates the srsf of warping functions with corresponding shooting
     vectors
@@ -596,7 +596,9 @@ def SqrtMean(gam, parallel=False, cores=-1, smooth=True):
                 with N samples
     :param parallel: run in parallel (default = F)
     :param cores: number of cores for parallel (default = -1 (all))
-    :param smooth: smooth warping functions before gradient calculation
+    :param smooth: take the derivative of a smoothing spline of each warping
+                   function instead of the finite-difference gradient
+                   (default = F, as in MATLAB)
 
     :rtype: 2 numpy ndarray and vector
     :return mu: Karcher mean psi function
@@ -612,23 +614,15 @@ def SqrtMean(gam, parallel=False, cores=-1, smooth=True):
     time = linspace(0, 1, T)
     binsize = mean(diff(time))
     psi = zeros((T, n))
-    if parallel:
-        out = Parallel(n_jobs=cores)(
-            delayed(gradient)(gam[:, k], binsize) for k in range(n)
-        )
-        psi = array(out)
-        psi = psi.transpose()
-        psi = sqrt(psi)
-    else:
-        for k in range(0, n):
-            if smooth:
-                tmp_spline = UnivariateSpline(time, gam[:, k], s=1e-4)
-                g = tmp_spline(time, 1)
-                idx = g <= 0
-                g[idx] = 0
-                psi[:, k] = sqrt(g)
-            else:
-                psi[:, k] = sqrt(gradient(gam[:, k], binsize))
+    for k in range(0, n):
+        if smooth:
+            tmp_spline = UnivariateSpline(time, gam[:, k], s=1e-4)
+            g = tmp_spline(time, 1)
+        else:
+            g = gradient(gam[:, k], binsize)
+        # clip negative slopes (numerical noise) as in MATLAB
+        g[g < 0] = 0
+        psi[:, k] = sqrt(g)
 
     # Find Direction
     mnpsi = psi.mean(axis=1)
